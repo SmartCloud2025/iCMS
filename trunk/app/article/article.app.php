@@ -36,11 +36,16 @@ class articleApp {
         $addtime = time();
         $ip      = iPHP::getIp();
         iDB::query("INSERT INTO `#iCMS@__comment`
-            (`appid`, `cid`, `iid`, `userid`, `username`, `title`, `contents`, `reply`, `addtime`, `status`, `up`, `down`, `ip`, `quote`, `floor`)
-VALUES (".iCMS_APP_ARTICLE.", '$cid', '$iid', '$this->userid', '$this->nickname', '$title', '$contents', '0', '$addtime', '1', '0', '0', '$ip', '0', '0');");
+            (`appid`, `cid`, `iid`, `userid`, `nickname`, `title`, `contents`, `reply`, `addtime`, `status`, `up`, `down`, `ip`, `quote`, `floor`)
+VALUES ('".iCMS_APP_ARTICLE."', '$cid', '$iid', '$this->userid', '$this->nickname', '$title', '$contents', '0', '$addtime', '1', '0', '0', '$ip', '0', '0');");
         iDB::query("UPDATE `#iCMS@__article` SET comments=comments+1 WHERE `id` ='{$iid}' limit 1");
 
         iPHP::code(1,'iCMS:comment:success',0,'json');
+    }
+    public function API_comment(){
+        iPHP::assign('appid',iCMS_APP_ARTICLE);
+        iPHP::assign('iid',(int)$_GET['iid']);
+        iCMS::tpl('iCMS://api.article.comment.htm');
     }
     public function article($id,$page=1,$tpl=true){
         $aRs		= iDB::getRow("SELECT * FROM #iCMS@__article WHERE id='".(int)$id."' AND `status` ='1' LIMIT 1;",ARRAY_A);

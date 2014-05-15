@@ -69,8 +69,8 @@ class iPHP{
             return self::$iTPL->fetch($tpl);
         }else {
             self::$iTPL->display($tpl);
-            echo iFS::sizeUnit(xdebug_memory_usage());
-            echo iFS::sizeUnit(xdebug_peak_memory_usage());            
+            //echo iFS::sizeUnit(xdebug_memory_usage());
+            //echo iFS::sizeUnit(xdebug_peak_memory_usage());            
         }
     }
 	public static function PG($key){

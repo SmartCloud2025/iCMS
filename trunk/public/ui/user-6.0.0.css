@@ -84,6 +84,9 @@ body { background-color: #fff; background-image: url(img/bg-v6.png); _background
 .comment_mini_box{margin: 5px;
 padding-top: 10px;
 text-align: right;}
+.comment_mini_list{font-size: 12px;}
+.comment_mini_list li{padding: 5px !important;}
+.comment_mini_list .date{float: right;}
 /* ----home.fun-------- */
 #home_fun { font-weight: bold; margin-top: 10px; padding-left: 25px; padding-bottom: 15px; border-bottom: 1px dotted #DBDBDB; }
 #home_fun a { width: 90px; }

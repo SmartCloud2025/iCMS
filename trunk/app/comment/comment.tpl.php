@@ -22,15 +22,15 @@ function comment_list($vars){
 	$cacheTime	= isset($vars['time'])?(int)$vars['time']:-1;
 	$by			= $vars['by']=='ASC'?"ASC":"DESC";
 	switch ($vars['orderby']) {
-		default:		$orderSQL=" ORDER BY `id` $by";
+		default: $orderSQL = " ORDER BY `id` $by";
 	}
 	$md5	= md5($whereSQL.$orderSQL);
 	$offset	= 0;
 	if($vars['page']){
-		$total	= iPHP::total($md5,"SELECT count(*) FROM `#iCMS@__comment` WHERE {$whereSQL} ");
+		$total  = iPHP::total($md5,"SELECT count(*) FROM `#iCMS@__comment` WHERE {$whereSQL} ");
+		$multi  = iCMS::page(array('total'=>$total,'perpage'=>$maxperpage,'unit'=>iPHP::lang('iCMS:page:list'),'nowindex'=>$GLOBALS['page']));
+		$offset = $multi->offset;
 		iPHP::assign("comment_total",$total);
-        $multi		= iCMS::page(array('total'=>$total,'perpage'=>$maxperpage,'unit'=>iPHP::lang('iCMS:page:list'),'nowindex'=>$GLOBALS['page']));
-        $offset		= $multi->offset;
 	}
 	if($vars['cache']){
 		$cacheName	= 'comment/'.$md5."/".(int)$GLOBALS['page'];
@@ -38,10 +38,14 @@ function comment_list($vars){
 	}
 	if(empty($rs)){
 		$rs		= iDB::getArray("SELECT * FROM `#iCMS@__comment` WHERE {$whereSQL} {$orderSQL} LIMIT {$offset},{$maxperpage}");
+		//iDB::debug();
 		$_count	= count($rs);
 		$ln		=($GLOBALS['page']-1)<0?0:$GLOBALS['page']-1;
 		for ($i=0;$i<$_count;$i++){
-			$rs[$i]['url']		= iCMS::$config['router']['publicURL'].'/comment.php?indexId='.$rs[$i]['indexid'].'&mid='.$rs[$i]['mid'].'&cid='.$rs[$i]['cid'];
+			if($vars['date_format']){
+				$rs[$i]['addtime'] = get_date($rs[$i]['addtime'],$vars['date_format']);
+			}
+			$rs[$i]['url']		= iCMS_API.'?app=comment&iid='.$rs[$i]['iid'].'&appid='.$rs[$i]['appid'].'&cid='.$rs[$i]['cid'];
 			$rs[$i]['lou']		= $total-($i+$ln*$maxperpage);
 			$rs[$i]['content']	= nl2br($rs[$i]['contents']);
 			if($vars['user']){

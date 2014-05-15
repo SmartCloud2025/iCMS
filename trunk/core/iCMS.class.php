@@ -71,8 +71,10 @@ class iCMS {
         define('iPHP_TPL_DEF',self::$config['site'][$tpl_key]);
         iPHP::iTPL();
 
-        define('iCMS_API', self::$config['router']['publicURL'].'/api.php');
+        define('iCMS_PUBLIC',self::$config['router']['publicURL']);
+        define('iCMS_API', iCMS_PURL.'/api.php');
         define('iCMS_URL', self::$config['router']['URL']);
+
         defined('iCMS_REWRITE') OR define('iCMS_REWRITE', 0);
 
         self::$apps   = self::$config['app'];

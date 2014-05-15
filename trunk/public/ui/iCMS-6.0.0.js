@@ -75,7 +75,11 @@
                 },'json');
             },
             comment_mini_box:function(a){
-                $('.comment_mini_box').remove();
+                if($('.comment_mini_box').length >0){
+                    $('.comment_mini_box').remove();
+                    $('.comment_mini_list').remove();
+                    return;
+                }
                 var b   = $(a),p = b.parent(),iid = b.attr('data-iid');
                 var box = $('<div class="comment_mini_box">');
                 box.html('<div class="input-append">'+
@@ -107,8 +111,21 @@
                         }
                     },'json'); 
                 });
+                //------------
+                var list = $('<div class="comment_mini_list">');
+                $.get(iCMS.api('article')+"&do=comment",{'iid':iid},
+                    function(c) {
+                        //console.log(c);
+                        var ul   = '<ul>';
+                        $.each(c,function(i,obj) {
+                            ul+='<li><span class="date">'+obj.addtime+'</span><span class="label label-info">'+obj.nickname+':</span> '+obj.content+'</li>';
+                        });
+                        ul+='</ul>';
+                        list.html(ul);
+                        box.after(list);
+                    },'json');
+                }
 
-            }
         },
         api:function(app){
             return iCMS.config.API+'?app='+app;
