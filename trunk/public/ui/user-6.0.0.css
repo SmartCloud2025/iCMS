@@ -5,10 +5,16 @@ body { background-color: #fff; background-image: url(img/bg-v6.png); _background
 #iCMS_home .right-col { float: right; padding-top: 20px; padding-bottom: 30px; width: 319px; }
 #iCMS_home .mod { margin-left: 10px; margin-right: 10px;}
 #iCMS_home .mod .hd { margin-bottom: 4px; }
-#iCMS_home .txtlist li { display: block; margin-bottom: 3px; list-style: none; }
-#iCMS_home .txtlist li a { padding: 0 0 0 10px; display: block; height: 28px; line-height: 28px; color: #666; }
-#iCMS_home .txtlist li a:hover { color: #259; background: #EFF6FA; border-radius: 3px; text-decoration: none; }
-#iCMS_home .txtlist li a span{margin-left: 10px;}
+#iCMS_home .txtList li { display: block; margin-bottom: 3px; list-style: none; }
+#iCMS_home .txtList li a { padding: 0 0 0 10px; display: block; height: 28px; line-height: 28px; color: #666; }
+#iCMS_home .txtList li a:hover { color: #259; background: #EFF6FA; border-radius: 3px; text-decoration: none; }
+#iCMS_home .txtList li a span{margin-left: 10px;}
+.avatarList{}
+.avatarList li{display: inline-block;margin-bottom: 4px;}
+.avatar_30{width: 30px;height: 30px;}
+.avatar_90{width: 90px;height: 90px;}
+.avatar_120{width: 120px;height: 120px;}
+
 /* --icon--- */
 .icon_user { display: inline-block; width: 16px; height: 16px; background: url(img/user.png) no-repeat top left; }
 .icon_male, .icon_female { float: left; width: 16px; height: 16px; overflow: hidden; margin-right: 2px; vertical-align: middle; background: url(img/gender.png) no-repeat top left; }
@@ -74,7 +80,10 @@ body { background-color: #fff; background-image: url(img/bg-v6.png); _background
 #artList .list_detail .text { font-size: 12px; }
 #artList .list_detail .pic { height: 150px; overflow: hidden; }
 #artList .list_fun { text-align: right; }
-#artList .list_fun a { color: #333; }
+#artList .list_fun a { color: #333; margin-left: 10px;}
+.comment_mini_box{margin: 5px;
+padding-top: 10px;
+text-align: right;}
 /* ----home.fun-------- */
 #home_fun { font-weight: bold; margin-top: 10px; padding-left: 25px; padding-bottom: 15px; border-bottom: 1px dotted #DBDBDB; }
 #home_fun a { width: 90px; }

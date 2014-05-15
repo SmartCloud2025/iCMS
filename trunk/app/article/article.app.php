@@ -7,10 +7,40 @@
  * @$Id: article.app.php 2408 2014-04-30 18:58:23Z coolmoo $
  */
 class articleApp {
-	public $methods	= array('iCMS');
-    function __construct() {}
+	public $methods	= array('iCMS','good','comment');
+    function __construct() {
+        $this->userid   = (int)iPHP::getCookie('userid');
+        $this->nickname = iS::escapeStr(iPHP::getUniCookie('nickname'));
+    }
     public function doiCMS($a = null) {
     	return $this->article((int)$_GET['id'],isset($_GET['p'])?(int)$_GET['p']:1);
+    }
+    public function API_good(){
+        $aid = (int)$_GET['iid'];
+        $aid OR iPHP::code(0,'iCMS:article:empty_id',0,'json');
+        $ackey = 'article_good_'.$aid;
+        $good  = (int)iPHP::getCookie($ackey);
+        $good && iPHP::code(0,'iCMS:article:!good',0,'json');
+        iDB::query("UPDATE `#iCMS@__article` SET good=good+1 WHERE `id` ='{$aid}' limit 1");
+        iPHP::setCookie('article_good_'.$aid,$this->userid,86400);
+        iPHP::code(1,'iCMS:article:good',0,'json');
+    }
+    public function ACTION_comment(){
+        $iid      = (int)$_POST['iid'];
+        $cid      = (int)$_POST['cid'];
+        $title    = $_POST['title'];
+        $contents = $_POST['content'];
+        $iid OR iPHP::code(0,'iCMS:article:empty_id',0,'json');
+        $contents OR iPHP::code(0,'iCMS:comment:empty',0,'json');
+
+        $addtime = time();
+        $ip      = iPHP::getIp();
+        iDB::query("INSERT INTO `#iCMS@__comment`
+            (`appid`, `cid`, `iid`, `userid`, `username`, `title`, `contents`, `reply`, `addtime`, `status`, `up`, `down`, `ip`, `quote`, `floor`)
+VALUES (".iCMS_APP_ARTICLE.", '$cid', '$iid', '$this->userid', '$this->nickname', '$title', '$contents', '0', '$addtime', '1', '0', '0', '$ip', '0', '0');");
+        iDB::query("UPDATE `#iCMS@__article` SET comments=comments+1 WHERE `id` ='{$iid}' limit 1");
+
+        iPHP::code(1,'iCMS:comment:success',0,'json');
     }
     public function article($id,$page=1,$tpl=true){
         $aRs		= iDB::getRow("SELECT * FROM #iCMS@__article WHERE id='".(int)$id."' AND `status` ='1' LIMIT 1;",ARRAY_A);

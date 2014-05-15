@@ -35,13 +35,17 @@ function user_follow($vars=null){
 	for ($i=0;$i<$_count;$i++){
 		if($vars['fuid']){
 			$rs[$i]['avatar'] = userData($rs[$i]['uid'],'avatar');
-			$rs[$i]['url']    = userData($rs[$i]['uid'],'url');			
+			$rs[$i]['url']    = userData($rs[$i]['uid'],'url');
 		}else{
 			$rs[$i]['avatar'] = userData($rs[$i]['fuid'],'avatar');
 			$rs[$i]['url']    = userData($rs[$i]['fuid'],'url');			
-			$rs[$i]['name']   = $rs[$i]['fname'];			
+			$rs[$i]['uid']    = $rs[$i]['fuid'];
+			$rs[$i]['name']   = $rs[$i]['fname'];
 		}
 	}
 	//var_dump($rs);
 	return $rs;
+}
+function user_stat($vars=null){
+	
 }

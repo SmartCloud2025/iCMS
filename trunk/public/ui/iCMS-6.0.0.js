@@ -13,8 +13,7 @@
                 return iCMS.getcookie('AUTH_INFO');
             },
             data:function(a){
-                $.get(iCMS.config.API+"?app=user&do=data", a,
-                function(c) {
+                $.get(iCMS.api('user')+"&do=data", a,function(c) {
                     //if(!c.code) return false;
                     var userhome = $(".iCMS_user_home")
                     userhome.attr("href",c.url);
@@ -23,8 +22,7 @@
                 },'json');  
             },
             logout:function() {
-                $.get(iCMS.config.API+"?app=user&do=logout",
-                function(c) {
+                $.get(iCMS.api('user')+"&do=logout",function(c) {
                     window.location.href = c.forward
                 },'json');   
             },
@@ -33,7 +31,7 @@
             },
             follow:function(a){
                 var b=$(a),fuid = b.attr('data-uid'),fname = b.attr('data-fname'),df = parseInt(b.attr('data-followed'));
-                $.get(iCMS.config.API+"?app=user&do=follow",{df:df,'fuid':fuid,'fname':fname},
+                $.get(iCMS.api('user')+"&do=follow",{df:df,'fuid':fuid,'fname':fname},
                 function(c) {
                     //console.log(c);
                     if(c.code){
@@ -58,7 +56,63 @@
                 return avatar;
             },
         }, 
+        article:{
+            do:function(a){
+                var b=$(a),iid = b.attr('data-iid'),d = b.attr('data-do');
 
+                $.get(iCMS.api('article'),{'do':d,'iid':iid},function(c) {
+                    //console.log(c);
+                    //iCMS.dialog(c.msg);
+                    alert(c.msg);
+                    if(c.code){
+                        if(d=='good'||d=='comment'){
+                            var count = parseInt($('span',b).text());
+                            $('span',b).text(count+1);                            
+                        }
+                    }else{
+                        return false;
+                    }
+                },'json');
+            },
+            comment_mini_box:function(a){
+                $('.comment_mini_box').remove();
+                var b   = $(a),p = b.parent(),iid = b.attr('data-iid');
+                var box = $('<div class="comment_mini_box">');
+                box.html('<div class="input-append">'+
+                    '<input class="comment_text span4" type="text">'+
+                    '<a href="###" class="btn">评论</a></div>'
+                );
+                p.after(box);
+                $(box).on("click",'.btn',function() {
+                    event.preventDefault();
+                    var param = {
+                        'action':'comment','iid':iid,'title':b.attr('data-title'),
+                        'content':$('.comment_text',box).val()
+                    };
+                    //console.log(param);
+                    if(!param.content){
+                        alert("写点东西吧!亲!!");
+                        $('.comment_text',box).focus();
+                        return false;
+                    }
+                    $.post(iCMS.api('article'),param,function(c) {
+//                        console.log(c);
+                        alert(c.msg);
+                        if(c.code){
+                            var count = parseInt($('span',b).text());
+                            $('span',b).text(count+1);
+                            box.remove();
+                        }else{
+                            return false;
+                        }
+                    },'json'); 
+                });
+
+            }
+        },
+        api:function(app){
+            return iCMS.config.API+'?app='+app;
+        },
     	Init:function(){
             this.user_status = this.user.status();
             // console.log(this.user_status);
@@ -75,15 +129,23 @@
                     iCMS.LoginBox(); 
                     return false;
                 }
-                //console.log($(this).hasClass('follow'))
-                //if($(this).hasClass('follow')){
                 iCMS.user.follow(this);
-                //}else if($(this).hasClass('unfollow')){
-                //    iCMS.user.follow(this,0);
-                //}
                 return false;
             });
-
+            $(document).on("click",'.iCMS_article_do',function() {
+                event.preventDefault();
+                if(!iCMS.user_status){
+                    iCMS.LoginBox(); 
+                    return false;
+                }
+                var d = $(this).attr('data-do');
+                if(d=='comment'){
+                    iCMS.article.comment_mini_box(this);
+                }else{
+                    iCMS.article.do(this);
+                }
+                return false;
+            });
             $(document).on("click",'.iCMS_user_logout',function() {
                 event.preventDefault();
                 iCMS.user.logout();
@@ -94,8 +156,9 @@
                 iCMS.LoginBox();
                 return false;
             });
+
             $("#iCMS_seccode_img,#iCMS_seccode_text").click(function(){
-                $("#iCMS_seccode_img").attr('src',iCMS.config.API+'?app=public&do=seccode&'+Math.random());
+                $("#iCMS_seccode_img").attr('src',iCMS.api('public')+'?app=public&do=seccode&'+Math.random());
             });
             $(".iCMS_API_iframe").load(function(){ 
                 $(this).height(0); //用于每次刷新时控制IFRAME高度初始化 
@@ -103,20 +166,7 @@
                 $(this).height(height); 
             }); 
     	},
-        dialog:function(msg,options,_parent){
-            var a    = window,
-            defaults = {width: 360,height: 150,fixed: true,lock: true,time:3000,label:'success',icon:'check'},            
-            opts     = $.extend(defaults,options);
-            _parent  = _parent||false;
-            //console.log(opts);
-            if(_parent) a = window.parent
- 
-            var dialog   = a.$.dialog({
-                id: 'iPHP_DIALOG',width:opts.width,height:opts.height,fixed:opts.fixed,lock:opts.lock,time:opts.time,
-                title: 'iCMS - 提示信息',
-                content: '<div class=\"iPHP-msg\"><span class=\"label label-'+opts.label+'\"><i class=\"fa fa-'+opts.icon+'\"></i> '+msg+'</span></div>',
-            });
-        },
+
         LoginBox:function(){
             var loginBox    = $('#iCMS_Login_Box');
             //console.log(typeof(loginBox));

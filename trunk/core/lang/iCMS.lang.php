@@ -28,7 +28,15 @@ return array(
 	'article'=>array(
 		'first'     =>'已经是第一篇',
 		'last'      =>'已经是最后一篇',
-		'clicknext' =>'点击图片进入下一页'
+		'clicknext' =>'点击图片进入下一页',
+		'empty_id'	=>'亲!不好意思,居然出错了！',
+		'!good' =>'亲!您已经点过赞了啦 ！',
+		'good'  =>'亲!谢谢你的赞',
+	),
+	'comment'=> array(
+		'empty'=>'请输入内容！',
+		//'error'=>'验证码不对哦!认真看清楚!要不换一张试试。',
+		'success'=>'评论成功!'
 	),
 	'seccode'=> array(
 		'empty'=>'请输入验证码！',
