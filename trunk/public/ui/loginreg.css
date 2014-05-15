@@ -1,0 +1,88 @@
+body { color: #2a2a2a; font-size: 14px; background-color: #f2f2f2; background-image: url(img/bg-v6.png); _background-attachment: fixed; }
+#header, #body, #footer { margin: 0 auto; width: 984px; }
+#ipt_seccode { width: 60px; }
+#seccode { vertical-align: top; }
+.logo { height: 106px; background: url(img/iCMS.logo-6.0.png) no-repeat 0 30px; _background-image: none; _filter: progid:DXImageTransform.Microsoft.AlphaImageLoader(src='img/login-reg-logo.png', sizingMethod="crop"); }
+.logo .icms { overflow: hidden; margin-right: 10px; width: 220px; height: 75px; text-indent: -999em; }
+.login_wrap .content, .register_wrap .content { height: 564px; background-color: #fff; border: 1px solid #CECECE; box-shadow: 0 0 3px #fff inset, 0 1px 1px rgba(0, 0, 0, .1); }
+.login_wrap .content { height: 454px; }
+.lg_login .sub, .rst_reg .reg, .ipt_sub .sub, .rst_login a { background: url(img/login_reg_icon.png) no-repeat 0 0; }
+#lg_box { padding-left: 55px; }
+#lg_left { float: left; width: 645px; height: 574px; }
+#lg_left h1 { margin-top: 30px; color: #768263; font-weight: normal; font-size: 26px; font-family: '\5FAE\8F6F\96C5\9ED1'; }
+#lg_left h1 span { margin-left: 10px; color: #FF5783; font-weight: normal; font-size: 12px; line-height: 48px; }
+#lg_center { position: relative; width: 644px; zoom: 1; }
+.lg_form { position: absolute; z-index: 1; float: left; width: 544px; }
+.lg_form span { float: left; color: #333; vertical-align: middle; text-align: center; font-size: 14px; }
+.lg_form .text { float: left; margin-left: 5px; padding: 0 8px; width: 238px; height: 30px; line-height: 30px; }
+.ipt_mail { overflow: hidden; margin-top: 15px; margin-left: 20px; line-height: 30px; room: 1; _width: 334px; }
+.ipt_nickname { overflow: hidden; margin-top: 18px; margin-left: 48px; line-height: 30px; room: 1; _width: 334px; }
+.ipt_sex { overflow: hidden; margin-top: 16px; margin-left: 48px; height: 30px; line-height: 30px; room: 1; _width: 300px; }
+.ipt_sex .rdo { display: inline-block; }
+.ipt_sex .rdo .ck { margin-top: -3px; vertical-align: middle; text-align: center; }
+.ipt_password { overflow: hidden; margin-top: 18px; margin-left: 48px; line-height: 30px; room: 1; _width: 334px; }
+.ipt_respassword { overflow: hidden; margin-top: 18px; margin-left: 20px; line-height: 30px; room: 1; _width: 334px; }
+.ipt_check, .lg_check { overflow: hidden; margin-top: 18px; margin-left: 39px; line-height: 30px; room: 1; _width: 100%; }
+.ipt_check .imgcheck_code_main, .lg_chk .imgcheck_code_main { margin-top: 5px; }
+.ipt_check #img_checkcode { float: left; float: left; margin-top: 2px; margin-left: 4px; width: 100px; height: 35px; vertical-align: middle; text-align: center; *margin-top: 2px; }
+.ipt_check a { float: left; margin-left: 6px; color: #87b32e; }
+.ipt_box { overflow: hidden; margin-top: 20px; margin-left: 91px; room: 1; _width: 290px; }
+.ipt_box a:hover { text-decoration: underline; }
+.ipt_box .box { margin-right: 2px; }
+.ipt_sub { overflow: hidden; margin-top: 20px; margin-left: 92px; room: 1; *margin-left: 48px; _width: 330px; }
+.ipt_sub .sub { display: block; width: 131px; height: 35px; border: 0; background-position: right -100px; cursor: pointer; }
+#lg_error { position: absolute; top: -5px; right: 0; width: 280px; _right: -35px; }
+#lg_error img { float: left; vertical-align: middle; text-align: center; }
+#lg_error span { color: #08c; margin-left: 8px; }
+#lg_error span i { font-size: 16px; }
+.err_username { visibility: hidden; margin-top: 20px; height: 36px; color: #999; font-size: 12px; line-height: 114%; }
+.err_nickname { visibility: hidden; margin-top: 20px; height: 36px; color: #999; font-size: 12px; line-height: 114%; _margin-top: 19px; }
+.err_password { visibility: hidden; margin-top: 70px; padding-top: 10px; height: 26px; color: #999; font-size: 12px; line-height: 114%; _margin-top: 70px; }
+.err_rstpassword { visibility: hidden; margin-top: 20px; padding-top: 10px; height: 26px; color: #999; font-size: 12px; line-height: 114%; _margin-top: 23px; }
+.register_wrap .err_seccode { visibility: hidden; margin-top: 20px; padding-top: 16px; height: 26px; color: #999; font-size: 12px; line-height: 114%; _margin-top: 19px; }
+#lg_right { float: left; margin-top: 40px; width: 250px; height: 480px; border-left: 1px solid #e5e5e5; }
+.rst_login { margin-top: 38px; margin-left: 32px; }
+.rst_login span { color: #999; }
+.rst_login a { display: block; margin-top: 12px; width: 81px; height: 29px; background-position: right -150px; }
+.other_login { margin-top: 65px; margin-left: 32px; }
+.other_login span { margin-bottom: 2px; color: #999; }
+.o_icon { display: block; margin-top: 12px; padding-top: 2px; padding-top: 5px\9; padding-left: 20px; width: 100px; height: 16px; line-height: 16px; *padding-top: 5px; _padding-top: 7px; }
+.icon_qq { background: url(img/icon_qq.png) no-repeat left center; }
+.icon_sina { background: url(img/icon_sina.png) no-repeat left center; }
+.icon { width: 16px; height: 16px; background-image: url(img/sprites-1.8.9.png); background-repeat: no-repeat; display: inline-block; vertical-align: middle; }
+.login_wrap #lg_left { height: 442px; }
+.login_wrap #lg_right { height: 370px; }
+.login_wrap .text{font-size: 12px;height: 22px;line-height: 22px;}
+.rst_reg  h2 { margin-bottom: 36px; margin-left: 40px; color: #768263; font-weight: normal; font-size: 22px; font-family: '\5FAE\8F6F\96C5\9ED1'; }
+.rst_reg span, .rst_reg p { margin-top: 36px; margin-left: 60px; color: #333; font-size: 14px; }
+.rst_reg .reg { display: block; margin-top: 10px; margin-left: 60px; width: 111px; height: 29px; background-position: right -50px; }
+.lg_name { float: left; margin-top: 15px; margin-left: 34px; line-height: 30px; }
+/*.lg_name .text { width: 226px; height: 30px; line-height: 30px; padding-left: 8px; color: #999; margin-left: 8px; }*/
+.lg_pass { margin-top: 18px; margin-left: 48px; line-height: 30px; float: left; margin-left: 14px\9; _margin-left: 7px; }
+.lg_pass .text{margin-left: 7px;}
+.lg_check { float: left; }
+.lg_remember { margin-top: 10px; margin-left: 60px; }
+.lg_remember .check { float: left; vertical-align: middle; text-align: center; _margin-top: -3px; margin-right: 2px; }
+.lg_remember span { font-size: 12px !important; color: #999; cursor: pointer; }
+.lg_login { margin-top: 10px; margin-left: 60px; font-size: 12px !important; }
+.lg_login .sub { width: 84px; height: 29px; border: 0; background-position: right 0; cursor: pointer; }
+.lg_login a { margin-left: 12px; color: #666; text-decoration: underline; }
+.ot_login { margin-top: 32px; margin-left: 60px; }
+.ot_login span { font-size: 12px !important; color: #999; }
+.ot_btn { clear: both; margin-top: 10px; }
+.ot_btn a { float: left; margin-left: 3px; *margin-left: 1px; }
+.ot_btn a img { vertical-align: top; }
+.err_uname { visibility: hidden; float: left; margin-top: 19px; margin-left: 12px; *margin-top: 0; _margin-top: 0; }
+.err_uname span { color: #08c !important; font-size: 12px !important; display: block; margin-left: 4px; padding-left: 21px; color: #ff89a7; *padding: 5px 0 2px 21px; *line-height: 30px; _padding: 5px 0 2px 21px; _line-height: 30px; }
+.err_pass, .login_wrap .err_seccode { visibility: hidden; float: left; margin-top: 25px; margin-left: 12px; *margin-top: 21px; _margin-top: 21px; }
+.err_pass span, .login_wrap .err_seccode span { color: #08c !important; font-size: 12px !important; margin-left: 4px; padding-top: 1px; padding-left: 21px; color: #ff89a7; *padding: 5px 0 2px 21px; *line-height: 30px; _padding: 5px 0 2px 21px; _line-height: 30px; }
+.login_qq { background: url(img/login_qq.png) no-repeat left center; width: 49px; height: 21px; }
+.login_wb { background: url(img/login_wb.png) no-repeat left center; width: 76px; height: 21px; }
+.login_wx { background: url(img/login_wx.png) no-repeat left center; width: 53px; height: 21px; }
+/* Footer
+-------------------------------------------------- */
+#footer { margin-top: 20px; padding: 10px 0; width: 100%; border-top: 1px solid #e5e5e5; background-color: #f5f5f5; text-align: center; }
+#footer p { margin-bottom: 4px; color: #777; }
+#footer .links { margin: 10px 0; }
+#footer .links li { display: inline; padding: 0 2px; }
+#footer .links li:first-child { padding-left: 0; }

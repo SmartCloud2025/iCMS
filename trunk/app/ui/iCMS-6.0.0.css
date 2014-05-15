@@ -1,0 +1,62 @@
+html, body { word-wrap: break-word; word-break: break-all; }
+body, button, input, select, textarea { font: 14px/1.75 'Helvetica Neue', Helvetica, Arial, Sans-serif, "\5b8b\4f53"; }
+a:hover { text-decoration: none; }
+.mt0 { margin-top: 0px !important; }
+.mb0 { margin-bottom: 0px !important; }
+.mt10 { margin-top: 10px !important; }
+.mb10 { margin-bottom: 10px !important; }
+.mt20 { margin-top: 20px !important; }
+.mb20 { margin-bottom: 20px !important; }
+.clearfloat { clear: both; }
+i { text-align: center; }
+/* bootstrap */
+a, a:hover, a:focus { color: #057AFD; }
+a.noneline { text-decoration: none !important; }
+.btn, .add-on, .navbar-inner, .label, .navbar a, .switch-left, .switch-right { background-image: none !important; -webkit-box-shadow: none !important; -moz-box-shadow: none !important; box-shadow: none !important; }
+.form-inline input, .form-inline textarea, .form-inline select { color: #1A1A1A !important; }
+.tab-content { overflow: visible; /* background-color: #fff; border: 1px solid #ddd;  */ padding: 10px; border-top: 0px; -webkit-border-radius: 4px; -moz-border-radius: 4px; border-radius: 4px; -webkit-border-top-left-radius: 0; -moz-border-radius-topleft: 0; border-top-left-radius: 0; -webkit-border-top-right-radius: 0; -moz-border-radius-topright: 0; border-top-right-radius: 0; }
+.add-on { background: -webkit-gradient(linear, 50% 0, 50% 100%, color-stop(20%, #fff), color-stop(50%, #f6f6f6), color-stop(52%, #eee), color-stop(100%, #f4f4f4)); background: -webkit-linear-gradient(top, #fff 20%, #f6f6f6 50%, #eee 52%, #f4f4f4 100%); background: -moz-linear-gradient(top, #fff 20%, #f6f6f6 50%, #eee 52%, #f4f4f4 100%); background: -o-linear-gradient(top, #fff 20%, #f6f6f6 50%, #eee 52%, #f4f4f4 100%); background: linear-gradient(top, #fff 20%, #f6f6f6 50%, #eee 52%, #f4f4f4 100%); background-color: #fff; background-clip: padding-box; box-shadow: 0 0 3px #fff inset, 0 1px 1px rgba(0, 0, 0, .1); color: #696969; }
+.input-prepend textarea { -webkit-border-top-left-radius: 0; -moz-border-radius-topleft: 0; border-top-left-radius: 0; -webkit-border-bottom-left-radius: 0; -moz-border-radius-bottomleft: 0; border-bottom-left-radius: 0; }
+.input-append textarea { -webkit-border-top-right-radius: 0; -moz-border-radius-topright: 0; border-top-right-radius: 0; -webkit-border-bottom-right-radius: 0; -moz-border-radius-bottomright: 0; border-bottom-right-radius: 0; }
+.btn-group-vertical > input { display: block; float: none; max-width: 100%; -webkit-border-bottom-right-radius: 0; -moz-border-radius-bottomright: 0; border-bottom-right-radius: 0; -webkit-border-bottom-left-radius: 0; -moz-border-radius-bottomleft: 0; border-bottom-left-radius: 0; }
+.navbar .divider-vertical { border-left: 1px solid #D4D4D4; }
+.navbar .nav>li>a { color: #888888; text-shadow: none; /* font-weight: bold; text-shadow: 0 1px 0 #f8f8f8;  */ }
+.navbar .nav>.active>a { color: #057AFD; }
+.navbar .nav li.dropdown.open>.dropdown-toggle, .navbar .nav li.dropdown.active>.dropdown-toggle, .navbar .nav li.dropdown.open.active>.dropdown-toggle { color: #057AFD; }
+.dropdown-menu li a:hover i, .dropdown-submenu:hover>a i { color: #fff !important; }
+.dropdown-menu li a:hover, .dropdown-menu .active a, .dropdown-menu .active a:hover { background-color: #057AFD; background-image: none; color: #f8f8f8; }
+.nav-tabs { margin-bottom: 0px; }
+.table th { background: #fafafa url("table_head.gif") repeat-x 0 100%; }
+.table td { background-color: #fff; }
+.table tbody .checker { margin-left: 3px !important; }
+.input-append a.btn { border: 1px solid #ccc !important; }
+.btn-primary:hover, .btn-primary:focus, .btn-primary:active, .btn-primary.active, .btn-primary.disabled, .btn-primary[disabled] { background-color: #08c; }
+/* DIALOG */
+.d-content .btn-group { position: absolute; }
+.iPHP-msg { text-align: center; margin: 5px; padding: 4px; }
+.iPHP-msg .label { padding: 8px 10px; font-size: 14px; letter-spacing: 1px; line-height: 160%;}
+.iPHP-msg pre { width: 800px; text-align: left; }
+.iPHP-msg i{font-size: 18px;}
+/* chosen */
+.chosen-container-single .chosen-single { background-image: none !important; -webkit-box-shadow: none !important; -moz-box-shadow: none !important; box-shadow: none !important; }
+.input-prepend .chosen-container-single .chosen-single { -webkit-border-top-left-radius: 0; -moz-border-radius-topleft: 0; border-top-left-radius: 0; -webkit-border-bottom-left-radius: 0; -moz-border-radius-bottomleft: 0; border-bottom-left-radius: 0; }
+.input-append .chosen-container-single .chosen-single { -webkit-border-top-right-radius: 0; -moz-border-radius-topright: 0; border-top-right-radius: 0; -webkit-border-bottom-right-radius: 0; -moz-border-radius-bottomright: 0; border-bottom-right-radius: 0; }
+.chosen-container-single .chosen-single { height: 28px; border: 1px solid #ccc; color: #696969; font-size: 14px; line-height: 28px; }
+.chosen-container-single .chosen-single div b { background-position-y: 5px; }
+/* tooltip */
+.tooltip-inner { max-width: 760px; text-align: left !important; font-size: 14px; }
+.tooltip-inner hr, .d-content .iPHP-msg .label hr { margin: 10px 0px; border-bottom: none; }
+/* uniform */
+.add-on .checker { margin-right: 0px; margin-bottom: 4px; }
+/* modal */
+.modal { z-index: 9999 !important; margin: 0px !important; }
+.modal .modal-header { padding: 3px 15px; -webkit-border-top-left-radius: 4px; -webkit-border-top-right-radius: 4px; -moz-border-radius-topleft: 4px; -moz-border-radius-topright: 4px; border-top-left-radius: 4px; border-top-right-radius: 4px; }
+.modal .modal-header h3 { font-size: 18px; }
+.modal .modal-footer { padding: 10px 15px; }
+.modal .modal-body { overflow: hidden; padding: 0px; max-height: 100%; height: 100%; }
+.modal-iframe { top: 0px; left: 0px; width: 100%; height: 100%; }
+.modal-iframeFix { top: 0px; left: 0px; width: 100%; height: 100%; background: #fff; position: absolute; opacity: 0.001; zIndex: 1000; display: none; }
+#modal-overlay { position: fixed; top: 0px; left: 0px; z-index: 100; width: 100%; height: 100%; }
+.modal-overlayBG { background-color: #000; opacity: 0.75; -ms-filter: "progid:DXImageTransform.Microsoft.Alpha(Opacity=75)"; filter: alpha(opacity=75); -moz-opacity: 0.75; }
+/* pagination */
+.pagination .muted { height: 20px; line-height: 20px; }

@@ -1,0 +1,45 @@
+<!--{if $comment.display=="iframe"}-->
+<html lang="zh-CN">
+	<head>
+		<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+		<title><!--{$comment.title}-->评论_<!--{$site.title}-->_<!--{$site.seotitle}--></title>
+		<!--{iCMS:public:ui script="false"}-->
+		<script>
+		$(function(){
+		$('.iCMS_LoginBox').on("click", function() {
+			event.preventDefault();
+			window.parent.iCMS.LoginBox();
+			return false;
+		});
+		})
+		</script>
+	</head>
+	<body class="iCMS-comment-page">
+		<!--{/if}-->
+		<div class="iCMS-comment-wrap">
+			<div class="iCMS-comment-user clearfix">
+			</div>
+			<div class="iCMS-comment-login clearfix mb10">
+				<a href="<!--{iCMS:router url='/api/login'}-->" class="iCMS_LoginBox" title="登录"><i class="fa fa-user"></i> 登录</a>
+				<a href="<!--{iCMS:router url='/api/register'}-->" target="_blank"><i class="fa fa-heart"></i> 注册</a>
+			</div>
+			<div class="alert">
+				<i class="fa fa-warning "></i> 请自觉遵守互联网相关的政策法规，严禁发布色情、暴力、反动的言论！
+			</div>
+			<div class="iCMS-comment-editor">
+				<textarea class="iCMS-editor-text" name="comment[content]"></textarea>
+			</div>
+			<div class="iCMS-comment-command clearfix">
+				<input type="hidden" id="comment_quote"	name="comment[quote]" value="0">
+				<input type="hidden" id="comment_floor"	name="comment[floor]" value="0">
+				<input type="hidden" id="comment_title"	name="comment[title]" value="<!--{$comment.title}-->">
+				<input type="hidden" id="comment_appid"	name="comment[appid]" value="<!--{$comment.appid}-->">
+				<input type="hidden" id="comment_iid name="comment[iid]" value="<!--{$comment.iid}-->">
+				<input type="hidden" id="comment_cid name="comment[cid]" value="<!--{$comment.cid}-->">
+				<button class="btn btn-primary" type="submit"><i class="fa fa-check"></i> 提 交</button>
+			</div>
+		</div>
+		<!--{if $comment.display=="iframe"}-->
+	</body>
+</html>
+<!--{/if}-->

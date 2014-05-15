@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+    <title><!--{$user.nickname}-->的<!--{$site.title}-->_<!--{$site.seotitle}--></title>
+    <meta name="keywords" content="<!--{$site.keywords}-->" />
+    <meta name="description" content="<!--{$user.nickname}-->的<!--{$site.title}-->"/>
+    <meta name="mobile-agent" content="format=html5;url=<!--{$article.url}-->"/>
+    <!--{iCMS:public:ui}-->
+    <link rel="stylesheet" href="<!--{$site.urls.public}-->/theme/default.css" type="text/css" />
+    <link rel="stylesheet" href="<!--{$site.urls.ui}-->/user-6.0.0.css" type="text/css" />
+    <script type="text/javascript">
+    $(function(){
+    $('.iCMS_user_card').tooltip({html: 'html'});
+    })
+    </script>
+  </head>
+  <body>
+    <!--{include file="{iTPL}/header.htm"}-->
+    <div id="iCMS_home" class="clearfix">
+      <div class="user_header">
+        <div class="card_banner">
+          <img src="http://pic2.52pk.com/files/130617/1283568_104827_7094.jpg" alt="">
+        </div>
+        <div class="card_top">
+          <div class="card_info">
+            <a class="card_title_name iCMS_user_card" data-id="<!--{$user.uid}-->" title="" href="<!--{$user.urls.home}-->"><!--{$user.nickname}--></a>
+            <i class="icon_<!--{$user.sex}-->"></i>
+            <a data-uid="<!--{$user.uid}-->" data-fname="<!--{$user.nickname}-->" data-followed="<!--{$status.followed}-->" class="iCMS_user_follow follow_btn <!--{if $status.followed}-->unfollow<!--{else}-->follow<!--{/if}-->"></a>
+            <p class="card_slogan">
+              <!--{$userdata.slogan|default:'这家伙太懒了,什么都没有留下!'}-->
+            </p>
+          </div>
+          <div class="card_data">
+            <ul>
+              <li class='last'>
+                <a href="<!--{$user.urls.share}-->">
+                  <span class="text_count">48864</span>
+                  <span class="text_atr">分享</span>
+                </a>
+              </li>
+              <li>
+                <a href="<!--{$user.urls.follower}-->">
+                <span class="text_count">48864</span>
+                <span class="text_atr">粉丝</span>
+                </a>
+              </li>
+              <li>
+                <a href="<!--{$user.urls.following}-->">
+                <span class="text_count">48864</span>
+                <span class="text_atr">关注</span>
+                </a>
+              </li>
+              <li class='first'>
+                <a href="<!--{$user.urls.home}-->">
+                <span class="text_count">22390</span>
+                <span class="text_atr">文章</span>
+                </a>
+              </li>
+            </ul>
+          </div>
+          <div class="card_avatar"><a href="<!--{$user.urls.home}-->"><img class="card_avatar_img" src="<!--{$user.avatar}-->"></a></div>
+        </div>
+      </div>
+      <div class="user_nav_wrap">
+        <ul class="nav_list">
+          <li class="c"><a href="<!--{$user.urls.home}-->" title="文章" class="nav_icon icon_art">文章</a></li>
+          <li> <a href="<!--{$user.urls.favorite}-->" title="收藏" class="nav_icon icon_fav">收藏</a></li>
+          <li> <a href="<!--{$user.urls.share}-->" title="分享" class="nav_icon icon_sha">分享</a></li>
+        </ul>
+      </div>
+      <div class="main-col">
+        <!--{if $user.category.name}-->
+        <h3 class="category_name"><span class="label label-info"><!--{$user.category.name}--></span></h3>
+        <!--{/if}-->
+        <div id="artList">
+          <ul>
+            <!--{iCMS:article:list loop="true" page="true" row="10" userid=$user.uid scid=$cid}-->
+            <li class="clearfix">
+              <div class="list_top">
+                <div class="rep_num" title="回复"><!--{$article_list.hits}--></div>
+                <div class="title">
+                  <a href="<!--{$article_list.url}-->" target="_blank" class="i_th_tit"><!--{$article_list.title}--></a>
+                </div>
+                <div class="info">
+                  <span class="icon_author " data-field="{'userid':<!--{$article_list.userid}-->}">
+                  <a class="sign_highlight iCMS_user_card " href="" target="_blank"><!--{$article_list.author}--></a>
+                  </span>
+                  <span class="date"><!--{$article_list.pubdate|date:'Y-m-d'}--></span>
+                </div>
+              </div>
+              <div class="list_detail clearfix">
+                <div class="text"><!--{$article_list.description}--></div>
+                <!--{if $article_list.pic}-->
+                <div class="pic"><img src="<!--{$article_list.pic}-->" onload="iCMS.imgFix(this,550,150);"></div>
+                <!--{/if}-->
+              </div>
+              <div class="list_fun clearfix">
+                <a href="###" data-iid='<!--{$article_list.id}-->' class="iCMS_good_btn" title="32个赞"><i class="icon-thumbs-up"></i> <span>(<!--{$article_list.good}-->)</span></a>
+                <a href="###" data-iid='<!--{$article_list.id}-->' class="iCMS_comment_btn" title="评论"><i class="icon-comment"></i> <span>(<!--{$article_list.comments}-->)</span></a>
+                <a href="###" data-iid='<!--{$article_list.id}-->' class="iCMS_favorite_btn" title="收藏"><i class="icon-heart"></i></a>
+              </div>
+            </li>
+            <!--{/iCMS}-->
+          </ul>
+        </div>
+        <div id="artpagenav" class="iCMS_pagination">
+          <!--{$page.nav}-->
+        </div>
+      </div>
+      <div class="right-col">
+        <!--{if $status.isme}-->
+        <div class="mod" id="home_fun">
+          <a href="<!--{iCMS:router url='/user/publish'}-->" class="btn"><i class="icon_edit"></i> <span>发表文章</span></a>
+          <a href="<!--{iCMS:router url='/user/manage'}-->" class="btn"><i class="icon_setting"></i> <span>主页管理</span></a>
+        </div>
+        <!--{/if}-->
+        <div class="mod txtlist" id="user_category">
+          <div class="hd">
+            <h3>分类<span>CATEGORY</span></h3>
+            <!--{if $status.isme}-->
+            <a href="<!--{iCMS:router url='/user/manage/category'}-->" target="_blank" class="more">管理&gt;&gt;</a>
+            <!--{/if}-->
+          </div>
+          <ul>
+            <!--{iCMS:user:category loop="true" row="30" userid=$user.uid}-->
+            <li><a href="<!--{$user_category.url}-->"><!--{$user_category.name}--> <span>(<!--{$user_category.count}-->)</span></a></li>
+            <!--{/iCMS}-->
+          </ul>
+        </div>
+        <div class="mod">
+          <div class="hd">
+            <h3>粉丝<span>FANS</span></h3>
+            <a href="<!--{iCMS:router url='/user/manage/follower'}-->" target="_blank" class="more">管理&gt;&gt;</a>
+          </div>
+          <ul>
+            <!--{iCMS:user:follow loop="true" row="30" fuid=$user.uid}-->
+            <li><a href="<!--{$user_follow.url}-->"><!--{$user_follow.name}--></a></li>
+            <!--{/iCMS}-->
+          </ul>
+        </div>
+        <div class="mod">
+          <div class="hd">
+            <h3>关注<span>FOLLOW</span></h3>
+            <a href="<!--{iCMS:router url='/user/manage/following'}-->" target="_blank" class="more">管理&gt;&gt;</a>
+          </div>
+          <ul>
+            <!--{iCMS:user:follow loop="true" row="30" userid=$user.uid}-->
+            <li><a href="<!--{$user_follow.url}-->"><!--{$user_follow.name}--></a></li>
+            <!--{/iCMS}-->
+          </ul>
+        </div>
+        <div class="mod">
+          <div class="hd">
+            <h3>统计<span>STATISTICS</span></h3>
+          </div>
+          <ul>
+            <!--{iCMS:user:category loop="true" row="30" uid=$user.uid}-->
+            <li><a href="<!--{$user_category.url}-->"><!--{$user_category.name}--></a></li>
+            <!--{/iCMS}-->
+          </ul>
+        </div>
+      </div>
+    </div>
+    <!--{include file="{iTPL}/footer.htm"}-->
+  </body>
+</html>

@@ -1,0 +1,56 @@
+<div id="iPHP_DIALOG" class="hide"><img src="<!--{$site.urls.ui}-->/img/loading.gif" /> 加载中,请稍侯......</div>
+<div id="iCMS_MODAL" class="modal hide">
+  <div class="modal-header">
+    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+    <h3>iCMS 提示</h3>
+  </div>
+  <div class="modal-body">
+    <p class="modal-loading"><img src="<!--{$site.urls.ui}-->/img/loading.gif" /> 加载中,请稍侯......</p>
+  </div>
+</div>
+<div id="iCMS_Login_Box">
+  <div class="iCMS_Login_Box">
+    <div class="login_box">
+      <p class="login_fail err_uname err_seccode"></p>
+      <div class="login_form">
+        <dl>
+          <dd>用户名：</dd>
+          <dt>
+          <input type="text" name="uname" id="iCMS_uname" value="<!--{"user:login:def_uname"|lang}-->">
+          </dt>
+          <dd>密 码：</dd>
+          <dt>
+          <input type="password" name="pass" id="iCMS_pass">
+          </dt>
+          <!--{if $iCMS.config.user.loginseccode}-->
+          <dd>验证码：</dd>
+          <dt>
+          <input id="iCMS_seccode" type="text" maxlength="4" name="seccode" class="r3">
+          <img class="r3" id="iCMS_seccode_img" src="<!--{iCMS:router url='/api/seccode'}-->" /> <a href="javascript:void(0);" id="iCMS_seccode_text" style="float: none">换一张</a>
+          </dt>
+          <!--{/if}-->
+          <dd>&nbsp;</dd>
+          <dt class="rem">
+          <input type="checkbox" name="remember" id="iCMS_remember" class="checkbox" value="1">
+          两周内免登录</dt>
+          <dd>&nbsp;</dd>
+          <dt>
+          <input type="button" class="iCMS_loginBtn btn btn-primary" value="登 陆">
+          <a href="<!--{iCMS:router url='/api/findpwd'}-->">忘记密码？</a></dt>
+        </dl>
+      </div>
+      <div class="reg_or_weibo">
+        <div class="register_box">还没有<!--{$site.title}-->账号？
+        <a href="<!--{iCMS:router url='/api/login/qq'}-->" style="display:block; margin:10px 0 20px"><img src="<!--{$site.urls.ui}-->/img/login_for_qq_v3.png"></a></div>
+        <div class="l_o">
+          <a href="<!--{iCMS:router url='/api/login/wb'}-->">用微博帐号登录</a><br>
+          <a style="background-position: 0 -137px;" href="<!--{iCMS:router url='/api/login/wx'}-->">用微信帐号登录</a>
+        </div>
+        <a href="<!--{iCMS:router url='/api/register'}-->" style="font-size:14px; text-decoration:underline;">直接注册<!--{$site.title}-->帐号</a>
+      </div>
+    </div>
+  </div>
+</div>
+<script type="text/javascript">
+<!--{include file="/iCMS/login.js"}-->
+</script>

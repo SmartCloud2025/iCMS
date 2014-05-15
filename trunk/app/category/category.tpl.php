@@ -1,0 +1,82 @@
+<?php
+/**
+ * @package iCMS
+ * @copyright 2007-2010, iDreamSoft
+ * @license http://www.idreamsoft.com iDreamSoft
+ * @author coolmoo <idreamsoft@qq.com>
+ * @$Id: category.tpl.php 2379 2014-03-19 02:37:47Z coolmoo $
+ */
+function category_array($vars){
+	$id		= (int)$vars['cid'];
+	$rs		= iCache::get('system/category/'.$id);
+	empty($rs) && iPHP::throwException('应用程序运行出错.找不到该栏目: <b>cid:'. $id.'</b>', 3002);
+	if($rs['url']) {
+		$gourl=(isset($vars['gotourl']) && $vars['gotourl']==0)?false:true;
+		if($gourl) return iPHP::gotourl($rs['url']);
+	}
+	$iurl       = iRouter::url('category',$rs);
+	$rs['url']	= $iurl->href;
+	$rs['link']	= "<a href='{$rs['url']}'>{$rs['name']}</a>";
+	//$rs['nav']	= $iCMS->shownav($rs['cid']);
+	$rootidA		= iCache::get('system/category/rootid');
+	$rs['subid']    = $rootidA[$id];
+	$rs['subids']   = implode(',',(array)$rs['subid']);
+	return $rs;
+}
+function category_list($vars){
+	$appid		= isset($vars['appid'])?(int)$vars['appid']:iCMS_APP_ARTICLE;
+	$row		= isset($vars['row'])?(int)$vars['row']:"100";
+	$cacheTime	= isset($vars['time'])?(int)$vars['time']:"-1";
+	$status		= isset($vars['status'])?(int)$vars['status']:"1";
+	$whereSQL	=" WHERE `appid`='$appid' AND `status`='$status'";
+
+	isset($vars['pid']) && $whereSQL.=" AND `pid` = '{$vars['pid']}'";
+	isset($vars['mode']) && $whereSQL.=" AND `mode` = '{$vars['mode']}'";
+	
+	isset($vars['cid']) && !isset($vars['stype']) && $whereSQL.= iPHP::andSQL($vars['cid'],'cid');
+	isset($vars['cid!']) && $whereSQL.= iPHP::andSQL($vars['cid!'],'cid','not');
+	switch ($vars['stype']) {
+		case "top":	
+			$vars['cid'] && $whereSQL.= iPHP::andSQL($vars['cid'],'cid');
+			$whereSQL.=" AND rootid='0'";
+		break;
+		case "sub":	
+			$vars['cid'] && $whereSQL.=" AND `rootid` = '{$vars['cid']}'";
+		break;
+		case "subtop":	
+			$vars['cid'] && $whereSQL.= iPHP::andSQL($vars['cid'],'cid');
+		break;
+		case "subone":	
+			$whereSQL.= iPHP::andSQL(iCMS::getIds($vars['cid'],false),'cid');
+		break;
+		case "self":
+			$parent=iCache::get('system/category/parent',$vars['cid']);
+			$whereSQL.=" AND `rootid`='$parent'";
+		break;
+	}
+	if($vars['cache']){
+		$cacheName	= 'category/'.md5($whereSQL);
+		$rs			= iCache::get($cacheName);
+	}
+	if(empty($rs)){
+		$rootidA= iCache::get('system/category/rootid');
+		$rs		= iDB::getArray("SELECT * FROM `#iCMS@__category`{$whereSQL} ORDER BY `orderNum`,`cid` ASC LIMIT $row");
+		$_count	= count($rs);
+		for ($i=0;$i<$_count;$i++){
+        	$rs[$i]['son']	= $rootidA[$rs[$i]['cid']]?true:false;
+			$rs[$i]['url']	= iRouter::url('category',$rs[$i])->href;
+			$rs[$i]['link']	= "<a href='{$rs[$i]['url']}'>{$rs[$i]['name']}</a>";
+	        if($rs[$i]['metadata']){
+	        	$mdArray=array();
+	        	$rs[$i]['metadata']=unserialize($rs[$i]['metadata']);
+	        	foreach($rs[$i]['metadata'] AS $mdval){
+	        		$mdArray[$mdval['key']]=$mdval['value'];
+	        	}
+	        	$rs[$i]['metadata']=$mdArray;
+	        }
+	        unset($rs[$i]['contentprop']);
+		}
+		$vars['cache'] && iCache::set($cacheName,$rs,$cacheTime);
+	}
+	return $rs;
+}

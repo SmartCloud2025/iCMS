@@ -1,0 +1,150 @@
+body { background-color: #fff; background-image: url(img/bg-v6.png); _background-attachment: fixed; }
+/* home */
+#iCMS_home { margin: 0 auto; width: 960px; background-color: #fff; }
+#iCMS_home .main-col { float: left; width: 640px; margin-top: 10px; min-height: 900px; _height: 900px; border-right: 1px solid #E4E4E4; background: #fff; }
+#iCMS_home .right-col { float: right; padding-top: 20px; padding-bottom: 30px; width: 319px; }
+#iCMS_home .mod { margin-left: 10px; margin-right: 10px;}
+#iCMS_home .mod .hd { margin-bottom: 4px; }
+#iCMS_home .txtlist li { display: block; margin-bottom: 3px; list-style: none; }
+#iCMS_home .txtlist li a { padding: 0 0 0 10px; display: block; height: 28px; line-height: 28px; color: #666; }
+#iCMS_home .txtlist li a:hover { color: #259; background: #EFF6FA; border-radius: 3px; text-decoration: none; }
+#iCMS_home .txtlist li a span{margin-left: 10px;}
+/* --icon--- */
+.icon_user { display: inline-block; width: 16px; height: 16px; background: url(img/user.png) no-repeat top left; }
+.icon_male, .icon_female { float: left; width: 16px; height: 16px; overflow: hidden; margin-right: 2px; vertical-align: middle; background: url(img/gender.png) no-repeat top left; }
+.icon_female { background-position: 4px 0px; }
+.icon_male { background-position: -12px 0px; }
+.icon_edit { display: inline-block; width: 91px; height: 71px; background: url(img/home_edit.png) no-repeat top left; }
+.icon_setting { display: inline-block; width: 78px; height: 71px; background: url(img/home_setting.png) no-repeat top left; }
+/* ------home.header---------- */
+.user_header { background: none repeat scroll 0 0 #FFF; }
+.card_top { height: 64px; line-height: normal; position: relative; *z-index: 1001; padding: 5px 0 10px 100px; }
+.card_info { padding: 10px 0; width: 400px; float: left; }
+.card_data { margin: 0; overflow: hidden; border: none; }
+.card_avatar { padding: 2px; border: 1px solid #CCC; *border: solid 1px #CCC; background: #fff; position: absolute; left: 0; top: 0; margin: 15px; box-shadow: 0 1px 5px #999; }
+.card_avatar, .card_avatar_img { border-radius: 5px; width: 60px; height: 60px; display: block; overflow: hidden }
+.card_title_name { font-size: 22px; color: #333; margin-right: 15px }
+.card_title_name:hover { }
+.card_title_name:visited { text-decoration: none; color: #333 }
+.card_slogan { color: #8E8E8E; font-size: 12px; height: 16px; overflow: hidden; float: left; padding-right: 30px; clear: both; margin-top: 5px; }
+.follow_btn { height: 28px; float: left; margin-left: 20px; _margin-top: 0; }
+.follow { width: 72px; background: url(img/follow.png) no-repeat top left; float: left; }
+.follow:hover { background-position: 0 -36px }
+.follow:active { background-position: 0 -73px }
+.unfollow { width: 130px; background: url(img/unfollow.png) no-repeat top left; float: left; }
+.unfollow:hover { background-position: 0 -58px }
+.unfollow:active { background-position: 0 -109px }
+.card_title_name { float: left }
+.card_title_name { margin-top: 0 }
+.card_title_name { margin-top: 0\0 }
+.card_title_name { margin-top: 3px\9\0 }
+.user_header .card_avatar { padding: 4px; overflow: hidden; background: #FFF; z-index: 9; top: auto; bottom: -5px; border-color: #CCC; margin: 20px }
+.user_header .card_avatar, .user_header .card_avatar_img { width: 150px; height: 150px }
+.user_header .card_data { padding: 15px 0 15px; float: right; width: 360px; text-align: center; }
+.user_header .card_banner { display: block; position: relative; min-height: 150px; max-height: 300px; margin: 0; overflow: hidden; _zoom: 1 }
+.user_header .card_banner img { width: 100%; vertical-align: top }
+.user_header .card_top { padding-left: 200px; border-top: 1px solid #CCC; background-color: #F8F8F8; _background: #F8F8F8 }
+.user_header .card_title_name { margin-right: 0; }
+.user_header ul li { padding: 0 15px; _display: inline-block; border-right: 1px solid #DEDEDE; cursor: pointer; min-width: 55px; _width: 55px; _overflow: visible; float: right; }
+.user_header .card_data  .text_count { position: relative; display: block; line-height: 18px; font-size: 16px; font-weight: 500; font-family: tahoma; }
+.user_header .card_data .text_atr { position: relative; display: block; margin-bottom: 3px; color: #333; font-size: 12px; }
+.user_header .card_data li.last { border-right: 0; }
+.user_header .card_data li.first { border-left: 0; }
+.user_nav_wrap { border-top: 1px solid #e4e4e4; border-bottom: 1px solid #CCC; height: 43px; width: 100%; background: url(img/home-top-bg.png) repeat-x 0 0; position: relative; }
+.user_nav_wrap .nav_list { height: 46px; font-size: 16px; float: left; overflow: hidden; width: 750px; margin-left: 22px; }
+.user_nav_wrap .nav_list li { height: 46px; line-height: 46px; float: left; display: inline; margin-left: -2px; }
+.user_nav_wrap .nav_list li.c { background: url(img/home-top-bg.png) repeat-x 0 -100px; }
+.user_nav_wrap .nav_list a { font-weight: bold; font-size: 14px; color: #5C6573; display: block; padding: 0 22px; position: relative; }
+.nav_list a.nav_icon { background: url(img/nav_icon.png) no-repeat; padding-left: 43px; }
+.nav_list a.icon_art { background-position: 20px -85px; }
+.nav_list a.icon_fav { background-position: 20px -169px; }
+.nav_list a.icon_sha { background-position: 20px -44px; }
+/* ----home.artList-------- */
+.category_name { margin-left: 20px; }
+.category_name .label { padding: 6px 20px; font-size: 16px; }
+#artList { font-size: 14px; }
+#artList ul { padding: 0 30px; }
+#artList li { width: 100%; overflow-y: hidden; padding: 16px 0 18px; border-bottom: 1px dotted #E4E4E4; line-height: 23px; }
+#artList .rep_num { float: left; font-size: 12px; padding: 0 4px 0 1px; overflow: hidden; width: 50px; height: 23px; line-height: 23px; text-align: center; color: #333; background: url(http://tb2.bdstatic.com/tb/static-frs/img/v2/reply_num_bg.gif?t=1398765586497) no-repeat; }
+#artList .list_top { height: 23px; line-height: 23px; overflow: hidden; }
+#artList .list_top .title { width: auto; float: left; display: inline-block; margin-left: 10px; }
+#artList .list_top .info { width: 155px; overflow: hidden; float: right; display: inline; overflow: hidden; }
+#artList .list_top .info .date { float: right; }
+#artList .list_detail { margin-top: 5px; }
+#artList .list_detail .text { font-size: 12px; }
+#artList .list_detail .pic { height: 150px; overflow: hidden; }
+#artList .list_fun { text-align: right; }
+#artList .list_fun a { color: #333; }
+/* ----home.fun-------- */
+#home_fun { font-weight: bold; margin-top: 10px; padding-left: 25px; padding-bottom: 15px; border-bottom: 1px dotted #DBDBDB; }
+#home_fun a { width: 90px; }
+/* ============== */
+/* profile */
+.profile_box { width: 960px; }
+.profile_box .piece_hd { background: url(img/profile_hd_bg.png) no-repeat; }
+.profile_box .piece_bd { min-height: 600px; background: url(img/profile_bd_bg.png) repeat-y; }
+.profile_box .piece_ft { background: url(img/profile_ft_bg.png) no-repeat; }
+.profile_box .pro_sidebar { margin: 25px 0 0 35px; font-size: 14px; width: 147px; }
+.profile_box .pro_sidebar h1 { font-size: 16px; line-height: 130%; font-weight: normal; color: #333; }
+.pro_sidebar .iconfont { color: #8DB933; }
+.pro_sidebar .base_info { margin: 10px 0 20px 14px; }
+.pro_sidebar a.c { font-weight: bold; }
+.pro_sidebar a { padding: 0 10px; line-height: 28px; font-size: 14px; }
+.profile_box .pro_contents { font-size: 14px; width: 685px; margin-left: 50px; }
+#profile_form { margin-top: 22px; position: relative; }
+#profile_form dl { margin-bottom: 12px; }
+#profile_form dd { float: left; width: 105px; text-align: right; line-height: 26px; vertical-align: middle; color: #666; }
+#profile_form dt { margin-bottom: 12px; font-size: 12px; color: #666; }
+.iner { _padding-top: -50px; display: inline; *vertical-align: 10px; }
+.profile_title { background: url(img/profile_title_bg.png) no-repeat; width: 649px; height: 30px; line-height: 30px; padding-left: 20px; margin-bottom: 10px; }
+.profile_title span { color: #70A700; font-size: 14px; font-weight: bold; height: 30px; line-height: 30px; }
+.profile_basic select { width: 90px; font-size: 14px; }
+.profile_basic .unick span { color: #f00; margin-left: 10px; margin-right: 5px; font-weight: bold; }
+.profile_basic .unick { font-size: 12px; }
+.iner { _padding-top: -50px; display: inline; *vertical-align: 10px; }
+.profile_basic textarea { height: 120px; width: 466px; border: 1px solid #cfcfcf; color: #666; padding: 5px; }
+.profile_basic .pstyle, .profile_basic .weibo input { width: 365px; }
+.profile_basic .is_show_sel { margin-top: 2px; float: right; margin-top: -23px\9; font-size: 12px !important; width: 100px !important; height: 25px !important; }
+.tags_list { width: 355px; border: 1px #CFCFCF solid; overflow: hidden; border-radius: 3px; padding: 10px; position: absolute; left: 105px; background-color: #fff; display: none; top: 30px; _left: 0; }
+.tags_list .tag { width: 330px; float: left; }
+.tags_list .close { background: url(img/twitter_light_box_bg.png) no-repeat left bottom; width: 11px; height: 11px; margin: 5px 5px 0 0; float: right; }
+.tags_list .tag a { color: #690; font-size: 12px; cursor: pointer; padding: 2px 4px; white-space: nowrap; }
+.tags_list .tag a:hover { text-decoration: underline; }
+.profile_avatar dt { font-size: 12px; }
+.profile_avatar span { color: #82af00; }
+.profile_avatar #uploadBtn { margin-bottom: 10px; }
+.profile_avatar .tfile { /* position: absolute; filter: alpha(opacity=0); opacity: 0; left: 255px; left: 250px\9; *left: 230px; _left: 130px; top: 0; height: 26px;  */
+display: none; }
+.profile_avatar .gray_button { width: 65px; height: 26px; display: inline; color: #333; font-size: 16px; }
+.profile_avatar .gray_text { width: 244px; height: 24px; margin-right: 2px; }
+.profile_avatar .avatar_confirm, .profile_avatar .preview { display: none; }
+/* -----profile.bind---------- */
+.account_bind .account_bind_title { height: 30px; line-height: 30px; background: #f7f7f7; padding: 0 15px; border-radius: 8px; color: #666; }
+.account_bind .bind_logo { margin-top: 5px; overflow: hidden; zoom: 1; }
+.account_bind .bind_help { font-size: 12px; color: #70a700; }
+.account_bind .bind_web { margin-left: 15px; float: left; width: 595px; height: 85px; }
+.account_bind .bind_web .unbind { color: #999; }
+.account_bind .bind_logo li { overflow: hidden; font-size: 12px; padding: 30px 0 0 0; line-height: 180%; color: #999; float: left; clear: both; zoom: 1; height: 85px; width: 685px; border-bottom: 1px solid #eee; }
+.account_bind .bind_logo li.mr0 { margin-right: 0; }
+.account_bind .bind_logo .checkType_box { background: #f7f7f7; overflow: hidden; zoom: 1; height: 23px; padding: 12px 0 8px 15px; margin-top: 10px; }
+.account_bind .bind_logo .checkType { float: left; color: #666; margin-right: 10px; }
+.account_bind .bind_logo .checkType input { vertical-align: middle; margin: 0 5px 4px 10px; }
+.account_bind .bind_logo .icon { height: 61px; width: 61px; background: url(img/profile_icon.png) no-repeat; margin-bottom: 4px; float: left; }
+.account_bind .bind_logo .i_sina { background-position: 0 -100px; }
+.account_bind .bind_logo .i_tencent { background-position: 0 -200px; }
+.account_bind .bind_logo .i_qzone { background-position: 0 -300px; }
+.account_bind .bind_logo .i_renren { background-position: 0 -400px; }
+.account_bind .bind_logo .i_douban { background-position: 0 -500px; }
+.account_bind .bind_logo .i_wangyi { background-position: 0 -600px; }
+.account_bind .bind_logo li span { color: #333; float: left; color: #70a700; margin-right: 10px; }
+.account_bind .bind_logo li .bind_title { color: #666; font-size: 14px; }
+.account_bind .bind_logo li .bind_title b { color: #87BD34; }
+.account_bind .bind_logo li .bind_title .unbind_link { float: right; font-size: 12px; color: #666; text-decoration: underline; }
+.account_bind .bind_logo li .bind_result { color: #666; margin: 10px 0 0 0; color: #70a700; }
+.account_bind .bind_logo li .bind_result .result_taobao { margin: 0 0 0 10px; color: #666; font-weight: normal; }
+.account_bind .bind_logo li .bind_result .result_taobao a { color: #666; text-decoration: underline; }
+.account_bind .bind_logo li span.unbind { color: #999; }
+.account_bind .bind_logo li a.binded { color: #5e7d08; }
+.account_bind .bind_logo li #bind_qq { clear: both; }
+.account_bind .bind_logo .bind_web .addSuccess { color: #690; line-height: 23px; padding-left: 12px; vertical-align: center; }
+.account_bind p.bind_tip { margin-top: 0; text-align: left; color: #999; }

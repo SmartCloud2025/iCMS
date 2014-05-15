@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+    <title><!--{$site.title}-->_<!--{$site.seotitle}--></title>
+    <meta name="keywords" content="<!--{$site.keywords}-->" />
+    <meta name="description" content="<!--{$site.description}-->"/>
+    <meta name="mobile-agent" content="format=html5;url=<!--{$site.url}-->"/>
+    <!--{iCMS:public:ui}-->
+    <link rel="stylesheet" href="<!--{$site.urls.ui}-->/loginreg.css" type="text/css" />
+    <script type="text/javascript">
+    <!--{include file="/iCMS/login.js"}-->
+    </script>
+  </head>
+  <body>
+    <div id="body" class="login_wrap">
+      <div class="logo"> <a href="<!--{$site.url}-->" class="icms fl" title="<!--{$site.title}-->"><!--{$site.title}--></a> </div>
+      <div class="content">
+        <div id="lg_box">
+          <div id="lg_left">
+            <h1>用户登录</h1>
+            <div id="lg_center">
+              <div class="iCMS_login" class="lg_form">
+                <div class="lg_name"> <span>用户名：</span>
+                  <input type="text" value="邮箱 或 昵称" name="uname" id="iCMS_uname" class="text r3" maxlength="32">
+                </div>
+                <div class="err_uname"><span><i class="fa fa-minus-circle"></i> 请输入登录名</span></div>
+                <div class="clear"></div>
+                <div class="lg_pass">
+                  <span>密码：</span><input type="password" value="" name="pass" id="iCMS_pass" class="text r3" maxlength="32">
+                </div>
+                <div class="err_pass"><span><i class="fa fa-minus-circle"></i> 请输入密码</span></div>
+                <div class="clear"></div>
+                <!--{if $iCMS.config.user.loginseccode }-->
+                <div class="lg_check"><span>验证码：</span>
+                  <input id="iCMS_seccode" type="text" maxlength="4" name="seccode" class="r3">
+                  <img class="r3" id="iCMS_seccode_img" src="<!--{iCMS:router url='/api/seccode'}-->" /> <a href="javascript:void(0);" id="iCMS_seccode_text" style="float: none">换一张</a>
+                </div>
+                <div class="err_seccode"><span><i class="fa fa-minus-circle"></i> 请输入验证码</span></div>
+                <!--{/if}-->
+                <div class="clear"></div>
+                <div class="lg_remember">
+                  <label><input type="checkbox" value="1" name="remember" name="iCMS_remember" class="check" checked="checked"><span>记住我（两周免登录）</span></label>
+                </div>
+                <div class="clear"></div>
+                <div class="lg_login">
+                  <input type="button" value=" " class="sub iCMS_loginBtn"><a href="<!--{$iCMS.SAPI}-->&do=findpwd">忘记密码？</a>
+                </div>
+              <div class="ot_login">
+                <span>您也可以用以下方式登录：</span>
+                <div class="ot_btn">
+                  <a href="<!--{iCMS:router url='/api/login/qq'}-->" class="login_qq"></a>
+                  <a href="<!--{iCMS:router url='/api/login/wb'}-->" class="login_wb"></a>
+                  <a href="<!--{iCMS:router url='/api/login/wx'}-->" class="login_wx"></a>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div id="lg_right">
+          <div class="rst_reg">
+          <h2>注册</h2> <span style="margin-left:40px;">还没有账号？</span> <a style="margin-left:40px;" class="reg" href="<!--{iCMS:router url='/api/register'}-->"></a> </div>
+        </div>
+        <div class="clear"></div>
+      </div>
+    </div>
+  </div>
+  <!--{include file="{iTPL}/footer.htm"}-->
+</body>
+</html>

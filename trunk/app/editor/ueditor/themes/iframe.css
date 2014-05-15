@@ -1,0 +1,7 @@
+body { background-color: #ffffff; padding: 5px margin: 0px;}
+body, td {font: 14px/20px Tahoma, Arial, sans-serif;}
+p { font-size: 14px; margin-top: 10px auto 0px auto; line-height: 25px; text-indent: 2em; padding: 0px; }
+.pagebreak { background-position: center center; background-image: url(pagebreak.gif); background-repeat: no-repeat; clear: both; display: block; width: 99%; border-top: #999999 1px dotted; border-bottom: #999999 1px dotted; border-right: 0px;margin:5px; border-left: 0px; padding: 0px;height: 5px;_height: 2px; }
+.attachment{border: #999999 1px dotted;height:24px;line-height:24px;width:310px;clear:both;}
+.attachment a{color:#333;}
+.ue_t{}

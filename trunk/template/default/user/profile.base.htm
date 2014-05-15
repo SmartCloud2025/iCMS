@@ -1,0 +1,267 @@
+<div class="profile_basic">
+	<form action="<!--{iCMS:router url='/user'}-->" method="post" target="iCMS_FRAME">
+	<input name="action" type="hidden" value="profile" />
+	<input name="pg" type="hidden" value="base" />
+
+	<div class="profile_title"> <span>基本资料</span> </div>
+	<dl>
+		<dd>昵称：</dd>
+		<dt class="unick"> <input name="unick" type="text"<!--{if $userdata.unickEdit}--> disabled<!--{/if}--> value="<!--{$me.nickname}-->">
+		<div class="iner" style="color:#666;"><span>*</span>昵称只能修改一次哦^_^</div>
+		</dt>
+		<dd>性别：</dd>
+		<dt class="sex" style="line-height: 30px;">
+		<input checked="" name="sex" value="2" type="radio" style="margin:0">
+		女
+		<input  name="sex" type="radio" value="1">
+		男 </dt>
+		<dd>邮箱：</dd>
+		<dt style="padding-top:5px;"><!--{$me.username}--></dt>
+		<dd>个人博客：</dd>
+		<dt class="weibo">
+		<input name="weibo" type="text" value="<!--{$userdata.weibo}-->">
+		</dt>
+		<dd>所在地：</dd>
+		<dt class="location">
+		<select id="province" name="province">
+		</select>
+		&nbsp;&nbsp;
+		<select id="city" name="city">
+		</select>
+		</dt>
+		<dd>生日：</dd>
+		<dt class="birthday">
+		<select name="year" id="year">
+			<option selected value=""></option>
+			<!--{for start=1970 stop=2004 value=i}-->
+			<option value="<!--{$i}-->"><!--{$i}--></option>
+			<!--{/for}-->
+		</select>
+		&nbsp;年&nbsp;
+		<select name="month" id="month">
+			<option selected></option>
+			<option value="1">1</option>
+			<option value="2">2</option>
+			<option value="3">3</option>
+			<option value="4">4</option>
+			<option value="5">5</option>
+			<option value="6">6</option>
+			<option value="7">7</option>
+			<option value="8">8</option>
+			<option value="9">9</option>
+			<option value="10">10</option>
+			<option value="11">11</option>
+			<option value="12">12</option>
+		</select>
+		&nbsp;月&nbsp;
+		<select name="day" id="day">
+			<option selected></option>
+			<option value="1">1</option>
+			<option value="2">2</option>
+			<option value="3">3</option>
+			<option value="4">4</option>
+			<option value="5">5</option>
+			<option value="6">6</option>
+			<option value="7">7</option>
+			<option value="8">8</option>
+			<option value="9">9</option>
+			<option value="10">10</option>
+			<option value="11">11</option>
+			<option value="12">12</option>
+			<option value="13">13</option>
+			<option value="14">14</option>
+			<option value="15">15</option>
+			<option value="16">16</option>
+			<option value="17">17</option>
+			<option value="18">18</option>
+			<option value="19">19</option>
+			<option value="20">20</option>
+			<option value="21">21</option>
+			<option value="22">22</option>
+			<option value="23">23</option>
+			<option value="24">24</option>
+			<option value="25">25</option>
+			<option value="26">26</option>
+			<option value="27">27</option>
+			<option value="28">28</option>
+			<option value="29">29</option>
+			<option value="30">30</option>
+			<option value="31">31</option>
+		</select>
+		&nbsp;日 </dt>
+		<dd>星座：</dd>
+		<dt class="constellation">
+		<select id="constellation" name="constellation">
+			<option selected id="xingzuo_name"></option>
+			<option value="水瓶座">水瓶座</option>
+			<option value="双鱼座">双鱼座</option>
+			<option value="白羊座">白羊座</option>
+			<option value="金牛座">金牛座</option>
+			<option value="双子座">双子座</option>
+			<option value="巨蟹座">巨蟹座</option>
+			<option value="狮子座">狮子座</option>
+			<option value="处女座">处女座</option>
+			<option value="天秤座">天秤座</option>
+			<option value="天蝎座">天蝎座</option>
+			<option value="射手座">射手座</option>
+			<option value="摩羯座">摩羯座</option>
+		</select>
+		</dt>
+		<dd>职业：</dd>
+		<dt class="profession">
+		<select id="profession" name="profession">
+			<option selected></option>
+			<option value="白领">白领</option>
+			<option value="学生">学生</option>
+			<option value="其他">其他</option>
+		</select>
+		</dt>
+	</dl>
+
+<!-- 
+<div class="profile_title mt30"> <span>身材信息</span> <span style="font-weight:normal;font-size:12px;padding-left:10px;">^_^ 用心填写这几项信息，会帮助女人邦给你推荐合适的衣服和鞋子哦~</span>
+		<select name="isSeeFigure" id="isSeeFigure" class="is_show_sel">
+			<option value="1" selected="">我关注的人可见</option>
+			<option value="2">所有人可见</option>
+			<option value="0">仅自己可见</option>
+		</select>
+	</div>
+	<dl>
+		<dd>身高：</dd>
+		<dt class="posr">
+		<input name="height" class="gray_text" type="text" value="">
+		cm </dt>
+		<dd>体重：</dd>
+		<dt class="posr">
+		<input name="weight" class="gray_text" type="text" value="">
+		kg </dt>
+		<dd>三围：</dd>
+		<dt class="posr">
+		<input name="bwhB" style="width:35px; color:#999;" class="gray_text" type="text" value="胸围" placeholder="胸围">
+		cm
+		<input name="bwhW" style="width:35px;margin-left:5px; color:#999;" class="gray_text" type="text" value="腰围" placeholder="腰围">
+		cm
+		<input name="bwhH" style="width:35px;margin-left:5px; color:#999;" class="gray_text " type="text" value="臀围" placeholder="臀围">
+		cm </dt>
+		<dd>肤质：</dd>
+		<dt class="posr">
+		<select name="pskin" id="pskin">
+			<option selected>请选择</option>
+			<option value="中性肤质">中性肤质</option>
+			<option value="干性肤质">干性肤质</option>
+			<option value="油性肤质">油性肤质</option>
+			<option value="混合性肤质">混合性肤质</option>
+			<option value="敏感性肤质">敏感性肤质</option>
+		</select>
+		</dt>
+		<dd>发质：</dd>
+		<dt class="posr">
+		<select id="phair" name="phair">
+			<option selected>请选择</option>
+			<option value="油性发质">油性发质</option>
+			<option value="干性发质">干性发质</option>
+			<option value="中性发质">中性发质</option>
+		</select>
+		</dt>
+		<dd>鞋码尺寸：</dd>
+		<dt class="posr">
+		<input name="shoesize" class="gray_text" type="text" value="<!--{$userdata.shoesize}-->">
+		码 </dt>
+	</dl>
+-->
+	<div class="profile_title mt30"> <span>其他信息</span> </div>
+	<dl>
+		<dd>个人标签：</dd>
+		<dt style="margin-bottom:5px;position:relative;">
+		<input autocomplete="off" style=" color:#999" id="user_style" name="personstyle" class=" pstyle" type="text" value="<!--{if $userdata.personstyle}--><!--{$userdata.personstyle}--><!--{else}-->多个标签之间请用逗号隔开<!--{/if}-->">
+		<div class="tags_list"> <span class="tag">
+<ul style="margin-left: 0px;"><li rel="&lt;em&gt;你是什么粉&lt;/em&gt;？赶紧宣告天下吧！"><h4 style="display:none">标签秘籍：<em>你是什么粉</em>？赶紧宣告天下吧！</h4> <a>企鹅控</a><a>微博控</a><a>苹果控</a><a>数码控</a><a>Nokia迷</a><a>我是新国货</a><a>贾静雯迷</a><a>薇迷</a><a>华仔迷</a><a href="#" style="color:#f00" title="成为“菌丝”，一起支持卓君！" class="">菌丝</a><a>Jay迷</a><a>Jolin粉</a><a>宏迷</a><a>锋蜜</a><a>尊迷</a><a>庚饭</a><a>玉米</a><a>笔笔</a><a>凉粉</a><a>可爱多</a><a>芋头</a><a>我爱手机QQ浏览器</a><a>MJ粉</a><a>Justin迷</a></li>
+<li rel="人人都有一张&lt;em&gt;社会名片&lt;/em&gt;，你的呢？"><h4 style="display:none">标签秘籍：人人都有一张<em>社会名片</em>，你的呢？</h4><a>70后</a><a>80后</a><a>85后</a><a>90后</a><a>间歇性整理控</a><a>技术宅</a><a>蚁族</a><a href="#" class="disabled">IT民工</a><a>背包客</a><a>记者</a><a>购物狂</a><a>文艺青年</a><a>自由职业</a><a>宅男</a><a>宅女</a><a>腐女</a><a>八卦女</a><a>待解救男青年</a><a>待解救女青年</a><a>伤不起的股民</a><a href="#" class="disabled">伪愤青</a><a>外貌协会</a><a>乐活族</a><a>月光族</a></li>
+<li rel="从&lt;em&gt;兴趣爱好&lt;/em&gt;开始，让别人认识你！"><h4 style="display:none">标签秘籍：从<em>兴趣爱好</em>开始，让别人认识你！</h4><a>听音乐</a><a>看电影</a><a>K歌</a><a>上网</a><a>逛论坛</a><a>摄影</a><a>旅游</a><a>爬山</a><a>看书</a><a>小说</a><a>动漫</a><a>游戏</a><a>美食</a><a>美容</a><a>爱睡觉</a><a>爱猫</a><a>爱狗</a><a>打篮球</a><a>踢足球</a><a>游泳</a><a>偶像剧</a><a>港台剧</a><a>美剧</a><a>日剧</a><a>韩剧</a></li>
+<li rel="晒出你的&lt;em&gt;个性&lt;/em&gt;，让大家更了解你！"><h4 style="display:none">标签秘籍：晒出你的<em>个性</em>，让大家更了解你！</h4><a>囧</a><a href="#" class="disabled">宅</a><a>各种宅</a><a>幽默</a><a>木讷</a><a>执着</a><a>三分钟热度</a><a>体贴</a><a>粗枝大叶</a><a>直率</a><a>内敛</a><a>柔情似水</a><a>大大咧咧</a><a>善良</a><a>邪恶</a><a>低调</a><a>张扬</a><a>阳光</a> <a>乐观主义</a> <a>悲观主义</a><a>完美主义</a> </li>
+<li rel=" 此时此刻你&lt;em&gt;正在做什么&lt;/em&gt;？"><h4 style="display:none">标签秘籍：此时此刻你<em>正在做什么</em>？</h4><a>恋爱ING</a><a>缺爱ING</a><a>失恋ING</a><a>交友ING</a><a>幸福ING</a><a>发呆ING</a><a>颓废ING</a><a>痛苦ING</a><a>成长ING</a><a>减肥ING</a><a>感冒ING</a><a>失眠ING</a><a>夜生活ING</a><a>学习ING</a><a>加班ING</a><a>努力ING</a><a href="#" class="disabled">攒钱ING</a><a>房奴ING</a><a>伤不起ING</a></li>
+<li rel="有&lt;em&gt;超能力&lt;/em&gt;？拿出来晒一晒吧！"><h4 style="display:none">标签秘籍：有<em>超能力</em>？拿出来晒一晒吧！</h4><a>过目不忘</a><a>记忆力超常</a><a>力大无穷</a><a>晒不黑</a><a>狂吃不胖</a><a>没生过病</a><a>能睁着眼睛睡觉</a><a>耳朵可以动</a><a>能倒立睡觉</a><a>单个眉毛可以动</a> <a>舌头可以舔到鼻子</a> <a>睁着眼睛睡觉</a> </li></ul>
+		</span> <a class="close" href="javascript:;"></a> </div>
+		</dt>
+		<dd>自我介绍：</dd>
+		<dt>
+		<textarea name="slogan" id="" rows="10" placeholder="随便写点什么，让大家了解你吧。"><!--{if $userdata.slogan}--><!--{$userdata.slogan}--><!--{else}-->随便写点什么，让大家了解你吧。<!--{/if}--></textarea>
+		</dt>
+		<dd>&nbsp;&nbsp;</dd>
+		<dt>
+		<input type="submit" class="btn" value="确认修改">
+		</dt>
+	</dl>
+</form>
+</div>
+<script type="text/javascript" src="http://s.ladyband.cn/js/city_utf8.js?v=1366268649"></script> 
+<script type="text/javascript">
+$(function(){
+	initPlace('<!--{$userdata.city}-->','<!--{$userdata.province}-->');
+	<!--{if $me.gender}-->
+	$("[name=sex][value=<!--{$me.gender}-->]").attr("checked",true);
+	<!--{/if}-->
+	<!--{if $userdata.isSeeFigure}-->
+	$("#isSeeFigure").val("<!--{$userdata.isSeeFigure}-->");
+	<!--{/if}-->
+	<!--{if $userdata.province=="" && $userdata.city==""}-->
+	$.getScript("http://int.dpool.sina.com.cn/iplookup/iplookup.php?format=js", function(){
+		initPlace(remote_ip_info.city,remote_ip_info.province);
+	}); 
+	<!--{/if}-->
+	<!--{if $userdata.year}-->
+	$("#year").val("<!--{$userdata.year}-->");
+	<!--{/if}-->
+	<!--{if $userdata.month}-->
+	$("#month").val("<!--{$userdata.month}-->");
+	<!--{/if}-->
+	<!--{if $userdata.day}-->
+	$("#day").val("<!--{$userdata.day}-->");
+	<!--{/if}-->
+	<!--{if $userdata.constellation}-->
+	$("#constellation").val("<!--{$userdata.constellation}-->");
+	<!--{/if}-->
+	<!--{if $userdata.profession}-->
+	$("#profession").val("<!--{$userdata.profession}-->");
+	<!--{/if}-->
+	<!--{if $userdata.pskin}-->
+	$("#pskin").val("<!--{$userdata.pskin}-->");
+	<!--{/if}-->
+	<!--{if $userdata.phair}-->
+	$("#phair").val("<!--{$userdata.phair}-->");
+	<!--{/if}-->
+	$("#month, #day").change(function() {
+		var c = $("#constellation")[0], b = $("#month").val(), d = $("#day").val();
+		c.selectedIndex = b == 1 && d >= 20 || b == 2 && d <= 18 ? 1 : b == 2 && d >= 19 || b == 3 && d <= 20 ? 2 : b == 3 && d >= 21 || b == 4 && d <= 19 ? 3 : b == 4 && d >= 20 || b == 5 && 
+		d <= 20 ? 4 : b == 5 && d >= 21 || b == 6 && d <= 21 ? 5 : b == 6 && d >= 22 || b == 7 && d <= 22 ? 6 : b == 7 && d >= 23 || b == 8 && d <= 22 ? 7 : b == 8 && d >= 23 || b == 9 && d <= 22 ? 8 : b == 9 && d >= 23 || b == 10 && d <= 22 ? 9 : b == 10 && d >= 23 || b == 11 && d <= 21 ? 10 : b == 11 && d >= 22 || b == 12 && d <= 21 ? 11 : b == 12 && d >= 22 || b == 1 && d <= 19 ? 12 : 0
+	});
+    $("#user_style").focus(function() {
+        $(".tags_list").show();
+        $("body").unbind("click")
+    }).blur(function() {
+        $("body").bind("click", function(c) {
+            c = c || window.event;
+            isParent(c.target || c.srcElement, $(".tags_list")[0]) || ($(".tags_list").hide(), $("body").unbind("click"))
+        })
+    });
+    $(".tags_list .tag a").click(function() {
+        var c = 
+        $("#user_style"), b = $.trim(c.val());
+        b == "\u591a\u4e2a\u6807\u7b7e\u4e4b\u95f4\u8bf7\u7528\u9017\u53f7\u9694\u5f00" && (b = "");
+        b = b != "" ? b + "," + $(this).text() : $(this).text();
+        c.val(b)
+    });
+    $(".tags_list .close").click(function() {
+        $(".tags_list").hide()
+    })
+	
+})
+function isParent(a, b) {
+	for (; a != void 0 && a != null && a.tagName.toUpperCase() != "BODY"; ) {
+	    if (a == b)
+	        return !0;
+	    a = a.parentNode
+	}
+	return !1
+}
+</script> 
