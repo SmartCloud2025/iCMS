@@ -516,7 +516,7 @@ class articleApp{
         $remote   = isset($_POST['remote']) ?true:false;
         $dellink  = isset($_POST['dellink']) ?true:false;
         $_POST['isRedirect']  && iFS::$isRedirect = true;
-        $_POST['iswatermark'] && $GLOBALS['iConfig']['watermark']['enable'] = false;
+        $_POST['iswatermark'] && $GLOBALS['iCONFIG']['watermark']['enable'] = false;
         $dellink && $body   = preg_replace("/<a[^>].*?>(.*?)<\/a>/si", "\\1",$body);
 
         iFS::remotepic($body,$remote,$autopic);

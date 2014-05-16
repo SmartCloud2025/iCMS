@@ -11,7 +11,7 @@
 * @$Id: iPic.class.php 2290 2013-11-21 03:49:19Z coolmoo $
 */
 iPic::$watermark = iPHP_APP_CONF;
-iPic::$config    = $GLOBALS['iConfig'];
+iPic::$config    = $GLOBALS['iCONFIG'];
 
 class iPic {
     public static $config    = null;

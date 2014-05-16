@@ -75,13 +75,14 @@
                 },'json');
             },
             comment_mini_box:function(a){
-                if($('.comment_mini_box').length >0){
-                    $('.comment_mini_box').remove();
-                    $('.comment_mini_list').remove();
+                var b = $(a),pp = b.parent().parent(),p = b.parent();
+                if($('.comment_mini_box',pp).length >0){
+                    $('.comment_mini_box',pp).remove();
+                    $('.comment_mini_list',pp).remove();
                     return;
                 }
-                var b   = $(a),p = b.parent(),iid = b.attr('data-iid');
-                var box = $('<div class="comment_mini_box">');
+                var iid = b.attr('data-iid'),
+                box = $('<div class="comment_mini_box">');
                 box.html('<div class="input-append">'+
                     '<input class="comment_text span4" type="text">'+
                     '<a href="###" class="btn">评论</a></div>'
@@ -105,27 +106,35 @@
                         if(c.code){
                             var count = parseInt($('span',b).text());
                             $('span',b).text(count+1);
-                            box.remove();
+                            //box.remove();
+                            comment_mini_list(true);
                         }else{
                             return false;
                         }
                     },'json'); 
                 });
-                //------------
-                var list = $('<div class="comment_mini_list">');
-                $.get(iCMS.api('article')+"&do=comment",{'iid':iid},
-                    function(c) {
-                        //console.log(c);
-                        var ul   = '<ul>';
-                        $.each(c,function(i,obj) {
-                            ul+='<li><span class="date">'+obj.addtime+'</span><span class="label label-info">'+obj.nickname+':</span> '+obj.content+'</li>';
-                        });
-                        ul+='</ul>';
-                        list.html(ul);
-                        box.after(list);
-                    },'json');
+                comment_mini_list();
+                function comment_mini_list(refresh){
+                    var list = $('.comment_mini_list',pp);
+                    if(refresh && list.length >0){
+                        list.empty();
+                    }else{
+                        list = $('<div class="comment_mini_list">');                        
+                    }
+                    $.get(iCMS.api('article')+"&do=comment",{'iid':iid},
+                        function(c) {
+                            //console.log(c);
+                            var ul   = '<ul>';
+                            $.each(c,function(i,obj) {
+                                ul+='<li><span class="date">'+obj.addtime+'</span><span class="label label-info">'+obj.nickname+':</span> '+obj.content+'</li>';
+                            });
+                            ul+='</ul>';
+                            list.html(ul);
+                            box.after(list);
+                    },'json');                    
                 }
-
+                //------------
+            }
         },
         api:function(app){
             return iCMS.config.API+'?app='+app;

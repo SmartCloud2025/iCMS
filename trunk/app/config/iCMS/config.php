@@ -1,6 +1,6 @@
 <?php
 defined('iPHP') OR exit('Access Denied');
-$GLOBALS['iConfig']	= array (
+$GLOBALS['iCONFIG']	= array (
   'site' => 
   array (
     'name' => 'iCMS V6',

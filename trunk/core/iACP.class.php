@@ -169,7 +169,7 @@ class iACP {
     }
     function cacheConfig($config=null){
     	$config===null && $config = iACP::getConfig(0);
-     	$output = "<?php\ndefined('iPHP') OR exit('Access Denied');\n\$GLOBALS['iConfig']\t= ";
+     	$output = "<?php\ndefined('iPHP') OR exit('Access Denied');\n\$GLOBALS['iCONFIG']\t= ";
     	$output.= var_export($config,true);
     	$output.= ';';
     	iFS::write(iCMS_CONF_FILE,$output);

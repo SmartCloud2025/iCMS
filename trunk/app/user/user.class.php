@@ -5,7 +5,7 @@
  * @license http://www.idreamsoft.com iDreamSoft
  * @author coolmoo <idreamsoft@qq.com>
  */
-// $GLOBALS['iConfig']['user_fs_conf']	= array(
+// $GLOBALS['iCONFIG']['user_fs_conf']	= array(
 // 	"url"=>"http://s1.ladyband.cn",
 // 	"dir"=>"../pic"
 // );

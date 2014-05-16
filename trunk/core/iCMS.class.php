@@ -27,7 +27,7 @@ class iCMS {
     public static $mobile      = false;
     public static $HOOK        = array();
     
-	public static function init(){
+	public static function Init(){
         $site   = iPHP_MULTI_SITE ? $_SERVER['HTTP_HOST']:"iCMS";
         if(iPHP_MULTI_DOMAIN){ //只绑定主域 
             preg_match("/[^\.\/]+\.[^\.\/]+$/", $site, $matches);
@@ -40,7 +40,7 @@ class iCMS {
         define('iCMS_CONF_FILE',iPHP_APP_CONF.'/config.php');   //网站配置文件
         @is_file(iCMS_CONF_FILE) OR exit('<h1>iCMS 运行出错.找不到"'.$site.'"网站的配置文件!(code:0002)</h1>');
         require iCMS_CONF_FILE;
-        self::$config = $GLOBALS['iConfig'];
+        self::$config = $GLOBALS['iCONFIG'];
 
         //config.php 中开启后 此处设置无效
         defined('iPHP_DEBUG')       OR define('iPHP_DEBUG', self::$config['debug']['php']);       //程序调试模式
@@ -71,8 +71,11 @@ class iCMS {
         define('iPHP_TPL_DEF',self::$config['site'][$tpl_key]);
         iPHP::iTPL();
 
+        iPHP_DEBUG      && iDB::$show_errors = true;
+        iPHP_TPL_DEBUG  && iPHP::clear_compiled_tpl();
+        
         define('iCMS_PUBLIC',self::$config['router']['publicURL']);
-        define('iCMS_API', iCMS_PURL.'/api.php');
+        define('iCMS_API', iCMS_PUBLIC.'/api.php');
         define('iCMS_URL', self::$config['router']['URL']);
 
         defined('iCMS_REWRITE') OR define('iCMS_REWRITE', 0);

@@ -13,19 +13,11 @@ define('iCMS',TRUE); //应用名
 define('iPATH',dirname(strtr(__FILE__,'\\','/'))."/");
 //框架初始化
 require iPATH.'config.php';		//框架初始化配置
-require iPATH.'iPHP.php';		//iPHP框架文件
-
-iPHP::loadClass("Mysql");		//加载数据库操作类
-iPHP::loadClass("FileSystem");	//加载文件操作类
-iPHP::loadClass('Cache');		//加载缓存操作类
-iPHP::loadClass("Template");	//加载模板操作类
-//iPHP::loadClass("Router");		//加载URL路由
+require iPATH.'iPHP/iPHP.php';		//iPHP框架文件
 
 require iPHP_APP_CORE.'/iCMS.define.php';
 require iPHP_APP_CORE.'/iCMS.version.php';
 require iPHP_APP_CORE.'/iCMS.class.php';
 require iPHP_APP_CORE.'/iRouter.class.php';
 
-iCMS::init();
-iPHP_DEBUG      && iDB::$show_errors = true;
-iPHP_TPL_DEBUG  && iPHP::clear_compiled_tpl();
+iCMS::Init();

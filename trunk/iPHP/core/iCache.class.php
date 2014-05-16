@@ -11,13 +11,13 @@
 * @$Id: iCache.class.php 2408 2014-04-30 18:58:23Z coolmoo $
 */
 //array(
-//	'enable'	=> $GLOBALS['iConfig']['cache']['enable'],
-//	'engine'	=> $GLOBALS['iConfig']['cache']['engine'],
-//	'host'		=> $GLOBALS['iConfig']['cache']['host'],
-//	'port'		=> $GLOBALS['iConfig']['cache']['port'],
-//	'db'		=> $GLOBALS['iConfig']['cache']['db'],
-//	'compress'	=> $GLOBALS['iConfig']['cache']['compress'],
-//	'time'		=> $GLOBALS['iConfig']['cache']['time'],
+//	'enable'	=> $GLOBALS['iCONFIG']['cache']['enable'],
+//	'engine'	=> $GLOBALS['iCONFIG']['cache']['engine'],
+//	'host'		=> $GLOBALS['iCONFIG']['cache']['host'],
+//	'port'		=> $GLOBALS['iCONFIG']['cache']['port'],
+//	'db'		=> $GLOBALS['iCONFIG']['cache']['db'],
+//	'compress'	=> $GLOBALS['iCONFIG']['cache']['compress'],
+//	'time'		=> $GLOBALS['iCONFIG']['cache']['time'],
 //)
 class iCache{
     public static $link      = null;
