@@ -264,13 +264,11 @@ values ('$this->userid', '$realname', '$mobile', '$enterprise', '$address', '$zi
         $uid   = (int)$user->uid;
         $name  = $user->nickname;
         
-        $fuid  = (int)$_GET['fuid'];
-        $fname = $_GET['fname'];
-        $df    = (int)$_GET['df'];
-        if($df){
-            iDB::query("DELETE FROM `#iCMS@__user_follow` WHERE `uid` = '$uid' AND `fuid`='$fuid' LIMIT 1;");
-            iPHP::code(1,0,0,'json');
-        }else{
+        $fuid   = (int)$_GET['fuid'];
+        $fname  = $_GET['fname'];
+        $follow = (bool)$_GET['follow'];
+        
+        if($follow){
             $check = user::follow($uid,$fuid);
             $uid==$fuid && iPHP::code(0,'user:follow:self',0,'json');
 
@@ -280,6 +278,9 @@ values ('$this->userid', '$realname', '$mobile', '$enterprise', '$address', '$zi
                 iDB::query("INSERT INTO `#iCMS@__user_follow` (`uid`,`name`,`fuid`,`fname`) VALUES ('$uid','$name','$fuid','$fname');");
                 iPHP::code(1,'user:follow:success',0,'json');
             }            
+        }else{
+            iDB::query("DELETE FROM `#iCMS@__user_follow` WHERE `uid` = '$uid' AND `fuid`='$fuid' LIMIT 1;");
+            iPHP::code(1,0,0,'json');
         }
     }
     public function API_register(){

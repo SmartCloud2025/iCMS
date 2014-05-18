@@ -35,8 +35,8 @@ class iPHP{
         $iTPL->register_modifier("htmlcut","htmlSubString");
         $iTPL->register_modifier("count","cstrlen");
         $iTPL->register_modifier("html2txt","HtmToText");
-        $iTPL->register_modifier("pinyin","GetPinyin");
-        $iTPL->register_modifier("unicode","getUNICODE");
+        //$iTPL->register_modifier("pinyin","GetPinyin");
+        $iTPL->register_modifier("unicode","getunicode");
         $iTPL->register_modifier("small","gethumb");
         $iTPL->register_modifier("thumb","small");
         $iTPL->register_modifier("random","random");
@@ -138,8 +138,8 @@ class iPHP{
 	}
     public static function getUniCookie($s){
 		$s = str_replace('\\\u','\\u',self::getCookie($s));
-		$u = json_decode('{"s":"'.$s.'"}');
-		return $u->s;
+		$u = json_decode('["'.$s.'"]');
+		return $u[0];
     }
     public static function import($path,$r=false){
 		$key	= str_replace(iPATH,'iPHP://',$path);
@@ -927,7 +927,13 @@ function getdirname($path=null){
 	}
 	return './';
 }
+function getunicode($string){
+	if(empty($string)) return;
 
+	$array = (array)$string;
+	$json  = json_encode($array);
+	return str_replace(array('["','"]'), '', $json);
+}
 function iPHP_ERROR_HANDLER($errno, $errstr, $errfile, $errline){
     $errno = $errno & error_reporting();
     if($errno == 0) return;

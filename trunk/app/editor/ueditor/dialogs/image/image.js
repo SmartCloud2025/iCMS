@@ -637,7 +637,7 @@ var imageUploader = {},imageManagerUrl = null,
             //action:"get",
             onsuccess:function (xhr) {
             	eval("var res =" + xhr.responseText);
-            	var html = template.render('explorer', res);
+            	var html = template('explorer', res);
             	g("imageList").innerHTML = html
             	return;
             },

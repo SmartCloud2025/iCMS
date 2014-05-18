@@ -16,7 +16,7 @@ sup, sub { vertical-align: baseline; font-size: 100%; }
 blockquote, q { quotes: none; }
 blockquote:before, blockquote:after, q:before, q:after { content: ''; content: none; }
 * { word-wrap: break-word; word-break: break-all; }
-body, button, input, select, textarea { color: #111; font: 14px/1.75 "Helvetica Neue",Helvetica,Tahoma,Arial,"\5b8b\4f53",sans-serif; }
+body, button, input, select, textarea { color: #111; font: 14px/1.75 "Helvetica Neue", Helvetica, Tahoma, Arial, "\5b8b\4f53", sans-serif; }
 a:hover { text-decoration: none; }
 .border { border: 1px solid #DADADA; }
 .r3 { border-radius: 3px; }
@@ -122,6 +122,21 @@ a:hover { text-decoration: none; }
 .ft6 { color: #666; }
 .fta { color: #aaa; }
 i { text-align: center; }
+.iCMS-icon { width: 16px; height: 16px; background-image: url(img/sprites-1.9.1.png); background-repeat: no-repeat; display: inline-block; vertical-align: middle; }
+.iCMS-icon-comment-like { background-position: -222px -92px; }
+a:hover>.iCMS-icon-comment-reply { background-position: -250px -79px }
+.iCMS-icon-comment-reply { background-position: -250px -92px; }
+a:hover>.iCMS-icon-comment-like { background-position: -222px -79px }
+.iCMS-icon-no-help { background-position: -71px -183px; }
+a:hover>.iCMS-icon-no-help { background-position: -71px -170px }
+.iCMS-icon-spike {
+position: absolute;
+top: -8px;
+left: 23px;
+width: 13px;
+height: 8px;
+background-position: -200px -165px;
+}
 /* bootstrap */
 a, a:hover, a:focus { color: #057AFD; }
 .btn, .add-on, .navbar-inner, .label, .navbar a, .switch-left, .switch-right { background-image: none !important; -webkit-box-shadow: none !important; -moz-box-shadow: none !important; box-shadow: none !important; }
@@ -144,7 +159,7 @@ a, a:hover, a:focus { color: #057AFD; }
 .modal-overlayBG { background-color: #000; opacity: 0.3; -ms-filter: "progid:DXImageTransform.Microsoft.Alpha(Opacity=30)"; filter: alpha(opacity=30); -moz-opacity: 0.3; }
 /* ============================================================================================= */
 /* iCMS_pagination */
-.iCMS_pagination { margin: 10px; clear: both; height: 30px;}
+.iCMS_pagination { margin: 10px; clear: both; height: 30px; }
 .iCMS_pagination a, .iCMS_pagination span { float: left; padding: 4px 12px; line-height: 20px; text-decoration: none; background-color: #fff; border: 1px solid #ddd; border-left-width: 0 }
 .iCMS_pagination a:hover, .iCMS_pagination a:focus { background-color: #f5f5f5 }
 .iCMS_pagination a.page_nowindex { color: #999; cursor: default }

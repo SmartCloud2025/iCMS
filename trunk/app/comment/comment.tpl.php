@@ -10,13 +10,15 @@ function comment_list($vars){
 	$appid		= (int)$vars['appid'];
 	$whereSQL	= "`appid`='$appid' AND `status`='1'";
 
-	isset($vars['pid']) 	&& $whereSQL.=" AND `pid`='".(int)$vars['pid']."'";
     if(isset($vars['cid'])){
         $cids	= $vars['sub']?iCMS::getIds($vars['cid'],true):$vars['cid'];
         $cids OR $cids	= $vars['cid'];
         $whereSQL.= iPHP::andSQL($cids,'cid');
     }
-	$vars['iid'] && $whereSQL.=" AND `iid`='".(int)$vars['iid']."'";
+	$vars['pid'] && $whereSQL .=" AND `pid`='".(int)$vars['pid']."'";
+	$vars['iid'] && $whereSQL .=" AND `iid`='".(int)$vars['iid']."'";
+	$vars['uid'] && $whereSQL .=" AND `uid`='".(int)$vars['uid']."'";
+	$vars['id']  && $whereSQL .=" AND `id`='".(int)$vars['id']."'";
 	
 	$maxperpage	= isset($vars['row'])?(int)$vars['row']:"10";
 	$cacheTime	= isset($vars['time'])?(int)$vars['time']:-1;
@@ -49,9 +51,10 @@ function comment_list($vars){
 			$rs[$i]['lou']		= $total-($i+$ln*$maxperpage);
 			$rs[$i]['content']	= nl2br($rs[$i]['contents']);
 			if($vars['user']){
-				$rs[$i]['user']['url']	= userinfo($rs[$i]['userid'],"url");
-				$rs[$i]['user']['face']	= userinfo($rs[$i]['userid'],"face",$vars['facesize']?$vars['facesize']:0);
-				$rs[$i]['user']['name']	= $rs[$i]['username'];
+				$rs[$i]['user']['uid']    = $rs[$i]['uid'];
+				$rs[$i]['user']['url']    = userData($rs[$i]['uid'],"url");
+				$rs[$i]['user']['avatar'] = userData($rs[$i]['uid'],"avatar",$vars['facesize']?$vars['facesize']:0);
+				$rs[$i]['user']['name']   = $rs[$i]['name'];
 			}
 		}
 		$vars['cache'] && iCache::set($cacheName,$rs,$cacheTime);

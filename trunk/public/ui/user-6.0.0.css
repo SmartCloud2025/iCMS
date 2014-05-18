@@ -3,18 +3,17 @@ body { background-color: #fff; background-image: url(img/bg-v6.png); _background
 #iCMS_home { margin: 0 auto; width: 960px; background-color: #fff; }
 #iCMS_home .main-col { float: left; width: 640px; margin-top: 10px; min-height: 900px; _height: 900px; border-right: 1px solid #E4E4E4; background: #fff; }
 #iCMS_home .right-col { float: right; padding-top: 20px; padding-bottom: 30px; width: 319px; }
-#iCMS_home .mod { margin-left: 10px; margin-right: 10px;}
+#iCMS_home .mod { margin-left: 10px; margin-right: 10px; }
 #iCMS_home .mod .hd { margin-bottom: 4px; }
 #iCMS_home .txtList li { display: block; margin-bottom: 3px; list-style: none; }
 #iCMS_home .txtList li a { padding: 0 0 0 10px; display: block; height: 28px; line-height: 28px; color: #666; }
 #iCMS_home .txtList li a:hover { color: #259; background: #EFF6FA; border-radius: 3px; text-decoration: none; }
-#iCMS_home .txtList li a span{margin-left: 10px;}
-.avatarList{}
-.avatarList li{display: inline-block;margin-bottom: 4px;}
-.avatar_30{width: 30px;height: 30px;}
-.avatar_90{width: 90px;height: 90px;}
-.avatar_120{width: 120px;height: 120px;}
-
+#iCMS_home .txtList li a span { margin-left: 10px; }
+.avatarList { }
+.avatarList li { display: inline-block; margin-bottom: 4px; }
+.avatar_30 { width: 30px; height: 30px; }
+.avatar_90 { width: 90px; height: 90px; }
+.avatar_120 { width: 120px; height: 120px; }
 /* --icon--- */
 .icon_user { display: inline-block; width: 16px; height: 16px; background: url(img/user.png) no-repeat top left; }
 .icon_male, .icon_female { float: left; width: 16px; height: 16px; overflow: hidden; margin-right: 2px; vertical-align: middle; background: url(img/gender.png) no-repeat top left; }
@@ -80,13 +79,54 @@ body { background-color: #fff; background-image: url(img/bg-v6.png); _background
 #artList .list_detail .text { font-size: 12px; }
 #artList .list_detail .pic { height: 150px; overflow: hidden; }
 #artList .list_fun { text-align: right; }
-#artList .list_fun a { color: #333; margin-left: 10px;}
-.comment_mini_box{margin: 5px;
-padding-top: 10px;
-text-align: right;}
-.comment_mini_list{font-size: 12px;}
-.comment_mini_list li{padding: 5px !important;}
-.comment_mini_list .date{float: right;}
+#artList .list_fun a { color: #333; margin-left: 10px; }
+.zm-comment-box { margin: 10px 0 0 35px; background: #fff; max-width: 540px; position: relative; border: 1px solid #ddd; border-radius: 4px; box-shadow: 0 1px 1px rgba(0, 0, 0, .05) }
+.zm-comment-box .load-more { padding: 8px 0; display: block; font-size: 13px; height: 22px; text-align: center; border: 1px solid #eee; border-width: 1px 0 0; color: #698ebf; box-shadow: 0 0 5px rgba(180, 180, 180, .1) inset; text-shadow: 0 1px 0 #fff }
+.zm-comment-box .load-more .text { position: relative }
+.zm-comment-box .load-more .spinner { position: absolute; top: 0; right: -20px; display: none }
+.zm-comment-box .load-more.loading .spinner { display: block }
+html.no-touch .zm-comment-box .load-more:hover { background: #fefefe; text-decoration: none }
+.zm-comment-box .load-more:active { background: #fbfbfb; box-shadow: 0 0 5px rgba(180, 180, 180, .2) inset }
+.zm-comment-box .load-more+.zm-item-comment { margin: 0; padding: 8px 12px; border-top: 1px solid #eee }
+.zm-comment-box .zm-comment-bubble { position: absolute; top: -8px; left: 81px; display: none }
+.zm-comment-box.empty { border: 0; box-shadow: none }
+.zm-comment-box.empty.cannot-comment { border: 1px solid #ddd }
+.zm-comment-box.cannot-comment .editable, .zm-comment-box.cannot-comment .zm-command, .zm-comment-box.cannot-comment .zm-comment-op-link.reply { display: none !important }
+.zm-comment-box.empty .zm-comment-bubble { display: none !important }
+.zm-comment-box.empty.cannot-comment .zm-comment-bubble { display: block !important }
+.zm-comment-box.empty .zm-comment-box-ft { margin: 0 30px 0 0; padding: 0; border: 0 !important; background: 0 }
+.zm-comment-box.empty.cannot-comment .zm-comment-form { margin: 0 }
+.zm-comment-box.empty.cannot-comment .zm-comment-form, .zm-comment-box .zm-comment-form { padding: 15px }
+.zm-comment-box.empty.cannot-comment .zm-comment-box-ft, .zm-comment-box .zm-comment-box-ft { background: #fbfbfb; border-radius: 0 0 4px 4px; border-top: 1px solid #EEE; position: relative }
+.zm-comment-box.empty.cannot-comment .zm-comment-box-ft { background: #fff }
+.zm-comment-spinner { padding: 6px 12px }
+.zm-item-comment { position: relative; margin: 0 12px; padding: 8px 0 }
+.zm-item-comment .zm-comment-content-wrap { margin: 0 0 0 35px }
+.zm-item-comment>.zm-item-link-avatar { float: left; margin: 4px 0 0 }
+.zm-item-comment .zm-item-img-avatar { width: 25px; height: 25px; border-radius: 2px }
+.zm-item-comment .zm-comment-content { color: #222; min-height: 22px }
+.zm-item-comment .zm-comment-hd, .zm-item-comment .zm-comment-ft { color: #999 }
+.zm-item-comment .zm-comment-hd .desc, .zm-item-comment .zm-comment-ft .desc { font-size: 12px }
+.zm-item-comment .zm-comment-ft { font-size: 12px }
+.zm-item-comment .like-num { float: right; margin-top: -1px }
+.zm-item-comment .like-num>span, .zm-item-comment .like-num>em { font-style: normal; vertical-align: -2px }
+.zm-item-comment .like-num.nil { display: none }
+.zm-item-comment.focusin .zm-comment-op-link, .zm-item-comment:hover .zm-comment-op-link { visibility: visible }
+.zm-item-comment+.zm-item-comment { border-top: solid 1px #eee }
+.zm-item-comment .zm-comment-form { padding: 15px 0 }
+.zm-comment-info { text-align: center }
+.zm-comment-form .zm-comment-textarea { padding: 7px 8px; color: #999; font-size: 13px; line-height: 22px; min-height: 22px; width: 95% }
+.zm-comment-form.expanded .zm-command { display: block; line-height: 33px; }
+.zm-comment-form .zm-command { display: none; padding: 10px 0; text-align: right }
+.zm-comment-form .zm-command .btn-primary { float: right; }
+.zm-comment-form .zm-command .zm-command-cancel { float: right; }
+.with-self-avatar .zm-comment-form .avatar { display: block }
+.zm-comment-form .avatar { float: left; display: none; margin: 2px 10px 0 0; width: 34px; height: 34px; border-radius: 4px }
+.zm-comment-form .avatar+.editable { overflow: hidden }
+.zm-comment-op-link { margin-left: .5em; color: #999; font-size: 12px; visibility: hidden }
+.zm-command-cancel { margin: 0 15px 0 0; cursor: pointer;float: left;}
+.zm-command-cancel:hover { text-decoration: underline }
+.zg-icon-comment-like, .zm-comment-op-link>.iCMS-icon { margin-right: 5px; width: 11px; height: 11px; vertical-align: -1px }
 /* ----home.fun-------- */
 #home_fun { font-weight: bold; margin-top: 10px; padding-left: 25px; padding-bottom: 15px; border-bottom: 1px dotted #DBDBDB; }
 #home_fun a { width: 90px; }

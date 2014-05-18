@@ -30,16 +30,14 @@
                 return iCMS.getcookie('AUTH_INFO') ? true : false;
             },
             follow:function(a){
-                var b=$(a),fuid = b.attr('data-uid'),fname = b.attr('data-fname'),df = parseInt(b.attr('data-followed'));
-                $.get(iCMS.api('user')+"&do=follow",{df:df,'fuid':fuid,'fname':fname},
-                function(c) {
-                    //console.log(c);
+                var b = $(a),param = iCMS.param(b);
+                param['follow'] = b.hasClass('follow')?1:0;
+                $.get(iCMS.api('user')+"&do=follow",param,function(c) {
                     if(c.code){
-                        b.attr('data-followed',(df?0:1));
-                        b.removeClass((df?'unfollow':'follow'));
-                        b.addClass((df?'follow':'unfollow'));   
+                        b.removeClass((param['follow']?'follow':'unfollow'));
+                        b.addClass((!param['follow']?'follow':'unfollow'));   
                     }else{
-                        alert(c.msg);
+                        iCMS.alert(c.msg);
                         //iCMS.dialog(c.msg);
                         return false;
                     }
@@ -57,84 +55,181 @@
             },
         }, 
         article:{
-            do:function(a){
-                var b=$(a),iid = b.attr('data-iid'),d = b.attr('data-do');
-
-                $.get(iCMS.api('article'),{'do':d,'iid':iid},function(c) {
-                    //console.log(c);
-                    //iCMS.dialog(c.msg);
-                    alert(c.msg);
+            good:function(a){
+                var b=$(a),p = b.parent(),param = iCMS.param(p);
+                param['do'] = 'good';
+                $.get(iCMS.api('article'),param,function(c) {
                     if(c.code){
-                        if(d=='good'||d=='comment'){
-                            var count = parseInt($('span',b).text());
-                            $('span',b).text(count+1);                            
-                        }
+                        var count = parseInt($('span',b).text());
+                        $('span',b).text(count+1);                            
+                        iCMS.dialog(c.msg);
                     }else{
+                        iCMS.alert(c.msg);
                         return false;
                     }
                 },'json');
             },
-            comment_mini_box:function(a){
-                var b = $(a),pp = b.parent().parent(),p = b.parent();
-                if($('.comment_mini_box',pp).length >0){
-                    $('.comment_mini_box',pp).remove();
-                    $('.comment_mini_list',pp).remove();
-                    return;
+            comment_box:function(a){
+                var b = $(a),pp = b.parent().parent(),p = b.parent(),
+                param = iCMS.param(p),def ='写下你的评论…',
+                box   = $('.zm-comment-box',pp);
+                if(box.length >0){
+                    box.remove();
+                    return false;
                 }
-                var iid = b.attr('data-iid'),
-                box = $('<div class="comment_mini_box">');
-                box.html('<div class="input-append">'+
-                    '<input class="comment_text span4" type="text">'+
-                    '<a href="###" class="btn">评论</a></div>'
+                // console.log(param);
+
+                spike = '<i class="iCMS-icon iCMS-icon-spike zm-comment-bubble" style="display: inline; left: 481px;"></i>',
+                box   = $('<div class="zm-comment-box">'),
+                list  = $('<div class="zm-comment-list">'),
+                form  = $('<div class="zm-comment-form">');
+                form.html('<div class="zm-comment-ipt">'+
+                    '<input class="zm-comment-textarea" type="text" value="'+def+'">'+
+                    '</div>'+
+                    '<div class="zm-command clearfix">'+
+                    '<a href="#" name="addnew" class="btn btn-primary">评论</a>'+
+                    '<a href="###" name="closeform" class="zm-command-cancel">取消</a>'+
+                    '</div>'
                 );
+                box.append(spike,list,form);
                 p.after(box);
-                $(box).on("click",'.btn',function() {
+                //加载评论
+                comment_list();
+
+                //----------绑定事件----------------
+                $('.zm-comment-textarea',box).focus(function() {
+                    form.addClass('expanded');
+                   if(this.value==def){
+                        this.value='';
+                    }
+                    $(this).css({color: '#222'});  
+                }).blur(function() {
+                    close_form();
+                });
+
+                //关闭评论
+                $('a[name="closeform"]',box).click(function(event) {
                     event.preventDefault();
-                    var param = {
-                        'action':'comment','iid':iid,'title':b.attr('data-title'),
-                        'content':$('.comment_text',box).val()
-                    };
-                    //console.log(param);
+                    form.removeClass('expanded');
+                    close_form(true);
+                });
+                //提交评论
+                box.on('click', 'a[name="addnew"]', function(event) {
+                //$('a[name="addnew"]',box).click(function() {
+                    event.preventDefault();
+                    var ta = $('.zm-comment-textarea',box),
+                    param  = comment_param(ta);
+
+                    console.log(param);
+                    return;
+
                     if(!param.content){
-                        alert("写点东西吧!亲!!");
-                        $('.comment_text',box).focus();
+                        iCMS.alert("请填写内容");
+                        ta.focus();
                         return false;
                     }
                     $.post(iCMS.api('article'),param,function(c) {
 //                        console.log(c);
-                        alert(c.msg);
                         if(c.code){
                             var count = parseInt($('span',b).text());
                             $('span',b).text(count+1);
-                            //box.remove();
-                            comment_mini_list(true);
+                            ta.val(def).css({color: '#222'});
+                            comment_list(c.forward);
                         }else{
-                            return false;
+                            alert(c.msg);
                         }
                     },'json'); 
                 });
-                comment_mini_list();
-                function comment_mini_list(refresh){
-                    var list = $('.comment_mini_list',pp);
-                    if(refresh && list.length >0){
-                        list.empty();
-                    }else{
-                        list = $('<div class="comment_mini_list">');                        
-                    }
-                    $.get(iCMS.api('article')+"&do=comment",{'iid':iid},
-                        function(c) {
-                            //console.log(c);
-                            var ul   = '<ul>';
-                            $.each(c,function(i,obj) {
-                                ul+='<li><span class="date">'+obj.addtime+'</span><span class="label label-info">'+obj.nickname+':</span> '+obj.content+'</li>';
+                //回复评论
+                list.on('click', 'a[name="reply_comment"]', function(event) {
+                    event.preventDefault();
+                    var item    = $(this).parent().parent(),
+                    reply_param = iCMS.param($(this)),
+                    item_form   = $('.zm-comment-form',item);
+
+                    if(item_form.length >0){
+                        item_form.remove();
+                        return false;
+                    }             
+                    item_form = form.clone();    
+                    item_form.addClass('expanded').removeClass('zm-comment-box-ft');
+                    $(this).parent().after(item_form);
+
+
+                    $('.zm-comment-textarea',item_form).data('param',reply_param).val("").focus();
+                    $('a[name="closeform"]',item_form).click(function(event) {
+                        event.preventDefault();
+                        item_form.remove();
+                    });
+                });
+                //赞评论
+                list.on('click', 'a[name="like_comment"]', function(event) {
+                    event.preventDefault();
+                    alert("like_comment");
+                });
+
+                // function comment_up(){
+
+                // }
+
+                function comment_param(ta){
+                    var data = ta.data('param'),
+                    content  = ta.val(),
+                    vars     = {
+                        'action':'comment',
+                        'content':(content==def?'':content),
+                    };
+                    console.log(vars,param,data);
+                    
+                    return $.extend(vars,param,data);
+                }
+                function close_form(d,p){
+                    var ta = $('.zm-comment-textarea',(p||box));
+                    if(ta.val()==""||d){
+                        ta.val(def).css({color: '#999'});
+                   }                   
+                }
+                function comment_list(id){
+                    $.get(iCMS.api('article')+"&do=comment",{'iid':param['iid'],'id':id},
+                        function(json) {
+                            if(!json) return false;
+
+                            form.addClass('zm-comment-box-ft');
+                            $.each(json,function(i,c) {
+                                //console.log(c.up>1);
+                                var item = '<div class="zm-item-comment" data-id="'+c.id+'">'+
+                                '<a title="'+c.user.name+'" data-tip="iCMS:ucard:'+c.user.uid+'" class="zm-item-link-avatar" href="'+c.user.url+'">'+
+                                '<img src="'+c.user.avatar+'" class="zm-item-img-avatar">'+
+                                '</a>'+
+                                '<div class="zm-comment-content-wrap">'+
+                                '<div class="zm-comment-hd">'+
+                                '<a data-tip="iCMS:ucard:'+c.user.uid+'" href="'+c.user.url+'" class="zg-link">'+c.user.name+'</a>'+
+                                '</div>'+
+                                '<div class="zm-comment-content">'+c.content+'</div>'+
+                                '<div class="zm-comment-ft">'+
+                                '<span class="date">'+c.addtime+'</span>'+
+                                '<a href="#" class="reply zm-comment-op-link" name="reply_comment" data-param=\'{"uid":"'+c.user.uid+'","name":"'+c.user.name+'"}\'>'+
+                                '<i class="iCMS-icon iCMS-icon-comment-reply"></i>回复</a>'+
+                                '<a href="#" class="like zm-comment-op-link" name="like_comment">'+
+                                '<i class="iCMS-icon iCMS-icon-comment-like"></i>赞</a>';
+                                if(c.up>1){
+                                    item += '<span class="like-num" data-tip="iCMS:s:'+c.up+' 人觉得这个很赞">'+
+                                            '<em>'+c.up+'</em> <span>赞</span></span>';
+                                }
+                                item += '<a href="#" name="report" class="report zm-comment-op-link needsfocus">'+
+                                '<i class="iCMS-icon iCMS-icon-no-help"></i>举报</a>'+
+                                '</div>'+
+                                '</div>'+
+                                '</div>';
+                                list.append(item);
                             });
-                            ul+='</ul>';
-                            list.html(ul);
-                            box.after(list);
                     },'json');                    
                 }
-                //------------
+               //------------
             }
+        },
+        param:function(a){
+            return $.parseJSON(a.attr('data-param'));
         },
         api:function(app){
             return iCMS.config.API+'?app='+app;
@@ -149,7 +244,7 @@
                 $("#iCMS_nav_profile").show();
                 this.hover(".iCMS_user_home", "#iCMS_user_menu",21);
             }
-            $(document).on("click",'.iCMS_user_follow',function() {
+            $(document).on("click",'.iCMS_user_follow',function(event) {
                 event.preventDefault();
                 if(!iCMS.user_status){
                     iCMS.LoginBox(); 
@@ -158,26 +253,26 @@
                 iCMS.user.follow(this);
                 return false;
             });
-            $(document).on("click",'.iCMS_article_do',function() {
+            $(document).on("click",'.iCMS_article_do',function(event) {
                 event.preventDefault();
                 if(!iCMS.user_status){
                     iCMS.LoginBox(); 
                     return false;
                 }
-                var d = $(this).attr('data-do');
-                if(d=='comment'){
-                    iCMS.article.comment_mini_box(this);
-                }else{
-                    iCMS.article.do(this);
+                var param = iCMS.param($(this));
+                if(param.do=='comment'){
+                    iCMS.article.comment_box(this);
+                }else if(param.do=='good'){
+                    iCMS.article.good(this);
                 }
                 return false;
             });
-            $(document).on("click",'.iCMS_user_logout',function() {
+            $(document).on("click",'.iCMS_user_logout',function(event) {
                 event.preventDefault();
                 iCMS.user.logout();
                 return false;
             });
-            $(document).on("click",'.iCMS_LoginBox',function() {
+            $(document).on("click",'.iCMS_LoginBox',function(event) {
             	event.preventDefault();
                 iCMS.LoginBox();
                 return false;
@@ -192,7 +287,23 @@
                 $(this).height(height); 
             }); 
     	},
-
+        alert:function(msg){
+            iCMS.dialog(msg,{label:'warning',icon:'warning'});
+        },
+        dialog:function(msg,options,_parent){
+            var a    = window,
+            defaults = {width: 360,height: 150,fixed: true,lock: true,time:3000,label:'success',icon:'check'},            
+            opts     = $.extend(defaults,options);
+            _parent  = _parent||false;
+            //console.log(opts);
+            if(_parent) a = window.parent
+ 
+            var dialog   = a.$.dialog({
+                id: 'iPHP_DIALOG',width:opts.width,height:opts.height,fixed:opts.fixed,lock:opts.lock,time:opts.time,
+                title: 'iCMS - 提示信息',
+                content: '<div class=\"iPHP-msg\"><span class=\"label label-'+opts.label+'\"><i class=\"fa fa-'+opts.icon+'\"></i> '+msg+'</span></div>',
+            });
+        },
         LoginBox:function(){
             var loginBox    = $('#iCMS_Login_Box');
             //console.log(typeof(loginBox));
@@ -218,7 +329,7 @@
             });
         },
         modal: function() {
-            $('[data-toggle="modal"]').on("click", function() {
+            $('[data-toggle="modal"]').on("click", function(event) {
             	event.preventDefault();
                 window.iCMS_MODAL = $(this).modal({width: "85%",height: "640px"});
                 //$(this).parent().parent().parent().removeClass("open");

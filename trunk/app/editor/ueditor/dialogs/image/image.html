@@ -96,25 +96,25 @@
   <div class="widget-box widget-plain" id="files-explorer">
     <div class="widget-title">
       <h5 class="brs">文件管理</h5>
-		<span class="label label-info pwd"><a href="javascript:imageUploader.getDir('<%=URI%><%=parent%>');">iCMS::/<%=pwd%></a></span>
+		<span class="label label-info pwd"><a href="javascript:imageUploader.getDir('{{$URI}}{{$parent}}');">iCMS::/{{$pwd}}</a></span>
 		<div class="buttons"><a href="javascript:imageUploader.refreshDir();" class="btn btn-mini btn-success" id="refresh"><i class="icon-refresh icon-white"></i> 刷新</a></div>
     </div>
     <div class="widget-content nopadding">
-        <%if(DirArray){%>
+        {{ if DirArray }}
         <table class="table table-bordered table-hover table-condensed">
           <tbody>
             <tr>
-              <td><a href="javascript:imageUploader.getDir('<%=URI%><%=parent%>');"><i class="icon-arrow-up"></i> 返回上级目录</a></td>
+              <td><a href="javascript:imageUploader.getDir('{{$URI}}{{$parent}}');"><i class="icon-arrow-up"></i> 返回上级目录</a></td>
             </tr>
-            <%for(i = 0; i < DirArray.length; i ++) {%>
+            {{each DirArray}}
             <tr>
-              <td><a href="javascript:imageUploader.getDir('<%=DirArray[i]['url']%>');" class="dir"><%=DirArray[i]['name']%></a></td>
+              <td><a href="javascript:imageUploader.getDir('{{$value.url}}');" class="dir">{{$value.name}}</a></td>
             </tr>
-            <%}%>
+            {{/each}}
           </tbody>
         </table>
-        <%}%>
-        <%if(FileArray){%>
+        {{/if}}
+        {{ if FileArray }}
         <table class="table table-bordered table-hover table-condensed">
           <thead>
             <tr>
@@ -125,21 +125,21 @@
             </tr>
           </thead>
           <tbody>
-			<%for(i = 0; i < FileArray.length; i ++) {%>
+			{{each FileArray}}
             <tr>
-              <td><input type="checkbox" class="url" value="<%=FileArray[i]['url']%>" /></td>
-              <td><a href="<%=FileArray[i]['url']%>"  target="_blank" title="点击查看图片"><img src="../../../../ui/fileicons/<%=FileArray[i]['ext']%>.gif" /></a> <a href="javascript:imageUploader.insertImage('<%=FileArray[i]['url']%>');" class="file"><%=FileArray[i]['name']%></a></td>
-              <td><%=FileArray[i]['size']%></td>
-              <td><%=FileArray[i]['modified']%></td>
+              <td><input type="checkbox" class="url" value="{{$value.url}}" /></td>
+              <td><a href="{{$value.url}}"  target="_blank" title="点击查看图片"><img src="../../../../ui/fileicons/{{$value.ext}}.gif" /></a> <a href="javascript:imageUploader.insertImage('{{$value.url}}');" class="file">{{$value.name}}</a></td>
+              <td>{{$value.size}}</td>
+              <td>{{$value.modified}}</td>
             </tr>
-            <%}%>
+            {{/each}}
           </tbody>
         </table>
-        <%}%>
+        {{/if}}
     </div>
   </div>
 	</script>
-    <script type="text/javascript" src="../../../../ui/template-2.0.4.min.js"></script>
+    <script type="text/javascript" src="../../../../ui/template-3.0.js"></script>
     <script type="text/javascript" src="../tangram.js"></script>
     <script type="text/javascript" src="image.js"></script>
 
