@@ -99,9 +99,8 @@
                 //----------绑定事件----------------
                 $('.zm-comment-textarea',box).focus(function() {
                     form.addClass('expanded');
-                   if(this.value==def){
-                        this.value='';
-                    }
+                   if(this.value==def) this.value='';
+                   
                     $(this).css({color: '#222'});  
                 }).blur(function() {
                     close_form();
@@ -136,7 +135,7 @@
                             ta.val(def).css({color: '#222'});
                             comment_list(c.forward);
                         }else{
-                            alert(c.msg);
+                            iCMS.alert(c.msg);
                         }
                     },'json'); 
                 });

@@ -26,18 +26,22 @@ class articleApp {
         iPHP::code(1,'iCMS:article:good',0,'json');
     }
     public function ACTION_comment(){
-        $iid      = (int)$_POST['iid'];
-        $cid      = (int)$_POST['cid'];
-        $title    = $_POST['title'];
-        $contents = $_POST['content'];
+        $iid        = (int)$_POST['iid'];
+        $cid        = (int)$_POST['cid'];
+        $suid       = (int)$_POST['suid'];
+        $reply_uid  = (int)$_POST['reply_uid'];
+        $reply_name = $_POST['reply_name'];        
+        $title      = $_POST['title'];
+        $contents   = $_POST['content'];
         $iid OR iPHP::code(0,'iCMS:article:empty_id',0,'json');
         $contents OR iPHP::code(0,'iCMS:comment:empty',0,'json');
 
+        $reply   = $reply_uid?1:0;
         $addtime = time();
         $ip      = iPHP::getIp();
         iDB::query("INSERT INTO `#iCMS@__comment`
-            (`appid`, `cid`, `iid`, `uid`, `name`, `title`, `contents`, `reply`,`reply_uid`,`reply_name`, `addtime`, `status`, `up`, `down`, `ip`, `quote`, `floor`)
-VALUES ('".iCMS_APP_ARTICLE."', '$cid', '$iid', '$this->userid', '$this->nickname', '$title', '$contents', '0','0','', '$addtime', '1', '0', '0', '$ip', '0', '0');");
+            (`appid`, `cid`, `iid`,`suid`, `title`,`uid`, `name`,  `contents`, `reply`,`reply_uid`,`reply_name`, `addtime`, `status`, `up`, `down`, `ip`, `quote`, `floor`)
+VALUES ('".iCMS_APP_ARTICLE."', '$cid', '$iid','$suid', '$title', '$this->userid', '$this->nickname', '$contents', '$reply','$reply_uid','$reply_name', '$addtime', '1', '0', '0', '$ip', '0', '0');");
         iDB::query("UPDATE `#iCMS@__article` SET comments=comments+1 WHERE `id` ='{$iid}' limit 1");
         $id = iDB::$insert_id;
         iPHP::code(1,'iCMS:comment:success',$id,'json');
