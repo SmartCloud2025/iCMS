@@ -97,11 +97,13 @@
                 comment_list();
 
                 //----------绑定事件----------------
+                //box.on('focus', 'zm-comment-textarea', function(event) {
                 $('.zm-comment-textarea',box).focus(function() {
                     form.addClass('expanded');
                    if(this.value==def) this.value='';
                    
                     $(this).css({color: '#222'});  
+                //}).on('blur', 'zm-comment-textarea', function(event) {
                 }).blur(function() {
                     close_form();
                 });
@@ -116,23 +118,22 @@
                 box.on('click', 'a[name="addnew"]', function(event) {
                 //$('a[name="addnew"]',box).click(function() {
                     event.preventDefault();
-                    var ta = $('.zm-comment-textarea',box),
-                    param  = comment_param(ta);
+                    var cform = $(this).parent().parent(),
+                    textarea  = $('.zm-comment-textarea',cform),
+                    cparam     = comment_param(textarea);
+console.log(cparam);
 
-                    console.log(param);
-                    return;
-
-                    if(!param.content){
+                    if(!cparam.content){
                         iCMS.alert("请填写内容");
-                        ta.focus();
+                        textarea.focus();
                         return false;
                     }
-                    $.post(iCMS.api('article'),param,function(c) {
+                    $.post(iCMS.api('article'),cparam,function(c) {
 //                        console.log(c);
                         if(c.code){
                             var count = parseInt($('span',b).text());
                             $('span',b).text(count+1);
-                            ta.val(def).css({color: '#222'});
+                            textarea.val(def).css({color: '#222'});
                             comment_list(c.forward);
                         }else{
                             iCMS.alert(c.msg);
@@ -145,17 +146,18 @@
                     var item    = $(this).parent().parent(),
                     reply_param = iCMS.param($(this)),
                     item_form   = $('.zm-comment-form',item);
+console.log(reply_param);
 
                     if(item_form.length >0){
                         item_form.remove();
                         return false;
-                    }             
+                    }
                     item_form = form.clone();    
                     item_form.addClass('expanded').removeClass('zm-comment-box-ft');
                     $(this).parent().after(item_form);
 
 
-                    $('.zm-comment-textarea',item_form).data('param',reply_param).val("").focus();
+                    $('.zm-comment-textarea',item_form).data('reply_param',reply_param).val("").focus();
                     $('a[name="closeform"]',item_form).click(function(event) {
                         event.preventDefault();
                         item_form.remove();
@@ -171,21 +173,23 @@
 
                 // }
 
-                function comment_param(ta){
-                    var data = ta.data('param'),
-                    content  = ta.val(),
+                function comment_param(textarea){
+                    var reply_param = textarea.data('reply_param'),
+                    content  = textarea.val(),
                     vars     = {
                         'action':'comment',
                         'content':(content==def?'':content),
                     };
-                    console.log(vars,param,data);
-                    
-                    return $.extend(vars,param,data);
+
+                    console.log(vars,param,reply_param);
+
+
+                    return $.extend(vars,param,reply_param);
                 }
                 function close_form(d,p){
-                    var ta = $('.zm-comment-textarea',(p||box));
-                    if(ta.val()==""||d){
-                        ta.val(def).css({color: '#999'});
+                    var textarea = $('.zm-comment-textarea',(p||box));
+                    if(textarea.val()==""||d){
+                        textarea.val(def).css({color: '#999'});
                    }                   
                 }
                 function comment_list(id){
@@ -195,15 +199,22 @@
 
                             form.addClass('zm-comment-box-ft');
                             $.each(json,function(i,c) {
-                                //console.log(c.up>1);
+                                //console.log(c.reply);
                                 var item = '<div class="zm-item-comment" data-id="'+c.id+'">'+
                                 '<a title="'+c.user.name+'" data-tip="iCMS:ucard:'+c.user.uid+'" class="zm-item-link-avatar" href="'+c.user.url+'">'+
                                 '<img src="'+c.user.avatar+'" class="zm-item-img-avatar">'+
                                 '</a>'+
                                 '<div class="zm-comment-content-wrap">'+
                                 '<div class="zm-comment-hd">'+
-                                '<a data-tip="iCMS:ucard:'+c.user.uid+'" href="'+c.user.url+'" class="zg-link">'+c.user.name+'</a>'+
-                                '</div>'+
+                                '<a data-tip="iCMS:ucard:'+c.user.uid+'" href="'+c.user.url+'" class="zg-link">'+c.user.name+'</a>';
+                                if(c.suid==c.uid){
+                                   item += '<span class="desc">（作者）</span>'; 
+                                }
+                                if(c.reply){
+                                   item += '<span class="desc">回复 </span>'+
+                                   '<a data-tip="iCMS:ucard:'+c.reply.uid+'" href="'+c.reply.url+'" class="zg-link">'+c.reply.name+'</a>';                                   
+                                }
+                                item += '</div>'+
                                 '<div class="zm-comment-content">'+c.content+'</div>'+
                                 '<div class="zm-comment-ft">'+
                                 '<span class="date">'+c.addtime+'</span>'+

@@ -47,14 +47,21 @@ function comment_list($vars){
 			if($vars['date_format']){
 				$rs[$i]['addtime'] = get_date($rs[$i]['addtime'],$vars['date_format']);
 			}
-			$rs[$i]['url']		= iCMS_API.'?app=comment&iid='.$rs[$i]['iid'].'&appid='.$rs[$i]['appid'].'&cid='.$rs[$i]['cid'];
-			$rs[$i]['lou']		= $total-($i+$ln*$maxperpage);
-			$rs[$i]['content']	= nl2br($rs[$i]['contents']);
-			if($vars['user']){
-				$rs[$i]['user']['uid']    = $rs[$i]['uid'];
-				$rs[$i]['user']['url']    = userData($rs[$i]['uid'],"url");
-				$rs[$i]['user']['avatar'] = userData($rs[$i]['uid'],"avatar",$vars['facesize']?$vars['facesize']:0);
-				$rs[$i]['user']['name']   = $rs[$i]['name'];
+			$rs[$i]['url']     = iCMS_API.'?app=comment&iid='.$rs[$i]['iid'].'&appid='.$rs[$i]['appid'].'&cid='.$rs[$i]['cid'];
+			$rs[$i]['lou']     = $total-($i+$ln*$maxperpage);
+			$rs[$i]['content'] = nl2br($rs[$i]['content']);
+			$rs[$i]['user']    = array();
+			$rs[$i]['user']['uid']    = $rs[$i]['uid'];
+			$rs[$i]['user']['url']    = userData($rs[$i]['uid'],"url");
+			$rs[$i]['user']['avatar'] = userData($rs[$i]['uid'],"avatar",$vars['facesize']?$vars['facesize']:0);
+			$rs[$i]['user']['name']   = $rs[$i]['name'];
+
+			$rs[$i]['reply'] = '';
+			if($rs[$i]['reply_uid']){
+				$rs[$i]['reply']['uid']    = $rs[$i]['reply_uid'];
+				$rs[$i]['reply']['url']    = userData($rs[$i]['reply_uid'],"url");
+				$rs[$i]['reply']['avatar'] = userData($rs[$i]['reply_uid'],"avatar",$vars['facesize']?$vars['facesize']:0);
+				$rs[$i]['reply']['name']   = $rs[$i]['reply_name'];
 			}
 		}
 		$vars['cache'] && iCache::set($cacheName,$rs,$cacheTime);
