@@ -43,7 +43,7 @@ defined('iPHP_MULTI_DOMAIN') OR define('iPHP_MULTI_DOMAIN',false);
 //defined('iPHP_TPL_DEBUG') OR define('iPHP_TPL_DEBUG',false);
 //defined('iPHP_URL_404') OR define('iPHP_URL_404','');
 //-----------------框架相关路径-----------------------
-define('iPHP_DIR',		iPATH."iPHP");
+//define('iPHP_PATH',		iPATH."iPHP");
 define('iPHP_CORE',		iPATH."iPHP/core");
 //-----------------应用相关路径-----------------------
 define('iPHP_APP',		iPATH."app");

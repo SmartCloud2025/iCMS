@@ -152,7 +152,7 @@ $(function(){
             <?php 
             $_count		= count($fileRs);
             for($i=0;$i<$_count;$i++){
-            	$icon	= iFS::icon($fileRs[$i]['name'],iCMS_UI);
+            	$icon	= iFS::icon($fileRs[$i]['name'],ACP_UI);
             ?>
             <tr>
               <td><input type="checkbox" value="<?php echo $fileRs[$i]['path'] ; ?>" url="<?php echo $fileRs[$i]['url'] ; ?>"  data-click="file"/></td>

@@ -14,13 +14,13 @@ defined('iCMS') OR exit('What are you doing?');
 <title>iCMS Administrator's Control Panel</title>
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <meta content="iDreamSoft Inc." name="Copyright" />
-<link rel="stylesheet" href="<?php echo iCMS_UI;?>/bootstrap-2.3.1/css/bootstrap.min.css" type="text/css" />
-<link rel="stylesheet" href="<?php echo iCMS_UI;?>/bootstrap-2.3.1/css/bootstrap-responsive.min.css" type="text/css" />
-<link rel="stylesheet" href="<?php echo iCMS_UI;?>/iCMS-6.0.0.css" type="text/css" />
+<link rel="stylesheet" href="<?php echo ACP_UI;?>/bootstrap-2.3.1/css/bootstrap.min.css" type="text/css" />
+<link rel="stylesheet" href="<?php echo ACP_UI;?>/bootstrap-2.3.1/css/bootstrap-responsive.min.css" type="text/css" />
+<link rel="stylesheet" href="<?php echo ACP_UI;?>/iCMS-6.0.0.css" type="text/css" />
 <!--[if lt IE 9]>
   <script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
 <![endif]-->
-<script type="text/javascript" src="<?php echo iCMS_UI;?>/jquery/jquery-1.11.0.min.js"></script>
+<script type="text/javascript" src="<?php echo ACP_UI;?>/jquery/jquery-1.11.0.min.js"></script>
 <style>
 body { background-color:#f8f8f8;}
 .iCMS-login { margin: 240px auto 0; width:720px; }
@@ -32,9 +32,9 @@ body { background-color:#f8f8f8;}
 .login label i { background-repeat: no-repeat; background-attachment: scroll; background-position: center; background-color: transparent; width: 16px; display: inline-block; border-right: 1px solid #dddddd; margin-right: 10px; padding: 10px; vertical-align: middle; }
 .login label span { text-align: center !important; color: #666666; text-shadow: 0 1px 0 #ffffff; }
 .ipt_uname { margin-bottom:20px !important; }
-.ipt_uname i { background-image: url('<?php echo iCMS_UI;?>/img/icons/16/user.png'); }
+.ipt_uname i { background-image: url('<?php echo ACP_UI;?>/img/icons/16/user.png'); }
 .ipt_pass { margin-bottom:20px !important; }
-.ipt_pass i { background-image: url('<?php echo iCMS_UI;?>/img/icons/16/lock.png'); }
+.ipt_pass i { background-image: url('<?php echo ACP_UI;?>/img/icons/16/lock.png'); }
 .login .controls { margin-left: 120px; }
 </style>
 <script type="text/javascript">
@@ -67,7 +67,7 @@ $(function(){
 <body>
 <div class="container">
   <div class="iCMS-login">
-    <div class="info"> <a class="iCMS-logo" href="http://www.idreamsoft.com" target="_blank"><img src="<?php echo iCMS_UI;?>/iCMS.login-6.0.png" /></a>
+    <div class="info"> <a class="iCMS-logo" href="http://www.idreamsoft.com" target="_blank"><img src="<?php echo ACP_UI;?>/iCMS.login-6.0.png" /></a>
       <p>iCMS 是一套采用 PHP 和 MySQL 构建的高效简洁的内容管理系统,为您的网站提供一个完美的开源解决方案</p>
     </div>
     <div class="login">

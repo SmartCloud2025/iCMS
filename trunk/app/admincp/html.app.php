@@ -88,7 +88,7 @@ class htmlApp{
 		if($k=="0" && empty($category)){
 			iPHP::alert('请选择需要生成静态的栏目!');
 		}elseif($category[0]=='all'){
-			$rs	= iCache::get('system/category.'.iCMS_APP_ARTICLE.'/cache');
+			$rs	= iCache::get('iCMS/category.'.iCMS_APP_ARTICLE.'/cache');
 			$category	= array();
 			foreach((array)$rs AS $_cid=>$C){
 				$C['status'] && $category[]=$C['cid'];
@@ -96,9 +96,9 @@ class htmlApp{
 		}
 
 		if($k){
-			$category	= iCache::get('system/create.category');
+			$category	= iCache::get('iCMS/create.category');
 		}else{
-			iCache::set('system/create.category',$category,0);
+			iCache::set('iCMS/create.category',$category,0);
 		}
     	
     	$_GET['loop']	&&	$loop=0;
@@ -189,7 +189,7 @@ class htmlApp{
 		}
 		
 		if($category[0]=='all'){
-			$rs	= iCache::get('system/category.'.iCMS_APP_ARTICLE.'/cache');
+			$rs	= iCache::get('iCMS/category.'.iCMS_APP_ARTICLE.'/cache');
 			$category	= array();
 			foreach((array)$rs AS $_cid=>$C){
 				$C['status'] && $category[]=$C['cid'];

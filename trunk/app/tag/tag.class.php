@@ -17,8 +17,8 @@ class tag {
 		$rs     = self::data($value,$field);
 		$_count = count($rs);
 	    for($i=0;$i<$_count;$i++) {
-			$C              = iCache::get('system/category/'.$rs[$i]['cid']);
-			$TC             = iCache::get('system/category/'.$rs[$i]['tcid']);
+			$C              = iCache::get('iCMS/category/'.$rs[$i]['cid']);
+			$TC             = iCache::get('iCMS/category/'.$rs[$i]['tcid']);
 			$rs[$i]['iurl'] = iRouter::url('tag',array($rs[$i],$C,$TC));
 			$rs[$i]['url']  = $rs[$i]['iurl']->href;
 			$tkey           = self::tkey($rs[$i]['cid']);
@@ -31,7 +31,7 @@ class tag {
 		$dir1 = substr($ncid, 0, 2);
 		$dir2 = substr($ncid, 2, 3);
 		$tkey = $dir1.'/'.$dir2.'/'.$cid;
-        return 'system/tags/'.$tkey;
+        return 'iCMS/tags/'.$tkey;
     }
     function getag($key='tags',&$array,$C,$TC){
     	if(empty($array[$key])) return;
@@ -65,7 +65,7 @@ class tag {
     }
 
 //	function geturl($name,$cid){
-//		$category	= iCache::get('system/category/'.$cid);
+//		$category	= iCache::get('iCMS/category/'.$cid);
 //		$rs			= self::data($value,'name');
 //		return iRouter::url('tag',array($rs[$i],$C));
 //	}

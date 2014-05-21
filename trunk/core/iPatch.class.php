@@ -15,7 +15,7 @@
  * @author coolmoo
  */
 define('PATCH_URL',"http://patch.idreamsoft.com");//自动更新服务器
-define('PATCH_DIR',iPATH.'cache/system/patch/');//临时文件夹
+define('PATCH_DIR',iPATH.'cache/iCMS/patch/');//临时文件夹
 class iPatch {
 	public static $version	= '';
 	public static $release	= '';

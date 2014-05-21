@@ -46,11 +46,11 @@ iACP::head(false);
     </div>
   </div>
 </div>
-<script type="text/javascript" src="<?php echo iCMS_UI;?>/ZeroClipboard-1.2.3.min.js"></script> 
-<script type="text/javascript" src="<?php echo iCMS_UI;?>/swfupload-2.2.0/swfupload.js"></script> 
-<script type="text/javascript" src="<?php echo iCMS_UI;?>/swfupload-2.2.0/swfupload.queue.js"></script> 
-<script type="text/javascript" src="<?php echo iCMS_UI;?>/swfupload-2.2.0/fileprogress.js"></script> 
-<script type="text/javascript" src="<?php echo iCMS_UI;?>/swfupload-2.2.0/callbacks.js"></script> 
+<script type="text/javascript" src="<?php echo ACP_UI;?>/ZeroClipboard-1.2.3.min.js"></script> 
+<script type="text/javascript" src="<?php echo ACP_UI;?>/swfupload-2.2.0/swfupload.js"></script> 
+<script type="text/javascript" src="<?php echo ACP_UI;?>/swfupload-2.2.0/swfupload.queue.js"></script> 
+<script type="text/javascript" src="<?php echo ACP_UI;?>/swfupload-2.2.0/fileprogress.js"></script> 
+<script type="text/javascript" src="<?php echo ACP_UI;?>/swfupload-2.2.0/callbacks.js"></script> 
 <script type="text/javascript">
     var APP_URI = '<?php echo APP_URI; ?>',watermark=$("#watermark").prop("checked");
     var swfupload,
@@ -59,8 +59,8 @@ iACP::head(false);
         var settings = {
             upload_url:'<?php echo APP_URI; ?>&do=upload&format=json',	//附件上传服务器地址
             file_post_name:'upfile',      								//向后台提交的表单名
-            flash_url:"<?php echo iCMS_UI;?>/swfupload-2.2.0/swfupload.swf",
-            flash9_url:"<?php echo iCMS_UI;?>/swfupload-2.2.0/swfupload_fp9.swf",
+            flash_url:"<?php echo ACP_UI;?>/swfupload-2.2.0/swfupload.swf",
+            flash9_url:"<?php echo ACP_UI;?>/swfupload-2.2.0/swfupload_fp9.swf",
             post_params:{"watermark":watermark,"udir":"<?php echo $_GET['dir']; ?>"},
             file_size_limit:"<?php echo $file_size_limit; ?>",			//文件大小限制，此处仅是前端flash选择时候的限制，具体还需要和后端结合判断
             file_types:"<?php echo '*.'.str_replace(',',';*.',iCMS::$config['FS']['allow_ext']);?>", //允许的扩展名，多个扩展名之间用分号隔开，支持*通配符
@@ -74,7 +74,7 @@ iACP::head(false);
             //debug:true,
 
             // 按钮设置
-            button_image_url:"<?php echo iCMS_UI;?>/swfupload-2.2.0/uploadbtn.png",
+            button_image_url:"<?php echo ACP_UI;?>/swfupload-2.2.0/uploadbtn.png",
             button_width:"144",
             button_height:"41",
             button_placeholder_id:"spanButtonPlaceHolder",
@@ -141,7 +141,7 @@ iACP::head(false);
 	    //swfupload.destroy();
     })
     <?php }?>
-    ZeroClipboard.setDefaults( { moviePath: '<?php echo iCMS_UI;?>/ZeroClipboard-1.2.3.swf' } );
+    ZeroClipboard.setDefaults( { moviePath: '<?php echo ACP_UI;?>/ZeroClipboard-1.2.3.swf' } );
 	$("#global-zeroclipboard-html-bridge").click(function() {
 		alert("复制成功!");
 	})

@@ -59,7 +59,7 @@ class tagApp {
             exit;
         }
         if ($rs['tcid']) {
-            $tCategory = iCache::get('system/category/' . $rs['tcid']);
+            $tCategory = iCache::get('iCMS/category/' . $rs['tcid']);
         }
         $rs['iurl'] = iRouter::url('tag', array($rs, $category, $tCategory));
 

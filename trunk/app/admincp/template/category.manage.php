@@ -10,11 +10,11 @@ iPHP::setCookie(iACP::$app_name.'_tabs',iACP::$app_do);
 iACP::head();
 ?>
 <?php if(iACP::$app_do=='tree'){ ?>
-<link rel="stylesheet" href="<?php echo iCMS_UI;?>/jquery/treeview-0.1.0.css" type="text/css" />
-<link rel="stylesheet" href="<?php echo iCMS_UI;?>/jquery/ui-1.10.3.min.css" type="text/css" />
-<script type="text/javascript" src="<?php echo iCMS_UI;?>/jquery/ui-1.10.3.min.js"></script>
-<script type="text/javascript" src="<?php echo iCMS_UI;?>/jquery/treeview-0.1.0.js"></script>
-<script type="text/javascript" src="<?php echo iCMS_UI;?>/jquery/treeview-0.1.0.async.js"></script>
+<link rel="stylesheet" href="<?php echo ACP_UI;?>/jquery/treeview-0.1.0.css" type="text/css" />
+<link rel="stylesheet" href="<?php echo ACP_UI;?>/jquery/ui-1.10.3.min.css" type="text/css" />
+<script type="text/javascript" src="<?php echo ACP_UI;?>/jquery/ui-1.10.3.min.js"></script>
+<script type="text/javascript" src="<?php echo ACP_UI;?>/jquery/treeview-0.1.0.js"></script>
+<script type="text/javascript" src="<?php echo ACP_UI;?>/jquery/treeview-0.1.0.async.js"></script>
 <script type="text/javascript">
 var upordurl="<?php echo APP_URI; ?>&do=updateorder";
 $(function(){

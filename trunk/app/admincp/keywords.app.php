@@ -88,6 +88,6 @@ class keywordsApp{
 	}
     function cache(){
     	$rs	= iDB::getArray("SELECT * FROM `#iCMS@__keywords` ORDER BY CHAR_LENGTH(`keyword`) DESC");
-		iCache::set('system/keywords',$rs,0);
+		iCache::set('iCMS/keywords',$rs,0);
     }
 }

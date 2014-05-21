@@ -17,14 +17,14 @@ class categoryApp{
 		$cid	= (int)$_GET['cid'];
 		$dir	= iS::escapeStr($_GET['dir']);
 		if(empty($cid) && $dir){
-			$cid	= iCache::get('system/category/dir2cid',$dir);
+			$cid	= iCache::get('iCMS/category/dir2cid',$dir);
 		}
 		empty($cid) && iPHP::throwException('应用程序运行出错.找不到该栏目: '.($dir?"<b>dir:$dir</b>":"<b>cid:$id</b>").' 请确认栏目是否存在', 3001);
 		
     	return $this->category($cid,$tpl);
     }
     public function category($id,$tpl='index') {
-        $rs	= iCache::get('system/category/'.$id);
+        $rs	= iCache::get('iCMS/category/'.$id);
 
        	$rs OR iPHP::throwException('应用程序运行出错.找不到该栏目: <b>cid:'. $id.'</b> 请更新栏目缓存或者确认栏目是否存在', 3002);
        	$rs['outurl']	= $rs['url'];
@@ -35,13 +35,13 @@ class categoryApp{
         $rs['url']    	= $iurl->href;
         $rs['link']		= "<a href='{$rs['url']}'>{$rs['name']}</a>";
         $rs['nav']		= $this->nav($rs);
-        $rootidA		= iCache::get('system/category/rootid');
+        $rootidA		= iCache::get('iCMS/category/rootid');
         $rs['subid']    = $rootidA[$id];
         $rs['subids']   = implode(',',(array)$rs['subid']);
 
         $rs['parent']	= array();
         if($rs['rootid']){
-        	$rs['parent']			= iCache::get('system/category/'.$rs['rootid']);
+        	$rs['parent']			= iCache::get('iCMS/category/'.$rs['rootid']);
 	        $rs['parent']['url']	= $rs['parent']['iurl']->href;
 	        $rs['parent']['link']	= "<a href='{$rs['parent']['url']}'>{$rs['parent']['name']}</a>";
         }
@@ -75,7 +75,7 @@ class categoryApp{
         	$iurl	= (array)$C['iurl'];
             $_nav	= "<a href='{$iurl['href']}'>{$C['name']}</a>";
             if($C['rootid']){
-            	$rc	= iCache::get('system/category/'.$C['rootid']);
+            	$rc	= iCache::get('iCMS/category/'.$C['rootid']);
             	$nav.=$this->nav($rc).iPHP::lang('iCMS:navTag');
         	}
             $nav.= $_nav;

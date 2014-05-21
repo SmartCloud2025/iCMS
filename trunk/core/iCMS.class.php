@@ -192,7 +192,7 @@ class iCMS {
     //------------------------------------
 	public static function getIds($id = "0",$all=true) {
 	    $ids	= array();
-	    $cArray	= iCache::get('system/category/rootid',$id);
+	    $cArray	= iCache::get('iCMS/category/rootid',$id);
 	    foreach((array)$cArray AS $_id) {
 	        $ids[]	= $_id;
 	        $all && $ids[]	= self::getIds($_id,$all);
@@ -249,9 +249,9 @@ class iCMS {
     }
     //过滤
     public static function filter(&$content){
-	    $cache		= iCache::get(array('system/word.filter','system/word.disable'));
-	    $filter		= $cache['system/word.filter'];//filter过滤
-	    $disable    = $cache['system/word.disable'];//disable禁止
+	    $cache		= iCache::get(array('iCMS/word.filter','iCMS/word.disable'));
+	    $filter		= $cache['iCMS/word.filter'];//filter过滤
+	    $disable    = $cache['iCMS/word.disable'];//disable禁止
 	    //禁止关键词
 	    foreach ((array)$disable AS $val) {
 	        if ($val && preg_match("/".preg_quote($val, '/')."/i", $content)) {
@@ -268,7 +268,7 @@ class iCMS {
     public static function keywords($a) {
         if(self::$config['other']['kwCount']==0) return $a;
 
-        $keywords	= iCache::get('system/keywords');
+        $keywords	= iCache::get('iCMS/keywords');
         if($keywords){
         	foreach($keywords AS $i=>$val) {
 	            if($val['times']>0) {

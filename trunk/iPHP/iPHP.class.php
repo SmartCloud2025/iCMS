@@ -402,7 +402,7 @@ class iPHP{
     }
     public static function pinyin($str,$split="",$pn=true) {
         if(!isset($GLOBALS["iPHP.PY"])) {
-            $GLOBALS["iPHP.PY"]=unserialize(gzuncompress(iFS::read(iPHP_DIR.'/pinyin.table')));
+            $GLOBALS["iPHP.PY"]=unserialize(gzuncompress(iFS::read(iPHP_PATH.'/pinyin.table')));
         }
         preg_match_all('/[\x01-\x7f]|[\xc2-\xdf][\x80-\xbf]|[\xe0-\xef][\x80-\xbf]{2}|[\xf0-\xff][\x80-\xbf]{3}/',trim($str),$match);
         $s = $match[0];
@@ -586,10 +586,7 @@ class iPHP{
         return $a;
     }
 }
-function iPHP_router_callback($a='',$var=''){
-	var_dump($a,$var);
-	# code...
-}
+
 function buildurl($url=false,$str='') {
 	$url	OR $url	= $_SERVER["REQUEST_URI"];
 	$urlA	= parse_url($url);
@@ -708,11 +705,11 @@ function csubstr($str,$len,$end=''){
 //截取HTML
 function htmlSubString($content,$maxlen=300,$suffix=FALSE) {
 	$content   = preg_split("/(<[^>]+?>)/si",$content, -1,PREG_SPLIT_NO_EMPTY| PREG_SPLIT_DELIM_CAPTURE);
-	$wordrows  =0;
-	$outstr    ="";
-	$wordend   =false;
-	$beginTags =0;
-	$endTags   =0;
+	$wordrows  = 0;
+	$outstr    = "";
+	$wordend   = false;
+	$beginTags = 0;
+	$endTags   = 0;
     foreach($content as $value) {
         if (trim($value)=="") continue;
 

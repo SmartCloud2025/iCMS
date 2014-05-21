@@ -44,25 +44,25 @@ class category {
     	}
     	if($appid===null){
 	    	foreach($appidArray AS $_appid) {
-		        iCache::set('system/category.'.$_appid.'/cache',$cache[$_appid],0);
-		        iCache::set('system/category.'.$_appid.'/array',$array[$_appid],0);
+		        iCache::set('iCMS/category.'.$_appid.'/cache',$cache[$_appid],0);
+		        iCache::set('iCMS/category.'.$_appid.'/array',$array[$_appid],0);
 	    	}
     	}else{
-	        iCache::set('system/category.'.$appid.'/cache',$cache[$appid],0);
-	        iCache::set('system/category.'.$appid.'/array',$array[$appid],0);
+	        iCache::set('iCMS/category.'.$appid.'/cache',$cache[$appid],0);
+	        iCache::set('iCMS/category.'.$appid.'/array',$array[$appid],0);
     	}
-        iCache::set('system/category/rootid',	$rootid,0);
-        iCache::set('system/category/parent',	$parent,0);
-        iCache::set('system/category/dir2cid',	$dir2cid,0);
-        iCache::set('system/category/hidden',	$hidden,0);
+        iCache::set('iCMS/category/rootid',	$rootid,0);
+        iCache::set('iCMS/category/parent',	$parent,0);
+        iCache::set('iCMS/category/dir2cid',	$dir2cid,0);
+        iCache::set('iCMS/category/hidden',	$hidden,0);
     }
     function cacheOne($C=null){
     	if(!is_array($C)){
     		$C = iDB::getRow("SELECT * FROM `#iCMS@__category` where `cid`='$C' LIMIT 1;",ARRAY_A);
 			$C = $this->C($C);
     	}
-		iCache::delete('system/category/'.$C['cid']);
-		iCache::set('system/category/'.$C['cid'],$C,0);
+		iCache::delete('iCMS/category/'.$C['cid']);
+		iCache::set('iCMS/category/'.$C['cid'],$C,0);
     }
     function C($C){
 	    if($C['metadata']){

@@ -7,7 +7,7 @@
  * @$Id: article.app.php 2408 2014-04-30 18:58:23Z coolmoo $
  */
 class articleApp {
-	public $methods	= array('iCMS','good','comment');
+	public $methods	= array('iCMS','good','like_comment','comment');
     function __construct() {
         $this->userid   = (int)iPHP::getCookie('userid');
         $this->nickname = iS::escapeStr(iPHP::getUniCookie('nickname'));
@@ -21,9 +21,15 @@ class articleApp {
         $ackey = 'article_good_'.$aid;
         $good  = (int)iPHP::getCookie($ackey);
         $good && iPHP::code(0,'iCMS:article:!good',0,'json');
-        iDB::query("UPDATE `#iCMS@__article` SET good=good+1 WHERE `id` ='{$aid}' limit 1");
+        iDB::query("UPDATE `#iCMS@__article` SET `good`=good+1 WHERE `id` ='{$aid}' limit 1");
         iPHP::setCookie('article_good_'.$aid,$this->userid,86400);
         iPHP::code(1,'iCMS:article:good',0,'json');
+    }
+    public function ACTION_like_comment(){
+        $id = (int)$_POST['id'];
+        $id OR iPHP::code(0,'iCMS:article:empty_id',0,'json');
+        iDB::query("UPDATE `#iCMS@__comment` SET `up`=up+1 WHERE `id`='$id'");
+        iPHP::code(1,'iCMS:comment:like_success',0,'json');
     }
     public function ACTION_comment(){
         $iid        = (int)$_POST['iid'];

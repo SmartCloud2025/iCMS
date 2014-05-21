@@ -181,8 +181,8 @@ function tag_search($vars){
 function tag_array($vars,$rs){
     $_count		= count($rs);
     for ($i=0;$i<$_count;$i++){
-		$category		= iCache::get('system/category/'.$rs[$i]['cid']);
-		$tcategory		= iCache::get('system/category/'.$rs[$i]['tcid']);
+		$category		= iCache::get('iCMS/category/'.$rs[$i]['cid']);
+		$tcategory		= iCache::get('iCMS/category/'.$rs[$i]['tcid']);
 
         $rs[$i]['category']['name']		= $category['name'];
         $rs[$i]['category']['subname']	= $category['subname'];

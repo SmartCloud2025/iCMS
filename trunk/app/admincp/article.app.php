@@ -48,7 +48,7 @@ class articleApp{
 		}
         $strpos   = strpos(__REF__,'?');
         $REFERER  = $strpos===false?'':substr(__REF__,$strpos);
-        $defArray = iCache::get('system/defaults');
+        $defArray = iCache::get('iCMS/defaults');
     	include iACP::tpl("article.add");
     }
     function doupdate(){

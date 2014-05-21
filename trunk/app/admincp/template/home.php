@@ -80,7 +80,7 @@ iACP::head();
           <td>当前程序版本</td>
           <td>iCMS <?php echo iCMS_VER ; ?>[<?php echo iCMS_RELEASE ; ?>]</td>
           <td><a href="<?php echo __ADMINCP__;?>=patch&do=check&frame=iPHP" target="iPHP_FRAME" id="home_patch">最新版本</a></td>
-          <td><span id="newversion"><img src="<?php echo iCMS_UI;?>/ajax_loader.gif" width="16" height="16" align="absmiddle"></span></td>
+          <td><span id="newversion"><img src="<?php echo ACP_UI;?>/ajax_loader.gif" width="16" height="16" align="absmiddle"></span></td>
         </tr>
         <tr>
           <td>服务器操作系统</td>

@@ -186,7 +186,7 @@ $(function(){
               <td><input type="checkbox" name="id[]" value="<?php echo $rs[$i]['id'] ; ?>" /></td>
               <td class="ordernum"><input type="text" name="orderNum[<?php echo $rs[$i]['id'] ; ?>]" value="<?php echo $rs[$i]['orderNum'] ; ?>" aid="<?php echo $rs[$i]['id'] ; ?>"/></td>
               <td><div class="edit" aid="<?php echo $rs[$i]['id'] ; ?>">
-                  <?php if($rs[$i]['isPic'])echo '<img src="'.iCMS_UI.'/image.gif" align="absmiddle">'?>
+                  <?php if($rs[$i]['isPic'])echo '<img src="'.ACP_UI.'/image.gif" align="absmiddle">'?>
                   <a href="<?php echo APP_URI; ?>&do=preview&id=<?php echo $rs[$i]['id'] ; ?>" data-toggle="modal" title="预览"><?php echo $rs[$i]['title'] ; ?></a> </div>
                 <div class="row-actions"> <a href="<?php echo __ADMINCP__; ?>=files&indexid=<?php echo $rs[$i]['id'] ; ?>&method=database" class="tip-bottom" title="查看文章使用的图片" target="_blank"><i class="fa fa-picture-o"></i></a>
                   <?php if($rs[$i]['status']!="2"){ ?>

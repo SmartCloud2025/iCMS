@@ -115,7 +115,7 @@ class iCache{
     public static function getsys($keys,$ckey=NULL){
     	if(is_array($keys)){
     		foreach($keys AS $k){
-    			$_keys[]='system/'.$k;
+    			$_keys[]='iCMS/'.$k;
     		}
     		$keys=$_keys;
     	}

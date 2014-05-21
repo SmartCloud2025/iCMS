@@ -17,7 +17,7 @@ class iRouter {
 		self::$config	= $config;
 	}
     function CPDIR($cid="0") {
-        $C    = iCache::get('system/category/'.$cid);
+        $C    = iCache::get('iCMS/category/'.$cid);
         $C['rootid'] && $dir.=self::CPDIR($C['rootid']);
         $dir.='/'.$C['dir'];
         return $dir;
@@ -25,7 +25,7 @@ class iRouter {
 
     function domain($cid="0",$akey='dir') {
         $ii		= new stdClass();
-        $C    	= iCache::get('system/category/'.$cid);
+        $C    	= iCache::get('iCMS/category/'.$cid);
         $rootid = $C['rootid'];
         $ii->sdir= $C[$akey];
         if($rootid && empty($C['domain'])) {

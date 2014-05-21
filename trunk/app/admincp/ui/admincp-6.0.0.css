@@ -363,7 +363,7 @@ form { margin-bottom: 0; }
 /* *** */
 #sidebar { float: none; width: 100% !important; }
 #sidebar > a { padding: 7px 20px 7px 15px; box-shadow: 0 1px 0 #666666; margin-bottom: 1px; display: block !important; text-transform: uppercase; color: #eeeeee; font-size: 10px; }
-#sidebar > a > i { margin-right: 10px; background-image: url('img/glyphicons-halflings-white.png'); }
+#sidebar > a > i { margin-right: 10px;}
 #sidebar > ul { display: none; margin: -2px 0 0 !important; width: 100% !important; box-shadow: 0 6px 6px rgba(0, 0, 0, 0.4); }
 #sidebar > ul > li.active > a { background: none !important; }
 #sidebar > ul > li > a > span { display: inline !important; }

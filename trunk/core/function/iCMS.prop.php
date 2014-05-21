@@ -12,7 +12,7 @@ function iCMS_prop($vars){
 	$cid	= $vars['cid'];
 	$pkey	= $type.'.'.$field;
 	$cid &&	$pkey	= 'c'.$cid.'.'.$type.'.'.$field;
-	$propArray 	= iCache::get("system/prop/{$pkey}");
+	$propArray 	= iCache::get("iCMS/prop/{$pkey}");
 	$propArray && sort($propArray);
 	$offset		= $vars['start']?$vars['start']:0;
 	$vars['row'] && $propArray = array_slice($propArray, 0, $vars['row']);

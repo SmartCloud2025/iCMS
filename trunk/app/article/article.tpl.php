@@ -13,7 +13,7 @@ function article_list($vars){
         return false;
     }
     $whereSQL = " `status`='1'";
-    $hidden   = iCache::get('system/category/hidden');
+    $hidden   = iCache::get('iCMS/category/hidden');
     $hidden &&  $whereSQL.=iPHP::andSQL($hidden,'cid','not');
     $maxperpage=isset($vars['row'])?(int)$vars['row']:10;
     $cacheTime =isset($vars['time'])?(int)$vars['time']:-1;
@@ -98,7 +98,7 @@ function article_list($vars){
     return $rs;
 }
 function article_search($vars){
-    $hidden = iCache::get('system/category/hidden');
+    $hidden = iCache::get('iCMS/category/hidden');
     $hidden &&  $whereSQL .=iPHP::andSQL($hidden,'cid','not');
     $SPH    = iCMS::sphinx();
     $SPH->init();
@@ -196,7 +196,7 @@ function article_array($vars,$rs){
         }
         $rs[$i]['pic'] && $rs[$i]['pic']=iFS::fp($rs[$i]['pic'],'+http');
 
-        $category	= iCache::get('system/category/'.$rs[$i]['cid']);
+        $category	= iCache::get('iCMS/category/'.$rs[$i]['cid']);
         $rs[$i]['category']['name']    = $category['name'];
         $rs[$i]['category']['subname'] = $category['subname'];
         $rs[$i]['category']['url']     = $category['iurl']->href;

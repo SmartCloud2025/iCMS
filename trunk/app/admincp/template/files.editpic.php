@@ -14,7 +14,7 @@ iACP::head(false);
 #onBrowse{width:200px;text-align: center;}
 #onBeforeUpload{width: 320px;}
 </style>
-<script src="<?php echo iCMS_UI;?>/meitu/xiuxiu.js" type="text/javascript"></script>
+<script src="<?php echo ACP_UI;?>/meitu/xiuxiu.js" type="text/javascript"></script>
 <div id="onBrowse" class="well" style="display:none;">
   <a class="btn btn-success" href="<?php echo __ADMINCP__; ?>=files&do=picture&from=modal&click=file&callback=xxfile" data-toggle="modal" data-meta='{"width":"75%","height":"480px"}' data-zIndex="9999999" title="从网站选择图片"><i class="fa fa-picture-o"></i> 从网站选择</a>
   <hr />
@@ -179,7 +179,7 @@ function modal_xxfile(el,a){
 }
 
 function loading(){
-  sel_dialog.content('<div class="iPHP-msg"><img src="<?php echo iCMS_UI;?>/ajax_loader.gif" /> <span class="label label-inverse">图片正在努力加载中...请稍候!</span></div>');
+  sel_dialog.content('<div class="iPHP-msg"><img src="<?php echo ACP_UI;?>/ajax_loader.gif" /> <span class="label label-inverse">图片正在努力加载中...请稍候!</span></div>');
 }
 function loadPhoto(data,base64){
 //console.log('sel_channel:',sel_channel);

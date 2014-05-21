@@ -36,7 +36,8 @@ return array(
 	'comment'=> array(
 		'empty'=>'请输入内容！',
 		//'error'=>'验证码不对哦!认真看清楚!要不换一张试试。',
-		'success'=>'评论成功!'
+		'success'=>'评论成功!',
+		'like_success'=>''
 	),
 	'seccode'=> array(
 		'empty'=>'请输入验证码！',

@@ -36,7 +36,7 @@ class filterApp{
         foreach((array)$filter AS $k=>$val) {
             $filterArray[$k]=implode("=",(array)$val);
         }
-    	iCache::set('system/word.filter',$filter,0);
-    	iCache::set('system/word.disable',$filterArray,0);
+    	iCache::set('iCMS/word.filter',$filter,0);
+    	iCache::set('iCMS/word.disable',$filterArray,0);
     }
 }

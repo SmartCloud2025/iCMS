@@ -128,12 +128,12 @@ WHERE `pid` = '$pid';");
     		$tfA[$row['type'].'.'.$row['field']][$row['pid']]=$row;
     	}
     	foreach($ctfA AS $k=>$a){
-    		iCache::set('system/prop/'.$k,$a,0);
+    		iCache::set('iCMS/prop/'.$k,$a,0);
     	}
     	foreach($tfA AS $k=>$a){
-    		iCache::set('system/prop/'.$k,$a,0);
+    		iCache::set('iCMS/prop/'.$k,$a,0);
     	}
-    	iCache::set('system/prop/cid.cache',$cidA,0);
-    	iCache::set('system/prop/type.cache',$typeA,0);
+    	iCache::set('iCMS/prop/cid.cache',$cidA,0);
+    	iCache::set('iCMS/prop/type.cache',$typeA,0);
     }
 }

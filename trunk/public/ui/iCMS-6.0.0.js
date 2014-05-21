@@ -121,7 +121,6 @@
                     var cform = $(this).parent().parent(),
                     textarea  = $('.zm-comment-textarea',cform),
                     cparam     = comment_param(textarea);
-console.log(cparam);
 
                     if(!cparam.content){
                         iCMS.alert("请填写内容");
@@ -146,7 +145,6 @@ console.log(cparam);
                     var item    = $(this).parent().parent(),
                     reply_param = iCMS.param($(this)),
                     item_form   = $('.zm-comment-form',item);
-console.log(reply_param);
 
                     if(item_form.length >0){
                         item_form.remove();
@@ -166,7 +164,17 @@ console.log(reply_param);
                 //赞评论
                 list.on('click', 'a[name="like_comment"]', function(event) {
                     event.preventDefault();
-                    alert("like_comment");
+                    var like_param = iCMS.param($(this));
+                    like_param.action = 'like_comment';
+                    $.post(iCMS.api('article'),like_param,function(c) {
+//                        console.log(c);
+                        if(c.code){
+                            var count = parseInt($('span',b).text());
+                            $('span',b).text(count+1);
+                        }else{
+                            iCMS.alert(c.msg);
+                        }
+                    },'json'); 
                 });
 
                 // function comment_up(){
@@ -180,10 +188,6 @@ console.log(reply_param);
                         'action':'comment',
                         'content':(content==def?'':content),
                     };
-
-                    console.log(vars,param,reply_param);
-
-
                     return $.extend(vars,param,reply_param);
                 }
                 function close_form(d,p){
@@ -220,7 +224,7 @@ console.log(reply_param);
                                 '<span class="date">'+c.addtime+'</span>'+
                                 '<a href="#" class="reply zm-comment-op-link" name="reply_comment" data-param=\'{"uid":"'+c.user.uid+'","name":"'+c.user.name+'"}\'>'+
                                 '<i class="iCMS-icon iCMS-icon-comment-reply"></i>回复</a>'+
-                                '<a href="#" class="like zm-comment-op-link" name="like_comment">'+
+                                '<a href="#" class="like zm-comment-op-link" name="like_comment" data-param=\'{"id":"'+c.id+'"}\'>'+
                                 '<i class="iCMS-icon iCMS-icon-comment-like"></i>赞</a>';
                                 if(c.up>1){
                                     item += '<span class="like-num" data-tip="iCMS:s:'+c.up+' 人觉得这个很赞">'+

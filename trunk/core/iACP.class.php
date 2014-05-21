@@ -14,7 +14,7 @@ defined('iPHP') OR exit('What are you doing?');
 define('__ADMINCP__',	__SELF__ . '?app');
 define('ACP_PATH',		iPHP_APP . '/admincp');
 define('ACP_DIR',		'app/admincp');
-define('iCMS_UI',		'app/ui');
+define('ACP_UI',		'app/admincp/ui');
 
 require iPHP_APP_CORE.'/iMember.class.php';
 require iPHP_APP_CORE.'/iMenu.class.php';
@@ -163,7 +163,7 @@ class iACP {
     }
 
     function setConfig($v, $n, $tid, $cache = false) {
-        $cache && iCache::set('system/' . $n, $v, 0);
+        $cache && iCache::set('iCMS/' . $n, $v, 0);
         is_array($v) && $v = addslashes(serialize($v));
         iDB::query("UPDATE `#iCMS@__config` SET `value` = '$v' WHERE `tid` ='$tid' AND `name` ='$n'");
     }
@@ -192,7 +192,7 @@ class iACP {
 
     function propBtn($field, $type = "") {
         $type OR $type = self::$app_name;
-        $propArray = iCache::get("system/prop/{$type}.{$field}");
+        $propArray = iCache::get("iCMS/prop/{$type}.{$field}");
         echo '<div class="btn-group">';
         echo '<a class="btn dropdown-toggle iCMS-default" data-toggle="dropdown" tabindex="-1"> <span class="caret"></span> 选择</a>';
         if ($propArray) {
@@ -207,7 +207,7 @@ class iACP {
 
     function getProp($field, $val = NULL, $out = 'option', $type = "") {
         $type OR $type = self::$app_name;
-        $propArray = iCache::get("system/prop/{$type}.{$field}");
+        $propArray = iCache::get("iCMS/prop/{$type}.{$field}");
         $opt = "";
         if ($propArray)
             foreach ($propArray AS $k => $P) {
