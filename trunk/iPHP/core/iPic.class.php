@@ -10,13 +10,14 @@
 * @package iPic
 * @$Id: iPic.class.php 2290 2013-11-21 03:49:19Z coolmoo $
 */
-iPic::$watermark = iPHP_APP_CONF;
-iPic::$config    = $GLOBALS['iCONFIG'];
-
 class iPic {
-    public static $config    = null;
-    public static $watermark = null;
+    protected static $config    = null;
+    protected static $watermark = null;
 
+    public static function init($config) {
+		self::$config    = $config;
+		self::$watermark = iPHP_APP_CONF;
+    }
     public static function watermark($pf) {
         if(!self::$config['watermark']['enable']) return;
         

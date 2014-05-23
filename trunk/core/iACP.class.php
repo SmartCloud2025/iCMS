@@ -172,7 +172,7 @@ class iACP {
      	$output = "<?php\ndefined('iPHP') OR exit('Access Denied');\n\$GLOBALS['iCONFIG']\t= ";
     	$output.= var_export($config,true);
     	$output.= ';';
-    	iFS::write(iCMS_CONF_FILE,$output);
+    	iFS::write(iPHP_APP_CONF.'/config.php',$output);
 	}
 	function updateConfig($k){
 		iACP::setConfig(iCMS::$config[$k],$k,0);
