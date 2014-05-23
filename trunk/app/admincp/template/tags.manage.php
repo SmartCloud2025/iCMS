@@ -131,7 +131,7 @@ $(function(){
           <?php for($i=0;$i<$_count;$i++){
               $C             = $this->category->category[$rs[$i]['cid']];
               $TC            = $this->tagcategory->category[$rs[$i]['tcid']];
-              $iurl          = iRouter::url('tag',array($rs[$i],$C,$TC));
+              $iurl          = iURL::get('tag',array($rs[$i],$C,$TC));
               $rs[$i]['url'] = $iurl->href;
     	   ?>
           <tr id="tr<?php echo $rs[$i]['id'] ; ?>">

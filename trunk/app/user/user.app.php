@@ -26,7 +26,7 @@ class userApp {
         $this->user(true);
         $u['category'] = user::category((int)$_GET['cid']);
         iPHP::append('user',$u,true);
-        return iCMS::tpl('iTPL://user/home.htm');
+        return iPHP::tpl('iTPL://user/home.htm');
     }
     public function pg_base(){
         $unick         = iS::escapeStr($_POST['unick']);
@@ -126,7 +126,7 @@ values ('$this->userid', '$realname', '$mobile', '$enterprise', '$address', '$zi
                 $platform = user::openid($this->userid);
                 iPHP::assign('platform',$platform);
             }
-            return iCMS::tpl("iTPL://user/profile.htm");         
+            return iPHP::tpl("iTPL://user/profile.htm");         
         }
     }
    function user($ud=false){
@@ -287,10 +287,10 @@ values ('$this->userid', '$realname', '$mobile', '$enterprise', '$address', '$zi
         if(iCMS::$config['user']['register']){
             iPHP::setCookie('forward',$this->forward);
             user::status($this->forward,"login");
-            return iCMS::tpl('iTPL://user/register.htm');
+            return iPHP::tpl('iTPL://user/register.htm');
         }
         //exit(iPHP::lang('user:register:forbidden'));
-        iCMS::tpl('iTPL://user/register.close.htm');
+        iPHP::tpl('iTPL://user/register.close.htm');
     }
     public function API_data($uid=0){
         //$uid OR $uid  = $this->userid;
@@ -306,11 +306,11 @@ values ('$this->userid', '$realname', '$mobile', '$enterprise', '$address', '$zi
         if(iCMS::$config['user']['login']){
             iPHP::setCookie('forward',$this->forward);
             user::status($this->forward,"login");
-            return iCMS::tpl('iTPL://user/login.htm');
+            return iPHP::tpl('iTPL://user/login.htm');
         }
-        iCMS::tpl('iTPL://user/login.close.htm');
+        iPHP::tpl('iTPL://user/login.close.htm');
     }
     public function API_agreement(){
-    	return iCMS::tpl('iTPL://user/agreement.htm');
+    	return iPHP::tpl('iTPL://user/agreement.htm');
     }    
 }

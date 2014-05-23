@@ -201,7 +201,7 @@ function article_array($vars,$rs){
         $rs[$i]['category']['subname'] = $category['subname'];
         $rs[$i]['category']['url']     = $category['iurl']->href;
         $rs[$i]['category']['link']    = "<a href='{$rs[$i]['category']['url']}'>{$rs[$i]['category']['name']}</a>";
-        $rs[$i]['url']                 = iRouter::url('article',array($rs[$i],$category))->href;
+        $rs[$i]['url']                 = iURL::get('article',array($rs[$i],$category))->href;
         $rs[$i]['link']                = "<a href='{$rs[$i]['url']}'>{$rs[$i]['title']}</a>";
         $rs[$i]['commentUrl']          = iCMS::$config['router']['publicURL']."/comment.php?indexId=".$rs[$i]['id']."&categoryId=".$rs[$i]['cid'];
         if($vars['user']){

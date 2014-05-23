@@ -11,13 +11,13 @@
 * @$Id: iCache.class.php 2408 2014-04-30 18:58:23Z coolmoo $
 */
 //array(
-//	'enable'	=> $GLOBALS['iCONFIG']['cache']['enable'],
-//	'engine'	=> $GLOBALS['iCONFIG']['cache']['engine'],
-//	'host'		=> $GLOBALS['iCONFIG']['cache']['host'],
-//	'port'		=> $GLOBALS['iCONFIG']['cache']['port'],
-//	'db'		=> $GLOBALS['iCONFIG']['cache']['db'],
-//	'compress'	=> $GLOBALS['iCONFIG']['cache']['compress'],
-//	'time'		=> $GLOBALS['iCONFIG']['cache']['time'],
+//	'enable'	=> true,falsh,
+//	'engine'	=> memcached,redis,file,
+//	'host'		=> 127.0.0.1,/tmp/redis.sock,
+//	'port'		=> 11211,
+//	'db'		=> 1,
+//	'compress'	=> 1-9,
+//	'time'		=> 0,
 //)
 class iCache{
     public static $link      = null;
@@ -82,7 +82,7 @@ class iCache{
     public static function get($keys,$ckey=NULL){
         $_keys=implode('',(array)$keys);
         if(!self::$config['enable']){
-        	if(strstr($_keys,'system')===false){
+        	if(strstr($_keys,iPHP_APP)===false){
         		return NULL;
         	}else{
         		self::sysCache();
@@ -97,7 +97,7 @@ class iCache{
     }
     public static function set($keys,$res,$cachetime="-1") {
         if(!self::$config['enable']){
-        	if(strstr($keys,'system')===false){
+        	if(strstr($keys,iPHP_APP)===false){
         		return NULL;
         	}else{
         		self::sysCache();
@@ -115,9 +115,9 @@ class iCache{
     public static function getsys($keys,$ckey=NULL){
     	if(is_array($keys)){
     		foreach($keys AS $k){
-    			$_keys[]='iCMS/'.$k;
+    			$_keys[] = iPHP_APP.'/'.$k;
     		}
-    		$keys=$_keys;
+    		$keys = $_keys;
     	}
     	return self::get($keys,$ckey);
     }
@@ -134,12 +134,13 @@ class iCache{
 	}
 	public static function redis(){
     	if(self::$config['engine']!='redis'){
-            $_config['enable'] = true;
-            $_config['reset']  = true;
-            $_config['engine'] = 'redis';
-            $_config['host']   = '127.0.0.1:6379@db:1';
-            $_config['time']   = '86400';
-			iCache::init($_config);
+			iCache::init(array(
+            'enable' => true,
+            'reset'  => true,
+            'engine' =>'redis',
+            'host'   =>'127.0.0.1:6379@db:1',
+            'time'   =>'86400'
+            ));
 		}
 	}
 }

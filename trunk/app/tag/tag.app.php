@@ -61,7 +61,7 @@ class tagApp {
         if ($rs['tcid']) {
             $tCategory = iCache::get('iCMS/category/' . $rs['tcid']);
         }
-        $rs['iurl'] = iRouter::url('tag', array($rs, $category, $tCategory));
+        $rs['iurl'] = iURL::get('tag', array($rs, $category, $tCategory));
 
         $rs['url'] OR $rs['url'] = $rs['iurl']->href;
 
@@ -78,9 +78,9 @@ class tagApp {
                 iCMS::clear_compiled_tpl('2013/zt.htm');
             }
             if (strstr($tpl, '.htm')) {
-                return iCMS::tpl($tpl, 'tag');
+                return iPHP::tpl($tpl, 'tag');
             }
-            return iCMS::tpl($rs['tpl'] ? $rs['tpl'] : '{iTPL}/tag.htm', 'tag');
+            return iPHP::tpl($rs['tpl'] ? $rs['tpl'] : '{iTPL}/tag.htm', 'tag');
         } else {
             return $rs;
         }

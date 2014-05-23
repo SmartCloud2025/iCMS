@@ -360,7 +360,7 @@ class categoryApp{
         iDB::query("UPDATE `#iCMS@__category` SET `count` ='$cc' WHERE `cid` ='$cid'");       
     }
     function listbtn($rs){
-        return '<a href="'.iRouter::url('category',$rs)->href.'" class="btn btn-small"><i class="fa fa-link"></i> 访问</a> <a href="'.__ADMINCP__.'=article&do=add&cid='.$rs['cid'] .'" class="btn btn-small"><i class="fa fa-edit"></i> 添加文章</a> <a href="'.__ADMINCP__.'=article&cid='.$rs['cid'] .'" class="btn btn-small"><i class="fa fa-list-alt"></i> 文章管理</a>';
+        return '<a href="'.iURL::get('category',$rs)->href.'" class="btn btn-small"><i class="fa fa-link"></i> 访问</a> <a href="'.__ADMINCP__.'=article&do=add&cid='.$rs['cid'] .'" class="btn btn-small"><i class="fa fa-edit"></i> 添加文章</a> <a href="'.__ADMINCP__.'=article&cid='.$rs['cid'] .'" class="btn btn-small"><i class="fa fa-list-alt"></i> 文章管理</a>';
     }
     function treebtn($rs){}
     function batchbtn(){

@@ -189,7 +189,7 @@ function tag_array($vars,$rs){
         $rs[$i]['category']['url']		= $category['iurl']->href;
         $rs[$i]['category']['link']		= "<a href='{$rs[$i]['category']['url']}'>{$rs[$i]['category']['name']}</a>";
 
-		$rs[$i]['iurl']					= iRouter::url('tag',array($rs[$i],$category,$tcategory));
+		$rs[$i]['iurl']					= iURL::get('tag',array($rs[$i],$category,$tcategory));
 		
 		empty($rs[$i]['url']) &&	$rs[$i]['url']	= $rs[$i]['iurl']->href;
 		

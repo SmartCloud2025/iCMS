@@ -40,7 +40,7 @@ class iTemplate {
 	public $_null                     = null;
 	public $_sections                 = array();
 	public $_foreach                  = array();
-	public $_iTPL_vars                =	array();
+	public $_iTPL_VARS                =	array();
 
 	function __construct() {
 		$this->def_template_dir = $this->template_dir;
@@ -175,7 +175,7 @@ class iTemplate {
 		$file = ltrim($file,'/');
 		strpos($file,'..') && $this->trigger_error("resource file has '..'", E_USER_ERROR);
 		strpos($file,'./')     !==false && $file = str_replace('./',dirname($this->_file).'/',$file);
-		strpos($file,'{iTPL}') !==false && $file = str_replace('{iTPL}',iPHP_TPL_DEF,$file);
+		strpos($file,'{iTPL}') !==false && $file = str_replace('{iTPL}',iPHP_TPL_DEFAULT,$file);
 
 		if(strpos($file, 'file::')!==false){
 			list($_dir,$file)   = explode('||',str_replace('file::','',$file));
@@ -249,7 +249,7 @@ class iTemplate {
 			$iTC->_file                     = &$this->_file;
 			$iTC->php_extract_vars          = &$this->php_extract_vars;
 			$iTC->reserved_template_varname = &$this->reserved_template_varname;
-			$iTC->_iTPL_vars                = &$this->_iTPL_vars;
+			$iTC->_iTPL_VARS                = &$this->_iTPL_VARS;
 			$iTC->default_modifiers         = &$this->default_modifiers;
 			$output                         = $iTC->_compile_file($template_file);
 			file_put_contents($compile_file,$output);
@@ -286,7 +286,7 @@ class iTemplate {
 		$keys			= isset($a['as'])?$a['as']:$a['app'];
 		if($a['method']){
 			$callback	= $a['app'].'_'.$a['method'];
-			function_exists($callback) OR $this->require_one(iPHP_APP."/".$a['app']."/".$a['app'].".tpl.php");
+			function_exists($callback) OR $this->require_one(iPHP_APP_DIR."/".$a['app']."/".$a['app'].".tpl.php");
 			isset($a['as']) OR $keys.= '_'.$a['method'];
 		}else{
 			$callback	= iPHP_TPL_VAR.'_' . $a['app'];
@@ -372,7 +372,7 @@ class iTemplate_Compiler extends iTemplate {
 	public $_mod_regexp               =	null;
 	public $_var_regexp               =	null;
 	public $_obj_params_regexp        = null;
-	public $_iTPL_vars                =	array();
+	public $_iTPL_VARS                =	array();
 
 	function iTemplate_Compiler(){
 		// matches double quoted strings:
@@ -961,7 +961,7 @@ class iTemplate_Compiler extends iTemplate {
 						break;
 					default:
 						$_var_name = str_replace($find, "", $variable[0]);
-						$_result = "\$this->_iTPL_vars['$_var_name']";
+						$_result = "\$this->_iTPL_VARS['$_var_name']";
 						break;
 				}
 				array_shift($variable);

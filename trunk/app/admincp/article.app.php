@@ -472,7 +472,7 @@ class articleApp{
             	return array("code"=>$callback,'indexId'=>$aid);
             }
             $moreBtn = array(
-                    array("text" =>"查看该文章","url"=>iRouter::url('article',array(array('id'=>$aid,'url'=>$url,'cid'=>$cid,'pubdate'=>$pubdate),$this->category->category[$cid]))->href,"o"=>'target="_blank"'),
+                    array("text" =>"查看该文章","url"=>iURL::get('article',array(array('id'=>$aid,'url'=>$url,'cid'=>$cid,'pubdate'=>$pubdate),$this->category->category[$cid]))->href,"o"=>'target="_blank"'),
                     array("text" =>"编辑该文章","url"=>APP_URI."&do=add&id=".$aid),
                     array("text" =>"继续添加文章","url"=>APP_URI."&do=add&cid=".$cid),
                     array("text" =>"返回文章列表","url"=>$SELFURL),

@@ -19,7 +19,7 @@ class tag {
 	    for($i=0;$i<$_count;$i++) {
 			$C              = iCache::get('iCMS/category/'.$rs[$i]['cid']);
 			$TC             = iCache::get('iCMS/category/'.$rs[$i]['tcid']);
-			$rs[$i]['iurl'] = iRouter::url('tag',array($rs[$i],$C,$TC));
+			$rs[$i]['iurl'] = iURL::get('tag',array($rs[$i],$C,$TC));
 			$rs[$i]['url']  = $rs[$i]['iurl']->href;
 			$tkey           = self::tkey($rs[$i]['cid']);
 	        iCache::set($tkey,$rs[$i],0);
@@ -67,7 +67,7 @@ class tag {
 //	function geturl($name,$cid){
 //		$category	= iCache::get('iCMS/category/'.$cid);
 //		$rs			= self::data($value,'name');
-//		return iRouter::url('tag',array($rs[$i],$C));
+//		return iURL::get('tag',array($rs[$i],$C));
 //	}
 	function getCache($tid){
 		$tkey	= self::tkey($tid);

@@ -55,7 +55,7 @@ VALUES ('".iCMS_APP_ARTICLE."', '$cid', '$iid','$suid', '$title', '$this->userid
         iPHP::assign('appid',iCMS_APP_ARTICLE);
         iPHP::assign('id',(int)$_GET['id']);
         iPHP::assign('iid',(int)$_GET['iid']);
-        iCMS::tpl('iCMS://api.article.comment.htm');
+        iPHP::tpl('iCMS://api.article.comment.htm');
     }
     public function article($id,$page=1,$tpl=true){
         $aRs		= iDB::getRow("SELECT * FROM #iCMS@__article WHERE id='".(int)$id."' AND `status` ='1' LIMIT 1;",ARRAY_A);
@@ -84,7 +84,7 @@ VALUES ('".iCMS_APP_ARTICLE."', '$cid', '$iid','$suid', '$title', '$this->userid
     
         
         $_iurlArray	= array((array)$rs,$category);
-        $rs->iurl	= iRouter::url('article',$_iurlArray,$page);
+        $rs->iurl	= iURL::get('article',$_iurlArray,$page);
         $pageurl	= $rs->iurl->pageurl;
         $rs->url    = $rs->iurl->href;
         $tpl && iCMS::gotohtml($rs->iurl->path,$rs->iurl->href,$category['mode']);
@@ -121,7 +121,7 @@ VALUES ('".iCMS_APP_ARTICLE."', '$cid', '$iid','$suid', '$title', '$this->userid
             $tagArray	= explode(',',$rs->tags);
             foreach($tagArray AS $tk=>$tag) {
 				$rs->tagArray[$tk]['name']	= $tag;
-				$rs->tagArray[$tk]['url']	= iRouter::url('tag',$tag);
+				$rs->tagArray[$tk]['url']	= iURL::get('tag',$tag);
 				$rs->tagslink.='<a href="'.$rs->tagArray[$tk]['url'].'" class="tags" target="_blank">'.$rs->tagArray[$tk]['name'].'</a> ';
             }
             $_tc	= count($tagArray);
@@ -149,10 +149,10 @@ VALUES ('".iCMS_APP_ARTICLE."', '$cid', '$iid','$suid', '$title', '$this->userid
 
 //        $rs->prev=iPHP::lang('iCMS:article:first');
 //        $prers=iDB::getRow("SELECT * FROM `#iCMS@__article` WHERE `id` < '{$rs->id}' AND `cid`='{$rs->cid}' AND `status`='1' order by id DESC LIMIT 1;");
-//        $prers && $rs->prev='<a href="'.iRouter::url('article',array((array)$prers,$category))->href.'" class="prev" target="_self">'.$prers->title.'</a>';
+//        $prers && $rs->prev='<a href="'.iURL::get('article',array((array)$prers,$category))->href.'" class="prev" target="_self">'.$prers->title.'</a>';
 //        $rs->next=iPHP::lang('iCMS:article:last');
 //        $nextrs = iDB::getRow("SELECT * FROM `#iCMS@__article` WHERE `id` > '{$rs->id}'  and `cid`='{$rs->cid}' AND `status`='1' order by id ASC LIMIT 1;");
-//        $nextrs && $rs->next='<a href="'.iRouter::url('article',array((array)$nextrs,$category))->href.'" class="next" target="_self">'.$nextrs->title.'</a>';
+//        $nextrs && $rs->next='<a href="'.iURL::get('article',array((array)$nextrs,$category))->href.'" class="next" target="_self">'.$nextrs->title.'</a>';
 
         $publicURL   = iCMS::$config['router']['publicURL'];
         $rs->comment = array('url'=>$publicURL."/api.php?app=comment&iid={$rs->id}&cid={$rs->cid}",'count'=>$rs->comments);
@@ -171,7 +171,7 @@ VALUES ('".iCMS_APP_ARTICLE."', '$cid', '$iid','$suid', '$title', '$this->userid
         if($tpl) {
             $articletpl	= empty($rs->tpl)?$category['contentTPL']:$rs->tpl;
             strstr($tpl,'.htm') && $articletpl	= $tpl;
-            $html	= iCMS::tpl($articletpl,'article');
+            $html	= iPHP::tpl($articletpl,'article');
             if(iPHP::$iTPLMode=="html") return array($html,$rs);
         }
     }

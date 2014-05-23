@@ -12,7 +12,7 @@
  */
 defined('iPHP') OR exit('What are you doing?');
 define('__ADMINCP__',	__SELF__ . '?app');
-define('ACP_PATH',		iPHP_APP . '/admincp');
+define('ACP_PATH',		iPHP_APP_DIR . '/admincp');
 define('ACP_DIR',		'app/admincp');
 define('ACP_UI',		'app/admincp/ui');
 

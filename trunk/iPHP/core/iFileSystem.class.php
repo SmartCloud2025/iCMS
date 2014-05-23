@@ -33,7 +33,7 @@
  */
 class iFS {
 
-    public static $TABLE         = '#iPHP@__filedata';
+    public static $TABLE         = null;
     public static $forceExt      = false;
     public static $isRedirect    = false;
     public static $checkFileData = false;
@@ -44,9 +44,13 @@ class iFS {
     public static $FileData      = null;
     public static $watermark     = true;
 
-    public static function init($config) {
+    public static function init($config,$table='') {
         self::$config = $config;
-        //self::$config['TABLE'] && self::$TABLE =self::$config['TABLE'];
+        $_table_name  = $config['table'];
+        if(empty($_table_name)){
+            $_table_name  = $table ? $table : 'filedata';
+        }
+        self::$TABLE  = iPHP_DB_PREFIX.$_table_name;//文件记录表
     }
 
     public static function config($config) {

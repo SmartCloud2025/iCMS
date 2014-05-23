@@ -14,7 +14,7 @@ function category_array($vars){
 		$gourl=(isset($vars['gotourl']) && $vars['gotourl']==0)?false:true;
 		if($gourl) return iPHP::gotourl($rs['url']);
 	}
-	$iurl       = iRouter::url('category',$rs);
+	$iurl       = iURL::get('category',$rs);
 	$rs['url']	= $iurl->href;
 	$rs['link']	= "<a href='{$rs['url']}'>{$rs['name']}</a>";
 	//$rs['nav']	= $iCMS->shownav($rs['cid']);
@@ -64,7 +64,7 @@ function category_list($vars){
 		$_count	= count($rs);
 		for ($i=0;$i<$_count;$i++){
         	$rs[$i]['son']	= $rootidA[$rs[$i]['cid']]?true:false;
-			$rs[$i]['url']	= iRouter::url('category',$rs[$i])->href;
+			$rs[$i]['url']	= iURL::get('category',$rs[$i])->href;
 			$rs[$i]['link']	= "<a href='{$rs[$i]['url']}'>{$rs[$i]['name']}</a>";
 	        if($rs[$i]['metadata']){
 	        	$mdArray=array();

@@ -12,7 +12,7 @@
 define("USER_LOGIN_URL",    iCMS::$app_vars['SAPI'].'&do=login');
 define("USER_CALLBACK_URL", iCMS::$app_vars['SAPI']);
 //define("USER_AVATAR_PATH",  "/data3/home/guang.ladyband.com/pic");
-require_once iPHP_APP.'/user/msg.class.php';
+require_once iPHP_APP_DIR.'/user/msg.class.php';
 class user {
 	public static $cookietime = 0;
 	public static $format     = false;

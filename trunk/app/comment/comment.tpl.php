@@ -107,5 +107,5 @@ function comment_form($vars){
 			break;
 	}
 	iPHP::assign('comment',$vars);
-	return iCMS::tpl('iCMS',$tpl);
+	return iPHP::tpl('iCMS',$tpl);
 }

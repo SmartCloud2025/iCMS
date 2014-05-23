@@ -178,7 +178,7 @@ $(function(){
             <?php for($i=0;$i<$_count;$i++){
                   $ourl = $rs[$i]['url'];
                   $C    = $this->category->category[$rs[$i]['cid']];
-                  $iurl = iRouter::url('article',array($rs[$i],$C));
+                  $iurl = iURL::get('article',array($rs[$i],$C));
                   empty($ourl) && $htmlurl = $iurl->path;
                   $rs[$i]['url']           = $iurl->href;
             ?>

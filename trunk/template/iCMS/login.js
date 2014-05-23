@@ -1,5 +1,5 @@
 $(function(){
-  var def_uname='<!--{"user:login:def_uname"|lang}-->'
+  var def_uname="<!--{iCMS:lang key='user:login:def_uname'}-->";
   $(document).on("focus",'#iCMS_uname',function() {
     if(this.value==def_uname){
       this.value = '';

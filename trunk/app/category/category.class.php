@@ -21,7 +21,7 @@ class category {
 //print_r($explain);
 //exit;
         foreach((array)$rs AS $C) {
-			$C['iurl']	= iRouter::url('category',$C);
+			$C['iurl']	= iURL::get('category',$C);
             $this->category[$C['cid']] =
             $this->_array[$C['rootid']][$C['cid']] = $C;
             $this->rootid[$C['rootid']][$C['cid']] = $C['cid'];
@@ -73,7 +73,7 @@ class category {
 	    	}
 	    	$C['metadata']=$mdArray;
 	    }
-		$C['iurl']	= iRouter::url('category',$C);
+		$C['iurl']	= iURL::get('category',$C);
 		return $C;
     }
     function rootid($cid="0"){

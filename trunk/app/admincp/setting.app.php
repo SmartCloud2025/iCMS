@@ -11,14 +11,14 @@
 */
 class settingApp{
     function __construct() {
-    	$this->capp	= array('index','article','tag','search','usercp','category','comment');
-		foreach (glob(iPHP_APP."/*/*.app.php") as $filename) {
+    	$this->apps	= array('index','article','tag','search','usercp','category','comment');
+		foreach (glob(iPHP_APP_DIR."/*/*.app.php") as $filename) {
 			$path_parts = pathinfo($filename);
-			$dirname	= str_replace(iPHP_APP.'/','',$path_parts['dirname']);
+			$dirname	= str_replace(iPHP_APP_DIR.'/','',$path_parts['dirname']);
 			if (!in_array($dirname,array('admincp','usercp'))) {
 				$app	= str_replace('.app','',$path_parts['filename']);
-				if (!in_array($app,$this->capp)){
-					array_push($this->capp,$app);
+				if (!in_array($app,$this->apps)){
+					array_push($this->apps,$app);
 				}
 			}
 		}
@@ -31,7 +31,7 @@ class settingApp{
     function dosave(){
     	$config		= iS::escapeStr($_POST['config']);
 		iFS::filterExt($config['router']['htmlext'],true) OR iPHP::alert('网站URL设置 > 文件后缀 设置不合法!');
-    	$config['app']	= $this->capp;
+    	$config['apps']	= $this->apps;
     	foreach($config AS $n=>$v){
     		iACP::setConfig($v,$n,0);
     	}
@@ -39,8 +39,8 @@ class settingApp{
     	iPHP::OK('更新完成');
     }
     public function cache(){
-        $config        = iACP::getConfig(0);
-        $config['app'] = $this->capp;
+        $config         = iACP::getConfig(0);
+        $config['apps'] = $this->apps;
         iACP::cacheConfig($config);
     }
 }

@@ -7,10 +7,10 @@
 * @site http://www.iiiphp.com
 * @licence http://www.iiiphp.com/license
 * @version 1.0.1
-* @package iRouter
-* @$Id: iRouter.class.php 2408 2014-04-30 18:58:23Z coolmoo $
+* @package iURL
+* @$Id: iURL.class.php 2408 2014-04-30 18:58:23Z coolmoo $
 */
-class iRouter {
+class iURL {
 	public static $config	= null;
 	public static $uriConfig= null;
 	public static function init($config){
@@ -43,7 +43,7 @@ class iRouter {
         return $ii;
     }
 
-    function irule($a) {
+    function rule($a) {
     	$b	= $a[1];
     	$c	= self::$uriConfig;
         switch($b) {
@@ -73,7 +73,7 @@ class iRouter {
         }
         return $e;
     }
-    public static function url($uri,$a=array()) {
+    public static function get($uri,$a=array()) {
         $i 		= new stdClass();
         $sURL	= self::$config['URL'];
         $htmldir= self::$config['htmldir'];
@@ -116,7 +116,7 @@ class iRouter {
         	self::$uriConfig	= $a;
 //        	strstr($url,'{') && $url = preg_replace_callback ("/\{(.*?)\}/",'self::irule($uri,"\\1",$a)',$url);
 //        	strstr($url,'{') && $url = preg_replace_callback ("/\{(.*?)\}/",'self::irule',$url);
-        	strstr($url,'{') && $url = preg_replace_callback ("/\{(.*?)\}/",'irule',$url);
+        	strstr($url,'{') && $url = preg_replace_callback ("/\{(.*?)\}/",'iURL_Rule',$url);
 //var_dump($url);
             $i->path    = iFS::path(iPATH.$htmldir.$url);
             $i->href    = iFS::path($sURL.$htmldir.$url);
@@ -215,6 +215,6 @@ class iRouter {
 		return $a[$n];
     }
 }
-function irule($a){
-	return iRouter::irule($a);
+function iURL_Rule($a){
+	return iURL::rule($a);
 }
