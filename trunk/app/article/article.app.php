@@ -22,14 +22,25 @@ class articleApp {
         $good  = (int)iPHP::getCookie($ackey);
         $good && iPHP::code(0,'iCMS:article:!good',0,'json');
         iDB::query("UPDATE `#iCMS@__article` SET `good`=good+1 WHERE `id` ='{$aid}' limit 1");
-        iPHP::setCookie('article_good_'.$aid,$this->userid,86400);
+        iPHP::setCookie($ackey,$this->userid,86400);
         iPHP::code(1,'iCMS:article:good',0,'json');
     }
-    public function ACTION_like_comment(){
-        $id = (int)$_POST['id'];
+
+    public function API_like_comment(){
+        $id = (int)$_GET['id'];
         $id OR iPHP::code(0,'iCMS:article:empty_id',0,'json');
+        $lckey = 'like_comment_'.$id;
+        $like  = (int)iPHP::getCookie($lckey);
+        $like && iPHP::code(0,'iCMS:comment:!like',0,'json');
         iDB::query("UPDATE `#iCMS@__comment` SET `up`=up+1 WHERE `id`='$id'");
-        iPHP::code(1,'iCMS:comment:like_success',0,'json');
+        iPHP::setCookie($lckey,$this->userid,86400);
+        iPHP::code(1,'iCMS:comment:like',0,'json');
+    }
+    public function API_comment(){
+        iPHP::assign('appid',iCMS_APP_ARTICLE);
+        iPHP::assign('id',(int)$_GET['id']);
+        iPHP::assign('iid',(int)$_GET['iid']);
+        iCMS::tpl('iCMS://api.article.comment.htm');
     }
     public function ACTION_comment(){
         $iid        = (int)$_POST['iid'];
@@ -50,12 +61,6 @@ VALUES ('".iCMS_APP_ARTICLE."', '$cid', '$iid','$suid', '$title', '$this->userid
         iDB::query("UPDATE `#iCMS@__article` SET comments=comments+1 WHERE `id` ='{$iid}' limit 1");
         $id = iDB::$insert_id;
         iPHP::code(1,'iCMS:comment:success',$id,'json');
-    }
-    public function API_comment(){
-        iPHP::assign('appid',iCMS_APP_ARTICLE);
-        iPHP::assign('id',(int)$_GET['id']);
-        iPHP::assign('iid',(int)$_GET['iid']);
-        iPHP::tpl('iCMS://api.article.comment.htm');
     }
     public function article($id,$page=1,$tpl=true){
         $aRs		= iDB::getRow("SELECT * FROM #iCMS@__article WHERE id='".(int)$id."' AND `status` ='1' LIMIT 1;",ARRAY_A);
@@ -121,6 +126,7 @@ VALUES ('".iCMS_APP_ARTICLE."', '$cid', '$iid','$suid', '$title', '$this->userid
             $tagArray	= explode(',',$rs->tags);
             foreach($tagArray AS $tk=>$tag) {
 				$rs->tagArray[$tk]['name']	= $tag;
+
 				$rs->tagArray[$tk]['url']	= iURL::get('tag',$tag);
 				$rs->tagslink.='<a href="'.$rs->tagArray[$tk]['url'].'" class="tags" target="_blank">'.$rs->tagArray[$tk]['name'].'</a> ';
             }
@@ -149,9 +155,11 @@ VALUES ('".iCMS_APP_ARTICLE."', '$cid', '$iid','$suid', '$title', '$this->userid
 
 //        $rs->prev=iPHP::lang('iCMS:article:first');
 //        $prers=iDB::getRow("SELECT * FROM `#iCMS@__article` WHERE `id` < '{$rs->id}' AND `cid`='{$rs->cid}' AND `status`='1' order by id DESC LIMIT 1;");
+
 //        $prers && $rs->prev='<a href="'.iURL::get('article',array((array)$prers,$category))->href.'" class="prev" target="_self">'.$prers->title.'</a>';
 //        $rs->next=iPHP::lang('iCMS:article:last');
 //        $nextrs = iDB::getRow("SELECT * FROM `#iCMS@__article` WHERE `id` > '{$rs->id}'  and `cid`='{$rs->cid}' AND `status`='1' order by id ASC LIMIT 1;");
+
 //        $nextrs && $rs->next='<a href="'.iURL::get('article',array((array)$nextrs,$category))->href.'" class="next" target="_self">'.$nextrs->title.'</a>';
 
         $publicURL   = iCMS::$config['router']['publicURL'];
@@ -171,6 +179,7 @@ VALUES ('".iCMS_APP_ARTICLE."', '$cid', '$iid','$suid', '$title', '$this->userid
         if($tpl) {
             $articletpl	= empty($rs->tpl)?$category['contentTPL']:$rs->tpl;
             strstr($tpl,'.htm') && $articletpl	= $tpl;
+
             $html	= iPHP::tpl($articletpl,'article');
             if(iPHP::$iTPLMode=="html") return array($html,$rs);
         }

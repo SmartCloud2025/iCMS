@@ -164,13 +164,18 @@
                 //赞评论
                 list.on('click', 'a[name="like_comment"]', function(event) {
                     event.preventDefault();
-                    var like_param = iCMS.param($(this));
-                    like_param.action = 'like_comment';
-                    $.post(iCMS.api('article'),like_param,function(c) {
+                    var a=$(this),like_param = iCMS.param($(this));
+                    like_param.do = 'like_comment';
+                    $.get(iCMS.api('article'),like_param,function(c) {
 //                        console.log(c);
                         if(c.code){
-                            var count = parseInt($('span',b).text());
-                            $('span',b).text(count+1);
+                            var p = a.parent(),like_num= $('.like-num em',p).text();
+                            if(like_num==""){
+                                a.parent().append('<span class="like-num" data-tip="iCMS:s:1 人觉得这个很赞"><em>1</em> <span>赞</span></span>')
+                            }else{
+                                like_num = parseInt(like_num)+1;
+                                $('.like-num em',p).text(like_num);
+                            }
                         }else{
                             iCMS.alert(c.msg);
                         }
@@ -197,10 +202,10 @@
                    }                   
                 }
                 function comment_list(id){
-                    $.get(iCMS.api('article')+"&do=comment",{'iid':param['iid'],'id':id},
+                    $.get(iCMS.api('article'),{'do':'comment','iid':param['iid'],'id':id},
                         function(json) {
                             if(!json) return false;
-
+console.log(json);
                             form.addClass('zm-comment-box-ft');
                             $.each(json,function(i,c) {
                                 //console.log(c.reply);
@@ -237,6 +242,9 @@
                                 '</div>';
                                 list.append(item);
                             });
+                            if(json.total>10){
+                               list.append('<a class="load-more" name="load-more"><span class="text">显示全部评论<img src="http://static.zhihu.com/static/img/spinner2.gif" class="spinner"></span></a>');
+                            }
                     },'json');                    
                 }
                //------------
