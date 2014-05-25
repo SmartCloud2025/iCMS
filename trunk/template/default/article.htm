@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+    <title><!--{$article.title}-->_<!--{$category.name}-->_<!--{$site.title}-->_<!--{$site.seotitle}--></title>
+    <meta name="keywords" content="<!--{$article.keywords}-->" />
+    <meta name="description" content="<!--{$article.description}-->"/>
+    <meta name="mobile-agent" content="format=html5;url=<!--{$article.url}-->"/>
+    <!--{iCMS:public:ui asd=true asd=aqweiouqweoi}-->
+    <link rel="stylesheet" href="<!--{$site.urls.public}-->/theme/default.css" type="text/css" />
+  </head>
+  <body>
+    <!--{include file="./header.htm"}-->
+    <div class="l-header-ad"><!--文章顶部横幅通栏 960x60--></div>
+    <div id="body" class="clearfix">
+      <div class="main-col">
+        <div id="guide"><strong>当前位置：</strong><a href="<!--{$site.url}-->">网站首页</a>&nbsp;&raquo;&nbsp;<!--{$category.nav}-->&nbsp;&raquo;&nbsp;正文</div>
+        <div id="page">
+          <h1><!--{$article.title}--></h1>
+          <div class="article-info">
+            <div class="article-author-time"> <a href="<!--{$article.user.url}-->" target="_blank"><!--{$article.author}--></a><span class="time"><!--{$article.pubdate|date:"Y-m-d H:s"}--></span> </div>
+            <div class="share-area">
+              <!-- Baidu Button BEGIN -->
+              <div id="bdshare" class="bdshare_t bds_tools get-codes-bdshare" style="float:right"> <span class="bds_more" style="background:#fff!important;padding:0;">分享到：</span> <a class="bds_qzone"></a> <a class="bds_tsina"></a> <a class="bds_tqq"></a> <a class="bds_renren"></a> <a class="bds_t163"></a> <a class="shareCount" style="display:none"></a> </div>
+              <script type="text/javascript" id="bdshare_js" data="type=tools&amp;uid=0" ></script>
+              <script type="text/javascript" id="bdshell_js"></script>
+              <script type="text/javascript">
+              var bds_config = {
+              'bdText':'一篇好文,推荐之-【'+$('#page h1').text()+'】（来自:<!--{$site.title}-->）',
+              <!--{if $article.pic_url}-->
+              'bdPic' : '<!--{$article.pic_url}-->'
+              <!--{/if}-->
+              }
+              document.getElementById("bdshell_js").src = "http://bdimg.share.baidu.com/static/js/shell_v2.js?cdnversion=" + Math.ceil(new Date()/3600000)
+              </script>
+              <!-- Baidu Button END -->
+            </div>
+            <div class="article-tags">
+              <!--{$article.taglink}-->
+            </div>
+          </div>
+          <blockquote><!--{$article.description}--></blockquote>
+          <div class="article-detail">
+            <!--{if $article.pic_url}-->
+            <p class="image"><img src="<!--{$article.pic_url}-->"/></p>
+            <!--{/if}-->
+            <div class="l-main-inner-ad"><!--正文内嵌图片广告 250x250--></div>
+            <!--{if $article.author}-->
+            <p class="text"><strong><strong>文 /&nbsp; <!--{$article.author}--></strong></strong></p>
+            <!--{/if}-->
+            <div class="article-body">
+              <!--{$article.body}-->
+            </div>
+          </div>
+          <script type="text/javascript">(function(){$("img",".article-detail").each(function(i){iCMS.imgFix(this,550,600);});})($);</script>
+          <div class="tip clr">提示：键盘也能翻页，试试"← →"键</div>
+          <script type="text/javascript">(function(){$(window).keydown(function(event){switch(event.keyCode) {case 37: window.location.href='<!--{$article.page.prev}-->';break;case 39: window.location.href='<!--{$article.page.next}-->';break;}});})($);</script>
+          <div class="article-pagenav">
+            <!--{$article.pagenav}-->
+            <div class="clearfix"></div>
+          </div>
+        </div>
+        <div class="comments_list" id="iCMS_comments_list">
+          <!--{iCMS:comment:list display="frame" appid="1" iid=$article.id}-->
+        </div>
+        <div class="comment_form">
+          <!--{iCMS:comment:form ref="true"}-->
+        </div>
+      </div>
+      <div class="right-col">
+        <div class="mod" id="artical">
+          <div class="hd">
+            <h3>热门文章排行榜<span>HOT</span></h3>
+          </div>
+          <div class="bd">
+          <ul class="artical-top artical-top-num">
+            <!--{iCMS:article:list loop="true" row="10" orderby="hot" cid=$category.cid}-->
+            <!--{if $article_list.rownum<4}-->
+            <li class="top-1"><span><!--{$article_list.rownum}--></span><p><a href="<!--{$article_list.url}-->" target="_blank"><!--{$article_list.title}--></a></p><p><!--{$article_list.description}--></p></li>
+            <!--{else}-->
+            <li><span><!--{$article_list.rownum}--></span><a href="<!--{$article_list.url}-->" target="_blank"><!--{$article_list.title}--></a></li>
+            <!--{/if}-->
+            <!--{/iCMS}-->
+          </ul>
+        </div>
+      </div>
+    </div>
+  </div>
+  <!--{include file="./footer.htm"}-->
+</body>
+</html>

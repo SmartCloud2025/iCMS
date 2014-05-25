@@ -30,6 +30,7 @@ class iCMS {
         self::$config = iPHP::config();
         iFS::init(self::$config['FS'],'filedata');
         iCache::init(self::$config['cache']);
+        iURL::init(self::$config['router']);
         iPHP::iTPL();
 
         iPHP_DEBUG      && iDB::$show_errors = true;

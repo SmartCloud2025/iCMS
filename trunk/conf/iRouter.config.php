@@ -57,4 +57,5 @@ return array(
 	'/{uid}/following/' => '/user.php?do=home&uid={uid}&pg=following',
 	'/{uid}/{cid}/'     => '/user.php?do=home&uid={uid}&cid={cid}',
 
+	'/article/{id}/'	=> '/index.php?do=article&id={id}',
 );

@@ -8,8 +8,8 @@
     <p class="modal-loading"><img src="<!--{$site.urls.ui}-->/img/loading.gif" /> 加载中,请稍侯......</p>
   </div>
 </div>
-<div id="iCMS_Login_Box">
-  <div class="iCMS_Login_Box">
+<div id="iCMS_login_box">
+  <div class="iCMS_login_box">
     <div class="login_box">
       <p class="login_fail err_uname err_seccode"></p>
       <div class="login_form">
@@ -54,3 +54,23 @@
 <script type="text/javascript">
 <!--{include file="/iCMS/login.js"}-->
 </script>
+<div id="iCMS_comment_report">
+  <div class="report_dialog">
+    <div class="header">请选择理由</div>
+    <ul class="options clearfix">
+      <li><label><input value="1" name="reason" type="radio">不友善内容</label></li>
+      <li><label><input value="2" name="reason" type="radio">广告等垃圾信息</label></li>
+      <li><label><input value="3" name="reason" type="radio">违法违规内容</label></li>
+      <li><label><input value="4" name="reason" type="radio">不宜公开讨论的政治内容</label></li>
+      <li><label><input value="0" name="reason" type="radio">其他（可自行填写）</label>
+        <p class="input-container visible-if-checked">
+          <input placeholder="请填写原因" type="text" name="content" class="reason-text zg-form-text-input">
+        </p>
+      </li>
+    </ul>
+    <div class="buttons clearfix">
+      <input type="button" name="cancel" class="btn" value="取消">
+      <input type="button" name="ok" class="btn btn-primary" value="确定">
+    </div>
+  </div>
+</div>

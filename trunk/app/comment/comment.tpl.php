@@ -6,7 +6,7 @@
  * @author coolmoo <idreamsoft@qq.com>
  * @$Id: comment.tpl.php 2408 2014-04-30 18:58:23Z coolmoo $
  */
-function comment_list($vars){
+function comment_list($vars){	
 	$appid		= (int)$vars['appid'];
 	$whereSQL	= "`appid`='$appid' AND `status`='1'";
 
@@ -40,7 +40,7 @@ function comment_list($vars){
 	}
 	if(empty($rs)){
 		$rs		= iDB::getArray("SELECT * FROM `#iCMS@__comment` WHERE {$whereSQL} {$orderSQL} LIMIT {$offset},{$maxperpage}");
-		//iDB::debug();
+		iDB::debug();
 		$_count	= count($rs);
 		$ln		=($GLOBALS['page']-1)<0?0:$GLOBALS['page']-1;
 		for ($i=0;$i<$_count;$i++){
@@ -63,6 +63,10 @@ function comment_list($vars){
 				$rs[$i]['reply']['avatar'] = userData($rs[$i]['reply_uid'],"avatar",$vars['facesize']?$vars['facesize']:0);
 				$rs[$i]['reply']['name']   = $rs[$i]['reply_name'];
 			}
+			$rs[$i]['total'] = $total;
+			if($vars['page']){
+				$rs[$i]['page']  = array('total'=>$multi->totalpage,'perpage'=>$multi->perpage);
+			}
 		}
 		$vars['cache'] && iCache::set($cacheName,$rs,$cacheTime);
 	}
@@ -73,7 +77,7 @@ function comment_form($vars){
 	$ref	= $vars['ref'];
 	if($ref){
 		$ref===true && $ref=iCMS::$app_name;
-		$rs	= iCMS::tpl_vars($ref);
+		$rs	= iPHP::tpl_vars($ref);
 		if($ref=="article"){
 			$vars['iid']	= (int)$rs['id'];
 			$vars['cid']	= (int)$rs['cid'];
@@ -107,5 +111,5 @@ function comment_form($vars){
 			break;
 	}
 	iPHP::assign('comment',$vars);
-	return iPHP::tpl('iCMS',$tpl);
+	return iPHP::tpl("iCMS://{$tpl}.htm");
 }

@@ -8,7 +8,7 @@
  */
 function iCMS_router($vars){
 	if(empty($vars['url'])){
-		echo '###';
+		echo 'javascript:;';
 		return;
 	}
 	$ukey = $vars['url'];

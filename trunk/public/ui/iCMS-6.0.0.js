@@ -12,8 +12,8 @@
             auth:function(){
                 return iCMS.getcookie('AUTH_INFO');
             },
-            data:function(a){
-                $.get(iCMS.api('user')+"&do=data", a,function(c) {
+            data:function(param){
+                $.get(iCMS.api('user','&do=data'),param,function(c) {
                     //if(!c.code) return false;
                     var userhome = $(".iCMS_user_home")
                     userhome.attr("href",c.url);
@@ -22,7 +22,7 @@
                 },'json');  
             },
             logout:function() {
-                $.get(iCMS.api('user')+"&do=logout",function(c) {
+                $.get(iCMS.api('user',"&do=logout"),function(c) {
                     window.location.href = c.forward
                 },'json');   
             },
@@ -30,12 +30,12 @@
                 return iCMS.getcookie('AUTH_INFO') ? true : false;
             },
             follow:function(a){
-                var b = $(a),param = iCMS.param(b);
-                param['follow'] = b.hasClass('follow')?1:0;
-                $.get(iCMS.api('user')+"&do=follow",param,function(c) {
+                var $this = $(a),param = iCMS.param($this);
+                param['follow'] = $this.hasClass('follow')?1:0;
+                $.get(iCMS.api('user',"&do=follow"),param,function(c) {
                     if(c.code){
-                        b.removeClass((param['follow']?'follow':'unfollow'));
-                        b.addClass((!param['follow']?'follow':'unfollow'));   
+                        $this.removeClass((param['follow']?'follow':'unfollow'));
+                        $this.addClass((!param['follow']?'follow':'unfollow'));   
                     }else{
                         iCMS.alert(c.msg);
                         //iCMS.dialog(c.msg);
@@ -56,30 +56,31 @@
         }, 
         article:{
             good:function(a){
-                var b=$(a),p = b.parent(),param = iCMS.param(p);
+                var $this   = $(a),p = $this.parent(),
+                param       = iCMS.param(p);
                 param['do'] = 'good';
                 $.get(iCMS.api('article'),param,function(c) {
+                    iCMS.alert(c.msg,c.code);
                     if(c.code){
                         var count = parseInt($('span',b).text());
                         $('span',b).text(count+1);                            
-                        iCMS.dialog(c.msg);
                     }else{
-                        iCMS.alert(c.msg);
                         return false;
                     }
                 },'json');
             },
             comment_box:function(a){
-                var b = $(a),pp = b.parent().parent(),p = b.parent(),
-                param = iCMS.param(p),def ='写下你的评论…',
-                box   = $('.zm-comment-box',pp);
+                var $this = $(a),p = $this.parent(),pp = p.parent(),
+                param     = iCMS.param(p),page = 1,
+                def       ='写下你的评论…',
+                box       = $('.zm-comment-box',pp);
                 if(box.length >0){
                     box.remove();
                     return false;
                 }
                 // console.log(param);
 
-                spike = '<i class="iCMS-icon iCMS-icon-spike zm-comment-bubble" style="display: inline; left: 481px;"></i>',
+                var spike = '<i class="iCMS-icon iCMS-icon-spike zm-comment-bubble" style="display: inline; left: 481px;"></i>',
                 box   = $('<div class="zm-comment-box">'),
                 list  = $('<div class="zm-comment-list">'),
                 form  = $('<div class="zm-comment-form">');
@@ -120,25 +121,31 @@
                     event.preventDefault();
                     var cform = $(this).parent().parent(),
                     textarea  = $('.zm-comment-textarea',cform),
-                    cparam     = comment_param(textarea);
+                    cparam    = comment_param(textarea);
 
                     if(!cparam.content){
                         iCMS.alert("请填写内容");
                         textarea.focus();
                         return false;
                     }
-                    $.post(iCMS.api('article'),cparam,function(c) {
+                    $.post(iCMS.api('comment'),cparam,function(c) {
 //                        console.log(c);
                         if(c.code){
-                            var count = parseInt($('span',b).text());
-                            $('span',b).text(count+1);
-                            textarea.val(def).css({color: '#222'});
-                            comment_list(c.forward);
+                            var count = parseInt($('span',$this).text());
+                            $('span',$this).text(count+1);
+                            textarea.val(def).css({color: '#999'});
+                            comment_list(0,c.forward);
                         }else{
                             iCMS.alert(c.msg);
                         }
                     },'json'); 
                 });
+                list.on('click', 'a[name="load-more"]', function(event) {
+                    event.preventDefault();
+                    $(".load-more",list).remove();
+                    comment_list(page);
+                });
+
                 //回复评论
                 list.on('click', 'a[name="reply_comment"]', function(event) {
                     event.preventDefault();
@@ -155,7 +162,8 @@
                     $(this).parent().after(item_form);
 
 
-                    $('.zm-comment-textarea',item_form).data('reply_param',reply_param).val("").focus();
+                    $('.zm-comment-textarea',item_form).data('reply_param',reply_param)
+                    .val("").focus().css({color: '#222'});
                     $('a[name="closeform"]',item_form).click(function(event) {
                         event.preventDefault();
                         item_form.remove();
@@ -164,14 +172,15 @@
                 //赞评论
                 list.on('click', 'a[name="like_comment"]', function(event) {
                     event.preventDefault();
-                    var a=$(this),like_param = iCMS.param($(this));
-                    like_param.do = 'like_comment';
-                    $.get(iCMS.api('article'),like_param,function(c) {
+                    var $this = $(this),like_param = iCMS.param($this);
+                    like_param.do = 'like';
+                    $.get(iCMS.api('comment'),like_param,function(c) {
 //                        console.log(c);
                         if(c.code){
-                            var p = a.parent(),like_num= $('.like-num em',p).text();
+                            var p    = $this.parent(),
+                            like_num = $('.like-num em',p).text();
                             if(like_num==""){
-                                a.parent().append('<span class="like-num" data-tip="iCMS:s:1 人觉得这个很赞"><em>1</em> <span>赞</span></span>')
+                                $this.parent().append('<span class="like-num" data-tip="iCMS:s:1 人觉得这个很赞"><em>1</em> <span>赞</span></span>')
                             }else{
                                 like_num = parseInt(like_num)+1;
                                 $('.like-num em',p).text(like_num);
@@ -181,18 +190,49 @@
                         }
                     },'json'); 
                 });
+                //举报评论
+                list.on('click', 'a[name="report_comment"]', function(event) {
+                    event.preventDefault();
+                    var $this     = $(this),
+                    report_box    = document.getElementById("iCMS_comment_report"),
+                    _REPORT_MODAL = $(this).modal({title:'为什么举报这个评论?',width:"460px",html:report_box,scroll:true});
+                    $("li",report_box).click(function(event) {
+                        $("li",report_box).removeClass('checked');
+                        $(this).addClass('checked');
+                    });
+                    $('[name="cancel"]',report_box).click(function(event){
+                        _REPORT_MODAL.destroy();
+                    }); 
+                    $('[name="ok"]',report_box).click(function(event){
+                        var report_param       = iCMS.param($this);
+                        report_param['reason'] = $("[name='reason']:checked",report_box).val();
+                        if(report_param['reason']==undefined){
+                            iCMS.alert("请选择举报的原因");
+                            return false;
+                        }
+                        if(report_param['reason']=="0"){
+                            report_param['content'] = $("[name='content']",report_box).val();
+                            if(report_param['content']==""){
+                                iCMS.alert("请填写举报的原因");
+                                return false;
+                            }
+                        }
+                        report_param.action = 'report';
 
-                // function comment_up(){
+                        $.post(iCMS.api('comment'),report_param,function(c) {
+                            $("[name='content']",report_box).val('');
+                            iCMS.alert(c.msg,c.code);
+                        },'json'); 
+                        return false;
+                    }); 
 
-                // }
+                    //iCMS.dialog(report_box,opts); 
+                });                
 
                 function comment_param(textarea){
                     var reply_param = textarea.data('reply_param'),
                     content  = textarea.val(),
-                    vars     = {
-                        'action':'comment',
-                        'content':(content==def?'':content),
-                    };
+                    vars     = {'action':'add','content':(content==def?'':content)};
                     return $.extend(vars,param,reply_param);
                 }
                 function close_form(d,p){
@@ -201,11 +241,12 @@
                         textarea.val(def).css({color: '#999'});
                    }                   
                 }
-                function comment_list(id){
-                    $.get(iCMS.api('article'),{'do':'comment','iid':param['iid'],'id':id},
+                function comment_list(pageNum,id){
+                    pageNum = pageNum||1;
+                    $.get(iCMS.api('comment'),{'do':'json','iid':param['iid'],'id':id,page:pageNum},
                         function(json) {
                             if(!json) return false;
-console.log(json);
+                            var totalpage = 0;        
                             form.addClass('zm-comment-box-ft');
                             $.each(json,function(i,c) {
                                 //console.log(c.reply);
@@ -227,34 +268,47 @@ console.log(json);
                                 '<div class="zm-comment-content">'+c.content+'</div>'+
                                 '<div class="zm-comment-ft">'+
                                 '<span class="date">'+c.addtime+'</span>'+
-                                '<a href="#" class="reply zm-comment-op-link" name="reply_comment" data-param=\'{"uid":"'+c.user.uid+'","name":"'+c.user.name+'"}\'>'+
+                                '<a href="javascript:;" class="reply zm-comment-op-link" name="reply_comment" data-param=\'{"uid":"'+c.user.uid+'","name":"'+c.user.name+'"}\'>'+
                                 '<i class="iCMS-icon iCMS-icon-comment-reply"></i>回复</a>'+
-                                '<a href="#" class="like zm-comment-op-link" name="like_comment" data-param=\'{"id":"'+c.id+'"}\'>'+
+                                '<a href="javascript:;" class="like zm-comment-op-link" name="like_comment" data-param=\'{"id":"'+c.id+'"}\'>'+
                                 '<i class="iCMS-icon iCMS-icon-comment-like"></i>赞</a>';
                                 if(c.up>1){
                                     item += '<span class="like-num" data-tip="iCMS:s:'+c.up+' 人觉得这个很赞">'+
                                             '<em>'+c.up+'</em> <span>赞</span></span>';
                                 }
-                                item += '<a href="#" name="report" class="report zm-comment-op-link needsfocus">'+
+                                item += '<a href="javascript:;" name="report_comment" data-param=\'{"id":"'+c.id+'","uid":"'+c.user.uid+'"}\' class="report zm-comment-op-link needsfocus">'+
                                 '<i class="iCMS-icon iCMS-icon-no-help"></i>举报</a>'+
                                 '</div>'+
                                 '</div>'+
                                 '</div>';
                                 list.append(item);
+                                //console.log(c.page.perpage,i,i+1);
+                                if(json.length==(i+1)){
+                                    totalpage = c.page.total;
+                                    console.log(totalpage,page);
+                                    if(totalpage>1){
+                                        page = pageNum+1;
+                                        if(page>totalpage){
+                                            page = totalpage;
+                                        }else{
+                                            list.append('<a href="javascript:;" class="load-more" name="load-more"><span class="text">显示全部评论</a>');
+                                        }
+                                    }
+                                }
                             });
-                            if(json.total>10){
-                               list.append('<a class="load-more" name="load-more"><span class="text">显示全部评论<img src="http://static.zhihu.com/static/img/spinner2.gif" class="spinner"></span></a>');
-                            }
+
                     },'json');                    
                 }
                //------------
             }
         },
         param:function(a){
-            return $.parseJSON(a.attr('data-param'));
+            var param = a.attr('data-param')||false;
+            if(!param) return {};
+            return $.parseJSON(param);
         },
-        api:function(app){
-            return iCMS.config.API+'?app='+app;
+        api:function(app,ido){
+            return iCMS.config.API+'?app='+app+(ido||'');
         },
     	Init:function(){
             this.user_status = this.user.status();
@@ -301,7 +355,7 @@ console.log(json);
             });
 
             $("#iCMS_seccode_img,#iCMS_seccode_text").click(function(){
-                $("#iCMS_seccode_img").attr('src',iCMS.api('public')+'?app=public&do=seccode&'+Math.random());
+                $("#iCMS_seccode_img").attr('src',iCMS.api('public','&do=seccode&')+Math.random());
             });
             $(".iCMS_API_iframe").load(function(){ 
                 $(this).height(0); //用于每次刷新时控制IFRAME高度初始化 
@@ -309,27 +363,29 @@ console.log(json);
                 $(this).height(height); 
             }); 
     	},
-        alert:function(msg){
-            iCMS.dialog(msg,{label:'warning',icon:'warning'});
+        alert:function(msg,ok){
+            var opts = ok ? {label:'success',icon:'check'}:{label:'warning',icon:'warning'}
+            iCMS.dialog(msg,opts);
         },
         dialog:function(msg,options,_parent){
             var a    = window,
-            defaults = {width: 360,height: 150,fixed: true,lock: true,time:3000,label:'success',icon:'check'},            
+            defaults = {id: 'iPHP_DIALOG',title: 'iCMS - 提示信息',content:msg,width: 360,height: 150,fixed: true,lock: true,time:300000,label:'success',icon:'check'},
             opts     = $.extend(defaults,options);
             _parent  = _parent||false;
             //console.log(opts);
             if(_parent) a = window.parent
- 
-            var dialog   = a.$.dialog({
-                id: 'iPHP_DIALOG',width:opts.width,height:opts.height,fixed:opts.fixed,lock:opts.lock,time:opts.time,
-                title: 'iCMS - 提示信息',
-                content: '<div class=\"iPHP-msg\"><span class=\"label label-'+opts.label+'\"><i class=\"fa fa-'+opts.icon+'\"></i> '+msg+'</span></div>',
-            });
+            
+            if(msg.jquery) opts.content = msg.html();
+            if(typeof msg=="string"){
+                opts.content = '<div class=\"iPHP-msg\"><span class=\"label label-'+opts.label+'\"><i class=\"fa fa-'+opts.icon+'\"></i> '+msg+'</span></div>';
+            }
+            var dialog   = a.$.dialog(opts);
         },
         LoginBox:function(){
-            var loginBox    = $('#iCMS_Login_Box');
+            //var loginBox    = $('#iCMS_Login_Box');
+            var loginBox    = document.getElementById("iCMS_login_box");
             //console.log(typeof(loginBox));
-            window.iCMS_Login_MODAL = $(this).modal({width:"560px",height: "240px",html:loginBox,scroll:true});
+            window.iCMS_Login_MODAL = $(this).modal({width:"560px",html:loginBox,scroll:true});
         },
 
         hover:function(a, b, t, l) {
@@ -404,7 +460,7 @@ console.log(json);
     $.fn.modal = function(options) {
         var im = $(this), 
         defaults = {
-            width: "360px",height: "300px",
+            width: "360px",height: "auto",
             title: im.attr('title') || "iCMS 提示",
             href: im.attr('href')||false,
             target: im.attr('data-target') || "#iCMS_MODAL",
@@ -418,25 +474,28 @@ console.log(json);
 
         return im.each(function() {
 
-            var m = $(opts.target), 
-            mBody = m.find(".modal-body"), 
+            var m  = $(opts.target), 
+            mBody  = m.find(".modal-body"), 
             mTitle = m.find(".modal-header h3");
             opts.title && mTitle.html(opts.title);
             mBody.empty();
 
-            if(opts.overflow){
-                $("body").css({"overflow-y": "hidden"});
-            }
-            
+            if(opts.overflow) $("body").css({"overflow-y": "hidden"});
+           
             if (opts.html) {
                 var html = opts.html;
-                if(typeof(opts.html)=="object"){
-                    html = opts.html.html();
+                if(typeof opts.html =="object"){
+                    if(opts.html.jquery){
+                        opts.html.show();
+                        html = opts.html.html();
+                    }else{
+                        opts.html.style.display = 'block';
+                    }
                 }
                 mBody.html(html).css({"overflow-y": "auto"});
             } else if (opts.href) {
                 var mFrame = $('<iframe class="modal-iframe" frameborder="no" allowtransparency="true" scrolling="auto" hidefocus="" src="' + opts.href + '"></iframe>');
-                mFrameFix = $('<div id="modal-iframeFix" class="modal-iframeFix"></div>');
+                mFrameFix  = $('<div id="modal-iframeFix" class="modal-iframeFix"></div>');
                 mFrame.appendTo(mBody);
                 mFrameFix.appendTo(mBody);
             }

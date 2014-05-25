@@ -36,15 +36,15 @@ class iPHP{
         define('iPHP_APP_CONF', iPHP_CONF_DIR.'/'.$site);//网站配置目录
         $app_config_file = iPHP_APP_CONF.'/config.php'; //网站配置文件
         @is_file($app_config_file) OR exit('<h1>'.iPHP_APP.' 运行出错.找不到"'.$site.'"网站的配置文件!(code:0002)</h1>');
-        $cfg = require $app_config_file;
+        $config = require $app_config_file;
 
         //config.php 中开启后 此处设置无效
-        defined('iPHP_DEBUG')       OR define('iPHP_DEBUG', $cfg['debug']['php']);       //程序调试模式
-        defined('iPHP_TPL_DEBUG')   OR define('iPHP_TPL_DEBUG',$cfg['debug']['tpl']);    //模板调试
-        defined('iPHP_TIME_CORRECT')OR define('iPHP_TIME_CORRECT',$cfg['time']['cvtime']);
+        defined('iPHP_DEBUG')       OR define('iPHP_DEBUG', $config['debug']['php']);       //程序调试模式
+        defined('iPHP_TPL_DEBUG')   OR define('iPHP_TPL_DEBUG',$config['debug']['tpl']);    //模板调试
+        defined('iPHP_TIME_CORRECT')OR define('iPHP_TIME_CORRECT',$config['time']['cvtime']);
         //config.php --END--
 
-        define('iPHP_URL_404',$cfg['router']['404']);//404定义
+        define('iPHP_URL_404',$config['router']['404']);//404定义
         
         if(iPHP_DEBUG||iPHP_TPL_DEBUG){
             set_error_handler('iPHP_ERROR_HANDLER');
@@ -52,17 +52,17 @@ class iPHP{
             error_reporting(E_ALL & ~E_NOTICE);
         }
 
-        $timezone = $cfg['time']['zone'];
+        $timezone = $config['time']['zone'];
         empty($timezone) && $timezone = 'Asia/Shanghai';//设置中国时区
         @ini_set('date.timezone',$timezone);
         function_exists('date_default_timezone_set') && @date_default_timezone_set($timezone);
 
-        $mobile_agent = str_replace(',','|',preg_quote($cfg['other']['mobile_agent']));
+        $mobile_agent = str_replace(',','|',preg_quote($config['other']['mobile_agent']));
         $mobile_agent && preg_match('/'.$mobile_agent.'/i',$_SERVER["HTTP_USER_AGENT"]) && self::$mobile = true;
-        $tpl_key      = ($cfg['site']['MW_TPL'] && self::$mobile)?'MW_TPL':'PC_TPL';        
-        define('iPHP_TPL_DEFAULT',$cfg['site'][$tpl_key]);
+        $tpl_key      = ($config['site']['MW_TPL'] && self::$mobile)?'MW_TPL':'PC_TPL';        
+        define('iPHP_TPL_DEFAULT',$config['site'][$tpl_key]);
 
-        return $cfg;
+        return $config;
 	}
 	public static function iTPL(){
         $iTPL                    = new iTemplate();
@@ -259,8 +259,8 @@ class iPHP{
 	public static function router($key,$static=false){
 		if($static) return $key;
 
-		$path   = iPHP_APP_CORE.'/iRouter.config.php';
-		@is_file($path) OR self::throwException('iRouter.config.php not exist',1013);
+		$path   = iPHP_CONF_DIR.'/iRouter.config.php';
+		@is_file($path) OR self::throwException($path.' not exist',1013);
 
 		$router = self::import($path,true);
 
@@ -645,13 +645,13 @@ function iPHP_ERROR_HANDLER($errno, $errstr, $errfile, $errline){
     $html.="\n</pre>";
     $html	= str_replace('\\','/',$html);
     $html	= str_replace(iPATH,'iPHP://',$html);
-	header('HTTP/1.1 500 Internal Server Error');
-	header('Status: 500 Internal Server Error');
-	header("Expires: Mon, 26 Jul 1997 05:00:00 GMT");
-	header("Last-Modified: " . gmdate("D, d M Y H:i:s") . " GMT");
-	header("Cache-Control: no-store, no-cache, must-revalidate");
-	header("Cache-Control: post-check=0, pre-check=0", false);
-	header("Pragma: no-cache");
+	@header('HTTP/1.1 500 Internal Server Error');
+	@header('Status: 500 Internal Server Error');
+	@header("Expires: Mon, 26 Jul 1997 05:00:00 GMT");
+	@header("Last-Modified: " . gmdate("D, d M Y H:i:s") . " GMT");
+	@header("Cache-Control: no-store, no-cache, must-revalidate");
+	@header("Cache-Control: post-check=0, pre-check=0", false);
+	@header("Pragma: no-cache");
     $_GET['frame'] OR exit($html);
     $html	= str_replace("\n",'<br />',$html);
     iPHP::$dialogLock	= true;

@@ -47,7 +47,7 @@ define('iPHP_CORE', iPATH."iPHP/core");
 define('iPHP_APP_DIR',	iPATH."app");
 define('iPHP_APP_CORE',	iPATH."core");
 define('iPHP_APP_CACHE',iPATH."cache");
-define('iPHP_CONF_DIR',	iPATH."config");
+define('iPHP_CONF_DIR',	iPATH."conf");
 define('iPHP_TPL_DIR',	iPATH."template");
 define('iPHP_TPL_CACHE',iPATH."cache/template");
 

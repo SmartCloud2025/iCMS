@@ -11,8 +11,8 @@
 * @$Id: iURL.class.php 2408 2014-04-30 18:58:23Z coolmoo $
 */
 class iURL {
-	public static $config	= null;
-	public static $uriConfig= null;
+    public static $config   = null;
+    public static $uriArray = null;
 	public static function init($config){
 		self::$config	= $config;
 	}
@@ -24,10 +24,10 @@ class iURL {
     }
 
     function domain($cid="0",$akey='dir') {
-        $ii		= new stdClass();
-        $C    	= iCache::get('iCMS/category/'.$cid);
-        $rootid = $C['rootid'];
-        $ii->sdir= $C[$akey];
+        $ii       = new stdClass();
+        $C        = iCache::get('iCMS/category/'.$cid);
+        $rootid   = $C['rootid'];
+        $ii->sdir = $C[$akey];
         if($rootid && empty($C['domain'])) {
             $dm         = self::domain($rootid);
             $ii->pd     = $dm->pd;
@@ -35,17 +35,15 @@ class iURL {
             $ii->pdir   = $dm->pdir.'/'.$C[$akey];
             $ii->dmpath = $dm->dmpath.'/'.$C[$akey];
         }else {
-            $ii->pd     = 
-            $ii->pdir   = $ii->sdir;
-            $ii->dmpath = 
-            $ii->domain = $C['domain']?(strstr($C['domain'],'http://')?$C['domain']:'http://'.$C['domain']):'';
+            $ii->pd     = $ii->pdir   = $ii->sdir;
+            $ii->dmpath = $ii->domain = $C['domain']?(strstr($C['domain'],'http://')?$C['domain']:'http://'.$C['domain']):'';
         }
         return $ii;
     }
 
     function rule($a) {
     	$b	= $a[1];
-    	$c	= self::$uriConfig;
+    	$c	= self::$uriArray;
         switch($b) {
             case 'ID':		$e=$c['id'];break;
             case '0xID':	$e=sprintf("%08s",$c['id']);break;
@@ -74,16 +72,19 @@ class iURL {
         return $e;
     }
     public static function get($uri,$a=array()) {
-        $i 		= new stdClass();
-        $sURL	= self::$config['URL'];
-        $htmldir= self::$config['htmldir'];
+
+        //var_dump(self::$config);
+
+        $i       = new stdClass();
+        $sURL    = self::$config['URL'];
+        $htmldir = self::$config['htmldir'];
         switch($uri) {
             case 'http':
-                $i->href= $a['url'];
-                $url	= $a['urlRule'];
-            	$_a		= (array)$a;
-                $a		= array_merge_recursive((array)$a,(array)$a);
-                $a['id']= $_a['id'];
+                $i->href = $a['url'];
+                $url     = $a['urlRule'];
+                $_a      = (array)$a;
+                $a       = array_merge_recursive((array)$a,(array)$a);
+                $a['id'] = $_a['id'];
                 break;
             case 'category':
                 $i->href= $a['url'];
@@ -113,7 +114,7 @@ class iURL {
         if($i->href) return $i;
 
         if(strstr($url,'{PHP}')===false) {
-        	self::$uriConfig	= $a;
+        	self::$uriArray	= $a;
 //        	strstr($url,'{') && $url = preg_replace_callback ("/\{(.*?)\}/",'self::irule($uri,"\\1",$a)',$url);
 //        	strstr($url,'{') && $url = preg_replace_callback ("/\{(.*?)\}/",'self::irule',$url);
         	strstr($url,'{') && $url = preg_replace_callback ("/\{(.*?)\}/",'iURL_Rule',$url);
