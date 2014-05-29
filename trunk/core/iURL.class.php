@@ -188,7 +188,7 @@ class iURL {
 //exit;
 //            var_dump($i);
         }else {
-        	$url	= $uri.'.php?';
+        	$url	= iPHP::router($uri,iCMS_REWRITE);
 	        switch($uri){
 	            case 'category':
 		            $a['categoryURI'][1] && $url = $a['categoryURI'][1].'.php?';

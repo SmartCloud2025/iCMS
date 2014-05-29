@@ -40,7 +40,7 @@ function comment_list($vars){
 	}
 	if(empty($rs)){
 		$rs		= iDB::getArray("SELECT * FROM `#iCMS@__comment` WHERE {$whereSQL} {$orderSQL} LIMIT {$offset},{$maxperpage}");
-		iDB::debug();
+		//iDB::debug();
 		$_count	= count($rs);
 		$ln		=($GLOBALS['page']-1)<0?0:$GLOBALS['page']-1;
 		for ($i=0;$i<$_count;$i++){
