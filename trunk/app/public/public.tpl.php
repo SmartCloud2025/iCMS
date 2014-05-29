@@ -9,8 +9,8 @@
 function public_ui($vars=null){
 	isset($vars['script']) OR $vars['script'] = true;
 	iPHP::assign("ui",$vars);
-	return iPHP::tpl('iCMS://public.ui.htm');
+	return iPHP::view('iCMS://public.ui.htm');
 }
 function public_dialog($vars=null){
-	return iPHP::tpl('iCMS://public.dialog.htm');
+	return iPHP::view('iCMS://public.dialog.htm');
 }

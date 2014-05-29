@@ -7,7 +7,6 @@
  * @$Id: article.app.php 2408 2014-04-30 18:58:23Z coolmoo $
  */
 class articleApp {
-	public $methods	= array('iCMS','good');
     function __construct() {
         $this->userid   = (int)iPHP::getCookie('userid');
         $this->nickname = iS::escapeStr(iPHP::getUniCookie('nickname'));
@@ -143,8 +142,7 @@ class articleApp {
         if($tpl) {
             $articletpl	= empty($rs->tpl)?$category['contentTPL']:$rs->tpl;
             strstr($tpl,'.htm') && $articletpl	= $tpl;
-
-            $html	= iPHP::tpl($articletpl,'article');
+            $html	= iPHP::view($articletpl,'article');
             if(iPHP::$iTPLMode=="html") return array($html,$rs);
         }
     }

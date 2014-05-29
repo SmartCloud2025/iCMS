@@ -113,7 +113,7 @@ class iPHP{
             //echo iFS::sizeUnit(xdebug_peak_memory_usage());            
         }
     }
-    public static function tpl($tpl,$p='index') {
+    public static function view($tpl,$p='index') {
         $tpl OR iPHP::throwException('应用程序运行出错. 请设置模板文件', 2000,'TPL');
         if(strpos($tpl,'APP:/')!==false){
             $tpl = 'file::'.self::$app_tpl."||".str_replace('APP:/','',$tpl);
