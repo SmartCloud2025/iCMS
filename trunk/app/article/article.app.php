@@ -7,6 +7,7 @@
  * @$Id: article.app.php 2408 2014-04-30 18:58:23Z coolmoo $
  */
 class articleApp {
+	public $methods	= array('iCMS','good','like_comment','comment');
     function __construct() {
         $this->userid   = (int)iPHP::getCookie('userid');
         $this->nickname = iS::escapeStr(iPHP::getUniCookie('nickname'));
@@ -49,8 +50,7 @@ class articleApp {
         if($category['status']==0) return false;
         
         if(iPHP::$iTPLMode=="html" && (strstr($category['contentRule'],'{PHP}')||$category['outurl']||$category['mode']==0)) return false;
-    
-        
+
         $_iurlArray	= array((array)$rs,$category);
         $rs->iurl	= iURL::get('article',$_iurlArray,$page);
         $pageurl	= $rs->iurl->pageurl;
@@ -89,7 +89,6 @@ class articleApp {
             $tagArray	= explode(',',$rs->tags);
             foreach($tagArray AS $tk=>$tag) {
 				$rs->tagArray[$tk]['name']	= $tag;
-
 				$rs->tagArray[$tk]['url']	= iURL::get('tag',$tag);
 				$rs->tagslink.='<a href="'.$rs->tagArray[$tk]['url'].'" class="tags" target="_blank">'.$rs->tagArray[$tk]['name'].'</a> ';
             }
@@ -118,11 +117,9 @@ class articleApp {
 
 //        $rs->prev=iPHP::lang('iCMS:article:first');
 //        $prers=iDB::getRow("SELECT * FROM `#iCMS@__article` WHERE `id` < '{$rs->id}' AND `cid`='{$rs->cid}' AND `status`='1' order by id DESC LIMIT 1;");
-
 //        $prers && $rs->prev='<a href="'.iURL::get('article',array((array)$prers,$category))->href.'" class="prev" target="_self">'.$prers->title.'</a>';
 //        $rs->next=iPHP::lang('iCMS:article:last');
 //        $nextrs = iDB::getRow("SELECT * FROM `#iCMS@__article` WHERE `id` > '{$rs->id}'  and `cid`='{$rs->cid}' AND `status`='1' order by id ASC LIMIT 1;");
-
 //        $nextrs && $rs->next='<a href="'.iURL::get('article',array((array)$nextrs,$category))->href.'" class="next" target="_self">'.$nextrs->title.'</a>';
 
         $publicURL   = iCMS::$config['router']['publicURL'];
