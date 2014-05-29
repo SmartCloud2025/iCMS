@@ -78,9 +78,9 @@ class tagApp {
                 iCMS::clear_compiled_tpl('2013/zt.htm');
             }
             if (strstr($tpl, '.htm')) {
-                return iPHP::tpl($tpl, 'tag');
+                return iPHP::view($tpl, 'tag');
             }
-            return iPHP::tpl($rs['tpl'] ? $rs['tpl'] : '{iTPL}/tag.htm', 'tag');
+            return iPHP::view($rs['tpl'] ? $rs['tpl'] : '{iTPL}/tag.htm', 'tag');
         } else {
             return $rs;
         }

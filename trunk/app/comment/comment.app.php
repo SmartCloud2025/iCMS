@@ -58,6 +58,6 @@ VALUES ('$uId','$indexId', '$itemId', '$userid', '$nickname', '$content', '$type
         $vars['title']   = iS::escapeStr($_GET['title']);
         $vars['display'] = $_GET['display'];
         iPHP::assign('comment',$vars);
-        return iPHP::tpl('iCMS','comment.form.default');
+        return iPHP::view('iCMS','comment.form.default');
     }
 }

@@ -40,7 +40,7 @@ class articleApp {
         iPHP::assign('appid',iCMS_APP_ARTICLE);
         iPHP::assign('id',(int)$_GET['id']);
         iPHP::assign('iid',(int)$_GET['iid']);
-        iCMS::tpl('iCMS://api.article.comment.htm');
+        iPHP::view('iCMS://api.article.comment.htm');
     }
     public function ACTION_comment(){
         $iid        = (int)$_POST['iid'];
@@ -180,7 +180,7 @@ VALUES ('".iCMS_APP_ARTICLE."', '$cid', '$iid','$suid', '$title', '$this->userid
             $articletpl	= empty($rs->tpl)?$category['contentTPL']:$rs->tpl;
             strstr($tpl,'.htm') && $articletpl	= $tpl;
 
-            $html	= iPHP::tpl($articletpl,'article');
+            $html	= iPHP::view($articletpl,'article');
             if(iPHP::$iTPLMode=="html") return array($html,$rs);
         }
     }

@@ -7,7 +7,7 @@
  * @$Id: user.tpl.php 1392 2013-05-20 12:28:08Z coolmoo $
  */
 function user_list($vars=null){
-	//return iPHP::tpl('iCMS','public.js');
+	//return iPHP::view('iCMS','public.js');
 }
 function user_category($vars=null){
 	$row      = isset($vars['row'])?(int)$vars['row']:"30";

@@ -50,7 +50,7 @@ class categoryApp{
         	list($CA_cid,$CA_psw)	= explode('#=iCMS!=#',authcode($categoryAuth,'DECODE'));
         	if($CA_psw!=md5($rs['password'])){
         		iPHP::assign('forward',__REF__);
-	        	iPHP::tpl('{iTPL}/category.password.htm','category.password');
+	        	iPHP::view('{iTPL}/category.password.htm','category.password');
 	        	exit;
         	}
         }
@@ -61,10 +61,10 @@ class categoryApp{
         if($tpl) {
             iCMS::gotohtml($iurl->path,$iurl->href,$rs['mode']);
             if(strstr($tpl,'.htm')){
-            	return iPHP::tpl($tpl,'category');
+            	return iPHP::view($tpl,'category');
             }
             $GLOBALS['page']>1 && $tpl='list';
-            $html	= iPHP::tpl($rs[$tpl.'TPL'],'category.'.$tpl);
+            $html	= iPHP::view($rs[$tpl.'TPL'],'category.'.$tpl);
             if(iPHP::$iTPLMode=="html") return array($html,$rs);
         }else{
         	return $rs;

@@ -16,7 +16,7 @@ class indexApp {
 		$iurl		= iURL::get('index',array('urlRule'=>$indexRule));
         iCMS::gotohtml($iurl->path,$iurl->href,iCMS::$config['site']['mode']);
         (iCMS::$config['site']['mode']||iPHP::$iTPLMode=="html") && iPHP::page($iurl);
-        $html	= iPHP::tpl($indexTpl);
+        $html	= iPHP::view($indexTpl);
         if(iPHP::$iTPLMode=="html") return array($html,$iurl);
     }
 }
