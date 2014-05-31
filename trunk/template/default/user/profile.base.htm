@@ -146,7 +146,7 @@
 		<dd>肤质：</dd>
 		<dt class="posr">
 		<select name="pskin" id="pskin">
-			<option selected>请选择</option>
+			<option selected><!--{iCMS:lang key='user:profile:pskin'}--></option>
 			<option value="中性肤质">中性肤质</option>
 			<option value="干性肤质">干性肤质</option>
 			<option value="油性肤质">油性肤质</option>
@@ -157,7 +157,7 @@
 		<dd>发质：</dd>
 		<dt class="posr">
 		<select id="phair" name="phair">
-			<option selected>请选择</option>
+			<option selected><!--{iCMS:lang key='user:profile:phair'}--></option>
 			<option value="油性发质">油性发质</option>
 			<option value="干性发质">干性发质</option>
 			<option value="中性发质">中性发质</option>
@@ -173,7 +173,7 @@
 	<dl>
 		<dd>个人标签：</dd>
 		<dt style="margin-bottom:5px;position:relative;">
-		<input autocomplete="off" style=" color:#999" id="user_style" name="personstyle" class=" pstyle" type="text" value="<!--{if $userdata.personstyle}--><!--{$userdata.personstyle}--><!--{else}-->多个标签之间请用逗号隔开<!--{/if}-->">
+		<input autocomplete="off" style=" color:#999" id="user_style" name="personstyle" class=" pstyle" type="text" value="<!--{if $userdata.personstyle}--><!--{$userdata.personstyle}--><!--{else}--><!--{iCMS:lang key='user:profile:personstyle'}--><!--{/if}-->">
 		<div class="tags_list"> <span class="tag">
 <ul style="margin-left: 0px;"><li rel="&lt;em&gt;你是什么粉&lt;/em&gt;？赶紧宣告天下吧！"><h4 style="display:none">标签秘籍：<em>你是什么粉</em>？赶紧宣告天下吧！</h4> <a>企鹅控</a><a>微博控</a><a>苹果控</a><a>数码控</a><a>Nokia迷</a><a>我是新国货</a><a>贾静雯迷</a><a>薇迷</a><a>华仔迷</a><a href="#" style="color:#f00" title="成为“菌丝”，一起支持卓君！" class="">菌丝</a><a>Jay迷</a><a>Jolin粉</a><a>宏迷</a><a>锋蜜</a><a>尊迷</a><a>庚饭</a><a>玉米</a><a>笔笔</a><a>凉粉</a><a>可爱多</a><a>芋头</a><a>我爱手机QQ浏览器</a><a>MJ粉</a><a>Justin迷</a></li>
 <li rel="人人都有一张&lt;em&gt;社会名片&lt;/em&gt;，你的呢？"><h4 style="display:none">标签秘籍：人人都有一张<em>社会名片</em>，你的呢？</h4><a>70后</a><a>80后</a><a>85后</a><a>90后</a><a>间歇性整理控</a><a>技术宅</a><a>蚁族</a><a href="#" class="disabled">IT民工</a><a>背包客</a><a>记者</a><a>购物狂</a><a>文艺青年</a><a>自由职业</a><a>宅男</a><a>宅女</a><a>腐女</a><a>八卦女</a><a>待解救男青年</a><a>待解救女青年</a><a>伤不起的股民</a><a href="#" class="disabled">伪愤青</a><a>外貌协会</a><a>乐活族</a><a>月光族</a></li>
@@ -185,7 +185,7 @@
 		</dt>
 		<dd>自我介绍：</dd>
 		<dt>
-		<textarea name="slogan" id="" rows="10" placeholder="随便写点什么，让大家了解你吧。"><!--{if $userdata.slogan}--><!--{$userdata.slogan}--><!--{else}-->随便写点什么，让大家了解你吧。<!--{/if}--></textarea>
+		<textarea name="slogan" id="" rows="10" placeholder="<!--{iCMS:lang key='user:profile:slogan'}-->"><!--{if $userdata.slogan}--><!--{$userdata.slogan}--><!--{else}--><!--{iCMS:lang key='user:profile:slogan'}--><!--{/if}--></textarea>
 		</dt>
 		<dd>&nbsp;&nbsp;</dd>
 		<dt>

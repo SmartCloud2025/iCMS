@@ -12,8 +12,12 @@
 defined('iPHP') OR exit('Access Denied');
 return array(
 	'profile'=>array(
-		'success' =>'修改完成！',
-		'avatar'  =>'头像上传成功！'
+		'success'     =>'修改完成！',
+		'avatar'      =>'头像上传成功！',
+		'personstyle' =>'多个标签之间请用逗号隔开',
+		'slogan'      =>"随便写点什么，让大家了解你吧。",
+		'pskin'       =>"请选择",
+		'phair'       =>"请选择",
 	),
 	'follow'=>array(
 		'success'=>'已关注！',

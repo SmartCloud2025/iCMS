@@ -52,10 +52,10 @@ class userApp {
         $slogan        = iS::escapeStr($_POST['slogan']);
         $unickEdit     = 0;
         
-        $personstyle=="多个标签之间请用逗号隔开" && $personstyle="";
-        $slogan=="随便写点什么，让大家了解你吧。" && $slogan="";
-        $pskin=="请选择" && $pskin="";
-        $phair=="请选择" && $phair="";
+        $personstyle == iPHP::lang('user:profile:personstyle') && $personstyle="";
+        $slogan      == iPHP::lang('user:profile:slogan')   && $slogan="";
+        $pskin       == iPHP::lang('user:profile:pskin') && $pskin="";
+        $phair       == iPHP::lang('user:profile:phair') && $phair="";
         
         // $user   = iDB::getRow("SELECT `nickname` FROM `#iCMS@__user` where `uid`='{$this->userid}'");
         // if($unick!=$user->nickname){

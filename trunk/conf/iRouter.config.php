@@ -9,15 +9,15 @@
 //$iURL.user.bind
 return array(
 	'/user'           => '/user.php',
-	'/user/home'      => '/user.php?do=home',
-	'/user/login'     => '/user.php?do=login',
-	'/user/logout'    => '/user.php?do=logout',
-	'/user/register'  => '/user.php?do=register',
-	'/user/findpwd'   => '/user.php?do=findpwd',
-	'/user/agreement' => '/user.php?do=agreement',
+	// '/user/login'     => '/user.php?do=login',
+	// '/user/logout'    => '/user.php?do=logout',
+	// '/user/register'  => '/user.php?do=register',
+	// '/user/findpwd'   => '/user.php?do=findpwd',
+	// '/user/agreement' => '/user.php?do=agreement',
 
 	'/user/article'  => '/user.php?do=article',
 	'/user/category' => '/user.php?do=category',
+	'/user/home'     => '/user.php?do=home',
 	'/user/favorite' => '/user.php?do=favorite',
 	'/user/publish'  => '/user.php?do=publish',
 
@@ -51,10 +51,10 @@ return array(
 	'/api/user/check'    => '/public/api.php?app=user&do=check',
 
 	'/{uid}/'           => '/user.php?do=home&uid={uid}',
-	'/{uid}/share/'     => '/user.php?do=home&uid={uid}&pg=share',
-	'/{uid}/favorite/'  => '/user.php?do=home&uid={uid}&pg=favorite',
-	'/{uid}/follower/'  => '/user.php?do=home&uid={uid}&pg=follower',
-	'/{uid}/following/' => '/user.php?do=home&uid={uid}&pg=following',
+	'/{uid}/share/'     => '/user.php?do=share&uid={uid}',
+	'/{uid}/favorite/'  => '/user.php?do=favorite&uid={uid}',
+	'/{uid}/follower/'  => '/user.php?do=follower&uid={uid}',
+	'/{uid}/following/' => '/user.php?do=following&uid={uid}',
 	'/{uid}/{cid}/'     => '/user.php?do=home&uid={uid}&cid={cid}',
 
 	'/article/{id}/'	=> '/index.php?do=article&id={id}',
