@@ -49,7 +49,7 @@ class articleApp{
         $strpos   = strpos(__REF__,'?');
         $REFERER  = $strpos===false?'':substr(__REF__,$strpos);
         $defArray = iCache::get('iCMS/defaults');
-    	include iACP::tpl("article.add");
+    	include iACP::view("article.add");
     }
     function doupdate(){
     	$sql	= iACP::iDT($_GET['iDT']);
@@ -372,7 +372,7 @@ class articleApp{
 //$explain=iDB::getRow(iDB::$last_query);
 //var_dump($explain);
         $_count		= count($rs);
-        include iACP::tpl("article.manage");
+        include iACP::view("article.manage");
 //		$mtime = microtime();
 //		$mtime = explode(' ', $mtime);
 //		$time_end = $mtime[1] + $mtime[0];

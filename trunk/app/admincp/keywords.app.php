@@ -21,7 +21,7 @@ class keywordsApp{
         	$rs['keyword']	= $_GET['keyword'];
         	$rs['url']		= $_GET['url'];
         }
-        include iACP::tpl("keywords.add");
+        include iACP::view("keywords.add");
     }
     function dosave(){
 		$id		= (int)$_POST['id'];
@@ -61,7 +61,7 @@ class keywordsApp{
 //$explain=iDB::getRow(iDB::$last_query);
 //var_dump($explain);
         $_count		= count($rs);
-    	include iACP::tpl("keywords.manage");
+    	include iACP::view("keywords.manage");
     }
     function dodel($id = null,$dialog=true){
     	$id===null && $id=$this->id;

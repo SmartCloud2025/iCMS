@@ -39,7 +39,7 @@ class pushApp{
         empty($rs['userid']) && $rs['userid']=iMember::$uId;
         $strpos 	= strpos(__REF__,'?');
         $REFERER 	= $strpos===false?'':substr(__REF__,$strpos);
-    	include iACP::tpl("push.add");
+    	include iACP::view("push.add");
     }
 
     function doiCMS(){
@@ -113,7 +113,7 @@ class pushApp{
 //$explain=iDB::getRow(iDB::last_query);
 //var_dump($explain);
         $_count=count($rs);
-        include iACP::tpl("push.manage");
+        include iACP::view("push.manage");
 //		$mtime = microtime();
 //		$mtime = explode(' ', $mtime);
 //		$time_end = $mtime[1] + $mtime[0];

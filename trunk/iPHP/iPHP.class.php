@@ -47,9 +47,9 @@ class iPHP{
         define('iPHP_URL_404',$config['router']['404']);//404定义
         
         if(iPHP_DEBUG||iPHP_TPL_DEBUG){
-            set_error_handler('iPHP_ERROR_HANDLER');
             ini_set('display_errors','ON');
             error_reporting(E_ALL & ~E_NOTICE);
+            set_error_handler('iPHP_ERROR_HANDLER');
         }
 
         $timezone = $config['time']['zone'];
@@ -114,7 +114,7 @@ class iPHP{
         }
     }
     public static function view($tpl,$p='index') {
-        $tpl OR iPHP::throwException('应用程序运行出错. 请设置模板文件', 2000,'TPL');
+        $tpl OR iPHP::throwException('应用程序运行出错. 请设置模板文件', 0010,'TPL');
         if(strpos($tpl,'APP:/')!==false){
             $tpl = 'file::'.self::$app_tpl."||".str_replace('APP:/','',$tpl);
             return iPHP::pl($tpl);
@@ -127,7 +127,7 @@ class iPHP{
         if(@is_file(iPHP_TPL_DIR."/".$tpl)) {
             return iPHP::pl($tpl);
         }else{
-        	iPHP::throwException('应用程序运行出错. 找不到模板文件 <b>' .$tpl. '</b>', 2001,'TPL');
+        	iPHP::throwException('应用程序运行出错. 找不到模板文件 <b>' .$tpl. '</b>', 0011,'TPL');
         }
     }
 
@@ -196,7 +196,7 @@ class iPHP{
 	public static function loadClass($name,$msg=''){
 		if (!class_exists($name)){
 		    $path = iPHP_CORE.'/i'.$name.'.class.php';
-			$msg && self::throwException($msg,1010);
+			$msg && self::throwException($msg,0020);
 		    self::import($path);
 	    }
 	}
@@ -260,7 +260,7 @@ class iPHP{
 		if($static) return $key;
 
 		$path   = iPHP_CONF_DIR.'/iRouter.config.php';
-		@is_file($path) OR self::throwException($path.' not exist',1013);
+		@is_file($path) OR self::throwException($path.' not exist',0013);
 
 		$router = self::import($path,true);
 
@@ -288,7 +288,7 @@ class iPHP{
 		$fname     = $app.'.lang.php';
 		$path      = iPHP_APP_CORE.'/lang/'.$fname;
 
-		@is_file($path) OR self::throwException($fname.' not exist',1015);
+		@is_file($path) OR self::throwException($fname.' not exist',0015);
 
 		$langArray = self::import($path,true);
 	
@@ -379,7 +379,7 @@ class iPHP{
     	list($label,$icon,$content)= explode(':#:',$info);
     	$msg = '<div class="iPHP-msg"><span class="label label-'.$label.'">';
     	$icon && $msg.= '<i class="fa fa-'.$icon.'"></i> ';
-    	if(strstr($content,':')){
+    	if(preg_match('/\w+:\w+/i', $content)){
     		$lang = self::lang($content);
     		$lang && $content = $lang;
     	}

@@ -54,7 +54,7 @@ class homeApp{
         $fdc  = iDB::getValue("SELECT count(*) FROM #iCMS@__filedata");
         $lc  = iDB::getValue("SELECT count(*) FROM #iCMS@__links");
 
-    	include iACP::tpl("home");
+    	include iACP::view("home");
     }
     function okORno($o) {
         return $o?'<font color=green><b>√</b></font>':'<font color=red><b>×</b></font>';

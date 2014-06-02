@@ -49,7 +49,7 @@ class categoryApp{
                 $rs['contentRule']  = $rootRs['contentRule'];
 	        }
         }
-        include iACP::tpl("category.add");
+        include iACP::view("category.add");
     }
     function dosave(){
         $cid          = (int)$_POST['cid'];
@@ -246,7 +246,7 @@ class categoryApp{
     }
     function dotree() {
         iACP::$app_do   = 'tree';
-        include iACP::tpl("category.manage");
+        include iACP::view("category.manage");
     }
     function dolist(){
         iACP::$app_do = 'list';
@@ -266,7 +266,7 @@ class categoryApp{
         iPHP::pagenav($total,$maxperpage);
         $rs           = iDB::getArray("SELECT * FROM `#iCMS@__category` {$sql} order by {$orderby} LIMIT ".iPHP::$offset." , {$maxperpage}");
         $_count       = count($rs);
-        include iACP::tpl("category.manage");
+        include iACP::view("category.manage");
     }
     function doajaxtree(){
 		$hasChildren=$_GET['hasChildren']?true:false;

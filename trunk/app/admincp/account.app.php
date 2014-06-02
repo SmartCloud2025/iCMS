@@ -34,7 +34,7 @@ class accountApp{
             $rs			= iDB::getRow("SELECT * FROM `#iCMS@__members` WHERE `uid`='$this->uid' LIMIT 1;");
             $rs->info && $rs->info	=unserialize($rs->info);
         }
-        include iACP::tpl("account.add");
+        include iACP::view("account.add");
     }
     function dosave(){
         $uid               = (int)$_POST['uid'];
@@ -85,7 +85,7 @@ VALUES ('$gid', '$username', '$password', '$nickname', '$realname', '$sex', '$in
 //$explain=iDB::getRow(iDB::$last_query);
 //var_dump($explain);
         $_count     = count($rs);
-        include iACP::tpl("user.manage");
+        include iACP::view("user.manage");
     }
     function doadmin(){
     	$this->type="1";
@@ -98,7 +98,7 @@ VALUES ('$gid', '$username', '$password', '$nickname', '$realname', '$sex', '$in
 		$month	= $job->month();
 		$pmonth	= $job->month($job->pmonth['start']);
 		$rs			= iDB::getRow("SELECT * FROM `#iCMS@__members` WHERE `uid`='$this->uid' LIMIT 1;");
-		include iACP::tpl("account.job");
+		include iACP::view("account.job");
     }
     function doiCMS(){
     	if($_GET['job']){
@@ -120,7 +120,7 @@ VALUES ('$gid', '$username', '$password', '$nickname', '$realname', '$sex', '$in
 //$explain=iDB::getRow(iDB::$last_query);
 //var_dump($explain);
         $_count		= count($rs);
-    	include iACP::tpl("account.manage");
+    	include iACP::view("account.manage");
     }
     function dobatch(){
     	$idA	= (array)$_POST['id'];

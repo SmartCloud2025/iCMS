@@ -20,7 +20,7 @@ class tagsApp{
     function doadd(){
         $this->id && $rs	= iDB::getRow("SELECT * FROM `#iCMS@__tags` WHERE `id`='$this->id' LIMIT 1;",ARRAY_A);
         $rs['metadata'] && $rs['metadata']=unserialize($rs['metadata']);
-        include iACP::tpl('tags.add');
+        include iACP::view('tags.add');
     }
     function doupdate(){
     	$sql	= iACP::iDT($_GET['iDT']);
@@ -67,7 +67,7 @@ class tagsApp{
 //$explain=iDB::getRow(iDB::$last_query);
 //var_dump($explain);
         $_count=count($rs);
-    	include iACP::tpl("tags.manage");
+    	include iACP::view("tags.manage");
     }
     function dosave(){
         $id          = (int)$_POST['id'];

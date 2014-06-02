@@ -8,7 +8,7 @@
  */
 iPHP::appClass("user","break");
 class userApp {
-    public $methods = array('iCMS','home','profile','data','check','follow','login','logout','register','agreement');
+    public $methods = array('iCMS','home','article','publish','manage','profile','data','check','follow','login','logout','register','agreement');
     public $openid  = null;
     function __construct() {
         $this->uid      = (int)$_GET['uid'];
@@ -28,7 +28,17 @@ class userApp {
         iPHP::append('user',$u,true);
         return iPHP::view('iTPL://user/home.htm');
     }
-    public function pg_base(){
+    public function domanage(){
+        $pgArray   = array('publish','category','article','comment','favorite','share','follow','fans');
+        $pg        = iS::escapeStr($_GET['pg']);
+        $pg OR $pg ='article';
+        if (in_array ($pg,$pgArray)) {
+            $this->user(true);
+            iPHP::assign('pg',$pg);
+            return iPHP::view("iTPL://user/manage.htm");         
+        }
+    }
+    public function profile_base(){
         $unick         = iS::escapeStr($_POST['unick']);
         $sex           = iS::escapeStr($_POST['sex']);
         $weibo         = iS::escapeStr($_POST['weibo']);
@@ -79,7 +89,7 @@ values ('$this->userid', '$realname', '$mobile', '$enterprise', '$address', '$zi
         }
         iPHP::OK('user:profile:success');
     }
-    public function pg_avatar(){
+    public function profile_avatar(){
         iFS::$watermark     = false;
         iFS::$checkFileData = true;
         $avatardir = dirname(get_avatar($this->userid));
@@ -89,7 +99,7 @@ values ('$this->userid', '$realname', '$mobile', '$enterprise', '$address', '$zi
         iPHP::code(1,'user:profile:avatar',$avatarurl,'json');
     }
 
-    public function pg_setpassword(){
+    public function profile_setpassword(){
 
         iPHP::seccode($_POST['validCode']) OR iPHP::alert('iCMS:seccode:error');
         
@@ -109,7 +119,7 @@ values ('$this->userid', '$realname', '$mobile', '$enterprise', '$address', '$zi
 
         $pgArray = array('base','avatar','setpassword','bind','custom');
         $pg      = iS::escapeStr($_POST['pg']);
-        $funname ='pg_'.$pg;
+        $funname ='profile_'.$pg;
         //var_dump($funname);
         if (in_array ($pg,$pgArray)) {
             $this->$funname();

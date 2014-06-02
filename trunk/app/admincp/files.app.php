@@ -23,7 +23,7 @@ class filesApp{
     }
 	function doadd(){
 		$this->id && $rs	= iFS::getFileData('id',$this->id);
-		include iACP::tpl("files.add");
+		include iACP::view("files.add");
 	}
 	function domulti(){
 		$file_upload_limit	= $_GET['UN']?$_GET['UN']:100;
@@ -31,7 +31,7 @@ class filesApp{
 		$file_size_limit	= (int)$this->upload_max_filesize;
         $file_size_limit OR iPHP::alert("检测到系统环境脚本上传文件大小限制为{$this->upload_max_filesize},请联系管理员");
         stristr($this->upload_max_filesize,'m') && $file_size_limit    = $file_size_limit*1024;
-		include iACP::tpl("files.multi");
+		include iACP::view("files.multi");
 	}
 	function doiCMS(){
     	$sql='WHERE 1=1 ';
@@ -64,7 +64,7 @@ class filesApp{
 //$explain=iDB::getRow(iDB::$last_query);
 //var_dump($explain);
         $_count		= count($rs);
-    	include iACP::tpl("files.manage");
+    	include iACP::view("files.manage");
     }
     function doIO(){
         $udir      = $_GET['udir'];
@@ -198,7 +198,7 @@ class filesApp{
         $parent = $res['parent'];
         $URI    = $res['URI'];
         $navbar = false;
-    	include iACP::tpl("files.explorer");
+    	include iACP::view("files.explorer");
     }
     function doseltpl(){
     	$this->explorer('template');
@@ -231,10 +231,10 @@ class filesApp{
         }
         $max_size  = (int)$this->upload_max_filesize;
         stristr($this->upload_max_filesize,'m') && $max_size = $max_size*1024*1024;
-        include iACP::tpl("files.editpic");
+        include iACP::view("files.editpic");
     }
     function dopreview(){
         $_GET['pic'] && $src = iFS::fp($_GET['pic'],'+http');
-        include iACP::tpl("files.preview");
+        include iACP::view("files.preview");
     }
 }

@@ -18,6 +18,6 @@ function iCMS_router($vars){
 	if($url){
 		echo iCMS::$config['router']['URL'].$url;		
 	}else{
-		echo '###';
+		echo 'javascript:;';
 	}
 }

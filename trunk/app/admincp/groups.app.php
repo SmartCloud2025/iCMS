@@ -32,7 +32,7 @@ class groupsApp{
     function doiCMS(){
     	$rs		= iDB::getArray("SELECT * FROM `#iCMS@__group` ORDER BY `type` , `gid` ASC",ARRAY_A);
 		$_count	= count($rs);
-    	include iACP::tpl("groups.manage");
+    	include iACP::view("groups.manage");
     }
     function dodel($gid = null,$dialog=true){
     	$gid===null && $gid=$this->gid;

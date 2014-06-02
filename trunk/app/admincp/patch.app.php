@@ -22,23 +22,23 @@ class patchApp{
 			if($_GET['ajax']){
 				iPHP::json(array('code'=>0));
 			}else{
-				iPHP::OK("您使用的 iCMS 版本,目前是最新版本<hr />当前版本:iCMS ".iCMS_VER." [".iCMS_RELEASE."]",0,"5");
+				iPHP::OK("您使用的 iCMS 版本,目前是最新版本<hr />当前版本：iCMS ".iCMS_VER." [".iCMS_RELEASE."]",0,"5");
 			}
 		}else{
 	    	switch(iCMS::$config['system']['patch']){
 	    		case "1"://自动下载,安装时询问
-		    		$this->msg	= iPatch::download($this->patch[1]);
-		    		$json	= array(
-		    			'code'=>"1",
-		    			'url'=>__ADMINCP__.'=patch&do=install',
-		    			'msg'=>"发现iCMS最新版本<span class='label label-warning'>iCMS ".$this->patch[0]." [".$this->patch[1]."]</span><br />".$this->patch[3]."<hr />您当前使用的版本<span class='label label-info'>iCMS ".iCMS_VER." [".iCMS_RELEASE."]</span><br /><br />新版本已经下载完成!! 是否现在更新?",
+					$this->msg = iPatch::download($this->patch[1]);
+					$json      = array(
+						'code' => "1",
+						'url'  => __ADMINCP__.'=patch&do=install',
+						'msg'  => "发现iCMS最新版本<span class='label label-warning'>iCMS ".$this->patch[0]." [".$this->patch[1]."]</span><br />".$this->patch[3]."<hr />您当前使用的版本<span class='label label-info'>iCMS ".iCMS_VER." [".iCMS_RELEASE."]</span><br /><br />新版本已经下载完成!! 是否现在更新?",
 		    		);
 	    		break;
 	    		case "2"://不自动下载更新,有更新时提示
 		    		$json	= array(
-		    			'code'=>"2",
-		    			'url'=>__ADMINCP__.'=patch&do=update',
-		    			'msg'=>"发现iCMS最新版本<span class='label label-warning'>iCMS ".$this->patch[0]." [".$this->patch[1]."]</span><br />".$this->patch[3]."<hr />您当前使用的版本<span class='label label-info'>iCMS ".iCMS_VER." [".iCMS_RELEASE."]</span><br /><br />请马上更新您的iCMS!!!",
+						'code' => "2",
+						'url'  => __ADMINCP__.'=patch&do=update',
+						'msg'  => "发现iCMS最新版本<span class='label label-warning'>iCMS ".$this->patch[0]." [".$this->patch[1]."]</span><br />".$this->patch[3]."<hr />您当前使用的版本<span class='label label-info'>iCMS ".iCMS_VER." [".iCMS_RELEASE."]</span><br /><br />请马上更新您的iCMS!!!",
 		    		);
 	    		break;
 	    	}
@@ -55,10 +55,10 @@ class patchApp{
     function doinstall(){
 		$this->msg.= iPatch::update();//更新文件
 		$this->msg.= iPatch::run();//数据库升级
-		include iACP::tpl("patch");
+		include iACP::view("patch");
     }
     function doupdate(){
 		$this->msg	= iPatch::download();//下载文件包
-		include iACP::tpl("patch");
+		include iACP::view("patch");
     }
 }

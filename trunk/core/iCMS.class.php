@@ -192,18 +192,31 @@ class iCMS {
 	    $cache		= iCache::get(array('iCMS/word.filter','iCMS/word.disable'));
 	    $filter		= $cache['iCMS/word.filter'];//filter过滤
 	    $disable    = $cache['iCMS/word.disable'];//disable禁止
-	    //禁止关键词
-	    foreach ((array)$disable AS $val) {
-	        if ($val && preg_match("/".preg_quote($val, '/')."/i", $content)) {
-	            return $val;
-	        }
-	    }
-	    //过滤关键词
-	    foreach ((array)$filter AS $k =>$val) {
-	        empty($val[1]) && $val[1]='***';
-	        $val[0] && $content = preg_replace("/".preg_quote($val[0], '/')."/i",$val[1],$content);
-	    }
-	}
+        //禁止关键词
+        $subject = $content;
+        $pattern = '/(~|`|!|@|\#|\$|%|\^|&|\*|\(|\)|\-|=|_|\+|\{|\}|\[|\]|;|:|"|\'|<|>|\?|\/|,|\.|\s|\n|。|，|、|；|：|？|！|…|-|·|ˉ|ˇ|¨|‘|“|”|々|～|‖|∶|＂|＇|｀|｜|〃|〔|〕|〈|〉|《|》|「|」|『|』|．|〖|〗|【|】|（|）|［|］|｛|｝|°|′|″|＄|￡|￥|‰|％|℃|¤|￠|○|§|№|☆|★|○|●|◎|◇|◆|□|■|△|▲|※|→|←|↑|↓|〓|＃|＆|＠|＾|＿|＼|№|)*/i';
+        $subject = preg_replace($pattern, '', $subject);
+        foreach ((array)$disable AS $val) {
+            if(strpos($val,'::')!==false){
+                list($tag,$start,$end) = explode('::',$val);
+                if($tag=='NUM'){
+                    $subject = cnNum($subject);
+                    if (preg_match('/\d{'.$start.','.$end.'}/i', $subject)) {
+                        return $val;
+                    }
+                }
+            }else{
+                if ($val && preg_match("/".preg_quote($val, '/')."/i", $subject)) {
+                    return $val;
+                }
+            }
+        }
+        //过滤关键词
+        foreach ((array)$filter AS $k =>$val) {
+            empty($val[1]) && $val[1]='***';
+            $val[0] && $content = preg_replace("/".preg_quote($val[0], '/')."/i",$val[1],$content);
+        }
+    }
 	//内链
     public static function keywords($a) {
         if(self::$config['other']['kwCount']==0) return $a;
@@ -385,4 +398,22 @@ function autoformat2($html){
     }
     $html   = implode("",$htmlArray);
     return addslashes($html);
+}
+function cnNum($subject){
+    $searchList = array(
+        array('ⅰ','ⅱ','ⅲ','ⅳ','ⅴ','ⅵ','ⅶ','ⅷ','ⅸ','ⅹ'),
+        array('㈠','㈡','㈢','㈣','㈤','㈥','㈦','㈧','㈨','㈩'),
+        array('①','②','③','④','⑤','⑥','⑦','⑧','⑨','⑩'),
+        array('一','二','三','四','五','六','七','八','九','十'),
+        array('零','壹','贰','叁','肆','伍','陆','柒','捌','玖','拾'),
+        array('Ⅰ','Ⅱ','Ⅲ','Ⅳ','Ⅴ','Ⅵ','Ⅶ','Ⅷ','Ⅸ','Ⅹ','Ⅺ','Ⅻ'),
+        array('⑴','⑵','⑶','⑷','⑸','⑹','⑺','⑻','⑼','⑽','⑾','⑿','⒀','⒁','⒂','⒃','⒄','⒅','⒆','⒇'),
+        array('⒈','⒉','⒊','⒋','⒌','⒍','⒎','⒏','⒐','⒑','⒒','⒓','⒔','⒕','⒖','⒗','⒘','⒙','⒚','⒛')
+    );
+    $replace = array(1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20);
+    foreach ($searchList as $key => $search) {
+        $subject = str_replace($search, $replace, $subject);
+    }
+
+    return $subject;
 }

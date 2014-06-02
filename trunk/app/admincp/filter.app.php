@@ -18,7 +18,7 @@ class filterApp{
         foreach((array)$filter AS $k=>$val) {
             $filterArray[$k]=implode("=",(array)$val);
         }
-    	include iACP::tpl("filter");
+    	include iACP::view("filter");
     }
     function dosave(){
         $disable	= explode("\n",iS::escapeStr($_POST['disable']));

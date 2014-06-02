@@ -47,7 +47,7 @@ class iACP {
 	function frame(){
 		self::$frames	= $_GET['frames']?$_GET['frames']:$_POST['frames'];
 		if(empty($_GET['app']) || self::$frames) {
-			include self::tpl("admincp");
+			include self::view("admincp");
 			exit;
 		}
 	}
@@ -91,7 +91,7 @@ class iACP {
         return new $appName();
     }
 
-    function tpl($p = NULL) {
+    function view($p = NULL) {
         if ($p === NULL && self::$app_name) {
             $p = self::$app_name;
             self::$app_do && $p.='.' . self::$app_do;
@@ -100,12 +100,12 @@ class iACP {
     }
 
     function head($navbar = true) {
-        include self::tpl("header");
-		$navbar && include self::tpl("navbar");
+        include self::view("header");
+		$navbar && include self::view("navbar");
     }
 
     function foot() {
-        include self::tpl("footer");
+        include self::view("footer");
     }
 
     //--------------------------function------------------------
@@ -169,7 +169,7 @@ class iACP {
     }
     function cacheConfig($config=null){
     	$config===null && $config = iACP::getConfig(0);
-     	$output = "<?php\ndefined('iPHP') OR exit('Access Denied');\n\$GLOBALS['iCONFIG']\t= ";
+     	$output = "<?php\ndefined('iPHP') OR exit('Access Denied');\nreturn ";
     	$output.= var_export($config,true);
     	$output.= ';';
     	iFS::write(iPHP_APP_CONF.'/config.php',$output);

@@ -22,7 +22,7 @@ class menuApp{
         }else{
         	$rootid	= $_GET['rootid'];
         }
-        include iACP::tpl("menu.add");
+        include iACP::view("menu.add");
     }
     function doaddseparator(){
     	$rootid	= $_GET['rootid'];
@@ -43,7 +43,7 @@ class menuApp{
     	$this->domanage();
     }
     function domanage($doType=null) {
-        include iACP::tpl("menu.manage");
+        include iACP::view("menu.manage");
     }
     function doajaxtree(){
 		$hasChildren=$_GET['hasChildren']?true:false;
@@ -103,7 +103,7 @@ class menuApp{
     		$caret		= '<b class="caret"></b>';
     	}else if($data_toggle=="modal"){
     		$data_meta	OR	$data_meta	= '{"width":"800px","height":"600px"}';
-    		$data_target	= '#iCMS_DIALOG';
+    		$data_target	= '#iCMS_MODAL';
     	}
 		if($id){
     		iDB::query("UPDATE `#iCMS@__menu` SET `rootid`='$rootid', `orderNum`='$orderNum', `app`='$app', `name`='$name', `title`='$title', `href`='$href', `icon`='$icon', `class`='$class', `a_class`='$a_class', `target`='$target', `caret`='$caret', `data-toggle`='$data_toggle', `data-meta`='$data_meta', `data-target`='$data_target' WHERE `id`='$id';");

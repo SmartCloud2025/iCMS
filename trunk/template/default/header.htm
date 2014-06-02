@@ -16,15 +16,15 @@
           <ul class="dropdown-menu iCMS_hover" id="iCMS_user_menu">
             <li> <a href="<!--{iCMS:router url='/user/home'}-->" target="_blank"> <i class="fa fa-user"></i> 我的主页</a> </li>
             <li> <a href="<!--{iCMS:router url='/user/article'}-->" target="_blank"> <i class="fa fa-cog"></i> 我的文章</a> </li>
-            <li> <a href="<!--{iCMS:router url='/user/favorite'}-->" target="_blank"> <i class="fa fa-cog"></i> 我的收藏</a> </li>
+            <li> <a href="<!--{iCMS:router url='/user/comment'}-->" target="_blank"> <i class="fa fa-cog"></i> 我的评论</a> </li>
             <li> <a href="<!--{iCMS:router url='/user/profile'}-->" target="_blank"> <i class="fa fa-cog"></i> 设置</a> </li>
-            <li> <a href="###" class="iCMS_user_logout" target="_blank"> <i class="fa fa-power-off"></i> 退出</a> </li>
+            <li> <a href="javascript:;" class="iCMS_user_logout" target="_blank"> <i class="fa fa-power-off"></i> 退出</a> </li>
           </ul>
         </div>
-        <span><a href="<!--{iCMS:router url='/user/home'}-->"><i class="fa fa-edit"></i> 发表文章</a></span>
+        <span><a href="<!--{iCMS:router url='/user/publish'}-->"><i class="fa fa-edit"></i> 发表文章</a></span>
       </div>
       <div class="clearfix mb5"></div>
-      <form class="form-inline" action="http://m.ladyband.com/search">
+      <form class="form-inline" action="<!--{iCMS:router url='/api/search'}-->">
         <div class="input-append">
           <input type="text" name="q" class="span4">
           <button type="submit" class="btn" ><i class="fa fa-search"></i> 搜索</button>

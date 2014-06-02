@@ -30,7 +30,7 @@ class pushcategoryApp extends categoryApp {
             $rs['status']		= '1';
             $rs['orderNum']		= '0';
         }
-        include iACP::tpl("pushcategory.add");
+        include iACP::view("pushcategory.add");
     }
     function merge($tocid,$cid){
         iDB::query("UPDATE `#iCMS@__push` SET `cid` ='$tocid' WHERE `cid` ='$cid'"); 

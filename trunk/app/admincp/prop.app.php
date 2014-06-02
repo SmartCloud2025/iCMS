@@ -20,7 +20,7 @@ class propApp{
         	$this->pid=0;
         	$rs['val']='';
         }
-        include iACP::tpl("prop.add");
+        include iACP::view("prop.add");
     }
     function dosave(){
 		$pid		= (int)$_POST['pid'];
@@ -116,7 +116,7 @@ WHERE `pid` = '$pid';");
 //$explain=iDB::getRow(iDB::$last_query);
 //var_dump($explain);
         $_count	= count($rs);
-    	include iACP::tpl("prop.manage");
+    	include iACP::view("prop.manage");
     }
     function cache(){
     	$rs	= iDB::getArray("SELECT * FROM `#iCMS@__prop`",ARRAY_A);

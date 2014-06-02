@@ -21,7 +21,7 @@ class linksApp{
         	$rs['keyword']	= $_GET['keyword'];
         	$rs['url']		= $_GET['url'];
         }
-        include iACP::tpl("links.add");
+        include iACP::view("links.add");
     }
     function dosave(){
 		$id			= (int)$_POST['id'];
@@ -66,7 +66,7 @@ class linksApp{
 //$explain=iDB::getRow(iDB::$last_query);
 //var_dump($explain);
         $_count		= count($rs);
-    	include iACP::tpl("links.manage");
+    	include iACP::view("links.manage");
     }
     function dodel($id = null,$dialog=true){
     	$id===null && $id=$this->id;

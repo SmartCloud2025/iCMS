@@ -13,7 +13,7 @@ class commentApp{
     function __construct() {
     }
     function doiCMS(){
-    	include iACP::tpl("comment.manage");
+    	include iACP::view("comment.manage");
     }
 
 }

@@ -21,7 +21,7 @@ class htmlApp{
         $this->alltime = $_GET['alltime']?$_GET['alltime']:0;
     }
     function doindex(){
-    	include iACP::tpl("html.index");
+    	include iACP::view("html.index");
     }
     function docreateIndex(){
     	$indexTPL	= iCMS::$config['site']['indexTPL']	= $this->PG['indexTPL'];
@@ -79,7 +79,7 @@ class htmlApp{
     }
     function docategory(){
     	$this->category		= iPHP::appClass("category",iCMS_APP_ARTICLE);
-    	include iACP::tpl("html.category");
+    	include iACP::view("html.category");
     }
     function docreateCategory($cid=0,$p=1,$loop=1){
 		$category	= $this->PG['cid'];
@@ -170,7 +170,7 @@ class htmlApp{
     }
     function doarticle(){
     	$this->category		= iPHP::appClass("category",iCMS_APP_ARTICLE);
-    	include iACP::tpl("html.article");
+    	include iACP::view("html.article");
     }
     function docreateArticle($aid=null){
 		$category	= $this->PG['cid'];

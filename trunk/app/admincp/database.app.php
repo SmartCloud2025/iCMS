@@ -23,7 +23,7 @@ class databaseApp{
     	$pwd	= $res['pwd'];
     	$parent	= $res['parent'];
     	$URI	= $res['URI'];
-		include iACP::tpl("database.recover");
+		include iACP::view("database.recover");
 	}
 	function dorepair(){
 		$this->dobackup();
@@ -39,10 +39,10 @@ class databaseApp{
 //				$oTable[] = $rs[$i];
 //			}
 //		}
-    	include iACP::tpl("database.backup");
+    	include iACP::view("database.backup");
     }
     function doreplace(){
-    	include iACP::tpl("database.replace");
+    	include iACP::view("database.replace");
     }
     function dobatch(){
     	$tableA	= (array)$_POST['table'];

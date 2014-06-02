@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+    <title><!--{$site.title}-->_<!--{$site.seotitle}--></title>
+    <meta name="keywords" content="<!--{$site.keywords}-->" />
+    <meta name="description" content="<!--{$site.description}-->"/>
+    <!--{iCMS:public:ui}-->
+    <link rel="stylesheet" href="<!--{$site.urls.ui}-->/user-6.0.0.css" type="text/css" />
+    <link rel="stylesheet" href="<!--{$site.urls.public}-->/theme/default.css" type="text/css" />
+  </head>
+  <body>
+    <!--{include file="{iTPL}/header.htm"}-->
+    <div id="body_wrap" class="clearfix">
+      <div class="profile_box">
+        <div class="piece">
+          <div class="piece_hd"> <b class="hl"></b> <b class="hr"></b> </div>
+          <div class="piece_bd clearfix">
+            <div class="pro_sidebar fl">
+              <h1><i class="icon_user"></i> 我的内容</h1>
+              <div class="base_info">
+                <p class="clearfix"><a href="<!--{iCMS:router url='/user/publish'}-->"<!--{if $pg=="publish"}--> class="c"<!--{/if}-->><i class="fa fa-edit"></i> 发表文章</a></p>
+                <p class="clearfix"><a href="<!--{iCMS:router url='/user/category'}-->"<!--{if $pg=="category"}--> class="c"<!--{/if}-->>我的分类</a></p>
+                <p class="clearfix"><a href="<!--{iCMS:router url='/user/article'}-->"<!--{if $pg=="article"}--> class="c"<!--{/if}-->>我的文章</a></p>
+                <p class="clearfix"><a href="<!--{iCMS:router url='/user/comment'}-->"<!--{if $pg=="comment"}--> class="c"<!--{/if}-->>我的评论</a></p>
+                <p class="clearfix"><a href="<!--{iCMS:router url='/user/manage/favorite'}-->"<!--{if $pg=="favorite"}--> class="c"<!--{/if}-->>我的收藏</a></p>
+                <p class="clearfix"><a href="<!--{iCMS:router url='/user/manage/share'}-->"<!--{if $pg=="share"}--> class="c"<!--{/if}-->>我的分享</a></p>
+                <p class="clearfix"><a href="<!--{iCMS:router url='/user/manage/follow'}-->"<!--{if $pg=="follow"}--> class="c"<!--{/if}-->>我的关注</a></p>
+                <p class="clearfix"><a href="<!--{iCMS:router url='/user/manage/fans'}-->"<!--{if $pg=="fans"}--> class="c"<!--{/if}-->>我的粉丝</a></p>
+              </div>
+            </div>
+            <div class="pro_contents fl">
+              <div id="profile_form">
+                <div class="profile_basic">
+                  <form action="<!--{iCMS:router url='/user'}-->" method="post" target="iCMS_FRAME">
+                  <input name="action" type="hidden" value="manage" />
+                  <input name="pg" type="hidden" value="<!--{$pg}-->" />
+                  <!--{switch from=$pg}-->
+                  <!--{case value="publish"}-->
+                  <!--{include file="./manage/publish.htm" import="true"}-->
+                  <!--{case value="category"}-->
+                  <!--{include file="./manage/category.htm" import="true"}-->
+                  <!--{case value="article"}-->
+                  <!--{include file="./manage/article.htm" import="true"}-->
+                  <!--{case value="comment"}-->
+                  <!--{include file="./manage/comment.htm" import="true"}-->
+                  <!--{case value="favorite"}-->
+                  <!--{include file="./manage/favorite.htm" import="true"}-->
+                  <!--{case value="share"}-->
+                  <!--{include file="./manage/share.htm" import="true"}-->
+                  <!--{case value="follow"}-->
+                  <!--{include file="./manage/follow.htm" import="true"}-->
+                  <!--{case value="fans"}-->
+                  <!--{include file="./manage/fans.htm" import="true"}-->
+                  <!--{/switch}-->
+                </form>
+              </div>
+            </div>
+          </div>
+        </div>
+        
+      </div>
+      <div class="piece_ft"> <b class="fl"></b> <b class="fr"></b> </div>
+    </div>
+  </div>
+</div>
+<iframe width="0" height="0" style="display:none" id="iCMS_FRAME" name="iCMS_FRAME"></iframe>
+<!--{include file="{iTPL}/footer.htm"}-->
+</body>
+</html>
