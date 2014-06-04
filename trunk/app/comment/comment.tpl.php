@@ -6,9 +6,17 @@
  * @author coolmoo <idreamsoft@qq.com>
  * @$Id: comment.tpl.php 2408 2014-04-30 18:58:23Z coolmoo $
  */
-function comment_list($vars){	
-	$appid		= (int)$vars['appid'];
-	$whereSQL	= "`appid`='$appid' AND `status`='1'";
+function comment_list($vars){
+	if ($vars['display']) {
+		$vars['do'] = 'list';
+		unset($vars['method']);
+		iPHP::assign('query',http_build_query($vars));
+		iPHP::view("iCMS://comment/list.{$vars['display']}.htm");
+		return;
+	}
+
+	$appid    = (int)$vars['appid'];
+	$whereSQL = "`appid`='$appid' AND `status`='1'";
 
     if(isset($vars['cid'])){
         $cids	= $vars['sub']?iCMS::getIds($vars['cid'],true):$vars['cid'];
@@ -104,12 +112,12 @@ function comment_form($vars){
 		case 'frame':
 			//iPHP::assign('iCMS_CFF_Id','iCMS_CFF_'.random(5));
 			$vars['style'] OR $vars['style']='width:0px;height:0px;';
-			$tpl	= 'comment.form.iframe';
+			$tpl	= 'form.iframe';
 			break;
 		default:
-			$tpl	= 'comment.form.default';
+			$tpl	= 'form.default';
 			break;
 	}
 	iPHP::assign('comment',$vars);
-	return iPHP::view('iCMS://'.$tpl.'.htm');
+	return iPHP::view('iCMS://comment/'.$tpl.'.htm');
 }

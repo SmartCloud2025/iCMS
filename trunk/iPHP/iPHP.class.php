@@ -464,21 +464,15 @@ class iPHP{
 
 	//翻页函数
 	public static function pagenav($total,$displaypg=20,$unit="条记录",$url='',$target='') {
-	    $displaypg	= intval($displaypg);
-	    $page		= $GLOBALS["page"]?intval($GLOBALS["page"]):1;
-	    $lastpg		= ceil($total/$displaypg); //最后页，也是总页数
-	    $page		= min($lastpg,$page);
-	    $prepg		= (($page-1)<0)?"0":$page-1; //上一页
-	    $nextpg		= ($page==$lastpg ? 0 : $page+1); //下一页
+		$displaypg = intval($displaypg);
+		$page      = $GLOBALS["page"]?intval($GLOBALS["page"]):1;
+		$lastpg    = ceil($total/$displaypg); //最后页，也是总页数
+		$page      = min($lastpg,$page);
+		$prepg     = (($page-1)<0)?"0":$page-1; //上一页
+		$nextpg    = ($page==$lastpg ? 0 : $page+1); //下一页
+		$url       = buildurl($url,array('totalNum'=>$total,'page'=>''));
 	    self::$offset	= ($page-1)*$displaypg;
 	    self::$offset<0 && self::$offset=0;
-	    $url OR $url= $_SERVER["REQUEST_URI"];
-	    $urlA	= parse_url($url);
-	    parse_str($urlA["query"], $query);
-	    $query['totalNum']	= $total;
-	    $query['page']		= "";
-	    $urlA["query"]		= http_build_query($query);
-	    $url	= $urlA["path"].'?'.$urlA["query"];
 	    self::$pagenav="<ul><li><a href='{$url}1' target='_self'>首页</a></li>";
 	    self::$pagenav.=$prepg?"<li><a href='{$url}$prepg' target='_self'>上一页</a></li>":'<li class="disabled"><a href="#">上一页</a></li>';
 	    $flag=0;

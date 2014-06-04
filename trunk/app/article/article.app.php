@@ -133,7 +133,13 @@ class articleApp {
         }
 		$rs->pic && $rs->pic_url=iFS::fp($rs->pic,'+http');
         $rs->appid	= iCMS_APP_ARTICLE;
-        
+        // iCMS::hooks('article',array(
+        //     'appid' => $rs->appid,
+        //     'cid'   => $rs->cid,
+        //     'ctype' => $rs->cid,
+        //     'iid'   => $rs->id,
+        //     'title' => $rs->title,
+        // ));
         iPHP::assign('article',(array)$rs);
         
         if($tpl) {

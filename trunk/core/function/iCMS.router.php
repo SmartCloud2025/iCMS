@@ -15,6 +15,8 @@ function iCMS_router($vars){
 	unset($vars['url'],$vars['app']);
 //	var_dump($vars);
 	$url = iPHP::router($ukey,iCMS_REWRITE);
+	$vars['query'] && $url = buildurl($url,$vars['query']);
+	
 	if($url){
 		echo iCMS::$config['router']['URL'].$url;		
 	}else{

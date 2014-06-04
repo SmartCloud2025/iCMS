@@ -20,7 +20,7 @@ class commentApp {
         $vars['title']   = iS::escapeStr($_GET['title']);
         $vars['display'] = $_GET['display'];
         iPHP::assign('comment',$vars);
-        return iPHP::view('iCMS://comment.form.default.htm');
+        return iPHP::view('iCMS://comment/form.default.htm');
     }
     public function API_like(){
         $this->id OR iPHP::code(0,'iCMS:article:empty_id',0,'json');
@@ -35,7 +35,7 @@ class commentApp {
         iPHP::assign('appid',iCMS_APP_ARTICLE);
         iPHP::assign('id',(int)$_GET['id']);
         iPHP::assign('iid',(int)$_GET['iid']);
-        iPHP::view('iCMS://comment.api.json.htm');
+        iPHP::view('iCMS://comment/api.json.htm');
     }
     public function ACTION_add(){
         $iid        = (int)$_POST['iid'];

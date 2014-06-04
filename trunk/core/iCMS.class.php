@@ -24,7 +24,7 @@ class iCMS {
     public static $app_file    = null;
     public static $app_args    = null;
     public static $app_vars    = null;
-    public static $HOOK        = array();
+    public static $hooks       = array();
     
 	public static function Init(){
         self::$config = iPHP::config();
@@ -55,12 +55,12 @@ class iCMS {
             'url'         => $router['URL'],
             '404'         => $router['404'],
             'urls'        => array(
-                "ui"     => $router['publicURL'].'/ui',
-                "lib"    => $router['publicURL'].'/lib',
-                "public" => $router['publicURL'],
-                "user"   => $router['userURL'],
-                "avatar" => rtrim(self::$config['FS']['url'],'/').'/avatar/',
-                "res"    => self::$config['FS']['url'],
+                    "ui"     => $router['publicURL'].'/ui',
+                    "lib"    => $router['publicURL'].'/lib',
+                    "public" => $router['publicURL'],
+                    "user"   => $router['userURL'],
+                    "avatar" => rtrim(self::$config['FS']['url'],'/').'/avatar/',
+                    "res"    => self::$config['FS']['url'],
 			)
 		));
         iPHP::$dialogTitle  = self::$config['site']['name'];
@@ -165,8 +165,9 @@ class iCMS {
 		$GLOBALS['TBAPI'] = new TBAPI;
 		return $GLOBALS['TBAPI'];
     }
-    public static function Hook($key,$value){
-		self::$HOOK[$key]	= $value;
+    public static function hooks($key,$array){
+        self::$hooks['app'] = $key;
+        self::$hooks[$key]  = $array;
     }
     //------------------------------------
     public static function gotohtml($fp,$url='',$fmode='0') {

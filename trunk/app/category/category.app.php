@@ -46,8 +46,8 @@ class categoryApp{
 	        $rs['parent']['link']	= "<a href='{$rs['parent']['url']}'>{$rs['parent']['name']}</a>";
         }
         if($rs['password']){
-        	$categoryAuth	= iPHP::getCookie('categoryAuth_'.$id);
-        	list($CA_cid,$CA_psw)	= explode('#=iCMS!=#',authcode($categoryAuth,'DECODE'));
+            $categoryAuth         = iPHP::getCookie('categoryAuth_'.$id);
+            list($CA_cid,$CA_psw) = explode('#=iCMS!=#',authcode($categoryAuth,'DECODE'));
         	if($CA_psw!=md5($rs['password'])){
         		iPHP::assign('forward',__REF__);
 	        	iPHP::view('{iTPL}/category.password.htm','category.password');

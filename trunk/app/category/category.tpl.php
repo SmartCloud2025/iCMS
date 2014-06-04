@@ -8,8 +8,8 @@
  */
 function category_array($vars){
 	$id		= (int)$vars['cid'];
-	$rs		= iCache::get('system/category/'.$id);
-	empty($rs) && iPHP::throwException('应用程序运行出错.找不到该栏目: <b>cid:'. $id.'</b>', 3002);
+	$rs		= iCache::get('iCMS/category/'.$id);
+	empty($rs) && iPHP::throwException('搴旂敤绋嬪簭杩愯鍑洪敊.鎵句笉鍒拌鏍忕洰: <b>cid:'. $id.'</b>', 3002);
 	if($rs['url']) {
 		$gourl=(isset($vars['gotourl']) && $vars['gotourl']==0)?false:true;
 		if($gourl) return iPHP::gotourl($rs['url']);
@@ -18,7 +18,7 @@ function category_array($vars){
 	$rs['url']	= $iurl->href;
 	$rs['link']	= "<a href='{$rs['url']}'>{$rs['name']}</a>";
 	//$rs['nav']	= $iCMS->shownav($rs['cid']);
-	$rootidA		= iCache::get('system/category/rootid');
+	$rootidA		= iCache::get('iCMS/category/rootid');
 	$rs['subid']    = $rootidA[$id];
 	$rs['subids']   = implode(',',(array)$rs['subid']);
 	return $rs;
@@ -50,7 +50,7 @@ function category_list($vars){
 			$whereSQL.= iPHP::andSQL(iCMS::getIds($vars['cid'],false),'cid');
 		break;
 		case "self":
-			$parent=iCache::get('system/category/parent',$vars['cid']);
+			$parent=iCache::get('iCMS/category/parent',$vars['cid']);
 			$whereSQL.=" AND `rootid`='$parent'";
 		break;
 	}
@@ -59,7 +59,7 @@ function category_list($vars){
 		$rs			= iCache::get($cacheName);
 	}
 	if(empty($rs)){
-		$rootidA= iCache::get('system/category/rootid');
+		$rootidA= iCache::get('iCMS/category/rootid');
 		$rs		= iDB::getArray("SELECT * FROM `#iCMS@__category`{$whereSQL} ORDER BY `orderNum`,`cid` ASC LIMIT $row");
 		$_count	= count($rs);
 		for ($i=0;$i<$_count;$i++){

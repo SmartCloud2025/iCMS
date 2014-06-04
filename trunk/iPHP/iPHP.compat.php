@@ -19,11 +19,12 @@ if (!function_exists('gc_collect_cycles')) {
 	}
 }
 
-function buildurl($url=false,$str='') {
+function buildurl($url=false,$qs='') {
 	$url	OR $url	= $_SERVER["REQUEST_URI"];
 	$urlA	= parse_url($url);
 	parse_str($urlA['query'], $query1);
-	parse_str($str, $query2);
+    $query2 = $qs;
+    is_array($qs) OR parse_str($qs, $query2);
 	$query         = array_merge($query1,$query2);
 	$urlA['query'] = http_build_query($query); 
 	$nurl          = glue_url($urlA);
