@@ -123,11 +123,11 @@ class iS {
 				unset($GLOBALS[$key]);
 			}
 		}
+
 		if (!get_magic_quotes_gpc()) {
 			iS::slashes($_POST);
 			iS::slashes($_GET);
 			iS::slashes($_COOKIE);
-			iS::slashes($_FILES);
 		}
 		iS::getServer(array('HTTP_REFERER','HTTP_HOST','HTTP_X_FORWARDED_FOR','HTTP_USER_AGENT',
 							'HTTP_CLIENT_IP','HTTP_SCHEME','HTTPS','PHP_SELF',

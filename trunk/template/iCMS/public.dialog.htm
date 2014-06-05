@@ -1,5 +1,5 @@
-<div id="iPHP_DIALOG" class="hide"><img src="<!--{$site.urls.ui}-->/img/loading.gif" /> 加载中,请稍侯......</div>
-<div id="iCMS_MODAL" class="modal hide">
+<div id="iPHP-DIALOG" class="hide"><img src="<!--{$site.urls.ui}-->/img/loading.gif" /> 加载中,请稍侯......</div>
+<div id="iCMS-MODAL" class="modal hide">
   <div class="modal-header">
     <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
     <h3>iCMS 提示</h3>
@@ -8,34 +8,34 @@
     <p class="modal-loading"><img src="<!--{$site.urls.ui}-->/img/loading.gif" /> 加载中,请稍侯......</p>
   </div>
 </div>
-<div id="iCMS_login_box">
-  <div class="iCMS_login_box">
+<div id="iCMS-login-box">
+  <div class="iCMS-login-wrap">
     <div class="login_box">
       <p class="login_fail err_uname err_seccode"></p>
       <div class="login_form">
         <dl>
           <dd>用户名：</dd>
           <dt>
-          <input type="text" name="uname" id="iCMS_uname" value="<!--{iCMS:lang key='user:login:def_uname'}-->">
+          <input type="text" name="uname" id="iCMS-uname" value="<!--{iCMS:lang key='user:login:def_uname'}-->">
           </dt>
           <dd>密 码：</dd>
           <dt>
-          <input type="password" name="pass" id="iCMS_pass">
+          <input type="password" name="pass" id="iCMS-pass">
           </dt>
           <!--{if $iCMS.config.user.loginseccode}-->
           <dd>验证码：</dd>
           <dt>
-          <input id="iCMS_seccode" type="text" maxlength="4" name="seccode" class="r3">
-          <img class="r3" id="iCMS_seccode_img" src="<!--{iCMS:router url='/api/seccode'}-->" /> <a href="javascript:void(0);" id="iCMS_seccode_text" style="float: none">换一张</a>
+          <input id="iCMS-seccode" type="text" maxlength="4" name="seccode" class="r3">
+          <img class="r3" id="iCMS-seccode-img" src="<!--{iCMS:router url='/api/seccode'}-->" /> <a href="javascript:void(0);" id="iCMS-seccode-text" style="float: none">换一张</a>
           </dt>
           <!--{/if}-->
           <dd>&nbsp;</dd>
           <dt class="rem">
-          <input type="checkbox" name="remember" id="iCMS_remember" class="checkbox" value="1">
+          <input type="checkbox" name="remember" id="iCMS-remember" class="checkbox" value="1">
           两周内免登录</dt>
           <dd>&nbsp;</dd>
           <dt>
-          <input type="button" class="iCMS_loginBtn btn btn-primary" value="登 陆">
+          <input type="button" class="iCMS-loginBtn btn btn-primary" value="登 陆">
           <a href="<!--{iCMS:router url='/api/user/findpwd'}-->">忘记密码？</a></dt>
         </dl>
       </div>
@@ -54,7 +54,7 @@
 <script type="text/javascript">
 <!--{include file="/iCMS/login.js"}-->
 </script>
-<div id="iCMS_comment_report">
+<div id="iCMS-comment-report">
   <div class="report_dialog">
     <div class="header">请选择理由</div>
     <ul class="options clearfix">

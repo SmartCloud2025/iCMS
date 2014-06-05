@@ -406,7 +406,7 @@ class iFS {
         $fid = self::insFileData(array('filename' => $file_md5, 'ofilename' => '', 'path' => $FileDir, 'ext' => $FileExt, 'size' => $FileSize), 2);
         return array('code' =>1,'fid' => $fid, 'md5' => $file_md5, 'size' => $FileSize, 'oname' => '', 'name' => $FileName, 'fname' => $FileName . "." . $FileExt, 'dir' => $FileDir, 'ext' => $FileExt, 'RootPath' => $FileRootPath, 'path' => $FilePath, 'dirRootPath' => $RootPath);
 	}
-    public static function upload($field, $udir = '', $FileName = '') {
+    public static function upload($field, $udir = '', $FileName = '',$ext='') {
         list($RootPath,$FileDir) = self::mk_udir($udir); // 文件保存目录方式
         
         if ($_FILES[$field]['name']) {
@@ -446,7 +446,8 @@ class iFS {
 	            if ($frs) {
 	                return array('code' =>1,'fid' => $frs->id, 'md5' => $frs->filename, 'size' => $frs->size, 'oname' => $frs->ofilename, 'name' => $frs->filename, 'fname' => $frs->filename . "." . $frs->ext, 'dir' => $frs->path, 'ext' => $frs->ext, 'RootPath' => $RootPath . '/' . $frs->path . '/' . $frs->filename . "." . $frs->ext, 'path' => $frs->path . '/' . $frs->filename . "." . $frs->ext, 'dirRootPath' => $RootPath . '/' . $frs->path);
 	            }
-	            $FileName OR $FileName = $file_md5;
+                $FileName OR $FileName = $file_md5;
+                $ext && $FileExt       = $ext;
                 $FileSize     = @filesize($tmp_file);
                 $FilePath     = $FileDir . $FileName . "." . $FileExt;
                 $FileRootPath = $RootPath . $FileName . "." . $FileExt;

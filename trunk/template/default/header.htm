@@ -2,23 +2,23 @@
   <div class="header-content">
     <div class="search pull-right">
       <div class="tools pull-right"> <a href="#"><i class="fa fa-rss"></i> 订阅</a> <a href="#"><i class="fa fa-bookmark fa-1"></i> 收藏</a> </div>
-      <div class="nav_login" id="iCMS_nav_login">
-        <a href="<!--{iCMS:router url='/api/user/login'}-->" class="iCMS_LoginBox" title="登录"><i class="fa fa-user"></i> 登录</a>
+      <div class="nav_login" id="iCMS-nav-login">
+        <a href="<!--{iCMS:router url='/api/user/login'}-->" class="iCMS-user-login" title="登录"><i class="fa fa-user"></i> 登录</a>
         <a href="<!--{iCMS:router url='/api/user/register'}-->" target="_blank"><i class="fa fa-heart"></i> 注册</a>
       </div>
-      <div class="nav_profile" id="iCMS_nav_profile">
+      <div class="nav_profile" id="iCMS-nav-profile">
         <div class="top_nav_profile">
-          <a class="iCMS_user_home hover-toggle" href="<!--{iCMS:router url='/user/home'}-->">
+          <a class="iCMS-user-home hover-toggle" href="<!--{iCMS:router url='/user/home'}-->">
           <img class="avatar" src="<!--{$site.urls.ui}-->/avatar.gif">
           <span class="name">iCMS</span>
           <b class="caret"></b>
           </a>
-          <ul class="dropdown-menu iCMS_hover" id="iCMS_user_menu">
+          <ul class="dropdown-menu iCMS-hover" id="iCMS-user-menu">
             <li> <a href="<!--{iCMS:router url='/user/home'}-->" target="_blank"> <i class="fa fa-user"></i> 我的主页</a> </li>
             <li> <a href="<!--{iCMS:router url='/user/article'}-->" target="_blank"> <i class="fa fa-cog"></i> 我的文章</a> </li>
             <li> <a href="<!--{iCMS:router url='/user/comment'}-->" target="_blank"> <i class="fa fa-cog"></i> 我的评论</a> </li>
             <li> <a href="<!--{iCMS:router url='/user/profile'}-->" target="_blank"> <i class="fa fa-cog"></i> 设置</a> </li>
-            <li> <a href="javascript:;" class="iCMS_user_logout" target="_blank"> <i class="fa fa-power-off"></i> 退出</a> </li>
+            <li> <a href="javascript:;" class="iCMS-user-logout" target="_blank"> <i class="fa fa-power-off"></i> 退出</a> </li>
           </ul>
         </div>
         <span><a href="<!--{iCMS:router url='/user/publish'}-->"><i class="fa fa-edit"></i> 发表文章</a></span>

@@ -11,6 +11,7 @@ function comment_list($vars){
 		$vars['do'] = 'list';
 		unset($vars['method']);
 		iPHP::assign('query',http_build_query($vars));
+		iPHP::assign('comment',$vars);
 		iPHP::view("iCMS://comment/list.{$vars['display']}.htm");
 		return;
 	}

@@ -20,31 +20,31 @@
           <div id="lg_left">
             <h1>用户登录</h1>
             <div id="lg_center">
-              <div class="iCMS_login" class="lg_form">
+              <div id="iCMS-login-box" class="lg_form" style="display:block;">
                 <div class="lg_name"> <span>用户名：</span>
-                  <input type="text" value="邮箱 或 昵称" name="uname" id="iCMS_uname" class="text r3" maxlength="32">
+                  <input type="text" value="邮箱 或 昵称" name="uname" id="iCMS-uname" maxlength="32">
                 </div>
                 <div class="err_uname"><span><i class="fa fa-minus-circle"></i> 请输入登录名</span></div>
                 <div class="clear"></div>
                 <div class="lg_pass">
-                  <span>密码：</span><input type="password" value="" name="pass" id="iCMS_pass" class="text r3" maxlength="32">
+                  <span>密码：</span><input type="password" value="" name="pass" id="iCMS-pass" maxlength="32">
                 </div>
                 <div class="err_pass"><span><i class="fa fa-minus-circle"></i> 请输入密码</span></div>
                 <div class="clear"></div>
                 <!--{if $iCMS.config.user.loginseccode }-->
                 <div class="lg_check"><span>验证码：</span>
-                  <input id="iCMS_seccode" type="text" maxlength="4" name="seccode" class="r3">
-                  <img class="r3" id="iCMS_seccode_img" src="<!--{iCMS:router url='/api/seccode'}-->" /> <a href="javascript:void(0);" id="iCMS_seccode_text" style="float: none">换一张</a>
+                  <input id="iCMS-seccode" type="text" maxlength="4" name="seccode" class="r3">
+                  <img class="r3" id="iCMS-seccode-img" src="<!--{iCMS:router url='/api/seccode'}-->" /> <a href="javascript:void(0);" id="iCMS-seccode-text" style="float: none">换一张</a>
                 </div>
                 <div class="err_seccode"><span><i class="fa fa-minus-circle"></i> 请输入验证码</span></div>
                 <!--{/if}-->
                 <div class="clear"></div>
                 <div class="lg_remember">
-                  <label><input type="checkbox" value="1" name="remember" name="iCMS_remember" class="check" checked="checked"><span>记住我（两周免登录）</span></label>
+                  <label><input type="checkbox" value="1" name="remember" name="iCMS-remember" class="check" checked="checked"><span>记住我（两周免登录）</span></label>
                 </div>
                 <div class="clear"></div>
                 <div class="lg_login">
-                  <input type="button" value=" " class="sub iCMS_loginBtn"><a href="<!--{$iCMS.SAPI}-->&do=findpwd">忘记密码？</a>
+                  <input type="button" value=" " class="sub iCMS-loginBtn"><a href="<!--{$iCMS.SAPI}-->&do=findpwd">忘记密码？</a>
                 </div>
               <div class="ot_login">
                 <span>您也可以用以下方式登录：</span>

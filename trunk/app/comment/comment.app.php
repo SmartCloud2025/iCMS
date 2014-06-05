@@ -7,11 +7,19 @@
  * @$Id: comment.app.php 2406 2014-04-28 02:24:46Z coolmoo $
  */
 class commentApp {
-	public $methods	= array('like','json','add','report','form');
+	public $methods	= array('like','json','add','report','form','list');
     function __construct() {
         $this->userid   = (int)iPHP::getCookie('userid');
         $this->nickname = iS::escapeStr(iPHP::getUniCookie('nickname'));
         $this->id       = (int)$_GET['id'];
+    }
+    public function API_list(){
+        $vars['iid']     = (int)$_GET['iid'];
+        $vars['cid']     = (int)$_GET['cid'];
+        $vars['appid']   = (int)$_GET['appid'];
+        $vars['display'] = $_GET['display'];
+        iPHP::assign('comment',$vars);
+        return iPHP::view('iCMS://comment/list.default.htm');
     }
     public function API_form(){
         $vars['iid']     = (int)$_GET['iid'];

@@ -38,7 +38,7 @@ class userApp {
             return iPHP::view("iTPL://user/manage.htm");         
         }
     }
-    public function profile_base(){
+    public function act_profile_base(){
         $unick         = iS::escapeStr($_POST['unick']);
         $sex           = iS::escapeStr($_POST['sex']);
         $weibo         = iS::escapeStr($_POST['weibo']);
@@ -89,17 +89,17 @@ values ('$this->userid', '$realname', '$mobile', '$enterprise', '$address', '$zi
         }
         iPHP::OK('user:profile:success');
     }
-    public function profile_avatar(){
+    public function act_profile_avatar(){
         iFS::$watermark     = false;
         iFS::$checkFileData = true;
         $avatardir = dirname(get_avatar($this->userid));
-        $F         = iFS::upload('avatar',$avatardir,$this->userid);
+        $F         = iFS::upload('avatar',$avatardir,$this->userid,'jpg');
         $F OR iPHP::code(0,'user:iCMS:error',0,'json');
         $avatarurl = iFS::fp($F['path'],'+http');
         iPHP::code(1,'user:profile:avatar',$avatarurl,'json');
     }
 
-    public function profile_setpassword(){
+    public function act_profile_setpassword(){
 
         iPHP::seccode($_POST['validCode']) OR iPHP::alert('iCMS:seccode:error');
         
@@ -119,7 +119,7 @@ values ('$this->userid', '$realname', '$mobile', '$enterprise', '$address', '$zi
 
         $pgArray = array('base','avatar','setpassword','bind','custom');
         $pg      = iS::escapeStr($_POST['pg']);
-        $funname ='profile_'.$pg;
+        $funname ='act_profile_'.$pg;
         //var_dump($funname);
         if (in_array ($pg,$pgArray)) {
             $this->$funname();

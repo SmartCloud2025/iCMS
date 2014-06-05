@@ -1,14 +1,14 @@
 body { background-color: #fff; background-image: url(img/bg-v6.png); _background-attachment: fixed; }
 /* home */
-#iCMS_home { margin: 0 auto; width: 960px; background-color: #fff; }
-#iCMS_home .main-col { float: left; width: 640px; margin-top: 10px; min-height: 900px; _height: 900px; border-right: 1px solid #E4E4E4; background: #fff; }
-#iCMS_home .right-col { float: right; padding-top: 20px; padding-bottom: 30px; width: 319px; }
-#iCMS_home .mod { margin-left: 10px; margin-right: 10px; }
-#iCMS_home .mod .hd { margin-bottom: 4px; }
-#iCMS_home .txtList li { display: block; margin-bottom: 3px; list-style: none; }
-#iCMS_home .txtList li a { padding: 0 0 0 10px; display: block; height: 28px; line-height: 28px; color: #666; }
-#iCMS_home .txtList li a:hover { color: #259; background: #EFF6FA; border-radius: 3px; text-decoration: none; }
-#iCMS_home .txtList li a span { margin-left: 10px; }
+.iCMS-home-wrap { margin: 0 auto; width: 960px; background-color: #fff; }
+.iCMS-home-wrap .main-col { float: left; width: 640px; margin-top: 10px; min-height: 900px; _height: 900px; border-right: 1px solid #E4E4E4; background: #fff; }
+.iCMS-home-wrap .right-col { float: right; padding-top: 20px; padding-bottom: 30px; width: 319px; }
+.iCMS-home-wrap .mod { margin-left: 10px; margin-right: 10px; }
+.iCMS-home-wrap .mod .hd { margin-bottom: 4px; }
+.iCMS-home-wrap .txtList li { display: block; margin-bottom: 3px; list-style: none; }
+.iCMS-home-wrap .txtList li a { padding: 0 0 0 10px; display: block; height: 28px; line-height: 28px; color: #666; }
+.iCMS-home-wrap .txtList li a:hover { color: #259; background: #EFF6FA; border-radius: 3px; text-decoration: none; }
+.iCMS-home-wrap .txtList li a span { margin-left: 10px; }
 .avatarList { }
 .avatarList li { display: inline-block; margin-bottom: 4px; }
 .avatar_30 { width: 30px; height: 30px; }
@@ -80,6 +80,8 @@ body { background-color: #fff; background-image: url(img/bg-v6.png); _background
 #artList .list_detail .pic { height: 150px; overflow: hidden; }
 #artList .list_fun { text-align: right; }
 #artList .list_fun a { color: #333; margin-left: 10px; }
+.spinner-gray, .spinner-lightgray { display: inline-block; margin: 0 5px; width: 14px; height: 15px; vertical-align: -3px; background-size: 14px 15px; background-repeat: no-repeat; background-image: url(/img/grey-loading.gif); }
+.spinner-lightgray { background-image: url(img/lightgray-loading.gif); }
 .zm-comment-box { margin: 10px 0 0 35px; background: #fff; max-width: 540px; position: relative; border: 1px solid #ddd; border-radius: 4px; box-shadow: 0 1px 1px rgba(0, 0, 0, .05) }
 .zm-comment-box .load-more { padding: 8px 0; display: block; font-size: 13px; height: 22px; text-align: center; border: 1px solid #eee; border-width: 1px 0 0; color: #698ebf; box-shadow: 0 0 5px rgba(180, 180, 180, .1) inset; text-shadow: 0 1px 0 #fff }
 .zm-comment-box .load-more .text { position: relative }
@@ -99,7 +101,7 @@ html.no-touch .zm-comment-box .load-more:hover { background: #fefefe; text-decor
 .zm-comment-box.empty.cannot-comment .zm-comment-form, .zm-comment-box .zm-comment-form { padding: 15px }
 .zm-comment-box.empty.cannot-comment .zm-comment-box-ft, .zm-comment-box .zm-comment-box-ft { background: #fbfbfb; border-radius: 0 0 4px 4px; border-top: 1px solid #EEE; position: relative }
 .zm-comment-box.empty.cannot-comment .zm-comment-box-ft { background: #fff }
-.zm-comment-spinner { padding: 6px 12px }
+.zm-comment-spinner { padding: 6px 12px; font-size: 13px; }
 .zm-item-comment { position: relative; margin: 0 12px; padding: 8px 0 }
 .zm-item-comment .zm-comment-content-wrap { margin: 0 0 0 35px }
 .zm-item-comment>.zm-item-link-avatar { float: left; margin: 4px 0 0 }
@@ -127,7 +129,6 @@ html.no-touch .zm-comment-box .load-more:hover { background: #fefefe; text-decor
 .zm-command-cancel { margin: 0 15px 0 0; cursor: pointer; float: left; }
 .zm-command-cancel:hover { text-decoration: underline }
 .zg-icon-comment-like, .zm-comment-op-link>.iCMS-icon { margin-right: 5px; width: 11px; height: 11px; vertical-align: -1px }
-
 /* ----home.fun-------- */
 #home_fun { font-weight: bold; margin-top: 10px; padding-left: 25px; padding-bottom: 15px; border-bottom: 1px dotted #DBDBDB; }
 #home_fun a { width: 90px; }

@@ -1058,7 +1058,7 @@ class iTemplate_Compiler extends iTemplate {
 			if (function_exists($_plugins_fun_name)){
 				$this->register_modifier($function,$_plugins_fun_name);
 				$this->_require_stack[$_plugins_file_name] = array($type, $function, $_plugins_fun_name);
-				return $pluginfile;
+				return $_plugins_fun_name;
 			}
 		}
 		return false;

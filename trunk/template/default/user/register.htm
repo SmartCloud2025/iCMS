@@ -20,12 +20,12 @@
           <div id="lg_left">
             <h1>新用户注册</h1>
             <div id="lg_center">
-              <div id="iCMS_register" class="lg_form">
+              <div id="iCMS-register-box" class="lg_form">
                 <div class="ipt_mail"> <span>电子邮箱：</span>
-                  <input id="iCMS_username" type="text" maxlength="36" name="username" class="text r3" value="">
+                  <input id="iCMS-username" type="text" maxlength="36" name="username" class="text r3" value="">
                 </div>
                 <div class="ipt_nickname"> <span>昵称：</span>
-                  <input id="iCMS_nickname" style="*margin-left:-1px;" maxlength="36" type="text" name="nickname" class="text r3" value="">
+                  <input id="iCMS-nickname" style="*margin-left:-1px;" maxlength="36" type="text" name="nickname" class="text r3" value="">
                 </div>
                 <div class="ipt_sex"> <span>性别：</span>
                   <div class="rdo">
@@ -35,22 +35,22 @@
                   男 </div>
                 </div>
                 <div class="ipt_password"> <span>密码：</span>
-                  <input id="iCMS_password" style="*margin-left:-1px;" maxlength="36" type="password" name="password" class="text r3">
+                  <input id="iCMS-password" style="*margin-left:-1px;" maxlength="36" type="password" name="password" class="text r3">
                 </div>
                 <div class="ipt_respassword"> <span>确认密码：</span>
-                  <input id="iCMS_rstpassword" type="password" maxlength="36" name="rstpassword" class="text r3">
+                  <input id="iCMS-rstpassword" type="password" maxlength="36" name="rstpassword" class="text r3">
                 </div>
                 <!--{if $iCMS.config.user.regseccode }-->
                 <div class="ipt_check"> <span>验证码：</span>
-                  <input id="iCMS_seccode" type="text" maxlength="4" name="seccode" class="r3">
-                  <img class="r3" id="iCMS_seccode_img" src="<!--{iCMS:router url='/api/seccode'}-->" /> <a href="javascript:void(0);" id="iCMS_seccode_text" style="float: none">换一张</a>
+                  <input id="iCMS-seccode" type="text" maxlength="4" name="seccode" class="r3">
+                  <img class="r3" id="iCMS-seccode-img" src="<!--{iCMS:router url='/api/seccode'}-->" /> <a href="javascript:void(0);" id="iCMS-seccode-text" style="float: none">换一张</a>
                 </div>
                 <!--{/if}-->
                 <div class="ipt_box">
                   <input class="box fl" name="agreement" type="checkbox" checked="checked">
                   <span class="fl">我已看过并同意《<a href="<!--{iCMS:router url='/api/user/agreement'}-->" target="_blank"><!--{$site.title}-->网络服务使用协议</a>》</span> </div>
                   <div class="ipt_sub">
-                    <input type="button" class="sub iCMS_registerBtn" value=" ">
+                    <input type="button" class="sub iCMS-registerBtn" value=" ">
                   </div>
                   <input name="openid" value="<!--{$openid}-->" type="hidden">
                   <input type="hidden" name="action" value="register">

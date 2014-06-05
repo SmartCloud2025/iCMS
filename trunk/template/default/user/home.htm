@@ -22,7 +22,7 @@
   </head>
   <body>
     <!--{include file="{iTPL}/header.htm"}-->
-    <div id="iCMS_home" class="clearfix">
+    <div class="iCMS-home-wrap clearfix">
       <div class="user_header">
         <div class="card_banner">
           <img src="http://pic2.52pk.com/files/130617/1283568_104827_7094.jpg" alt="">
@@ -31,7 +31,7 @@
           <div class="card_info">
             <a class="card_title_name" data-tip="iCMS:ucard:<!--{$user.uid}-->" href="<!--{$user.urls.home}-->"><!--{$user.nickname}--></a>
             <i class="icon_<!--{$user.sex}-->"></i>
-            <a data-param='{"fuid":"<!--{$user.uid}-->","fname":"<!--{$user.nickname}-->"}' class="iCMS_user_follow follow_btn <!--{if $status.followed}-->unfollow<!--{else}-->follow<!--{/if}-->"></a>
+            <a data-param='{"fuid":"<!--{$user.uid}-->","fname":"<!--{$user.nickname}-->"}' class="iCMS-user-follow follow_btn <!--{if $status.followed}-->unfollow<!--{else}-->follow<!--{/if}-->"></a>
             <p class="card_slogan">
             <!--{$userdata.slogan|default:'这家伙太懒了,什么都没有留下!'}-->
             </p>
@@ -101,15 +101,15 @@
                 <!--{/if}-->
               </div>
               <div class="list_fun clearfix" data-param='{"iid":"<!--{$article_list.id}-->","suid":"<!--{$article_list.userid}-->","title":"<!--{$article_list.title|unicode}-->"}'>
-                <a href="###" data-param='{"do":"good"}' class="iCMS_article_do" title="32个赞"><i class="icon-thumbs-up"></i> (<span><!--{$article_list.good}--></span>)</a>
-                <a href="###" data-param='{"do":"comment"}' class="iCMS_article_do" title="评论"><i class="icon-comment"></i> (<span><!--{$article_list.comments}--></span>)</a>
-                <a href="###" data-param='{"do":"favorite"}' class="iCMS_article_do" title="收藏"><i class="icon-heart"></i></a>
+                <a href="###" data-param='{"do":"good"}' class="iCMS-article-do" title="32个赞"><i class="icon-thumbs-up"></i> (<span><!--{$article_list.good}--></span>)</a>
+                <a href="###" data-param='{"do":"comment"}' class="iCMS-article-do" title="评论"><i class="icon-comment"></i> (<span><!--{$article_list.comments}--></span>)</a>
+                <a href="###" data-param='{"do":"favorite"}' class="iCMS-article-do" title="收藏"><i class="icon-heart"></i></a>
               </div>
             </li>
             <!--{/iCMS}-->
           </ul>
         </div>
-        <div id="artpagenav" class="iCMS_pagination">
+        <div id="artpagenav" class="iCMS-pagination">
           <!--{$page.nav}-->
         </div>
       </div>
