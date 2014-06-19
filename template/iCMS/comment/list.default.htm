@@ -12,40 +12,29 @@
 	<body class="iCMS-comment-page">
 		<!--{/if}-->
 		<style>
-.zm-comment-box { margin: 10px 0 0 35px; background: #fff; max-width: 540px; position: relative; border: 1px solid #ddd; border-radius: 4px; box-shadow: 0 1px 1px rgba(0, 0, 0, .05) }
-.zm-comment-box .load-more { padding: 8px 0; display: block; font-size: 13px; height: 22px; text-align: center; border: 1px solid #eee; border-width: 1px 0 0; color: #698ebf; box-shadow: 0 0 5px rgba(180, 180, 180, .1) inset; text-shadow: 0 1px 0 #fff }
-.zm-comment-box .load-more .text { position: relative }
-.zm-comment-box .load-more .spinner { position: absolute; top: 0; right: -20px; display: none }
-.zm-comment-box .load-more.loading .spinner { display: block }
-html.no-touch .zm-comment-box .load-more:hover { background: #fefefe; text-decoration: none }
-.zm-comment-box .load-more:active { background: #fbfbfb; box-shadow: 0 0 5px rgba(180, 180, 180, .2) inset }
-.zm-comment-box .load-more+.zm-item-comment { margin: 0; padding: 8px 12px; border-top: 1px solid #eee }
-.zm-comment-box .zm-comment-bubble { position: absolute; top: -8px; left: 81px; display: none }
-.zm-comment-box.empty { border: 0; box-shadow: none }
-.zm-comment-box.empty.cannot-comment { border: 1px solid #ddd }
-.zm-comment-box.cannot-comment .editable, .zm-comment-box.cannot-comment .zm-command, .zm-comment-box.cannot-comment .zm-comment-op-link.reply { display: none !important }
-.zm-comment-box.empty .zm-comment-bubble { display: none !important }
-.zm-comment-box.empty.cannot-comment .zm-comment-bubble { display: block !important }
-.zm-comment-box.empty .zm-comment-box-ft { margin: 0 30px 0 0; padding: 0; border: 0 !important; background: 0 }
-.zm-comment-box.empty.cannot-comment .zm-comment-form { margin: 0 }
-.zm-comment-box.empty.cannot-comment .zm-comment-form, .zm-comment-box .zm-comment-form { padding: 15px }
-.zm-comment-box.empty.cannot-comment .zm-comment-box-ft, .zm-comment-box .zm-comment-box-ft { background: #fbfbfb; border-radius: 0 0 4px 4px; border-top: 1px solid #EEE; position: relative }
-.zm-comment-box.empty.cannot-comment .zm-comment-box-ft { background: #fff }
-.zm-comment-spinner { padding: 6px 12px; font-size: 13px; }
-.zm-item-comment { position: relative; margin: 0 12px; padding: 8px 0 }
-.zm-item-comment .zm-comment-content-wrap { margin: 0 0 0 35px }
-.zm-item-comment>.zm-item-link-avatar { float: left; margin: 4px 0 0 }
-.zm-item-comment .zm-item-img-avatar { width: 50px; height: 50px; border-radius: 2px;box-shadow: 0 1px 3px rgba(0,0,0,0.22);padding: 2px;}
-.zm-item-comment .zm-comment-content { color: #222; min-height: 22px }
-.zm-item-comment .zm-comment-hd, .zm-item-comment .zm-comment-ft { color: #999 }
-.zm-item-comment .zm-comment-hd .desc, .zm-item-comment .zm-comment-ft .desc { font-size: 12px }
-.zm-item-comment .zm-comment-ft { font-size: 12px }
-.zm-item-comment .like-num { float: right; margin-top: -1px }
-.zm-item-comment .like-num>span, .zm-item-comment .like-num>em { font-style: normal; vertical-align: -2px }
-.zm-item-comment .like-num.nil { display: none }
-.zm-item-comment.focusin .zm-comment-op-link, .zm-item-comment:hover .zm-comment-op-link { visibility: visible }
-.zm-item-comment+.zm-item-comment { border-top: solid 1px #eee }
-.zm-item-comment .zm-comment-form { padding: 15px 0 }
+.iCMS-comment-list-wrap { margin: 10px; background: #fff; position: relative; border-top: 1px solid #ddd; }
+.iCMS-comment-list-wrap .load-more { padding: 8px 0; display: block; font-size: 13px; height: 22px; text-align: center; border: 1px solid #eee; border-width: 1px 0 0; color: #698ebf; box-shadow: 0 0 5px rgba(180, 180, 180, .1) inset; text-shadow: 0 1px 0 #fff }
+.iCMS-comment-list-wrap .load-more .text { position: relative }
+.iCMS-comment-list-wrap .load-more .spinner { position: absolute; top: 0; right: -20px; display: none }
+.iCMS-comment-list-wrap .load-more.loading .spinner { display: block }
+.iCMS-comment-list-wrap .load-more:active { background: #fbfbfb; box-shadow: 0 0 5px rgba(180, 180, 180, .2) inset }
+.iCMS-comment-list-wrap .load-more+.iCMS-comment-item { margin: 0; padding: 8px 12px; border-top: 1px solid #eee }
+
+.iCMS-comment-item { position: relative; margin: 0 12px; padding: 8px 0 }
+.iCMS-comment-item .cmt-content-wrap { margin: 0 0 0 35px }
+.iCMS-comment-item>.zm-item-link-avatar { float: left; margin: 0px 8px 0px 0px; }
+.iCMS-comment-item .zm-item-img-avatar { width: 60px; height: 60px; border-radius: 2px;box-shadow: 0 1px 3px rgba(0,0,0,0.22);padding: 2px;}
+.iCMS-comment-item .cmt-content { color: #222; min-height: 22px }
+.iCMS-comment-item .cmt-hd, .iCMS-comment-item .cmt-ft { color: #999 }
+.iCMS-comment-item .cmt-hd .desc, .iCMS-comment-item .cmt-ft .desc { font-size: 12px }
+.iCMS-comment-item .cmt-ft { font-size: 12px }
+.iCMS-comment-item .like-num { float: right; margin-top: -1px }
+.iCMS-comment-item .like-num>span, .iCMS-comment-item .like-num>em { font-style: normal; vertical-align: -2px }
+.iCMS-comment-item .like-num.nil { display: none }
+.iCMS-comment-item.focusin .zm-comment-op-link, .iCMS-comment-item:hover .zm-comment-op-link { visibility: visible }
+.iCMS-comment-item+.iCMS-comment-item { border-top: solid 1px #eee }
+.iCMS-comment-item .zm-comment-form { padding: 15px 0 }
+
 .zm-comment-info { text-align: center }
 .zm-comment-form .zm-comment-textarea { padding: 7px 8px; color: #999; font-size: 13px; line-height: 22px; min-height: 22px; width: 95% }
 .zm-comment-form.expanded .zm-command { display: block; line-height: 33px; }
@@ -61,19 +50,16 @@ html.no-touch .zm-comment-box .load-more:hover { background: #fefefe; text-decor
 .zg-icon-comment-like, .zm-comment-op-link>.iCMS-icon { margin-right: 5px; width: 11px; height: 11px; vertical-align: -1px }
 
 		</style>
-		<div class="iCMS-comment-list-wrap zm-comment-box" id="iCMS-comments-list">
-			<ul class="iCMS-comments-list">
+		<div class="iCMS-comment-list-wrap" id="iCMS-comment-list-box">
+			<ul class="iCMS-comment-list">
 				<!--{iCMS:comment:list loop="true" appid=$comment.appid iid=$comment.iid}-->
-				<li class="iCMS-comments-item">
+				<li class="iCMS-comment-item" data-id="<!--{$comment_list.id}-->">
 
-
-
-<div class="zm-item-comment" data-id="<!--{$comment_list.id}-->">
 <a title="<!--{$comment_list.user.name}-->" data-tip="iCMS:ucard:<!--{$comment_list.user.uid}-->" class="zm-item-link-avatar" href="<!--{$comment_list.user.url}-->">
 <img src="<!--{$comment_list.user.avatar}-->" class="zm-item-img-avatar">
 </a>
-<div class="zm-comment-content-wrap">
-	<div class="zm-comment-hd">
+<div class="cmt-content-wrap">
+	<div class="cmt-hd">
 		<a data-tip="iCMS:ucard:<!--{$comment_list.user.uid}-->" href="<!--{$comment_list.user.url}-->" class="zg-link"><!--{$comment_list.user.name}--></a>
 		<!--{if $comment_list.suid == $comment_list.uid}-->
 		<span class="desc">（作者）</span>
@@ -83,8 +69,8 @@ html.no-touch .zm-comment-box .load-more:hover { background: #fefefe; text-decor
 		<a data-tip="iCMS:ucard:<!--{$comment_list.reply.uid}-->" href="<!--{$comment_list.reply.url}-->" class="zg-link"><!--{$comment_list.reply.name}--></a>
 		<!--{/if}-->
 	</div>
-	<div class="zm-comment-content"><!--{$comment_list.content}--></div>
-	<div class="zm-comment-ft">
+	<div class="cmt-content"><!--{$comment_list.content}--></div>
+	<div class="cmt-ft">
 		<span class="date"><!--{$comment_list.addtime|format_date}--></span>
 		<a href="javascript:;" class="reply zm-comment-op-link" name="reply_comment" data-param='{"uid":"<!--{$comment_list.user.uid}-->","name":"<!--{$comment_list.user.name}-->"}'>
 		<i class="iCMS-icon iCMS-icon-comment-reply"></i>回复</a>
@@ -98,32 +84,6 @@ html.no-touch .zm-comment-box .load-more:hover { background: #fefefe; text-decor
 		<i class="iCMS-icon iCMS-icon-no-help"></i>举报</a>
 	</div>
 </div>
-</div>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 				</li>
 				<!--{/iCMS}-->

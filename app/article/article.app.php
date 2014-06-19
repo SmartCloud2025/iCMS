@@ -51,9 +51,9 @@ class articleApp {
         
         if(iPHP::$iTPLMode=="html" && (strstr($category['contentRule'],'{PHP}')||$category['outurl']||$category['mode']==0)) return false;
 
-        $_iurlArray	= array((array)$rs,$category);
-        $rs->iurl	= iURL::get('article',$_iurlArray,$page);
-        $pageurl	= $rs->iurl->pageurl;
+        $_iurlArray = array((array)$rs,$category);
+        $rs->iurl   = iURL::get('article',$_iurlArray,$page);
+        $pageurl    = $rs->iurl->pageurl;
         $rs->url    = $rs->iurl->href;
         $tpl && iCMS::gotohtml($rs->iurl->path,$rs->iurl->href,$category['mode']);
         $picbody	=	preg_replace('/<div\sclass="ke_items">.*?<\/ul>\s*<\/div>/is', '', $rs->body);

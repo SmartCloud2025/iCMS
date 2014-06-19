@@ -232,12 +232,16 @@ url('iconfont/iconfont.svg#iconfont') format('svg'); /* iOS 4.1- */ }
 /* iCMS/comment
 -------------------------------------------------- */
 .iCMS-API-iframe { width: 100%; }
-.iCMS-comment-wrap { margin: 0px auto 20px auto; width: 600px; font-size: 14px; }
-.iCMS-comment-wrap .alert { margin-bottom: 10px; padding: 4px 10px; font-size: 12px; }
-.iCMS-comment-editor { }
+.iCMS-comment-form-wrap { margin: 0px auto 20px auto; width: 600px; font-size: 14px; }
+.iCMS-comment-form-wrap .alert { margin-bottom: 10px; padding: 4px 10px; font-size: 12px; }
+.iCMS-cmt-user{display: none;}
+.iCMS-cmt-login{margin:10px 0px;}
+.iCMS-cmt-editor { }
 .iCMS-editor-text { padding: 5px 10px; width: 580px; height: 90px; background: url(img/iCMS.logo.bg-6.0.png) no-repeat center center; font-size: 14px; line-height: 1.7; }
-.iCMS-comment-command { }
-.iCMS-comment-command .btn { float: right; margin: 8px 0px 8px 8px; padding: 5px 10px; }
+.iCMS-cmt-command {text-align: right;}
+.iCMS-cmt-command .cmt-add { float: right; margin: 8px 0px 8px 8px; padding: 5px 10px; }
+.iCMS-cmt-command .cmt-cancel { float: right; margin: 15px 15px 0 0;cursor: pointer; }
+
 /*--------*/
 #iCMS-comment-report { display: none; }
 .report_dialog {}

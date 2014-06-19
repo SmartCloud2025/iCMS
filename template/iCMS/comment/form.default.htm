@@ -11,30 +11,55 @@
 				window.parent.iCMS.LoginBox();
 				return false;
 			});
+            if (iCMS.user_status) {
+                iCMS.user.data();
+                //this.userinfo();
+                $("#iCMS-nav-login").hide();
+                $("#iCMS-nav-profile").show();
+                iCMS.hover(".iCMS-user-home", "#iCMS-user-menu", 21);
+            }
 		})
 		</script>
 	</head>
 	<body class="iCMS-comment-page">
 		<!--{/if}-->
-		<div class="iCMS-comment-wrap">
-			<div class="iCMS-comment-user clearfix">
+		<div class="iCMS-comment-form-wrap">
+			<div class="iCMS-cmt-user">
+      <div class="nav_profile" id="iCMS-nav-profile">
+        <div class="top_nav_profile">
+          <a class="iCMS-user-home hover-toggle" href="<!--{iCMS:router url='/user/home'}-->">
+          <img class="avatar" src="<!--{$site.urls.ui}-->/avatar.gif">
+          <span class="name">iCMS</span>
+          <b class="caret"></b>
+          </a>
+          <ul class="dropdown-menu iCMS-hover" id="iCMS-user-menu">
+            <li> <a href="<!--{iCMS:router url='/user/home'}-->" target="_blank"> <i class="fa fa-user"></i> 我的主页</a> </li>
+            <li> <a href="<!--{iCMS:router url='/user/article'}-->" target="_blank"> <i class="fa fa-cog"></i> 我的文章</a> </li>
+            <li> <a href="<!--{iCMS:router url='/user/comment'}-->" target="_blank"> <i class="fa fa-cog"></i> 我的评论</a> </li>
+            <li> <a href="<!--{iCMS:router url='/user/profile'}-->" target="_blank"> <i class="fa fa-cog"></i> 设置</a> </li>
+            <li> <a href="javascript:;" class="iCMS-user-logout" target="_blank"> <i class="fa fa-power-off"></i> 退出</a> </li>
+          </ul>
+        </div>
+        <span><a href="<!--{iCMS:router url='/user/publish'}-->"><i class="fa fa-edit"></i> 发表文章</a></span>
+      </div>
 			</div>
-			<div class="iCMS-comment-login clearfix mb10">
+			<div class="iCMS-cmt-login">
 				<a href="<!--{iCMS:router url='/api/user/login'}-->" class="iCMS-user-login" title="登录"><i class="fa fa-user"></i> 登录</a>
 				<a href="<!--{iCMS:router url='/api/user/register'}-->" target="_blank"><i class="fa fa-heart"></i> 注册</a>
 			</div>
 			<div class="alert">
 				<i class="fa fa-warning "></i> 请自觉遵守互联网相关的政策法规，严禁发布色情、暴力、反动的言论！
 			</div>
-			<div class="iCMS-comment-editor">
+			<div class="iCMS-cmt-editor">
 				<textarea class="iCMS-editor-text" name="comment[content]"></textarea>
 			</div>
-			<div class="iCMS-comment-command clearfix">
+			<div class="iCMS-cmt-command clearfix">
 				<input type="hidden" id="comment_title"	name="comment[title]" value="<!--{$comment.title}-->">
 				<input type="hidden" id="comment_appid"	name="comment[appid]" value="<!--{$comment.appid}-->">
 				<input type="hidden" id="comment_iid" name="comment[iid]" value="<!--{$comment.iid}-->">
 				<input type="hidden" id="comment_cid" name="comment[cid]" value="<!--{$comment.cid}-->">
-				<button class="btn btn-primary" type="submit"><i class="fa fa-check"></i> 提 交</button>
+				<button class="btn btn-primary cmt-add" type="submit"><i class="fa fa-check"></i> 评 论</button>
+				<a href="javascript:;" class="cmt-cancel">取 消</a>
 			</div>
 		</div>
 		<!--{if $comment.display=="iframe"}-->
