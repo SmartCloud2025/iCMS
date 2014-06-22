@@ -53,7 +53,7 @@ class iPages {
 		$this->_set_url($url);//设置链接地址
 		$this->nowindex      = min($this->totalpage,$this->nowindex);
 		$this->offset        = (int)($this->nowindex-1<0?0:$this->nowindex-1)*$this->perpage;
-		$_config['ajax'] && $this->open_ajax($_config['ajax']);//打开AJAX模式
+		$_config['ajax'] && $this->ajax($_config['ajax']);//打开AJAX模式
 	}
 
 	/**
@@ -80,9 +80,9 @@ class iPages {
 	*
 	* @param string $action 默认ajax触发的动作。
 	*/
-	function open_ajax($action){
-		$this->is_ajax=true;
-		$this->ajax_fun=$action;
+	function ajax($action){
+		$this->is_ajax  = true;
+		$this->ajax_fun = $action;
 	}
 	
 	
@@ -266,10 +266,11 @@ class iPages {
 	* @return string $url
 	*/
 	function _get_url($pageno=1){
+		if($this->is_ajax) return (int)$pageno;
 		if($pageno<2){
 			$url	= $this->url;
 			if(!$this->html['enable']){
-				$url	= str_replace('?page={P}','',$this->url);
+				$url	= str_replace(array('?page={P}','&page={P}'),'',$this->url);
 			}
 			return str_replace('_{P}','',$url);
 		}
@@ -295,7 +296,7 @@ class iPages {
 		$target OR $target	= '_self';
 		if($this->is_ajax){
 	  		//如果是使用AJAX模式
-			return '<a '.$style.' href="javascript:'.$this->ajax_fun.'(\''.$url.'\')">'.$text.'</a>';
+			return '<a '.$style.' href="javascript:'.$this->ajax_fun.'(\''.$url.'\',this);">'.$text.'</a>';
 		}else{
 			return '<a '.$style.' href="'.$url.'" target="'.$target.'">'.$text.'</a>';
 		}

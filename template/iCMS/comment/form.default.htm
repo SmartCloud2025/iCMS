@@ -14,8 +14,8 @@
             if (iCMS.user_status) {
                 iCMS.user.data();
                 //this.userinfo();
-                $("#iCMS-nav-login").hide();
-                $("#iCMS-nav-profile").show();
+                $(".iCMS-cmt-login").hide();
+                $(".iCMS-cmt-profile").show();
                 iCMS.hover(".iCMS-user-home", "#iCMS-user-menu", 21);
             }
 		})
@@ -24,8 +24,8 @@
 	<body class="iCMS-comment-page">
 		<!--{/if}-->
 		<div class="iCMS-comment-form-wrap">
-			<div class="iCMS-cmt-user">
-      <div class="nav_profile" id="iCMS-nav-profile">
+			<div class="iCMS-cmt-profile">
+      <div class="nav_profile">
         <div class="top_nav_profile">
           <a class="iCMS-user-home hover-toggle" href="<!--{iCMS:router url='/user/home'}-->">
           <img class="avatar" src="<!--{$site.urls.ui}-->/avatar.gif">
@@ -40,7 +40,6 @@
             <li> <a href="javascript:;" class="iCMS-user-logout" target="_blank"> <i class="fa fa-power-off"></i> 退出</a> </li>
           </ul>
         </div>
-        <span><a href="<!--{iCMS:router url='/user/publish'}-->"><i class="fa fa-edit"></i> 发表文章</a></span>
       </div>
 			</div>
 			<div class="iCMS-cmt-login">
@@ -62,6 +61,17 @@
 				<a href="javascript:;" class="cmt-cancel">取 消</a>
 			</div>
 		</div>
+		<script>
+		$(function(){
+            if (iCMS.user_status) {
+                iCMS.user.data();
+                //this.userinfo();
+                $(".iCMS-cmt-login").hide();
+                $(".iCMS-cmt-profile").show();
+                iCMS.hover(".iCMS-user-home", "#iCMS-user-menu", 21);
+            }
+		})
+		</script>
 		<!--{if $comment.display=="iframe"}-->
 	</body>
 </html>

@@ -201,8 +201,8 @@ url('iconfont/iconfont.svg#iconfont') format('svg'); /* iOS 4.1- */ }
 
 /* iCMS.TOP.userinfo
 -------------------------------------------------- */
-.iCMS-hover { display: none; z-index: 999; position: absolute; top: 0; left: 0; min-width: 120px; border-radius: 0 0 3px 3px; background: #FFF; }
-.hover-toggle .caret { margin-top: 10px; margin-left: 0px; }
+.iCMS-hover-toggle .caret { margin-top: 10px; margin-left: 0px; }
+.iCMS-hover-wrap { display: none; z-index: 999; position: absolute; top: 0; left: 0; min-width: 120px; border-radius: 0 0 3px 3px; background: #FFF; }
 #iCMS-nav-profile { display: none; }
 #iCMS-nav-profile .top_nav_profile { display: inline-block; padding-right: 10px; }
 #iCMS-nav-profile .iCMS-user-home { text-decoration: none; }

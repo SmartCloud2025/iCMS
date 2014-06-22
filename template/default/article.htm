@@ -53,17 +53,86 @@
             </div>
           </div>
           <script type="text/javascript">(function(){$("img",".article-detail").each(function(i){iCMS.imgFix(this,550,600);});})($);</script>
-          <div class="tip clr">提示：键盘也能翻页，试试"← →"键</div>
           <script type="text/javascript">(function(){$(window).keydown(function(event){switch(event.keyCode) {case 37: window.location.href='<!--{$article.page.prev}-->';break;case 39: window.location.href='<!--{$article.page.next}-->';break;}});})($);</script>
           <div class="article-pagenav">
             <!--{$article.pagenav}-->
             <div class="clearfix"></div>
           </div>
+          <div class="tip clr">提示：键盘也能翻页，试试"← →"键</div>
         </div>
-        <div class="comments_list">
+<style>
+.up_down{
+position: relative;
+top:14px;
+left:19px;
+}
+.up_down_btn{
+position: relative;
+display: block;
+text-decoration: none;
+text-align: left;
+color: #fff;
+background: #fff;
+font-size: 16px;
+line-height: 25px;
+font-family: "微软雅黑";
+border: 1px solid #ddd;
+border-radius: 5px;
+padding:5px;
+float:left;
+margin-right:10px;
+}
+.up_down_icon {
+position: absolute;
+top: 8px;
+left: 15px;
+width: 19px;
+height: 18px;
+display: block;
+}
+.up_down_btn_num{
+font:14px/24px "宋体";
+margin-left:35px;
+color:#369;
+}
+.up_down_btn_num_gray{
+color:#666;
+}
+.up_down_txt{
+font:14px/24px "宋体";
+color:#666;
+}
+.up_down_txt_hover{
+color:#369;
+}
+.up_down_btn_gray{ background:#fbfbfb;}
+.up{ background: url(/static/images/up.png) no-repeat;_filter:progid:DXImageTransform.Microsoft.AlphaImageLoader(enabled='true',sizingMethod='scale',src='/static/images/up.png');_background:none;}
+.down{ background: url(/static/images/down.png) no-repeat;top:10px;_filter:progid:DXImageTransform.Microsoft.AlphaImageLoader(enabled='true',sizingMethod='scale',src='/static/images/down.png');_background:none;}
+.up_gray{ background: url(/static/images/up_gray.png) no-repeat;_filter:progid:DXImageTransform.Microsoft.AlphaImageLoader(enabled='true',sizingMethod='scale',src='/static/images/up_gray.png');_background:none;}
+.down_gray{ background: url(/static/images/down_gray.png) no-repeat;top:10px;_filter:progid:DXImageTransform.Microsoft.AlphaImageLoader(enabled='true',sizingMethod='scale',src='/static/images/down_gray.png');_background:none;}
+</style>
+<div class="up_down">
+  <a id="up_article" class="up_down_btn" href="javascript:void(0);" style="text-decoration:none;">
+    <i id="up_icon" class="up_down_icon up"></i>
+    <span class="up_down_btn_num" id="up_btn_num">38</span>
+    <span class="up_down_txt" id="up_txt">此文甚好</span>
+  </a>
+  <a id="down_article" class="up_down_btn" href="javascript:void(0);" style="text-decoration:none;">
+    <i id="down_icon" class="up_down_icon down"></i>
+    <span class="up_down_btn_num" id="down_btn_num">118</span>
+    <span class="up_down_txt" id="down_txt">太水了</span>
+  </a>
+</div>
+<div style="padding: 0 20px;margin-bottom:20px;font-size:12px;">
+  <div style="color:#999;">上一篇 : <a href="http://maoqiying.baijia.baidu.com/article/19636" style="color:#369;" mon="name=bjcard&pos=prevarticle">再不发FDD牌照，电信就老了！</a></div>
+  <div style="color:#999;">下一篇 : <a href="http://maoqiying.baijia.baidu.com/article/19144" style="color:#369;"  mon="name=bjcard&pos=nextarticle">中移动4G自主品牌机面临三重挑战</a></div>
+</div>
+<div class="clearfix"></div>
+
+        <div class="comments_list clearfix">
           <!--{iCMS:comment:list display="default" appid="1" iid=$article.id}-->
         </div>
-        <div class="comment_form">
+        <div class="comment_form clearfix">
           <!--{iCMS:comment:form ref="true"}-->
         </div>
       </div>

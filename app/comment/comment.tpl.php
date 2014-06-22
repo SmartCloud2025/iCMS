@@ -39,7 +39,7 @@ function comment_list($vars){
 	$offset	= 0;
 	if($vars['page']){
 		$total  = iPHP::total($md5,"SELECT count(*) FROM `#iCMS@__comment` WHERE {$whereSQL} ");
-		$multi  = iCMS::page(array('total'=>$total,'perpage'=>$maxperpage,'unit'=>iPHP::lang('iCMS:page:list'),'nowindex'=>$GLOBALS['page']));
+		$multi  = iCMS::page(array('total'=>$total,'perpage'=>$maxperpage,'unit'=>iPHP::lang('iCMS:page:comment'),'nowindex'=>$GLOBALS['page'],'ajax'=>'iCMS.comment_page'));
 		$offset = $multi->offset;
 		iPHP::assign("comment_total",$total);
 	}
