@@ -27,7 +27,7 @@ class articleApp {
     }
 
     public function article($id,$page=1,$tpl=true){
-        $aRs		= iDB::getRow("SELECT * FROM #iCMS@__article WHERE id='".(int)$id."' AND `status` ='1' LIMIT 1;",ARRAY_A);
+        $aRs		= iDB::getRow("SELECT * FROM `#iCMS@__article` WHERE id='".(int)$id."' AND `status` ='1' LIMIT 1;",ARRAY_A);
         if($aRs['url']) {
             if(iPHP::$iTPLMode=="html") {
                 return false;
@@ -37,7 +37,7 @@ class articleApp {
             }
         }
         if($aRs){
-	        $dRs	= iDB::getRow("SELECT body,subtitle FROM #iCMS@__article_data WHERE aid='".(int)$id."' LIMIT 1;",ARRAY_A);
+	        $dRs	= iDB::getRow("SELECT body,subtitle FROM `#iCMS@__article_data` WHERE aid='".(int)$id."' LIMIT 1;",ARRAY_A);
 	        $rs		= (Object)array_merge($aRs,$dRs);
 	        unset($dRs);
         }
@@ -59,26 +59,26 @@ class articleApp {
         $picbody	=	preg_replace('/<div\sclass="ke_items">.*?<\/ul>\s*<\/div>/is', '', $rs->body);
         preg_match_all("/<img.*?src\s*=[\"|'|\s]*(http:\/\/.*?\.(gif|jpg|jpeg|bmp|png)).*?>/is",$picbody,$picArray);
         $pA = array_unique($picArray[1]);
-        foreach($pA as $key =>$pVal) {
+        if($pA)foreach($pA as $key =>$pVal) {
             $rs->photo[]=trim($pVal);
         }
-        $body            = explode('#--iCMS.PageBreak--#',$rs->body);
-        $pagetotal       = count($body);
-        $rs->pagetotal   = $pagetotal+1;
-        $rs->body        = iCMS::keywords($body[intval($page-1)]);
-        $rs->pagecurrent = $page;
-        if($rs->pagetotal>1) {
+        $body     = explode('#--iCMS.PageBreak--#',$rs->body);
+        $count    = count($body);
+        $total    = $count+1;
+        $rs->body = iCMS::keywords($body[intval($page-1)]);
+        $current  = $page;
+        if($total>1) {
             $ppHref      = iPHP::page_p2num($pageurl,($page-1>1)?$page-1:1);
             $rs->pagenav = '<a href="'.$ppHref.'" class="prev" target="_self">'.iPHP::lang('iCMS:page:prev').'</a> ';
-            for($i=1;$i<=$rs->pagetotal;$i++) {
+            for($i=1;$i<=$total;$i++) {
                 $cls=($i==$page)?"current":"page";
                 $rs->pagenav.='<a href="'.iPHP::page_p2num($pageurl,$i).'" class="'.$cls.'" target="_self">'.$i.'</a>';
             }
-            $npHref      = iPHP::page_p2num($pageurl,(($rs->pagetotal-$page>0)?$page+1:$page));
+            $npHref      = iPHP::page_p2num($pageurl,(($total-$page>0)?$page+1:$page));
             $rs->pagenav.='<a href="'.$npHref.'" class="next" target="_self">'.iPHP::lang('iCMS:page:next').'</a>';
         }
-       $rs->page = array('total'=>$rs->pagetotal,'ototal'=>$pagetotal,'current'=>$rs->pagecurrent,'nav'=>$rs->pagenav,'prev'=>$ppHref,'next'=>$npHref);
-        if($page<$rs->pagetotal){
+       $rs->page = array('total'=>$total,'count'=>$count,'current'=>$current,'nav'=>$rs->pagenav,'prev'=>$ppHref,'next'=>$npHref);
+        if($page<$total){
             $imgA = array_unique($picArray[0]);
             foreach($imgA as $key =>$img){
                 $rs->body =str_replace($img,'<p align="center"><a href="'.$npHref.'"><b>'.iPHP::lang('iCMS:article:clicknext').'</b></a></p>
@@ -100,9 +100,8 @@ class articleApp {
             }
             $relTags = implode(',',$relTags);
         }
-        iPHP::assign('relTags',$relTags?$relTags:$category['name']);
-
-        $rs->rel	= $rs->related;
+        $rs->relTags = $relTags?$relTags:$category['name'];
+        $rs->rel     = $rs->related;
         
         if(strstr($rs->source, '|')){
             list($sourceName,$sourceUrl) = explode('|',$rs->source);
@@ -122,12 +121,12 @@ class articleApp {
 //        $nextrs = iDB::getRow("SELECT * FROM `#iCMS@__article` WHERE `id` > '{$rs->id}'  and `cid`='{$rs->cid}' AND `status`='1' order by id ASC LIMIT 1;");
 //        $nextrs && $rs->next='<a href="'.iURL::get('article',array((array)$nextrs,$category))->href.'" class="next" target="_self">'.$nextrs->title.'</a>';
 
-        $publicURL   = iCMS::$config['router']['publicURL'];
-        $rs->comment = array('url'=>$publicURL."/api.php?app=comment&iid={$rs->id}&cid={$rs->cid}",'count'=>$rs->comments);
+        
+        $rs->comment = array('url'=>iCMS_API."?app=comment&iid={$rs->id}&cid={$rs->cid}",'count'=>$rs->comments);
         if($category['mode']) {
-            $rs->script['hits']    = "<script type=\"text/javascript\" src=\"{$publicURL}/api.php?app=article&do=hits&cid={$rs->cid}&id={$rs->id}\"></script>";
-            $rs->script['digg']    = "<script type=\"text/javascript\" src=\"{$publicURL}/api.php?app=article&do=digg&id={$rs->id}\"></script>";
-            $rs->script['comment'] = "<script type=\"text/javascript\" src=\"{$publicURL}/api.php?app=article&do=comment&id={$rs->id}\"></script>";
+            $rs->script['hits']    = '<script type="text/javascript" src="'.iCMS_API.'?app=article&do=hits&cid='.$rs->cid.'&id='.$rs->id.'"></script>';
+            $rs->script['digg']    = '<script type="text/javascript" src="'.iCMS_API.'?app=article&do=digg&id='.$rs->id.'"></script>';
+            $rs->script['comment'] = '<script type="text/javascript" src="'.iCMS_API.'?app=article&do=comment&id='.$rs->id.'"></script>';
         }else {
             iPHP::$iTPLMode!='html' && iDB::query("UPDATE `#iCMS@__article` SET hits=hits+1 WHERE `id` ='{$rs->id}'");
         }

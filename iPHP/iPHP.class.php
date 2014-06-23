@@ -83,7 +83,7 @@ class iPHP{
         self::$iTPL = $iTPL;
         return $iTPL;
 	}
-    public static function tpl_vars($key=null){
+    public static function get_vars($key=null){
         return self::$iTPL->get_template_vars($key);
     }
     public static function clear_compiled_tpl($file = null){

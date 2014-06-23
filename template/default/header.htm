@@ -40,7 +40,7 @@
           <li class="active" id="c0"><a href="<!--{$site.url}-->">首页</a></li>
           <li class="divider-vertical"></li>
           <!--{iCMS:category:list loop="true" stype='top' row="10"}-->
-          <!--{if $category_list.son}-->
+          <!--{if $category_list.child}-->
           <li class="dropdown"  id="c<!--{$category_list.cid}-->"><a class="dropdown-toggle" data-toggle="dropdown" href="<!--{$category_list.url}-->" target="_blank"><span><!--{$category_list.name}--></span><b class="caret"></b></a>
           <ul class="dropdown-menu">
             <li><!--{iCMS:category:list as="sub_category" loop="true" stype='sub' row="10" cid=$category_list.cid}-->

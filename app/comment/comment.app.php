@@ -17,7 +17,8 @@ class commentApp {
         $vars['iid']     = (int)$_GET['iid'];
         $vars['cid']     = (int)$_GET['cid'];
         $vars['appid']   = (int)$_GET['appid'];
-        $vars['display'] = $_GET['display'];
+        //$vars['display'] = $_GET['display'];
+        //iCMS::hooks
         iPHP::assign('comment',$vars);
         return iPHP::view('iCMS://comment/list.default.htm');
     }

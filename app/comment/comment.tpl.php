@@ -8,6 +8,7 @@
  */
 function comment_list($vars){
 	if ($vars['display']) {
+		$vars['display'] OR $vars['display'] = 'default';
 		$vars['do'] = 'list';
 		unset($vars['method']);
 		iPHP::assign('query',http_build_query($vars));
@@ -15,6 +16,11 @@ function comment_list($vars){
 		iPHP::view("iCMS://comment/list.{$vars['display']}.htm");
 		return;
 	}
+
+// print_r(get_class_vars("iCMS")); 
+// exit;
+// $a = iPHP::get_vars(iCMS::$app_name);
+// var_dump($a);
 
 	$appid    = (int)$vars['appid'];
 	$whereSQL = "`appid`='$appid' AND `status`='1'";
@@ -86,7 +92,7 @@ function comment_form($vars){
 	$ref	= $vars['ref'];
 	if($ref){
 		$ref===true && $ref=iCMS::$app_name;
-		$rs	= iPHP::tpl_vars($ref);
+		$rs	= iPHP::get_vars($ref);
 		if($ref=="article"){
 			$vars['iid']	= (int)$rs['id'];
 			$vars['cid']	= (int)$rs['cid'];

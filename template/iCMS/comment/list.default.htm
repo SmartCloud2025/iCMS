@@ -12,21 +12,18 @@
 	<body class="iCMS-comment-page">
 		<!--{/if}-->
 		<style>
-.iCMS-comment-list-wrap { margin: 10px; background: #fff; position: relative; }
+.iCMS-comment-list-wrap {background: #fff; position: relative; }
 .iCMS-comment-list-wrap .load-more { padding: 8px 0; display: block; font-size: 13px; height: 22px; text-align: center; border: 1px solid #eee; border-width: 1px 0 0; color: #698ebf; box-shadow: 0 0 5px rgba(180, 180, 180, .1) inset; text-shadow: 0 1px 0 #fff }
 .iCMS-comment-list-wrap .load-more .text { position: relative }
 .iCMS-comment-list-wrap .load-more .spinner { position: absolute; top: 0; right: -20px; display: none }
 .iCMS-comment-list-wrap .load-more.loading .spinner { display: block }
 .iCMS-comment-list-wrap .load-more:active { background: #fbfbfb; box-shadow: 0 0 5px rgba(180, 180, 180, .2) inset }
 .iCMS-comment-list-wrap .load-more+.iCMS-comment-item { margin: 0; padding: 8px 12px; border-top: 1px solid #eee }
-.iCMS-comment-list-wrap h3 {
-padding: 18px 0 5px;
-font: normal 16px/20px "微软雅黑";
-}
+
 .iCMS-comment-item { position: relative; margin: 0 12px; padding: 8px 0 }
 .iCMS-comment-item .cmt-content-wrap { margin: 0 0 0 35px }
-.iCMS-comment-item>.zm-item-link-avatar { float: left; margin: 0px 8px 0px 0px; }
-.iCMS-comment-item .zm-item-img-avatar { width: 60px; height: 60px; border-radius: 2px;box-shadow: 0 1px 3px rgba(0,0,0,0.22);padding: 2px;}
+.iCMS-comment-item .cmt-item-link-avatar { float: left; margin: 0px 8px 0px 0px; }
+.iCMS-comment-item .cmt-item-img-avatar { width: 60px; height: 60px; border-radius: 2px;box-shadow: 0 1px 3px rgba(0,0,0,0.22);padding: 2px;}
 .iCMS-comment-item .cmt-content { color: #222; min-height: 22px }
 .iCMS-comment-item .cmt-hd, .iCMS-comment-item .cmt-ft { color: #999 }
 .iCMS-comment-item .cmt-hd .desc, .iCMS-comment-item .cmt-ft .desc { font-size: 12px }
@@ -55,13 +52,12 @@ font: normal 16px/20px "微软雅黑";
 
 		</style>
 		<div class="iCMS-comment-list-wrap">
-			<span class="label label-info">精彩评论</span>
 			<ul class="iCMS-comment-list" id="iCMS-comment-list-box">
 				<!--{iCMS:comment:list loop="true" page="true" row="8" appid=$comment.appid iid=$comment.iid}-->
 				<li class="iCMS-comment-item" data-id="<!--{$comment_list.id}-->">
 
-<a title="<!--{$comment_list.user.name}-->" data-tip="iCMS:ucard:<!--{$comment_list.user.uid}-->" class="zm-item-link-avatar" href="<!--{$comment_list.user.url}-->">
-<img src="<!--{$comment_list.user.avatar}-->" class="zm-item-img-avatar">
+<a title="<!--{$comment_list.user.name}-->" data-tip="iCMS:ucard:<!--{$comment_list.user.uid}-->" class="cmt-item-link-avatar" href="<!--{$comment_list.user.url}-->">
+<img src="<!--{$comment_list.user.avatar}-->" class="cmt-item-img-avatar">
 </a>
 <div class="cmt-content-wrap">
 	<div class="cmt-hd">

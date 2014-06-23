@@ -63,9 +63,9 @@ function category_list($vars){
 		$rs		= iDB::getArray("SELECT * FROM `#iCMS@__category`{$whereSQL} ORDER BY `orderNum`,`cid` ASC LIMIT $row");
 		$_count	= count($rs);
 		for ($i=0;$i<$_count;$i++){
-        	$rs[$i]['son']	= $rootidA[$rs[$i]['cid']]?true:false;
-			$rs[$i]['url']	= iURL::get('category',$rs[$i])->href;
-			$rs[$i]['link']	= "<a href='{$rs[$i]['url']}'>{$rs[$i]['name']}</a>";
+			$rs[$i]['child'] = $rootidA[$rs[$i]['cid']]?true:false;
+			$rs[$i]['url']   = iURL::get('category',$rs[$i])->href;
+			$rs[$i]['link']  = "<a href='{$rs[$i]['url']}'>{$rs[$i]['name']}</a>";
 	        if($rs[$i]['metadata']){
 	        	$mdArray=array();
 	        	$rs[$i]['metadata']=unserialize($rs[$i]['metadata']);

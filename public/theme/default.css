@@ -140,4 +140,6 @@ margin: 30px 0;}
 .article-pagenav a.current { border: 2px solid #08c; color:#333;font-weight:bold;}
 .article-pagenav a.prev,.article-pagenav a.next { font-weight:bold;}
 .article-pagenav a:hover { background-color:#fff; color:#666; }
+.comments_list{}
+.comments_list h3{padding: 5px 12px;font-size: 14px;margin-left: 10px;}
 .comment_form{border-top: 1px solid #eaeaea; }
