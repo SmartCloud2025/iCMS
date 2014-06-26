@@ -114,12 +114,12 @@ class articleApp {
         }
         $rs->link	= "<a href='{$rs->url}'>{$rs->title}</a>";
 
-//        $rs->prev=iPHP::lang('iCMS:article:first');
-//        $prers=iDB::getRow("SELECT * FROM `#iCMS@__article` WHERE `id` < '{$rs->id}' AND `cid`='{$rs->cid}' AND `status`='1' order by id DESC LIMIT 1;");
-//        $prers && $rs->prev='<a href="'.iURL::get('article',array((array)$prers,$category))->href.'" class="prev" target="_self">'.$prers->title.'</a>';
-//        $rs->next=iPHP::lang('iCMS:article:last');
-//        $nextrs = iDB::getRow("SELECT * FROM `#iCMS@__article` WHERE `id` > '{$rs->id}'  and `cid`='{$rs->cid}' AND `status`='1' order by id ASC LIMIT 1;");
-//        $nextrs && $rs->next='<a href="'.iURL::get('article',array((array)$nextrs,$category))->href.'" class="next" target="_self">'.$nextrs->title.'</a>';
+       $rs->prev            = iPHP::lang('iCMS:article:first');
+       $prers               = iDB::getRow("SELECT * FROM `#iCMS@__article` WHERE `id` < '{$rs->id}' AND `cid`='{$rs->cid}' AND `status`='1' order by id DESC LIMIT 1;");
+       $prers && $rs->prev  = '<a href="'.iURL::get('article',array((array)$prers,$category))->href.'" class="prev" target="_self">'.$prers->title.'</a>';
+       $rs->next            = iPHP::lang('iCMS:article:last');
+       $nextrs              = iDB::getRow("SELECT * FROM `#iCMS@__article` WHERE `id` > '{$rs->id}'  and `cid`='{$rs->cid}' AND `status`='1' order by id ASC LIMIT 1;");
+       $nextrs && $rs->next = '<a href="'.iURL::get('article',array((array)$nextrs,$category))->href.'" class="next" target="_self">'.$nextrs->title.'</a>';
 
         
         $rs->comment = array('url'=>iCMS_API."?app=comment&iid={$rs->id}&cid={$rs->cid}",'count'=>$rs->comments);
