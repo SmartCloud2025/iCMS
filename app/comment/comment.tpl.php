@@ -8,21 +8,23 @@
  */
 function comment_list($vars){
 	if ($vars['display']) {
-		$vars['display'] OR $vars['display'] = 'default';
 		$vars['do'] = 'list';
+		$vars['display'] OR $vars['display'] = 'default';
 		if($vars['display'] != 'iframe'){
-			$vars['ajax'] = 'iCMS.comment_page';
+			$vars['ajax'] = true;
 		}
 		unset($vars['method']);
-
-		iPHP::assign('query',http_build_query($vars));
-		iPHP::assign('comment',$vars);
+		$vars['query'] = http_build_query($vars);
+		iPHP::assign('vars',$vars);
 		iPHP::view("iCMS://comment/list.{$vars['display']}.htm");
 		return;
 	}
-var_dump($vars);	
-	isset($vars['vars']) && $vars = $vars['vars'];
 
+	if(isset($vars['vars'])){
+		$_vars = $vars['vars'];
+		unset($vars['vars']);
+	 	$vars = array_merge($vars,$_vars);
+	}
 // print_r(get_class_vars("iCMS")); 
 // exit;
 // $a = iPHP::get_vars(iCMS::$app_name);
@@ -49,20 +51,38 @@ var_dump($vars);
 	}
 	$md5	= md5($whereSQL.$orderSQL);
 	$offset	= 0;
+	$limit  = "LIMIT {$maxperpage}";
 	if($vars['page']){
-		$vars['ajax'] && $vars['ajax'] = 'iCMS.comment_page';
-		$total  = iPHP::total($md5,"SELECT count(*) FROM `#iCMS@__comment` WHERE {$whereSQL} ");
-		$multi  = iCMS::page(array('total'=>$total,'perpage'=>$maxperpage,'unit'=>iPHP::lang('iCMS:page:comment'),'nowindex'=>$GLOBALS['page'],'ajax'=>$vars['ajax']));
+		$total  = iPHP::total($md5,"SELECT count(*) FROM `#iCMS@__comment` WHERE {$whereSQL} limit 1");		
+		$pgconf = array(
+			'total'     => $total,
+			'perpage'   => $maxperpage,
+			'unit'      => iPHP::lang('iCMS:page:comment'),
+			'ajax'      => $vars['ajax']?'iCMS.comment.page':FALSE,
+			'nowindex'  => $GLOBALS['page'],
+		);
+		if($vars['display'] == 'iframe'){
+			iS::gp('pn','GP',2);
+			$pgconf['page_name'] = 'pn';
+			$pgconf['nowindex']  = $GLOBALS['pn'];
+		}
+
+		$multi  = iCMS::page($pgconf);
 		$offset = $multi->offset;
+		$limit  = "LIMIT {$offset},{$maxperpage}";
+		if($offset>1000){
+			$whereSQL.=" AND `id` >= (SELECT `id` FROM `#iCMS@__comment` WHERE {$whereSQL} {$orderSQL} LIMIT {$offset},1)";
+			$limit  = "LIMIT {$maxperpage}";
+		}
 		iPHP::assign("comment_total",$total);
 	}
 	if($vars['cache']){
-		$cacheName	= 'comment/'.$md5."/".(int)$GLOBALS['page'];
+		$cacheName	= 'comment/'.$md5."/".(int)$offset;
 		$rs			= iCache::get($cacheName);
 	}
 	if(empty($rs)){
-		$rs		= iDB::getArray("SELECT * FROM `#iCMS@__comment` WHERE {$whereSQL} {$orderSQL} LIMIT {$offset},{$maxperpage}");
-		//iDB::debug();
+		$rs		= iDB::getArray("SELECT * FROM `#iCMS@__comment` WHERE {$whereSQL} {$orderSQL} {$limit}");
+		iDB::debug();
 		$_count	= count($rs);
 		$ln		=($GLOBALS['page']-1)<0?0:$GLOBALS['page']-1;
 		for ($i=0;$i<$_count;$i++){
@@ -132,6 +152,8 @@ function comment_form($vars){
 			$tpl	= 'form.default';
 			break;
 	}
-	iPHP::assign('comment',$vars);
+	unset($vars['method']);
+	$vars['query'] = http_build_query($vars);
+	iPHP::assign('vars',$vars);
 	return iPHP::view('iCMS://comment/'.$tpl.'.htm');
 }

@@ -176,7 +176,11 @@ if ($.browser.msie && ($.browser.version == "6.0" || $.browser.version == "7.0")
 
 window.iCMS = {
     select: function(a, v) {
-        $("#" + a).val(v || 0).trigger("chosen:updated");
+        var va = v.split(',');
+        $.each(va, function(i,val){      
+          $("#" + a+" option[value='"+val+"']").attr("selected", true);
+        });      
+        $("#"+a).trigger("chosen:updated");
     },
     modal: function() {
         $('[data-toggle="modal"]').on("click",function() {

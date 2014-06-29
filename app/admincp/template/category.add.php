@@ -21,9 +21,9 @@ $(function(){
    		$(this).parent().parent().remove();
 	});
 	$(".addprop").click(function(){
-		var href = $(this).attr("href");
-		var tb	= $(href),tbody=$("tbody",tb);
-		var ntr=$(".aclone",tb).clone(true).removeClass("hide aclone");
+    var href = $(this).attr("href");
+    var tb   = $(href),tbody=$("tbody",tb);
+    var ntr  = $(".aclone",tb).clone(true).removeClass("hide aclone");
 		$('input',ntr).removeAttr("disabled");
 		ntr.appendTo(tbody);
 		return false;
@@ -63,16 +63,10 @@ $(function(){
               <span class="help-inline">本<?php echo $this->name_text;?>的上级<?php echo $this->name_text;?>或分类</span> </div>
             <div class="clearfloat mb10"></div>
             <div class="input-prepend"> <span class="add-on"><?php echo $this->name_text;?>属性</span>
-              <select name="pid" id="pid" class="chosen-select" data-placeholder="请选择<?php echo $this->name_text;?>属性...">
+              <select name="pid[]" id="pid" class="chosen-select span6" data-placeholder="请选择<?php echo $this->name_text;?>属性..." multiple="multiple">
                 <option value="0">普通<?php echo $this->name_text;?>[pid='0']</option>
-                <?php echo iACP::getProp("pid",$rs['pid']) ; ?>
+                <?php echo iACP::getProp("pid") ; ?>
               </select>
-            </div>
-            <div class="clearfloat mb10"></div>
-            <div class="input-prepend"> <span class="add-on"><?php echo $this->name_text;?>状态</span>
-              <div class="switch" data-on-label="显示" data-off-label="隐藏">
-                <input type="checkbox" data-type="switch" name="status" id="status" <?php echo $rs['status']?'checked':''; ?>/>
-              </div>
             </div>
             <div class="clearfloat mb10"></div>
             <div class="input-prepend"> <span class="add-on"><?php echo $this->name_text;?>名称</span>
@@ -114,6 +108,12 @@ $(function(){
             <div class="clearfloat mb10"></div>
             <div class="input-prepend"> <span class="add-on"><?php echo $this->name_text;?>排序</span>
               <input id="orderNum" class="span1" value="<?php echo $rs['orderNum'] ; ?>" name="orderNum" type="text"/>
+            </div>
+            <div class="clearfloat mb10"></div>
+            <div class="input-prepend"> <span class="add-on"><?php echo $this->name_text;?>状态</span>
+              <div class="switch" data-on-label="显示" data-off-label="隐藏">
+                <input type="checkbox" data-type="switch" name="status" id="status" <?php echo $rs['status']?'checked':''; ?>/>
+              </div>
             </div>
           </div>
           <div id="category-add-url" class="tab-pane hide">

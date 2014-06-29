@@ -1,8 +1,8 @@
-<!--{if $comment.display=="iframe"}-->
+<!--{if $vars.display=="iframe"}-->
 <html lang="zh-CN">
 	<head>
 		<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-		<title><!--{$comment.title}-->评论_<!--{$site.title}-->_<!--{$site.seotitle}--></title>
+		<title><!--{$vars.title}-->评论_<!--{$site.title}-->_<!--{$site.seotitle}--></title>
 		<!--{iCMS:public:ui script="false"}-->
 		<script>
 		$(function(){
@@ -21,9 +21,9 @@
 .iCMS-comment-list-wrap .load-more+.iCMS-comment-item { margin: 0; padding: 8px 12px; border-top: 1px solid #eee }
 
 .iCMS-comment-item { position: relative; margin: 0 12px; padding: 8px 0 }
-.iCMS-comment-item .cmt-content-wrap { margin: 0 0 0 35px }
+.iCMS-comment-item .cmt-content-wrap { margin: 0 0 0 48px }
 .iCMS-comment-item .cmt-item-link-avatar { float: left; margin: 0px 8px 0px 0px; }
-.iCMS-comment-item .cmt-item-img-avatar { width: 60px; height: 60px; border-radius: 2px;box-shadow: 0 1px 3px rgba(0,0,0,0.22);padding: 2px;}
+.iCMS-comment-item .cmt-item-img-avatar { width: 36px; height: 36px; border-radius: 2px;box-shadow: 0 1px 3px rgba(0,0,0,0.22);padding: 2px;}
 .iCMS-comment-item .cmt-content { color: #222; min-height: 22px }
 .iCMS-comment-item .cmt-hd, .iCMS-comment-item .cmt-ft { color: #999 }
 .iCMS-comment-item .cmt-hd .desc, .iCMS-comment-item .cmt-ft .desc { font-size: 12px }
@@ -53,7 +53,7 @@
 		</style>
 		<div class="iCMS-comment-list-wrap">
 			<ul class="iCMS-comment-list" id="iCMS-comment-list-box">
-				<!--{iCMS:comment:list loop="true" page="true" row="8" vars=$comment}-->
+				<!--{iCMS:comment:list loop="true" page="true" vars=$vars}-->
 				<li class="iCMS-comment-item" data-id="<!--{$comment_list.id}-->">
 
 <a title="<!--{$comment_list.user.name}-->" data-tip="iCMS:ucard:<!--{$comment_list.user.uid}-->" class="cmt-item-link-avatar" href="<!--{$comment_list.user.url}-->">
@@ -89,9 +89,12 @@
 				</li>
 				<!--{/iCMS}-->
 			</ul>
-			<div class="iCMS-pagination"><!--{$iPAGE|method:'show(4)'}--></div>
+			<script>
+			var comment_param = <!--{$vars|json_encode}-->
+			</script>
+			<div class="iCMS-pagination" data-query="<!--{$vars.query}-->"><!--{$iPAGE|method:'show(4)'}--></div>
 		</div>
-		<!--{if $comment.display=="iframe"}-->
+		<!--{if $vars.display=="iframe"}-->
 	</body>
 </html>
 <!--{/if}-->

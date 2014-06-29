@@ -68,14 +68,22 @@ class articleApp {
         $rs->body = iCMS::keywords($body[intval($page-1)]);
         $current  = $page;
         if($total>1) {
-            $ppHref      = iPHP::page_p2num($pageurl,($page-1>1)?$page-1:1);
-            $rs->pagenav = '<a href="'.$ppHref.'" class="prev" target="_self">'.iPHP::lang('iCMS:page:prev').'</a> ';
-            for($i=1;$i<=$total;$i++) {
-                $cls=($i==$page)?"current":"page";
-                $rs->pagenav.='<a href="'.iPHP::page_p2num($pageurl,$i).'" class="'.$cls.'" target="_self">'.$i.'</a>';
+            $rs->pagenav = '<a href="'.$rs->url.'" class="first" target="_self">'.iPHP::lang('iCMS:page:index').'</a>';
+            $rs->pagenav.= '<a href="'.iPHP::page_p2num($pageurl,($page-1>1)?$page-1:1).'" class="prev" target="_self">'.iPHP::lang('iCMS:page:prev').'</a>';
+            $flag=0;
+            for($i=$page-3;$i<=$page-1;$i++) {
+                if($i<1) continue;
+                $rs->pagenav.="<a href='".iPHP::page_p2num($pageurl,$i)."' target='_self'>$i</a>";
+                $flag++;
             }
-            $npHref      = iPHP::page_p2num($pageurl,(($total-$page>0)?$page+1:$page));
-            $rs->pagenav.='<a href="'.$npHref.'" class="next" target="_self">'.iPHP::lang('iCMS:page:next').'</a>';
+            $rs->pagenav.='<span class="current">'.$page.'</span>';
+            for($i=$page+1;$i<=$total;$i++) {
+                $rs->pagenav.="<a href='".iPHP::page_p2num($pageurl,$i)."' target='_self'>$i</a>";
+                $flag++;
+                if($flag==6)break;
+            }
+            $rs->pagenav.='<a href="'.iPHP::page_p2num($pageurl,(($total-$page>0)?$page+1:$page)).'" class="next" target="_self">'.iPHP::lang('iCMS:page:next').'</a>';
+            $rs->pagenav.='<a href="'.iPHP::page_p2num($pageurl,$total).'" class="end" target="_self">共'.$total.'页</a>';
         }
        $rs->page = array('total'=>$total,'count'=>$count,'current'=>$current,'nav'=>$rs->pagenav,'prev'=>$ppHref,'next'=>$npHref);
         if($page<$total){

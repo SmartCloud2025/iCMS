@@ -140,19 +140,19 @@ class iPages {
 		$plus=ceil($this->pagebarnum/2);
 		if($this->pagebarnum-$plus+$this->nowindex>$this->totalpage)
 			$plus=($this->pagebarnum-$this->totalpage+$this->nowindex);
-		$begin=$this->nowindex-$plus+1;
-		$begin=($begin>=1)?$begin:1;
-		$return='';
+		$begin  =$this->nowindex-$plus+1;
+		$begin  =($begin>=1)?$begin:1;
+		$return ='';
 		for($i=$begin;$i<$begin+$this->pagebarnum;$i++){
 			if($i<=$this->totalpage){
-				if($i!=$this->nowindex)
+				if($i!=$this->nowindex){
 		    		$return.=$this->_get_text($this->_get_link($this->_get_url($i),$i,$style,$target));
-				else 
-		    	$return.=$this->_get_text('<span class="'.$nowindex_style.'">'.$i.'</span>');
+				}else{ 
+		    		$return.=$this->_get_text('<span class="'.$nowindex_style.'">'.$i.'</span>');
+		    	}
 			}else{
 				break;
 			}
-			$return.="\n";
 		}
 		unset($begin);
 		return $return;
@@ -270,7 +270,7 @@ class iPages {
 		if($pageno<2){
 			$url	= $this->url;
 			if(!$this->html['enable']){
-				$url	= str_replace(array('?page={P}','&page={P}'),'',$this->url);
+				$url	= str_replace(array('?'.$this->page_name.'={P}','&'.$this->page_name.'={P}'),'',$this->url);
 			}
 			return str_replace('_{P}','',$url);
 		}
@@ -296,7 +296,7 @@ class iPages {
 		$target OR $target	= '_self';
 		if($this->is_ajax){
 	  		//如果是使用AJAX模式
-			return '<a '.$style.' href="javascript:'.$this->ajax_fun.'(\''.$url.'\',this);">'.$text.'</a>';
+			return '<a '.$style.' href="javascript:;" onclick="'.$this->ajax_fun.'(\''.$url.'\',this)">'.$text.'</a>';
 		}else{
 			return '<a '.$style.' href="'.$url.'" target="'.$target.'">'.$text.'</a>';
 		}

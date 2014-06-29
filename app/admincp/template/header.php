@@ -45,7 +45,7 @@ $navbar OR $bodyClass	= 'iframe ';
 <script type="text/javascript" src="<?php echo ACP_UI;?>/iCMS-6.0.0.js"></script>
 <script type="text/javascript" src="<?php echo ACP_UI;?>/admincp-6.0.0.js"></script>
 <script type="text/javascript">
-window.iCMS.DIR		= "/<?php echo trim(iCMS::$config['router']['DIR'],'/');?>/";
+window.iCMS.DIR		= "<?php echo trim(iCMS::$config['router']['DIR'],'/');?>/";
 window.iCMS.APP		= "<?php echo __ADMINCP__;?>";
 window.iCMS.UI		= "<?php echo ACP_UI;?>";
 window.iCMS.URL		= "<?php echo iCMS::$config['router']['URL'];?>";

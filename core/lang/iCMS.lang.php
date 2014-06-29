@@ -23,7 +23,9 @@ return array(
 		'sql'     =>'条记录',
 		'tag'     =>'个标签',
 		'comment' =>'条评论',
-		'message' =>'条留言'
+		'format_left' =>'',
+		'format_right' =>'',
+		'di' =>'第',
 	),
 	'article'=>array(
 		'first'     =>'已经是第一篇',

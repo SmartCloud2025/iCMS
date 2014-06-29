@@ -98,9 +98,9 @@ class tag {
 	    
 	    $tid	= iDB::getValue("SELECT `id` FROM `#iCMS@__tags` WHERE `name`='$tag'");
 	    if($tid) {
-	        $tlid = iDB::getValue("SELECT `id` FROM `#iCMS@__taglist` WHERE `iid`='$iid' and `tid`='$tid' and `appid`='".TAG_APPID."'");
+	        $tlid = iDB::getValue("SELECT `id` FROM `#iCMS@__tag_map` WHERE `iid`='$iid' and `tid`='$tid' and `appid`='".TAG_APPID."'");
 	        if(empty($tlid)) {
-	            iDB::query("INSERT INTO `#iCMS@__taglist` (`iid`, `tid`, `appid`) VALUES ('$iid', '$tid', '".TAG_APPID."')");
+	            iDB::query("INSERT INTO `#iCMS@__tag_map` (`iid`, `tid`, `appid`) VALUES ('$iid', '$tid', '".TAG_APPID."')");
 	            iDB::query("UPDATE `#iCMS@__tags` SET  `count`=count+1,`pubdate`='".time()."'  WHERE `id`='$tid'");
 	        }
 	    }else {
@@ -110,7 +110,7 @@ class tag {
 VALUES ('$uid', '$cid', '$tcid', '0', '$tkey', '$tag', '', '', '', '', '', '', '', '', '1', '0', '', '0', '".time()."', '1');");
 	        $tid = iDB::$insert_id;
 	        self::cache($tag);
-	        iDB::query("INSERT INTO `#iCMS@__taglist` (`iid`, `tid`, `appid`) VALUES ('$iid', '$tid', '".TAG_APPID."')");
+	        iDB::query("INSERT INTO `#iCMS@__tag_map` (`iid`, `tid`, `appid`) VALUES ('$iid', '$tid', '".TAG_APPID."')");
 	    }
 	    return array($tag,$tid,$cid,$tcid);
 	}
@@ -127,10 +127,10 @@ VALUES ('$uid', '$cid', '$tcid', '0', '$tkey', '$tag', '', '', '', '', '', '', '
 	        if($tA->count<=1) {
 	        	//$iid && $sql="AND `iid`='$iid'";
 	            iDB::query("DELETE FROM `#iCMS@__tags`  WHERE `name`='$tag'");
-	            iDB::query("DELETE FROM `#iCMS@__taglist` WHERE `tid`='$tA->id'");
+	            iDB::query("DELETE FROM `#iCMS@__tag_map` WHERE `tid`='$tA->id'");
 	        }else {
 	            iDB::query("UPDATE `#iCMS@__tags` SET  `count`=count-1,`pubdate`='".time()."'  WHERE `name`='$tag' and `count`>0");
-	            iDB::query("DELETE FROM `#iCMS@__taglist` WHERE `iid`='$iid' and `tid`='$tA->id' AND `appid`='".TAG_APPID."'");
+	            iDB::query("DELETE FROM `#iCMS@__tag_map` WHERE `iid`='$iid' and `tid`='$tA->id' AND `appid`='".TAG_APPID."'");
 	        }
 	   }
 	   return json_encode($tagArray);
@@ -140,7 +140,7 @@ VALUES ('$uid', '$cid', '$tcid', '0', '$tkey', '$tag', '', '', '', '', '', '', '
 	    $iid && $sql="AND `iid`='$iid'";
 	    foreach($tagArray AS $k=>$v) {
 	    	$tagA	= iDB::getRow("SELECT * FROM `#iCMS@__tags` WHERE `$field`='$v' LIMIT 1;");
-	    	$tRS	= iDB::getArray("SELECT `iid` FROM `#iCMS@__taglist` WHERE `tid`='$tagA->id' AND `appid`='".TAG_APPID."' {$sql}");
+	    	$tRS	= iDB::getArray("SELECT `iid` FROM `#iCMS@__tag_map` WHERE `tid`='$tagA->id' AND `appid`='".TAG_APPID."' {$sql}");
 	    	foreach((array)$tRS AS $TL) {
 	    		$idA[]=$TL['iid'];
 	    	}
@@ -151,7 +151,7 @@ VALUES ('$uid', '$cid', '$tcid', '0', '$tkey', '$tag', '', '', '', '', '', '', '
 		    // 	iDB::query("UPDATE `#iCMS@__$table` SET `tags`=REPLACE(tags, '$tagA->name,',''),`tags`=REPLACE(tags, ',$tagA->name','') WHERE id IN($ids)");
 	    	// }
             iDB::query("DELETE FROM `#iCMS@__tags`  WHERE `$field`='$v'");
-            iDB::query("DELETE FROM `#iCMS@__taglist` WHERE tid='$tagA->id' AND `appid`='".TAG_APPID."' {$sql}");
+            iDB::query("DELETE FROM `#iCMS@__tag_map` WHERE tid='$tagA->id' AND `appid`='".TAG_APPID."' {$sql}");
             $ckey	= self::tkey($tagA->cid);
             iCache::delete($ckey);
 	    }

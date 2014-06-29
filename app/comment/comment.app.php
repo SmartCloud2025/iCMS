@@ -14,21 +14,12 @@ class commentApp {
         $this->id       = (int)$_GET['id'];
     }
     public function API_list(){
-        // $vars['iid']     = (int)$_GET['iid'];
-        // $vars['cid']     = (int)$_GET['cid'];
-        // $vars['appid']   = (int)$_GET['appid'];
-        // $vars['display'] = $_GET['display'];
-        //iCMS::hooks
-        iPHP::assign('comment',$_GET);
+        iPHP::assign('vars',$_GET);
         return iPHP::view('iCMS://comment/list.default.htm');
     }
     public function API_form(){
-        $vars['iid']     = (int)$_GET['iid'];
-        $vars['cid']     = (int)$_GET['cid'];
-        $vars['appid']   = (int)$_GET['appid'];
-        $vars['title']   = iS::escapeStr($_GET['title']);
-        $vars['display'] = $_GET['display'];
-        iPHP::assign('comment',$vars);
+        $_GET['title']   = iS::escapeStr($_GET['title']);
+        iPHP::assign('vars',$_GET);
         return iPHP::view('iCMS://comment/form.default.htm');
     }
     public function API_like(){

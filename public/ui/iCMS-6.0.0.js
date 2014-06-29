@@ -72,8 +72,19 @@
                         return false;
                     }
                 }, 'json');
+            }
+        },
+        comment:{
+            page:function (pn,a) {
+                var $this = $(a),
+                    p = $this.parent(),
+                    pp = p.parent(),
+                    query = p.attr('data-query');
+
+                //url
+                console.log(a,p,query);
             },
-            comment_box: function(a) {
+            box: function(a) {
                 var $this = $(a),
                     p = $this.parent(),
                     pp = p.parent(),
@@ -372,7 +383,7 @@
                 }
                 var param = iCMS.param($(this));
                 if (param.do =='comment') {
-                    iCMS.article.comment_box(this);
+                    iCMS.comment.box(this);
                 } else if (param.do =='good') {
                     iCMS.article.good(this);
                 }

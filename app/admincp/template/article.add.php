@@ -22,6 +22,8 @@ $(function(){
 		iCMS.editor[this.value].focus();
 		$(".iCMS-editor-page").val(this.value).trigger("chosen:updated");
 	});
+  iCMS.select('pid',"<?php echo $rs['pid'] ; ?>");
+  iCMS.select('scid',"<?php echo $rs['scid'] ; ?>");
 	$("#cid").change(function() {
     var cid = this.value;
 		$.getJSON("<?php echo APP_URI; ?>",{'do':'getmeta','cid':cid},function(prop){
@@ -192,10 +194,21 @@ function _modal_dialog(cancel){
                 <?php }  ?>
               </select>
             </div>
+            <div class="clearfloat mb10"></div>
+            <div class="input-prepend"> <span class="add-on">副栏目</span>
+              <?php if($cata_option){  ?>
+              <select name="scid[]" id="scid" class="chosen-select span6" multiple="multiple"  data-placeholder="请选择副栏目(可多选)...">
+                <?php echo $cata_option;}else{  ?>
+                <select onclick="window.location.replace('<?php echo __ADMINCP__; ?>=category&do=add');">
+                <option value="0"> == 暂无栏目请先添加 == </option>
+                <?php }  ?>
+              </select>
+            </div>
+            <div class="clearfloat mb10"></div>
             <div class="input-prepend"> <span class="add-on">属 性</span>
-              <select name="pid" id="pid" class="chosen-select span3">
+              <select name="pid[]" id="pid" class="chosen-select span6" multiple="multiple">
                 <option value="0">普通文章[pid='0']</option>
-                <?php echo iACP::getProp("pid",$rs['pid']) ; ?>
+                <?php echo iACP::getProp("pid") ; ?>
               </select>
             </div>
             <div class="clearfloat mb10"></div>

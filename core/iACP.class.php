@@ -205,21 +205,43 @@ class iACP {
         echo '</div>';
     }
 
-    function getProp($field, $val = NULL, $out = 'option', $type = "") {
+    function getProp($field, $val = NULL,/*$default=array(),*/$out = 'option', $url="",$type = "") {
         $type OR $type = self::$app_name;
         $propArray = iCache::get("iCMS/prop/{$type}.{$field}");
-        $opt = "";
-        if ($propArray)
+        $valArray  = explode(',', $val);
+
+        // $opt = '<select name="'.$field.'" id="'.$field.'" class="chosen-select span6" multiple="multiple">';
+        // if ($default){
+        //     foreach ($default AS $dval => $dname) {
+        //         $opt.='<option value="'.$dval.'" '.($val == $dval ? " selected='selected'" : '').'>'.$dname.'['.$field.'=\''.$dval.'\']</option>';
+        //     }
+        // }
+        if ($propArray){
             foreach ($propArray AS $k => $P) {
                 if ($out == 'option') {
-                    $opt.="<option value='{$P['val']}'" . ($val == $P['val'] ? " selected='selected'" : '') . ">{$P['name']}[pid='{$P['val']}'] </option>";
+                    $opt.="<option value='{$P['val']}'" . (array_search($P['val'],$valArray)? " selected='selected'" : '') . ">{$P['name']}[pid='{$P['val']}'] </option>";
                 } elseif ($out == 'text') {
-                    if ($val == $P['val']) {
-                        return '<i class="fa fa-flag"></i>' . $P['name'] . '';
+                    if (array_search($P['val'],$valArray)) {
+                        $flag = '<i class="fa fa-flag"></i> '.$P['name'];
+                        $opt .= ($url?'<a href="'.str_replace('{PID}',$P['val'],$url).'">'.$flag.'</a>':$flag).'<br />';
                     }
                 }
             }
+        }
+        // $opt.='</select>';
         return $opt;
+    }
+    function propmap($pid,$iid,$appid){
+        $id =  iDB::gerValue("SELECT `id` FROM `#iCMS@__prop_map` WHERE `pid`='$pid' AND `iid`='$iid' AND `appid`='$appid'");
+        if($id){
+            iDB::query("UPDATE `icms6`.`icms_prop_map`
+SET `pid` = '$pid', `iid` = '$iid', `appid` = '$appid'
+WHERE `id` = '$id';");
+        }else{
+            iDB::query("INSERT INTO `icms6`.`icms_prop_map`
+            (`pid`, `iid`, `appid`)
+VALUES ('$pid', '$iid', '$appid');");
+        }
     }
 
 }

@@ -72,7 +72,7 @@ $(function(){
             <span class="help-inline">本标签所属的标签分类</span>
             <div class="clearfloat mb10"></div>
             <div class="input-prepend"> <span class="add-on">标签属性</span>
-              <select name="pid" id="pid" class="chosen-select span3">
+              <select name="pid" id="pid" class="chosen-select span3" multiple="multiple">
                 <option value="0">普通标签[pid='0']</option>
                 <?php echo iACP::getProp("pid",$rs['pid']) ; ?>
               </select>

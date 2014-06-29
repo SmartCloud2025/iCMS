@@ -18,7 +18,10 @@
         <div id="page">
           <h1><!--{$article.title}--></h1>
           <div class="article-info">
-            <div class="article-author-time"> <a href="<!--{$article.user.url}-->" target="_blank"><!--{$article.author}--></a><span class="time"><!--{$article.pubdate|date:"Y-m-d H:s"}--></span> </div>
+            <div class="article-author-time"> 
+              <a href="<!--{$article.user.url}-->" target="_blank"><!--{$article.author}--></a>
+              <span class="time"><!--{$article.pubdate|date:"Y-m-d H:s"}--></span> 
+            </div>
             <div class="share-area">
               <!-- Baidu Button BEGIN -->
               <div id="bdshare" class="bdshare_t bds_tools get-codes-bdshare" style="float:right"> <span class="bds_more" style="background:#fff!important;padding:0;">分享到：</span> <a class="bds_qzone"></a> <a class="bds_tsina"></a> <a class="bds_tqq"></a> <a class="bds_renren"></a> <a class="bds_t163"></a> <a class="shareCount" style="display:none"></a> </div>
@@ -54,9 +57,8 @@
           </div>
           <script type="text/javascript">(function(){$("img",".article-detail").each(function(i){iCMS.imgFix(this,550,600);});})($);</script>
           <script type="text/javascript">(function(){$(window).keydown(function(event){switch(event.keyCode) {case 37: window.location.href='<!--{$article.page.prev}-->';break;case 39: window.location.href='<!--{$article.page.next}-->';break;}});})($);</script>
-          <div class="article-pagenav">
+          <div class="article-pagenav iCMS-pagination clearfix">
             <!--{$article.pagenav}-->
-            <div class="clearfix"></div>
           </div>
           <div class="tip clr">提示：键盘也能翻页，试试"← →"键</div>
         </div>
@@ -80,7 +82,7 @@
 
         <div class="comments_list clearfix">
           <h3 class="label label-info"><i class="fa fa-comments"></i> 精彩评论</h3>
-          <!--{iCMS:comment:list page="true" display="default" appid="1" iid=$article.id}-->
+          <!--{iCMS:comment:list page="true" display="default" row="1" appid="1" iid=$article.id}-->
           <!--{iCMS:comment:list display="ajax" appid="1" iid=$article.id}-->
           <!--{iCMS:comment:list page="true" display="iframe" appid="1" iid=$article.id}-->
         </div>

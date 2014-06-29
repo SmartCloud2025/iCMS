@@ -1,8 +1,8 @@
-<!--{if $comment.display=="iframe"}-->
+<!--{if $vars.display=="iframe"}-->
 <html lang="zh-CN">
 	<head>
 		<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-		<title><!--{$comment.title}-->评论_<!--{$site.title}-->_<!--{$site.seotitle}--></title>
+		<title><!--{$vars.title}-->评论_<!--{$site.title}-->_<!--{$site.seotitle}--></title>
 		<!--{iCMS:public:ui script="false"}-->
 		<script>
 		$(function(){
@@ -53,10 +53,10 @@
 				<textarea class="iCMS-editor-text" name="comment[content]"></textarea>
 			</div>
 			<div class="iCMS-cmt-command clearfix">
-				<input type="hidden" id="comment_title"	name="comment[title]" value="<!--{$comment.title}-->">
-				<input type="hidden" id="comment_appid"	name="comment[appid]" value="<!--{$comment.appid}-->">
-				<input type="hidden" id="comment_iid" name="comment[iid]" value="<!--{$comment.iid}-->">
-				<input type="hidden" id="comment_cid" name="comment[cid]" value="<!--{$comment.cid}-->">
+				<input type="hidden" id="comment_title"	name="comment[title]" value="<!--{$vars.title}-->">
+				<input type="hidden" id="comment_appid"	name="comment[appid]" value="<!--{$vars.appid}-->">
+				<input type="hidden" id="comment_iid" name="comment[iid]" value="<!--{$vars.iid}-->">
+				<input type="hidden" id="comment_cid" name="comment[cid]" value="<!--{$vars.cid}-->">
 				<button class="btn btn-primary cmt-add" type="submit"><i class="fa fa-check"></i> 评 论</button>
 				<a href="javascript:;" class="cmt-cancel">取 消</a>
 			</div>
@@ -72,7 +72,7 @@
             }
 		})
 		</script>
-		<!--{if $comment.display=="iframe"}-->
+		<!--{if $vars.display=="iframe"}-->
 	</body>
 </html>
 <!--{/if}-->

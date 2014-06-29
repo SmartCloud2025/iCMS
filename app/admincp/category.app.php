@@ -60,6 +60,7 @@ class categoryApp{
         $isexamine    = (int)$_POST['isexamine'];
         $orderNum     = (int)$_POST['orderNum'];
         $mode         = (int)$_POST['mode'];
+        $pid          = implode(',', (array)$_POST['pid']);
         $name         = iS::escapeStr($_POST['name']);
         $subname      = iS::escapeStr($_POST['subname']);
         $domain       = iS::escapeStr($_POST['domain']);
@@ -71,7 +72,6 @@ class categoryApp{
         $title        = iS::escapeStr($_POST['title']);
         $keywords     = iS::escapeStr($_POST['keywords']);
         $description  = iS::escapeStr($_POST['description']);
-        $pid          = iS::escapeStr($_POST['pid']);
         $categoryURI  = iS::escapeStr($_POST['categoryURI']);
         $categoryRule = iS::escapeStr($_POST['categoryRule']);
         $contentRule  = iS::escapeStr($_POST['contentRule']);
