@@ -168,11 +168,14 @@ class iDB{
 
         return $return_val;
     }
-    function debug(){
-		echo '<!--'.self::$last_query."\n";
-		$explain 	= self::getRow('explain '.self::$last_query);
+    function debug($show=false){
+        if(!self::$show_errors) return false;
+
+		if(!$show) echo '<!--';
+        echo self::$last_query."\n";
+		$explain 	= self::getRow('EXPLAIN EXTENDED '.self::$last_query);
 		var_dump($explain);
-        echo "-->\n";
+        if(!$show) echo "-->\n";
     }
     /**
      * Insert an array of data into a table

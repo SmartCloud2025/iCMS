@@ -17,7 +17,13 @@ function category_list($vars){
 	$status    = isset($vars['status'])?(int)$vars['status']:"1";
 	$whereSQL  =" WHERE `appid`='$appid' AND `status`='$status'";
 
-	isset($vars['pid']) && $whereSQL.=" AND `pid` = '{$vars['pid']}'";
+	if($vars['pid']){
+		iPHP::import(iPHP_APP_CORE .'/iMAP.class.php');
+		$map = new map(iCMS_APP_CATEGORY);
+		$ids = $map->ids($vars['pid']);
+//		$whereSQL.=" AND `pid` = '{$vars['pid']}'";
+		$whereSQL.=" AND `cid` IN ($ids)";
+	}
 	isset($vars['mode']) && $whereSQL.=" AND `mode` = '{$vars['mode']}'";
 	
 	isset($vars['cid']) && !isset($vars['stype']) && $whereSQL.= iPHP::andSQL($vars['cid'],'cid');
@@ -48,6 +54,7 @@ function category_list($vars){
 	if(empty($rs)){
 		$rootidA= iCache::get('iCMS/category/rootid');
 		$rs		= iDB::getArray("SELECT * FROM `#iCMS@__category`{$whereSQL} ORDER BY `orderNum`,`cid` ASC LIMIT $row");
+		//iDB::debug(1);
 		$_count	= count($rs);
 		for ($i=0;$i<$_count;$i++){
 			$rs[$i]['child'] = $rootidA[$rs[$i]['cid']]?true:false;
