@@ -25,6 +25,7 @@ class categoryApp{
             $rootid	= $rs['rootid'];
             $rs['metadata'] && $rs['metadata']=unserialize($rs['metadata']);
             $rs['contentprop'] && $rs['contentprop']=unserialize($rs['contentprop']);
+            $rs['body'] = iCache::get('iCMS/category.'.$this->cid.'/body');
         }else {
             $rootid=(int)$_GET['rootid'];
             $rootid && iMember::CP($rootid,'Permission_Denied',APP_URI);
@@ -61,6 +62,7 @@ class categoryApp{
         $orderNum     = (int)$_POST['orderNum'];
         $mode         = (int)$_POST['mode'];
         $pid          = implode(',', (array)$_POST['pid']);
+        $opid         = iS::escapeStr($_POST['opid']);;
         $name         = iS::escapeStr($_POST['name']);
         $subname      = iS::escapeStr($_POST['subname']);
         $domain       = iS::escapeStr($_POST['domain']);
@@ -81,6 +83,8 @@ class categoryApp{
         $contentTPL   = iS::escapeStr($_POST['contentTPL']);
         $metadata     = iS::escapeStr($_POST['metadata']);
         $contentprop  = iS::escapeStr($_POST['contentprop']);
+        $bodyData     = $_POST['body'];
+        $body         = $bodyData?1:0;
 
         ($cid && $cid==$rootid) && iPHP::alert('不能以自身做为上级'.$this->name_text);
         empty($name) && iPHP::alert($this->name_text.'名称不能为空!');
@@ -95,7 +99,7 @@ class categoryApp{
 		if($contentprop){
 	        $ca			= array();
 			foreach($contentprop['key'] AS $_cak=>$_caval){
-				$_caval OR $_caval = strtolower(iPHP::pinyin($contentprop['name'][$_cak]));
+				$_caval OR $_caval = strtolower(pinyin($contentprop['name'][$_cak]));
 				!preg_match("/[a-zA-Z0-9_\-]/",$_caval) && iPHP::alert('内容附加属性字段只能由英文字母、数字或_-组成(不支持中文)');
 				$ca[$_caval]=$contentprop['name'][$_cak];
 			}
@@ -103,7 +107,7 @@ class categoryApp{
 		}
 		
         if(empty($dir) && empty($url)) {
-            $dir = strtolower(iPHP::pinyin($name));
+            $dir = strtolower(pinyin($name));
         }
         
         if($mode=="2"){
@@ -114,17 +118,22 @@ class categoryApp{
         		iPHP::alert('伪静态模式下内容URL规则<hr />必需要有<br />{ID}文章ID <br />或者<br />{0xID}文章ID补零<br />');
         	}
         }
+        iPHP::import(iPHP_APP_CORE .'/iMAP.class.php');
+        $map = new map(iCMS_APP_CATEGORY);
+
         if(empty($cid)) {
         	$nameArray	= explode("\n",$name);
         	foreach($nameArray AS $nkey=>$_name){
         		$_name	= trim($_name);
+                if(empty($_name)) continue;
 		        if(empty($url)){
-		            $_dir = strtolower(iPHP::pinyin($_name));
+		            $_dir = strtolower(pinyin($_name));
 		        }
 	            (iDB::getValue("SELECT `dir` FROM `#iCMS@__category` where `dir` ='$_dir' AND `appid`='$this->appid'") && empty($url)) && iPHP::alert('该'.$this->name_text.'别名/目录已经存在!请另选一个');
-	            iDB::query("INSERT INTO `#iCMS@__category` (`rootid`,`appid`,`orderNum`,`name`,`subname`,`password`,`title`,`keywords`,`description`,`dir`,`mode`,`domain`,`url`,`pic`,`htmlext`,`categoryURI`,`categoryRule`,`contentRule`,`urlRule`,`indexTPL`,`listTPL`,`contentTPL`,`metadata`,`contentprop`,`pid`,`isexamine`,`issend`,`isucshow`,`status`)
-	    		VALUES ('$rootid','$this->appid', '$orderNum', '$_name','$subname','$password','$title','$keywords', '$description', '$_dir','$mode','$domain', '$url','$pic','$htmlext','$categoryURI','$categoryRule', '$contentRule','$urlRule','$indexTPL', '$listTPL', '$contentTPL','$metadata','$contentprop', '$pid','$isexamine','$issend','$isucshow','$status')");
+	            iDB::query("INSERT INTO `#iCMS@__category` (`rootid`,`appid`,`orderNum`,`name`,`subname`,`password`,`title`,`keywords`,`description`,`dir`,`mode`,`domain`,`url`,`pic`,`htmlext`,`categoryURI`,`categoryRule`,`contentRule`,`urlRule`,`indexTPL`,`listTPL`,`contentTPL`,`metadata`,`contentprop`,`body`,`pid`,`isexamine`,`issend`,`isucshow`,`status`)
+	    		VALUES ('$rootid','$this->appid', '$orderNum', '$_name','$subname','$password','$title','$keywords', '$description', '$_dir','$mode','$domain', '$url','$pic','$htmlext','$categoryURI','$categoryRule', '$contentRule','$urlRule','$indexTPL', '$listTPL', '$contentTPL','$metadata','$contentprop', '$body','$pid','$isexamine','$issend','$isucshow','$status')");
 	    		$cid = iDB::$insert_id;
+                $map->add($pid,$cid);
 	            $this->category->cache(false,$this->appid);
 	            $this->category->cacheOne($cid);
             }
@@ -133,10 +142,12 @@ class categoryApp{
             iMember::CP($cid,'Permission_Denied',APP_URI);
             $rootid!=$category->category[$cid]['rootid'] && iMember::CP($rootid,'Permission_Denied',APP_URI);
             iDB::getValue("SELECT `dir` FROM `#iCMS@__category` where `dir` ='$dir' AND `cid` !='$cid' AND `appid`='$this->appid'") && empty($url) &&  iPHP::alert('该'.$this->name_text.'别名/目录已经存在!请另选一个');
-            iDB::query("UPDATE `#iCMS@__category` SET `rootid` = '$rootid',`orderNum` = '$orderNum',`name` = '$name',`subname` = '$subname',`password`='$password',`title` = '$title',`keywords` = '$keywords',`description` = '$description',`dir` = '$dir',`url` = '$url',`mode` = '$mode',`domain` = '$domain',`pic`='$pic',`htmlext`='$htmlext',`categoryURI`='$categoryURI',`categoryRule`='$categoryRule',`contentRule`='$contentRule',`urlRule`='$urlRule',`indexTPL` = '$indexTPL',`listTPL` = '$listTPL',`contentTPL` = '$contentTPL',`metadata` = '$metadata',`contentprop` = '$contentprop',`pid` = '$pid',`isexamine`='$isexamine',`status`='$status',`issend`='$issend',`isucshow`='$isucshow' WHERE `cid` ='$cid' ");
+            iDB::query("UPDATE `#iCMS@__category` SET `rootid` = '$rootid',`orderNum` = '$orderNum',`name` = '$name',`subname` = '$subname',`password`='$password',`title` = '$title',`keywords` = '$keywords',`description` = '$description',`dir` = '$dir',`url` = '$url',`mode` = '$mode',`domain` = '$domain',`pic`='$pic',`htmlext`='$htmlext',`categoryURI`='$categoryURI',`categoryRule`='$categoryRule',`contentRule`='$contentRule',`urlRule`='$urlRule',`indexTPL` = '$indexTPL',`listTPL` = '$listTPL',`contentTPL` = '$contentTPL',`metadata` = '$metadata',`contentprop` = '$contentprop',`body` = '$body',`pid` = '$pid',`isexamine`='$isexamine',`status`='$status',`issend`='$issend',`isucshow`='$isucshow' WHERE `cid` ='$cid' ");
+            $map->diff($pid,$opid,$cid);
             $this->category->cacheOne($cid);
             $msg=$this->name_text."编辑完成!";
         }
+        $body && iCache::set('iCMS/category.'.$cid.'/body',$bodyData,0);
         iPHP::OK($msg,'url:'.APP_URI);
     }
     function doupdate(){

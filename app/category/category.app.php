@@ -54,7 +54,7 @@ class categoryApp{
 	        	exit;
         	}
         }
-        
+        $rs['body'] && $rs['body'] = iCache::get('iCMS/category.'.$rs['cid'].'/body');
         ($rs['mode'] && $tpl) && iPHP::page($iurl);
         
 		iPHP::assign('category',$rs);

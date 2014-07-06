@@ -113,7 +113,7 @@ class tagsApp{
 			$tkey = substr(md5($url),8,16);
 			iDB::getValue("SELECT `id` FROM `#iCMS@__tags` where `tkey` = '$tkey'") && iPHP::alert('该自定义链接已经存在!请检查是否重复');
 		}
-		$tkey OR $tkey = strtolower(iPHP::pinyin($name));
+		$tkey OR $tkey = strtolower(pinyin($name));
 		strstr($pic, 'http://') && $pic = iFS::http($pic);
 		
 		if(empty($id)){

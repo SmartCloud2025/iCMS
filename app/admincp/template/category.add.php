@@ -41,13 +41,14 @@ $(function(){
         <li><a href="#category-add-tpl" data-toggle="tab"><i class="fa fa-columns"></i> 模版设置</a></li>
         <li><a href="#category-add-user" data-toggle="tab"><i class="fa fa-user"></i> 用户设置</a></li>
         <li><a href="#category-add-prop" data-toggle="tab"><i class="fa fa-wrench"></i> <?php echo $this->name_text;?>附加属性</a></li>
+        <li><a href="#category-add-body" data-toggle="tab"><i class="fa fa-wrench"></i> HTML</a></li>
         <li><a href="#category-add-art" data-toggle="tab"><i class="fa fa-wrench"></i> 内容扩展属性</a></li>
-        <li><a href="#category-add-body" data-toggle="tab"><i class="fa fa-wrench"></i> 内容</a></li>
       </ul>
     </div>
     <div class="widget-content nopadding">
       <form action="<?php echo APP_FURI; ?>&do=save" method="post" class="form-inline" id="iCMS-category" target="iPHP_FRAME">
         <input name="cid" type="hidden" value="<?php echo $rs['cid']  ; ?>" />
+        <input name="opid" type="hidden" value="<?php echo $rs['pid']  ; ?>" />
         <div id="category-add" class="tab-content">
           <div id="category-add-base" class="tab-pane active">
             <div class="input-prepend"> <span class="add-on">上级<?php echo $this->name_text;?></span>
@@ -311,9 +312,10 @@ $(function(){
             <script type="text/javascript" charset="utf-8" src="app/editor/iCMS.editor-6.0.0.js"></script>
             <script type="text/javascript" charset="utf-8" src="app/editor/ueditor/ueditor.all.min.js"></script>
             <span class="help-inline">大文本段,支持HTML,至于干嘛用,我也不知道...你爱怎么用就怎么用!!</span>
-            <textarea type="text/plain" id="iCMS-editor" name="body"><?php echo $bodyArray[$i];?></textarea>
+            <a class="btn" href="javascript:iCMS.editor.cleanup();"><i class="fa fa-magic"></i> 自动排版</a>
+            <textarea type="text/plain" id="iCMS-editor-1" name="body"><?php echo $rs['body'] ; ?></textarea>
             <script type="text/javascript">
-            UE.getEditor('iCMS-editor');
+            iCMS.editor.create();
             </script>
           </div>
         </div>

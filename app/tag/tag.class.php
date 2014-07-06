@@ -104,7 +104,7 @@ class tag {
 	            iDB::query("UPDATE `#iCMS@__tags` SET  `count`=count+1,`pubdate`='".time()."'  WHERE `id`='$tid'");
 	        }
 	    }else {
-	        $tkey	= iPHP::pinyin($tag,iCMS::$config['other']['CLsplit']);
+	        $tkey	= pinyin($tag,iCMS::$config['other']['CLsplit']);
 	        iDB::query("INSERT INTO `#iCMS@__tags`
             (`uid`, `cid`, `tcid`, `pid`, `tkey`, `name`, `seotitle`, `subtitle`, `keywords`, `description`, `ispic`, `pic`, `url`, `related`, `count`, `weight`, `tpl`, `ordernum`, `pubdate`, `status`)
 VALUES ('$uid', '$cid', '$tcid', '0', '$tkey', '$tag', '', '', '', '', '', '', '', '', '1', '0', '', '0', '".time()."', '1');");

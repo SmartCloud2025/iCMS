@@ -231,17 +231,20 @@ class iACP {
         // $opt.='</select>';
         return $opt;
     }
-    function propmap($pid,$iid,$appid){
-        $id =  iDB::gerValue("SELECT `id` FROM `#iCMS@__prop_map` WHERE `pid`='$pid' AND `iid`='$iid' AND `appid`='$appid'");
-        if($id){
-            iDB::query("UPDATE `icms6`.`icms_prop_map`
-SET `pid` = '$pid', `iid` = '$iid', `appid` = '$appid'
-WHERE `id` = '$id';");
-        }else{
-            iDB::query("INSERT INTO `icms6`.`icms_prop_map`
-            (`pid`, `iid`, `appid`)
-VALUES ('$pid', '$iid', '$appid');");
+    function propmap($field,$iid,$appid){
+        foreach ((array)$_POST[$field] as $key => $pid) {
+            $id =  iDB::getValue("SELECT `id` FROM `#iCMS@__prop_map` WHERE `pid`='$pid' AND `iid`='$iid' AND `appid`='$appid'");
+            if($id){
+                iDB::query("UPDATE `#iCMS@__prop_map`
+    SET `pid` = '$pid', `iid` = '$iid', `appid` = '$appid'
+    WHERE `id` = '$id';");
+            }else{
+                iDB::query("INSERT INTO `#iCMS@__prop_map`
+                (`pid`, `iid`, `appid`)
+    VALUES ('$pid', '$iid', '$appid');");
+            }            
         }
+
     }
 
 }

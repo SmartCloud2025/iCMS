@@ -7,28 +7,15 @@
  * @$Id: category.tpl.php 2379 2014-03-19 02:37:47Z coolmoo $
  */
 function category_array($vars){
-	$id		= (int)$vars['cid'];
-	$rs		= iCache::get('iCMS/category/'.$id);
-	empty($rs) && iPHP::throwException('应用程序运行出错.找不到该栏目: <b>cid:'. $id.'</b>', 3002);
-	if($rs['url']) {
-		$gourl=(isset($vars['gotourl']) && $vars['gotourl']==0)?false:true;
-		if($gourl) return iPHP::gotourl($rs['url']);
-	}
-	$iurl       = iURL::get('category',$rs);
-	$rs['url']	= $iurl->href;
-	$rs['link']	= "<a href='{$rs['url']}'>{$rs['name']}</a>";
-	//$rs['nav']	= $iCMS->shownav($rs['cid']);
-	$rootidA		= iCache::get('iCMS/category/rootid');
-	$rs['subid']    = $rootidA[$id];
-	$rs['subids']   = implode(',',(array)$rs['subid']);
-	return $rs;
+	$cid         = (int)$vars['cid'];
+	return iPHP::app("category")->category($cid,false);
 }
 function category_list($vars){
-	$appid		= isset($vars['appid'])?(int)$vars['appid']:iCMS_APP_ARTICLE;
-	$row		= isset($vars['row'])?(int)$vars['row']:"100";
-	$cacheTime	= isset($vars['time'])?(int)$vars['time']:"-1";
-	$status		= isset($vars['status'])?(int)$vars['status']:"1";
-	$whereSQL	=" WHERE `appid`='$appid' AND `status`='$status'";
+	$appid     = isset($vars['appid'])?(int)$vars['appid']:iCMS_APP_ARTICLE;
+	$row       = isset($vars['row'])?(int)$vars['row']:"100";
+	$cacheTime = isset($vars['time'])?(int)$vars['time']:"-1";
+	$status    = isset($vars['status'])?(int)$vars['status']:"1";
+	$whereSQL  =" WHERE `appid`='$appid' AND `status`='$status'";
 
 	isset($vars['pid']) && $whereSQL.=" AND `pid` = '{$vars['pid']}'";
 	isset($vars['mode']) && $whereSQL.=" AND `mode` = '{$vars['mode']}'";

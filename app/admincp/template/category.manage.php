@@ -116,7 +116,7 @@ iCMS.select('st',"<?php echo $_GET['st'] ; ?>");
             <tr>
               <th style="width:10px;"><i class="fa fa-arrows-v"></i></th>
               <th style="width:24px;">cid</th>
-              <th style="width:24px;">pid</th>
+              <th>pid</th>
               <th style="width:40px;">rootid</th>
               <th class="span4"><?php echo $this->name_text;?></th>
               <th style="width:40px;">记录数</th>
