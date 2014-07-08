@@ -62,7 +62,7 @@ class categoryApp{
         $orderNum     = (int)$_POST['orderNum'];
         $mode         = (int)$_POST['mode'];
         $pid          = implode(',', (array)$_POST['pid']);
-        $opid         = iS::escapeStr($_POST['opid']);;
+        $_pid         = iS::escapeStr($_POST['_pid']);
         $name         = iS::escapeStr($_POST['name']);
         $subname      = iS::escapeStr($_POST['subname']);
         $domain       = iS::escapeStr($_POST['domain']);
@@ -119,8 +119,8 @@ class categoryApp{
         	}
         }
         iPHP::import(iPHP_APP_CORE .'/iMAP.class.php');
-        $map = new map(iCMS_APP_CATEGORY);
-
+        map::init(iCMS_APP_CATEGORY);
+        
         if(empty($cid)) {
         	$nameArray	= explode("\n",$name);
         	foreach($nameArray AS $nkey=>$_name){
@@ -133,7 +133,7 @@ class categoryApp{
 	            iDB::query("INSERT INTO `#iCMS@__category` (`rootid`,`appid`,`orderNum`,`name`,`subname`,`password`,`title`,`keywords`,`description`,`dir`,`mode`,`domain`,`url`,`pic`,`htmlext`,`categoryURI`,`categoryRule`,`contentRule`,`urlRule`,`indexTPL`,`listTPL`,`contentTPL`,`metadata`,`contentprop`,`body`,`pid`,`isexamine`,`issend`,`isucshow`,`status`)
 	    		VALUES ('$rootid','$this->appid', '$orderNum', '$_name','$subname','$password','$title','$keywords', '$description', '$_dir','$mode','$domain', '$url','$pic','$htmlext','$categoryURI','$categoryRule', '$contentRule','$urlRule','$indexTPL', '$listTPL', '$contentTPL','$metadata','$contentprop', '$body','$pid','$isexamine','$issend','$isucshow','$status')");
 	    		$cid = iDB::$insert_id;
-                $map->add($pid,$cid);
+                map::add($pid,$cid);
 	            $this->category->cache(false,$this->appid);
 	            $this->category->cacheOne($cid);
             }
@@ -143,7 +143,7 @@ class categoryApp{
             $rootid!=$category->category[$cid]['rootid'] && iMember::CP($rootid,'Permission_Denied',APP_URI);
             iDB::getValue("SELECT `dir` FROM `#iCMS@__category` where `dir` ='$dir' AND `cid` !='$cid' AND `appid`='$this->appid'") && empty($url) &&  iPHP::alert('该'.$this->name_text.'别名/目录已经存在!请另选一个');
             iDB::query("UPDATE `#iCMS@__category` SET `rootid` = '$rootid',`orderNum` = '$orderNum',`name` = '$name',`subname` = '$subname',`password`='$password',`title` = '$title',`keywords` = '$keywords',`description` = '$description',`dir` = '$dir',`url` = '$url',`mode` = '$mode',`domain` = '$domain',`pic`='$pic',`htmlext`='$htmlext',`categoryURI`='$categoryURI',`categoryRule`='$categoryRule',`contentRule`='$contentRule',`urlRule`='$urlRule',`indexTPL` = '$indexTPL',`listTPL` = '$listTPL',`contentTPL` = '$contentTPL',`metadata` = '$metadata',`contentprop` = '$contentprop',`body` = '$body',`pid` = '$pid',`isexamine`='$isexamine',`status`='$status',`issend`='$issend',`isucshow`='$isucshow' WHERE `cid` ='$cid' ");
-            $map->diff($pid,$opid,$cid);
+            map::diff($pid,$_pid,$cid);
             $this->category->cacheOne($cid);
             $msg=$this->name_text."编辑完成!";
         }

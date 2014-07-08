@@ -22,8 +22,8 @@ $(function(){
 		iCMS.editor[this.value].focus();
 		$(".iCMS-editor-page").val(this.value).trigger("chosen:updated");
 	});
-  iCMS.select('pid',"<?php echo $rs['pid'] ; ?>");
-  iCMS.select('scid',"<?php echo $rs['scid'] ; ?>");
+  iCMS.select('pid',"<?php echo $rs['pid']?$rs['pid']:0 ; ?>");
+  iCMS.select('scid',"<?php echo $rs['scid']; ?>");
 	$("#cid").change(function() {
     var cid = this.value;
 		$.getJSON("<?php echo APP_URI; ?>",{'do':'getmeta','cid':cid},function(prop){
@@ -175,6 +175,11 @@ function _modal_dialog(cancel){
     </div>
     <div class="widget-content nopadding iCMS-article-add">
       <form action="<?php echo APP_FURI; ?>&do=save" method="post" class="form-inline" id="iCMS-article" target="iPHP_FRAME">
+        <input name="_cid" type="hidden" value="<?php echo $this->cid ; ?>" />
+        <input name="_scid" type="hidden" value="<?php echo $this->scid ; ?>" />
+        <input name="_tags" type="hidden" value="<?php echo $this->tags ; ?>" />
+        <input name="_pid" type="hidden" value="<?php echo $this->pid ; ?>" />
+
         <input name="aid" type="hidden" value="<?php echo $this->id ; ?>" />
         <input name="adid" type="hidden" value="<?php echo $adRs['id']; ?>" />
         <input name="status" type="hidden" value="<?php echo $rs['status'] ; ?>" />

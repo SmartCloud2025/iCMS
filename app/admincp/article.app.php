@@ -161,8 +161,8 @@ class articleApp{
 		iPHP::OK('操作成功!','js:1');
     }
     function dogetjson(){
-		$id		= (int)$_GET['id'];
-		$rs		= iDB::getRow("SELECT * FROM `#iCMS@__article` WHERE id='$id' LIMIT 1;",ARRAY_A);
+        $id = (int)$_GET['id'];
+        $rs = iDB::getRow("SELECT * FROM `#iCMS@__article` WHERE id='$id' LIMIT 1;",ARRAY_A);
 		
     }
     function dogetmeta(){
@@ -387,6 +387,10 @@ class articleApp{
         $status      = (int)$_POST['status'];
         $chapter     = (int)$_POST['chapter'];
         $orderNum    = _int($_POST['orderNum']);
+        $_cid        = iS::escapeStr($_POST['_cid']);
+        $_pid        = iS::escapeStr($_POST['_pid']);
+        $_scid       = iS::escapeStr($_POST['_scid']);
+        $_tags       = iS::escapeStr($_POST['_tags']);
         $title       = iS::escapeStr($_POST['title']);
         $stitle      = iS::escapeStr($_POST['stitle']);
         $pic         = iS::escapeStr($_POST['pic']);
@@ -447,6 +451,8 @@ class articleApp{
         //     iDB::query("UPDATE `#iCMS@__article` SET `chapter`=chapter+1  WHERE `id` = '$aid'");
         //     iPHP::OK('章节添加完成!','url:'.$SELFURL);
         // }
+        iPHP::import(iPHP_APP_CORE .'/iMAP.class.php');
+        map::init(iCMS_APP_ARTICLE);
 
         if(empty($aid)) {
             $postime  = $pubdate;
@@ -456,19 +462,20 @@ class articleApp{
 
             if($tags){
                 iPHP::appClass("tag",'break');
-                $tags = tag::add($tags,$userid,$aid,$this->category->rootid($cid));
-                $tags = addslashes($tags);
+                $tagArray = tag::add($tags,$userid,$aid,$this->category->rootid($cid));
+                $tags = addslashes(json_encode($tagArray));
             }
 
             iDB::query("INSERT INTO `#iCMS@__article` 
             	   (`cid`,`scid`,`orderNum`, `title`, `stitle`, `clink`, `url`, `source`, `author`, `editor`, `userid`, `pic`, `picwidth`, `picheight`, `keywords`, `tags`, `description`, `related`, `metadata`, `pubdate`, `postime`, `hits`, `comments`, `good`, `bad`, `chapter`, `pid`, `top`, `postype`, `tpl`, `status`, `isPic`)
 			VALUES ('$cid','$scid', '$orderNum', '$title', '$stitle', '$clink', '$url', '$source', '$author', '$editor', '$userid', '$pic', '$picwidth', '$picheight', '$keywords', '$tags', '$description', '$related', '$metadata', '$pubdate', '$postime', '$hits', '$comments', '$good', '$bad', '$chapter', '$pid', '$top', '$postype', '$tpl', '$status', '$isPic');");
             
-            $aid	= iDB::$insert_id;
-            $url OR $this->article_data($body,$aid);
+            $aid = iDB::$insert_id;
+            map::add($pid,$aid);
+            $tagArray && tag::map_iid($tagArray,$aid);
 
+            $url OR $this->article_data($body,$aid);
             iDB::query("UPDATE `#iCMS@__category` SET `count` = count+1 WHERE `cid` ='$cid'");
-            
             if($callback){
             	return array("code"=>$callback,'indexId'=>$aid);
             }
@@ -482,10 +489,9 @@ class articleApp{
             iPHP::$dialogLock	= true;
             iPHP::dialog('success:#:check:#:文章添加完成!<br />10秒后返回文章列表','url:'.$SELFURL,10,$moreBtn);
         }else{
-            $art = iDB::getRow("SELECT `cid`,`tags` FROM `#iCMS@__article` where `id` ='$aid' LIMIT 1;");
 			if($tags){
 				iPHP::appClass("tag",'break');
-	            $tags = tag::diff($tags,$art->tags,iMember::$uId,$aid,$this->category->rootid($cid));
+	            $tags = tag::diff($tags,$_tags,iMember::$uId,$aid,$this->category->rootid($cid));
 			    $tags = addslashes($tags);
             }
             $pic && list($picwidth, $picheight, $_type, $_attr) = @getimagesize(iFS::fp($pic,'+iPATH'));
@@ -493,10 +499,12 @@ class articleApp{
 			iDB::query("UPDATE `#iCMS@__article` 
 			SET `cid` = '$cid', `scid` = '$scid', `orderNum` = '$orderNum', `title` = '$title', `stitle` = '$stitle', `clink` = '$clink', `url` = '$url', `source` = '$source', `author` = '$author', `editor` = '$editor', `userid` = '$userid', `pic` = '$pic', `picwidth` = '$picwidth', `picheight` = '$picheight', `keywords` = '$keywords', `tags` = '$tags', `description` = '$description', `related` = '$related', `metadata` = '$metadata', `pubdate` = '$pubdate', `chapter` = '$chapter', `pid` = '$pid', `top` = '$top', `postype` = '$postype', `tpl` = '$tpl',`status` = '$status', `isPic` = '$isPic'
 			WHERE `id` = '$aid';");
+            map::diff($pid,$_pid,$aid);
             $url OR $this->article_data($body,$aid);
+
             //$ischapter && $this->chapterCount($aid);
-            if($art->cid!=$cid) {
-                iDB::query("UPDATE `#iCMS@__category` SET `count` = count-1 WHERE `cid` ='{$art->cid}' and `count`>0");
+            if($_cid!=$cid) {
+                iDB::query("UPDATE `#iCMS@__category` SET `count` = count-1 WHERE `cid` ='{$_cid}' and `count`>0");
                 iDB::query("UPDATE `#iCMS@__category` SET `count` = count+1 WHERE `cid` ='$cid'");
             }
 

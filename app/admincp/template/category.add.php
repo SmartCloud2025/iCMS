@@ -48,7 +48,7 @@ $(function(){
     <div class="widget-content nopadding">
       <form action="<?php echo APP_FURI; ?>&do=save" method="post" class="form-inline" id="iCMS-category" target="iPHP_FRAME">
         <input name="cid" type="hidden" value="<?php echo $rs['cid']  ; ?>" />
-        <input name="opid" type="hidden" value="<?php echo $rs['pid']  ; ?>" />
+        <input name="_pid" type="hidden" value="<?php echo $rs['pid']  ; ?>" />
         <div id="category-add" class="tab-content">
           <div id="category-add-base" class="tab-pane active">
             <div class="input-prepend"> <span class="add-on">上级<?php echo $this->name_text;?></span>
