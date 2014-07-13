@@ -452,8 +452,8 @@ class articleApp{
         //     iPHP::OK('章节添加完成!','url:'.$SELFURL);
         // }
         iPHP::import(iPHP_APP_CORE .'/iMAP.class.php');
-        map::init(iCMS_APP_ARTICLE);
-
+        map::$table = 'article';
+        
         if(empty($aid)) {
             $postime  = $pubdate;
             $hits     = $good = $bad = $comments = 0;
@@ -471,7 +471,14 @@ class articleApp{
 			VALUES ('$cid','$scid', '$orderNum', '$title', '$stitle', '$clink', '$url', '$source', '$author', '$editor', '$userid', '$pic', '$picwidth', '$picheight', '$keywords', '$tags', '$description', '$related', '$metadata', '$pubdate', '$postime', '$hits', '$comments', '$good', '$bad', '$chapter', '$pid', '$top', '$postype', '$tpl', '$status', '$isPic');");
             
             $aid = iDB::$insert_id;
+
+            map::$appid = 0;//PID
             map::add($pid,$aid);
+
+            map::$appid = 1;//CID
+            map::add($cid,$aid);
+            map::add($scid,$aid);
+
             $tagArray && tag::map_iid($tagArray,$aid);
 
             $url OR $this->article_data($body,$aid);
@@ -499,7 +506,13 @@ class articleApp{
 			iDB::query("UPDATE `#iCMS@__article` 
 			SET `cid` = '$cid', `scid` = '$scid', `orderNum` = '$orderNum', `title` = '$title', `stitle` = '$stitle', `clink` = '$clink', `url` = '$url', `source` = '$source', `author` = '$author', `editor` = '$editor', `userid` = '$userid', `pic` = '$pic', `picwidth` = '$picwidth', `picheight` = '$picheight', `keywords` = '$keywords', `tags` = '$tags', `description` = '$description', `related` = '$related', `metadata` = '$metadata', `pubdate` = '$pubdate', `chapter` = '$chapter', `pid` = '$pid', `top` = '$top', `postype` = '$postype', `tpl` = '$tpl',`status` = '$status', `isPic` = '$isPic'
 			WHERE `id` = '$aid';");
+            map::$appid = 0;//PID
             map::diff($pid,$_pid,$aid);
+
+            map::$appid = 1;//CID
+            map::diff($cid,$_cid,$aid);
+            map::diff($scid,$_scid,$aid);
+
             $url OR $this->article_data($body,$aid);
 
             //$ischapter && $this->chapterCount($aid);

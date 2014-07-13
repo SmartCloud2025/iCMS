@@ -11,66 +11,71 @@ function category_array($vars){
 	return iPHP::app("category")->category($cid,false);
 }
 function category_list($vars){
-	$appid     = isset($vars['appid'])?(int)$vars['appid']:iCMS_APP_ARTICLE;
-	$row       = isset($vars['row'])?(int)$vars['row']:"100";
-	$cacheTime = isset($vars['time'])?(int)$vars['time']:"-1";
-	$status    = isset($vars['status'])?(int)$vars['status']:"1";
-	$whereSQL  =" WHERE `appid`='$appid' AND `status`='$status'";
-
-	if($vars['pid']){
-		iPHP::import(iPHP_APP_CORE .'/iMAP.class.php');
-		$map = new map(iCMS_APP_CATEGORY);
-		$ids = $map->ids($vars['pid']);
-//		$whereSQL.=" AND `pid` = '{$vars['pid']}'";
-		$whereSQL.=" AND `cid` IN ($ids)";
-	}
-	isset($vars['mode']) && $whereSQL.=" AND `mode` = '{$vars['mode']}'";
-	
-	isset($vars['cid']) && !isset($vars['stype']) && $whereSQL.= iPHP::andSQL($vars['cid'],'cid');
-	isset($vars['cid!']) && $whereSQL.= iPHP::andSQL($vars['cid!'],'cid','not');
+	$appid      = isset($vars['appid'])?(int)$vars['appid']:iCMS_APP_ARTICLE;
+	$row        = isset($vars['row'])?(int)$vars['row']:"100";
+	$cache_time = isset($vars['time'])?(int)$vars['time']:"-1";
+	$status     = isset($vars['status'])?(int)$vars['status']:"1";
+	$where_sql  =" WHERE `appid`='$appid' AND `status`='$status'";
+	$resource   = array();
+	isset($vars['mode']) && $where_sql.=" AND `mode` = '{$vars['mode']}'";	
+	isset($vars['cid']) && !isset($vars['stype']) && $where_sql.= iPHP::andSQL($vars['cid'],'cid');
+	isset($vars['cid!']) && $where_sql.= iPHP::andSQL($vars['cid!'],'cid','not');
 	switch ($vars['stype']) {
 		case "top":	
-			$vars['cid'] && $whereSQL.= iPHP::andSQL($vars['cid'],'cid');
-			$whereSQL.=" AND rootid='0'";
+			$vars['cid'] && $where_sql.= iPHP::andSQL($vars['cid'],'cid');
+			$where_sql.=" AND rootid='0'";
 		break;
 		case "sub":	
-			$vars['cid'] && $whereSQL.=" AND `rootid` = '{$vars['cid']}'";
+			$vars['cid'] && $where_sql.=" AND `rootid` = '{$vars['cid']}'";
 		break;
 		case "subtop":	
-			$vars['cid'] && $whereSQL.= iPHP::andSQL($vars['cid'],'cid');
+			$vars['cid'] && $where_sql.= iPHP::andSQL($vars['cid'],'cid');
 		break;
 		case "subone":	
-			$whereSQL.= iPHP::andSQL(iCMS::getIds($vars['cid'],false),'cid');
+			$where_sql.= iPHP::andSQL(iCMS::getIds($vars['cid'],false),'cid');
 		break;
 		case "self":
 			$parent=iCache::get('iCMS/category/parent',$vars['cid']);
-			$whereSQL.=" AND `rootid`='$parent'";
+			$where_sql.=" AND `rootid`='$parent'";
 		break;
 	}
-	if($vars['cache']){
-		$cacheName	= 'category/'.md5($whereSQL);
-		$rs			= iCache::get($cacheName);
+	if(isset($vars['pid'])){
+		iPHP::import(iPHP_APP_CORE .'/iMAP.class.php');
+		map::$table = 'prop';
+		map::$appid = iCMS_APP_CATEGORY;
+//		$map_ids    = map::ids($vars['pid']);		
+//		$map_sql    = map::sql($vars['pid']); //map 表小的用 in
+		$where_sql.= map::exists($vars['pid'],'`#iCMS@__category`.cid'); //map 表大的用exists
+
+//		$where_sql.=" AND `pid` = '{$vars['pid']}'";
+		//if(empty($map_ids)) return $resource;
+		//$where_sql.=" AND `cid` IN ($map_ids)";
+		//$where_sql.=" AND `cid` IN ($map_sql)";
 	}
-	if(empty($rs)){
-		$rootidA= iCache::get('iCMS/category/rootid');
-		$rs		= iDB::getArray("SELECT * FROM `#iCMS@__category`{$whereSQL} ORDER BY `orderNum`,`cid` ASC LIMIT $row");
-		//iDB::debug(1);
-		$_count	= count($rs);
+	if($vars['cache']){
+		$cache_name = 'category/'.md5($where_sql);
+		$resource   = iCache::get($cache_name);
+	}
+	if(empty($resource)){
+		$rootid_array = iCache::get('iCMS/category/rootid');
+		$resource     = iDB::getArray("SELECT * FROM `#iCMS@__category` {$where_sql} ORDER BY `orderNum`,`cid` ASC LIMIT $row");
+		iDB::debug(1);
+		$_count	= count($resource);
 		for ($i=0;$i<$_count;$i++){
-			$rs[$i]['child'] = $rootidA[$rs[$i]['cid']]?true:false;
-			$rs[$i]['url']   = iURL::get('category',$rs[$i])->href;
-			$rs[$i]['link']  = "<a href='{$rs[$i]['url']}'>{$rs[$i]['name']}</a>";
-	        if($rs[$i]['metadata']){
+			$resource[$i]['child'] = $rootid_array[$resource[$i]['cid']]?true:false;
+			$resource[$i]['url']   = iURL::get('category',$resource[$i])->href;
+			$resource[$i]['link']  = "<a href='{$resource[$i]['url']}'>{$resource[$i]['name']}</a>";
+	        if($resource[$i]['metadata']){
 	        	$mdArray=array();
-	        	$rs[$i]['metadata']=unserialize($rs[$i]['metadata']);
-	        	foreach($rs[$i]['metadata'] AS $mdval){
+	        	$resource[$i]['metadata']=unserialize($resource[$i]['metadata']);
+	        	foreach($resource[$i]['metadata'] AS $mdval){
 	        		$mdArray[$mdval['key']]=$mdval['value'];
 	        	}
-	        	$rs[$i]['metadata']=$mdArray;
+	        	$resource[$i]['metadata']=$mdArray;
 	        }
-	        unset($rs[$i]['contentprop']);
+	        unset($resource[$i]['contentprop']);
 		}
-		$vars['cache'] && iCache::set($cacheName,$rs,$cacheTime);
+		$vars['cache'] && iCache::set($cache_name,$resource,$cache_time);
 	}
-	return $rs;
+	return $resource;
 }

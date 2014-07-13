@@ -12,17 +12,18 @@ function article_list($vars){
     if($vars['loop']==="rel" && empty($vars['id'])){
         return false;
     }
-    $whereSQL = " `status`='1'";
-    $hidden   = iCache::get('iCMS/category/hidden');
-    $hidden &&  $whereSQL.=iPHP::andSQL($hidden,'cid','not');
+    $resource  = array();
+    $where_sql = " `status`='1'";
+    $hidden    = iCache::get('iCMS/category/hidden');
+    $hidden &&  $where_sql.=iPHP::andSQL($hidden,'cid','not');
     $maxperpage=isset($vars['row'])?(int)$vars['row']:10;
     $cacheTime =isset($vars['time'])?(int)$vars['time']:-1;
-    isset($vars['userid']) && $whereSQL .=" AND `userid`='{$vars['userid']}'";
-    isset($vars['author']) && $whereSQL .=" AND `author`='{$vars['author']}'";
-    isset($vars['top']) && $whereSQL    .=" AND `top`='"._int($vars['top'])."'";
-    $vars['call']=='user' && $whereSQL.=" AND `postype`='0'";
-    $vars['call']=='admin' && $whereSQL.=" AND `postype`='1'";
-    $vars['scid'] && $whereSQL   .=" AND `scid`='{$vars['scid']}'";
+    isset($vars['userid']) && $where_sql .=" AND `userid`='{$vars['userid']}'";
+    isset($vars['author']) && $where_sql .=" AND `author`='{$vars['author']}'";
+    isset($vars['top']) && $where_sql    .=" AND `top`='"._int($vars['top'])."'";
+    $vars['call']=='user' && $where_sql.=" AND `postype`='0'";
+    $vars['call']=='admin' && $where_sql.=" AND `postype`='1'";
+    $vars['scid'] && $where_sql   .=" AND `scid`='{$vars['scid']}'";
 
 
    
@@ -32,7 +33,7 @@ function article_list($vars){
         	$ncids	= iCMS::getIds($vars['cid!'],true);
         	array_push ($ncids,$vars['cid!']);
         }
-        $whereSQL.= iPHP::andSQL($ncids,'cid','not');
+        $where_sql.= iPHP::andSQL($ncids,'cid','not');
     }
     if(isset($vars['cid'])){
     	$cids    = $vars['cid'];
@@ -40,45 +41,52 @@ function article_list($vars){
         	$cids	= iCMS::getIds($vars['cid'],true);
         	array_push ($cids,$vars['cid']);
         }
-        $whereSQL.= iPHP::andSQL($cids,'cid');
+        $where_sql.= iPHP::andSQL($cids,'cid');
     }
-    isset($vars['pid']) && $whereSQL.= " AND `pid` ='{$vars['pid']}'";
-    $vars['id'] && $whereSQL.= iPHP::andSQL($vars['id'],'id');
-    $vars['id!'] && $whereSQL.= iPHP::andSQL($vars['id!'],'id','not');
+    // && $where_sql.= " AND `pid` ='{$vars['pid']}'";
+    if(isset($vars['pid'])){
+        iPHP::import(iPHP_APP_CORE .'/iMAP.class.php');
+        map::$table = 'article';
+        map::$appid = 0;
+        $where_sql.= map::exists($vars['pid'],'`#iCMS@__article`.id'); //map 表大的用exists
+    }
+
+    $vars['id'] && $where_sql.= iPHP::andSQL($vars['id'],'id');
+    $vars['id!'] && $where_sql.= iPHP::andSQL($vars['id!'],'id','not');
     $by=$vars['by']=="ASC"?"ASC":"DESC";
     if($vars['keywords']){
         if(strpos($vars['keywords'],',')===false){
              $vars['keywords']=str_replace(array('%','_'),array('\%','\_'),$vars['keywords']);
-            $whereSQL.= " AND CONCAT(title,keywords,description) like '%".addslashes($vars['keywords'])."%'";
+            $where_sql.= " AND CONCAT(title,keywords,description) like '%".addslashes($vars['keywords'])."%'";
            }else{
             $kw=explode(',',$vars['keywords']);
             foreach($kw AS $v){
                 $keywords.=addslashes($v)."|";
             }
             $keywords=substr($keywords,0,-1);
-            $whereSQL.= "  And CONCAT(title,keywords,description) REGEXP '$keywords' ";
+            $where_sql.= "  And CONCAT(title,keywords,description) REGEXP '$keywords' ";
         }
     }
-    isset($vars['pic']) && $whereSQL.= " AND `isPic`='1'";
-    isset($vars['nopic']) && $whereSQL.= " AND `isPic`='0'";
+    isset($vars['pic']) && $where_sql.= " AND `isPic`='1'";
+    isset($vars['nopic']) && $where_sql.= " AND `isPic`='0'";
     switch ($vars['orderby']) {
-        case "id":          $orderSQL =" ORDER BY `id` $by";            break;
-        case "hot":         $orderSQL =" ORDER BY `hits` $by";          break;
-        case "comment":     $orderSQL =" ORDER BY `comments` $by";      break;
-        case "pubdate":     $orderSQL =" ORDER BY `pubdate` $by";       break;
-        case "disorder":    $orderSQL =" ORDER BY `orderNum` $by";      break;
-        case "rand":        $orderSQL =" ORDER BY rand() $by";          break;
-        case "top":         $orderSQL =" ORDER BY `top`,`orderNum` ASC";break;
-        default:            $orderSQL =" ORDER BY `id` DESC";
+        case "id":          $order_sql =" ORDER BY `id` $by";            break;
+        case "hot":         $order_sql =" ORDER BY `hits` $by";          break;
+        case "comment":     $order_sql =" ORDER BY `comments` $by";      break;
+        case "pubdate":     $order_sql =" ORDER BY `pubdate` $by";       break;
+        case "disorder":    $order_sql =" ORDER BY `orderNum` $by";      break;
+        case "rand":        $order_sql =" ORDER BY rand() $by";          break;
+        case "top":         $order_sql =" ORDER BY `top`,`orderNum` ASC";break;
+        default:            $order_sql =" ORDER BY `id` DESC";
     }
-    isset($vars['startdate'])    && $whereSQL.=" AND `pubdate`>='".strtotime($vars['startdate'])."'";
-    isset($vars['enddate'])     && $whereSQL.=" AND `pubdate`<='".strtotime($vars['enddate'])."'";
-    isset($vars['where'])        && $whereSQL.=$vars['where'];
+    isset($vars['startdate'])    && $where_sql.=" AND `pubdate`>='".strtotime($vars['startdate'])."'";
+    isset($vars['enddate'])     && $where_sql.=" AND `pubdate`<='".strtotime($vars['enddate'])."'";
+    isset($vars['where'])        && $where_sql.=$vars['where'];
     
-    $md5    = md5($whereSQL.$orderSQL.$maxperpage);
-    $offset    = 0;
+    $md5    = md5($where_sql.$order_sql.$maxperpage);
+    $offset = 0;
     if($vars['page']){
-        $total   = iPHP::total($md5,"SELECT count(*) FROM `#iCMS@__article` WHERE {$whereSQL}");
+        $total   = iPHP::total($md5,"SELECT count(*) FROM `#iCMS@__article` WHERE {$where_sql}");
         $pagenav = isset($vars['pagenav'])?$vars['pagenav']:"pagenav";
         $pnstyle = isset($vars['pnstyle'])?$vars['pnstyle']:0;
         $multi   = iCMS::page(array('total'=>$total,'perpage'=>$maxperpage,'unit'=>iPHP::lang('iCMS:page:list'),'nowindex'=>$GLOBALS['page']));
@@ -86,20 +94,21 @@ function article_list($vars){
         iPHP::assign("article_list_total",$total);
     }
     if($vars['cache']){
-        $cacheName ='article/'.$md5."/".(int)$GLOBALS['page'];
-        $rs        =iCache::get($cacheName);
+        $cache_name ='article/'.$md5."/".(int)$GLOBALS['page'];
+        $resource        =iCache::get($cache_name);
     }
-    if(empty($rs)){
-        $rs = iDB::getArray("SELECT * FROM `#iCMS@__article` WHERE {$whereSQL} {$orderSQL} LIMIT {$offset} , {$maxperpage}");
-        iDB::debug();
-        $rs = article_array($vars,$rs);
-        $vars['cache'] && iCache::set($cacheName,$rs,$cacheTime);
+    if(empty($resource)){
+        $resource = iDB::getArray("SELECT * FROM `#iCMS@__article` WHERE {$where_sql} {$order_sql} LIMIT {$offset} , {$maxperpage}");
+        iDB::debug(1);
+        $resource = article_array($vars,$resource);
+        $vars['cache'] && iCache::set($cache_name,$resource,$cacheTime);
     }
-    return $rs;
+    return $resource;
 }
 function article_search($vars){
+    $resource  = array();
     $hidden = iCache::get('iCMS/category/hidden');
-    $hidden &&  $whereSQL .=iPHP::andSQL($hidden,'cid','not');
+    $hidden &&  $where_sql .=iPHP::andSQL($hidden,'cid','not');
     $SPH    = iCMS::sphinx();
     $SPH->init();
     $SPH->SetArrayResult(true);
@@ -144,10 +153,10 @@ function article_search($vars){
     $SPH->SetLimits($start,$maxperpage,10000);
     
     $orderBy    = '@id DESC, @weight DESC';
-    $orderSQL    = ' order by id DESC';
+    $order_sql    = ' order by id DESC';
     
     $vars['orderBy']     && $orderBy    = $vars['orderBy'];
-    $vars['orderSQL']     && $orderSQL= ' order by '.$vars['orderSQL'];
+    $vars['order_sql']     && $order_sql= ' order by '.$vars['order_sql'];
 
     $vars['pic'] && $SPH->SetFilter('isPic',array(1));
     $vars['id!'] && $SPH->SetFilter('@id',array($vars['id!']),true);
@@ -168,59 +177,59 @@ function article_search($vars){
     }
     if(empty($aids)) return;
     
-    $whereSQL=" `id` in($aids)";
+    $where_sql=" `id` in($aids)";
     $offset    = 0;
     if($vars['page']){
-        $total    = $res['total'];
+        $total = $res['total'];
         iPHP::assign("article_search_total",$total);
-        $pagenav= isset($vars['pagenav'])?$vars['pagenav']:"pagenav";
-        $pnstyle= isset($vars['pnstyle'])?$vars['pnstyle']:0;
-        $multi    = iCMS::page(array('total'=>$total,'perpage'=>$maxperpage,'unit'=>iPHP::lang('iCMS:page:list'),'nowindex'=>$GLOBALS['page']));
-        $offset    = $multi->offset;
+        $pagenav = isset($vars['pagenav'])?$vars['pagenav']:"pagenav";
+        $pnstyle = isset($vars['pnstyle'])?$vars['pnstyle']:0;
+        $multi   = iCMS::page(array('total'=>$total,'perpage'=>$maxperpage,'unit'=>iPHP::lang('iCMS:page:list'),'nowindex'=>$GLOBALS['page']));
+        $offset  = $multi->offset;
     }
-    $rs    = iDB::getArray("SELECT * FROM `#iCMS@__article` WHERE {$whereSQL} {$orderSQL} LIMIT {$maxperpage}");
-    $rs    = article_array($vars,$rs);
-    return $rs;
+    $resource = iDB::getArray("SELECT * FROM `#iCMS@__article` WHERE {$where_sql} {$order_sql} LIMIT {$maxperpage}");
+    $resource = article_array($vars,$resource);
+    return $resource;
 }
 
-function article_array($vars,$rs){
-    $_count        = count($rs);
+function article_array($vars,$resource){
+    $_count = count($resource);
     for ($i=0;$i<$_count;$i++){
         if($vars['page']){
-            $rs[$i]['page']  = $GLOBALS['page']?$GLOBALS['page']:1;
-            $rs[$i]['total'] = $total;
+            $resource[$i]['page']  = $GLOBALS['page']?$GLOBALS['page']:1;
+            $resource[$i]['total'] = $total;
         }
-        if(isset($vars['picWidth']) && isset($vars['picHeight']) && $rs[$i]['pic']){
-                $im = bitscale(array("tw"  => $vars['picWidth'],"th" => $vars['picHeight'],"w"  =>$rs[$i]['picwidth'] ,"h" =>$rs[$i]['picheight']));
-                $rs[$i]['img']=$im;
+        if(isset($vars['picWidth']) && isset($vars['picHeight']) && $resource[$i]['pic']){
+                $im = bitscale(array("tw"  => $vars['picWidth'],"th" => $vars['picHeight'],"w"  =>$resource[$i]['picwidth'] ,"h" =>$resource[$i]['picheight']));
+                $resource[$i]['img']=$im;
         }
-        $rs[$i]['pic'] && $rs[$i]['pic']=iFS::fp($rs[$i]['pic'],'+http');
+        $resource[$i]['pic'] && $resource[$i]['pic']=iFS::fp($resource[$i]['pic'],'+http');
 
-        $category	= iCache::get('iCMS/category/'.$rs[$i]['cid']);
-        $rs[$i]['category']['name']    = $category['name'];
-        $rs[$i]['category']['subname'] = $category['subname'];
-        $rs[$i]['category']['url']     = $category['iurl']->href;
-        $rs[$i]['category']['link']    = "<a href='{$rs[$i]['category']['url']}'>{$rs[$i]['category']['name']}</a>";
-        $rs[$i]['url']                 = iURL::get('article',array($rs[$i],$category))->href;
-        $rs[$i]['link']                = "<a href='{$rs[$i]['url']}'>{$rs[$i]['title']}</a>";
-        $rs[$i]['commentUrl']          = iCMS::$config['router']['publicURL']."/comment.php?indexId=".$rs[$i]['id']."&categoryId=".$rs[$i]['cid'];
+        $category	= iCache::get('iCMS/category/'.$resource[$i]['cid']);
+        $resource[$i]['category']['name']    = $category['name'];
+        $resource[$i]['category']['subname'] = $category['subname'];
+        $resource[$i]['category']['url']     = $category['iurl']->href;
+        $resource[$i]['category']['link']    = "<a href='{$resource[$i]['category']['url']}'>{$resource[$i]['category']['name']}</a>";
+        $resource[$i]['url']                 = iURL::get('article',array($resource[$i],$category))->href;
+        $resource[$i]['link']                = "<a href='{$resource[$i]['url']}'>{$resource[$i]['title']}</a>";
+        $resource[$i]['commentUrl']          = iCMS::$config['router']['publicURL']."/comment.php?indexId=".$resource[$i]['id']."&categoryId=".$resource[$i]['cid'];
         if($vars['user']){
-            $rs[$i]['user']['url']  = "/u/".$rs[$i]['userid'];
-            $rs[$i]['user']['name'] = $rs[$i]['author'];
-            $rs[$i]['user']['id']   = $rs[$i]['userid'];
+            $resource[$i]['user']['url']  = "/u/".$resource[$i]['userid'];
+            $resource[$i]['user']['name'] = $resource[$i]['author'];
+            $resource[$i]['user']['id']   = $resource[$i]['userid'];
         }
         // if($vars['urls']){
-        //     $rs[$i]['urls']['url']      = "/u/".$rs[$i]['userid'];
-        //     $rs[$i]['urls']['url']      = "/u/".$rs[$i]['userid'];
-        //     $rs[$i]['urls']['url']      = "/u/".$rs[$i]['userid'];
+        //     $resource[$i]['urls']['url']      = "/u/".$resource[$i]['userid'];
+        //     $resource[$i]['urls']['url']      = "/u/".$resource[$i]['userid'];
+        //     $resource[$i]['urls']['url']      = "/u/".$resource[$i]['userid'];
         // }
 		if($vars['meta']){
-            $rs[$i]['metadata'] && $rs[$i]['metadata'] = unserialize($rs[$i]['metadata']);
+            $resource[$i]['metadata'] && $resource[$i]['metadata'] = unserialize($resource[$i]['metadata']);
         }
-        $rs[$i]['description'] && $rs[$i]['description'] = nl2br($rs[$i]['description']);
+        $resource[$i]['description'] && $resource[$i]['description'] = nl2br($resource[$i]['description']);
         if($vars['tags']){
-        	tag::getag('tags',$rs[$i],$category);
+        	tag::getag('tags',$resource[$i],$category);
         }
     }
-    return $rs;
+    return $resource;
 }

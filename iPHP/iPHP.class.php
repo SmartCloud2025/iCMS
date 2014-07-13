@@ -339,14 +339,16 @@ class iPHP{
 			$ECODE && header("X-iPHP-ECODE:".$ECODE);
 	    }
 	}
-	public static function andSQL($vars,$field,$not='') {
+
+	public static function andSQL($vars,$field,$not=false) {
 	    if(is_array($vars)) {
-	        $ids=implode(',',$vars);
-	        $sql=$not=='not'?" AND $field NOT IN ($ids)":" AND $field IN ($ids) ";
+			$vars = addslashes(implode(',',$vars));
+			$sql  = $not?" NOT IN ($vars)":" IN ($vars) ";
 	    }else {
-	        $vars=addslashes($vars);
-	        $sql=$not=='not'?" AND $field<>'$vars'  ":" AND $field='$vars' ";
+			$vars = addslashes($vars);
+			$sql  = $not?"<>'$vars' ":"='$vars' ";
 	    }
+	    $sql = ' AND '.$field.$sql;
 	    return $sql;
 	}
 	public static function str2time($str="0") {
