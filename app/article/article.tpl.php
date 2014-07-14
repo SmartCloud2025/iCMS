@@ -15,7 +15,7 @@ function article_list($vars){
     $resource  = array();
     $where_sql = " `status`='1'";
     $hidden    = iCache::get('iCMS/category/hidden');
-    $hidden &&  $where_sql.=iPHP::andSQL($hidden,'cid','not');
+    $hidden &&  $where_sql.=iPHP::where($hidden,'cid','not');
     $maxperpage=isset($vars['row'])?(int)$vars['row']:10;
     $cacheTime =isset($vars['time'])?(int)$vars['time']:-1;
     isset($vars['userid']) && $where_sql .=" AND `userid`='{$vars['userid']}'";
@@ -26,33 +26,39 @@ function article_list($vars){
     $vars['scid'] && $where_sql   .=" AND `scid`='{$vars['scid']}'";
 
 
-   
+   $map_type = $map_node = array();
+
     if(isset($vars['cid!'])){
     	$ncids    = $vars['cid!'];
     	if($vars['sub']){
-        	$ncids	= iCMS::getIds($vars['cid!'],true);
+        	$ncids	= iCMS::get_category_ids($vars['cid!'],true);
         	array_push ($ncids,$vars['cid!']);
         }
-        $where_sql.= iPHP::andSQL($ncids,'cid','not');
+        $where_sql.= iPHP::where($ncids,'cid','not');
     }
     if(isset($vars['cid'])){
-    	$cids    = $vars['cid'];
+        $map_type[] = 1;
+        $map_node   = array_merge($map_node,(array)$vars['cid']);
     	if($vars['sub']){
-        	$cids	= iCMS::getIds($vars['cid'],true);
-        	array_push ($cids,$vars['cid']);
+            $cids     = iCMS::get_category_ids($vars['cid'],true);
+            $map_node = array_merge($map_node,(array)$cids);
         }
-        $where_sql.= iPHP::andSQL($cids,'cid');
     }
     // && $where_sql.= " AND `pid` ='{$vars['pid']}'";
     if(isset($vars['pid'])){
+        $map_type[] = 0;
+        $map_node   = array_merge($map_node,(array)$vars['pid']);
+     }
+    var_dump($map_node);
+
+    if($map_node){
         iPHP::import(iPHP_APP_CORE .'/iMAP.class.php');
         map::$table = 'article';
-        map::$appid = 0;
-        $where_sql.= map::exists($vars['pid'],'`#iCMS@__article`.id'); //map 表大的用exists
+        map::$appid = $map_type;
+        $where_sql.= map::exists($map_node,'`#iCMS@__article`.id'); //map 表大的用exists
     }
-
-    $vars['id'] && $where_sql.= iPHP::andSQL($vars['id'],'id');
-    $vars['id!'] && $where_sql.= iPHP::andSQL($vars['id!'],'id','not');
+    $vars['id'] && $where_sql.= iPHP::where($vars['id'],'id');
+    $vars['id!'] && $where_sql.= iPHP::where($vars['id!'],'id','not');
     $by=$vars['by']=="ASC"?"ASC":"DESC";
     if($vars['keywords']){
         if(strpos($vars['keywords'],',')===false){
@@ -108,7 +114,7 @@ function article_list($vars){
 function article_search($vars){
     $resource  = array();
     $hidden = iCache::get('iCMS/category/hidden');
-    $hidden &&  $where_sql .=iPHP::andSQL($hidden,'cid','not');
+    $hidden &&  $where_sql .=iPHP::where($hidden,'cid','not');
     $SPH    = iCMS::sphinx();
     $SPH->init();
     $SPH->SetArrayResult(true);
@@ -140,7 +146,7 @@ function article_search($vars){
     isset($vars['postype']) && $SPH->SetFilter('postype',array($vars['postype']));
     
     if(isset($vars['cid'])){
-        $cids    = $vars['sub']?iCMS::getIds($vars['cid'],true):$vars['cid'];
+        $cids    = $vars['sub']?iCMS::get_category_ids($vars['cid'],true):$vars['cid'];
         $cids OR $cids = (array)$vars['cid'];
         $cids    = array_map("intval", $cids);
         $SPH->SetFilter('cid',$cids);
