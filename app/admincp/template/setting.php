@@ -5,7 +5,7 @@
  * @author coolmoo <idreamsoft@qq.com>
  * @$Id: setting.php 2412 2014-05-04 09:52:07Z coolmoo $
  */
-defined('iCMS') OR exit('What are you doing?'); 
+defined('iCMS') OR exit('What are you doing?');
 iACP::head();
 ?>
 <script type="text/javascript">
@@ -200,12 +200,12 @@ function modal_tplfile(el,a){
                 <option value="redis">分布式缓存 Redis</option>
               </select>
             </div>
+            <span class="help-inline">当前PHP扩展环境:memcached <?php echo $memcache?'支持':'不支持';?>; Redis <?php echo $redis?'支持':'不支持';?></div>
             <div class="clearfloat mb10"></div>
             <div class="input-prepend"> <span class="add-on">缓存目录/服务器IP/UNIX SOCK</span>
               <textarea name="config[cache][host]" id="cache_host" class="span6" style="height: 150px;"><?php echo $config['cache']['host'] ; ?></textarea>
             </div>
-            <span class="help-inline">缓存目录:目录层级 cache<br />
-            cache:1<br />
+            <span class="help-inline">文件缓存目录:文件层级(cache:1)<br />
             memcached服务器IP:每行一个,带端口. <br />
             例:<br />
             127.0.0.1:11211<br />
@@ -224,7 +224,7 @@ function modal_tplfile(el,a){
               </div>
             </div>
           </div>
-          <div id="setting-file" class="tab-pane hide"> 
+          <div id="setting-file" class="tab-pane hide">
             <!--
             <div class="input-prepend"> <span class="add-on">附件接口</span>
               <input type="text" name="config[FS][API]" class="span4" id="FS_API" value="<?php echo $config['FS']['API'] ; ?>"/>

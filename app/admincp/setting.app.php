@@ -26,6 +26,8 @@ class settingApp{
     function doiCMS(){
     	$config	= iACP::getConfig(0);
     	$config['site']['indexName'] OR $config['site']['indexName'] = 'index';
+        $redis    = extension_loaded('redis');
+        $memcache = extension_loaded('memcache');
     	include iACP::view("setting");
     }
     function dosave(){
