@@ -15,14 +15,14 @@ function push_list($vars){
     isset($vars['userid'])    &&     $whereSQL.=" AND `userid`='{$vars['userid']}'";
 
     if(isset($vars['cid!'])){
-        $cids	= $vars['sub']?iCMS::getIds($vars['cid!'],true):$vars['cid!'];
+        $cids	= $vars['sub']?iCMS::get_category_ids($vars['cid!'],true):$vars['cid!'];
         $cids OR $cids	= $vars['cid!'];
-        $whereSQL.= iPHP::andSQL($cids,'cid','not');
+        $whereSQL.= iPHP::where($cids,'cid','not');
     }
     if(isset($vars['cid'])){
-        $cids	= $vars['sub']?iCMS::getIds($vars['cid'],true):$vars['cid'];
+        $cids	= $vars['sub']?iCMS::get_category_ids($vars['cid'],true):$vars['cid'];
         $cids OR $cids	= $vars['cid'];
-        $whereSQL.= iPHP::andSQL($cids,'cid');
+        $whereSQL.= iPHP::where($cids,'cid');
     }
     isset($vars['pid']) 	&& $whereSQL.= " AND `type` ='{$vars['pid']}'";
     isset($vars['pic']) 	&& $whereSQL.= " AND `ispic`='1'";

@@ -340,7 +340,7 @@ class iPHP{
 	    }
 	}
 
-	public static function andSQL($vars,$field,$not=false) {
+	public static function where($vars,$field,$not=false,$noand=false) {
 	    if(is_array($vars)) {
 			$vars = addslashes(implode(',',$vars));
 			$sql  = $not?" NOT IN ($vars)":" IN ($vars) ";
@@ -348,7 +348,11 @@ class iPHP{
 			$vars = addslashes($vars);
 			$sql  = $not?"<>'$vars' ":"='$vars' ";
 	    }
-	    $sql = ' AND '.$field.$sql;
+	    $sql = $field.$sql;
+	    if($noand){
+	    	return $sql;
+	    }
+	    $sql = ' AND '.$sql;
 	    return $sql;
 	}
 	public static function str2time($str="0") {

@@ -13,14 +13,14 @@ function tag_list($vars){
 	isset($vars['pid']) 	&& $whereSQL.=" AND `pid`='".(int)$vars['pid']."'";
 
     if(isset($vars['cid!'])){
-        $cids	= $vars['sub']?iCMS::getIds($vars['cid!'],true):$vars['cid!'];
+        $cids	= $vars['sub']?iCMS::get_category_ids($vars['cid!'],true):$vars['cid!'];
         $cids OR $cids	= $vars['cid!'];
-        $whereSQL.= iPHP::andSQL($cids,'cid','not');
+        $whereSQL.= iPHP::where($cids,'cid','not');
     }
     if(isset($vars['cid'])){
-        $cids	= $vars['sub']?iCMS::getIds($vars['cid'],true):$vars['cid'];
+        $cids	= $vars['sub']?iCMS::get_category_ids($vars['cid'],true):$vars['cid'];
         $cids OR $cids	= $vars['cid'];
-        $whereSQL.= iPHP::andSQL($cids,'cid');
+        $whereSQL.= iPHP::where($cids,'cid');
     }
 	
 	$maxperpage	= isset($vars['row'])?(int)$vars['row']:"10";
@@ -61,14 +61,14 @@ function tag_flist($vars){
 	isset($vars['pid']) 	&& $whereSQL.=" AND `pid`='".(int)$vars['pid']."'";
 
     if(isset($vars['cid!'])){
-        $cids	= $vars['sub']?iCMS::getIds($vars['cid!'],true):$vars['cid!'];
+        $cids	= $vars['sub']?iCMS::get_category_ids($vars['cid!'],true):$vars['cid!'];
         $cids OR $cids	= $vars['cid!'];
-        $whereSQL.= iPHP::andSQL($cids,'cid','not');
+        $whereSQL.= iPHP::where($cids,'cid','not');
     }
     if(isset($vars['cid'])){
-        $cids	= $vars['sub']?iCMS::getIds($vars['cid'],true):$vars['cid'];
+        $cids	= $vars['sub']?iCMS::get_category_ids($vars['cid'],true):$vars['cid'];
         $cids OR $cids	= $vars['cid'];
-        $whereSQL.= iPHP::andSQL($cids,'cid');
+        $whereSQL.= iPHP::where($cids,'cid');
     }
 	
 	$maxperpage	= isset($vars['row'])?(int)$vars['row']:"10";
@@ -128,7 +128,7 @@ function tag_search($vars){
 	}
 
     if(isset($vars['cid'])){
-    	$cids	= $vars['sub']?iCMS::getIds($vars['cid'],true):$vars['cid'];
+    	$cids	= $vars['sub']?iCMS::get_category_ids($vars['cid'],true):$vars['cid'];
     	$cids OR $cids = (array)$vars['cid'];
         $cids	= array_map("intval", $cids);
 		$SPH->SetFilter('cid',$cids);

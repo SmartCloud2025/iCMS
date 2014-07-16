@@ -130,15 +130,15 @@ class iCMS {
     	self::run($app,null,'API_');
     }
     //------------------------------------
-	public static function getIds($id = "0",$all=true) {
+	public static function get_category_ids($id = "0",$all=true) {
 	    $ids	= array();
 	    $cArray	= iCache::get('iCMS/category/rootid',$id);
 	    foreach((array)$cArray AS $_id) {
 	        $ids[]	= $_id;
-	        $all && $ids[]	= self::getIds($_id,$all);
+	        $all && $ids[]	= self::get_category_ids($_id,$all);
 	    }
-	    $ids	= array_unique($ids);
-	    $ids	= array_filter($ids);
+        $ids = array_unique($ids);
+        $ids = array_filter($ids);
 	    return $ids;
 	}
     public static function sphinx(){

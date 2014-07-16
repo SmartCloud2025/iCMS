@@ -18,21 +18,21 @@ function category_list($vars){
 	$where_sql  =" WHERE `appid`='$appid' AND `status`='$status'";
 	$resource   = array();
 	isset($vars['mode']) && $where_sql.=" AND `mode` = '{$vars['mode']}'";	
-	isset($vars['cid']) && !isset($vars['stype']) && $where_sql.= iPHP::andSQL($vars['cid'],'cid');
-	isset($vars['cid!']) && $where_sql.= iPHP::andSQL($vars['cid!'],'cid','not');
+	isset($vars['cid']) && !isset($vars['stype']) && $where_sql.= iPHP::where($vars['cid'],'cid');
+	isset($vars['cid!']) && $where_sql.= iPHP::where($vars['cid!'],'cid','not');
 	switch ($vars['stype']) {
 		case "top":	
-			$vars['cid'] && $where_sql.= iPHP::andSQL($vars['cid'],'cid');
+			$vars['cid'] && $where_sql.= iPHP::where($vars['cid'],'cid');
 			$where_sql.=" AND rootid='0'";
 		break;
 		case "sub":	
 			$vars['cid'] && $where_sql.=" AND `rootid` = '{$vars['cid']}'";
 		break;
 		case "subtop":	
-			$vars['cid'] && $where_sql.= iPHP::andSQL($vars['cid'],'cid');
+			$vars['cid'] && $where_sql.= iPHP::where($vars['cid'],'cid');
 		break;
 		case "subone":	
-			$where_sql.= iPHP::andSQL(iCMS::getIds($vars['cid'],false),'cid');
+			$where_sql.= iPHP::where(iCMS::get_category_ids($vars['cid'],false),'cid');
 		break;
 		case "self":
 			$parent=iCache::get('iCMS/category/parent',$vars['cid']);

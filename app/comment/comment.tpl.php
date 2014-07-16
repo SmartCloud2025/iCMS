@@ -34,9 +34,9 @@ function comment_list($vars){
 	$whereSQL = "`appid`='$appid' AND `status`='1'";
 
     if(isset($vars['cid'])){
-        $cids	= $vars['sub']?iCMS::getIds($vars['cid'],true):$vars['cid'];
+        $cids	= $vars['sub']?iCMS::get_category_ids($vars['cid'],true):$vars['cid'];
         $cids OR $cids	= $vars['cid'];
-        $whereSQL.= iPHP::andSQL($cids,'cid');
+        $whereSQL.= iPHP::where($cids,'cid');
     }
 	$vars['pid'] && $whereSQL .=" AND `pid`='".(int)$vars['pid']."'";
 	$vars['iid'] && $whereSQL .=" AND `iid`='".(int)$vars['iid']."'";

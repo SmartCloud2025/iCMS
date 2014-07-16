@@ -11,8 +11,8 @@
 */
 class propApp{
     function __construct() {
-    	$this->category		= iPHP::appClass("category",'all');
-    	$this->pid			= (int)$_GET['pid'];
+        $this->category = iPHP::appClass("category",'all');
+        $this->pid      = (int)$_GET['pid'];
     }
     function doadd(){
         $this->pid && $rs	= iDB::getRow("SELECT * FROM `#iCMS@__prop` WHERE `pid`='$this->pid' LIMIT 1;",ARRAY_A);
@@ -93,9 +93,9 @@ WHERE `pid` = '$pid';");
 //        $cid			= (int)$_GET['cid'];
 //
 //        if($cid) {
-//	        $cids	= $_GET['sub']?iCMS::getIds($cid,true):$cid;
+//	        $cids	= $_GET['sub']?iCMS::get_category_ids($cid,true):$cid;
 //	        $cids OR $cids	= $vars['cid'];
-//	        $sql.= iPHP::andSQL($cids,'cid');
+//	        $sql.= iPHP::where($cids,'cid');
 //        }
 
 		$_GET['field'] && $sql.=" AND `field`='".$_GET['field']."'";
