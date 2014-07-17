@@ -37,26 +37,42 @@ function article_list($vars){
         $where_sql.= iPHP::where($ncids,'cid','not');
     }
     if(isset($vars['cid'])){
-        $map_type[] = 1;
-        $map_node   = array_merge($map_node,(array)$vars['cid']);
-    	if($vars['sub']){
-            $cids     = iCMS::get_category_ids($vars['cid'],true);
-            $map_node = array_merge($map_node,(array)$cids);
+        // $map_type[] = 1;
+        // $map_node   = array_merge($map_node,(array)$vars['cid']);
+        // if($vars['sub']){
+        //     $cids     = iCMS::get_category_ids($vars['cid'],true);
+        //     $map_node = array_merge($map_node,(array)$cids);
+        // }
+        if($vars['multi']){
+            iPHP::import(iPHP_APP_CORE .'/iMAP.class.php');
+            map::init('category',iCMS_APP_ARTICLE);
+            $where_sql.= map::exists($vars['cid'],'`#iCMS@__article`.id'); //map 表大的用exists          
+        }else{
+            $cids    = $vars['cid!'];
+            if($vars['sub']){
+                $cids  = iCMS::get_category_ids($vars['cid'],true);
+                array_push ($cids,$vars['cid']);
+            }
+            $where_sql.= iPHP::where($cids,'cid');               
         }
     }
     // && $where_sql.= " AND `pid` ='{$vars['pid']}'";
     if(isset($vars['pid'])){
-        $map_type[] = 0;
-        $map_node   = array_merge($map_node,(array)$vars['pid']);
-     }
-    var_dump($map_node);
-
-    if($map_node){
         iPHP::import(iPHP_APP_CORE .'/iMAP.class.php');
-        map::$table = 'article';
-        map::$appid = $map_type;
-        $where_sql.= map::exists($map_node,'`#iCMS@__article`.id'); //map 表大的用exists
+        map::init('prop',iCMS_APP_ARTICLE);
+        $where_sql.= map::exists($vars['pid'],'`#iCMS@__article`.id'); //map 表大的用exists
+
+        // $map_type[] = 0;
+        // $map_node   = array_merge($map_node,(array)$vars['pid']);
     }
+    // var_dump($map_node);
+
+    // if($map_node){
+    //     iPHP::import(iPHP_APP_CORE .'/iMAP.class.php');
+    //     map::$table = 'article';
+    //     map::$appid = $map_type;
+    //     $where_sql.= map::exists($map_node,'`#iCMS@__article`.id'); //map 表大的用exists
+    // }
     $vars['id'] && $where_sql.= iPHP::where($vars['id'],'id');
     $vars['id!'] && $where_sql.= iPHP::where($vars['id!'],'id','not');
     $by=$vars['by']=="ASC"?"ASC":"DESC";
@@ -105,7 +121,7 @@ function article_list($vars){
     }
     if(empty($resource)){
         $resource = iDB::getArray("SELECT * FROM `#iCMS@__article` WHERE {$where_sql} {$order_sql} LIMIT {$offset} , {$maxperpage}");
-        iDB::debug(1);
+        //iDB::debug(1);
         $resource = article_array($vars,$resource);
         $vars['cache'] && iCache::set($cache_name,$resource,$cacheTime);
     }

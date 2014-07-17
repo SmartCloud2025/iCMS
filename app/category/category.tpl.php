@@ -41,8 +41,7 @@ function category_list($vars){
 	}
 	if(isset($vars['pid'])){
 		iPHP::import(iPHP_APP_CORE .'/iMAP.class.php');
-		map::$table = 'prop';
-		map::$appid = iCMS_APP_CATEGORY;
+		map::init('prop',iCMS_APP_CATEGORY);
 //		$map_ids    = map::ids($vars['pid']);		
 //		$map_sql    = map::sql($vars['pid']); //map 表小的用 in
 		$where_sql.= map::exists($vars['pid'],'`#iCMS@__category`.cid'); //map 表大的用exists
@@ -59,7 +58,7 @@ function category_list($vars){
 	if(empty($resource)){
 		$rootid_array = iCache::get('iCMS/category/rootid');
 		$resource     = iDB::getArray("SELECT * FROM `#iCMS@__category` {$where_sql} ORDER BY `orderNum`,`cid` ASC LIMIT $row");
-		iDB::debug(1);
+		//iDB::debug(1);
 		$_count	= count($resource);
 		for ($i=0;$i<$_count;$i++){
 			$resource[$i]['child'] = $rootid_array[$resource[$i]['cid']]?true:false;

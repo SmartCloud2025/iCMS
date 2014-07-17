@@ -348,7 +348,7 @@ class iPHP{
 			$vars = addslashes($vars);
 			$sql  = $not?"<>'$vars' ":"='$vars' ";
 	    }
-	    $sql = $field.$sql;
+	    $sql = "`{$field}`".$sql;
 	    if($noand){
 	    	return $sql;
 	    }

@@ -178,15 +178,15 @@ class iCMS {
     //翻页函数
     public static function page($a) {
         iPHP::loadClass("Pages");
-        $lang  = iPHP::lang('iCMS:page');
-        $multi = new iPages($a,$lang);
-        if($multi->totalpage>1) {
-        	$pagenav	= $a['pagenav']?$a['pagenav']:'nav';
-        	$pnstyle	= $a['pnstyle']?$a['pnstyle']:0;
-            iPHP::assign('page',array('totalRow'=>$a['total'],'total'=>$multi->totalpage,'current'=>$multi->nowindex,$pagenav=>$multi->show($pnstyle)));
-            iPHP::assign('iPAGE',$multi);
+        $lang   = iPHP::lang('iCMS:page');
+        $iPages = new iPages($a,$lang);
+        if($iPages->totalpage>1) {
+            $pagenav = $a['pagenav']?$a['pagenav']:'nav';
+            $pnstyle = $a['pnstyle']?$a['pnstyle']:0;
+            iPHP::assign('page',array('totalRow'=>$a['total'],'total'=>$iPages->totalpage,'current'=>$iPages->nowindex,$pagenav=>$iPages->show($pnstyle)));
+            iPHP::assign('iPAGE',$iPages);
         }
-        return $multi;
+        return $iPages;
     }
     //过滤
     public static function filter(&$content){

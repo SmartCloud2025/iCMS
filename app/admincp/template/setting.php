@@ -200,15 +200,14 @@ function modal_tplfile(el,a){
                 <option value="redis">分布式缓存 Redis</option>
               </select>
             </div>
-            <span class="help-inline">当前PHP扩展环境:memcached <?php echo $memcache?'支持':'不支持';?>; Redis <?php echo $redis?'支持':'不支持';?></div>
+            <span class="help-inline">Memcache,Redis 需要服务器支持,如果不清楚请询问管理员,iCMS推荐使用Redis</span>
             <div class="clearfloat mb10"></div>
-            <div class="input-prepend"> <span class="add-on">缓存目录/服务器IP/UNIX SOCK</span>
+            <div class="input-prepend"> <span class="add-on">缓存配置</span>
               <textarea name="config[cache][host]" id="cache_host" class="span6" style="height: 150px;"><?php echo $config['cache']['host'] ; ?></textarea>
             </div>
             <span class="help-inline">文件缓存目录:文件层级(cache:1)<br />
             memcached服务器IP:每行一个,带端口. <br />
-            例:<br />
-            127.0.0.1:11211<br />
+            例:127.0.0.1:11211<br />
             127.0.0.2:11211<br />
             Redis UNIX SOCK<br />
             unix:///tmp/redis.sock@db:1 <br />
@@ -634,9 +633,9 @@ index iCMS_article_delta : iCMS_article
 ##sphinx使用问题,请自行Google上百度一下
           </pre>
           </div>
-        </div>
-        <div class="form-actions">
-          <button class="btn btn-primary" type="submit"><i class="fa fa-check"></i> 提交</button>
+          <div class="form-actions">
+            <button class="btn btn-primary" type="submit"><i class="fa fa-check"></i> 提交</button>
+          </div>
         </div>
       </form>
     </div>

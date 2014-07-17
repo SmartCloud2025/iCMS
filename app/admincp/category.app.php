@@ -119,8 +119,7 @@ class categoryApp{
         	}
         }
         iPHP::import(iPHP_APP_CORE .'/iMAP.class.php');
-        map::$table = 'prop';
-        map::$appid = iCMS_APP_CATEGORY;
+        map::init('prop',iCMS_APP_CATEGORY);
         
         if(empty($cid)) {
         	$nameArray	= explode("\n",$name);
