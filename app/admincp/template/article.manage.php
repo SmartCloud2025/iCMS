@@ -215,7 +215,7 @@ $(function(){
               <td><?php if($rs[$i]['pubdate']) echo get_date($rs[$i]['pubdate'],'Y-m-d H:i');?><br />
                 <?php if($rs[$i]['postime']) echo get_date($rs[$i]['postime'],'Y-m-d H:i');?></td>
               <td><a href="<?php echo APP_DOURI; ?>&cid=<?php echo $rs[$i]['cid'] ; ?>&<?php echo $uri ; ?>"><?php echo $C['name'] ; ?></a><br />
-                <?php echo iACP::getProp("pid",$rs[$i]['pid'],'text',APP_DOURI.'&pid={PID}&'.$uri.'') ; ?></td>
+                <?php echo iACP::getProp("pid",$rs[$i]['pid'],'text',APP_DOURI.'&pid={PID}&'.$uri) ; ?></td>
               <td><a href="<?php echo APP_DOURI; ?>&userid=<?php echo $rs[$i]['userid'] ; ?>&<?php echo $uri ; ?>"><?php echo $rs[$i]['editor'] ; ?></a></td>
               <td><?php echo $rs[$i]['hits']; ?>/<?php echo _int($rs[$i]['top']); ?></td>
               <td><?php if($rs[$i]['status']=="1"){ ?>

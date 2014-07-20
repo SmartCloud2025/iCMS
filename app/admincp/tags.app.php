@@ -18,12 +18,12 @@ class tagsApp{
     	iPHP::appClass("tag",'break');
     }
     function doadd(){
-        $this->id && $rs	= iDB::getRow("SELECT * FROM `#iCMS@__tags` WHERE `id`='$this->id' LIMIT 1;",ARRAY_A);
+        $this->id && $rs = iDB::getRow("SELECT * FROM `#iCMS@__tags` WHERE `id`='$this->id' LIMIT 1;",ARRAY_A);
         $rs['metadata'] && $rs['metadata']=unserialize($rs['metadata']);
         include iACP::view('tags.add');
     }
     function doupdate(){
-    	$sql	= iACP::iDT($_GET['iDT']);
+        $sql = iACP::iDT($_GET['iDT']);
     	$sql &&	iDB::query("UPDATE `#iCMS@__tags` SET $sql WHERE `id` ='$this->id' LIMIT 1 ");
     	$this->id && tag::cache($this->id,'id');
     	iPHP::OK('操作成功!','js:1');
@@ -33,10 +33,10 @@ class tagsApp{
     	$this->domanage();
     }
     function domanage(){
-        $sql			= " where 1=1";
+        $sql = " where 1=1";
+        $cid = (int)$_GET['cid'];
+        $cid = iMember::CP($cid)?$cid:"0";
         $_GET['keywords'] && $sql.=" AND CONCAT(name,seotitle,subtitle,keywords,description) REGEXP '{$_GET['keywords']}'";
-        $cid			= (int)$_GET['cid'];
-        $cid	= iMember::CP($cid)?$cid:"0";
         if($cid) {
             $cidIN=$this->category->cid($cid).$cid;
             if(isset($_GET['sub']) && strstr($cidIN,',')) {
@@ -73,8 +73,10 @@ class tagsApp{
         $id          = (int)$_POST['id'];
         $uid         = (int)$_POST['uid'];
         $cid         = (int)$_POST['cid'];
-        $tcid        = (int)$_POST['tcid'];
-        $pid         = (int)$_POST['pid'];
+        $tcid        = implode(',', (array)$_POST['tcid']);
+        $pid         = implode(',', (array)$_POST['pid']);
+        $_tcid       = iS::escapeStr($_POST['_tcid']);
+        $_pid        = iS::escapeStr($_POST['_pid']);
         $name        = iS::escapeStr($_POST['name']);
         $subtitle    = iS::escapeStr($_POST['subtitle']);
         $tkey        = iS::escapeStr($_POST['tkey']);
@@ -115,19 +117,30 @@ class tagsApp{
 		}
 		$tkey OR $tkey = strtolower(pinyin($name));
 		strstr($pic, 'http://') && $pic = iFS::http($pic);
-		
+		iPHP::import(iPHP_APP_CORE .'/iMAP.class.php');
 		if(empty($id)){
 			iDB::query("INSERT INTO `#iCMS@__tags`
             (`uid`, `cid`, `tcid`, `pid`, `tkey`, `name`, `seotitle`, `subtitle`, `keywords`, `description`, `metadata`,`ispic`, `pic`, `url`, `related`, `count`, `weight`, `tpl`, `ordernum`, `pubdate`, `status`)
 VALUES ('$uid', '$cid', '$tcid', '$pid', '$tkey', '$name', '$seotitle', '$subtitle', '$keywords', '$description', '$metadata','$ispic', '$pic', '$url', '$related', '0', '$weight', '$tpl', '$ordernum', '$pubdate', '$status');");
 			$id = iDB::$insert_id;
 			tag::cache($id,'id');
+            map::init('prop',iCMS_APP_TAG);
+            map::add($pid,$id);
+
+            map::init('category',iCMS_APP_TAG);
+            map::add($tcid,$id);
+
 	        iPHP::OK('标签添加完成',"url:".APP_URI);
 		}else{
 			iDB::query("UPDATE `#iCMS@__tags`
 SET `uid` = '$uid', `cid` = '$cid', `tcid` = '$tcid', `pid` = '$pid', `tkey` = '$tkey', `name` = '$name', `seotitle` = '$seotitle', `subtitle` = '$subtitle', `keywords` = '$keywords', `description` = '$description', `metadata` = '$metadata', `ispic` = '$ispic', `pic` = '$pic', `url` = '$url', `related` = '$related',`weight` = '$weight',`tpl` = '$tpl', `ordernum` = '$ordernum', `pubdate` = '$pubdate', `status` = '$status'
 WHERE `id` = '$id';");
 			tag::cache($id,'id');
+            map::init('prop',iCMS_APP_TAG);
+            map::diff($pid,$_pid,$id);
+
+            map::init('category',iCMS_APP_TAG);
+            map::diff($tcid,$_tcid,$id);
         	iPHP::OK('标签更新完成',"url:".APP_URI);
 		}
     }

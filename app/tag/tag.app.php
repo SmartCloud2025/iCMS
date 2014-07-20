@@ -11,19 +11,20 @@ class tagApp {
 
     public $methods = array('iCMS');
 
-    function __construct() {
-        
-    }
+    function __construct() {}
 
     function doiCMS($a = null) {
         if ($_GET['name']) {
-            $name = $_GET['name'];
+            $name  = $_GET['name'];
             mb_check_encoding($name, "UTF-8") OR $name = mb_convert_encoding($name, "UTF-8", "gbk");
-            $val = iS::escapeStr($name);
+            $val   = iS::escapeStr($name);
             $field = 'name';
         } elseif ($_GET['tkey']) {
             $field = 'tkey';
-            $val = iS::escapeStr($_GET['tkey']);
+            $val   = iS::escapeStr($_GET['tkey']);
+        } elseif ($_GET['id']) {
+            $field = 'id';
+            $val   = (int)$_GET['id'];            
         }
         return $this->tag($val, $field);
     }

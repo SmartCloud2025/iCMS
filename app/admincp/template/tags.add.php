@@ -12,7 +12,7 @@ iACP::head();
 $(function(){
 	iCMS.select('cid',"<?php echo $rs['cid'] ; ?>");
 	iCMS.select('tcid',"<?php echo $rs['tcid'] ; ?>");
-	iCMS.select('pid',"<?php echo $rs['pid'] ; ?>");
+	iCMS.select('pid',"<?php echo $rs['pid']?$rs['pid']:0 ; ?>");
 	iCMS.select('status',"<?php echo $rs['status'] ; ?>");
 	$("#iCMS-tags").submit(function(){
 		if($("#cid option:selected").val()=="0"){
@@ -53,6 +53,10 @@ $(function(){
       <form action="<?php echo APP_FURI; ?>&do=save" method="post" class="form-inline" id="iCMS-tags" target="iPHP_FRAME">
         <input name="id" type="hidden" value="<?php echo $this->id ; ?>" />
         <input name="uid" type="hidden" value="<?php echo $rs['uid'] ; ?>" />
+
+        <input name="_tcid" type="hidden" value="<?php echo $rs['tcid'] ; ?>" />
+        <input name="_pid" type="hidden" value="<?php echo $rs['pid'] ; ?>" />
+
         <div id="tags-add" class="tab-content">
           <div id="tag-add-base" class="tab-pane active">
             <div class="input-prepend"> <span class="add-on">所属栏目</span>
@@ -64,7 +68,7 @@ $(function(){
             <span class="help-inline">本标签所属的栏目</span>
             <div class="clearfloat mb10"></div>
             <div class="input-prepend"> <span class="add-on">标签分类</span>
-              <select name="tcid" id="tcid" class="chosen-select span3">
+              <select name="tcid[]" id="tcid" class="chosen-select span6" multiple="multiple">
                 <option value="0"> ==== 暂无分类 ==== </option>
                 <?php echo $this->tagcategory->select($rs['tcid'],0,1,'all',true);?>
               </select>
@@ -72,9 +76,9 @@ $(function(){
             <span class="help-inline">本标签所属的标签分类</span>
             <div class="clearfloat mb10"></div>
             <div class="input-prepend"> <span class="add-on">标签属性</span>
-              <select name="pid" id="pid" class="chosen-select span3" multiple="multiple">
+              <select name="pid[]" id="pid" class="chosen-select span6" multiple="multiple">
                 <option value="0">普通标签[pid='0']</option>
-                <?php echo iACP::getProp("pid",$rs['pid']) ; ?>
+                <?php echo iACP::getProp("pid") ; ?>
               </select>
             </div>
             <div class="clearfloat mb10"></div>

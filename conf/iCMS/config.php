@@ -13,6 +13,11 @@ return array (
     'indexTPL' => '{iTPL}/index.htm',
     'indexName' => 'index',
   ),
+  'debug' => 
+  array (
+    'php' => '1',
+    'tpl' => '1',
+  ),
   'router' => 
   array (
     'DIR' => '',
@@ -23,7 +28,7 @@ return array (
     'htmldir' => '/html/',
     'htmlext' => '.html',
     'speed' => '50',
-    'tagURL' => 'http://v6.idreamsoft.com',
+    'tagURL' => 'http://v6.icms.com',
     'tagRule' => '{PHP}',
     'tagDir' => '/',
   ),
@@ -71,6 +76,14 @@ return array (
     'loginseccode' => '0',
     'agreement' => '',
   ),
+  'openapi' => 
+  array (
+    'QQ' => 
+    array (
+      'appid' => '140',
+      'appkey' => '140',
+    ),
+  ),
   'publish' => 
   array (
     'autoformat' => '0',
@@ -89,28 +102,11 @@ return array (
     'examine' => '1',
     'seccode' => '0',
   ),
-  'debug' => 
-  array (
-    'php' => '1',
-    'tpl' => '1',
-  ),
   'time' => 
   array (
     'zone' => 'Asia/Shanghai',
     'cvtime' => '0',
     'dateformat' => 'Y-m-d H:i:s',
-  ),
-  'app' => 
-  array (
-    0 => 'index',
-    1 => 'article',
-    2 => 'tag',
-    3 => 'search',
-    4 => 'usercp',
-    5 => 'category',
-    6 => 'comment',
-    7 => 'public',
-    8 => 'user',
   ),
   'other' => 
   array (
@@ -128,14 +124,6 @@ return array (
   array (
     'host' => '127.0.0.1:9312',
     'index' => 'iCMS_article iCMS_article_delta',
-  ),
-  'openapi' => 
-  array (
-    'QQ' => 
-    array (
-      'appid' => '140',
-      'appkey' => '140',
-    ),
   ),
   'apps' => 
   array (

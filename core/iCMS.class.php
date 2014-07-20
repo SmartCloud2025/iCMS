@@ -107,10 +107,7 @@ class iCMS {
             ),            
         );
         iPHP::$iTPL->_iTPL_VARS = self::$app_vars;
-
-        iPHP::import(self::$app_file);
-        $appName    = self::$app_name . 'App';
-		self::$app	= new $appName();
+        self::$app    = iPHP::app($app);
 		if(self::$app_do && self::$app->methods){
 			in_array(self::$app_do, self::$app->methods) OR iPHP::throwException('应用程序运行出错. <b>' .self::$app_name. '</b> 类中找不到方法定义: <b>'.self::$app_method.'</b>', 1003);
 			$method = self::$app_method;
@@ -126,7 +123,7 @@ class iCMS {
 
     }
     public static function API($app = NULL,$do = NULL) {
-    	$app OR $app	= iS::escapeStr($_GET['app']);
+        $app OR $app = iS::escapeStr($_GET['app']);
     	self::run($app,null,'API_');
     }
     //------------------------------------

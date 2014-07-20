@@ -7,20 +7,28 @@
  * @$Id: tag.tpl.php 159 2013-03-23 04:11:53Z coolmoo $
  */
 function tag_list($vars){
-	$whereSQL=" status='1'";
+	$where_sql=" status='1'";
 
-	isset($vars['tcid']) 	&& $whereSQL.=" AND `tcid`='".(int)$vars['tcid']."'";
-	isset($vars['pid']) 	&& $whereSQL.=" AND `pid`='".(int)$vars['pid']."'";
+	if(isset($vars['tcid'])){
+        iPHP::import(iPHP_APP_CORE .'/iMAP.class.php');
+        map::init('category',iCMS_APP_TAG);
+        $where_sql.= map::exists($vars['tcid'],'`#iCMS@__tags`.id'); //map 表大的用exists          
+	}
+	if(isset($vars['pid'])){
+        iPHP::import(iPHP_APP_CORE .'/iMAP.class.php');
+        map::init('prop',iCMS_APP_TAG);
+        $where_sql.= map::exists($vars['pid'],'`#iCMS@__tags`.id'); //map 表大的用exists          
+	}
 
     if(isset($vars['cid!'])){
         $cids	= $vars['sub']?iCMS::get_category_ids($vars['cid!'],true):$vars['cid!'];
         $cids OR $cids	= $vars['cid!'];
-        $whereSQL.= iPHP::where($cids,'cid','not');
+        $where_sql.= iPHP::where($cids,'cid','not');
     }
     if(isset($vars['cid'])){
         $cids	= $vars['sub']?iCMS::get_category_ids($vars['cid'],true):$vars['cid'];
         $cids OR $cids	= $vars['cid'];
-        $whereSQL.= iPHP::where($cids,'cid');
+        $where_sql.= iPHP::where($cids,'cid');
     }
 	
 	$maxperpage	= isset($vars['row'])?(int)$vars['row']:"10";
@@ -33,10 +41,10 @@ function tag_list($vars){
 //		case "rand":	$orderSQL=" ORDER BY rand() $by";		break;
 		default:		$orderSQL=" ORDER BY `id` $by";
 	}
-	$md5	= md5($whereSQL.$orderSQL);
+	$md5	= md5($where_sql.$orderSQL);
 	$offset	= 0;
 	if($vars['page']){
-		$total	= iPHP::total($md5,"SELECT count(*) FROM `#iCMS@__tags` WHERE {$whereSQL} ");
+		$total	= iPHP::total($md5,"SELECT count(*) FROM `#iCMS@__tags` WHERE {$where_sql} ");
 		iPHP::assign("tags_total",$total);
         $multi	= iCMS::page(array('total'=>$total,'perpage'=>$maxperpage,'unit'=>iPHP::lang('iCMS:page:list'),'nowindex'=>$GLOBALS['page']));
         $offset	= $multi->offset;
@@ -47,28 +55,29 @@ function tag_list($vars){
 	}
 	if(empty($rs)){
 		iPHP::appClass("tag",'break');
-		$rs		= iDB::getArray("SELECT * FROM `#iCMS@__tags` WHERE {$whereSQL} {$orderSQL} LIMIT {$offset},{$maxperpage}");
-		$rs		= tag_array($vars,$rs);
+		$rs = iDB::getArray("SELECT * FROM `#iCMS@__tags` WHERE {$where_sql} {$orderSQL} LIMIT {$offset},{$maxperpage}");
+		iDB::debug(1);
+		$rs = tag_array($vars,$rs);
 		$vars['cache'] && iCache::set($cacheName,$rs,$cacheTime);
 	}
 	
 	return $rs;
 }
 function tag_flist($vars){
-	$whereSQL=" status='1'";
+	$where_sql=" status='1'";
 
-	isset($vars['tcid']) 	&& $whereSQL.=" AND `tcid`='".(int)$vars['tcid']."'";
-	isset($vars['pid']) 	&& $whereSQL.=" AND `pid`='".(int)$vars['pid']."'";
+	isset($vars['tcid']) 	&& $where_sql.=" AND `tcid`='".(int)$vars['tcid']."'";
+	isset($vars['pid']) 	&& $where_sql.=" AND `pid`='".(int)$vars['pid']."'";
 
     if(isset($vars['cid!'])){
         $cids	= $vars['sub']?iCMS::get_category_ids($vars['cid!'],true):$vars['cid!'];
         $cids OR $cids	= $vars['cid!'];
-        $whereSQL.= iPHP::where($cids,'cid','not');
+        $where_sql.= iPHP::where($cids,'cid','not');
     }
     if(isset($vars['cid'])){
         $cids	= $vars['sub']?iCMS::get_category_ids($vars['cid'],true):$vars['cid'];
         $cids OR $cids	= $vars['cid'];
-        $whereSQL.= iPHP::where($cids,'cid');
+        $where_sql.= iPHP::where($cids,'cid');
     }
 	
 	$maxperpage	= isset($vars['row'])?(int)$vars['row']:"10";
@@ -81,10 +90,10 @@ function tag_flist($vars){
 //		case "rand":	$orderSQL=" ORDER BY rand() $by";		break;
 		default:		$orderSQL=" ORDER BY `id` $by";
 	}
-	$md5	= md5($whereSQL.$orderSQL);
+	$md5	= md5($where_sql.$orderSQL);
 	$offset	= 0;
 	if($vars['page']){
-		$total	= iPHP::total($md5,"SELECT count(*) FROM `#iCMS@__ftags` WHERE {$whereSQL} ");
+		$total	= iPHP::total($md5,"SELECT count(*) FROM `#iCMS@__ftags` WHERE {$where_sql} ");
 		iPHP::assign("tags_total",$total);
         $multi	= iCMS::page(array('total'=>$total,'perpage'=>$maxperpage,'unit'=>iPHP::lang('iCMS:page:list'),'nowindex'=>$GLOBALS['page']));
         $offset	= $multi->offset;
@@ -95,7 +104,7 @@ function tag_flist($vars){
 	}
 	if(empty($rs)){
 		iPHP::appClass("tag",'break');
-		$rs		= iDB::getArray("SELECT * FROM `#iCMS@__ftags` WHERE {$whereSQL} {$orderSQL} LIMIT {$offset},{$maxperpage}");
+		$rs		= iDB::getArray("SELECT * FROM `#iCMS@__ftags` WHERE {$where_sql} {$orderSQL} LIMIT {$offset},{$maxperpage}");
 		$rs		= tag_array($vars,$rs);
 		$vars['cache'] && iCache::set($cacheName,$rs,$cacheTime);
 	}
@@ -165,7 +174,7 @@ function tag_search($vars){
 	}
 	if(empty($tids)) return;
 	
-	$whereSQL=" `id` in($tids)";
+	$where_sql=" `id` in($tids)";
 	$offset	= 0;
 	if($vars['page']){
 		$total	= $res['total'];
@@ -174,7 +183,7 @@ function tag_search($vars){
         $multi	= iCMS::page(array('total'=>$total,'perpage'=>$maxperpage,'unit'=>iPHP::lang('iCMS:page:list'),'nowindex'=>$GLOBALS['page']));
         $offset	= $multi->offset;
 	}
-	$rs	= iDB::getArray("SELECT * FROM `#iCMS@__tags` WHERE {$whereSQL} {$orderSQL} LIMIT {$maxperpage}");
+	$rs	= iDB::getArray("SELECT * FROM `#iCMS@__tags` WHERE {$where_sql} {$orderSQL} LIMIT {$maxperpage}");
 	$rs	= tag_array($vars,$rs);
 	return $rs;
 }

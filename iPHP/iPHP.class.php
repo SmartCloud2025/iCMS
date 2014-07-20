@@ -179,9 +179,9 @@ class iPHP{
 		$u = json_decode('["'.$s.'"]');
 		return $u[0];
     }
-    public static function import($path,$r=false){
+    public static function import($path,$dump=false){
 		$key	= str_replace(iPATH,'iPHP://',$path);
-		if($r){
+		if($dump){
 			if(!isset($GLOBALS['_iPHP_REQ'][$key])){
 				$GLOBALS['_iPHP_REQ'][$key] = include $path;
 			}

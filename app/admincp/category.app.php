@@ -126,9 +126,9 @@ class categoryApp{
         	foreach($nameArray AS $nkey=>$_name){
         		$_name	= trim($_name);
                 if(empty($_name)) continue;
-		        if(empty($url)){
-		            $_dir = strtolower(pinyin($_name));
-		        }
+
+		        empty($url) && $_dir = strtolower(pinyin($_name));
+                
 	            (iDB::getValue("SELECT `dir` FROM `#iCMS@__category` where `dir` ='$_dir' AND `appid`='$this->appid'") && empty($url)) && iPHP::alert('该'.$this->name_text.'别名/目录已经存在!请另选一个');
 	            iDB::query("INSERT INTO `#iCMS@__category` (`rootid`,`appid`,`orderNum`,`name`,`subname`,`password`,`title`,`keywords`,`description`,`dir`,`mode`,`domain`,`url`,`pic`,`htmlext`,`categoryURI`,`categoryRule`,`contentRule`,`urlRule`,`indexTPL`,`listTPL`,`contentTPL`,`metadata`,`contentprop`,`body`,`pid`,`isexamine`,`issend`,`isucshow`,`status`)
 	    		VALUES ('$rootid','$this->appid', '$orderNum', '$_name','$subname','$password','$title','$keywords', '$description', '$_dir','$mode','$domain', '$url','$pic','$htmlext','$categoryURI','$categoryRule', '$contentRule','$urlRule','$indexTPL', '$listTPL', '$contentTPL','$metadata','$contentprop', '$body','$pid','$isexamine','$issend','$isucshow','$status')");

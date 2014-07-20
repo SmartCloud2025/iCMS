@@ -43,18 +43,14 @@ function article_list($vars){
         //     $cids     = iCMS::get_category_ids($vars['cid'],true);
         //     $map_node = array_merge($map_node,(array)$cids);
         // }
-        if($vars['multi']){
-            iPHP::import(iPHP_APP_CORE .'/iMAP.class.php');
-            map::init('category',iCMS_APP_ARTICLE);
-            $where_sql.= map::exists($vars['cid'],'`#iCMS@__article`.id'); //map 表大的用exists          
-        }else{
-            $cids    = $vars['cid!'];
-            if($vars['sub']){
-                $cids  = iCMS::get_category_ids($vars['cid'],true);
-                array_push ($cids,$vars['cid']);
-            }
-            $where_sql.= iPHP::where($cids,'cid');               
+        $cids = $vars['cid'];
+        if($vars['sub']){
+            $cids  = iCMS::get_category_ids($vars['cid'],true);
+            array_push ($cids,$vars['cid']);
         }
+        iPHP::import(iPHP_APP_CORE .'/iMAP.class.php');
+        map::init('category',iCMS_APP_ARTICLE);
+        $where_sql.= map::exists($cids,'`#iCMS@__article`.id'); //map 表大的用exists
     }
     // && $where_sql.= " AND `pid` ='{$vars['pid']}'";
     if(isset($vars['pid'])){
@@ -113,15 +109,16 @@ function article_list($vars){
         $pnstyle = isset($vars['pnstyle'])?$vars['pnstyle']:0;
         $multi   = iCMS::page(array('total'=>$total,'perpage'=>$maxperpage,'unit'=>iPHP::lang('iCMS:page:list'),'nowindex'=>$GLOBALS['page']));
         $offset  = $multi->offset;
+        //$where_sql.=' `id` >= (SELECT id FROM table LIMIT 1000000, 1) '
         iPHP::assign("article_list_total",$total);
     }
     if($vars['cache']){
-        $cache_name ='article/'.$md5."/".(int)$GLOBALS['page'];
-        $resource        =iCache::get($cache_name);
+        $cache_name = 'article/'.$md5."/".(int)$GLOBALS['page'];
+        $resource   = iCache::get($cache_name);
     }
     if(empty($resource)){
         $resource = iDB::getArray("SELECT * FROM `#iCMS@__article` WHERE {$where_sql} {$order_sql} LIMIT {$offset} , {$maxperpage}");
-        //iDB::debug(1);
+        iDB::debug(1);
         $resource = article_array($vars,$resource);
         $vars['cache'] && iCache::set($cache_name,$resource,$cacheTime);
     }

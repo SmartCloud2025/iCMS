@@ -1,6 +1,6 @@
 html, body { word-wrap: break-word; word-break: break-all; }
 body, button, input, select, textarea { font: 14px/1.75 'Helvetica Neue', Helvetica, Arial, Sans-serif, "\5b8b\4f53"; }
-input, select, textarea {font-family:Tahoma,Arial;}
+input, select, textarea { font-family: Tahoma, Arial; }
 a:hover { text-decoration: none; }
 .mt0 { margin-top: 0px !important; }
 .mb0 { margin-bottom: 0px !important; }
@@ -35,13 +35,14 @@ a.noneline { text-decoration: none !important; }
 /* DIALOG */
 .d-content .btn-group { position: absolute; }
 .iPHP-msg { text-align: center; margin: 5px; padding: 4px; }
-.iPHP-msg .label { padding: 8px 10px; font-size: 14px; letter-spacing: 1px; line-height: 160%;}
+.iPHP-msg .label { padding: 8px 10px; font-size: 14px; letter-spacing: 1px; line-height: 160%; }
 .iPHP-msg pre { width: 800px; text-align: left; }
-.iPHP-msg i{font-size: 18px;}
+.iPHP-msg i { font-size: 18px; }
 /* chosen */
 .chosen-container-single .chosen-single { background-image: none !important; -webkit-box-shadow: none !important; -moz-box-shadow: none !important; box-shadow: none !important; }
 .input-prepend .chosen-container-single .chosen-single { -webkit-border-top-left-radius: 0; -moz-border-radius-topleft: 0; border-top-left-radius: 0; -webkit-border-bottom-left-radius: 0; -moz-border-radius-bottomleft: 0; border-bottom-left-radius: 0; }
 .input-append .chosen-container-single .chosen-single { -webkit-border-top-right-radius: 0; -moz-border-radius-topright: 0; border-top-right-radius: 0; -webkit-border-bottom-right-radius: 0; -moz-border-radius-bottomright: 0; border-bottom-right-radius: 0; }
+.input-prepend .chosen-container-multi .chosen-choices { -webkit-border-radius: 0 4px 4px 0; -moz-border-radius: 0 4px 4px 0; border-radius: 0 4px 4px 0; font-size: 12px; padding: 0px 6px; }
 .chosen-container-single .chosen-single { height: 28px; border: 1px solid #ccc; color: #696969; font-size: 14px; line-height: 28px; }
 .chosen-container-single .chosen-single div b { background-position-y: 5px; }
 /* tooltip */

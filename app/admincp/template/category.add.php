@@ -10,7 +10,7 @@ iACP::head();
 ?>
 <script type="text/javascript">
 $(function(){
-	iCMS.select('pid',"<?php echo $rs['pid'] ; ?>");
+	iCMS.select('pid',"<?php echo $rs['pid']?$rs['pid']:0 ; ?>");
 	iCMS.select('mode',"<?php echo $rs['mode'] ; ?>");
 
 	iCMS.select('isucshow',"<?php echo $rs['isucshow'] ; ?>");
