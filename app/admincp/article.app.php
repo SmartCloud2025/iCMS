@@ -394,6 +394,8 @@ class articleApp{
         $title       = iS::escapeStr($_POST['title']);
         $stitle      = iS::escapeStr($_POST['stitle']);
         $pic         = iS::escapeStr($_POST['pic']);
+        $mpic        = iS::escapeStr($_POST['mpic']);
+        $spic        = iS::escapeStr($_POST['spic']);
         $source      = iS::escapeStr($_POST['source']);
         $author      = iS::escapeStr($_POST['author']);
         $editor      = iS::escapeStr($_POST['editor']);
@@ -435,10 +437,13 @@ class articleApp{
             $description = csubstr($bodyText,iCMS::$config['publish']['descLen']);
             unset($bodyText);
         }
-               
-        strstr($pic, 'http://') && $pic = iFS::http($pic);
+       
+        strstr($pic, 'http://') && $pic   = iFS::http($pic);
+        strstr($mpic, 'http://') && $mpic = iFS::http($mpic);
+        strstr($spic, 'http://') && $spic = iFS::http($spic);
         
-        $isPic   = empty($pic)?0:1;       
+        $isPic   = empty($pic)?0:1; 
+              
         $SELFURL = __SELF__.$_POST['REFERER'];
         if(empty($_POST['REFERER'])||strstr($_POST['REFERER'], '=save')){
         	$SELFURL= __SELF__.'?app=article&do=manage';
@@ -466,8 +471,8 @@ class articleApp{
             }
 
             iDB::query("INSERT INTO `#iCMS@__article` 
-            	   (`cid`,`scid`,`orderNum`, `title`, `stitle`, `clink`, `url`, `source`, `author`, `editor`, `userid`, `pic`, `picwidth`, `picheight`, `keywords`, `tags`, `description`, `related`, `metadata`, `pubdate`, `postime`, `hits`, `comments`, `good`, `bad`, `chapter`, `pid`, `top`, `postype`, `tpl`, `status`, `isPic`)
-			VALUES ('$cid','$scid', '$orderNum', '$title', '$stitle', '$clink', '$url', '$source', '$author', '$editor', '$userid', '$pic', '$picwidth', '$picheight', '$keywords', '$tags', '$description', '$related', '$metadata', '$pubdate', '$postime', '$hits', '$comments', '$good', '$bad', '$chapter', '$pid', '$top', '$postype', '$tpl', '$status', '$isPic');");
+            	   (`cid`,`scid`,`orderNum`, `title`, `stitle`, `clink`, `url`, `source`, `author`, `editor`, `userid`, `pic`,`mpic`,`spic`, `picwidth`, `picheight`, `keywords`, `tags`, `description`, `related`, `metadata`, `pubdate`, `postime`, `hits`, `comments`, `good`, `bad`, `chapter`, `pid`, `top`, `postype`, `tpl`, `status`, `isPic`)
+			VALUES ('$cid','$scid', '$orderNum', '$title', '$stitle', '$clink', '$url', '$source', '$author', '$editor', '$userid', '$pic','$mpic','$spic', '$picwidth', '$picheight', '$keywords', '$tags', '$description', '$related', '$metadata', '$pubdate', '$postime', '$hits', '$comments', '$good', '$bad', '$chapter', '$pid', '$top', '$postype', '$tpl', '$status', '$isPic');");
             
             $aid = iDB::$insert_id;
 
@@ -503,7 +508,7 @@ class articleApp{
             $pic && list($picwidth, $picheight, $_type, $_attr) = @getimagesize(iFS::fp($pic,'+iPATH'));
 
 			iDB::query("UPDATE `#iCMS@__article` 
-			SET `cid` = '$cid', `scid` = '$scid', `orderNum` = '$orderNum', `title` = '$title', `stitle` = '$stitle', `clink` = '$clink', `url` = '$url', `source` = '$source', `author` = '$author', `editor` = '$editor', `userid` = '$userid', `pic` = '$pic', `picwidth` = '$picwidth', `picheight` = '$picheight', `keywords` = '$keywords', `tags` = '$tags', `description` = '$description', `related` = '$related', `metadata` = '$metadata', `pubdate` = '$pubdate', `chapter` = '$chapter', `pid` = '$pid', `top` = '$top', `postype` = '$postype', `tpl` = '$tpl',`status` = '$status', `isPic` = '$isPic'
+			SET `cid` = '$cid', `scid` = '$scid', `orderNum` = '$orderNum', `title` = '$title', `stitle` = '$stitle', `clink` = '$clink', `url` = '$url', `source` = '$source', `author` = '$author', `editor` = '$editor', `userid` = '$userid', `pic` = '$pic',`mpic` = '$mpic',`spic` = '$spic', `picwidth` = '$picwidth', `picheight` = '$picheight', `keywords` = '$keywords', `tags` = '$tags', `description` = '$description', `related` = '$related', `metadata` = '$metadata', `pubdate` = '$pubdate', `chapter` = '$chapter', `pid` = '$pid', `top` = '$top', `postype` = '$postype', `tpl` = '$tpl',`status` = '$status', `isPic` = '$isPic'
 			WHERE `id` = '$aid';");
             map::init('prop',iCMS_APP_ARTICLE);
             map::diff($pid,$_pid,$aid);

@@ -243,6 +243,16 @@ function _modal_dialog(cancel){
               <?php iACP::picBtnGroup("pic");?>
             </div>
             <div class="clearfloat mb10"></div>
+            <div class="input-prepend input-append"> <span class="add-on">缩略图2</span>
+              <input type="text" name="mpic" class="span6" id="mpic" value="<?php echo $rs['mpic'] ; ?>"/>
+              <?php iACP::picBtnGroup("mpic");?>
+            </div>
+            <div class="clearfloat mb10"></div>
+            <div class="input-prepend input-append"> <span class="add-on">缩略图3</span>
+              <input type="text" name="spic" class="span6" id="spic" value="<?php echo $rs['spic'] ; ?>"/>
+              <?php iACP::picBtnGroup("spic");?>
+            </div>
+            <div class="clearfloat mb10"></div>
             <div class="input-prepend"> <span class="add-on">关键字</span>
               <input type="text" name="keywords" class="span6" id="keywords" value="<?php echo $rs['keywords'] ; ?>" onkeyup="javascript:this.value=this.value.replace(/，/ig,',');"/>
             </div>
