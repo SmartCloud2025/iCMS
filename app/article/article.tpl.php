@@ -211,44 +211,44 @@ function article_search($vars){
     return $resource;
 }
 
-function article_array($vars,$resource){
-    $_count = count($resource);
-    for ($i=0;$i<$_count;$i++){
+function article_array($vars,$variable){
+    if($variable)foreach ($variable as $key => $value) {  
         if($vars['page']){
-            $resource[$i]['page']  = $GLOBALS['page']?$GLOBALS['page']:1;
-            $resource[$i]['total'] = $total;
+            $value['page']  = $GLOBALS['page']?$GLOBALS['page']:1;
+            $value['total'] = $total;
         }
-        if(isset($vars['picWidth']) && isset($vars['picHeight']) && $resource[$i]['pic']){
-                $im = bitscale(array("tw"  => $vars['picWidth'],"th" => $vars['picHeight'],"w"  =>$resource[$i]['picwidth'] ,"h" =>$resource[$i]['picheight']));
-                $resource[$i]['img']=$im;
+        if(isset($vars['picWidth']) && isset($vars['picHeight']) && $value['pic']){
+                $im = bitscale(array("tw"  => $vars['picWidth'],"th" => $vars['picHeight'],"w"  =>$value['picwidth'] ,"h" =>$value['picheight']));
+                $value['img']=$im;
         }
-        $resource[$i]['pic'] && $resource[$i]['pic']=iFS::fp($resource[$i]['pic'],'+http');
+        $value['pic'] && $value['pic']=iFS::fp($value['pic'],'+http');
 
-        $category	= iCache::get('iCMS/category/'.$resource[$i]['cid']);
-        $resource[$i]['category']['name']    = $category['name'];
-        $resource[$i]['category']['subname'] = $category['subname'];
-        $resource[$i]['category']['url']     = $category['iurl']->href;
-        $resource[$i]['category']['link']    = "<a href='{$resource[$i]['category']['url']}'>{$resource[$i]['category']['name']}</a>";
-        $resource[$i]['url']                 = iURL::get('article',array($resource[$i],$category))->href;
-        $resource[$i]['link']                = "<a href='{$resource[$i]['url']}'>{$resource[$i]['title']}</a>";
-        $resource[$i]['commentUrl']          = iCMS::$config['router']['publicURL']."/comment.php?indexId=".$resource[$i]['id']."&categoryId=".$resource[$i]['cid'];
+        $category	= iCache::get('iCMS/category/'.$value['cid']);
+        $value['category']['name']    = $category['name'];
+        $value['category']['subname'] = $category['subname'];
+        $value['category']['url']     = $category['iurl']->href;
+        $value['category']['link']    = "<a href='{$value['category']['url']}'>{$value['category']['name']}</a>";
+        $value['url']                 = iURL::get('article',array($value,$category))->href;
+        $value['link']                = "<a href='{$value['url']}'>{$value['title']}</a>";
+        $value['commentUrl']          = iCMS::$config['router']['publicURL']."/comment.php?indexId=".$value['id']."&categoryId=".$value['cid'];
         if($vars['user']){
-            $resource[$i]['user']['url']  = "/u/".$resource[$i]['userid'];
-            $resource[$i]['user']['name'] = $resource[$i]['author'];
-            $resource[$i]['user']['id']   = $resource[$i]['userid'];
+            $value['user']['url']  = "/u/".$value['userid'];
+            $value['user']['name'] = $value['author'];
+            $value['user']['id']   = $value['userid'];
         }
         // if($vars['urls']){
-        //     $resource[$i]['urls']['url']      = "/u/".$resource[$i]['userid'];
-        //     $resource[$i]['urls']['url']      = "/u/".$resource[$i]['userid'];
-        //     $resource[$i]['urls']['url']      = "/u/".$resource[$i]['userid'];
+        //     $value['urls']['url']      = "/u/".$value['userid'];
+        //     $value['urls']['url']      = "/u/".$value['userid'];
+        //     $value['urls']['url']      = "/u/".$value['userid'];
         // }
 		if($vars['meta']){
-            $resource[$i]['metadata'] && $resource[$i]['metadata'] = unserialize($resource[$i]['metadata']);
+            $value['metadata'] && $value['metadata'] = unserialize($value['metadata']);
         }
-        $resource[$i]['description'] && $resource[$i]['description'] = nl2br($resource[$i]['description']);
+        $value['description'] && $value['description'] = nl2br($value['description']);
         if($vars['tags']){
-        	tag::getag('tags',$resource[$i],$category);
+        	tag::getag('tags',$value,$category);
         }
+        $resource[$key] = $value;
     }
     return $resource;
 }

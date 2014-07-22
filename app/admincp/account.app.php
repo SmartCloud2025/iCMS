@@ -13,11 +13,11 @@ class accountApp{
     function __construct() {
     	$this->uid	= (int)$_GET['id'];
     }
-    function doadd1(){
+    function doaddadmin(){
     	$this->type="1";
     	$this->add();
     }
-    function doadd0(){
+    function doadduser(){
     	$this->type="0";
     	$this->add();
     }

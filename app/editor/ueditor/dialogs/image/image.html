@@ -5,9 +5,9 @@
     <title></title>
     <meta http-equiv="Content-Type" content="text/html;charset=utf-8"/>
     <script type="text/javascript" src="../internal.js"></script>
-<link rel="stylesheet" href="../../../../ui/bootstrap-2.3.1/css/bootstrap.min.css" type="text/css" />
-<link rel="stylesheet" href="../../../../ui/bootstrap-2.3.1/css/bootstrap-responsive.min.css" type="text/css" />
-<link rel="stylesheet" href="../../../../ui/admincp-6.0.0.css" type="text/css" />
+<link rel="stylesheet" href="../../../../admincp/ui/bootstrap-2.3.1/css/bootstrap.min.css" type="text/css" />
+<link rel="stylesheet" href="../../../../admincp/ui/bootstrap-2.3.1/css/bootstrap-responsive.min.css" type="text/css" />
+<link rel="stylesheet" href="../../../../admincp/ui/admincp-6.0.0.css" type="text/css" />
     <link rel="stylesheet" href="image.css" type="text/css" />
 </head>
 <body>
@@ -128,7 +128,7 @@
 			{{each FileArray}}
             <tr>
               <td><input type="checkbox" class="url" value="{{$value.url}}" /></td>
-              <td><a href="{{$value.url}}"  target="_blank" title="点击查看图片"><img src="../../../../ui/fileicons/{{$value.ext}}.gif" /></a> <a href="javascript:imageUploader.insertImage('{{$value.url}}');" class="file">{{$value.name}}</a></td>
+              <td><a href="{{$value.url}}"  target="_blank" title="点击查看图片"><img src="../../../../admincp/ui/fileicons/{{$value.ext}}.gif" /></a> <a href="javascript:imageUploader.insertImage('{{$value.url}}');" class="file">{{$value.name}}</a></td>
               <td>{{$value.size}}</td>
               <td>{{$value.modified}}</td>
             </tr>
@@ -139,7 +139,7 @@
     </div>
   </div>
 	</script>
-    <script type="text/javascript" src="../../../../ui/template-3.0.js"></script>
+    <script type="text/javascript" src="../../../../admincp/ui/template-3.0.js"></script>
     <script type="text/javascript" src="../tangram.js"></script>
     <script type="text/javascript" src="image.js"></script>
 

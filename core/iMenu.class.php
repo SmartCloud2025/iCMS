@@ -10,34 +10,34 @@
 * @$Id: iMenu.class.php 2334 2014-01-04 12:18:19Z coolmoo $
 */
 class iMenu {
-	public static $menuArray= array();
-    public static $MArray	= array();
-    public static $doMid	= 0;
-    public static $rootid	= 0;
-    public static $appMid	= 0;
-    public static $MUri		= array();
-    private static $rootA	= array();
+	public static $menuArray = array();
+	public static $MArray    = array();
+	public static $doMid     = 0;
+	public static $rootid    = 0;
+	public static $appMid    = 0;
+	public static $MUri      = array();
+	private static $rootA    = array();
 
 	function __construct() {
-		$this->menuArray	= iCache::get('iCMS/iMenu/menuArray');
-		$this->MArray		= iCache::get('iCMS/iMenu/MArray');
-		$this->rootA		= iCache::get('iCMS/iMenu/rootA');
-		$this->subA			= iCache::get('iCMS/iMenu/subA');
-		$this->parent		= iCache::get('iCMS/iMenu/parent');
-		$this->MUri			= iCache::get('iCMS/iMenu/MUri');
-		$href				= '';
+		$this->menuArray = iCache::get('iCMS/iMenu/menuArray');
+		$this->MArray    = iCache::get('iCMS/iMenu/MArray');
+		$this->rootA     = iCache::get('iCMS/iMenu/rootA');
+		$this->subA      = iCache::get('iCMS/iMenu/subA');
+		$this->parent    = iCache::get('iCMS/iMenu/parent');
+		$this->MUri      = iCache::get('iCMS/iMenu/MUri');
+		$href            = '';
 		if($_GET['app']){
-			$href 			= $_GET['app'];
-			$this->appMid	= $this->MUri[$href];
+			$href         = $_GET['app'];
+			$this->appMid = $this->MUri[$href];
 		}
 		if($_GET['do']){
 			$_GET['do']	&& $href.= '&do='.$_GET['do'];
 			$this->doMid	= $this->MUri[$href];
 		}
-		$this->doMid OR $this->doMid	= $this->appMid;
-		$this->rootid					= $this->rootid($this->doMid);
-		$this->rootid OR $this->rootid	= 1;
-		$this->parentid					= $this->parent[$this->doMid];
+		$this->doMid OR $this->doMid   = $this->appMid;
+		$this->rootid                  = $this->rootid($this->doMid);
+		$this->rootid OR $this->rootid = 1;
+		$this->parentid                = $this->parent[$this->doMid];
 		$this->parentid==$this->rootid && $this->parentid=$this->doMid;
 		$this->menuArray OR $this->cache();
 	}
@@ -88,7 +88,7 @@ class iMenu {
 			echo $this->a($this->doMid);
 		}
 		if($this->appMid==$this->doMid && $this->appMid){
-			echo '<a href="#" class="current">...</a>';
+			echo '<a href="javascript:;" class="current">...</a>';
 		}
 	}
 	function a($id){
@@ -131,7 +131,7 @@ class iMenu {
 		if(strstr($a['href'], 'http://')||strstr($a['href'], '#')) $href = $a['href'];
 		
 		$a['href']=='__SELF__' && $href = __SELF__;
-		$a['href']=='#' && $href = 'javascript:void(0);';
+		$a['href']=='#' && $href = 'javascript:;';
 		
 		$isSM	= count($this->rootA[$id]);
 
@@ -139,14 +139,14 @@ class iMenu {
 			$a['class']	= 'dropdown-submenu';
 		}
 		if($mType=='sidebar' && $isSM && $level==1){
-			$href		= 'javascript:void(0);';
+			$href		= 'javascript:;';
 			$a['class']	= 'submenu';
 			$label		= '<span class="label">'.$this->subcount($id).'</span>';
 		}
 
-		$li		= '<li class="'.$a['class'].'" title="'.$a['name'].'" data-level="'.$level.'" data-menu="m'.$id.'">';
-
-		$aa= '<a href="'.$href.'"';
+		$li = '<li class="'.$a['class'].'" title="'.$a['name'].'" data-level="'.$level.'" data-menu="m'.$id.'">';
+		
+		$aa = '<a href="'.$href.'"';
 		$a['title'] 		&& $aa.= ' title="'.$a['title'].'"';
 		$a['a_class'] 		&& $aa.= ' class="'.$a['a_class'].'"';
 		$a['target'] 		&& $aa.= ' target="'.$a['target'].'"';
@@ -176,5 +176,8 @@ class iMenu {
 		}
 		$li.=$SMul.'</li>';
 		return $li;
+	}
+	function permission(){
+		
 	}
 }

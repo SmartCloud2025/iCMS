@@ -1,5 +1,5 @@
 html, body { word-wrap: break-word; word-break: break-all; }
-body, button, input, select, textarea { font: 14px/1.75 'Helvetica Neue', Helvetica, Arial, Sans-serif, "\5b8b\4f53"; }
+body, button, input, select, textarea { font: 14px/1.75 Tahoma,Arial,sans-serif,"\5b8b\4f53"; }
 input, select, textarea { font-family: Tahoma, Arial; }
 a:hover { text-decoration: none; }
 .mt0 { margin-top: 0px !important; }
