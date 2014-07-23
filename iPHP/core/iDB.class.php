@@ -8,7 +8,7 @@
 * @licence http://www.iiiphp.com/license
 * @version 1.0.1
 * @package iDB
-* @$Id: iMysql.class.php 2412 2014-05-04 09:52:07Z coolmoo $
+* @$Id: iDB.class.php 2412 2014-05-04 09:52:07Z coolmoo $
 */
 
 define('OBJECT', 'OBJECT', true);
@@ -34,139 +34,18 @@ class iDB{
     private static $link;
     private static $result;
 
-    public static function connect() {
-		extension_loaded('mysql') OR die('您的 PHP 环境看起来缺少 MySQL 数据库部分，这对 iPHP 来说是必须的。');
 
-        defined('iPHP_DB_COLLATE') &&self::$collate = iPHP_DB_COLLATE;
+    public static function connect() {}
+    public static function print_error($str = '') {}
+    public static function query($query,$QT=NULL) {}
 
-		if(isset($GLOBALS['iPHP_DB'])){
-			self::$link	= $GLOBALS['iPHP_DB'];
-			if(self::$link){
-				if(mysql_ping(self::$link))
-					return self::$link;
-			}
-		}
-
-		self::$link = @mysql_connect(iPHP_DB_HOST, iPHP_DB_USER, iPHP_DB_PASSWORD);
-        self::$link OR self::bail("<h1>数据库连接失败</h1><p>请检查 <em><strong>config.php</strong></em> 的配置是否正确!</p><ul><li>请确认主机支持MySQL?</li><li>请确认用户名和密码正确?</li><li>请确认主机名正确?(一般为localhost)</li></ul><p>如果你不确定这些情况,请询问你的主机提供商.如果你还需要帮助你可以随时浏览 <a href='http://www.iiiphp.com'>iPHP 支持论坛</a>.</p>");
-
-        $GLOBALS['iPHP_DB'] = self::$link;
-
-        if (defined('iPHP_DB_CHARSET') && version_compare(mysql_get_server_info(), '4.1.0', '>='))
-            self::query("SET NAMES '".iPHP_DB_CHARSET."'");
-
-        @mysql_select_db(iPHP_DB_NAME, self::$link) OR self::bail("<h1>数据库连接失败</h1><p>我们能连接到数据库服务器（即数据库用户名和密码正确） ，但是不能链接到<em><strong> ".iPHP_DB_NAME." </strong></em>数据库.</p><ul><li>你确定<em><strong> ".iPHP_DB_NAME." </strong></em>存在?</li></ul><p>如果你不确定这些情况,请询问你的主机提供商.如果你还需要帮助你可以随时浏览 <a href='http://www.iiiphp.com'>iPHP 支持论坛</a>.</p>");
-
-    }
-    // ==================================================================
-    //	Print SQL/DB error.
-
-    public static function print_error($str = '') {
-        $str OR $str 	= mysql_error(self::$link);
-        $EZSQL_ERROR[]	= array ('query' => self::$last_query, 'error_str' => $str);
-
-        $str	= htmlspecialchars($str, ENT_QUOTES);
-        $query	= htmlspecialchars(self::$last_query, ENT_QUOTES);
-        // Is error output turned on or not..
-        if ( self::$show_errors ) {
-            // If there is an error then take note of it
-            die("<div id='error'>
-			<p class='iPHPDBerror'><strong>iPHP database error:</strong> [$str]<br />
-			<code>$query</code></p>
-			</div>");
-        } else {
-            return false;
-        }
-    }
-    // ==================================================================
-    //	Kill cached query results
 
     public static function flush() {
         self::$last_result	= array();
         self::$col_info		= null;
         self::$last_query	= null;
     }
-    // ==================================================================
 
-    // ==================================================================
-    //	Basic Query	- see docs for more detail
-
-    public static function query($query,$QT=NULL) {
-        if(empty($query)){
-            if (self::$show_errors) {
-                // If there is an error then take note of it
-                die("<div id='error'>
-                <p class='iPHPDBerror'><strong>iPHP database error:</strong> [$str]<br />
-                <code>$query</code></p>
-                </div>");
-            } else {
-                return false;
-            }
-        }
-
-    	self::$link OR self::connect();
-
-        // filter the query, if filters are available
-        // NOTE: some queries are made before the plugins have been loaded, and thus cannot be filtered with this method
-        $query	= str_replace(iPHP_DB_PREFIX_TAG,iPHP_DB_PREFIX, $query);
-
-        // initialise return
-        $return_val = 0;
-        self::flush();
-
-        // Log how the function was called
-        self::$func_call = __CLASS__."::query(\"$query\")";
-
-        // Keep track of the last query for debug..
-        self::$last_query = $query;
-
-        // Perform the query via std mysql_query function..
-        SAVEQUERIES && self::timer_start();
-
-
-        self::$result = mysql_query($query, self::$link);
-        self::$num_queries++;
-
-        SAVEQUERIES && self::$queries[] = array( $query, self::timer_stop());
-
-        // If there is an error then take note of it..
-        if ( self::$last_error = mysql_error(self::$link) ) {
-            self::print_error();
-            return false;
-        }
-        $QH	= strtoupper(substr($query,0,strpos($query, ' ')));
-        if (in_array($QH,array("INSERT","DELETE","UPDATE","REPLACE"))) {
-            $rows_affected = mysql_affected_rows(self::$link);
-            // Take note of the insert_id
-            if (in_array($QH,array("INSERT","REPLACE"))) {
-                self::$insert_id = mysql_insert_id(self::$link);
-            }
-            // Return number of rows affected
-            $return_val = $rows_affected;
-        } else {
-            if($QT=="field") {
-                $i = 0;
-                while ($i < @mysql_num_fields(self::$result)) {
-                    self::$col_info[$i] = mysql_fetch_field(self::$result);
-                    $i++;
-                }
-            }else {
-                $num_rows = 0;
-                while ( $row = @mysql_fetch_object(self::$result) ) {
-                    self::$last_result[$num_rows] = $row;
-                    $num_rows++;
-                }
-                // Log number of rows the query returned
-                self::$num_rows = $num_rows;
-
-                // Return number of rows selected
-                $return_val = $num_rows;
-            }
-            @mysql_free_result(self::$result);
-        }
-
-        return $return_val;
-    }
     public static function debug($show=false){
         if(!self::$show_errors) return false;
 
@@ -323,15 +202,7 @@ class iDB{
             }
         }
     }
-    public static function version() {
-		self::$link OR self::connect();
-        // Make sure the server has MySQL 4.0
-        $mysql_version = preg_replace('|[^0-9\.]|', '', @mysql_get_server_info(self::$link));
-        if ( version_compare($mysql_version, '4.0.0', '<') )
-            self::bail('database_version<strong>ERROR</strong>: iPHP %s requires MySQL 4.0.0 or higher');
-        else
-            return $mysql_version;
-    }
+    public static function version() {}
 
     /**
      * Starts the timer, for debugging purposes

@@ -40,7 +40,7 @@ class iDB{
     function connect() {
 		extension_loaded('PDO') OR die('您的 PHP 安装看起来缺少 PDO 部分，这对 iPHP 来说是必须的。');
 		extension_loaded('PDO_SQLITE') OR die('您的 PHP 安装看起来缺少 PDO_SQLITE 部分，这对 iPHP 来说是必须的。');
-		
+
         if (defined('iPHP_DB_COLLATE'))
             self::$collate = iPHP_DB_COLLATE;
 
@@ -61,7 +61,7 @@ class iDB{
             $info 	= self::$link->errorInfo();
             $str	= $info[2];
         }
-        
+
         $EZSQL_ERROR[]	= array ('query' => self::$last_query, 'error_str' => $str);
 
         $str	= htmlspecialchars($str, ENT_QUOTES);
@@ -337,8 +337,6 @@ class iDB{
         if ( !self::$show_errors ) {
             return false;
         }
-        header('Content-Type: text/html; charset=utf8');
-		echo '<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd"><html xmlns="http://www.w3.org/1999/xhtml"><head><title>iPHP MySQL Error</title><meta http-equiv="Content-Type" content="text/html; charset=utf-8" /></head><body><h1 id="logo"><img alt="iPHP" src="http://www.iiiphp.com/doc/iPHP.logo.gif" /></h1><p>'.$message.'</p></body></html>';
-		exit();
+        trigger_error($message,E_USER_ERROR);
     }
 }

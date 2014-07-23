@@ -40,15 +40,13 @@ class iDB{
     }
     function connect() {
 		extension_loaded('pgsql') OR die('您的 PHP 安装看起来缺少 PostgreSQL 数据库部分，这对 iPHP 来说是必须的。');
-		
+
         defined('iPHP_DB_COLLATE') && self::$collate = iPHP_DB_COLLATE;
 
-        self::$link = pg_connect("host=".iPHP_DB_HOST." port=".iPHP_DB_PORT." dbname=".iPHP_DB_NAME." user=".iPHP_DB_USER." password=".iPHP_DB_PASSWORD);
-
-        defined('iPHP_DB_CHARSET') && self::query("set client_encoding to '".iPHP_DB_CHARSET."'");
-
+        self::$link = @pg_connect("host=".iPHP_DB_HOST." port=".iPHP_DB_PORT." dbname=".iPHP_DB_NAME." user=".iPHP_DB_USER." password=".iPHP_DB_PASSWORD);
         self::$link OR self::bail("<h1>数据库链接失败</h1><p>请检查 <em><strong>config.php</strong></em> 的配置是否正确!</p><ul><li>请确认主机支持PostgreSQL?</li><li>请确认用户名和密码正确?</li><li>请确认主机名正确?(一般为localhost)</li></ul><p>如果你不确定这些情况,请询问你的主机提供商.如果你还需要帮助你可以随时浏览 <a href='http://www.iiiphp.com'>iPHP 支持论坛</a>.</p>");
-        //@mysql_select_db(iPHP_DB_NAME, self::$link) OR self::bail("<h1>链接到<em><strong>".iPHP_DB_NAME."</strong></em>数据库失败</h1><p>我们能连接到数据库服务器（即数据库用户名和密码正确） ，但是不能链接到<em><strong>$db</strong></em>数据库.</p><ul><li>你确定<em><strong>$db</strong></em>存在?</li></ul><p>如果你不确定这些情况,请询问你的主机提供商.如果你还需要帮助你可以随时浏览 <a href='http://www.iiiphp.com'>iPHP 支持论坛</a>.</p>");
+        defined('iPHP_DB_CHARSET') && self::query("set client_encoding to '".iPHP_DB_CHARSET."'");
+       //@mysql_select_db(iPHP_DB_NAME, self::$link) OR self::bail("<h1>链接到<em><strong>".iPHP_DB_NAME."</strong></em>数据库失败</h1><p>我们能连接到数据库服务器（即数据库用户名和密码正确） ，但是不能链接到<em><strong>$db</strong></em>数据库.</p><ul><li>你确定<em><strong>$db</strong></em>存在?</li></ul><p>如果你不确定这些情况,请询问你的主机提供商.如果你还需要帮助你可以随时浏览 <a href='http://www.iiiphp.com'>iPHP 支持论坛</a>.</p>");
 
     }
     // ==================================================================
@@ -107,7 +105,7 @@ class iDB{
         if (SAVEQUERIES) self::timer_start();
 
         self::$result = pg_query(self::$link,$query);
-        
+
 
         self::$num_queries++;
 
@@ -341,8 +339,6 @@ class iDB{
         if ( !self::$show_errors ) {
             return false;
         }
-        header('Content-Type: text/html; charset=utf8');
-		echo '<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd"><html xmlns="http://www.w3.org/1999/xhtml"><head><title>iPHP PostgreSQL Error</title><meta http-equiv="Content-Type" content="text/html; charset=utf-8" /></head><body><h1 id="logo"><img alt="iPHP" src="http://www.iiiphp.com/doc/iPHP.logo.gif" /></h1><p>'.$message.'</p></body></html>';
-		exit();
+        trigger_error($message,E_USER_ERROR);
     }
 }
