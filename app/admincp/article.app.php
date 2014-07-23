@@ -457,11 +457,11 @@ class articleApp{
         //     iPHP::OK('章节添加完成!','url:'.$SELFURL);
         // }
         iPHP::import(iPHP_APP_CORE .'/iMAP.class.php');
+        $picdata = '';
 
         if(empty($aid)) {
-            $postime  = $pubdate;
-            $hits     = $good = $bad = $comments = 0;
-            $picwidth = $picheight = 0;
+            $postime = $pubdate;
+            $hits    = $good = $bad = $comments = 0;
             $ischapter && $chapter = 1;
 
             if($tags){
@@ -471,8 +471,8 @@ class articleApp{
             }
 
             iDB::query("INSERT INTO `#iCMS@__article`
-            	   (`cid`,`scid`,`orderNum`, `title`, `stitle`, `clink`, `url`, `source`, `author`, `editor`, `userid`, `pic`,`mpic`,`spic`, `picwidth`, `picheight`, `keywords`, `tags`, `description`, `related`, `metadata`, `pubdate`, `postime`, `hits`, `comments`, `good`, `bad`, `chapter`, `pid`, `top`, `postype`, `tpl`, `status`, `isPic`)
-			VALUES ('$cid','$scid', '$orderNum', '$title', '$stitle', '$clink', '$url', '$source', '$author', '$editor', '$userid', '$pic','$mpic','$spic', '$picwidth', '$picheight', '$keywords', '$tags', '$description', '$related', '$metadata', '$pubdate', '$postime', '$hits', '$comments', '$good', '$bad', '$chapter', '$pid', '$top', '$postype', '$tpl', '$status', '$isPic');");
+            	   (`cid`,`scid`,`orderNum`, `title`, `stitle`, `clink`, `url`, `source`, `author`, `editor`, `userid`, `pic`,`mpic`,`spic`, `picdata`, `keywords`, `tags`, `description`, `related`, `metadata`, `pubdate`, `postime`, `hits`, `comments`, `good`, `bad`, `chapter`, `pid`, `top`, `postype`, `tpl`, `status`, `isPic`)
+			VALUES ('$cid','$scid', '$orderNum', '$title', '$stitle', '$clink', '$url', '$source', '$author', '$editor', '$userid', '$pic','$mpic','$spic', '$picdata', '$keywords', '$tags', '$description', '$related', '$metadata', '$pubdate', '$postime', '$hits', '$comments', '$good', '$bad', '$chapter', '$pid', '$top', '$postype', '$tpl', '$status', '$isPic');");
 
             $aid = iDB::$insert_id;
 
@@ -505,10 +505,10 @@ class articleApp{
 	            $tags = tag::diff($tags,$_tags,iMember::$uId,$aid,$this->category->rootid($cid));
 			    $tags = addslashes($tags);
             }
-            $pic && list($picwidth, $picheight, $_type, $_attr) = @getimagesize(iFS::fp($pic,'+iPATH'));
+            $picdata = $this->picdata($pic,$mpic,$spic);
 
 			iDB::query("UPDATE `#iCMS@__article`
-			SET `cid` = '$cid', `scid` = '$scid', `orderNum` = '$orderNum', `title` = '$title', `stitle` = '$stitle', `clink` = '$clink', `url` = '$url', `source` = '$source', `author` = '$author', `editor` = '$editor', `userid` = '$userid', `pic` = '$pic',`mpic` = '$mpic',`spic` = '$spic', `picwidth` = '$picwidth', `picheight` = '$picheight', `keywords` = '$keywords', `tags` = '$tags', `description` = '$description', `related` = '$related', `metadata` = '$metadata', `pubdate` = '$pubdate', `chapter` = '$chapter', `pid` = '$pid', `top` = '$top', `postype` = '$postype', `tpl` = '$tpl',`status` = '$status', `isPic` = '$isPic'
+			SET `cid` = '$cid', `scid` = '$scid', `orderNum` = '$orderNum', `title` = '$title', `stitle` = '$stitle', `clink` = '$clink', `url` = '$url', `source` = '$source', `author` = '$author', `editor` = '$editor', `userid` = '$userid', `pic` = '$pic',`mpic` = '$mpic',`spic` = '$spic', `picdata` = '$picdata',`keywords` = '$keywords', `tags` = '$tags', `description` = '$description', `related` = '$related', `metadata` = '$metadata', `pubdate` = '$pubdate', `chapter` = '$chapter', `pid` = '$pid', `top` = '$top', `postype` = '$postype', `tpl` = '$tpl',`status` = '$status', `isPic` = '$isPic'
 			WHERE `id` = '$aid';");
             map::init('prop',iCMS_APP_ARTICLE);
             map::diff($pid,$_pid,$aid);
@@ -573,13 +573,29 @@ class articleApp{
             if($autopic && $key==0 && empty($pic)){
 				$uri  = parse_url(iCMS::$config['FS']['url']);
 	            if(strstr(strtolower($value),$uri['host'])){
-	               list($picwidth, $picheight, $type, $attr) = @getimagesize(iFS::fp($_value,'+iPATH'));
-	               iDB::query("UPDATE `#iCMS@__article` SET `isPic`='1',`pic` = '$_value',`picwidth` = '$picwidth',`picheight` = '$picheight' WHERE `id` = '$aid'");
+                   $picdata = $this->picdata($_value);
+	               iDB::query("UPDATE `#iCMS@__article` SET `isPic`='1',`pic` = '$_value',`picdata` = '$picdata' WHERE `id` = '$aid'");
                 }
             }
             $faid = iDB::getValue("SELECT `indexid` FROM `#iCMS@__filedata` WHERE `filename` ='$filename'");
             empty($faid) && iDB::query("UPDATE `#iCMS@__filedata` SET `indexid` = '$aid' WHERE `filename` ='$filename'");
         }
+    }
+    function picdata($pic='',$mpic='',$spic=''){
+        $picdata = array();
+        if($pic){
+            list($width, $height, $type, $attr) = @getimagesize(iFS::fp($pic,'+iPATH'));
+            $picdata['b'] = array('w'=>$width,'h'=>$height);
+        }
+        if($mpic){
+            list($width, $height, $type, $attr) = @getimagesize(iFS::fp($mpic,'+iPATH'));
+            $picdata['m'] = array('w'=>$width,'h'=>$height);
+        }
+        if($spic){
+            list($width, $height, $type, $attr) = @getimagesize(iFS::fp($spic,'+iPATH'));
+            $picdata['s'] = array('w'=>$width,'h'=>$height);
+        }
+        return $picdata?addslashes(serialize($picdata)):'';
     }
     function postype(){
     	$this->postype OR $this->postype = 1;

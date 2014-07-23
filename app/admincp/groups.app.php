@@ -10,7 +10,7 @@
 * @$Id: groups.app.php 634 2013-04-03 06:02:53Z coolmoo $
 */
 class groupsApp{
-	public $array = NULL;
+	public $group = NULL;
 	public $all   = NULL;
     function __construct($type=null) {
     	$this->gid	= (int)$_GET['gid'];
@@ -18,9 +18,13 @@ class groupsApp{
 		$rs		= iDB::getArray("SELECT * FROM `#iCMS@__group` where 1=1{$sql} ORDER BY `orderNum` , `gid` ASC",ARRAY_A);
 		$_count	= count($rs);
 		for ($i=0;$i<$_count;$i++){
-			$this->all[$rs[$i]['gid']]=
-			$this->group[$rs[$i]['type']][]=$rs[$i];
+			$this->all[$rs[$i]['gid']]      = $rs[$i];
+			$this->group[$rs[$i]['type']][] = $rs[$i];
 		}
+    }
+    function doadd(){
+        $this->gid && $rs = iDB::getRow("SELECT * FROM `#iCMS@__group` WHERE `gid`='$this->gid' LIMIT 1;");
+        include iACP::view("groups.add");
     }
 	function select($type="0",$currentid=NULL){
 		if($this->group[$type])foreach($this->group[$type] AS $G){
@@ -56,5 +60,21 @@ class groupsApp{
 				iPHP::OK('全部删除完成!','js:1');
     		break;
 		}
+	}
+	function dosave(){
+		$gid  = intval($_POST['gid']);
+		$type = intval($_POST['type']);
+		$name = iS::escapeStr($_POST['name']);
+		$name OR iPHP::alert('角色名不能为空');
+		if($gid){
+			iDB::query("UPDATE `#iCMS@__group`
+SET `name` = '$name', `orderNum` = '$orderNum', `power` = '$power', `cpower` = '$cpower', `type` = '$type'
+WHERE `gid` = '$gid';");
+			$msg="角色修改完成!";
+		}else{
+			iDB::query("INSERT INTO `#iCMS@__group` (`name`, `orderNum`, `power`, `cpower`, `type`)VALUES ('$name', '$orderNum', '$power', '$cpower', '$type');");
+			$msg="角色添加完成!";
+		}
+		iPHP::OK($msg,'url:'.APP_URI);
 	}
 }

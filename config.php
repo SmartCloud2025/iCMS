@@ -13,8 +13,8 @@
 define('iPHP_DB_TYPE',		'mysql');//数据库类型 mysql sqlite (SQLite3)
 define('iPHP_DB_NAME',		'icms6');// 数据库名
 define('iPHP_DB_USER',		'root');// 数据库用户
-define('iPHP_DB_PASSWORD',	'123456');//数据库密码
-define('iPHP_DB_HOST',		'127.0.0.1');// 服务器名或服务器ip,一般为localhost
+define('iPHP_DB_PASSWORD',	'');//数据库密码
+define('iPHP_DB_HOST',		'localhost');// 服务器名或服务器ip,一般为localhost
 define('iPHP_DB_CHARSET',	'utf8');//MYSQL编码设置.如果您的程序出现乱码现象，需要设置此项来修复. 请不要随意更改此项，否则将可能导致系统出现乱码现象
 define('iPHP_DB_PREFIX',	'icms_');// 表名前缀, 同一数据库安装多个请修改此处
 define('iPHP_DB_PREFIX_TAG','#iCMS@__');// SQL表名前缀替换

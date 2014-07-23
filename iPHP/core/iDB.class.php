@@ -36,25 +36,9 @@ class iDB{
 
 
     public static function connect() {}
-    public static function print_error($str = '') {}
     public static function query($query,$QT=NULL) {}
 
 
-    public static function flush() {
-        self::$last_result	= array();
-        self::$col_info		= null;
-        self::$last_query	= null;
-    }
-
-    public static function debug($show=false){
-        if(!self::$show_errors) return false;
-
-		if(!$show) echo '<!--';
-        echo self::$last_query."\n";
-		$explain 	= self::getRow('EXPLAIN EXTENDED '.self::$last_query);
-		var_dump($explain);
-        if(!$show) echo "-->\n";
-    }
     /**
      * Insert an array of data into a table
      * @param string $table WARNING: not sanitized!
@@ -202,6 +186,11 @@ class iDB{
             }
         }
     }
+    public static function flush() {
+        self::$last_result  = array();
+        self::$col_info     = null;
+        self::$last_query   = null;
+    }
     public static function version() {}
 
     /**
@@ -213,7 +202,6 @@ class iDB{
         self::$time_start = $mtime[1] + $mtime[0];
         return true;
     }
-
     /**
      * Stops the debugging timer
      * @return int total time spent on the query, in milliseconds
@@ -224,6 +212,24 @@ class iDB{
         $time_end = $mtime[1] + $mtime[0];
         $time_total = $time_end - self::$time_start;
         return $time_total;
+    }
+    public static function print_error($error = '') {
+        $error = htmlspecialchars($error, ENT_QUOTES);
+        $query = htmlspecialchars(self::$last_query, ENT_QUOTES);
+        if ( self::$show_errors ) {
+            self::bail("<strong>iPHP database error:</strong> [$error]<br /><code>$query</code>");
+        } else {
+            return false;
+        }
+    }
+    public static function debug($show=false){
+        if(!self::$show_errors) return false;
+
+        if(!$show) echo '<!--';
+        echo self::$last_query."\n";
+        $explain    = self::getRow('EXPLAIN EXTENDED '.self::$last_query);
+        var_dump($explain);
+        if(!$show) echo "-->\n";
     }
 
     /**

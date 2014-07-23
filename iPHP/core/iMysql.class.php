@@ -59,36 +59,6 @@ class iDB{
 
     }
     // ==================================================================
-    //	Print SQL/DB error.
-
-    public static function print_error($str = '') {
-        $str OR $str 	= mysql_error(self::$link);
-        $EZSQL_ERROR[]	= array ('query' => self::$last_query, 'error_str' => $str);
-
-        $str	= htmlspecialchars($str, ENT_QUOTES);
-        $query	= htmlspecialchars(self::$last_query, ENT_QUOTES);
-        // Is error output turned on or not..
-        if ( self::$show_errors ) {
-            // If there is an error then take note of it
-            die("<div id='error'>
-			<p class='iPHPDBerror'><strong>iPHP database error:</strong> [$str]<br />
-			<code>$query</code></p>
-			</div>");
-        } else {
-            return false;
-        }
-    }
-    // ==================================================================
-    //	Kill cached query results
-
-    public static function flush() {
-        self::$last_result	= array();
-        self::$col_info		= null;
-        self::$last_query	= null;
-    }
-    // ==================================================================
-
-    // ==================================================================
     //	Basic Query	- see docs for more detail
 
     public static function query($query,$QT=NULL) {
@@ -167,15 +137,7 @@ class iDB{
 
         return $return_val;
     }
-    public static function debug($show=false){
-        if(!self::$show_errors) return false;
 
-		if(!$show) echo '<!--';
-        echo self::$last_query."\n";
-		$explain 	= self::getRow('EXPLAIN EXTENDED '.self::$last_query);
-		var_dump($explain);
-        if(!$show) echo "-->\n";
-    }
     /**
      * Insert an array of data into a table
      * @param string $table WARNING: not sanitized!
@@ -332,7 +294,24 @@ class iDB{
         else
             return $mysql_version;
     }
+    public static function debug($show=false){
+        if(!self::$show_errors) return false;
 
+        if(!$show) echo '<!--';
+        echo self::$last_query."\n";
+        $explain    = self::getRow('EXPLAIN EXTENDED '.self::$last_query);
+        var_dump($explain);
+        if(!$show) echo "-->\n";
+    }
+    
+    // ==================================================================
+    //  Kill cached query results
+
+    public static function flush() {
+        self::$last_result  = array();
+        self::$col_info     = null;
+        self::$last_query   = null;
+    }
     /**
      * Starts the timer, for debugging purposes
      */
@@ -354,7 +333,22 @@ class iDB{
         $time_total = $time_end - self::$time_start;
         return $time_total;
     }
+    // ==================================================================
+    //  Print SQL/DB error.
 
+    public static function print_error($str = '') {
+        $str OR $str    = mysql_error(self::$link);
+        $EZSQL_ERROR[]  = array ('query' => self::$last_query, 'error_str' => $str);
+
+        $str    = htmlspecialchars($str, ENT_QUOTES);
+        $query  = htmlspecialchars(self::$last_query, ENT_QUOTES);
+        // Is error output turned on or not..
+        if ( self::$show_errors ) {
+            self::bail("<strong>iPHP database error:</strong> [$str]<br /><code>$query</code>");
+        } else {
+            return false;
+        }
+    }
     /**
      * Wraps fatal errors in a nice header and footer and dies.
      * @param string $message
