@@ -12,7 +12,7 @@
 
 class iSeccode {
     public static $im     = null;
-    public static $code   = null;   
+    public static $code   = null;
     public static $color  = null;
     public static $config = array (
         'width'      => 80,
@@ -20,23 +20,23 @@ class iSeccode {
         'angle'      => '0',//随机倾斜度
         'shadow'     => '0',//阴影
     );
-    public function run(){
-        self::$code OR self::$code = self::mkcode();
+    public static function run(){
+        self::$code OR self::$code = self::__mkcode();
         //设定cookie
         //iPHP::setCookie('seccode', '',-31536000);
         iPHP::setCookie('seccode', authcode(self::$code, 'ENCODE'));
-        self::image();
+        self::__image();
     }
-    function image(){
+    private static function __image(){
         if(function_exists('imagecreate') && function_exists('imagecolorset') && function_exists('imagecopyresized') &&
                 function_exists('imagecolorallocate') && function_exists('imagechar') && function_exists('imagecolorsforindex') &&
                 function_exists('imageline') && function_exists('imagecreatefromstring') && (function_exists('imagegif') || function_exists('imagepng') || function_exists('imagejpeg'))) {
 
-            $bgcontent = self::background();
+            $bgcontent = self::__background();
 
             self::$im = imagecreatefromstring($bgcontent);
-            self::adulterate();
-            self::giffont();
+            self::__adulterate();
+            self::__giffont();
             if(function_exists('imagepng')) {
                 header('Content-type: image/png');
                 imagepng(self::$im);
@@ -108,7 +108,7 @@ class iSeccode {
         }
     }
     //生成随机
-    function mkcode() {
+    private static function __mkcode() {
         $seccode      = random(6, 1);
         $s            = sprintf('%04s', base_convert($seccode, 10, 24));
         $seccode      = '';
@@ -121,7 +121,7 @@ class iSeccode {
     }
 
     //背景
-    function background() {
+    private static function __background() {
         $im = imagecreatetruecolor(self::$config['width'], self::$config['height']);
         $backgroundcolor = imagecolorallocate($im, 255, 255, 255);
 
@@ -143,7 +143,7 @@ class iSeccode {
         self::$color[1] -= 20;
         self::$color[2] -= 20;
 
-        self::obclean();
+        self::__obclean();
         if(function_exists('imagepng')) {
             imagepng($im);
         } else {
@@ -151,12 +151,12 @@ class iSeccode {
         }
         imagedestroy($im);
         $bgcontent = ob_get_contents();
-        self::obclean();
+        self::__obclean();
 
         return $bgcontent;
     }
 
-    function adulterate() {
+    private static function __adulterate() {
         $linenums = rand(4, 8);
         for($i=0; $i <= $linenums; $i++) {
             $color = imagecolorallocate(self::$im, self::$color[0], self::$color[1], self::$color[2]);
@@ -174,7 +174,7 @@ class iSeccode {
         }
     }
 
-    function giffont() {
+    private static function __giffont() {
 
         $seccodedir = array();
         if(function_exists('imagecreatefromgif')) {
@@ -227,7 +227,7 @@ class iSeccode {
         }
     }
     //ob
-    function obclean() {
+    private static function __obclean() {
         ob_end_clean();
         function_exists('ob_gzhandler')?ob_start('ob_gzhandler'):ob_start();
     }

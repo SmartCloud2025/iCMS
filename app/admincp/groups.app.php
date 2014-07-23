@@ -10,8 +10,8 @@
 * @$Id: groups.app.php 634 2013-04-03 06:02:53Z coolmoo $
 */
 class groupsApp{
-	public static $array	= NULL;
-	public static $all		= NULL;
+	public $array = NULL;
+	public $all   = NULL;
     function __construct($type=null) {
     	$this->gid	= (int)$_GET['gid'];
     	$type!==null && $sql=" and `type`='$type'";

@@ -124,7 +124,7 @@ class iURL {
 //var_dump($i);
 			$pathA 		= pathinfo($i->path);
 //var_dump($pathA);
-            
+
 //            if(in_array($uri,array('article','content'))) {
 //                $i->path    = FS::path($Curl->dmdir.'/'.$url);
 //                $i->href    = FS::path($Curl->domain.'/'.$url);

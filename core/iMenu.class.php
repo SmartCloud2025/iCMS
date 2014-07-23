@@ -10,13 +10,13 @@
 * @$Id: iMenu.class.php 2334 2014-01-04 12:18:19Z coolmoo $
 */
 class iMenu {
-	public static $menuArray = array();
-	public static $MArray    = array();
-	public static $doMid     = 0;
-	public static $rootid    = 0;
-	public static $appMid    = 0;
-	public static $MUri      = array();
-	private static $rootA    = array();
+	public $menuArray = array();
+	public $MArray    = array();
+	public $doMid     = 0;
+	public $rootid    = 0;
+	public $appMid    = 0;
+	public $MUri      = array();
+	private $rootA    = array();
 
 	function __construct() {
 		$this->menuArray = iCache::get('iCMS/iMenu/menuArray');
@@ -41,7 +41,7 @@ class iMenu {
 		$this->parentid==$this->rootid && $this->parentid=$this->doMid;
 		$this->menuArray OR $this->cache();
 	}
-	
+
 	function getArray($cache=false){
 		$rs	= iDB::getArray("SELECT * FROM `#iCMS@__menu` ORDER BY `orderNum` , `id` ASC",ARRAY_A);
 		foreach((array)$rs AS $M) {
@@ -97,7 +97,7 @@ class iMenu {
 		if(strstr($a['href'], 'http://')||strstr($a['href'], '#')) $href = $a['href'];
 		$a['href']=='__SELF__' && $href = __SELF__;
 		$a['icon'] && $icon='<i class="'.$a['icon'].'"></i> ';
-		
+
 		echo '<a href="'.$href.'">'.$icon.' '.$a['name'].'</a>';
 	}
 	function sidebar(){
@@ -124,15 +124,15 @@ class iMenu {
 		if($a['app']=="separator"){
 			return '<li class="'.$a['class'].'"></li>';
 		}
-		
+
 		$a['href'] && $href	= __ADMINCP__.'='.$a['href'];
 		$a['target']=='iPHP_FRAME' && $href.='&frame=iPHP';
-		
+
 		if(strstr($a['href'], 'http://')||strstr($a['href'], '#')) $href = $a['href'];
-		
+
 		$a['href']=='__SELF__' && $href = __SELF__;
 		$a['href']=='#' && $href = 'javascript:;';
-		
+
 		$isSM	= count($this->rootA[$id]);
 
 		if($isSM && $level && $mType=='nav'){
@@ -145,12 +145,12 @@ class iMenu {
 		}
 
 		$li = '<li class="'.$a['class'].'" title="'.$a['name'].'" data-level="'.$level.'" data-menu="m'.$id.'">';
-		
+
 		$aa = '<a href="'.$href.'"';
 		$a['title'] 		&& $aa.= ' title="'.$a['title'].'"';
 		$a['a_class'] 		&& $aa.= ' class="'.$a['a_class'].'"';
 		$a['target'] 		&& $aa.= ' target="'.$a['target'].'"';
-		
+
 		if($mType=='sidebar' && $a['data-toggle']=='modal'){
 			$aa.= ' data-toggle="'.$a['data-toggle'].'"';
 		}elseif($mType=='nav'){
@@ -178,6 +178,6 @@ class iMenu {
 		return $li;
 	}
 	function permission(){
-		
+
 	}
 }

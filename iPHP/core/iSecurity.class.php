@@ -64,7 +64,7 @@ class iS {
 	function isNum($param) {
 		return is_numeric($param) ? true : false;
 	}
-	
+
 	/**
 	 * html转换输出
 	 * @param $param
@@ -115,7 +115,7 @@ class iS {
 	/**
 	 * 全局变量过滤
 	 */
-	function filter() {
+	public static function filter() {
 		$allowed = array('GLOBALS' => 1,'_GET' => 1,'_POST' => 1,'HTTP_RAW_POST_DATA' => 1,'_COOKIE' => 1,'_FILES' => 1,'_SERVER' => 1,'_APP' => 1);
 		foreach ($GLOBALS as $key => $value) {
 			if (!isset($allowed[$key])) {
@@ -143,7 +143,7 @@ class iS {
 	 * @param $ifCheck
 	 * @return string
 	 */
-	function escapePath($fileName, $ifCheck = true) {
+	public static function escapePath($fileName, $ifCheck = true) {
 		if (!iS::_escapePath($fileName, $ifCheck)) {
 			exit('Access Denied');
 		}
@@ -169,7 +169,7 @@ class iS {
 	 * @param unknown_type $dir
 	 * @return string
 	 */
-	function escapeDir($dir) {
+	public static function escapeDir($dir) {
 		$dir = str_replace(array("'",'#','=','`','$','%','&',';'), '', $dir);
 		return rtrim(preg_replace('/(\/){2,}|(\\\){1,}/', '/', $dir), '/');
 	}
@@ -213,7 +213,7 @@ class iS {
 	 * 变量检查
 	 * @param $var
 	 */
-	function checkVar(&$var) {
+	public static function checkVar(&$var) {
 		if (is_array($var)) {
 			foreach ($var as $key => $value) {
 				iS::checkVar($var[$key]);
@@ -246,7 +246,7 @@ class iS {
 	 * @param $keys
 	 * @return string
 	 */
-	function getServer($keys) {
+	public static function getServer($keys) {
 		// Fix for IIS when running with PHP ISAPI
 		if ( empty($_SERVER['REQUEST_URI'] ) || ( php_sapi_name() != 'cgi-fcgi' && preg_match( '/^Microsoft-IIS\//',$_SERVER['SERVER_SOFTWARE'] ) ) ) {
 		    if (isset($_SERVER['HTTP_X_ORIGINAL_URL'])) {
@@ -278,18 +278,18 @@ class iS {
 		   $_SERVER['SCRIPT_FILENAME'] =$_SERVER['PATH_TRANSLATED'];
 
 		// Fix for ther PHP as CGI hosts
-		if (strpos($_SERVER['SCRIPT_NAME'], 'php.cgi') !== false) 
+		if (strpos($_SERVER['SCRIPT_NAME'], 'php.cgi') !== false)
 		    unset($_SERVER['PATH_INFO']);
 
 		if ( empty($_SERVER['PHP_SELF']) )
 		   $_SERVER['PHP_SELF'] = preg_replace("/(\?.*)?$/",'',$_SERVER["REQUEST_URI"]);
-		
+
 
 		foreach ($_SERVER as $key=>$sval){
 			if (in_array($key, $keys)) {
 				$_SERVER[$key] = str_replace(array('<','>','"',"'",'%3C','%3E','%22','%27','%3c','%3e'), '',$sval);
 			}else{
-				unset($_SERVER[$key]);				
+				unset($_SERVER[$key]);
 			}
 		}
 	}

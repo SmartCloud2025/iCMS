@@ -17,15 +17,15 @@ class user {
 	public static $cookietime = 0;
 	public static $format     = false;
 
-	function check($val,$field='username'){
+	public static function check($val,$field='username'){
 		$check = iDB::getValue("SELECT uid FROM `#iCMS@__user` where `$field`='{$val}'");
 		return empty($check)?true:false;
 	}
-	function follow($uid=0,$fuid=0){
+	public static function follow($uid=0,$fuid=0){
 		$check = iDB::getRow("SELECT `fuid` FROM `#iCMS@__user_follow` where `uid`='{$uid}' and `fuid`='$fuid' limit 1");
 		return $check?true:false;
 	}
-	function openid($uid=0){
+	public static function openid($uid=0){
 		$pf = array();
 		$rs = iDB::getArray("SELECT `openid`,`platform` FROM `#iCMS@__user_openid` where `uid`='{$uid}'");
 		foreach ((array)$rs as $key => $value) {
@@ -33,7 +33,7 @@ class user {
 		}
 		return $pf;
 	}
-	function login($v,$pass='',$t='nk'){
+	public static function login($v,$pass='',$t='nk'){
 
 		$f = 'username';
 		$t =='nk'	&& $f	= 'nickname';
@@ -51,23 +51,23 @@ class user {
 		$user->urls   = userData($user->uid,'urls');
 		return $user;
 	}
-	function setCache($uid){
+	public static function setCache($uid){
 		$user	= iDB::getRow("SELECT * FROM `#iCMS@__user` where `uid`='{$uid}'",ARRAY_A);
 		iCache::set('user:'.$user['uid'],$user,0);
 	}
-	function set_cookie($a,$p,$user){
+	public static function set_cookie($a,$p,$user){
 		$authash = '#=(iCMS@'.iPHP_KEY.')=#';
 		iPHP::setCookie('AUTH_INFO',authcode((int)$user['uid'].$authash.$a.$authash.$p,'ENCODE'),self::$cookietime);
 		iPHP::setCookie('userid',(int)$user['uid'],self::$cookietime);
 		iPHP::setCookie('nickname',str_replace('"','',json_encode($user['nickname'])),self::$cookietime);
 	}
-	function category($cid=0){
+	public static function category($cid=0){
 		if(empty($cid)) return false;
 
 		$category	= iDB::getRow("SELECT * FROM `#iCMS@__user_category` where `cid`='".(int)$cid."' limit 1");
 		return (array)$category;
 	}
-	function data($uid=0,$unpass=true){
+	public static function data($uid=0,$unpass=true){
 		if(empty($uid)) return false;
 
 		$user         = iDB::getRow("SELECT * FROM `#iCMS@__user` where `uid`='".(int)$uid."' limit 1");
@@ -77,7 +77,7 @@ class user {
 	   	if($unpass) unset($user->password);
 	   	return $user;
 	}
-	function status($url=null,$st=null) {
+	public static function status($url=null,$st=null) {
 		$status = false;
 		$auth   = iPHP::getCookie('AUTH_INFO');
 		$userid = (int)iPHP::getCookie('userid');
@@ -99,7 +99,7 @@ class user {
 				if(self::$format=='json'){
 					return iPHP::code(1,0,$url,'json');
 				}
-				iPHP::gotourl($url);	
+				iPHP::gotourl($url);
 			}
 			return $user;
 		}else{
@@ -107,12 +107,12 @@ class user {
 				if(self::$format=='json'){
 					return iPHP::code(0,0,$url,'json');
 				}
-				iPHP::gotourl($url);	
+				iPHP::gotourl($url);
 			}
 			return false;
 		}
 	}
-	function logout(){
+	public static function logout(){
 		iPHP::setCookie('AUTH_INFO', '',-31536000);
 		iPHP::setCookie('userid', '',-31536000);
 		iPHP::setCookie('nickname', '',-31536000);

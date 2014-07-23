@@ -33,12 +33,12 @@ class iDB{
     private static $last_error ;
     private static $link;
     private static $result;
-    
+
     public static function connect() {
 		extension_loaded('mysql') OR die('您的 PHP 环境看起来缺少 MySQL 数据库部分，这对 iPHP 来说是必须的。');
-		
+
         defined('iPHP_DB_COLLATE') &&self::$collate = iPHP_DB_COLLATE;
-		
+
 		if(isset($GLOBALS['iPHP_DB'])){
 			self::$link	= $GLOBALS['iPHP_DB'];
 			if(self::$link){
@@ -47,12 +47,11 @@ class iDB{
 			}
 		}
 
-		self::$link = mysql_connect(iPHP_DB_HOST, iPHP_DB_USER, iPHP_DB_PASSWORD);
-		$GLOBALS['iPHP_DB'] = self::$link;
-
-
+		self::$link = @mysql_connect(iPHP_DB_HOST, iPHP_DB_USER, iPHP_DB_PASSWORD);
         self::$link OR self::bail("<h1>数据库链接失败</h1><p>请检查 <em><strong>config.php</strong></em> 的配置是否正确!</p><ul><li>请确认主机支持MySQL?</li><li>请确认用户名和密码正确?</li><li>请确认主机名正确?(一般为localhost)</li></ul><p>如果你不确定这些情况,请询问你的主机提供商.如果你还需要帮助你可以随时浏览 <a href='http://www.iiiphp.com'>iPHP 支持论坛</a>.</p>");
- 
+
+        $GLOBALS['iPHP_DB'] = self::$link;
+
         if (defined('iPHP_DB_CHARSET') && version_compare(mysql_get_server_info(), '4.1.0', '>='))
             self::query("SET NAMES '".iPHP_DB_CHARSET."'");
 
@@ -62,7 +61,7 @@ class iDB{
     // ==================================================================
     //	Print SQL/DB error.
 
-    function print_error($str = '') {
+    public static function print_error($str = '') {
         $str OR $str 	= mysql_error(self::$link);
         $EZSQL_ERROR[]	= array ('query' => self::$last_query, 'error_str' => $str);
 
@@ -168,7 +167,7 @@ class iDB{
 
         return $return_val;
     }
-    function debug($show=false){
+    public static function debug($show=false){
         if(!self::$show_errors) return false;
 
 		if(!$show) echo '<!--';

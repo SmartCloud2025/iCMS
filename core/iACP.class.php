@@ -36,7 +36,7 @@ class iACP {
     public static $app_path   = NULL;
     public static $app_file   = NULL;
 
-    function init() {
+    public static function init() {
         self::$apps = array('home', 'category', 'pushcategory','tagcategory', 'article', 'push', 'prop', 'setting', 'filter', 'cache','tags','editor');
         $_POST['ajax'] && iMember::$ajax	= true;
         iMember::checkLogin();
@@ -44,14 +44,14 @@ class iACP {
         self::$menu = new iMenu();
         //self::frame();
     }
-	function frame(){
+	public static function frame(){
 		self::$frames	= $_GET['frames']?$_GET['frames']:$_POST['frames'];
 		if(empty($_GET['app']) || self::$frames) {
 			include self::view("admincp");
 			exit;
 		}
 	}
-    function run($prefix="do") {
+    public static function run($prefix="do") {
         self::init();
         $app = $_GET['app'];
         $app OR $app = 'home';
@@ -82,7 +82,7 @@ class iACP {
 		self::$app->$method();
     }
 
-    function app($app = NULL, $arg = NULL) {
+    public static function app($app = NULL, $arg = NULL) {
         iPHP::import(ACP_PATH . '/' . $app . '.app.php');
         $appName = $app . 'App';
         if ($arg !== NULL) {
@@ -91,7 +91,7 @@ class iACP {
         return new $appName();
     }
 
-    function view($p = NULL) {
+    public static function view($p = NULL) {
         if ($p === NULL && self::$app_name) {
             $p = self::$app_name;
             self::$app_do && $p.='.' . self::$app_do;
@@ -99,17 +99,17 @@ class iACP {
         return ACP_PATH . '/template/' . $p . '.php';
     }
 
-    function head($navbar = true) {
+    public static function head($navbar = true) {
         include self::view("header");
 		$navbar && include self::view("navbar");
     }
 
-    function foot() {
+    public static function foot() {
         include self::view("footer");
     }
 
     //--------------------------function------------------------
-    function picBtnGroup($callback) {
+    public static function picBtnGroup($callback) {
         $unid   = rand(100,999);
         echo '<div class="btn-group">
               <a class="btn dropdown-toggle" data-toggle="dropdown" tabindex="-1"> <span class="caret"></span> 选择图片</a>
@@ -146,7 +146,7 @@ class iACP {
        ';
     }
 
-    function getConfig($tid = 0, $n = NULL) {
+    public static function getConfig($tid = 0, $n = NULL) {
         if ($n === NULL) {
             $rs = iDB::getArray("SELECT * FROM `#iCMS@__config` WHERE `tid`='$tid'");
             foreach ($rs AS $c) {
@@ -162,23 +162,23 @@ class iACP {
         }
     }
 
-    function setConfig($v, $n, $tid, $cache = false) {
+    public static function setConfig($v, $n, $tid, $cache = false) {
         $cache && iCache::set('iCMS/' . $n, $v, 0);
         is_array($v) && $v = addslashes(serialize($v));
         iDB::query("UPDATE `#iCMS@__config` SET `value` = '$v' WHERE `tid` ='$tid' AND `name` ='$n'");
     }
-    function cacheConfig($config=null){
+    public static function cacheConfig($config=null){
     	$config===null && $config = iACP::getConfig(0);
      	$output = "<?php\ndefined('iPHP') OR exit('Access Denied');\nreturn ";
     	$output.= var_export($config,true);
     	$output.= ';';
     	iFS::write(iPHP_APP_CONF.'/config.php',$output);
 	}
-	function updateConfig($k){
+	public static function updateConfig($k){
 		iACP::setConfig(iCMS::$config[$k],$k,0);
 		iACP::cacheConfig();
 	}
-    function iDT($data) {
+    public static function iDT($data) {
         $sql = array();
         $dA = explode(',', $data);
         foreach ((array) $dA as $d) {
@@ -190,7 +190,7 @@ class iACP {
         return implode(',', $sql);
     }
 
-    function propBtn($field, $type = "") {
+    public static function propBtn($field, $type = "") {
         $type OR $type = self::$app_name;
         $propArray = iCache::get("iCMS/prop/{$type}.{$field}");
         echo '<div class="btn-group">';
@@ -205,7 +205,7 @@ class iACP {
         echo '</div>';
     }
 
-    function getProp($field, $val = NULL,/*$default=array(),*/$out = 'option', $url="",$type = "") {
+    public static function getProp($field, $val = NULL,/*$default=array(),*/$out = 'option', $url="",$type = "") {
         $type OR $type = self::$app_name;
         $propArray = iCache::get("iCMS/prop/{$type}.{$field}");
         $valArray  = explode(',', $val);
@@ -231,7 +231,7 @@ class iACP {
         // $opt.='</select>';
         return $opt;
     }
-    function propmap($field,$iid,$appid){
+    public static function propmap($field,$iid,$appid){
         foreach ((array)$_POST[$field] as $key => $pid) {
             $id =  iDB::getValue("SELECT `id` FROM `#iCMS@__prop_map` WHERE `pid`='$pid' AND `iid`='$iid' AND `appid`='$appid'");
             if($id){
@@ -242,7 +242,7 @@ class iACP {
                 iDB::query("INSERT INTO `#iCMS@__prop_map`
                 (`pid`, `iid`, `appid`)
     VALUES ('$pid', '$iid', '$appid');");
-            }            
+            }
         }
 
     }

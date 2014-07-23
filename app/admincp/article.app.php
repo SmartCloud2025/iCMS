@@ -17,7 +17,7 @@ class articleApp{
         define('TAG_APPID',iCMS_APP_ARTICLE);
     }
     function doadd(){
-        $rs      = array();      
+        $rs      = array();
         if($this->id){
             $rs        = iDB::getRow("SELECT * FROM `#iCMS@__article` WHERE `id`='$this->id' LIMIT 1;",ARRAY_A);
             $adsql     = $this->dataid?" and `id`='{$this->dataid}'":'';
@@ -163,7 +163,7 @@ class articleApp{
     function dogetjson(){
         $id = (int)$_GET['id'];
         $rs = iDB::getRow("SELECT * FROM `#iCMS@__article` WHERE id='$id' LIMIT 1;",ARRAY_A);
-		
+
     }
     function dogetmeta(){
         $cid = $_GET['cid'];
@@ -178,13 +178,13 @@ class articleApp{
         $title       = iS::escapeStr($_POST['title']);
         $tags        = iS::escapeStr($_POST['tags']);
         $description = iS::escapeStr($_POST['description']);
-		
+
 		$art	= iDB::getRow("SELECT `cid`,`tags` FROM `#iCMS@__article` where `id` ='$id' LIMIT 1;");
 		if($tags){
 			iPHP::appClass("tag",'break');
 			tag::diff($tags,$art->tags,iMember::$uId,$id,$this->category->rootid($art->cid));
 		}
-		
+
 		if($_POST['status']=="1"){
 			$updatesql=",`status`='1'";
 		}
@@ -305,10 +305,10 @@ class articleApp{
 //	       		$sql.=" `status` ='1'".$this->postype();
 	       		$sql.=" `status` ='1'";
 	       		$this->postype && $sql.=$this->postype();
-	       		
+
 		       	$cid && $position=$this->category->category[$cid]['name'];
 		}
-		
+
         if($_GET['keywords']) {
             if($_GET['st']=="title") {
                 $sql.=" AND `title` REGEXP '{$_GET['keywords']}'";
@@ -326,9 +326,9 @@ class articleApp{
         }
         $_GET['title'] 			&& $sql .=" AND `title` like '%{$_GET['title']}%'";
         $_GET['tag'] 			&& $sql .=" AND `tags` REGEXP '[[:<:]]".preg_quote(rawurldecode($_GET['tag']),'/')."[[:>:]]'";
-        
+
         isset($_GET['pid']) && $_GET['pid']!='-1' && $sql.=" AND `pid` ='".$_GET['pid']."'";
-        
+
         if(iMember::$Rs->gid==1){
 	        $_GET['userid'] && $sql.=" AND `userid`='".(int)$_GET['userid']."'";
         }else{
@@ -336,8 +336,8 @@ class articleApp{
 	         	$sql.=" AND `userid`='".iMember::$uId."'";
 	       	}
         }
-        $cid	= iMember::CP($cid)?$cid:"0";
-        if($cid) {
+
+        if(iMember::CP($cid)) {
             $cidIN=$this->category->cid($cid).$cid;
             if(isset($_GET['sub']) && strstr($cidIN,',')) {
                 $sql.=" AND cid IN(".$cidIN.")";
@@ -410,13 +410,13 @@ class articleApp{
         $body        = (array)$_POST['body'];
 
         $top         = _int($_POST['top']);
-        $pubdate     = iPHP::str2time($_POST['pubdate']);       
+        $pubdate     = iPHP::str2time($_POST['pubdate']);
 
         $userid OR $userid = iMember::$uId;
         $postype   = $_POST['postype']?$_POST['postype']:0;
         $ischapter = isset($_POST['ischapter'])?1:0;
         isset($_POST['inbox'])	&&  $status = "0";
-        
+
         empty($title)   && iPHP::alert('标题不能为空！');
         empty($cid)     && iPHP::alert('请选择所属栏目');
         empty($body)    && empty($url) && iPHP::alert('文章内容不能为空！');
@@ -437,27 +437,27 @@ class articleApp{
             $description = csubstr($bodyText,iCMS::$config['publish']['descLen']);
             unset($bodyText);
         }
-       
+
         strstr($pic, 'http://') && $pic   = iFS::http($pic);
         strstr($mpic, 'http://') && $mpic = iFS::http($mpic);
         strstr($spic, 'http://') && $spic = iFS::http($spic);
-        
-        $isPic   = empty($pic)?0:1; 
-              
+
+        $isPic   = empty($pic)?0:1;
+
         $SELFURL = __SELF__.$_POST['REFERER'];
         if(empty($_POST['REFERER'])||strstr($_POST['REFERER'], '=save')){
         	$SELFURL= __SELF__.'?app=article&do=manage';
         }
-        
+
         $editor OR	$editor	= empty(iMember::$Rs->nickname)?iMember::$Rs->username:iMember::$Rs->nickname;
-        
+
         // if($aid && $ischapter){
         //     $this->article_data($body,$aid);
         //     iDB::query("UPDATE `#iCMS@__article` SET `chapter`=chapter+1  WHERE `id` = '$aid'");
         //     iPHP::OK('章节添加完成!','url:'.$SELFURL);
         // }
         iPHP::import(iPHP_APP_CORE .'/iMAP.class.php');
-        
+
         if(empty($aid)) {
             $postime  = $pubdate;
             $hits     = $good = $bad = $comments = 0;
@@ -470,10 +470,10 @@ class articleApp{
                 $tags = addslashes(json_encode($tagArray));
             }
 
-            iDB::query("INSERT INTO `#iCMS@__article` 
+            iDB::query("INSERT INTO `#iCMS@__article`
             	   (`cid`,`scid`,`orderNum`, `title`, `stitle`, `clink`, `url`, `source`, `author`, `editor`, `userid`, `pic`,`mpic`,`spic`, `picwidth`, `picheight`, `keywords`, `tags`, `description`, `related`, `metadata`, `pubdate`, `postime`, `hits`, `comments`, `good`, `bad`, `chapter`, `pid`, `top`, `postype`, `tpl`, `status`, `isPic`)
 			VALUES ('$cid','$scid', '$orderNum', '$title', '$stitle', '$clink', '$url', '$source', '$author', '$editor', '$userid', '$pic','$mpic','$spic', '$picwidth', '$picheight', '$keywords', '$tags', '$description', '$related', '$metadata', '$pubdate', '$postime', '$hits', '$comments', '$good', '$bad', '$chapter', '$pid', '$top', '$postype', '$tpl', '$status', '$isPic');");
-            
+
             $aid = iDB::$insert_id;
 
             map::init('prop',iCMS_APP_ARTICLE);
@@ -507,7 +507,7 @@ class articleApp{
             }
             $pic && list($picwidth, $picheight, $_type, $_attr) = @getimagesize(iFS::fp($pic,'+iPATH'));
 
-			iDB::query("UPDATE `#iCMS@__article` 
+			iDB::query("UPDATE `#iCMS@__article`
 			SET `cid` = '$cid', `scid` = '$scid', `orderNum` = '$orderNum', `title` = '$title', `stitle` = '$stitle', `clink` = '$clink', `url` = '$url', `source` = '$source', `author` = '$author', `editor` = '$editor', `userid` = '$userid', `pic` = '$pic',`mpic` = '$mpic',`spic` = '$spic', `picwidth` = '$picwidth', `picheight` = '$picheight', `keywords` = '$keywords', `tags` = '$tags', `description` = '$description', `related` = '$related', `metadata` = '$metadata', `pubdate` = '$pubdate', `chapter` = '$chapter', `pid` = '$pid', `top` = '$top', `postype` = '$postype', `tpl` = '$tpl',`status` = '$status', `isPic` = '$isPic'
 			WHERE `id` = '$aid';");
             map::init('prop',iCMS_APP_ARTICLE);
@@ -538,7 +538,7 @@ class articleApp{
         $body     = implode('#--iCMS.PageBreak--#',$bodyArray);
         $body     = preg_replace(array('/<script.+?<\/script>/is','/<form.+?<\/form>/is'),'',$body);
 
-        $autopic  = isset($_POST['autopic']) ?true:false; 
+        $autopic  = isset($_POST['autopic']) ?true:false;
         $remote   = isset($_POST['remote']) ?true:false;
         $dellink  = isset($_POST['dellink']) ?true:false;
         $_POST['isRedirect']  && iFS::$isRedirect = true;

@@ -20,7 +20,7 @@ class iPatch {
 	public static $version	= '';
 	public static $release	= '';
 	public static $zipName	= '';
-    public function init($force=false){
+    public static function init($force=false){
     	$verList	= self::getVersion($force);
     	foreach((array)$verList AS $key=>$version){
     		list(self::$version,$release,$installFile,$changelog)=explode("||",$version);//版本||发布日期||升级文件||升级说明
@@ -31,7 +31,7 @@ class iPatch {
     		}
     	}
     }
-    function getVersion($force=false) {
+    public static function getVersion($force=false) {
     	iFS::mkdir(PATCH_DIR);
 	    $tFilePath		= PATCH_DIR.'version.txt';//临时文件夹
 	    if(iFS::ex($tFilePath) && time()-iFS::mtime($tFilePath) < 3600 && !$force){
@@ -42,7 +42,7 @@ class iPatch {
 	    }
     	return explode("\n",$FileData);//版本列表
     }
-    function download(){
+    public static function download(){
 	    $zipFile	= PATCH_DIR.self::$zipName;//临时文件
 	    $zipHttp	= PATCH_URL.'/'.self::$zipName;
 		$msg		= '正在下载 ['.self::$release.'] 更新包 '.$zipHttp.'<iCMS>下载完成....<iCMS>';
@@ -55,7 +55,7 @@ class iPatch {
 			return $msg;
 	    }
     }
-    function update(){
+    public static function update(){
 		@set_time_limit(0);
 		// Unzip uses a lot of memory
 		@ini_set('memory_limit', '256M');
@@ -66,7 +66,7 @@ class iPatch {
 		if ( false == ($archive_files = $zip->extract(PCLZIP_OPT_EXTRACT_AS_STRING))) exit("ZIP包错误");
 
 		if ( 0 == count($archive_files) ) exit("空的ZIP文件");
-		
+
 		$msg.= '解压完成开始更新程序#<iCMS>';
 		$bakDir	= iPATH.self::$release.'bak';
 		iFS::mkdir($bakDir);
@@ -94,7 +94,7 @@ class iPatch {
     	iFS::rmdir(PATCH_DIR,true,'version.txt');
 		return $msg;
    }
-   function run(){
+   public static function run(){
    	   $updateFile	= iPATH.'update.'.self::$release.'.php';
    	   if(iFS::ex($updateFile)){
    	   	   require $updateFile;

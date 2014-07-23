@@ -21,7 +21,7 @@ class iMember{
     public static $LOGIN_TPL   = './';
     private static $loginCount = 0;
 
-    function check($a,$p) {
+    public static function check($a,$p) {
     	if(empty($a) && empty($p)) {
         	self::LoginPage();
     	}
@@ -37,7 +37,7 @@ class iMember{
         return self::$Rs;
     }
     //登陆验证
-    function checkLogin() {
+    public static function checkLogin() {
 //        self::$loginCount = (int)authcode(get_cookie('iCMS_LOGIN_COUNT'),'DECODE');
 //        if(self::$loginCount>iCMS_LOGIN_COUNT) exit();
 
@@ -58,20 +58,20 @@ class iMember{
             return $crs;
         }
     }
-    
+
 	//登陆页
-	function LoginPage(){
+	public static function LoginPage(){
 		self::$ajax && iPHP::json(array('code'=>0));
         iPHP::setCookie(self::$AUTH,'',-31536000);
 		include self::$LOGIN_TPL.'/template/login.php';
 		exit;
 	}
 	//注销
-	function logout(){
+	public static function logout(){
 		iPHP::setCookie(self::$AUTH,'',-31536000);
 	}
     //检查栏目权限
-    function CP($p=NULL,$T="F",$url=__REF__) {
+    public static function CP($p=NULL,$T="F",$url=__REF__) {
         if(self::$Rs->gid=="1")
             return TRUE;
 
@@ -86,7 +86,7 @@ class iMember{
         };
     }
     //检查后台权限
-    function MP($p=NULL,$T="Permission_Denied",$url=__REF__) {
+    public static function MP($p=NULL,$T="Permission_Denied",$url=__REF__) {
         if(self::$Rs->gid=="1")
             return TRUE;
 
@@ -100,7 +100,7 @@ class iMember{
             }
         }
     }
-	function smerge($s1,$s2){
+	public static function smerge($s1,$s2){
 		$a	= array();
 		$s1 && $a[]=$s1;
 		$s2 && $a[]=$s2;

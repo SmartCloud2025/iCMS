@@ -6,9 +6,9 @@
  * @author coolmoo <idreamsoft@qq.com>
  */
 class category {
-    public static $category	= array();
-    public static $_array	= array();
-    private static $rootid	= array();
+    public $category = array();
+    public $_array   = array();
+    private $rootid  = array();
 
     function __construct($appid=1) {
        $this->appid = $appid;
@@ -96,9 +96,9 @@ class category {
     }
     function select($currentid="0",$cid="0",$level = 1,$pid=NULL,$url=NULL) {
         foreach((array)$this->_array[$cid] AS $root=>$C) {
-        	
+
         	if(!$C['status']) continue;
-        	
+
             if(iMember::CP($C['cid'])) {
                 $t=$level=='1'?"":"├ ";
                 $selected=($currentid==$C['cid'])?"selected='selected'":"";
@@ -127,9 +127,9 @@ class category {
     }
     function user_select($currentid="0",$cid="0",$level = 1,$pid=NULL,$url=NULL) {
         foreach((array)$this->_array[$cid] AS $root=>$C) {
-        	
+
         	if(!$C['status']) continue;
-        	
+
         	if($C['isucshow']){
                 $t=$level=='1'?"":"├ ";
                 $selected=($currentid==$C['cid'])?"selected='selected'":"";

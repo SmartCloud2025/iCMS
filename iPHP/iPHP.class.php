@@ -26,7 +26,7 @@ class iPHP{
 
 	public static function config(){
         $site   = iPHP_MULTI_SITE ? $_SERVER['HTTP_HOST']:iPHP_APP;
-        if(iPHP_MULTI_DOMAIN){ //只绑定主域 
+        if(iPHP_MULTI_DOMAIN){ //只绑定主域
             preg_match("/[^\.\/]+\.[^\.\/]+$/", $site, $matches);
             $site = $matches[0];
         }
@@ -45,11 +45,11 @@ class iPHP{
         //config.php --END--
 
         define('iPHP_URL_404',$config['router']['404']);//404定义
-        
+
         if(iPHP_DEBUG||iPHP_TPL_DEBUG){
             ini_set('display_errors','ON');
             error_reporting(E_ALL & ~E_NOTICE);
-            set_error_handler('iPHP_ERROR_HANDLER');
+        	set_error_handler('iPHP_ERROR_HANDLER');
         }
 
         $timezone = $config['time']['zone'];
@@ -59,7 +59,7 @@ class iPHP{
 
         $mobile_agent = str_replace(',','|',preg_quote($config['other']['mobile_agent']));
         $mobile_agent && preg_match('/'.$mobile_agent.'/i',$_SERVER["HTTP_USER_AGENT"]) && self::$mobile = true;
-        $tpl_key      = ($config['site']['MW_TPL'] && self::$mobile)?'MW_TPL':'PC_TPL';        
+        $tpl_key      = ($config['site']['MW_TPL'] && self::$mobile)?'MW_TPL':'PC_TPL';
         define('iPHP_TPL_DEFAULT',$config['site'][$tpl_key]);
 
         return $config;
@@ -110,7 +110,7 @@ class iPHP{
         }else {
             self::$iTPL->display($tpl);
             //echo iFS::sizeUnit(xdebug_memory_usage());
-            //echo iFS::sizeUnit(xdebug_peak_memory_usage());            
+            //echo iFS::sizeUnit(xdebug_peak_memory_usage());
         }
     }
     public static function view($tpl,$p='index') {
@@ -189,7 +189,7 @@ class iPHP{
 		}
 
       	if(isset($GLOBALS['_iPHP_REQ'][$key])) return;
-      	
+
 		$GLOBALS['_iPHP_REQ'][$key] = true;
 		require $path;
     }
@@ -200,7 +200,7 @@ class iPHP{
 		    self::import($path);
 	    }
 	}
-	
+
     public static function app($app = NULL,$args = NULL){
     	$app_dir	= $app_name = $app;
     	if(is_array($app)){
@@ -229,7 +229,7 @@ class iPHP{
     		$class_name	= $class[1];
     	}
     	self::import(iPHP_APP_DIR.'/'.$class_dir.'/'.$class_name.'.class.php');
-    	
+
     	if($args==="break") return;
 
     	if($args){
@@ -277,21 +277,21 @@ class iPHP{
 			$url = $router[$key];
 		}
 		return $url;
-	}	
+	}
     public static function lang($string='') {
     	if(empty($string)) return false;
 
 		$keyArray  = explode(':',$string);
 		$count     = count($keyArray);
-		list($app,$do,$key,$msg) = $keyArray;   
-		 	
+		list($app,$do,$key,$msg) = $keyArray;
+
 		$fname     = $app.'.lang.php';
 		$path      = iPHP_APP_CORE.'/lang/'.$fname;
 
 		@is_file($path) OR self::throwException($fname.' not exist',0015);
 
 		$langArray = self::import($path,true);
-	
+
 		switch ($count) {
 			case 1:return $langArray;
 			case 2:return $langArray[$do];
@@ -389,7 +389,7 @@ class iPHP{
     		$lang = self::lang($content);
     		$lang && $content = $lang;
     	}
-    	$msg.= $content.'</span></div>';       
+    	$msg.= $content.'</span></div>';
     	if($ret) return $msg;
     	echo $msg;
     }
@@ -401,16 +401,16 @@ class iPHP{
 				$A[1]=="0"	&& $code	= self::$dialogObject.'history.go(-1);';
 				$A[1]=="1"	&& $code	= self::$dialogObject.'location.reload();';
         	break;
-        	case 'url':	
+        	case 'url':
 				$A[1]=="1" && $A[1]	= __REF__;
 	        	$code	= self::$dialogObject."location.href='".$A[1]."';";
         	break;
         	case 'src':	$code	= self::$dialogObject."$('#iPHP_FRAME').attr('src','".$A[1]."');";break;
         	default:	$code	= '';
         }
-        
+
         if($ret) return $code;
-        
+
         echo '<script type="text/javascript">'.$code.'</script>';
         self::$break && exit();
     }
@@ -538,26 +538,26 @@ class iPHP{
     	$dir	= trim($dir,'/');
     	$sDir	= $dir;
     	$_GET['dir'] && $gDir	= trim($_GET['dir'],'/');
-    	
-    	
-    	
+
+
+
 //    	print_r('$dir='.$dir.'<br />');
 //    	print_r('$gDir='.$gDir.'<br />');
 
     	//$gDir && $dir	= $gDir;
-    	
+
         //strstr($dir,'.')!==false	&& self::alert('What are you doing?','',1000000);
         //strstr($dir,'..')!==false	&& self::alert('What are you doing?','',1000000);
-		
-		
+
+
         $sDir_PATH	= iFS::path_join(iPATH,$sDir);
         $iDir_PATH	= iFS::path_join($sDir_PATH,$gDir);
 
 //    	print_r('$sDir_PATH='.$sDir_PATH."\n");
 //    	print_r('$iDir_PATH='.$iDir_PATH."\n");
-    	
+
 		strpos($iDir_PATH,$sDir_PATH)===false && self::alert("对不起!您访问的目录有问题!");
-		
+
         if (!is_dir($iDir_PATH)) {
             return false;
         }
@@ -586,7 +586,7 @@ class iPHP{
 	                        'md5'=>md5_file($filepath),
 	                        'ext'=>$filext,
 	                        'size'=>iFS::sizeUnit(filesize($filepath))
-	                ); 
+	                );
 	                if($type){
 	                	 in_array(strtolower($filext),$type) && $fileArray[]	= $fileinfo;
 	                }else{
