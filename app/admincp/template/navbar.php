@@ -16,7 +16,7 @@ defined('iCMS') OR exit('What are you doing?');
           <?php echo iACP::$menu->show(); ?>
         </ul>
         <ul class="nav pull-right">
-          <li><a href="#"><i class="fa fa-home fa-lg"></i> 网站首页</a></li>
+          <li><a href="index.php" target="_blank"><i class="fa fa-home fa-lg"></i> 网站首页</a></li>
           <li class="divider-vertical"></li>
           <li class="dropdown"> <a href="#" class="dropdown-toggle" data-toggle="dropdown"><i class="fa fa-users"></i> <?php echo iMember::$group->name;?> <b class="caret"></b></a>
             <ul class="dropdown-menu">

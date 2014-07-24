@@ -338,14 +338,16 @@ class articleApp{
         }
 
         if(iMember::CP($cid)) {
-            $cidIN=$this->category->cid($cid).$cid;
-            if(isset($_GET['sub']) && strstr($cidIN,',')) {
-                $sql.=" AND cid IN(".$cidIN.")";
-            }else {
-                $sql.=" AND cid ='$cid'";
+            if($_GET['sub']){
+                $cids  = iCMS::get_category_ids($cid,true);
+                array_push ($cids,$cid);
             }
-            //$sql.=" OR `vlink` REGEXP '[[:<:]]".preg_quote($cid, '/')."[[:>:]]')";
-        }else {
+            if($cids){
+                iPHP::import(iPHP_APP_CORE .'/iMAP.class.php');
+                map::init('category',iCMS_APP_ARTICLE);
+                $sql.= map::exists($cids,'`#iCMS@__article`.id'); //map 表大的用exists
+            }
+        }else{
             iMember::$cpower && $sql.=" AND cid IN(".implode(',',(array)iMember::$cpower).")";
         }
 
@@ -367,10 +369,7 @@ class articleApp{
         $total		= iPHP::total(false,"SELECT count(*) FROM `#iCMS@__article` {$sql}","G");
         iPHP::pagenav($total,$maxperpage,"篇文章");
         $rs			= iDB::getArray("SELECT * FROM `#iCMS@__article` {$sql} order by {$orderby} LIMIT ".iPHP::$offset." , {$maxperpage}");
-//echo iDB::$last_query;
-//iDB::$last_query='explain '.iDB::$last_query;
-//$explain=iDB::getRow(iDB::$last_query);
-//var_dump($explain);
+        //iDB::debug(1);
         $_count		= count($rs);
         include iACP::view("article.manage");
 //		$mtime = microtime();
@@ -458,7 +457,6 @@ class articleApp{
         // }
         iPHP::import(iPHP_APP_CORE .'/iMAP.class.php');
         $picdata = '';
-
         if(empty($aid)) {
             $postime = $pubdate;
             $hits    = $good = $bad = $comments = 0;

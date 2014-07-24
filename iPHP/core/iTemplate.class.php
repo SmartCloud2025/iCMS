@@ -293,6 +293,7 @@ class iTemplate {
 			function_exists($callback) OR $this->require_one(iPHP_TPL_FUN."/".iPHP_TPL_VAR.".".$a['app'].".php");
 		}
 		//$this->assign($keys,call_user_func($callback, (array)$a));
+		//$this->clear_assign($keys);
 		$this->assign($keys,$callback($a));
 	}
 

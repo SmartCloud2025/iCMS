@@ -10,16 +10,16 @@ class map {
 	public static $field = 'node';
 	public static $appid = '1';
 
-	function init($table = 'prop',$appid='1',$field = 'node'){
+	public static function init($table = 'prop',$appid='1',$field = 'node'){
 		self::$table = $table;
 		self::$field = $field;
 		self::$appid = $appid;
 		return self;
 	}
-	function table(){
+	public static function table(){
 		return'#iCMS@__'.self::$table.'_map';
 	}
-	public function add($nodes,$iid="0") {
+	public static function add($nodes,$iid="0") {
 		$_array   = explode(',',$nodes);
 		$_count   = count($_array);
 		$varArray = array();
@@ -28,17 +28,17 @@ class map {
 	    }
 	    return json_encode($varArray);
 	}
-	public function addnew($node,$iid="0") {
+	public static function addnew($node,$iid="0") {
 		$has = iDB::getValue("SELECT `id` FROM `".self::table()."` WHERE `".self::$field."`='$node' AND `iid`='$iid' AND `appid`='".self::$appid."' LIMIT 1");
 	    if(!$has) {
 	        iDB::query("INSERT INTO `".self::table()."` (`".self::$field."`,`iid`, `appid`) VALUES ('$node','$iid','".self::$appid."')");
 	    }
 	    //return array($vars,$tid,$cid,$tcid);
 	}
-	function diff($Nnodes,$Onodes,$iid="0") {
-		$N        = explode(',', $Nnodes);
-		$O        = explode(',', $Onodes);
-		$diff     = array_diff_values($N,$O);
+	public static function diff($Nnodes,$Onodes,$iid="0") {
+		$N         = explode(',', $Nnodes);
+		$O         = explode(',', $Onodes);
+		$diff      = array_diff_values($N,$O);
 		$varsArray = array();
 	    foreach((array)$N AS $i=>$_node) {//新增
             $varsArray[$i] = self::addnew($_node,$iid);
@@ -48,7 +48,9 @@ class map {
 	   }
 	   return json_encode($varsArray);
 	}
-	public function ids($nodes=0){
+	public static function ids($nodes=0){
+		if(empty($nodes)) return false;
+
 		$sql      = self::sql($nodes);
 		$rs       = iDB::getArray($sql);
 		$resource = array();
@@ -63,7 +65,9 @@ class map {
 		}
 		return false;
 	}
-	public function sql($nodes=0){
+	public static function sql($nodes=0){
+		if(empty($nodes)) return false;
+
 		if(!is_array($nodes) && strstr($nodes, ',')){
 			$nodes = explode(',', $nodes);
 		}
@@ -71,11 +75,13 @@ class map {
 		$where_sql.= iPHP::where($nodes,self::$field);
 		return "SELECT `iid` FROM ".self::table()." WHERE {$where_sql}";
 	}
-	public function exists($nodes=0,$iid=''){
+	public static function exists($nodes=0,$iid=''){
+		if(empty($nodes)) return false;
+
 		$sql = self::sql($nodes)." AND iid =".$iid;
 		return ' AND exists ('.$sql.')';		
 	}
-	public function multi($nodes=0,$iid=''){
+	public static function multi($nodes=0,$iid=''){
 		
 	}
 }

@@ -175,10 +175,10 @@ function _modal_dialog(cancel){
     </div>
     <div class="widget-content nopadding iCMS-article-add">
       <form action="<?php echo APP_FURI; ?>&do=save" method="post" class="form-inline" id="iCMS-article" target="iPHP_FRAME">
-        <input name="_cid" type="hidden" value="<?php echo $this->cid ; ?>" />
-        <input name="_scid" type="hidden" value="<?php echo $this->scid ; ?>" />
-        <input name="_tags" type="hidden" value="<?php echo $this->tags ; ?>" />
-        <input name="_pid" type="hidden" value="<?php echo $this->pid ; ?>" />
+        <input name="_cid" type="hidden" value="<?php echo $rs['cid'] ; ?>" />
+        <input name="_scid" type="hidden" value="<?php echo $rs['scid']; ?>" />
+        <input name="_tags" type="hidden" value="<?php echo $rs['tags']; ?>" />
+        <input name="_pid" type="hidden" value="<?php echo $rs['pid']; ?>" />
 
         <input name="aid" type="hidden" value="<?php echo $this->id ; ?>" />
         <input name="adid" type="hidden" value="<?php echo $adRs['id']; ?>" />

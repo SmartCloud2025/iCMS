@@ -121,7 +121,7 @@ function modal_icms(el,a){
 	if(!a.checked) return;
 
 	var e=$('#'+el)||$('.'+el);
-    var val = a.value.replace(iCMS.DEFTPL+'/', "{TPL}/");
+    var val = a.value.replace(iCMS.DEFTPL+'/', "{iTPL}/");
 	e.val(val);
     return 'off';
 }

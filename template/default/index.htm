@@ -25,7 +25,7 @@
               <!--{iCMS:article:list loop="true" pic="true" user="true" row="4"}-->
               <li class="player clearfix">
                 <div class="content_player_wrapper">
-                  <div class="player-imgview"><a href="<!--{$article_list.url}-->" target="_blank"><img src="<!--{$article_list.pic}-->"></a></div>
+                  <div class="player-imgview"><a href="<!--{$article_list.url}-->" target="_blank"><img src="<!--{$article_list.pic.url}-->"></a></div>
                 </div>
                 <div class="player-imgtit">
                   <p class="data-title"><a href="<!--{$article_list.url}-->" target="_blank"><!--{$article_list.title}--></a></p>
@@ -60,8 +60,8 @@
           <div class="bd"><!--{iCMS:article:list row="10" cid=$category_list.cid}-->
           <!--{if $article_list}-->
           <ul class="w-ul ulist">
-            <!--{if $article_list[0].pic}-->
-            <li class="fb"><a href="<!--{$article_list[0].url}-->" target="_blank"><img src="<!--{$article_list[0].pic}-->"></a><a href="<!--{$article_list[0].url}-->" target="_blank"><!--{$article_list[0].title}--></a>
+            <!--{if $article_list[0].pic.url}-->
+            <li class="fb"><a href="<!--{$article_list[0].url}-->" target="_blank"><img src="<!--{$article_list[0].pic.url}-->"></a><a href="<!--{$article_list[0].url}-->" target="_blank"><!--{$article_list[0].title}--></a>
             <p><!--{$article_list[0].description|html2txt}--></p>
           </li>
           <!--{/if}-->
@@ -100,8 +100,8 @@
       </div>
       <div class="bd"><!--{iCMS:article:list row="10" orderby="hot"}-->
       <ul class="artical-top">
-        <!--{if $article_list[0].pic}-->
-        <li class="first-item clearfix"><span><a href="<!--{$article_list[0].url}-->" target="_blank"><img src="<!--{$article_list[0].pic}-->" style="height: 72px;"></a></span>
+        <!--{if $article_list[0].pic.url}-->
+        <li class="first-item clearfix"><span><a href="<!--{$article_list[0].url}-->" target="_blank"><img src="<!--{$article_list[0].pic.url}-->" style="height: 72px;"></a></span>
         <p class="title"><a href="<!--{$article_list[0].url}-->" target="_blank"><!--{$article_list[0].title}--></a></p>
         <p class="text"><!--{$article_list[0].description|html2txt}--></p>
       </li>
