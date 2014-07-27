@@ -23,14 +23,14 @@ class settingApp{
 			}
 		}
     }
-    function doiCMS(){
+    function do_iCMS(){
     	$config	= iACP::getConfig(0);
     	$config['site']['indexName'] OR $config['site']['indexName'] = 'index';
         $redis    = extension_loaded('redis');
         $memcache = extension_loaded('memcache');
     	include iACP::view("setting");
     }
-    function dosave(){
+    function do_save(){
     	$config		= iS::escapeStr($_POST['config']);
 		iFS::filterExt($config['router']['htmlext'],true) OR iPHP::alert('网站URL设置 > 文件后缀 设置不合法!');
     	$config['apps']	= $this->apps;
@@ -38,7 +38,7 @@ class settingApp{
     		iACP::setConfig($v,$n,0);
     	}
     	iACP::cacheConfig($config);
-    	iPHP::OK('更新完成');
+    	iPHP::success('更新完成');
     }
     public function cache(){
         $config         = iACP::getConfig(0);

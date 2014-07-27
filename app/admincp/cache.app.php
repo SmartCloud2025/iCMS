@@ -12,29 +12,29 @@
 class cacheApp{
     function __construct() {
     }
-    function doiCMS(){
+    function do_iCMS(){
 		if (in_array($_GET['acp'], array('setting','prop','filter','keywords'))) {
 	    	$acp	= iACP::app($_GET['acp']);
 	    	$acp->cache();
-	    	iPHP::OK('更新完成');
+	    	iPHP::success('更新完成');
 		}
     }
-    function domenu(){
+    function do_menu(){
     	iACP::$menu->cache();
-    	iPHP::OK('更新完成','js:1');
+    	iPHP::success('更新完成','js:1');
     }
-    function docategory(){
+    function do_category(){
     	$category	= iPHP::appClass("category");
     	$category->cache(true,isset($_GET['type'])?$_GET['type']:null);
-    	iPHP::OK('更新完成');
+    	iPHP::success('更新完成');
     }
-    function dotpl(){
+    function do_tpl(){
     	iCMS::clear_compiled_tpl();
-    	iPHP::OK('清理完成');
+    	iPHP::success('清理完成');
     }
-    function doartCount(){
+    function do_artCount(){
     	$o	= iACP::app('category');
     	$o->reCount();
-    	iPHP::OK('更新完成');
+    	iPHP::success('更新完成');
     }
 }

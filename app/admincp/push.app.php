@@ -14,7 +14,7 @@ class pushApp{
     	$this->id	= (int)$_GET['id'];
         $this->pushcategory	= iPHP::appClass("category",iCMS_APP_PUSH);
     }
-    function doadd(){
+    function do_add(){
         $id		= (int)$_GET['id'];
         $rs		= array();
         $_GET['title'] 	&& $rs['title']	= $_GET['title'];
@@ -29,7 +29,7 @@ class pushApp{
         $_GET['pic3'] 	&& $rs['pic3']	= $_GET['pic3'];
         $_GET['url3'] 	&& $rs['url3']	= $_GET['url3'];
 
-        $id && $rs	= iDB::getRow("SELECT * FROM `#iCMS@__push` WHERE `id`='$id' LIMIT 1;",ARRAY_A);
+        $id && $rs	= iDB::row("SELECT * FROM `#iCMS@__push` WHERE `id`='$id' LIMIT 1;",ARRAY_A);
         empty($rs['editor']) && $rs['editor']=empty(iMember::$Rs->nickname)?iMember::$Rs->username:iMember::$Rs->nickname;
         empty($rs['userid']) && $rs['userid']=iMember::$uId;
         $rs['addtime']	= $id?get_date(0,"Y-m-d H:i:s"):get_date($rs['addtime'],'Y-m-d H:i:s');
@@ -42,11 +42,11 @@ class pushApp{
     	include iACP::view("push.add");
     }
 
-    function doiCMS(){
+    function do_iCMS(){
     	iACP::$app_method="domanage";
-    	$this->domanage();
+    	$this->do_manage();
     }
-    function domanage($doType=null) {
+    function do_manage($doType=null) {
         $mtime      = microtime();
         $mtime      = explode(' ', $mtime);
         $time_start = $mtime[1] + $mtime[0];
@@ -107,26 +107,19 @@ class pushApp{
         $maxperpage =(int)$_GET['perpage']>0?$_GET['perpage']:20;
         $total      = iPHP::total(false,"SELECT count(*) FROM `#iCMS@__push` {$sql}","G");
         iPHP::pagenav($total,$maxperpage,"条记录");
-        $rs         =iDB::getArray("SELECT * FROM `#iCMS@__push` {$sql} order by {$orderby} LIMIT ".iPHP::$offset." , {$maxperpage}");
-//echo iDB::$last_query;
-//iDB::last_query='explain '.iDB::$last_query;
-//$explain=iDB::getRow(iDB::last_query);
-//var_dump($explain);
-        $_count=count($rs);
+        $rs     = iDB::all("SELECT * FROM `#iCMS@__push` {$sql} order by {$orderby} LIMIT ".iPHP::$offset." , {$maxperpage}");
+        $_count = count($rs);
         include iACP::view("push.manage");
-//		$mtime = microtime();
-//		$mtime = explode(' ', $mtime);
-//		$time_end = $mtime[1] + $mtime[0];
-//		echo  "<h1>".($time_end - $time_start);
     }
-    function dosave(){
-        $id			= (int)$_POST['id'];
-        $cid		= (int)$_POST['cid'];
-        $userid		= (int)$_POST['userid'];
-        $pid		= (int)$_POST['pid'];
-        $editor		= iS::escapeStr($_POST['editor']);
-        $orderNum	= _int($_POST['orderNum']);
-        $addtime	= iPHP::str2time($_POST['addtime']);
+    function do_save(){
+        $id       = (int)$_POST['id'];
+        $cid      = (int)$_POST['cid'];
+        $_cid     = (int)$_POST['_cid'];
+        $userid   = (int)$_POST['userid'];
+        $pid      = (int)$_POST['pid'];
+        $editor   = iS::escapeStr($_POST['editor']);
+        $orderNum = _int($_POST['orderNum']);
+        $addtime  = iPHP::str2time($_POST['addtime']);
         
         
         
@@ -155,20 +148,20 @@ class pushApp{
         $ispic	= empty($pic)?0:1;
         
         $status	= 1;
+        $fields = array('cid', 'rootid', 'pid', 'ispic', 'editor', 'userid', 'title', 'pic', 'url', 'description', 'title2', 'pic2', 'url2', 'description2', 'title3', 'pic3', 'url3', 'description3', 'orderNum', 'metadata', 'addtime','hits', 'status');
+        $data   = compact ($fields);
+
         if(empty($id)) {
-			iDB::query("INSERT INTO `#iCMS@__push` (`cid`, `rootid`, `pid`, `ispic`, `editor`, `userid`, `title`, `pic`, `url`, `description`, `title2`, `pic2`, `url2`, `description2`, `title3`, `pic3`, `url3`, `description3`, `orderNum`, `metadata`, `addtime`,`hits`, `status`)
-VALUES ('$cid', '0', '$pid', '$ispic', '$editor', '$userid', '$title', '$pic', '$url', '$description', '$title2', '$pic2', '$url2', '$description2', '$title3', '$pic3', '$url3', '$description3', '$orderNum', '$metadata', '$addtime','$hits', '$status');");
+            iDB::insert('push',$data);
             iDB::query("UPDATE `#iCMS@__category` SET `count` = count+1 WHERE `cid` ='$cid' LIMIT 1 ");
-            iPHP::OK('推送完成','url:'.APP_URI);
+            iPHP::success('推送完成','url:'.APP_URI);
         }else{
-            $OP	= iDB::getRow("SELECT `cid` FROM `#iCMS@__push` where `id` ='$id' LIMIT 1;");
-			iDB::query("UPDATE `#iCMS@__push` SET `cid` = '$cid', `pid` = '$pid', `ispic` = '$ispic', `editor` = '$editor', `userid` = '$userid', `title` = '$title', `pic` = '$pic', `url` = '$url', `description` = '$description', `title2` = '$title2', `pic2` = '$pic2', `url2` = '$url2', `description2` = '$description2', `title3` = '$title3', `pic3` = '$pic3', `url3` = '$url3', `description3` = '$description3', `orderNum` = '$orderNum', `metadata` = '$metadata', `addtime` = '$addtime', `status` = '$status'
-WHERE `id` = '$id';");
-            if($OP->cid!=$cid) {
-                iDB::query("UPDATE `#iCMS@__category` SET `count` = count-1 WHERE `cid` ='{$OP->cid}' and `count`>0 LIMIT 1 ");
+			iDB::update('push', $data, array('id'=>$id));
+            if($_cid!=$cid) {
+                iDB::query("UPDATE `#iCMS@__category` SET `count` = count-1 WHERE `cid` ='{$_cid}' and `count`>0 LIMIT 1 ");
                 iDB::query("UPDATE `#iCMS@__category` SET `count` = count+1 WHERE `cid` ='$cid' LIMIT 1 ");
             }
-            iPHP::OK('编辑完成!','url:'.APP_URI);
+            iPHP::success('编辑完成!','url:'.APP_URI);
         }
     }
 	function getpic($path){
@@ -182,13 +175,13 @@ WHERE `id` = '$id';");
 		}
 		return $pic;
 	}
-    function dodel($id = null,$dialog=true){
+    function do_del($id = null,$dialog=true){
     	$id===null && $id=$this->id;
 		$id OR iPHP::alert('请选择要删除的推送');
 		iDB::query("DELETE FROM `#iCMS@__push` WHERE `id` = '$id'");
-		$dialog && iPHP::OK('推送删除完成','js:parent.$("#tr'.$id.'").remove();');
+		$dialog && iPHP::success('推送删除完成','js:parent.$("#tr'.$id.'").remove();');
     }
-    function dobatch(){
+    function do_batch(){
         $idArray = (array)$_POST['id'];
         $idArray OR iPHP::alert("请选择要删除的推送");
         $ids     = implode(',',$idArray);
@@ -197,10 +190,10 @@ WHERE `id` = '$id';");
     		case 'dels':
 				iPHP::$break	= false;
 	    		foreach($idArray AS $id){
-	    			$this->dodel($id,false);
+	    			$this->do_del($id,false);
 	    		}
 	    		iPHP::$break	= true;
-				iPHP::OK('全部删除完成!','js:1');
+				iPHP::success('全部删除完成!','js:1');
     		break;
 		}
 	}

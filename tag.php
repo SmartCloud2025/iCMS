@@ -7,13 +7,7 @@
 * @site http://www.idreamsoft.com
 * @licence http://www.idreamsoft.com/license.php
 * @version 6.0.0
-* @$Id: comment.app.php 634 2013-04-03 06:02:53Z coolmoo $
+* @$Id: tag.php 179 2013-03-29 03:21:28Z coolmoo $
 */
-class commentApp{
-    function __construct() {
-    }
-    function do_iCMS(){
-    	include iACP::view("comment.manage");
-    }
-
-}
+require (dirname(__file__).'/iCMS.php');
+iCMS::run();

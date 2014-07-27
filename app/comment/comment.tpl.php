@@ -81,7 +81,7 @@ function comment_list($vars){
 		$rs			= iCache::get($cacheName);
 	}
 	if(empty($rs)){
-		$rs		= iDB::getArray("SELECT * FROM `#iCMS@__comment` WHERE {$whereSQL} {$orderSQL} {$limit}");
+		$rs		= iDB::all("SELECT * FROM `#iCMS@__comment` WHERE {$whereSQL} {$orderSQL} {$limit}");
 		iDB::debug();
 		$_count	= count($rs);
 		$ln		=($GLOBALS['page']-1)<0?0:$GLOBALS['page']-1;
@@ -94,15 +94,15 @@ function comment_list($vars){
 			$rs[$i]['content'] = nl2br($rs[$i]['content']);
 			$rs[$i]['user']    = array();
 			$rs[$i]['user']['uid']    = $rs[$i]['uid'];
-			$rs[$i]['user']['url']    = userData($rs[$i]['uid'],"url");
-			$rs[$i]['user']['avatar'] = userData($rs[$i]['uid'],"avatar",$vars['facesize']?$vars['facesize']:0);
+			$rs[$i]['user']['url']    = get_user($rs[$i]['uid'],"url");
+			$rs[$i]['user']['avatar'] = get_user($rs[$i]['uid'],"avatar",$vars['facesize']?$vars['facesize']:0);
 			$rs[$i]['user']['name']   = $rs[$i]['name'];
 
 			$rs[$i]['reply'] = '';
 			if($rs[$i]['reply_uid']){
 				$rs[$i]['reply']['uid']    = $rs[$i]['reply_uid'];
-				$rs[$i]['reply']['url']    = userData($rs[$i]['reply_uid'],"url");
-				$rs[$i]['reply']['avatar'] = userData($rs[$i]['reply_uid'],"avatar",$vars['facesize']?$vars['facesize']:0);
+				$rs[$i]['reply']['url']    = get_user($rs[$i]['reply_uid'],"url");
+				$rs[$i]['reply']['avatar'] = get_user($rs[$i]['reply_uid'],"avatar",$vars['facesize']?$vars['facesize']:0);
 				$rs[$i]['reply']['name']   = $rs[$i]['reply_name'];
 			}
 			$rs[$i]['total'] = $total;

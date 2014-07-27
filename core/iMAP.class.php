@@ -29,7 +29,7 @@ class map {
 	    return json_encode($varArray);
 	}
 	public static function addnew($node,$iid="0") {
-		$has = iDB::getValue("SELECT `id` FROM `".self::table()."` WHERE `".self::$field."`='$node' AND `iid`='$iid' AND `appid`='".self::$appid."' LIMIT 1");
+		$has = iDB::value("SELECT `id` FROM `".self::table()."` WHERE `".self::$field."`='$node' AND `iid`='$iid' AND `appid`='".self::$appid."' LIMIT 1");
 	    if(!$has) {
 	        iDB::query("INSERT INTO `".self::table()."` (`".self::$field."`,`iid`, `appid`) VALUES ('$node','$iid','".self::$appid."')");
 	    }
@@ -52,7 +52,7 @@ class map {
 		if(empty($nodes)) return false;
 
 		$sql      = self::sql($nodes);
-		$rs       = iDB::getArray($sql);
+		$rs       = iDB::all($sql);
 		$resource = array();
 		iDB::debug(1);
 		foreach((array)$rs AS $_vars) {

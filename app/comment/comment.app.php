@@ -9,7 +9,7 @@
 class commentApp {
 	public $methods	= array('like','json','add','report','form','list');
     function __construct() {
-        $this->userid   = (int)iPHP::getCookie('userid');
+        $this->userid   = (int)iPHP::get_cookie('userid');
         $this->nickname = iS::escapeStr(iPHP::getUniCookie('nickname'));
         $this->id       = (int)$_GET['id'];
     }
@@ -25,10 +25,10 @@ class commentApp {
     public function API_like(){
         $this->id OR iPHP::code(0,'iCMS:article:empty_id',0,'json');
         $lckey = 'like_comment_'.$this->id;
-        $like  = (int)iPHP::getCookie($lckey);
+        $like  = (int)iPHP::get_cookie($lckey);
         $like && iPHP::code(0,'iCMS:comment:!like',0,'json');
         iDB::query("UPDATE `#iCMS@__comment` SET `up`=up+1 WHERE `id`='$this->id'");
-        iPHP::setCookie($lckey,$this->userid,86400);
+        iPHP::set_cookie($lckey,$this->userid,86400);
         iPHP::code(1,'iCMS:comment:like',0,'json');
     }
     public function API_json(){
@@ -75,28 +75,28 @@ VALUES ('".iCMS_APP_ARTICLE."', '$cid', '$iid','$suid', '$title', '$this->userid
         iPHP::code(1,'iCMS:comment:reason_success',$id,'json');
     }
     //---------------------------
-    public function doAjax($a = null) {
+    public function do_Ajax($a = null) {
     	$type	= $_GET['type'];
 		in_array($type, array("detail")) OR die();
 		
     	$ln		= ($GLOBALS['page']-1)<0?0:$GLOBALS['page']-1;
     	$id		= (int)$_GET['id'];
-    	$total	= iDB::getValue("SELECT count(*) FROM `#iCMS@__{$type}_cmt` WHERE `indexId`='$id' AND `status`='1'");
-    	$rs		= iDB::getArray("SELECT * FROM `#iCMS@__{$type}_cmt` WHERE `indexId`='$id' AND `status`='1' ORDER BY id DESC LIMIT 10");
+    	$total	= iDB::value("SELECT count(*) FROM `#iCMS@__{$type}_cmt` WHERE `indexId`='$id' AND `status`='1'");
+    	$rs		= iDB::all("SELECT * FROM `#iCMS@__{$type}_cmt` WHERE `indexId`='$id' AND `status`='1' ORDER BY id DESC LIMIT 10");
         $_count=count($rs);
         for ($i=0;$i<$_count;$i++){
         	$rs[$i]['lou']			= $total-($i+$ln*$maxperpage);
-            $rs[$i]['user']['url']	= userData($rs[$i]['userid'],'url');
+            $rs[$i]['user']['url']	= get_user($rs[$i]['userid'],'url');
             $rs[$i]['user']['name']	= $rs[$i]['nickname'];
             $rs[$i]['user']['id']	= $rs[$i]['userid'];
-            $rs[$i]['user']['face']	= userData($rs[$i]['userid'],'face',48);
+            $rs[$i]['user']['face']	= get_user($rs[$i]['userid'],'face',48);
             $rs[$i]['date']			= get_date($rs[$i]['addtime'],"m月d日 H:m");
             
         }
     	echo $_GET['callback'].'('.json_encode($rs).')';
     }
 
-    public function doPost($a = null) {
+    public function do_Post($a = null) {
         $type     = $_POST['type'];
         in_array($type, array("detail")) OR die();
         
@@ -105,7 +105,7 @@ VALUES ('".iCMS_APP_ARTICLE."', '$cid', '$iid','$suid', '$title', '$this->userid
         $itemId   = (int)$_POST['itemId'];
         $content  = iS::escapeStr($_POST['content']);
         
-        $userid   = iPHP::getCookie('userid');
+        $userid   = iPHP::get_cookie('userid');
         $nickname = iPHP::getUniCookie('nickname');
 		
 		empty($userid) && iPHP::json(array('code'=>0,'msg'=>'nologin'));

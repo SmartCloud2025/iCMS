@@ -9,6 +9,8 @@ defined('iCMS') OR exit('What are you doing?');
 iACP::head($navbar);
 ?>
 <script type="text/javascript">
+var click_type = {'file':'文件','dir':'目录'};
+
 function modal_callback(obj){
   var state = window.parent.modal_<?php echo $this->callback;?>('<?php echo $this->target; ?>',obj);
   if(state=='off'){
@@ -18,8 +20,13 @@ function modal_callback(obj){
 $(function(){
     $('input[type=file]').uniform();
     <?php if($this->click){?>
-    $('[data-click="<?php echo $this->click;?>"]').click(function() {
-      modal_callback(this);
+    $('[data-click]').click(function() {
+      var click = $(this).attr('data-click');
+      if(click=="<?php echo $this->click;?>"){
+        modal_callback(this);
+      }else{
+        alert("当前只能选择"+click_type['<?php echo $this->click;?>']);
+      }
     });
     <?php }?>
     <?php if($this->click=='file'){?>

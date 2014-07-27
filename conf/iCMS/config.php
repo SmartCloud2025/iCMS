@@ -8,15 +8,34 @@ return array (
     'keywords' => '',
     'description' => '',
     'icp' => '',
-    'PC_TPL' => 'default',
-    'MW_TPL' => 'mobile',
-    'indexTPL' => '{iTPL}/index.htm',
-    'indexName' => 'index',
   ),
   'debug' => 
   array (
     'php' => '1',
     'tpl' => '1',
+  ),
+  'template' => 
+  array (
+    'index' => '{iTPL}/index.htm',
+    'index_name' => '',
+    'pc' => 'default',
+    'mobile_agent' => 'WAP,Smartphone,Mobile,UCWEB,Opera Mini,Windows CE,Symbian,SAMSUNG,iPhone,Android,BlackBerry,HTC,Mini,LG,SonyEricsson,J2ME,MOT',
+    'mobile' => 'mobile',
+    'device' => 
+    array (
+      0 => 
+      array (
+        'name' => 'iPhone',
+        'ua' => 'iPhone',
+        'tpl' => 'default',
+      ),
+      1 => 
+      array (
+        'name' => 'iPad',
+        'ua' => 'iPad',
+        'tpl' => 'iPad',
+      ),
+    ),
   ),
   'router' => 
   array (
@@ -110,7 +129,6 @@ return array (
   ),
   'other' => 
   array (
-    'mobile_agent' => 'WAP,Smartphone,Mobile,UCWEB,Opera Mini,Windows CE,Symbian,SAMSUNG,iPhone,Android,BlackBerry,HTC,Mini,LG,SonyEricsson,J2ME,MOT',
     'CLsplit' => ',',
     'kwCount' => '1',
     'sidebar_enable' => '1',

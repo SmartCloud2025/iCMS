@@ -42,8 +42,8 @@ class iMenu {
 		$this->menuArray OR $this->cache();
 	}
 
-	function getArray($cache=false){
-		$rs	= iDB::getArray("SELECT * FROM `#iCMS@__menu` ORDER BY `orderNum` , `id` ASC",ARRAY_A);
+	function get_array($cache=false){
+		$rs	= iDB::all("SELECT * FROM `#iCMS@__menu` ORDER BY `orderNum` , `id` ASC",ARRAY_A);
 		foreach((array)$rs AS $M) {
 			$menuArray[$M['id']]            = $M;
 			$MArray[$M['rootid']][$M['id']] = $M;
@@ -62,7 +62,7 @@ class iMenu {
 		}
 	}
 	function cache(){
-		$this->getArray(true);
+		$this->get_array(true);
 	}
 	function rootid($id){
 		$rootid = $this->parent[$id];

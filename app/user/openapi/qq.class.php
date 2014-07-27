@@ -10,7 +10,7 @@ class QQ {
 	}
 	function login(){
 	    $state = md5(uniqid(rand(), TRUE)); //CSRF protection
-	    iPHP::setCookie("QQ_STATE",authcode($state,'ENCODE'));
+	    iPHP::set_cookie("QQ_STATE",authcode($state,'ENCODE'));
 	    $login_url = "https://graph.qq.com/oauth2.0/authorize?response_type=code&client_id=" 
 	        . self::$appid . "&redirect_uri=" . urlencode(CALLBACK_URL.self::$callback)
 	        . "&state=" .$state
@@ -18,7 +18,7 @@ class QQ {
 	    header("Location:$login_url");
 	}
 	function callback(){
-		$state	= authcode(iPHP::getCookie("QQ_STATE"), 'DECODE');
+		$state	= authcode(iPHP::get_cookie("QQ_STATE"), 'DECODE');
 		if($_GET['state']!=$state){
 			//die('QQ.api.err::1000');
 			self::login();
@@ -41,11 +41,11 @@ class QQ {
         }
         $params = array();
         parse_str($response, $params);
-		iPHP::setCookie("QQ_access_token",authcode($params["access_token"],'ENCODE'));
+		iPHP::set_cookie("QQ_access_token",authcode($params["access_token"],'ENCODE'));
         self::openId($params["access_token"]);
 	}
 	function openId($access_token=""){
-		$access_token	= authcode(iPHP::getCookie("QQ_access_token"), 'DECODE');
+		$access_token	= authcode(iPHP::get_cookie("QQ_access_token"), 'DECODE');
 	    $graph_url = "https://graph.qq.com/oauth2.0/me?access_token=".$access_token;
 	    $str  = self::get_url_contents($graph_url);
 	    if (strpos($str, "callback") !== false){
@@ -62,11 +62,11 @@ class QQ {
 	    //echo("Hello " . $user->openid);
 	    //set openid to session
 	    self::$openid	= $user->openid;
-	    iPHP::setCookie("QQ_openid",authcode($user->openid,'ENCODE'));
+	    iPHP::set_cookie("QQ_openid",authcode($user->openid,'ENCODE'));
 	}
 	function get_user_info(){
-		$access_token	= authcode(iPHP::getCookie("QQ_access_token"), 'DECODE');
-		$openid	= authcode(iPHP::getCookie("QQ_openid"), 'DECODE');
+		$access_token	= authcode(iPHP::get_cookie("QQ_access_token"), 'DECODE');
+		$openid	= authcode(iPHP::get_cookie("QQ_openid"), 'DECODE');
 	    $get_user_info = "https://graph.qq.com/user/get_user_info?"
 	        . "access_token=" . $access_token
 	        . "&oauth_consumer_key=" .self::$appid
@@ -76,13 +76,13 @@ class QQ {
 	    $info = self::get_url_contents($get_user_info);
 	    $arr = json_decode($info, true);
 	    $arr['avatar']	= $arr['figureurl_2'];
-	    $arr['gender']	= $arr['gender']=="ÄÐ"?'1':0;
+	    $arr['gender']	= $arr['gender']=="??"?'1':0;
 	    return $arr;
 	}
 	function cleancookie(){
-		iPHP::setCookie('QQ_access_token', '',-31536000);
-		iPHP::setCookie('QQ_openid', '',-31536000);
-		iPHP::setCookie('QQ_STATE', '',-31536000);
+		iPHP::set_cookie('QQ_access_token', '',-31536000);
+		iPHP::set_cookie('QQ_openid', '',-31536000);
+		iPHP::set_cookie('QQ_STATE', '',-31536000);
 	}
 	function get_url_contents($url){
 		$result =  file_get_contents($url);

@@ -10,6 +10,7 @@ a:hover { text-decoration: none; }
 .mb20 { margin-bottom: 20px !important; }
 .clearfloat { clear: both; }
 i { text-align: center; }
+.solid { clear: both; height: 1px; margin-top: 10px; margin-bottom: 10px; border-bottom: 1px solid #ddd; }
 /* bootstrap */
 a, a:hover, a:focus { color: #057AFD; }
 a.noneline { text-decoration: none !important; }

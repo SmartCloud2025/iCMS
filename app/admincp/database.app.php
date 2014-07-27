@@ -13,10 +13,10 @@ class databaseApp{
     function __construct() {
     	$this->bakdir	= $_GET['dir'];
     }
-//    function doiCMS(){
-//    	$this->dobackup();
+//    function do_iCMS(){
+//    	$this->do_backup();
 //    }
-	function dorecover(){
+	function do_recover(){
     	$res	= iPHP::folder('cache/backup',array('sql'));
     	$dirRs	= $res['DirArray'];
     	$fileRs	= $res['FileArray'];
@@ -25,11 +25,11 @@ class databaseApp{
     	$URI	= $res['URI'];
 		include iACP::view("database.recover");
 	}
-	function dorepair(){
-		$this->dobackup();
+	function do_repair(){
+		$this->do_backup();
 	}
-    function dobackup(){
-        $rs	= iDB::getArray("SHOW TABLE STATUS FROM `".iPHP_DB_NAME."` WHERE ENGINE IS NOT NULL;");
+    function do_backup(){
+        $rs	= iDB::all("SHOW TABLE STATUS FROM `".iPHP_DB_NAME."` WHERE ENGINE IS NOT NULL;");
         //print_r($rs);
 		$_count	= count($rs);
 //		for($i=0;$i<$_count;$i++){
@@ -41,17 +41,17 @@ class databaseApp{
 //		}
     	include iACP::view("database.backup");
     }
-    function doreplace(){
+    function do_replace(){
     	include iACP::view("database.replace");
     }
-    function dobatch(){
+    function do_batch(){
     	$tableA	= (array)$_POST['table'];
     	$tableA OR iPHP::alert("请选择要操作的表");
     	$tables	= implode(',',$tableA);
     	$batch	= $_POST['batch'];
     	switch($batch){
     		case 'backup':
-    			$this->dosavebackup();
+    			$this->do_savebackup();
     		break;
     		case 'optimize':
     			$this->optimize($tables);
@@ -61,7 +61,7 @@ class databaseApp{
     		break;
 		}
 	}
-    function dosavebackup() {
+    function do_savebackup() {
         iDB::query("SET SQL_QUOTE_SHOW_CREATE = 0");
 
         $tableA		= $_POST['table'];
@@ -120,7 +120,7 @@ class databaseApp{
     function bakuptable($tabledb) {
         foreach($tabledb as $table) {
             $creattable.= "DROP TABLE IF EXISTS $table;\n";
-            $CreatTable = iDB::getRow("SHOW CREATE TABLE $table",ARRAY_A);
+            $CreatTable = iDB::row("SHOW CREATE TABLE $table",ARRAY_A);
             $CreatTable['Create Table']=str_replace($CreatTable['Table'],$table,$CreatTable['Create Table']);
             $creattable.=$CreatTable['Create Table'].";\n\n";
             //$creattable=str_replace(iPHP_DB_PREFIX,'iCMS_',$creattable);
@@ -134,7 +134,7 @@ class databaseApp{
         $t_count	= count($tabledb);
         
         for($i=$this->tableid;$i<$t_count;$i++){
-            $ts		= iDB::getRow("SHOW TABLE STATUS LIKE '$tabledb[$i]'");
+            $ts		= iDB::row("SHOW TABLE STATUS LIKE '$tabledb[$i]'");
             $this->rows	= $ts->Rows;
 
             $limit	= "LIMIT $start,100000";
@@ -179,30 +179,30 @@ class databaseApp{
     }
     function repair($tables) {
     	$tableA	= (array)$_POST['table'];
-        $rs		= iDB::getArray("REPAIR TABLE $tables");
+        $rs		= iDB::all("REPAIR TABLE $tables");
         $_count	= count($rs);
         for ($i=0;$i<$_count;$i++) {
             $msg.='表：'.substr(strrchr($rs[$i]['Table'] ,'.'),1).' 操作：'.$rs[$i]['Op'].' 状态：'.$rs[$i]['Msg_text'].'<hr />';
         }
-        iPHP::OK($msg."修复表完成");
+        iPHP::success($msg."修复表完成");
     }
     function optimize($tables) {
     	$tableA	= (array)$_POST['table'];
-        $rs 	= iDB::getArray("OPTIMIZE TABLE $tables");
+        $rs 	= iDB::all("OPTIMIZE TABLE $tables");
         $_count	= count($rs);
         for ($i=0;$i<$_count;$i++) {
             $msg.='表：'.substr(strrchr($rs[$i]['Table'] ,'.'),1).' 操作：'.$rs[$i]['Op'].' 状态：'.$rs[$i]['Msg_text'].'<hr />';
         }
-        iPHP::OK($msg."优化表完成");
+        iPHP::success($msg."优化表完成");
     }
-    function dodel() {
+    function do_del() {
     	$this->bakdir OR iPHP::alert('请选择要删除的备份卷');
     	$backupdir	= iPHP_APP_CACHE.'/backup/'.$this->bakdir;
     	if(iFS::rmdir($backupdir)){
-    		iPHP::OK('备份文件已删除!','js:parent.$("#'.md5($this->bakdir).'").remove();');
+    		iPHP::success('备份文件已删除!','js:parent.$("#'.md5($this->bakdir).'").remove();');
     	}
     }
-    function dodownload() {
+    function do_download() {
     	$this->bakdir OR iPHP::alert('请选择要下载的备份卷');
     	@ini_set('memory_limit', '256M');
     	require iPHP_CORE.'/pclzip.class.php';	//加载zip操作类
@@ -224,7 +224,7 @@ class databaseApp{
 		flush();
 		ob_flush();
     }
-    function dorenew(){
+    function do_renew(){
     	iPHP::alert('请使用 iCMS Tools 恢复');
     	$this->bakdir OR iPHP::alert('请选择要恢复的备份卷');
     	$backupdir	= iPHP_APP_CACHE.'/backup/'.$this->bakdir;
@@ -284,7 +284,7 @@ class databaseApp{
             }
         }
     }
-    function doquery() {
+    function do_query() {
         $field		= $_POST["field"];
         $pattern	= $_POST["pattern"];
         $replacement= $_POST["replacement"];
@@ -301,7 +301,7 @@ class databaseApp{
                 $rows_affected	= iDB::query("UPDATE `#iCMS@__article` SET `$field` = REPLACE(`$field`, '$pattern', '$replacement'){$where}");
             }
         }
-        iPHP::OK($rows_affected."条记录被替换<hr />操作完成!!");
+        iPHP::success($rows_affected."条记录被替换<hr />操作完成!!");
 
     }
 }

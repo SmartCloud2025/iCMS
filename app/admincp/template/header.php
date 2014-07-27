@@ -50,7 +50,7 @@ window.iCMS.APP		= "<?php echo __ADMINCP__;?>";
 window.iCMS.UI		= "<?php echo ACP_UI;?>";
 window.iCMS.URL		= "<?php echo iCMS::$config['router']['URL'];?>";
 window.iCMS.PUBLIC	= "<?php echo iCMS::$config['router']['publicURL'];?>";
-window.iCMS.DEFTPL	= "<?php echo iCMS::$config['site']['PC_TPL'];?>";
+window.iCMS.DEFTPL	= "<?php echo iCMS::$config['template']['pc'];?>";
 
 $(function(){
 	var a = $("#iCMS-menu"),b = $("#sidebar");$("[data-menu='m<?php echo iACP::$menu->rootid; ?>']",a).addClass("active");

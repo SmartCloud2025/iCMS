@@ -11,13 +11,13 @@
 */
 class homeApp{
     function __construct() {}
-    function dologout(){
+    function do_logout(){
     	iMember::logout();
-    	iPHP::OK('注销成功!','url:'.__SELF__);
+    	iPHP::success('注销成功!','url:'.__SELF__);
     }
-    function doiCMS(){
+    function do_iCMS(){
         //数据统计
-        $rs=iDB::getArray("SHOW FULL TABLES FROM `".iPHP_DB_NAME."` WHERE table_type = 'BASE TABLE';");
+        $rs=iDB::all("SHOW FULL TABLES FROM `".iPHP_DB_NAME."` WHERE table_type = 'BASE TABLE';");
         foreach($rs as $k=>$val) {
             if(strstr(iPHP_DB_PREFIX, $val['Tables_in_'.iPHP_DB_NAME])===false) {
                 $iTable[]=strtoupper($val['Tables_in_'.iPHP_DB_NAME]);
@@ -26,7 +26,7 @@ class homeApp{
             }
         }
         $content_datasize = 0;
-        $tables = iDB::getArray("SHOW TABLE STATUS");
+        $tables = iDB::all("SHOW TABLE STATUS");
         $_count	= count($tables);
         for ($i=0;$i<$_count;$i++) {
             $tableName	= strtoupper($tables[$i]['Name']);
@@ -38,21 +38,21 @@ class homeApp{
                 }
             }
         }
-        $acc = iDB::getValue("SELECT count(*) FROM #iCMS@__category WHERE `appid`='".iCMS_APP_ARTICLE."'");
-        $tac = iDB::getValue("SELECT count(*) FROM #iCMS@__category WHERE `appid`='".iCMS_APP_TAG."'");
-        $pac = iDB::getValue("SELECT count(*) FROM #iCMS@__category WHERE `appid`='".iCMS_APP_PUSH."'");
+        $acc = iDB::value("SELECT count(*) FROM #iCMS@__category WHERE `appid`='".iCMS_APP_ARTICLE."'");
+        $tac = iDB::value("SELECT count(*) FROM #iCMS@__category WHERE `appid`='".iCMS_APP_TAG."'");
+        $pac = iDB::value("SELECT count(*) FROM #iCMS@__category WHERE `appid`='".iCMS_APP_PUSH."'");
         
-        $ac  = iDB::getValue("SELECT count(*) FROM #iCMS@__article");
-        $ac0 = iDB::getValue("SELECT count(*) FROM #iCMS@__article WHERE `status`='0'");
-        $ac2 = iDB::getValue("SELECT count(*) FROM #iCMS@__article WHERE `status`='2'");
+        $ac  = iDB::value("SELECT count(*) FROM #iCMS@__article");
+        $ac0 = iDB::value("SELECT count(*) FROM #iCMS@__article WHERE `status`='0'");
+        $ac2 = iDB::value("SELECT count(*) FROM #iCMS@__article WHERE `status`='2'");
         
-        $ctc = iDB::getValue("SELECT count(*) FROM #iCMS@__comment");
-        $tc  = iDB::getValue("SELECT count(*) FROM #iCMS@__tags");
-        $kc  = iDB::getValue("SELECT count(*) FROM #iCMS@__keywords");
-        $pc  = iDB::getValue("SELECT count(*) FROM #iCMS@__push");
-        $uc  = iDB::getValue("SELECT count(*) FROM #iCMS@__user");
-        $fdc  = iDB::getValue("SELECT count(*) FROM #iCMS@__filedata");
-        $lc  = iDB::getValue("SELECT count(*) FROM #iCMS@__links");
+        $ctc = iDB::value("SELECT count(*) FROM #iCMS@__comment");
+        $tc  = iDB::value("SELECT count(*) FROM #iCMS@__tags");
+        $kc  = iDB::value("SELECT count(*) FROM #iCMS@__keywords");
+        $pc  = iDB::value("SELECT count(*) FROM #iCMS@__push");
+        $uc  = iDB::value("SELECT count(*) FROM #iCMS@__user");
+        $fdc  = iDB::value("SELECT count(*) FROM #iCMS@__filedata");
+        $lc  = iDB::value("SELECT count(*) FROM #iCMS@__links");
 
     	include iACP::view("home");
     }

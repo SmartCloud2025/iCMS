@@ -37,6 +37,7 @@ $(function(){
       <form action="<?php echo APP_FURI; ?>&do=save" method="post" enctype="multipart/form-data" class="form-inline" id="iCMS-push" target="iPHP_FRAME">
         <input name="id" type="hidden" value="<?php echo $id ; ?>" />
         <input name="userid" type="hidden" value="<?php echo $rs['userid'] ; ?>" />
+        <input name="_cid" type="hidden" value="<?php echo $rs['cid'] ; ?>" />
         <div id="push-add" class="tab-content">
           <div class="input-prepend"> <span class="add-on">版块</span>
             <?php if($cata_option){  ?>

@@ -12,7 +12,7 @@
 class templateApp{
     function __construct() {
     }
-    function doiCMS(){
+    function do_iCMS(){
         $res       = iPHP::folder('template',array('htm','css','js','png','jpg','gif'));
         $dirRs     = $res['DirArray'];
         $fileRs    = $res['FileArray'];

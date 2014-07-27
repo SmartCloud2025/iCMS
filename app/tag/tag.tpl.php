@@ -55,7 +55,7 @@ function tag_list($vars){
 	}
 	if(empty($rs)){
 		iPHP::appClass("tag",'break');
-		$rs = iDB::getArray("SELECT * FROM `#iCMS@__tags` WHERE {$where_sql} {$orderSQL} LIMIT {$offset},{$maxperpage}");
+		$rs = iDB::all("SELECT * FROM `#iCMS@__tags` WHERE {$where_sql} {$orderSQL} LIMIT {$offset},{$maxperpage}");
 		iDB::debug(1);
 		$rs = tag_array($vars,$rs);
 		$vars['cache'] && iCache::set($cacheName,$rs,$cacheTime);
@@ -104,7 +104,7 @@ function tag_flist($vars){
 	}
 	if(empty($rs)){
 		iPHP::appClass("tag",'break');
-		$rs		= iDB::getArray("SELECT * FROM `#iCMS@__ftags` WHERE {$where_sql} {$orderSQL} LIMIT {$offset},{$maxperpage}");
+		$rs		= iDB::all("SELECT * FROM `#iCMS@__ftags` WHERE {$where_sql} {$orderSQL} LIMIT {$offset},{$maxperpage}");
 		$rs		= tag_array($vars,$rs);
 		$vars['cache'] && iCache::set($cacheName,$rs,$cacheTime);
 	}
@@ -183,7 +183,7 @@ function tag_search($vars){
         $multi	= iCMS::page(array('total'=>$total,'perpage'=>$maxperpage,'unit'=>iPHP::lang('iCMS:page:list'),'nowindex'=>$GLOBALS['page']));
         $offset	= $multi->offset;
 	}
-	$rs	= iDB::getArray("SELECT * FROM `#iCMS@__tags` WHERE {$where_sql} {$orderSQL} LIMIT {$maxperpage}");
+	$rs	= iDB::all("SELECT * FROM `#iCMS@__tags` WHERE {$where_sql} {$orderSQL} LIMIT {$maxperpage}");
 	$rs	= tag_array($vars,$rs);
 	return $rs;
 }

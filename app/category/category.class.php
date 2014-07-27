@@ -14,10 +14,10 @@ class category {
        $this->appid = $appid;
        $sql         = "WHERE `appid`='$this->appid'";
        $this->appid === 'all' && $sql='';
-       $rs          = iDB::getArray("SELECT * FROM `#iCMS@__category` {$sql} ORDER BY `orderNum` , `cid` ASC",ARRAY_A);
+       $rs          = iDB::all("SELECT * FROM `#iCMS@__category` {$sql} ORDER BY `orderNum` , `cid` ASC",ARRAY_A);
 //echo iDB::$last_query;
 //iDB::$last_query='explain '.iDB::$last_query;
-//$explain=iDB::getRow(iDB::$last_query);
+//$explain=iDB::row(iDB::$last_query);
 //print_r($explain);
 //exit;
         foreach((array)$rs AS $C) {
@@ -29,7 +29,7 @@ class category {
         }
     }
     function cache($one=false,$appid=null) {
-    	$rs	= iDB::getArray("SELECT * FROM `#iCMS@__category` ORDER BY `orderNum` , `cid` ASC",ARRAY_A);
+    	$rs	= iDB::all("SELECT * FROM `#iCMS@__category` ORDER BY `orderNum` , `cid` ASC",ARRAY_A);
     	foreach((array)$rs AS $C) {
 	        $C = $this->C($C);
 			$one && $this->cacheOne($C);
@@ -58,7 +58,7 @@ class category {
     }
     function cacheOne($C=null){
     	if(!is_array($C)){
-    		$C = iDB::getRow("SELECT * FROM `#iCMS@__category` where `cid`='$C' LIMIT 1;",ARRAY_A);
+    		$C = iDB::row("SELECT * FROM `#iCMS@__category` where `cid`='$C' LIMIT 1;",ARRAY_A);
 			$C = $this->C($C);
     	}
 		iCache::delete('iCMS/category/'.$C['cid']);

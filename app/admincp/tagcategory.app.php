@@ -20,7 +20,7 @@ class tagcategoryApp extends categoryApp {
         iDB::query("UPDATE `#iCMS@__tags` SET `tcid` ='$tocid' WHERE `tcid` ='$cid'"); 
     }
     function updateCount($cid){
-        $cc = iDB::getValue("SELECT count(*) FROM `#iCMS@__tags` where `tcid`='$cid'");
+        $cc = iDB::value("SELECT count(*) FROM `#iCMS@__tags` where `tcid`='$cid'");
         iDB::query("UPDATE `#iCMS@__category` SET `count` ='$cc' WHERE `cid` ='$cid'");       
     }
     function listbtn($rs){}

@@ -91,6 +91,13 @@
 #links .bd { padding-left: 10px; }
 #links .bd a:link, #links .bd a:visited { display: inline; float: left; margin: 10px 10px 0 0; padding: 5px 10px; border-radius: 3px; background: #3886c2; box-shadow: 0 1px 1px 0 #ccc; color: #fff; white-space: nowrap; font-size: 14px; }
 #register { padding-top: 10px; }
+/* list
+-------------------------------------------------- */
+.list-item { }
+.list-item .item-detail { border-bottom: 1px solid #ddd; padding: 5px; }
+.list-item .item-detail .pic { width: 120px; height: 90px; text-align: center;  margin: 20px 10px 0 0; overflow: hidden; display: inline; float: left; border: 1px solid #ddd; padding: 2px; background-color: #fff; }
+.list-item .item-detail .pic img{ height: 90px;}
+.list-item .item-detail .title { position: relative; top: 20px;color: #369;font-weight: bold;font-size: 18px; }
 /* Footer
 -------------------------------------------------- */
 #footer { margin-top: 20px; padding: 10px 0; width: 100%; border-top: 3px solid #ccc; text-align: center; }
@@ -124,7 +131,7 @@
 .article-info .share-area { float: right; width: 200px; }
 .article-body p { margin: 6px 0; text-indent: 28px; font-size: 14px; line-height: 24px; }
 .article-pagenav { position: relative; margin: 0 auto; padding: 10px; background: #f3f3f3; text-align: center; font-size: 14px; }
-.article-pagenav a { color: #666;}
+.article-pagenav a { color: #666; }
 .article-pagenav .current { border: 1px solid #08c; background-color: #3a87ad; color: #fff; font-weight: bold; }
 .comments_list { }
 .comments_list h3 { padding: 5px 12px; font-size: 14px; margin-left: 10px; }

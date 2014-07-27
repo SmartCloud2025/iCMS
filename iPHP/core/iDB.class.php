@@ -79,8 +79,8 @@ class iDB{
      * @param int $y = 0 col num to return
      * @return mixed results
      */
-    public static function getValue($query=null, $x = 0, $y = 0) {
-        self::$func_call = __CLASS__."::getValue(\"$query\",$x,$y)";
+    public static function value($query=null, $x = 0, $y = 0) {
+        self::$func_call = __CLASS__."::value(\"$query\",$x,$y)";
         $query && self::query($query);
         // Extract var out of cached results based x,y vals
         if ( !empty( self::$last_result[$y] ) ) {
@@ -97,8 +97,8 @@ class iDB{
      * @param int $y row num to return
      * @return mixed results
      */
-    public static function getRow($query = null, $output = OBJECT, $y = 0) {
-        self::$func_call = __CLASS__."::getRow(\"$query\",$output,$y)";
+    public static function row($query = null, $output = OBJECT, $y = 0) {
+        self::$func_call = __CLASS__."::row(\"$query\",$output,$y)";
         $query && self::query($query);
 
         if ( !isset(self::$last_result[$y]) )
@@ -111,7 +111,7 @@ class iDB{
         } elseif ( $output == ARRAY_N ) {
             return self::$last_result[$y] ? array_values(get_object_vars(self::$last_result[$y])) : null;
         } else {
-            self::print_error(__CLASS__."::getRow(string query, output type, int offset) -- Output type must be one of: OBJECT, ARRAY_A, ARRAY_N");
+            self::print_error(__CLASS__."::row(string query, output type, int offset) -- Output type must be one of: OBJECT, ARRAY_A, ARRAY_N");
         }
     }
 
@@ -121,8 +121,8 @@ class iDB{
      * @param string $output ARRAY_A | ARRAY_N | OBJECT
      * @return mixed results
      */
-    public static function getArray($query = null, $output = ARRAY_A) {
-        self::$func_call = __CLASS__."::getArray(\"$query\", $output)";
+    public static function all($query = null, $output = ARRAY_A) {
+        self::$func_call = __CLASS__."::array(\"$query\", $output)";
 
         $query && self::query($query);
 
@@ -155,12 +155,12 @@ class iDB{
      * @param int $x col num to return
      * @return array results
      */
-    public static function getCol($query = null , $x = 0) {
+    public static function col($query = null , $x = 0) {
         $query && self::query($query);
         $new_array = array();
         // Extract the column values
         for ( $i=0; $i < count(self::$last_result); $i++ ) {
-            $new_array[$i] = self::getValue(null, $x, $i);
+            $new_array[$i] = self::value(null, $x, $i);
         }
         return $new_array;
     }
@@ -171,7 +171,7 @@ class iDB{
      * @param int $col_offset 0: col name. 1: which table the col's in. 2: col's max length. 3: if the col is numeric. 4: col's type
      * @return mixed results
      */
-    public static function get_col_info($query = null ,$info_type = 'name', $col_offset = -1) {
+    public static function col_info($query = null ,$info_type = 'name', $col_offset = -1) {
         $query && self::query($query,"field");
         if ( self::$col_info ) {
             if ( $col_offset == -1 ) {
@@ -227,7 +227,7 @@ class iDB{
 
         if(!$show) echo '<!--';
         echo self::$last_query."\n";
-        $explain    = self::getRow('EXPLAIN EXTENDED '.self::$last_query);
+        $explain    = self::row('EXPLAIN EXTENDED '.self::$last_query);
         var_dump($explain);
         if(!$show) echo "-->\n";
     }

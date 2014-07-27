@@ -18,10 +18,10 @@ class categoryApp{
         $this->category  = iPHP::appClass("category",$this->appid);
         $this->name_text = "栏目";
     }
-    function doadd(){
+    function do_add(){
         if($this->cid) {
             iMember::CP($this->cid,'Permission_Denied',APP_URI);
-            $rs		= iDB::getRow("SELECT * FROM `#iCMS@__category` WHERE `cid`='$this->cid' LIMIT 1;",ARRAY_A);
+            $rs		= iDB::row("SELECT * FROM `#iCMS@__category` WHERE `cid`='$this->cid' LIMIT 1;",ARRAY_A);
             $rootid	= $rs['rootid'];
             $rs['metadata'] && $rs['metadata']=unserialize($rs['metadata']);
             $rs['contentprop'] && $rs['contentprop']=unserialize($rs['contentprop']);
@@ -40,11 +40,11 @@ class categoryApp{
             $rs['htmlext']      = '.html';
             $rs['categoryURI']  = 'category';
             $rs['categoryRule'] = '{CDIR}/index{EXT}';
-            $rs['contentRule']  = '{CDIR}/{YYYY}/{MM}{DD}/{AID}{EXT}';
+            $rs['contentRule']  = '{CDIR}/{YYYY}/{MM}{DD}/{ID}{EXT}';
             $rs['metadata']     ='';
             $rs['contentprop']  ='';
 	        if($rootid){
-                $rootRs             = iDB::getRow("SELECT * FROM `#iCMS@__category` WHERE `cid`='".$rootid."' LIMIT 1;",ARRAY_A);
+                $rootRs             = iDB::row("SELECT * FROM `#iCMS@__category` WHERE `cid`='".$rootid."' LIMIT 1;",ARRAY_A);
                 $rs['htmlext']      = $rootRs['htmlext'];
                 $rs['categoryRule'] = $rootRs['categoryRule'];
                 $rs['contentRule']  = $rootRs['contentRule'];
@@ -52,7 +52,8 @@ class categoryApp{
         }
         include iACP::view("category.add");
     }
-    function dosave(){
+    function do_save(){
+        $appid        = $this->appid;
         $cid          = (int)$_POST['cid'];
         $rootid       = (int)$_POST['rootid'];
         $status       = (int)$_POST['status'];
@@ -70,6 +71,8 @@ class categoryApp{
         $url          = iS::escapeStr($_POST['url']);
         $password     = iS::escapeStr($_POST['password']);
         $pic          = iS::escapeStr($_POST['pic']);
+        $mpic         = iS::escapeStr($_POST['mpic']);
+        $spic         = iS::escapeStr($_POST['spic']);
         $dir          = iS::escapeStr($_POST['dir']);
         $title        = iS::escapeStr($_POST['title']);
         $keywords     = iS::escapeStr($_POST['keywords']);
@@ -121,6 +124,9 @@ class categoryApp{
         iPHP::import(iPHP_APP_CORE .'/iMAP.class.php');
         map::init('prop',iCMS_APP_CATEGORY);
         
+        $fields = array('rootid','appid','orderNum','name','subname','password','title','keywords','description','dir','mode','domain','url','pic','mpic','spic','htmlext','categoryURI','categoryRule','contentRule','urlRule','indexTPL','listTPL','contentTPL','metadata','contentprop','body','pid','isexamine','issend','isucshow','status');
+        $data  =  compact ($fields);
+
         if(empty($cid)) {
         	$nameArray	= explode("\n",$name);
         	foreach($nameArray AS $nkey=>$_name){
@@ -128,11 +134,10 @@ class categoryApp{
                 if(empty($_name)) continue;
 
 		        empty($url) && $_dir = strtolower(pinyin($_name));
-                
-	            (iDB::getValue("SELECT `dir` FROM `#iCMS@__category` where `dir` ='$_dir' AND `appid`='$this->appid'") && empty($url)) && iPHP::alert('该'.$this->name_text.'别名/目录已经存在!请另选一个');
-	            iDB::query("INSERT INTO `#iCMS@__category` (`rootid`,`appid`,`orderNum`,`name`,`subname`,`password`,`title`,`keywords`,`description`,`dir`,`mode`,`domain`,`url`,`pic`,`htmlext`,`categoryURI`,`categoryRule`,`contentRule`,`urlRule`,`indexTPL`,`listTPL`,`contentTPL`,`metadata`,`contentprop`,`body`,`pid`,`isexamine`,`issend`,`isucshow`,`status`)
-	    		VALUES ('$rootid','$this->appid', '$orderNum', '$_name','$subname','$password','$title','$keywords', '$description', '$_dir','$mode','$domain', '$url','$pic','$htmlext','$categoryURI','$categoryRule', '$contentRule','$urlRule','$indexTPL', '$listTPL', '$contentTPL','$metadata','$contentprop', '$body','$pid','$isexamine','$issend','$isucshow','$status')");
-	    		$cid = iDB::$insert_id;
+                $this->check_dir($_dir,$appid,$url);
+                $data['name'] = $_name;
+                $data['dir']  = $_dir;
+                $cid = iDB::insert('category',$data);
                 map::add($pid,$cid);
 	            $this->category->cache(false,$this->appid);
 	            $this->category->cacheOne($cid);
@@ -141,24 +146,29 @@ class categoryApp{
         }else {
             iMember::CP($cid,'Permission_Denied',APP_URI);
             $rootid!=$category->category[$cid]['rootid'] && iMember::CP($rootid,'Permission_Denied',APP_URI);
-            iDB::getValue("SELECT `dir` FROM `#iCMS@__category` where `dir` ='$dir' AND `cid` !='$cid' AND `appid`='$this->appid'") && empty($url) &&  iPHP::alert('该'.$this->name_text.'别名/目录已经存在!请另选一个');
-            iDB::query("UPDATE `#iCMS@__category` SET `rootid` = '$rootid',`orderNum` = '$orderNum',`name` = '$name',`subname` = '$subname',`password`='$password',`title` = '$title',`keywords` = '$keywords',`description` = '$description',`dir` = '$dir',`url` = '$url',`mode` = '$mode',`domain` = '$domain',`pic`='$pic',`htmlext`='$htmlext',`categoryURI`='$categoryURI',`categoryRule`='$categoryRule',`contentRule`='$contentRule',`urlRule`='$urlRule',`indexTPL` = '$indexTPL',`listTPL` = '$listTPL',`contentTPL` = '$contentTPL',`metadata` = '$metadata',`contentprop` = '$contentprop',`body` = '$body',`pid` = '$pid',`isexamine`='$isexamine',`status`='$status',`issend`='$issend',`isucshow`='$isucshow' WHERE `cid` ='$cid' ");
+            $this->check_dir($dir,$appid,$url,$cid);
+            iDB::update('category', $data, array('cid'=>$cid));
             map::diff($pid,$_pid,$cid);
             $this->category->cacheOne($cid);
             $msg=$this->name_text."编辑完成!";
         }
         $body && iCache::set('iCMS/category.'.$cid.'/body',$bodyData,0);
-        iPHP::OK($msg,'url:'.APP_URI);
+        iPHP::success($msg,'url:'.APP_URI);
     }
-    function doupdate(){
+    function check_dir($dir,$appid,$url,$cid=0){
+        $sql ="SELECT `dir` FROM `#iCMS@__category` where `dir` ='$dir' AND `appid`='$appid'";
+        $cid && $sql.=" AND `cid` !='$cid'";
+        iDB::value($sql) && empty($url) && iPHP::alert('该'.$this->name_text.'静态目录已经存在!<br />请重新填写(URL规则设置->静态目录)');    
+    }
+    function do_update(){
     	foreach((array)$_POST['name'] as $cid=>$name){
     		$name	= iS::escapeStr($name);
 			iDB::query("UPDATE `#iCMS@__category` SET `name` = '$name',`orderNum` = '".(int)$_POST['orderNum'][$cid]."' WHERE `cid` ='".(int)$cid."' LIMIT 1");
 	    	$this->category->cacheOne($cid);
     	}
-    	iPHP::OK('更新完成');
+    	iPHP::success('更新完成');
     }
-    function dobatch(){
+    function do_batch(){
         $_POST['id'] OR iPHP::alert("请选择要操作的".$this->name_text);
         $idArray = (array)$_POST['id'];
         $ids     = implode(',',$idArray);
@@ -172,7 +182,7 @@ class categoryApp{
                     iDB::query("UPDATE `#iCMS@__category` SET `rootid` ='$tocid' WHERE `cid` ='$cid'"); 
                 }
                 $this->category->cache(true,$this->appid);
-                iPHP::OK('更新完成!','js:1');
+                iPHP::success('更新完成!','js:1');
             break;
             case 'merge':
                 $tocid = (int)$_POST['tocid'];
@@ -180,11 +190,11 @@ class categoryApp{
                 unset($idArray[$key]);//清除同ID
                 foreach($idArray as $k=>$cid){
                     $this->mergecontent($tocid,$cid);
-                    $this->dodel($cid,false);
+                    $this->do_del($cid,false);
                 }
                 $this->updateCount($tocid);
                 $this->category->cache(true,$this->appid);
-                iPHP::OK('更新完成!','js:1');
+                iPHP::success('更新完成!','js:1');
             break;
             case 'name':
                 foreach($idArray as $k=>$cid){
@@ -192,7 +202,7 @@ class categoryApp{
                     iDB::query("UPDATE `#iCMS@__category` SET `name` = '$name' WHERE `cid` ='".(int)$cid."' LIMIT 1");
                     $this->category->cacheOne($cid);
                 }
-                iPHP::OK('更新完成!','js:1');
+                iPHP::success('更新完成!','js:1');
             break;
             case 'status':
                 $val = (int)$_POST['status'];
@@ -230,36 +240,36 @@ class categoryApp{
                 foreach($idArray as $k=>$cid){
                     $this->updateCount($cid);
                 }
-                iPHP::OK('操作成功!','js:1');
+                iPHP::success('操作成功!','js:1');
             break;
             case 'dels':
                 iPHP::$break    = false;
                 foreach($idArray AS $cid){
-                    $this->dodel($cid,false);
+                    $this->do_del($cid,false);
                 }
                 iPHP::$break    = true;
-                iPHP::OK('全部删除完成!','js:1');
+                iPHP::success('全部删除完成!','js:1');
             break;
        }
         iDB::query("UPDATE `#iCMS@__category` SET {$sql} WHERE `cid` IN ($ids)");
         $this->category->cache(true,$this->appid);
-        iPHP::OK('操作成功!','js:1');
+        iPHP::success('操作成功!','js:1');
     }
-    function doupdateorder(){
+    function do_updateorder(){
     	foreach((array)$_POST['ordernum'] as $orderNum=>$cid){
             iDB::query("UPDATE `#iCMS@__category` SET `orderNum` = '".intval($orderNum)."' WHERE `cid` ='".intval($cid)."' LIMIT 1");
 	    	$this->category->cacheOne($cid);
     	}
     }
-    function doiCMS(){
-        $tabs   = iPHP::getCookie(iACP::$app_name.'_tabs');
-        $tabs=="list"?$this->dolist():$this->dotree();
+    function do_iCMS(){
+        $tabs   = iPHP::get_cookie(iACP::$app_name.'_tabs');
+        $tabs=="list"?$this->do_list():$this->do_tree();
     }
-    function dotree() {
+    function do_tree() {
         iACP::$app_do   = 'tree';
         include iACP::view("category.manage");
     }
-    function dolist(){
+    function do_list(){
         iACP::$app_do = 'list';
         $sql          = " where `appid`='{$this->appid}'";
         if($_GET['keywords']) {
@@ -275,11 +285,11 @@ class categoryApp{
         $maxperpage   = (int)$_GET['perpage']>0?$_GET['perpage']:20;
         $total        = iPHP::total(false,"SELECT count(*) FROM `#iCMS@__category` {$sql}","G");
         iPHP::pagenav($total,$maxperpage);
-        $rs           = iDB::getArray("SELECT * FROM `#iCMS@__category` {$sql} order by {$orderby} LIMIT ".iPHP::$offset." , {$maxperpage}");
+        $rs           = iDB::all("SELECT * FROM `#iCMS@__category` {$sql} order by {$orderby} LIMIT ".iPHP::$offset." , {$maxperpage}");
         $_count       = count($rs);
         include iACP::view("category.manage");
     }
-    function doajaxtree(){
+    function do_ajaxtree(){
 		$hasChildren=$_GET['hasChildren']?true:false;
 	 	echo $this->tree($_GET["root"],$hasChildren);
     }
@@ -335,7 +345,7 @@ class categoryApp{
         $tr.='</span></div>';
         return $tr;
     }
-    function dodel($cid = null,$dialog=true){
+    function do_del($cid = null,$dialog=true){
         $cid===null && $cid=(int)$_GET['cid'];
         iMember::CP($cid,'Permission_Denied',APP_URI);
     	$msg	= '请选择要删除的'.$this->name_text.'!';
@@ -347,10 +357,10 @@ class categoryApp{
         }else {
         	$msg	= '请先删除本'.$this->name_text.'下的子'.$this->name_text.'!';
         }
-		$dialog && iPHP::OK($msg,'js:parent.$("#'.$cid.'").parent().remove();');
+		$dialog && iPHP::success($msg,'js:parent.$("#'.$cid.'").parent().remove();');
     }
     function reCount(){
-        $rs     = iDB::getArray("SELECT `cid` FROM `#iCMS@__category` where `appid`='$this->appid'");
+        $rs     = iDB::all("SELECT `cid` FROM `#iCMS@__category` where `appid`='$this->appid'");
         $_count = count($rs);
 		for ($i=0;$i<$_count;$i++) {
             $this->updateCount($rs[$i]['cid']);
@@ -367,7 +377,7 @@ class categoryApp{
         iDB::query("UPDATE `#iCMS@__prop` SET `cid` ='$tocid' WHERE `cid` ='$cid'"); 
     }
     function updateCount($cid){
-        $cc = iDB::getValue("SELECT count(*) FROM `#iCMS@__article` where `cid`='$cid'");
+        $cc = iDB::value("SELECT count(*) FROM `#iCMS@__article` where `cid`='$cid'");
         iDB::query("UPDATE `#iCMS@__category` SET `count` ='$cc' WHERE `cid` ='$cid'");       
     }
     function listbtn($rs){

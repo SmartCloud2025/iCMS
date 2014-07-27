@@ -11,7 +11,7 @@ class tag {
 	function data($fv=0,$field='name',$limit=0){
 		$sql      = $fv ? "where `$field`='$fv'":'';
 		$limitSQL = $limit ? "LIMIT $limit ":'';
-	    return iDB::getArray("SELECT * FROM `#iCMS@__tags` {$sql} order by id DESC {$limitSQL}");
+	    return iDB::all("SELECT * FROM `#iCMS@__tags` {$sql} order by id DESC {$limitSQL}");
 	}
 	function cache($value=0,$field='id'){
 		$rs     = self::data($value,$field);
@@ -100,9 +100,9 @@ class tag {
 	public function update($tag,$uid="0",$iid="0",$cid='0',$tcid='0') {
 	    if(empty($tag)) return;
 	    
-	    $tid	= iDB::getValue("SELECT `id` FROM `#iCMS@__tags` WHERE `name`='$tag'");
+	    $tid	= iDB::value("SELECT `id` FROM `#iCMS@__tags` WHERE `name`='$tag'");
 	    if($tid) {
-	        $tlid = iDB::getValue("SELECT `id` FROM `#iCMS@__tags_map` WHERE `iid`='$iid' and `tid`='$tid' and `appid`='".TAG_APPID."'");
+	        $tlid = iDB::value("SELECT `id` FROM `#iCMS@__tags_map` WHERE `iid`='$iid' and `tid`='$tid' and `appid`='".TAG_APPID."'");
 	        if(empty($tlid)) {
 	            iDB::query("INSERT INTO `#iCMS@__tags_map` (`iid`, `tid`, `appid`) VALUES ('$iid', '$tid', '".TAG_APPID."')");
 	            iDB::query("UPDATE `#iCMS@__tags` SET  `count`=count+1,`pubdate`='".time()."'  WHERE `id`='$tid'");
@@ -128,7 +128,7 @@ VALUES ('$uid', '$cid', '$tcid', '0', '$tkey', '$tag', '', '', '', '', '', '', '
             $tagArray[$i] = self::update($tag,$uid,$iid,$cid,$tcid);
 		}
 	    foreach((array)$diff['-'] AS $tag) {//减少
-	        $tA	= iDB::getRow("SELECT `id`,`count` FROM `#iCMS@__tags` WHERE `name`='$tag' LIMIT 1;");
+	        $tA	= iDB::row("SELECT `id`,`count` FROM `#iCMS@__tags` WHERE `name`='$tag' LIMIT 1;");
 	        if($tA->count<=1) {
 	        	//$iid && $sql="AND `iid`='$iid'";
 	            iDB::query("DELETE FROM `#iCMS@__tags`  WHERE `name`='$tag'");
@@ -144,8 +144,8 @@ VALUES ('$uid', '$cid', '$tcid', '0', '$tkey', '$tag', '', '', '', '', '', '', '
 	    $tagArray	= explode(",",$tags);
 	    $iid && $sql="AND `iid`='$iid'";
 	    foreach($tagArray AS $k=>$v) {
-	    	$tagA	= iDB::getRow("SELECT * FROM `#iCMS@__tags` WHERE `$field`='$v' LIMIT 1;");
-	    	$tRS	= iDB::getArray("SELECT `iid` FROM `#iCMS@__tags_map` WHERE `tid`='$tagA->id' AND `appid`='".TAG_APPID."' {$sql}");
+	    	$tagA	= iDB::row("SELECT * FROM `#iCMS@__tags` WHERE `$field`='$v' LIMIT 1;");
+	    	$tRS	= iDB::all("SELECT `iid` FROM `#iCMS@__tags_map` WHERE `tid`='$tagA->id' AND `appid`='".TAG_APPID."' {$sql}");
 	    	foreach((array)$tRS AS $TL) {
 	    		$idA[]=$TL['iid'];
 	    	}

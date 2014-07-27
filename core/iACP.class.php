@@ -51,7 +51,7 @@ class iACP {
 			exit;
 		}
 	}
-    public static function run($prefix="do") {
+    public static function run($prefix="do_") {
         self::init();
         $app = $_GET['app'];
         $app OR $app = 'home';
@@ -98,57 +98,9 @@ class iACP {
         }
         return ACP_PATH . '/template/' . $p . '.php';
     }
-
-    public static function head($navbar = true) {
-        include self::view("header");
-		$navbar && include self::view("navbar");
-    }
-
-    public static function foot() {
-        include self::view("footer");
-    }
-
-    //--------------------------function------------------------
-    public static function picBtnGroup($callback) {
-        $unid   = rand(100,999);
-        echo '<div class="btn-group">
-              <a class="btn dropdown-toggle" data-toggle="dropdown" tabindex="-1"> <span class="caret"></span> 选择图片</a>
-              <ul class="dropdown-menu">
-                <li><a href="' . __ADMINCP__ . '=files&do=add&from=modal&callback=' . $callback . '" data-toggle="modal" data-meta=\'{"width":"300px","height":"80px"}\' title="本地上传">本地上传</a></li>
-                <li><a href="' . __ADMINCP__ . '=files&do=browse&from=modal&click=file&callback=' . $callback . '" data-toggle="modal" title="从网站选择">从网站选择</a></li>
-                <li class="divider"></li>
-                <li><a href="' . __ADMINCP__ . '=files&do=editpic&from=modal&callback=' . $callback . '" data-toggle="modal" title="编辑图片" class="modal_photo_'.$unid.'">编辑(美图秀秀)</a></li>
-                <li class="divider"></li>
-                <li><a href="' . __ADMINCP__ . '=files&do=preview&from=modal&callback=' . $callback . '" data-toggle="modal" data-check="1" title="预览" class="modal_photo_'.$unid.'">预览</a></li>
-              </ul>
-            </div>
-            <script type="text/javascript">
-            $(function(){
-        		window.modal_'.$callback.' = function(el,a){
-                    $("#'.$callback.'").val(a.value);
-                    window.iCMS_MODAL.destroy();
-				}
-                $(".modal_photo_'.$unid.'").on("click",function(){
-                    var  pic=$("#'.$callback.'").val(),href = $(this).attr("href");
-                    if(pic){
-                        $(".modal-iframe").attr("src",href+"&pic="+pic);
-                    }else{
-                        var check = $(this).attr("data-check"),title=$(this).attr("title");
-                        if(check){
-                            window.iCMS_MODAL.destroy();
-                            alert("暂无图片,您现在不能"+title);
-                        }
-                    }
-                    return false;
-                });
-            });
-            </script>
-       ';
-    }
-
     public static function getConfig($tid = 0, $n = NULL) {
         if ($n === NULL) {
-            $rs = iDB::getArray("SELECT * FROM `#iCMS@__config` WHERE `tid`='$tid'");
+            $rs = iDB::all("SELECT * FROM `#iCMS@__config` WHERE `tid`='$tid'");
             foreach ($rs AS $c) {
                 $value = $c['value'];
                 strstr($c['value'], 'a:') && $value = unserialize($c['value']);
@@ -156,7 +108,7 @@ class iACP {
             }
             return $config;
         } else {
-            $value = iDB::getValue("SELECT `value` FROM `#iCMS@__config` WHERE `tid`='$tid' AND `name` ='$n'");
+            $value = iDB::value("SELECT `value` FROM `#iCMS@__config` WHERE `tid`='$tid' AND `name` ='$n'");
             strstr($value, 'a:') && $value = unserialize($value);
             return $value;
         }
@@ -189,7 +141,51 @@ class iACP {
         }
         return implode(',', $sql);
     }
+    //--------------------------function------------------------
+    public static function head($navbar = true) {
+        include self::view("header");
+        $navbar && include self::view("navbar");
+    }
 
+    public static function foot() {
+        include self::view("footer");
+    }
+    public static function picBtnGroup($callback) {
+        $unid   = rand(100,999);
+        echo '<div class="btn-group">
+              <a class="btn dropdown-toggle" data-toggle="dropdown" tabindex="-1"> <span class="caret"></span> 选择图片</a>
+              <ul class="dropdown-menu">
+                <li><a href="' . __ADMINCP__ . '=files&do=add&from=modal&callback=' . $callback . '" data-toggle="modal" data-meta=\'{"width":"300px","height":"80px"}\' title="本地上传">本地上传</a></li>
+                <li><a href="' . __ADMINCP__ . '=files&do=browse&from=modal&click=file&callback=' . $callback . '" data-toggle="modal" title="从网站选择">从网站选择</a></li>
+                <li class="divider"></li>
+                <li><a href="' . __ADMINCP__ . '=files&do=editpic&from=modal&callback=' . $callback . '" data-toggle="modal" title="编辑图片" class="modal_photo_'.$unid.'">编辑(美图秀秀)</a></li>
+                <li class="divider"></li>
+                <li><a href="' . __ADMINCP__ . '=files&do=preview&from=modal&callback=' . $callback . '" data-toggle="modal" data-check="1" title="预览" class="modal_photo_'.$unid.'">预览</a></li>
+              </ul>
+            </div>
+            <script type="text/javascript">
+            $(function(){
+                window.modal_'.$callback.' = function(el,a){
+                    $("#'.$callback.'").val(a.value);
+                    window.iCMS_MODAL.destroy();
+                }
+                $(".modal_photo_'.$unid.'").on("click",function(){
+                    var  pic=$("#'.$callback.'").val(),href = $(this).attr("href");
+                    if(pic){
+                        $(".modal-iframe").attr("src",href+"&pic="+pic);
+                    }else{
+                        var check = $(this).attr("data-check"),title=$(this).attr("title");
+                        if(check){
+                            window.iCMS_MODAL.destroy();
+                            alert("暂无图片,您现在不能"+title);
+                        }
+                    }
+                    return false;
+                });
+            });
+            </script>
+       ';
+    }
     public static function propBtn($field, $type = "") {
         $type OR $type = self::$app_name;
         $propArray = iCache::get("iCMS/prop/{$type}.{$field}");
@@ -231,20 +227,10 @@ class iACP {
         // $opt.='</select>';
         return $opt;
     }
-    public static function propmap($field,$iid,$appid){
-        foreach ((array)$_POST[$field] as $key => $pid) {
-            $id =  iDB::getValue("SELECT `id` FROM `#iCMS@__prop_map` WHERE `pid`='$pid' AND `iid`='$iid' AND `appid`='$appid'");
-            if($id){
-                iDB::query("UPDATE `#iCMS@__prop_map`
-    SET `pid` = '$pid', `iid` = '$iid', `appid` = '$appid'
-    WHERE `id` = '$id';");
-            }else{
-                iDB::query("INSERT INTO `#iCMS@__prop_map`
-                (`pid`, `iid`, `appid`)
-    VALUES ('$pid', '$iid', '$appid');");
-            }
-        }
-
+    public static function files_modal($title='',$click='file',$target='template_index',$callback='',$do='seltpl',$from='modal') {
+        $href = __ADMINCP__."=files&do={$do}&from={$from}&click={$click}&target={$target}&callback={$callback}";
+        $_title=$title.'文件';
+        $click=='dir' && $_title=$title.'目录';
+        echo '<a href="'.$href.'" class="btn files_modal" data-toggle="modal" title="选择'.$_title.'"><i class="fa fa-search"></i> 选择</a>';
     }
-
 }

@@ -13,7 +13,7 @@ class tagApp {
 
     function __construct() {}
 
-    function doiCMS($a = null) {
+    function do_iCMS($a = null) {
         if ($_GET['name']) {
             $name  = $_GET['name'];
             mb_check_encoding($name, "UTF-8") OR $name = mb_convert_encoding($name, "UTF-8", "gbk");
@@ -33,11 +33,11 @@ class tagApp {
         $val OR iPHP::throwException('应用程序运行出错.TAG不能为空', 6001);
         $ftags	= false;
 		if($field == "name"){
-			$rs = iDB::getRow("SELECT * FROM `#iCMS@__ftags` where `name`='$val' AND `status`='1' LIMIT 1;", ARRAY_A);
+			$rs = iDB::row("SELECT * FROM `#iCMS@__ftags` where `name`='$val' AND `status`='1' LIMIT 1;", ARRAY_A);
 			$rs	&&	$ftags	= true;
 		}
 		if(empty($rs)){
-        	$rs = iDB::getRow("SELECT * FROM `#iCMS@__tags` where `$field`='$val' LIMIT 1;", ARRAY_A);
+        	$rs = iDB::row("SELECT * FROM `#iCMS@__tags` where `$field`='$val' LIMIT 1;", ARRAY_A);
 		}
         if ($field == "name" && empty($rs)) {
             header('HTTP/1.1 301 Moved Permanently');

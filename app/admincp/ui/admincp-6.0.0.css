@@ -17,7 +17,6 @@ body { background-color: #EDEDED; color: #000; }
 .iCMS-editor { padding-right: 5px; }
 .iCMS-editor-page { width: 120px; }
 .border { padding: 5px; border: 1px solid #ccc; border: 1px solid rgba(0, 0, 0, 0.15); -webkit-border-radius: 4px; -moz-border-radius: 4px; border-radius: 4px; }
-.line { clear: both; height: 1px; margin-top: 10px; margin-bottom: 10px; border-bottom: 1px solid #e5e5e5; }
 .tar { text-align: right !important; }
 .tal { text-align: left !important; }
 .row-actions { height: 20px; }

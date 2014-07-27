@@ -70,7 +70,7 @@ class JOB{
 	    return array_sum($this->commission['tk'.$userid]);
     }
     function countPost($userid){
-		$rs		= iDB::getArray("SELECT `postime`,`status` FROM #iCMS@__article where `userid`='".$userid."'");
+		$rs		= iDB::all("SELECT `postime`,`status` FROM #iCMS@__article where `userid`='".$userid."'");
 		$this->total			= count($rs);
 		$this->today['count']	= $this->yesterday['count']=$this->month['count']=$this->pmonth['count']=0;
 		$this->dayCountPost		= array();

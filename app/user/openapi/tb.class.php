@@ -11,7 +11,7 @@ class TB {
 	}
 	function login(){
 	    $state = md5(uniqid(rand(), TRUE)); //CSRF protection
-	    iPHP::setCookie("TB_STATE",authcode($state,'ENCODE'));
+	    iPHP::set_cookie("TB_STATE",authcode($state,'ENCODE'));
 	    $login_url = "https://oauth.taobao.com/authorize?response_type=code&client_id="
 	        . self::$appid . "&redirect_uri=" . urlencode(CALLBACK_URL.self::$callback)
 	        . "&state=" .$state
@@ -19,7 +19,7 @@ class TB {
 	    header("Location:$login_url");
 	}
 	function callback(){
-		$state	= authcode(iPHP::getCookie("TB_STATE"), 'DECODE');
+		$state	= authcode(iPHP::get_cookie("TB_STATE"), 'DECODE');
 		if($_GET['state']!=$state){
 			self::login();
 			exit;
@@ -39,12 +39,12 @@ class TB {
 	}
 	function get_user_info(){
 		$user['nickname']=self::$info['taobao_user_nick'];
-		$user['gender']	=0; //$user['gender']=="ÄÐ"?'1':0;
+		$user['gender']	=0; //$user['gender']=="??"?'1':0;
 		$user['avatar']	=''; //$user['figureurl_2'];
 		return $user;
 	}
 	function cleancookie(){
-		iPHP::setCookie('TB_STATE', '',-31536000);
+		iPHP::set_cookie('TB_STATE', '',-31536000);
 	}
 
 	function postUrl($url, $POSTFIELDS) {

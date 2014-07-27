@@ -9,25 +9,25 @@
 class articleApp {
 	public $methods	= array('iCMS','good','like_comment','comment');
     function __construct() {
-        $this->userid   = (int)iPHP::getCookie('userid');
+        $this->userid   = (int)iPHP::get_cookie('userid');
         $this->nickname = iS::escapeStr(iPHP::getUniCookie('nickname'));
     }
-    public function doiCMS($a = null) {
+    public function do_iCMS($a = null) {
     	return $this->article((int)$_GET['id'],isset($_GET['p'])?(int)$_GET['p']:1);
     }
     public function API_good(){
         $aid = (int)$_GET['iid'];
         $aid OR iPHP::code(0,'iCMS:article:empty_id',0,'json');
         $ackey = 'article_good_'.$aid;
-        $good  = (int)iPHP::getCookie($ackey);
+        $good  = (int)iPHP::get_cookie($ackey);
         $good && iPHP::code(0,'iCMS:article:!good',0,'json');
         iDB::query("UPDATE `#iCMS@__article` SET `good`=good+1 WHERE `id` ='{$aid}' limit 1");
-        iPHP::setCookie($ackey,$this->userid,86400);
+        iPHP::set_cookie($ackey,$this->userid,86400);
         iPHP::code(1,'iCMS:article:good',0,'json');
     }
 
     public function article($id,$page=1,$tpl=true){
-        $aRs		= iDB::getRow("SELECT * FROM `#iCMS@__article` WHERE id='".(int)$id."' AND `status` ='1' LIMIT 1;",ARRAY_A);
+        $aRs		= iDB::row("SELECT * FROM `#iCMS@__article` WHERE id='".(int)$id."' AND `status` ='1' LIMIT 1;",ARRAY_A);
         if($aRs['url']) {
             if(iPHP::$iTPLMode=="html") {
                 return false;
@@ -37,7 +37,7 @@ class articleApp {
             }
         }
         if($aRs){
-	        $dRs	= iDB::getRow("SELECT body,subtitle FROM `#iCMS@__article_data` WHERE aid='".(int)$id."' LIMIT 1;",ARRAY_A);
+	        $dRs	= iDB::row("SELECT body,subtitle FROM `#iCMS@__article_data` WHERE aid='".(int)$id."' LIMIT 1;",ARRAY_A);
 	        $rs		= (Object)array_merge($aRs,$dRs);
 	        unset($dRs);
         }
@@ -69,21 +69,21 @@ class articleApp {
         $current  = $page;
         if($total>1) {
             $rs->pagenav = '<a href="'.$rs->url.'" class="first" target="_self">'.iPHP::lang('iCMS:page:index').'</a>';
-            $rs->pagenav.= '<a href="'.iPHP::page_p2num($pageurl,($page-1>1)?$page-1:1).'" class="prev" target="_self">'.iPHP::lang('iCMS:page:prev').'</a>';
+            $rs->pagenav.= '<a href="'.iPHP::p2num($pageurl,($page-1>1)?$page-1:1).'" class="prev" target="_self">'.iPHP::lang('iCMS:page:prev').'</a>';
             $flag=0;
             for($i=$page-3;$i<=$page-1;$i++) {
                 if($i<1) continue;
-                $rs->pagenav.="<a href='".iPHP::page_p2num($pageurl,$i)."' target='_self'>$i</a>";
+                $rs->pagenav.="<a href='".iPHP::p2num($pageurl,$i)."' target='_self'>$i</a>";
                 $flag++;
             }
             $rs->pagenav.='<span class="current">'.$page.'</span>';
             for($i=$page+1;$i<=$total;$i++) {
-                $rs->pagenav.="<a href='".iPHP::page_p2num($pageurl,$i)."' target='_self'>$i</a>";
+                $rs->pagenav.="<a href='".iPHP::p2num($pageurl,$i)."' target='_self'>$i</a>";
                 $flag++;
                 if($flag==6)break;
             }
-            $rs->pagenav.='<a href="'.iPHP::page_p2num($pageurl,(($total-$page>0)?$page+1:$page)).'" class="next" target="_self">'.iPHP::lang('iCMS:page:next').'</a>';
-            $rs->pagenav.='<a href="'.iPHP::page_p2num($pageurl,$total).'" class="end" target="_self">共'.$total.'页</a>';
+            $rs->pagenav.='<a href="'.iPHP::p2num($pageurl,(($total-$page>0)?$page+1:$page)).'" class="next" target="_self">'.iPHP::lang('iCMS:page:next').'</a>';
+            $rs->pagenav.='<a href="'.iPHP::p2num($pageurl,$total).'" class="end" target="_self">共'.$total.'页</a>';
         }
        $rs->page = array('total'=>$total,'count'=>$count,'current'=>$current,'nav'=>$rs->pagenav,'prev'=>$ppHref,'next'=>$npHref);
         if($page<$total){
@@ -123,10 +123,10 @@ class articleApp {
         $rs->link	= "<a href='{$rs->url}'>{$rs->title}</a>";
 
        $rs->prev            = iPHP::lang('iCMS:article:first');
-       $prers               = iDB::getRow("SELECT * FROM `#iCMS@__article` WHERE `id` < '{$rs->id}' AND `cid`='{$rs->cid}' AND `status`='1' order by id DESC LIMIT 1;");
+       $prers               = iDB::row("SELECT * FROM `#iCMS@__article` WHERE `id` < '{$rs->id}' AND `cid`='{$rs->cid}' AND `status`='1' order by id DESC LIMIT 1;");
        $prers && $rs->prev  = '<a href="'.iURL::get('article',array((array)$prers,$category))->href.'" class="prev" target="_self">'.$prers->title.'</a>';
        $rs->next            = iPHP::lang('iCMS:article:last');
-       $nextrs              = iDB::getRow("SELECT * FROM `#iCMS@__article` WHERE `id` > '{$rs->id}'  and `cid`='{$rs->cid}' AND `status`='1' order by id ASC LIMIT 1;");
+       $nextrs              = iDB::row("SELECT * FROM `#iCMS@__article` WHERE `id` > '{$rs->id}'  and `cid`='{$rs->cid}' AND `status`='1' order by id ASC LIMIT 1;");
        $nextrs && $rs->next = '<a href="'.iURL::get('article',array((array)$nextrs,$category))->href.'" class="next" target="_self">'.$nextrs->title.'</a>';
 
         

@@ -16,12 +16,12 @@ class articleApp{
         $this->category = iPHP::appClass("category",iCMS_APP_ARTICLE);
         define('TAG_APPID',iCMS_APP_ARTICLE);
     }
-    function doadd(){
+    function do_add(){
         $rs      = array();
         if($this->id){
-            $rs        = iDB::getRow("SELECT * FROM `#iCMS@__article` WHERE `id`='$this->id' LIMIT 1;",ARRAY_A);
+            $rs        = iDB::row("SELECT * FROM `#iCMS@__article` WHERE `id`='$this->id' LIMIT 1;",ARRAY_A);
             $adsql     = $this->dataid?" and `id`='{$this->dataid}'":'';
-            $adRs      = iDB::getRow("SELECT * FROM `#iCMS@__article_data` WHERE `aid`='$this->id'{$adsql}",ARRAY_A);
+            $adRs      = iDB::row("SELECT * FROM `#iCMS@__article_data` WHERE `aid`='$this->id'{$adsql}",ARRAY_A);
             $bodyArray = explode('#--iCMS.PageBreak--#',$adRs['body']);
             $bodyCount = count($bodyArray);
         }
@@ -51,17 +51,17 @@ class articleApp{
         $defArray = iCache::get('iCMS/defaults');
     	include iACP::view("article.add");
     }
-    function doupdate(){
+    function do_update(){
     	$sql	= iACP::iDT($_GET['iDT']);
     	$sql &&	iDB::query("UPDATE `#iCMS@__article` SET $sql WHERE `id` ='$this->id'");
-    	iPHP::OK('操作成功!','js:1');
+    	iPHP::success('操作成功!','js:1');
     }
-    function doupdateorder(){
+    function do_updateorder(){
         foreach((array)$_POST['ordernum'] as $orderNum=>$id){
             iDB::query("UPDATE `#iCMS@__article` SET `orderNum` = '".intval($orderNum)."' WHERE `id` ='".intval($id));
         }
     }
-    function dobatch(){
+    function do_batch(){
     	$_POST['id'] OR iPHP::alert("请选择要操作的文章");
     	$ids	= implode(',',(array)$_POST['id']);
     	$batch	= $_POST['batch'];
@@ -70,20 +70,20 @@ class articleApp{
 		        foreach((array)$_POST['orderNum'] AS $id=>$orderNum) {
 		            iDB::query("UPDATE `#iCMS@__article` SET `orderNum` = '$orderNum' WHERE `id` ='$id'");
 		        }
-		        iPHP::OK('排序已更新!','js:1');
+		        iPHP::success('排序已更新!','js:1');
     		break;
     		case 'move':
 		        $_POST['cid'] OR iPHP::alert("请选择目标栏目!");
 		        $cid	=(int)$_POST['cid'];
 		        foreach((array)$_POST['id'] AS $id) {
-		            $ocid	= iDB::getValue("SELECT `cid` FROM `#iCMS@__article` where `id` ='$id'");
+		            $ocid	= iDB::value("SELECT `cid` FROM `#iCMS@__article` where `id` ='$id'");
 		            iDB::query("UPDATE `#iCMS@__article` SET cid='$cid' WHERE `id` ='$id'");
 		            if($ocid!=$cid) {
 		                iDB::query("UPDATE `#iCMS@__category` SET `count` = count-1 WHERE `cid` ='{$ocid}' AND `count`>0");
 		                iDB::query("UPDATE `#iCMS@__category` SET `count` = count+1 WHERE `cid` ='{$cid}'");
 		            }
 		        }
-		        iPHP::OK('成功移动到目标栏目!','js:1');
+		        iPHP::success('成功移动到目标栏目!','js:1');
     		break;
     		case 'prop':
                 $pid = $_POST['pid'];
@@ -98,17 +98,17 @@ class articleApp{
     				$sql	="`keywords` = '".iS::escapeStr($_POST['mkeyword'])."'";
     			}elseif($_POST['pattern']=='addto') {
 		        	foreach($_POST['id'] AS $id){
-		        		$keywords	= iDB::getValue("SELECT keywords FROM `#iCMS@__article` WHERE `id`='$id'");
+		        		$keywords	= iDB::value("SELECT keywords FROM `#iCMS@__article` WHERE `id`='$id'");
 		        		$sql		="`keywords` = '".($keywords?$keywords.','.iS::escapeStr($_POST['mkeyword']):iS::escapeStr($_POST['mkeyword']))."'";
 				        iDB::query("UPDATE `#iCMS@__article` SET {$sql} WHERE `id`='$id'");
 		        	}
-		        	iPHP::OK('文章关键字更改完成!','js:1');
+		        	iPHP::success('文章关键字更改完成!','js:1');
     			}
     		break;
     		case 'tag':
     			iPHP::appClass("tag",'break');
 		     	foreach($_POST['id'] AS $id){
-		    		$art=iDB::getRow("SELECT tags,cid FROM `#iCMS@__article` WHERE `id`='$id' LIMIT 1;");
+		    		$art=iDB::row("SELECT tags,cid FROM `#iCMS@__article` WHERE `id`='$id' LIMIT 1;");
 			        if($_POST['pattern']=='replace') {
 			        	$tags=iS::escapeStr($_POST['mtag']);
 			        }elseif($_POST['pattern']=='addto') {
@@ -117,11 +117,11 @@ class articleApp{
 			        tag::diff($tags,$art->tags,iMember::$uId,$id,$this->category->rootid($art->cid));
 			 		iDB::query("UPDATE `#iCMS@__article` SET `tags` = '$tags' WHERE `id`='$id'");
 		    	}
-		    	iPHP::OK('文章标签更改完成!','js:1');
+		    	iPHP::success('文章标签更改完成!','js:1');
     		break;
     		case 'thumb':
 		        foreach((array)$_POST['id'] AS $id) {
-		            $content	= iDB::getValue("SELECT body FROM `#iCMS@__article_data` WHERE aid='$id'");
+		            $content	= iDB::value("SELECT body FROM `#iCMS@__article_data` WHERE aid='$id'");
 		            $img 	= array();
 		            preg_match_all("/<img.*?src\s*=[\"|'|\s]*(http:\/\/.*?\.(gif|jpg|jpeg|bmp|png)).*?>/is",$content,$img);
 		            $_array = array_unique($img[1]);
@@ -137,7 +137,7 @@ class articleApp{
 		                }
 		            }
 		        }
-		        iPHP::OK('成功提取缩略图!','js:1');
+		        iPHP::success('成功提取缩略图!','js:1');
     		break;
     		case 'dels':
     			iPHP::$break	= false;
@@ -152,25 +152,25 @@ class articleApp{
 		        	ob_end_flush();
 	   			}
 	   			iPHP::$break	= true;
-				iPHP::OK('文章全部删除完成!','js:1');
+				iPHP::success('文章全部删除完成!','js:1');
     		break;
     		default:
 				$sql	= iACP::iDT($batch);
     	}
 		iDB::query("UPDATE `#iCMS@__article` SET {$sql} WHERE `id` IN ($ids)");
-		iPHP::OK('操作成功!','js:1');
+		iPHP::success('操作成功!','js:1');
     }
-    function dogetjson(){
+    function do_getjson(){
         $id = (int)$_GET['id'];
-        $rs = iDB::getRow("SELECT * FROM `#iCMS@__article` WHERE id='$id' LIMIT 1;",ARRAY_A);
+        $rs = iDB::row("SELECT * FROM `#iCMS@__article` WHERE id='$id' LIMIT 1;",ARRAY_A);
 
     }
-    function dogetmeta(){
+    function do_getmeta(){
         $cid = $_GET['cid'];
         $cid && $contentprop =  unserialize($this->category->category[$cid]['contentprop']);
         iPHP::json($contentprop);
     }
-	function doupdatetitle(){
+	function do_updatetitle(){
         $id          = (int)$_POST['id'];
         $cid         = (int)$_POST['cid'];
         $pid         = (int)$_POST['pid'];
@@ -179,7 +179,7 @@ class articleApp{
         $tags        = iS::escapeStr($_POST['tags']);
         $description = iS::escapeStr($_POST['description']);
 
-		$art	= iDB::getRow("SELECT `cid`,`tags` FROM `#iCMS@__article` where `id` ='$id' LIMIT 1;");
+		$art	= iDB::row("SELECT `cid`,`tags` FROM `#iCMS@__article` where `id` ='$id' LIMIT 1;");
 		if($tags){
 			iPHP::appClass("tag",'break');
 			tag::diff($tags,$art->tags,iMember::$uId,$id,$this->category->rootid($art->cid));
@@ -194,25 +194,25 @@ class articleApp{
 		iDB::query("UPDATE `#iCMS@__article` SET `cid` = '$cid',`pid` = '$pid',`title` = '$title',`tags` = '$tags',`description` = '$description' {$updatesql} WHERE `id` ='$id'");
 		exit('1');
 	}
-    function dopreview(){
-		$rs	= iDB::getRow("SELECT a.*,d.body,d.subtitle FROM #iCMS@__article as a LEFT JOIN #iCMS@__article_data AS d ON a.id = d.aid WHERE a.id='{$this->id}' LIMIT 1;");
+    function do_preview(){
+		$rs	= iDB::row("SELECT a.*,d.body,d.subtitle FROM #iCMS@__article as a LEFT JOIN #iCMS@__article_data AS d ON a.id = d.aid WHERE a.id='{$this->id}' LIMIT 1;");
 		echo $rs->body;
     }
-    function doiCMS(){
+    function do_iCMS(){
     	iACP::$app_do="manage";
-    	$this->domanage();
+    	$this->do_manage();
     }
-    function doinbox(){
-    	$this->domanage("inbox");
+    function do_inbox(){
+    	$this->do_manage("inbox");
     }
-    function doexamine(){
-    	$this->domanage("examine");
+    function do_examine(){
+    	$this->do_manage("examine");
     }
-    function dooff(){
-    	$this->domanage("off");
+    function do_off(){
+    	$this->do_manage("off");
     }
-    function dotrash(){
-    	$this->domanage("trash");
+    function do_trash(){
+    	$this->do_manage("trash");
     }
     function msg($str){
     	return iPHP::msg('success:#:check:#:'.$str,true);
@@ -234,16 +234,16 @@ class articleApp{
 	    $id	=(int)$id;
 	    $id OR iPHP::alert("请选择要删除的文章");
 	    $uid && $sql="and `userid`='$uid' and `postype`='$postype'";
-	    $art	= iDB::getRow("SELECT * FROM `#iCMS@__article` WHERE id='$id' {$sql} LIMIT 1;");
+	    $art	= iDB::row("SELECT * FROM `#iCMS@__article` WHERE id='$id' {$sql} LIMIT 1;");
 	    if($art->pic) {
-	        $usePic	= iDB::getValue("SELECT id FROM `#iCMS@__article` WHERE `pic`='{$art->pic}' and `id`<>'$id'");
+	        $usePic	= iDB::value("SELECT id FROM `#iCMS@__article` WHERE `pic`='{$art->pic}' and `id`<>'$id'");
 	       if(empty($usePic)) {
 	            $msg.= $this->delpic($art->pic);
 	        }else {
 	            $msg.= $this->msg($art->pic.' 其它文章正在使用,请到文件管理删除');
 	        }
 	    }
-	    $frs	= iDB::getArray("SELECT `filename`,`path`,`ext` FROM `#iCMS@__filedata` WHERE `indexid`='$id'");
+	    $frs	= iDB::all("SELECT `filename`,`path`,`ext` FROM `#iCMS@__filedata` WHERE `indexid`='$id'");
 	    for($i=0;$i<count($frs);$i++) {
 	        if($frs[$i]){
 	        	$path	= $frs[$i]['path'].'/'.$frs[$i]['filename'].'.'.$frs[$i]['ext'];
@@ -267,14 +267,14 @@ class articleApp{
 	    $msg.= $this->msg('删除完成');
 	    return $msg;
 	}
-    function dodel(){
+    function do_del(){
     	$msg = $this->delArticle($this->id);
         $msg.= $this->msg('文章删除完成!');
         $msg.= $this->msg('10秒后返回文章列表!');
         iPHP::$dialogLock	= true;
     	iPHP::dialog($msg,'js:1');
     }
-    function domanage($doType=null) {
+    function do_manage($doType=null) {
         $mtime         = microtime();
         $mtime         = explode(' ', $mtime);
         $time_start    = $mtime[1] + $mtime[0];
@@ -368,16 +368,12 @@ class articleApp{
         $maxperpage = (int)$_GET['perpage']>0?$_GET['perpage']:20;
         $total		= iPHP::total(false,"SELECT count(*) FROM `#iCMS@__article` {$sql}","G");
         iPHP::pagenav($total,$maxperpage,"篇文章");
-        $rs			= iDB::getArray("SELECT * FROM `#iCMS@__article` {$sql} order by {$orderby} LIMIT ".iPHP::$offset." , {$maxperpage}");
+        $rs			= iDB::all("SELECT * FROM `#iCMS@__article` {$sql} order by {$orderby} LIMIT ".iPHP::$offset." , {$maxperpage}");
         //iDB::debug(1);
         $_count		= count($rs);
         include iACP::view("article.manage");
-//		$mtime = microtime();
-//		$mtime = explode(' ', $mtime);
-//		$time_end = $mtime[1] + $mtime[0];
-//		echo  "<h1>".($time_end - $time_start);
     }
-    function dosave($callback=false){
+    function do_save($callback=false){
         $aid         = (int)$_POST['aid'];
         $cid         = (int)$_POST['cid'];
         $userid      = (int)$_POST['userid'];
@@ -421,7 +417,7 @@ class articleApp{
         empty($body)    && empty($url) && iPHP::alert('文章内容不能为空！');
 
         if(empty($aid) && iCMS::$config['publish']['repeatitle']) {
-			iDB::getValue("SELECT `id` FROM `#iCMS@__article` where `title` = '$title'") && iPHP::alert('该标题的文章已经存在!请检查是否重复');
+			iDB::value("SELECT `id` FROM `#iCMS@__article` where `title` = '$title'") && iPHP::alert('该标题的文章已经存在!请检查是否重复');
 		}
         if(iMember::$Rs->gid!=1){
 	    	if(!iMember::MP("Allow_Edit_Article","F") && $userid!=iMember::$uId){
@@ -453,7 +449,7 @@ class articleApp{
         // if($aid && $ischapter){
         //     $this->article_data($body,$aid);
         //     iDB::query("UPDATE `#iCMS@__article` SET `chapter`=chapter+1  WHERE `id` = '$aid'");
-        //     iPHP::OK('章节添加完成!','url:'.$SELFURL);
+        //     iPHP::success('章节添加完成!','url:'.$SELFURL);
         // }
         iPHP::import(iPHP_APP_CORE .'/iMAP.class.php');
         $picdata = '';
@@ -467,12 +463,9 @@ class articleApp{
                 $tagArray = tag::add($tags,$userid,$aid,$this->category->rootid($cid));
                 $tags = addslashes(json_encode($tagArray));
             }
-
-            iDB::query("INSERT INTO `#iCMS@__article`
-            	   (`cid`,`scid`,`orderNum`, `title`, `stitle`, `clink`, `url`, `source`, `author`, `editor`, `userid`, `pic`,`mpic`,`spic`, `picdata`, `keywords`, `tags`, `description`, `related`, `metadata`, `pubdate`, `postime`, `hits`, `comments`, `good`, `bad`, `chapter`, `pid`, `top`, `postype`, `tpl`, `status`, `isPic`)
-			VALUES ('$cid','$scid', '$orderNum', '$title', '$stitle', '$clink', '$url', '$source', '$author', '$editor', '$userid', '$pic','$mpic','$spic', '$picdata', '$keywords', '$tags', '$description', '$related', '$metadata', '$pubdate', '$postime', '$hits', '$comments', '$good', '$bad', '$chapter', '$pid', '$top', '$postype', '$tpl', '$status', '$isPic');");
-
-            $aid = iDB::$insert_id;
+            $fields = array('cid','scid','orderNum', 'title', 'stitle', 'clink', 'url', 'source', 'author', 'editor', 'userid', 'pic','mpic','spic', 'picdata', 'keywords', 'tags', 'description', 'related', 'metadata', 'pubdate', 'postime', 'hits', 'comments', 'good', 'bad', 'chapter', 'pid', 'top', 'postype', 'tpl', 'status', 'isPic');
+            $data   = compact ($fields);            
+            $aid    = iDB::insert('article',$fields);
 
             map::init('prop',iCMS_APP_ARTICLE);
             map::add($pid,$aid);
@@ -504,10 +497,10 @@ class articleApp{
 			    $tags = addslashes($tags);
             }
             $picdata = $this->picdata($pic,$mpic,$spic);
+            $fields  = array('cid', 'scid', 'orderNum', 'title', 'stitle', 'clink', 'url', 'source', 'author', 'editor', 'userid', 'pic','mpic','spic', 'picdata','keywords', 'tags', 'description', 'related', 'metadata', 'pubdate', 'chapter', 'pid', 'top', 'postype', 'tpl','status', 'isPic');
+            $data    = compact ($fields);
+            iDB::update('article', $data, array('id'=>$aid));
 
-			iDB::query("UPDATE `#iCMS@__article`
-			SET `cid` = '$cid', `scid` = '$scid', `orderNum` = '$orderNum', `title` = '$title', `stitle` = '$stitle', `clink` = '$clink', `url` = '$url', `source` = '$source', `author` = '$author', `editor` = '$editor', `userid` = '$userid', `pic` = '$pic',`mpic` = '$mpic',`spic` = '$spic', `picdata` = '$picdata',`keywords` = '$keywords', `tags` = '$tags', `description` = '$description', `related` = '$related', `metadata` = '$metadata', `pubdate` = '$pubdate', `chapter` = '$chapter', `pid` = '$pid', `top` = '$top', `postype` = '$postype', `tpl` = '$tpl',`status` = '$status', `isPic` = '$isPic'
-			WHERE `id` = '$aid';");
             map::init('prop',iCMS_APP_ARTICLE);
             map::diff($pid,$_pid,$aid);
 
@@ -527,7 +520,7 @@ class articleApp{
 				$htmlApp = iACP::app("html");
 				$htmlApp->Article($aid);
 			}
-            iPHP::OK('文章编辑完成!<br />3秒后返回文章列表','url:'.$SELFURL);
+            iPHP::success('文章编辑完成!<br />3秒后返回文章列表','url:'.$SELFURL);
         }
     }
     function article_data($bodyArray,$aid=0,$id=0){
@@ -556,7 +549,7 @@ class articleApp{
         $this->insert_db_pic($body,$aid,$autopic);
     }
     function chapterCount($aid){
-        $count = iDB::getValue("SELECT count(id) FROM `#iCMS@__article_data` where `aid` = '$aid'");
+        $count = iDB::value("SELECT count(id) FROM `#iCMS@__article_data` where `aid` = '$aid'");
         iDB::query("UPDATE `#iCMS@__article` SET `chapter`='$count'  WHERE `id` = '$aid'");
     }
     function insert_db_pic($content,$aid,$autopic) {
@@ -567,7 +560,7 @@ class articleApp{
             $_value   = iFS::fp($value,'-http');
             $filename = basename($_value);
             $filename = substr($filename,0, 32);
-            $pic      = iDB::getValue("SELECT `pic` FROM `#iCMS@__article` WHERE `id` = '$aid'");
+            $pic      = iDB::value("SELECT `pic` FROM `#iCMS@__article` WHERE `id` = '$aid'");
             if($autopic && $key==0 && empty($pic)){
 				$uri  = parse_url(iCMS::$config['FS']['url']);
 	            if(strstr(strtolower($value),$uri['host'])){
@@ -575,7 +568,7 @@ class articleApp{
 	               iDB::query("UPDATE `#iCMS@__article` SET `isPic`='1',`pic` = '$_value',`picdata` = '$picdata' WHERE `id` = '$aid'");
                 }
             }
-            $faid = iDB::getValue("SELECT `indexid` FROM `#iCMS@__filedata` WHERE `filename` ='$filename'");
+            $faid = iDB::value("SELECT `indexid` FROM `#iCMS@__filedata` WHERE `filename` ='$filename'");
             empty($faid) && iDB::query("UPDATE `#iCMS@__filedata` SET `indexid` = '$aid' WHERE `filename` ='$filename'");
         }
     }
@@ -599,7 +592,7 @@ class articleApp{
     	$this->postype OR $this->postype = 1;
     	return " AND `postype`='{$this->postype}'";
     }
-    function dopurge(){
+    function do_purge(){
 		$id	= sprintf("%08s",$_GET['id']);
 		$url= str_replace('/article/','/~cc/article/',$_GET['url']);
 		echo $this->fopen_url($url);

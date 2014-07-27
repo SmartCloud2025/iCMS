@@ -18,16 +18,16 @@ class user {
 	public static $format     = false;
 
 	public static function check($val,$field='username'){
-		$check = iDB::getValue("SELECT uid FROM `#iCMS@__user` where `$field`='{$val}'");
+		$check = iDB::value("SELECT uid FROM `#iCMS@__user` where `$field`='{$val}'");
 		return empty($check)?true:false;
 	}
 	public static function follow($uid=0,$fuid=0){
-		$check = iDB::getRow("SELECT `fuid` FROM `#iCMS@__user_follow` where `uid`='{$uid}' and `fuid`='$fuid' limit 1");
+		$check = iDB::row("SELECT `fuid` FROM `#iCMS@__user_follow` where `uid`='{$uid}' and `fuid`='$fuid' limit 1");
 		return $check?true:false;
 	}
 	public static function openid($uid=0){
 		$pf = array();
-		$rs = iDB::getArray("SELECT `openid`,`platform` FROM `#iCMS@__user_openid` where `uid`='{$uid}'");
+		$rs = iDB::all("SELECT `openid`,`platform` FROM `#iCMS@__user_openid` where `uid`='{$uid}'");
 		foreach ((array)$rs as $key => $value) {
 			$pf[$value['platform']] = $value['openid'];
 		}
@@ -41,46 +41,46 @@ class user {
 		// $t=='wboi' 	&& $f	= 'wbopenid';
 		// $t=='tboi' 	&& $f	= 'tbopenid';
 
-		$user     = iDB::getRow("SELECT `uid`,`nickname`,`password`,`username` FROM `#iCMS@__user` where `{$f}`='{$v}' and `password`='$pass' limit 1");
+		$user     = iDB::row("SELECT `uid`,`nickname`,`password`,`username` FROM `#iCMS@__user` where `{$f}`='{$v}' and `password`='$pass' limit 1");
 		if(empty($user)){
 			return false;
 		}
 		self::set_cookie($user->username,$user->password,(array)$user);
 		unset($user->password);
-		$user->avatar = userData($user->uid,'avatar');
-		$user->urls   = userData($user->uid,'urls');
+		$user->avatar = get_user($user->uid,'avatar');
+		$user->urls   = get_user($user->uid,'urls');
 		return $user;
 	}
 	public static function setCache($uid){
-		$user	= iDB::getRow("SELECT * FROM `#iCMS@__user` where `uid`='{$uid}'",ARRAY_A);
+		$user	= iDB::row("SELECT * FROM `#iCMS@__user` where `uid`='{$uid}'",ARRAY_A);
 		iCache::set('user:'.$user['uid'],$user,0);
 	}
 	public static function set_cookie($a,$p,$user){
 		$authash = '#=(iCMS@'.iPHP_KEY.')=#';
-		iPHP::setCookie('AUTH_INFO',authcode((int)$user['uid'].$authash.$a.$authash.$p,'ENCODE'),self::$cookietime);
-		iPHP::setCookie('userid',(int)$user['uid'],self::$cookietime);
-		iPHP::setCookie('nickname',str_replace('"','',json_encode($user['nickname'])),self::$cookietime);
+		iPHP::set_cookie('AUTH_INFO',authcode((int)$user['uid'].$authash.$a.$authash.$p,'ENCODE'),self::$cookietime);
+		iPHP::set_cookie('userid',(int)$user['uid'],self::$cookietime);
+		iPHP::set_cookie('nickname',str_replace('"','',json_encode($user['nickname'])),self::$cookietime);
 	}
 	public static function category($cid=0){
 		if(empty($cid)) return false;
 
-		$category	= iDB::getRow("SELECT * FROM `#iCMS@__user_category` where `cid`='".(int)$cid."' limit 1");
+		$category	= iDB::row("SELECT * FROM `#iCMS@__user_category` where `cid`='".(int)$cid."' limit 1");
 		return (array)$category;
 	}
 	public static function data($uid=0,$unpass=true){
 		if(empty($uid)) return false;
 
-		$user         = iDB::getRow("SELECT * FROM `#iCMS@__user` where `uid`='".(int)$uid."' limit 1");
+		$user         = iDB::row("SELECT * FROM `#iCMS@__user` where `uid`='".(int)$uid."' limit 1");
 		$user->sex    = $user->gender?'male':'female';
-		$user->avatar = userData($user->uid,'avatar');
-		$user->urls   = userData($user->uid,'urls');
+		$user->avatar = get_user($user->uid,'avatar');
+		$user->urls   = get_user($user->uid,'urls');
 	   	if($unpass) unset($user->password);
 	   	return $user;
 	}
 	public static function status($url=null,$st=null) {
 		$status = false;
-		$auth   = iPHP::getCookie('AUTH_INFO');
-		$userid = (int)iPHP::getCookie('userid');
+		$auth   = iPHP::get_cookie('AUTH_INFO');
+		$userid = (int)iPHP::get_cookie('userid');
 		if($auth && $userid){
 			$authash = '#=(iCMS@'.iPHP_KEY.')=#';
 			list($_userid,$_username,$_password) = explode($authash,authcode($auth));
@@ -113,9 +113,9 @@ class user {
 		}
 	}
 	public static function logout(){
-		iPHP::setCookie('AUTH_INFO', '',-31536000);
-		iPHP::setCookie('userid', '',-31536000);
-		iPHP::setCookie('nickname', '',-31536000);
-		iPHP::setCookie('seccode', '',-31536000);
+		iPHP::set_cookie('AUTH_INFO', '',-31536000);
+		iPHP::set_cookie('userid', '',-31536000);
+		iPHP::set_cookie('nickname', '',-31536000);
+		iPHP::set_cookie('seccode', '',-31536000);
 	}
 }

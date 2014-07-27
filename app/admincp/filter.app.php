@@ -12,7 +12,7 @@
 class filterApp{
     function __construct() {
     }
-    function doiCMS(){
+    function do_iCMS(){
         $filter = iACP::getConfig(1,'word.filter');
         $disable = iACP::getConfig(1,'word.disable');
         foreach((array)$filter AS $k=>$val) {
@@ -20,7 +20,7 @@ class filterApp{
         }
     	include iACP::view("filter");
     }
-    function dosave(){
+    function do_save(){
         $disable	= explode("\n",iS::escapeStr($_POST['disable']));
         $filter		= explode("\n",iS::escapeStr($_POST['filter']));
         foreach($filter AS $k=> $val) {
@@ -28,7 +28,7 @@ class filterApp{
         }
         iACP::setConfig($filterArray,'word.filter',1,true);
         iACP::setConfig($disable,'word.disable',1,true);
-        iPHP::OK('更新完成');
+        iPHP::success('更新完成');
     }
     function cache(){
         $filter		= iACP::getConfig(1,'word.filter');

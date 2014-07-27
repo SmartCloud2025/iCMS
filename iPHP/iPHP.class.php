@@ -53,18 +53,39 @@ class iPHP{
         }
 
         $timezone = $config['time']['zone'];
-        empty($timezone) && $timezone = 'Asia/Shanghai';//设置中国时区
+        $timezone OR $timezone = 'Asia/Shanghai';//设置中国时区
         @ini_set('date.timezone',$timezone);
         function_exists('date_default_timezone_set') && @date_default_timezone_set($timezone);
 
-        $mobile_agent = str_replace(',','|',preg_quote($config['other']['mobile_agent']));
-        $mobile_agent && preg_match('/'.$mobile_agent.'/i',$_SERVER["HTTP_USER_AGENT"]) && self::$mobile = true;
-        $tpl_key      = ($config['site']['MW_TPL'] && self::$mobile)?'MW_TPL':'PC_TPL';
-        define('iPHP_TPL_DEFAULT',$config['site'][$tpl_key]);
-
+        self::set_tpl_default($config);
         return $config;
 	}
-	public static function iTPL(){
+	private static function set_tpl_default($config){
+		$template    = $config['template'];
+		$device_name = 'pc';
+		$def_tpl     = $template['pc'];				
+		foreach ((array)$template['device'] as $key => $device) {
+			$has_tpl = self::__tpl_agent($device['ua']);
+        	if($device['tpl'] && $has_tpl){
+				$device_name = $device['name'];
+				$def_tpl     = $device['tpl'];
+        		break;
+        	}
+		}
+		if(empty($def_tpl)){
+			if(self::__tpl_agent($template['mobile_agent'])){
+				$device_name = 'mobile';
+				$def_tpl     = $template['mobile'];				
+			}
+		}
+        define('iPHP_TPL_DEFAULT',$def_tpl);
+        //var_dump($device_name,$def_tpl);
+	}
+	private static function __tpl_agent($user_agent){
+		$user_agent = str_replace(',','|',$user_agent);
+		return ($user_agent && preg_match('/'.preg_quote($user_agent).'/i',$_SERVER["HTTP_USER_AGENT"]));
+	}
+	public static function iTemplate(){
         $iTPL                    = new iTemplate();
         $iTPL->template_dir      = iPHP_TPL_DIR;
         $iTPL->compile_dir       = iPHP_TPL_CACHE;
@@ -72,11 +93,11 @@ class iPHP{
         $iTPL->right_delimiter   = '}-->';
         $iTPL->register_modifier("date", "get_date");
         $iTPL->register_modifier("cut", "csubstr");
-        $iTPL->register_modifier("htmlcut","htmlSubString");
+        $iTPL->register_modifier("htmlcut","htmlcut");
         $iTPL->register_modifier("count","cstrlen");
-        $iTPL->register_modifier("html2txt","HtmToText");
+        $iTPL->register_modifier("html2txt","html2text");
         //$iTPL->register_modifier("pinyin","GetPinyin");
-        $iTPL->register_modifier("unicode","getunicode");
+        $iTPL->register_modifier("unicode","get_unicode");
         $iTPL->register_modifier("small","gethumb");
         $iTPL->register_modifier("thumb","small");
         $iTPL->register_modifier("random","random");
@@ -158,7 +179,7 @@ class iPHP{
 	    }
 	}
 	//设置COOKIE
-	public static function setCookie($name, $value = "", $time = 0) {
+	public static function set_cookie($name, $value = "", $time = 0) {
 	    $cookiedomain	= iPHP_COOKIE_DOMAIN;
 	    $cookiepath		= iPHP_COOKIE_PATH;
 	    $cookietime		= ($time?$time:iPHP_COOKIE_TIME);
@@ -167,7 +188,7 @@ class iPHP{
 	    setcookie($name, $value,time()+$cookietime,$cookiepath, $cookiedomain, $_SERVER['SERVER_PORT'] == 443 ? 1 : 0);
 	}
 	//取得COOKIE
-	public static function getCookie($name) {
+	public static function get_cookie($name) {
 	    $name	= iPHP_COOKIE_PRE.'_'.$name;
 	    if (isset($_COOKIE[$name])) {
 	        return $_COOKIE[$name];
@@ -175,7 +196,7 @@ class iPHP{
 	    return FALSE;
 	}
     public static function getUniCookie($s){
-		$s = str_replace('\\\u','\\u',self::getCookie($s));
+		$s = str_replace('\\\u','\\u',self::get_cookie($s));
 		$u = json_decode('["'.$s.'"]');
 		return $u[0];
     }
@@ -243,7 +264,7 @@ class iPHP{
 		}
 	    trigger_error('<B>iPHP '.$name.' Fatal Error:</B>'.$msg. '(' . $code . ')',E_USER_ERROR);
 	}
-	public static function page_p2num($path,$page=false){
+	public static function p2num($path,$page=false){
 		$page===false && $page	= $GLOBALS['page'];
 		if($page<2){
 			return str_replace(array('_{P}','&p={P}'),'',$path);
@@ -301,7 +322,7 @@ class iPHP{
     }
 	//检查验证码
 	public static function seccode($seccode,$type='F') {
-	    $_seccode		= self::getCookie('seccode');
+	    $_seccode		= self::get_cookie('seccode');
 	    $cookie_seccode = empty($_seccode)?'':authcode($_seccode, 'DECODE');
 	    if(empty($cookie_seccode) || strtolower($cookie_seccode) != strtolower($seccode)) {
 	        return false;
@@ -415,11 +436,11 @@ class iPHP{
         self::$break && exit();
     }
 	public static function alert($msg,$js=null,$s=3) {
-		self::$dialogLock	= true;
+		self::$dialogLock = true;
 		self::dialog('warning:#:warning:#:'.$msg,$js,$s);
     }
-	public static function OK($msg,$js=null,$s=3) {
-		self::$dialogLock	= true;
+	public static function success($msg,$js=null,$s=3) {
+		self::$dialogLock = true;
 		self::dialog('success:#:check:#:'.$msg,$js,$s);
     }
 	public static function dialog($info=array(),$js='js:',$s=3,$buttons=null,$update=false) {
@@ -511,15 +532,15 @@ class iPHP{
     	$tnkey	= substr($tnkey,8,16);
     	$total	= (int)$_GET['totalNum'];
     	if(empty($total) && $type!='G'){
-//    		$total	= (int)self::getCookie($tnkey);
-    		$total	= (int)iCache::get('iTotalNum/'.$tnkey);
+//    		$total	= (int)self::get_cookie($tnkey);
+    		$total	= (int)iCache::get('total/'.$tnkey);
 		}
     	if(empty($total) || $GLOBALS['removeTotal']){
-        	$total	= iDB::getValue($sql);
+        	$total	= iDB::value($sql);
         	//echo iDB::$last_query;
         	if($type!='G'){
-        		iCache::set('iTotalNum/'.$tnkey,$total,3600);
-        		//self::setCookie($tnkey,$total,3600);
+        		iCache::set('total/'.$tnkey,$total,3600);
+        		//self::set_cookie($tnkey,$total,3600);
         	}
         }
         return $total;

@@ -22,13 +22,33 @@ $(function(){
 		$("a[href='#<?php echo $_GET['app']; ?>-<?php echo $_GET['tab']; ?>']",$itab).parent().addClass("active");
 		$("#<?php echo $_GET['app']; ?>-<?php echo $_GET['tab']; ?>").addClass("active").removeClass("hide");
 	<?php }?>
+
+  $(document).on("click",".del_device",function(){
+      $(this).parent().parent().remove();
+  });
+  $(".add_template_device").click(function(){
+    var href  = $(this).attr("href");
+    var tb    = $(href),tbody=$("tbody",tb);
+    var count = $('tr',tbody).size();
+    var ntr   = $(".template_clone",tb).clone(true).removeClass("hide template_clone");
+    $('input',ntr).removeAttr("disabled").each(function(){
+      this.id   = this.id.replace("{key}",count);
+      this.name = this.name.replace("{key}",count);
+    });
+    var fmhref  = $('.files_modal',ntr).attr("href").replace("{key}",count);
+    $('.files_modal',ntr).attr("href",fmhref);
+    ntr.appendTo(tbody);
+    return false;
+  });
+
 });
 function modal_tplfile(el,a){
+
   if(!el) return;
   if(!a.checked) return;
 
   var e   = $('#'+el)||$('.'+el);
-  var def = $("#PC_TPL").val();
+  var def = $("#template_pc").val();
   var val = a.value.replace(def+'/', "{iTPL}/");
   e.val(val);
   return 'off';
@@ -40,7 +60,8 @@ function modal_tplfile(el,a){
     <div class="widget-title"> <span class="icon"> <i class="fa fa-cog"></i> </span>
       <ul class="nav nav-tabs" id="setting-tab">
         <li class="active"><a href="#setting-base" data-toggle="tab">基本信息</a></li>
-        <li><a href="#setting-url" data-toggle="tab">网站URL</a></li>
+        <li><a href="#setting-tpl" data-toggle="tab">模板</a></li>
+        <li><a href="#setting-url" data-toggle="tab">URL</a></li>
         <li><a href="#setting-tag" data-toggle="tab">标签</a></li>
         <li><a href="#setting-cache" data-toggle="tab">缓存</a></li>
         <li><a href="#setting-file" data-toggle="tab">附件</a></li>
@@ -84,22 +105,6 @@ function modal_tplfile(el,a){
             </div>
             <span class="help-inline">页面底部可以显示 ICP 备案信息，如果网站已备案，在此输入您的授权码，它将显示在页面底部，如果没有请留空</span>
             <div class="clearfloat mb10"></div>
-            <div class="input-prepend input-append"> <span class="add-on">PC端模板</span>
-              <input type="text" name="config[site][PC_TPL]" class="span3" id="PC_TPL" value="<?php echo $config['site']['PC_TPL'] ; ?>"/>
-              <a href="<?php echo __ADMINCP__; ?>=files&do=seltpl&from=modal&click=dir&target=PC_TPL" class="btn" data-toggle="modal" title="选择模板文件"><i class="fa fa-search"></i> 选择</a> </div>
-            <span class="help-inline">网站PC端模板默认模板</span>
-            <div class="clearfloat mb10"></div>
-            <div class="input-prepend input-append"> <span class="add-on">移动端模板</span>
-              <input type="text" name="config[site][MW_TPL]" class="span3" id="MW_TPL" value="<?php echo $config['site']['MW_TPL'] ; ?>"/>
-              <a href="<?php echo __ADMINCP__; ?>=files&do=seltpl&from=modal&click=dir&target=MW_TPL" class="btn" data-toggle="modal" title="选择模板文件"><i class="fa fa-search"></i> 选择</a> </div>
-            <span class="help-inline">网站移动端模板默认模板,如果不想让程序自行切换请留空</span>
-            <div class="clearfloat mb10"></div>
-            <div class="input-prepend input-append"> <span class="add-on">首页模板</span>
-              <input type="text" name="config[site][indexTPL]" class="span3" id="indexTPL" value="<?php echo $config['site']['indexTPL'] ; ?>"/>
-              <input type="hidden" name="config[site][indexName]" class="span3" id="indexName" value="<?php echo $config['site']['indexName'] ; ?>"/>
-              <a href="<?php echo __ADMINCP__; ?>=files&do=seltpl&from=modal&click=file&target=indexTPL&callback=tplfile" class="btn" data-toggle="modal" title="选择模板文件"><i class="fa fa-search"></i> 选择</a> </div>
-            <span class="help-inline">首页默认模板，注：最好使用<span class="label label-inverse">{iTPL}</span>代替模板目录,程序将会自行切换PC端或者移动端</span>
-            <div class="clearfloat mb10"></div>
             <div class="input-prepend"> <span class="add-on">程序提示</span>
               <div class="switch">
                 <input type="checkbox" data-type="switch" name="config[debug][php]" id="debug_php" <?php echo $config['debug']['php']?'checked':''; ?>/>
@@ -113,6 +118,85 @@ function modal_tplfile(el,a){
               </div>
             </div>
             <span class="help-inline">模板错误提示!如果网站显示空白或者不完整,可开启此项,方便排除错误!模板调整时也可开启,开启此项也要开"程序提示"</span> </div>
+          <div id="setting-tpl" class="tab-pane hide">
+            <div class="input-prepend input-append"> <span class="add-on">首页模板</span>
+              <input type="text" name="config[template][index]" class="span3" id="template_index" value="<?php echo $config['template']['index'] ; ?>"/>
+              <input type="hidden" name="config[template][index_name]" class="span3" id="index_name" value="<?php echo $config['template']['index_name'] ; ?>"/>
+              <?php iACP::files_modal('模板','file','template_index','tplfile');?></div>
+            <span class="help-inline">首页默认模板，注：最好使用<span class="label label-inverse">{iTPL}</span>代替模板目录,程序将会自行切换PC端或者移动端</span>
+            <div class="clearfloat mb10"></div>
+            <div class="input-prepend input-append"> <span class="add-on">PC端模板</span>
+              <input type="text" name="config[template][pc]" class="span3" id="template_pc" value="<?php echo $config['template']['pc'] ; ?>"/>
+              <?php iACP::files_modal('模板','dir','template_pc');?></div>
+            <span class="help-inline">网站PC端模板默认模板</span>
+            <div class="clearfloat mb10 solid"></div>
+            <div class="input-prepend"> <span class="add-on">移动端识别</span>
+              <input type="text" name="config[template][mobile_agent]" class="span6" id="mobile_agent" value="<?php echo $config['template']['mobile_agent'] ; ?>"/>
+            </div>
+            <span class="help-inline">请用<span class="label label-info">,</span>分隔 如不启用自动识别请留空</span>
+            <div class="clearfloat mb10"></div>
+            <div class="input-prepend input-append"> <span class="add-on">移动端模板</span>
+              <input type="text" name="config[template][mobile]" class="span3" id="template_mobile" value="<?php echo $config['template']['mobile'] ; ?>"/>
+              <?php iACP::files_modal('模板','dir','template_mobile');?></div>
+            <span class="help-inline">网站移动端模板默认模板,如果不想让程序自行切换请留空</span>
+            <div class="clearfloat mb10"></div>
+            <table class="table table-hover">
+              <thead>
+                <tr>
+                  <th style="text-align:left"><span class="label label-important">模板优先级为:设备模板 &gt; 移动端模板 &gt; PC端模板</span></th>
+                </tr>
+              </thead>
+              <tbody>
+                <?php foreach ((array)$config['template']['device'] as $key => $device) {?>
+                <tr>
+                  <td>
+                    <div class="input-prepend input-append"> <span class="add-on">设备名称</span>
+                      <input type="text" name="config[template][device][<?php echo $key;?>][name]" class="span3" id="device_name_<?php echo $key;?>" value="<?php echo $device['name'];?>"/>
+                      <a class="btn del_device"><i class="fa fa-trash-o"></i> 删除</a>
+                    </div>
+                    <span class="help-inline"><span class="label label-info">例:iPad</span></span>
+                    <div class="clearfloat mb10"></div>
+                    <div class="input-prepend"> <span class="add-on">设备识别</span>
+                      <input type="text" name="config[template][device][<?php echo $key;?>][ua]" class="span3" id="device_ua_<?php echo $key;?>" value="<?php echo $device['ua'];?>"/>
+                    </div>
+                    <span class="help-inline">设备唯一识别符,识别设备的User agent<span class="label label-info">例:iPad</span>,如果多个请用<span class="label label-info">,</span>分隔.</span>
+                    <div class="clearfloat mb10"></div>
+                    <div class="input-prepend input-append"> <span class="add-on">模板</span>
+                      <input type="text" name="config[template][device][<?php echo $key;?>][tpl]" class="span3" id="device_tpl_<?php echo $key;?>" value="<?php echo $device['tpl'];?>"/>
+                      <?php iACP::files_modal('模板','dir','device_tpl_'.$key);?>
+                    </div>
+                    <span class="help-inline">识别到的设备会使用这个模板设置</span>
+                  </td>
+                </tr>
+                <?php }?>
+              </tbody>
+              <tfoot>
+              <tr class="hide template_clone">
+                <td>
+                  <div class="input-prepend input-append"> <span class="add-on">设备名称</span>
+                    <input type="text" name="config[template][device][{key}][name]" class="span3" id="device_name_{key}" value="" disabled="disabled"/>
+                    <a class="btn del_device"><i class="fa fa-trash-o"></i> 删除</a>
+                  </div>
+                  <span class="help-inline"><span class="label label-info">例:iPad</span></span>
+                  <div class="clearfloat mb10"></div>
+                  <div class="input-prepend"> <span class="add-on">设备识别</span>
+                    <input type="text" name="config[template][device][{key}][ua]" class="span3" id="device_ua_{key}" value="" disabled="disabled"/>
+                  </div>
+                  <span class="help-inline">设备唯一识别符,识别设备的User agent<span class="label label-info">例:iPad</span>,如果多个请用<span class="label label-info">,</span>分隔.</span>
+                  <div class="clearfloat mb10"></div>
+                  <div class="input-prepend input-append"> <span class="add-on">模板</span>
+                    <input type="text" name="config[template][device][{key}][tpl]" class="span3" id="device_tpl_{key}" value="" disabled="disabled"/>
+                    <?php iACP::files_modal('模板','dir','device_tpl_{key}');?>
+                  </div>
+                  <span class="help-inline">识别到的设备会使用这个模板设置</span>
+                </td>
+              </tr>
+              <tr>
+                <td colspan="2"><a href="#setting-tpl" class="btn add_template_device btn-success"/>增加设备模板</a></td>
+              </tr>
+              </tfoot>
+            </table>
+          </div>
           <div id="setting-url" class="tab-pane hide">
             <div class="input-prepend"> <span class="add-on">CMS安装目录</span>
               <input type="text" name="config[router][DIR]" class="span4" id="router_dir" value="<?php echo $config['router']['DIR'] ; ?>"/>
@@ -534,11 +618,6 @@ function modal_tplfile(el,a){
             </div>
           </div>
           <div id="setting-other" class="tab-pane hide">
-            <div class="input-prepend"> <span class="add-on">移动端识别</span>
-              <input type="text" name="config[other][mobile_agent]" class="span6" id="mobile_agent" value="<?php echo $config['other']['mobile_agent'] ; ?>"/>
-            </div>
-            <span class="help-inline">请用<span class="label label-info">,</span>分隔 如不启用自动识别请留空</span>
-            <div class="clearfloat mb10"></div>
             <div class="input-prepend"> <span class="add-on">拼音分割符</span>
               <input type="text" name="config[other][CLsplit]" class="span3" id="CLsplit" value="<?php echo $config['other']['CLsplit'] ; ?>"/>
             </div>

@@ -48,9 +48,8 @@ class iFS {
         self::$config = $config;
         $_table_name  = $config['table'];
         if(empty($_table_name)){
-            $_table_name  = $table ? $table : 'filedata';
+            self::$TABLE  = $table ? $table : 'filedata';//文件记录表
         }
-        self::$TABLE  = iPHP_DB_PREFIX.$_table_name;//文件记录表
     }
 
     public static function config($config) {
@@ -444,7 +443,7 @@ class iFS {
                 $file_md5 = md5_file($tmp_file);
                 $frs      = self::getFileData('filename', $file_md5);
 	            if ($frs) {
-	                return array('code' =>1,'fid' => $frs->id, 'md5' => $frs->filename, 'size' => $frs->size, 'oname' => $frs->ofilename, 'name' => $frs->filename, 'fname' => $frs->filename . "." . $frs->ext, 'dir' => $frs->path, 'ext' => $frs->ext, 'RootPath' => $RootPath . '/' . $frs->path . '/' . $frs->filename . "." . $frs->ext, 'path' => $frs->path . '/' . $frs->filename . "." . $frs->ext, 'dirRootPath' => $RootPath . '/' . $frs->path);
+	                return array('code' =>1,'fid' => $frs->id, 'md5' => $frs->filename, 'size' => $frs->size, 'oname' => $frs->ofilename, 'name' => $frs->filename, 'fname' => $frs->filename . "." . $frs->ext, 'dir' => $frs->path, 'ext' => $frs->ext, 'RootPath' => $RootPath . '/' . $frs->path .$frs->filename . "." . $frs->ext, 'path' => $frs->path . $frs->filename . "." . $frs->ext, 'dirRootPath' => $RootPath . '/' . $frs->path);
 	            }
                 $FileName OR $FileName = $file_md5;
                 $ext && $FileExt       = $ext;
@@ -526,12 +525,15 @@ class iFS {
     }
 
 //--------upload---end-------------------------------
-    public static function insFileData($a, $type = 0) {
+    public static function insFileData($data, $type = 0) {
         if (self::$checkFileData)
             return;
 
         $userid = self::$userid === false ? 0 : self::$userid;
-        iDB::query("INSERT INTO `".self::$TABLE."` (`userid`,`filename`,`ofilename`,`path`,`intro`,`ext`,`size` ,`time`,`type`) VALUES ('" . $userid . "','" . $a['filename'] . "', '" . $a['ofilename'] . "', '" . $a['path'] . "','" . $a['intro'] . "', '" . $a['ext'] . "', '" . $a['size'] . "', '" . time() . "', '$type') ");
+        $data['userid'] = $userid;
+        $data['time']   = time();
+        $data['type']   = $type;
+        iDB::insert(self::$TABLE,$data);
         return iDB::$insert_id;
     }
 
@@ -540,7 +542,7 @@ class iFS {
             return;
 
         $sql = self::$userid === false ? '' : " AND `userid`='" . self::$userid . "'";
-        $rs = iDB::getRow("SELECT * FROM ".self::$TABLE." WHERE `$f`='$v' {$sql} LIMIT 1");
+        $rs = iDB::row("SELECT * FROM ".iPHP_DB_PREFIX.self::$TABLE." WHERE `$f`='$v' {$sql} LIMIT 1");
         $rs && $rs->filepath = $rs->path . '/' . $rs->filename . '.' . $rs->ext;
         return $rs;
     }

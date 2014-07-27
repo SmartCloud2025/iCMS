@@ -57,7 +57,7 @@
         <div class="hd">
           <h3><!--{$category_list.name}--></h3>
           <span class="ext"></span><a href="<!--{$category_list.url}-->" target="_blank" class="more">更多&gt;&gt;</a></div>
-          <div class="bd"><!--{iCMS:article:list row="10" cid=$category_list.cid}-->
+          <div class="bd"><!--{iCMS:article:list row="10" cid="$category_list.cid"}-->
           <!--{if $article_list}-->
           <ul class="w-ul ulist">
             <!--{if $article_list[0].pic.url}-->

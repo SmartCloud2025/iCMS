@@ -11,7 +11,7 @@ class WB {
 	}
 	function login(){
 	    $state = md5(uniqid(rand(), TRUE)); //CSRF protection
-	    iPHP::setCookie("WB_STATE",authcode($state,'ENCODE'));
+	    iPHP::set_cookie("WB_STATE",authcode($state,'ENCODE'));
 	    $login_url = "https://api.weibo.com/oauth2/authorize?response_type=code&client_id="
 	        . self::$appid . "&redirect_uri=" . urlencode(CALLBACK_URL.self::$callback)
 	        . "&state=" .$state
@@ -19,7 +19,7 @@ class WB {
 	    header("Location:$login_url");
 	}
 	function callback(){
-		$state	= authcode(iPHP::getCookie("WB_STATE"), 'DECODE');
+		$state	= authcode(iPHP::get_cookie("WB_STATE"), 'DECODE');
 		if($_GET['state']!=$state){
 			self::login();
 			exit;
@@ -32,9 +32,9 @@ class WB {
         $response	= self::postUrl('https://api.weibo.com/oauth2/access_token',$POST_FIELDS);
 		$token = json_decode($response, true);
 		if ( is_array($token) && !isset($token['error']) ) {
-			iPHP::setCookie("WB_access_token",	authcode($token['access_token'],'ENCODE'));
-	    	iPHP::setCookie("WB_refresh_token",	authcode($token['refresh_token'],'ENCODE'));
-		    iPHP::setCookie("WB_openid",			authcode($token['uid'],'ENCODE'));
+			iPHP::set_cookie("WB_access_token",	authcode($token['access_token'],'ENCODE'));
+	    	iPHP::set_cookie("WB_refresh_token",	authcode($token['refresh_token'],'ENCODE'));
+		    iPHP::set_cookie("WB_openid",			authcode($token['uid'],'ENCODE'));
 		    self::$openid			= $token['uid'];
 		} else {
 			self::login();
@@ -42,9 +42,9 @@ class WB {
 		}
 	}
 	function get_user_info(){
-		$access_token	= authcode(iPHP::getCookie("WB_access_token"), 'DECODE');
-		$refresh_token	= authcode(iPHP::getCookie("WB_refresh_token"), 'DECODE');
-		//$openid			= authcode(iPHP::getCookie("QQ_openid"), 'DECODE');
+		$access_token	= authcode(iPHP::get_cookie("WB_access_token"), 'DECODE');
+		$refresh_token	= authcode(iPHP::get_cookie("WB_refresh_token"), 'DECODE');
+		//$openid			= authcode(iPHP::get_cookie("QQ_openid"), 'DECODE');
 	    $url = "https://api.weibo.com/2/users/show.json?uid=".self::$openid;
 	    $info = self::get_url_contents($url,$access_token);
 	    $arr = json_decode($info, true);
@@ -54,7 +54,7 @@ class WB {
 	    return $arr;
 	}
 	function cleancookie(){
-		iPHP::setCookie('WB_STATE', '',-31536000);
+		iPHP::set_cookie('WB_STATE', '',-31536000);
 	}
 	function get_url_contents($url,$access_token=""){
 		$headers[] = "Authorization: OAuth2 ".$access_token;

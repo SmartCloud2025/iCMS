@@ -14,12 +14,12 @@ class editorApp{
 		$this->stateInfo	= 'SUCCESS';
 		iFS::$callback		= true;
     }
-    function doimageManager(){
+    function do_imageManager(){
 		$res              = iPHP::folder(iCMS::$config['FS']['dir'],array('jpg','png','gif','jpeg'));
 		$res['publicURL'] = iCMS::$config['router']['publicURL'];
 		iPHP::json($res);
     }
-    function doimageUp(){
+    function do_imageUp(){
     	$F		= iFS::upload('upfile');
     	$F['code']	OR	$this->stateInfo = $F['state'];
     	
@@ -33,7 +33,7 @@ class editorApp{
 					'state'=>$this->stateInfo
 		));
     }
-    function dofileUp(){
+    function do_fileUp(){
 		$F	= iFS::upload('upfile');
 		$F['code']	OR	$this->stateInfo = $F['state'];
 		$F['path'] && $url	= iFS::fp($F['path'],'+http');
@@ -44,7 +44,7 @@ class editorApp{
 			"state"=>$this->stateInfo
 		));
     }
-    function doscrawlUp(){
+    function do_scrawlUp(){
 		if ($_GET[ "action" ] == "tmpImg") { // 背景上传
 			$F		= iFS::upload('upfile','scrawl/tmp');
 			$F['code']	OR	$this->stateInfo = $F['state'];

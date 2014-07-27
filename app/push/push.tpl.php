@@ -43,7 +43,7 @@ function push_list($vars){
 		$rs			= iCache::get($cacheName);
 	}
 	if(empty($rs)){
-		$rs		= iDB::getArray("SELECT * FROM `#iCMS@__push`{$whereSQL} {$orderSQL} LIMIT $maxperpage");
+		$rs		= iDB::all("SELECT * FROM `#iCMS@__push`{$whereSQL} {$orderSQL} LIMIT $maxperpage");
 		//echo iDB::$last_query;
         $_count	= count($rs);
         for ($i=0;$i<$_count;$i++){

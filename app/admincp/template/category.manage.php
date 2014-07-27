@@ -6,7 +6,7 @@
  * @$Id: category.manage.php 2381 2014-03-21 04:03:07Z coolmoo $
  */
 defined('iCMS') OR exit('What are you doing?'); 
-iPHP::setCookie(iACP::$app_name.'_tabs',iACP::$app_do);
+iPHP::set_cookie(iACP::$app_name.'_tabs',iACP::$app_do);
 iACP::head();
 ?>
 <?php if(iACP::$app_do=='tree'){ ?>

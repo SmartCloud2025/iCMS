@@ -136,7 +136,7 @@ function csubstr($str,$len,$end=''){
 }
 
 //截取HTML
-function htmlSubString($content,$maxlen=300,$suffix=FALSE) {
+function htmlcut($content,$maxlen=300,$suffix=FALSE) {
 	$content   = preg_split("/(<[^>]+?>)/si",$content, -1,PREG_SPLIT_NO_EMPTY| PREG_SPLIT_DELIM_CAPTURE);
 	$wordrows  = 0;
 	$outstr    = "";
@@ -219,10 +219,10 @@ function sechtml($string) {
     return $string;
 }
 //HTML TO TEXT
-function HtmToText($string) {
+function html2text($string) {
     if(is_array($string)) {
         foreach($string as $key => $val) {
-            $string[$key] = HtmToText($val);
+            $string[$key] = html2text($val);
         }
     } else {
 		$search  = array ("'<script[^>]*?>.*?</script>'si","'<[\/\!]*?[^<>]*?>'si","'([\r\n])[\s]+'","'&(quot|#34);'i","'&(amp|#38);'i","'&(lt|#60);'i","'&(gt|#62);'i","'&(nbsp|#160);'i","'&(iexcl|#161);'i","'&(cent|#162);'i","'&(pound|#163);'i","'&(copy|#169);'i","'&#(\d+);'e");
@@ -231,10 +231,10 @@ function HtmToText($string) {
     }
     return $string;
 }
-function HTML2JS($string) {
+function html2js($string) {
     if(is_array($string)) {
         foreach($string as $key => $val) {
-            $string[$key] = HTML2JS($val);
+            $string[$key] = html2js($val);
         }
     } else {
         $string = str_replace(array("\n","\r","\\","\""), array(' ',' ',"\\\\","\\\""), $string);
@@ -347,7 +347,7 @@ function array_diff_values($N, $O){
 function _int($n) {
     return 0-$n;
 }
-function getdirname($path=null){
+function get_dir_name($path=null){
 	if (!empty($path)) {
 		if (strpos($path,'\\')!==false) {
 			return substr($path,0,strrpos($path,'\\')).'/';
@@ -357,14 +357,14 @@ function getdirname($path=null){
 	}
 	return './';
 }
-function getunicode($string){
+function get_unicode($string){
 	if(empty($string)) return;
 
 	$array = (array)$string;
 	$json  = json_encode($array);
 	return str_replace(array('["','"]'), '', $json);
 }
-function UTF8toUni($c) {
+function utf2uni($c) {
     switch(strlen($c)) {
         case 1:
             return ord($c);
@@ -393,7 +393,7 @@ function pinyin($str,$split="",$pn=true) {
     $s = $match[0];
     $c = count($s);
     for ($i=0;$i<$c;$i++) {
-        $uni	= strtoupper(dechex(UTF8toUni($s[$i])));
+        $uni = strtoupper(dechex(utf2uni($s[$i])));
         if(strlen($uni)>2) {
 			$pyArr = $GLOBALS["iPHP.PY"][$uni];
 			$py    = is_array($pyArr)?$pyArr[0]:$pyArr;
@@ -409,7 +409,7 @@ function pinyin($str,$split="",$pn=true) {
 			$az09 = true;
         }else {
             $sp=true;
-            if($split) {
+            if($split){
                 if($s[$i]==' ') {
                     $R[]=$sp?'':$split;
                     $sp=false;

@@ -12,40 +12,40 @@
 class menuApp{
     function __construct() {
     	$this->menu	= new iMenu();
-    	$this->menu->getArray();
+    	$this->menu->array();
     }
-    function doadd(){
+    function do_add(){
     	$id	= $_GET['id'];
         if($id) {
-            $rs		= iDB::getRow("SELECT * FROM `#iCMS@__menu` WHERE `id`='$id' LIMIT 1;",ARRAY_A);
+            $rs		= iDB::row("SELECT * FROM `#iCMS@__menu` WHERE `id`='$id' LIMIT 1;",ARRAY_A);
             $rootid	= $rs['rootid'];
         }else{
         	$rootid	= $_GET['rootid'];
         }
         include iACP::view("menu.add");
     }
-    function doaddseparator(){
+    function do_addseparator(){
     	$rootid	= $_GET['rootid'];
     	$class	= $rootid?'divider':'divider-vertical';
     	iDB::query("INSERT INTO `#iCMS@__menu` (`rootid`,`app`,`class`) VALUES($rootid,'separator','$class');");
     	$this->menu->cache();
-    	iPHP::OK('添加完成');
+    	iPHP::success('添加完成');
     }
-    function doupdateorder(){
+    function do_updateorder(){
     	foreach((array)$_POST['ordernum'] as $orderNum=>$id){
             iDB::query("UPDATE `#iCMS@__menu` SET `orderNum` = '".intval($orderNum)."' WHERE `id` ='".intval($id)."' LIMIT 1");
     	}
 		$this->menu->cache();
     }
-    function doiCMS(){
+    function do_iCMS(){
     	iACP::$app_method="domanage";
     	$_GET['tab'] OR $_GET['tab']="tree";
-    	$this->domanage();
+    	$this->do_manage();
     }
-    function domanage($doType=null) {
+    function do_manage($doType=null) {
         include iACP::view("menu.manage");
     }
-    function doajaxtree(){
+    function do_ajaxtree(){
 		$hasChildren=$_GET['hasChildren']?true:false;
 	 	echo $this->tree($_GET["root"],$hasChildren);
     }
@@ -80,7 +80,7 @@ class menuApp{
         <a href="'.APP_FURI.'&do=addseparator&rootid='.$M['id'].'" class="btn btn-success btn-small" target="iPHP_FRAME"><i class="fa fa-minus-square"></i> 分隔符</a> <a href="'.APP_URI.'&do=add&id='.$M['id'].'" title="编辑菜单设置"  class="btn btn-primary btn-small"><i class="fa fa-edit"></i> 编辑</a> <a href="'.APP_FURI.'&do=del&id='.$M['id'].'" class="btn btn-danger btn-small" onClick="return confirm(\'确定要删除此菜单?\');" target="iPHP_FRAME"><i class="fa fa-trash-o"></i> 删除</a></span></div>';
         return $tr;
     }
-    function dosave(){
+    function do_save(){
         $id          = $_POST['id'];
         $rootid      = $_POST['rootid'];
         $app         = $_POST['app'];
@@ -105,17 +105,20 @@ class menuApp{
     		$data_meta	OR	$data_meta	= '{"width":"800px","height":"600px"}';
     		$data_target	= '#iCMS_MODAL';
     	}
+        $fields = array('rootid', 'orderNum', 'app', 'name', 'title', 'href', 'icon', 'class', 'a_class', 'target', 'caret', 'data-toggle', 'data-meta', 'data-target');
+        $data   = compact ($fields);
+
 		if($id){
-    		iDB::query("UPDATE `#iCMS@__menu` SET `rootid`='$rootid', `orderNum`='$orderNum', `app`='$app', `name`='$name', `title`='$title', `href`='$href', `icon`='$icon', `class`='$class', `a_class`='$a_class', `target`='$target', `caret`='$caret', `data-toggle`='$data_toggle', `data-meta`='$data_meta', `data-target`='$data_target' WHERE `id`='$id';");
-    		$msg	= "编辑完成!";
+            iDB::update('menu', $data, array('id'=>$id));
+    		$msg = "编辑完成!";
     	}else{
-	    	iDB::query("INSERT INTO `#iCMS@__menu` (`rootid`, `orderNum`, `app`, `name`, `title`, `href`, `icon`, `class`, `a_class`, `target`, `caret`, `data-toggle`, `data-meta`, `data-target`) VALUES ('$rootid', '$orderNum', '$app', '$name', '$title', '$href', '$icon', '$class', '$a_class', '$target', '$caret', '$data_toggle', '$data_meta', '$data_target');");
-			$msg	= "添加完成!";
+            iDB::insert('menu',$data);
+			$msg = "添加完成!";
     	}
 		$this->menu->cache();
-		iPHP::OK($msg,'url:' . APP_URI . '&do=manage');
+		iPHP::success($msg,'url:' . APP_URI . '&do=manage');
     }
-    function dodel(){
+    function do_del(){
         $id		= (int)$_GET['id'];
         if(empty($this->menu->MArray[$id])) {
             iDB::query("DELETE FROM `#iCMS@__menu` WHERE `id` = '$id'");

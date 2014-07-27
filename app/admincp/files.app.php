@@ -21,11 +21,11 @@ class filesApp{
         $this->upload_max_filesize = get_cfg_var("upload_max_filesize");
 
     }
-	function doadd(){
+	function do_add(){
 		$this->id && $rs	= iFS::getFileData('id',$this->id);
 		include iACP::view("files.add");
 	}
-	function domulti(){
+	function do_multi(){
 		$file_upload_limit	= $_GET['UN']?$_GET['UN']:100;
 		$file_queue_limit	= $_GET['QN']?$_GET['QN']:10;
 		$file_size_limit	= (int)$this->upload_max_filesize;
@@ -33,7 +33,7 @@ class filesApp{
         stristr($this->upload_max_filesize,'m') && $file_size_limit    = $file_size_limit*1024;
 		include iACP::view("files.multi");
 	}
-	function doiCMS(){
+	function do_iCMS(){
     	$sql='WHERE 1=1 ';
         if($_GET['keywords']) {
             if($_GET['st']=="filename") {
@@ -58,15 +58,11 @@ class filesApp{
         $maxperpage =(int)$_GET['perpage']>0?$_GET['perpage']:50;
 		$total		= iPHP::total(false,"SELECT count(*) FROM `#iCMS@__filedata` {$sql}","G");
         iPHP::pagenav($total,$maxperpage,"个文件");
-        $rs			=iDB::getArray("SELECT * FROM `#iCMS@__filedata` {$sql} order by {$orderby} LIMIT ".iPHP::$offset." , {$maxperpage}");
-//echo iDB::$last_query;
-//iDB::$last_query='explain '.iDB::$last_query;
-//$explain=iDB::getRow(iDB::$last_query);
-//var_dump($explain);
-        $_count		= count($rs);
+        $rs     = iDB::all("SELECT * FROM `#iCMS@__filedata` {$sql} order by {$orderby} LIMIT ".iPHP::$offset." , {$maxperpage}");
+        $_count = count($rs);
     	include iACP::view("files.manage");
     }
-    function doIO(){
+    function do_IO(){
         $udir      = $_GET['udir'];
         $name      = $_GET['name'];
         $ext       = $_GET['ext'];
@@ -83,7 +79,7 @@ class filesApp{
         );
         iPHP::json($array);
     }
-    function doupload(){
+    function do_upload(){
 //iFS::$checkFileData = true;
     	$_POST['watermark'] OR iFS::$watermark = false;
     	if($this->id){
@@ -111,7 +107,7 @@ class filesApp{
 			$this->callback($array);
 		}
     }
-    function dodownload(){
+    function do_download(){
         $rs              = iFS::getFileData('id',$this->id);
         iFS::$isRedirect = true;
         $FileRootPath    = iFS::fp($rs->filepath,"+iPATH");
@@ -127,7 +123,7 @@ class filesApp{
     		if($_FileSize!=$rs->size){
 	    		iDB::query("update `#iCMS@__filedata` SET `size`='$_FileSize' WHERE `id` = '$this->id'");
     		}
-    		iPHP::OK("{$rs->ofilename} <br />重新下载到<br /> {$rs->filepath} <br />完成",'js:1',3);
+    		iPHP::success("{$rs->ofilename} <br />重新下载到<br /> {$rs->filepath} <br />完成",'js:1',3);
     	}else{
     		iPHP::alert("下载远程文件失败!",'js:1',3);
     	}
@@ -137,7 +133,7 @@ class filesApp{
     	echo "<script type=\"text/javascript\">window.parent.callback($json);</script>";
     	exit;
     }
-    function dobatch(){
+    function do_batch(){
         $idArray = (array)$_POST['id'];
         $idArray OR iPHP::alert("请选择要删除的文件");
         $ids     = implode(',',$idArray);
@@ -146,19 +142,19 @@ class filesApp{
     		case 'dels':
 				iPHP::$break	= false;
 	    		foreach($idArray AS $id){
-	    			$this->dodel($id);
+	    			$this->do_del($id);
 	    		}
 	    		iPHP::$break	= true;
-				iPHP::OK('文件全部删除完成!','js:1');
+				iPHP::success('文件全部删除完成!','js:1');
     		break;
 		}
 	}
-    function dodel($id = null){
+    function do_del($id = null){
         $id ===null && $id = $this->id;
         $id OR iPHP::alert("请选择要删除的文件");
         $indexid = (int)$_GET['indexid'];
         $sql     = isset($_GET['indexid'])?"AND `indexid`='$indexid'":"";
-        $rs      = iDB::getRow("SELECT * FROM `#iCMS@__filedata` WHERE `id` = '$id' {$sql} LIMIT 1;");
+        $rs      = iDB::row("SELECT * FROM `#iCMS@__filedata` WHERE `id` = '$id' {$sql} LIMIT 1;");
     	if($rs){
 	    	$rs->filepath	= $rs->path.'/'.$rs->filename.'.'.$rs->ext;
 	    	$FileRootPath	= iFS::fp($rs->filepath,"+iPATH");
@@ -176,7 +172,7 @@ class filesApp{
     	$_GET['ajax'] && iPHP::json(array('code'=>0,'msg'=>$msg));
     	iPHP::alert($msg);
     }
-    function domkdir(){
+    function do_mkdir(){
     	$name	= $_POST['name'];
         strstr($name,'.')!==false	&& iPHP::json(array('code'=>0,'msg'=>'您输入的目录名称有问题!'));
         strstr($name,'..')!==false	&& iPHP::json(array('code'=>0,'msg'=>'您输入的目录名称有问题!'));
@@ -200,16 +196,16 @@ class filesApp{
         $navbar = false;
     	include iACP::view("files.explorer");
     }
-    function doseltpl(){
+    function do_seltpl(){
     	$this->explorer('template');
     }
-    function dobrowse(){
+    function do_browse(){
     	$this->explorer(iCMS::$config['FS']['dir']);
     }
-    function dopicture(){
+    function do_picture(){
     	$this->explorer(iCMS::$config['FS']['dir'],array('jpg','png','gif','jpeg'));
     }
-    function doeditpic(){
+    function do_editpic(){
         $pic       = $_GET['pic'];
         //$pic OR iPHP::alert("请选择图片!");
         if($pic){
@@ -233,7 +229,7 @@ class filesApp{
         stristr($this->upload_max_filesize,'m') && $max_size = $max_size*1024*1024;
         include iACP::view("files.editpic");
     }
-    function dopreview(){
+    function do_preview(){
         $_GET['pic'] && $src = iFS::fp($_GET['pic'],'+http');
         include iACP::view("files.preview");
     }

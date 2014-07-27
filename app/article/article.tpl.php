@@ -99,7 +99,7 @@ function article_list($vars){
         $resource   = iCache::get($cache_name);
     }
     if(empty($resource)){
-        $resource = iDB::getArray("SELECT * FROM `#iCMS@__article` WHERE {$where_sql} {$order_sql} LIMIT {$offset} , {$maxperpage}");
+        $resource = iDB::all("SELECT * FROM `#iCMS@__article` WHERE {$where_sql} {$order_sql} LIMIT {$offset} , {$maxperpage}");
         //iDB::debug(1);
         $resource = __article($vars,$resource);
         $vars['cache'] && iCache::set($cache_name,$resource,$cacheTime);
@@ -189,7 +189,7 @@ function article_search($vars){
         $multi   = iCMS::page(array('total'=>$total,'perpage'=>$maxperpage,'unit'=>iPHP::lang('iCMS:page:list'),'nowindex'=>$GLOBALS['page']));
         $offset  = $multi->offset;
     }
-    $resource = iDB::getArray("SELECT * FROM `#iCMS@__article` WHERE {$where_sql} {$order_sql} LIMIT {$maxperpage}");
+    $resource = iDB::all("SELECT * FROM `#iCMS@__article` WHERE {$where_sql} {$order_sql} LIMIT {$maxperpage}");
     $resource = __article($vars,$resource);
     return $resource;
 }
@@ -201,9 +201,9 @@ function __article($vars,$variable){
             $value['total'] = $total;
         }
         $value['picdata']&& $picdata = unserialize($value['picdata']);
-        $value['pic']    && $value['pic'] = __pic($value['pic'],$picdata["b"]);
-        $value['mpic']   && $value['mpic']= __pic($value['mpic'],$picdata["m"]);
-        $value['spic']   && $value['spic']= __pic($value['spic'],$picdata["s"]);
+        $value['pic']  = get_pic($value['pic'],$picdata["b"]);
+        $value['mpic'] = get_pic($value['mpic'],$picdata["m"]);
+        $value['spic'] = get_pic($value['spic'],$picdata["s"]);
 
         $category	= iCache::get('iCMS/category/'.$value['cid']);
         $value['category']['name']  = $category['name'];
@@ -235,21 +235,4 @@ function __article($vars,$variable){
     }
     return $resource;
 }
-function __pic($src,$size=0){
 
-    // $im = bitscale(array(
-    //     "tw" => $vars['picWidth'],
-    //     "th" => $vars['picHeight'],
-    //     "w"  => $value['picwidth'] ,
-    //     "h"  => $value['picheight']
-    // ));
-    return array(
-        'src'    => $src,
-        'url'    => iFS::fp($src,'+http'),
-        'width'  => $size['w'],
-        'height' => $size['h'],
-        'tw'     => '',
-        'th'     => '',
-    );
-
-}

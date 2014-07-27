@@ -14,15 +14,15 @@ class propApp{
         $this->category = iPHP::appClass("category",'all');
         $this->pid      = (int)$_GET['pid'];
     }
-    function doadd(){
-        $this->pid && $rs	= iDB::getRow("SELECT * FROM `#iCMS@__prop` WHERE `pid`='$this->pid' LIMIT 1;",ARRAY_A);
+    function do_add(){
+        $this->pid && $rs	= iDB::row("SELECT * FROM `#iCMS@__prop` WHERE `pid`='$this->pid' LIMIT 1;",ARRAY_A);
         if($_GET['act']=="copy"){
         	$this->pid=0;
         	$rs['val']='';
         }
         include iACP::view("prop.add");
     }
-    function dosave(){
+    function do_save(){
 		$pid		= (int)$_POST['pid'];
 		$cid		= (int)$_POST['cid'];
 		$ordernum	= (int)$_POST['ordernum'];
@@ -38,33 +38,35 @@ class propApp{
         
 		$field=='pid' && $val=(int)$val;
 
+        $fields = array('rootid','cid','field','type','ordernum', 'name', 'val');
+        $data   = compact ($fields);
+
 		if($pid){
-			iDB::query("UPDATE `#iCMS@__prop` SET `cid` = '$cid', `field` = '$field', `type` = '$type', `ordernum` = '$ordernum', `name` = '$name', `val` = '$val'
-WHERE `pid` = '$pid';");
+            iDB::update('prop', $data, array('pid'=>$pid));
 			$msg="属性更新完成!";
 		}else{
-	        iDB::getValue("SELECT `pid` FROM `#iCMS@__prop` where `type` ='$type' AND `val` ='$val' AND `field` ='$field' AND `cid` ='$cid'") && iPHP::alert('该类型属性值已经存在!请另选一个');
-	        iDB::query("insert into `#iCMS@__prop` (`rootid`,`cid`,`field`,`type`,`ordernum`, `name`, `val`) values ('0','$cid','$field','$type','$ordernum', '$name', '$val');");
+	        iDB::value("SELECT `pid` FROM `#iCMS@__prop` where `type` ='$type' AND `val` ='$val' AND `field` ='$field' AND `cid` ='$cid'") && iPHP::alert('该类型属性值已经存在!请另选一个');	        
+            iDB::insert('prop',$data);
 	        $msg="新属性添加完成!";
 		}
 		$this->cache();
-        iPHP::OK($msg,'url:'.APP_URI);
+        iPHP::success($msg,'url:'.APP_URI);
     }
-    function doupdate(){
+    function do_update(){
     	foreach((array)$_POST['pid'] as $tk=>$pid){
             iDB::query("update `#iCMS@__prop` set `type` = '".$_POST['type'][$tk]."', `name` = '".$_POST['name'][$tk]."', `value` = '".$_POST['value'][$tk]."' where `pid` = '$pid';");
     	}
     	$this->cache();
     	iPHP::alert('更新完成');
     }
-    function dodel($id = null,$dialog=true){
+    function do_del($id = null,$dialog=true){
     	$id===null && $id=$this->pid;
     	$id OR iPHP::alert('请选择要删除的属性!');
 		iDB::query("DELETE FROM `#iCMS@__prop` WHERE `pid` = '$this->pid';");
     	$this->cache();
-    	$dialog && iPHP::OK("已经删除!",'url:'.APP_URI);
+    	$dialog && iPHP::success("已经删除!",'url:'.APP_URI);
     }
-    function dobatch(){
+    function do_batch(){
         $idArray = (array)$_POST['id'];
         $idArray OR iPHP::alert("请选择要操作的属性");
         $ids     = implode(',',$idArray);
@@ -73,22 +75,22 @@ WHERE `pid` = '$pid';");
     		case 'dels':
 				iPHP::$break	= false;
 	    		foreach($idArray AS $id){
-	    			$this->dodel($id,false);
+	    			$this->do_del($id,false);
 	    		}
 	    		iPHP::$break	= true;
-				iPHP::OK('属性全部删除完成!','js:1');
+				iPHP::success('属性全部删除完成!','js:1');
     		break;
     		case 'refresh':
     			$this->cache();
-    			iPHP::OK('属性缓存全部更新完成!','js:1');
+    			iPHP::success('属性缓存全部更新完成!','js:1');
     		break;
 		}
 	}
-    function doiCMS(){
+    function do_iCMS(){
     	iACP::$app_method="domanage";
-    	$this->domanage();
+    	$this->do_manage();
     }
-    function domanage(){
+    function do_manage(){
         $sql			= " where 1=1";
 //        $cid			= (int)$_GET['cid'];
 //
@@ -110,16 +112,12 @@ WHERE `pid` = '$pid';");
         $maxperpage =(int)$_GET['perpage']>0?$_GET['perpage']:20;
         $total		= iPHP::total(false,"SELECT count(*) FROM `#iCMS@__prop` {$sql}","G");
         iPHP::pagenav($total,$maxperpage,"个属性");
-        $rs=iDB::getArray("SELECT * FROM `#iCMS@__prop` {$sql} order by pid DESC LIMIT ".iPHP::$offset." , {$maxperpage}");
-//echo iDB::$last_query;
-//iDB::$last_query='explain '.iDB::$last_query;
-//$explain=iDB::getRow(iDB::$last_query);
-//var_dump($explain);
-        $_count	= count($rs);
+        $rs     = iDB::all("SELECT * FROM `#iCMS@__prop` {$sql} order by pid DESC LIMIT ".iPHP::$offset." , {$maxperpage}");
+        $_count = count($rs);
     	include iACP::view("prop.manage");
     }
     function cache(){
-    	$rs	= iDB::getArray("SELECT * FROM `#iCMS@__prop`",ARRAY_A);
+    	$rs	= iDB::all("SELECT * FROM `#iCMS@__prop`",ARRAY_A);
     	foreach((array)$rs AS $row) {
     		$pkey	= $row['cid'].$row['type'].$row['field'];
     		$cidA[$row['cid']][]=$row;

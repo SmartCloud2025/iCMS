@@ -24,7 +24,7 @@ function iCMS_link($vars){
 		$rs			= iCache::get($cacheName);
 	}
 	if(empty($rs)){
-		$rs=iDB::getArray("SELECT * FROM `#iCMS@__links`{$where} ORDER BY orderNum ASC,id ASC LIMIT 0 , $limit");
+		$rs=iDB::all("SELECT * FROM `#iCMS@__links`{$where} ORDER BY orderNum ASC,id ASC LIMIT 0 , $limit");
 		$iscache && iCache::set($cacheName,$rs,$cacheTime);
 	}
 	return $rs;

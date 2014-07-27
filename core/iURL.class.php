@@ -16,14 +16,14 @@ class iURL {
 	public static function init($config){
 		self::$config	= $config;
 	}
-    function CPDIR($cid="0") {
+    private static function CPDIR($cid="0") {
         $C    = iCache::get('iCMS/category/'.$cid);
         $C['rootid'] && $dir.=self::CPDIR($C['rootid']);
         $dir.='/'.$C['dir'];
         return $dir;
     }
 
-    function domain($cid="0",$akey='dir') {
+    private static function domain($cid="0",$akey='dir') {
         $ii       = new stdClass();
         $C        = iCache::get('iCMS/category/'.$cid);
         $rootid   = $C['rootid'];
@@ -41,7 +41,7 @@ class iURL {
         return $ii;
     }
 
-    function rule($a) {
+    public static function rule($a) {
     	$b	= $a[1];
     	$c	= self::$uriArray;
         switch($b) {
@@ -207,7 +207,7 @@ class iURL {
         }
         return $i;
     }
-    public static function ma($n,$o,&$a){
+    private static function ma($n,$o,&$a){
 		$a[$n]	= $a[$o];
 		if(is_array($a[$o])){
     		$a[$n] = $a[$o][0];

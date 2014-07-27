@@ -13,9 +13,9 @@ class categoryApp{
     	$appid && $this->appid	= $appid;
     	$_GET['appid'] && $this->appid	= (int)$_GET['appid'];
     }
-    public function doiCMS($tpl = 'index') {
-		$cid	= (int)$_GET['cid'];
-		$dir	= iS::escapeStr($_GET['dir']);
+    public function do_iCMS($tpl = 'index') {
+        $cid = (int)$_GET['cid'];
+        $dir = iS::escapeStr($_GET['dir']);
 		if(empty($cid) && $dir){
 			$cid	= iCache::get('iCMS/category/dir2cid',$dir);
 		}
@@ -30,14 +30,14 @@ class categoryApp{
        	$rs['outurl']	= $rs['url'];
         if($tpl && $rs['outurl']) return iPHP::gotourl($rs['outurl']);
 		
-		$iurl			= $rs['iurl'];
-        $rs['iurl']    	= (array)$iurl;
-        $rs['url']    	= $iurl->href;
-        $rs['link']		= "<a href='{$rs['url']}'>{$rs['name']}</a>";
-        $rs['nav']		= $this->nav($rs);
-        $rootidA		= iCache::get('iCMS/category/rootid');
-        $rs['subid']    = $rootidA[$id];
-        $rs['subids']   = implode(',',(array)$rs['subid']);
+        $iurl         = $rs['iurl'];
+        $rs['iurl']   = (array)$iurl;
+        $rs['url']    = $iurl->href;
+        $rs['link']   = "<a href='{$rs['url']}'>{$rs['name']}</a>";
+        $rs['nav']    = $this->nav($rs);
+        $rootidA      = iCache::get('iCMS/category/rootid');
+        $rs['subid']  = $rootidA[$id];
+        $rs['subids'] = implode(',',(array)$rs['subid']);
 
         $rs['parent']	= array();
         if($rs['rootid']){
@@ -46,7 +46,7 @@ class categoryApp{
 	        $rs['parent']['link']	= "<a href='{$rs['parent']['url']}'>{$rs['parent']['name']}</a>";
         }
         if($rs['password']){
-            $categoryAuth         = iPHP::getCookie('categoryAuth_'.$id);
+            $categoryAuth         = iPHP::get_cookie('categoryAuth_'.$id);
             list($CA_cid,$CA_psw) = explode('#=iCMS!=#',authcode($categoryAuth,'DECODE'));
         	if($CA_psw!=md5($rs['password'])){
         		iPHP::assign('forward',__REF__);
@@ -54,9 +54,15 @@ class categoryApp{
 	        	exit;
         	}
         }
+        $rs['pic']  = get_pic($rs['pic']);
+        $rs['mpic'] = get_pic($rs['mpic']);
+        $rs['spic'] = get_pic($rs['spic']);
+
         $rs['body'] && $rs['body'] = iCache::get('iCMS/category.'.$rs['cid'].'/body');
         ($rs['mode'] && $tpl) && iPHP::page($iurl);
-        
+        $rs['appid']  = iCMS_APP_CATEGORY;
+
+
 		iPHP::assign('category',$rs);
         if($tpl) {
             iCMS::gotohtml($iurl->path,$iurl->href,$rs['mode']);

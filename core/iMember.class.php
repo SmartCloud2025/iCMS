@@ -26,11 +26,11 @@ class iMember{
         	self::LoginPage();
     	}
 
-        self::$Rs = iDB::getRow("SELECT * FROM `#iCMS@__members` WHERE `username`='{$a}' AND `password`='{$p}' AND `status`='1' LIMIT 1;");
+        self::$Rs = iDB::row("SELECT * FROM `#iCMS@__members` WHERE `username`='{$a}' AND `password`='{$p}' AND `status`='1' LIMIT 1;");
         self::$Rs OR self::LoginPage();
         self::$Rs->info && self::$Rs->info	= unserialize(self::$Rs->info);
         self::$uId      = self::$Rs->uid;
-        self::$group    = iDB::getRow("SELECT * FROM `#iCMS@__group` WHERE `gid`='".self::$Rs->gid."' LIMIT 1;");
+        self::$group    = iDB::row("SELECT * FROM `#iCMS@__group` WHERE `gid`='".self::$Rs->gid."' LIMIT 1;");
         self::$power    = self::smerge(self::$group->power,self::$Rs->power);
         self::$cpower   = self::smerge(self::$group->cpower,self::$Rs->cpower);
         self::$nickname = self::$Rs->nickname?self::$Rs->nickname:self::$Rs->username;
@@ -46,14 +46,14 @@ class iMember{
         $ip  = iPHP::getIp();
         $sep = iPHP_AUTH_IP?'#=iCMS['.$ip.']=#':'#=iCMS=#';
         if(empty($a) && empty($p)) {
-            $auth       = iPHP::getCookie(self::$AUTH);
+            $auth       = iPHP::get_cookie(self::$AUTH);
             list($a,$p) = explode($sep,authcode($auth,'DECODE'));
             return self::check($a,$p);
         }else {
             $p   = md5($p);
             $crs = self::check($a,$p);
             iDB::query("UPDATE `#iCMS@__members` SET `lastip`='".$ip."',`lastlogintime`='".time()."',`logintimes`=logintimes+1 WHERE `uid`='".self::$uId."'");
-            iPHP::setCookie(self::$AUTH,authcode($a.$sep.$p,'ENCODE'));
+            iPHP::set_cookie(self::$AUTH,authcode($a.$sep.$p,'ENCODE'));
         	self::$ajax && iPHP::json(array('code'=>1));
             return $crs;
         }
@@ -62,13 +62,13 @@ class iMember{
 	//登陆页
 	public static function LoginPage(){
 		self::$ajax && iPHP::json(array('code'=>0));
-        iPHP::setCookie(self::$AUTH,'',-31536000);
+        iPHP::set_cookie(self::$AUTH,'',-31536000);
 		include self::$LOGIN_TPL.'/template/login.php';
 		exit;
 	}
 	//注销
 	public static function logout(){
-		iPHP::setCookie(self::$AUTH,'',-31536000);
+		iPHP::set_cookie(self::$AUTH,'',-31536000);
 	}
     //检查栏目权限
     public static function CP($p=NULL,$T="F",$url=__REF__) {

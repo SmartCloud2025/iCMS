@@ -85,9 +85,19 @@ $(function(){
               <input type="text" name="subname" class="span6" id="subname" value="<?php echo $rs['subname'] ; ?>"/>
             </div>
             <div class="clearfloat mb10"></div>
-            <div class="input-prepend input-append"> <span class="add-on">缩 略 图</span>
+            <div class="input-prepend input-append"> <span class="add-on">缩略图</span>
               <input type="text" name="pic" class="span6" id="pic" value="<?php echo $rs['pic'] ; ?>"/>
               <?php iACP::picBtnGroup("pic");?>
+            </div>
+            <div class="clearfloat mb10"></div>
+            <div class="input-prepend input-append"> <span class="add-on">缩略图2</span>
+              <input type="text" name="mpic" class="span6" id="mpic" value="<?php echo $rs['mpic'] ; ?>"/>
+              <?php iACP::picBtnGroup("mpic");?>
+            </div>
+            <div class="clearfloat mb10"></div>
+            <div class="input-prepend input-append"> <span class="add-on">缩略图3</span>
+              <input type="text" name="spic" class="span6" id="spic" value="<?php echo $rs['spic'] ; ?>"/>
+              <?php iACP::picBtnGroup("spic");?>
             </div>
             <div class="clearfloat mb10"></div>
             <div class="input-prepend"> <span class="add-on">SEO 标题</span>
@@ -274,7 +284,7 @@ $(function(){
                     <a class="btn delprop"><i class="fa fa-trash-o"></i> 删除</a></td>
                 </tr>
                 <tr>
-                  <td colspan="2"><a href="#category-add-prop" class="btn addprop"/>增加加附加属性</a></td>
+                  <td colspan="2"><a href="#category-add-prop" class="btn addprop"/>增加附加属性</a></td>
                 </tr>
               </tfoot>
             </table>

@@ -20,15 +20,15 @@ class htmlApp{
         $this->time_start = $mtime[1] + $mtime[0];
         $this->alltime = $_GET['alltime']?$_GET['alltime']:0;
     }
-    function doindex(){
+    function do_index(){
     	include iACP::view("html.index");
     }
-    function docreateIndex(){
-    	$indexTPL	= iCMS::$config['site']['indexTPL']	= $this->PG['indexTPL'];
-    	$indexName	= iCMS::$config['site']['indexName']= $this->PG['indexName'];
+    function do_createIndex(){
+		$indexTPL  = iCMS::$config['template']['index']	= $this->PG['indexTPL'];
+		$indexName = iCMS::$config['template']['index_name'] = $this->PG['indexName'];
     	$indexName OR $indexName ="index".iCMS::$config['router']['htmlext'];
     	iFS::filterExt($indexName,true) OR iPHP::alert('文件名后缀不合法!');
-		iACP::updateConfig('site');
+		iACP::updateConfig('template');
     	$this->CreateIndex($indexTPL,$indexName);
     }
     function CreateIndex($indexTPL,$indexName,$p=1,$loop=1){
@@ -39,8 +39,8 @@ class htmlApp{
 		$query['indexName']	= $indexName;
 
 		$app	= iPHP::app("index");
-		$htm	= $app->doiCMS($indexTPL,$indexName);
-		$fpath	= iPHP::page_p2num($htm[1]->pagepath);
+		$htm	= $app->do_iCMS($indexTPL,$indexName);
+		$fpath	= iPHP::p2num($htm[1]->pagepath);
 		$total	= $GLOBALS['iPage']['total'];
 		iFS::filterExt($fpath,true) OR iPHP::alert("文件后缀不安全,禁止生成!<hr />请更改系统设置->网站URL->文件后缀");
 		iFS::mkdir($htm[1]->dir);
@@ -77,11 +77,11 @@ class htmlApp{
 		$updateMsg	= $this->page?true:false;
 		iPHP::dialog($msg,$loopurl?"src:".$loopurl:'',$dtime,$moreBtn,$updateMsg);
     }
-    function docategory(){
+    function do_category(){
     	$this->category		= iPHP::appClass("category",iCMS_APP_ARTICLE);
     	include iACP::view("html.category");
     }
-    function docreateCategory($cid=0,$p=1,$loop=1){
+    function do_createCategory($cid=0,$p=1,$loop=1){
 		$category	= $this->PG['cid'];
 		$rootid		= $this->PG['rootid'];
 		$k			= (int)$this->PG['k'];
@@ -110,7 +110,7 @@ class htmlApp{
 		$app	= iPHP::app("category");
 		$htm	= $app->category($cid);
 
-		$fpath	= iPHP::page_p2num($htm[1]['iurl']['pagepath']);
+		$fpath	= iPHP::p2num($htm[1]['iurl']['pagepath']);
 		$total	= $GLOBALS['iPage']['total'];
 		iFS::filterExt($fpath,true) OR iPHP::alert("文件后缀不安全,禁止生成!<hr />请更改栏目->URL规则设置->栏目规则");
 		iFS::mkdir($htm[1]['iurl']['dir']);
@@ -122,7 +122,7 @@ class htmlApp{
 		if($loop<$this->CP && $GLOBALS['page']<$total) {
 			$loop++;
 			$p++;
-			$this->docreateCategory($cid,$p,$loop);
+			$this->do_createCategory($cid,$p,$loop);
 		}
 		$looptimes	= ($total-$GLOBALS['page'])/$this->CP;
 		$use_time	= $this->use_time();
@@ -168,11 +168,11 @@ class htmlApp{
 		iPHP::dialog($msg,$loopurl?"src:".$loopurl:"",$dtime,$moreBtn,$updateMsg);
 
     }
-    function doarticle(){
+    function do_article(){
     	$this->category		= iPHP::appClass("category",iCMS_APP_ARTICLE);
     	include iACP::view("html.article");
     }
-    function docreateArticle($aid=null){
+    function do_createArticle($aid=null){
 		$category	= $this->PG['cid'];
 		$startime	= $this->PG['startime'];
 		$endtime	= $this->PG['endtime'];
@@ -185,7 +185,7 @@ class htmlApp{
     	$aid===null && $aid=$this->PG['aid'];
 		if($aid){
 			$title	= self::Article($aid);
-			iPHP::OK($title.'<hr />生成静态完成!');
+			iPHP::success($title.'<hr />生成静态完成!');
 		}
 		
 		if($category[0]=='all'){
@@ -199,22 +199,18 @@ class htmlApp{
 			$cids	= implode(',',$category);
 			$whereSQL.= " AND `cid` IN({$cids})";
 		}
-        $startime 	&& $whereSQL.=" AND `pubdate`>=UNIX_TIMESTAMP('{$startime} 00:00:00')";
-        $endtime 	&& $whereSQL.=" AND `pubdate`<=UNIX_TIMESTAMP('{$endtime} 23:59:59')";
-        $startid 	&& $whereSQL.=" AND `id`>='{$startid}'";
-        $endid		&& $whereSQL.=" AND `id`<='{$endid}'";
-        $perpage	OR $perpage	= $this->CP;
-        $orderby	OR $orderby	= "id DESC";
-        $total		= iPHP::total(false,"SELECT count(*) FROM `#iCMS@__article` {$whereSQL}","G");
-        $looptimes	= ceil($total/$perpage);
-        $offset		= $this->page*$perpage;
-        $rs			= iDB::getArray("SELECT `id` FROM `#iCMS@__article` {$whereSQL} order by {$orderby} LIMIT {$offset},{$perpage}");
-//echo iDB::$last_query;
-//iDB::$last_query='explain '.iDB::$last_query;
-//$explain=iDB::getRow(iDB::$last_query);
-//var_dump($explain);
-        $_count	= count($rs);
-        $msg	= "共<span class='label label-info'>{$total}</span>篇文章,将分成<span class='label label-info'>{$looptimes}</span>次完成<hr />开始执行第<span class='label label-info'>".($this->page+1)."</span>次生成,共<span class='label label-info'>{$_count}</span>篇<hr />";
+		$startime&& $whereSQL.=" AND `pubdate`>=UNIX_TIMESTAMP('{$startime} 00:00:00')";
+		$endtime && $whereSQL.=" AND `pubdate`<=UNIX_TIMESTAMP('{$endtime} 23:59:59')";
+		$startid && $whereSQL.=" AND `id`>='{$startid}'";
+		$endid   && $whereSQL.=" AND `id`<='{$endid}'";
+		$perpage OR $perpage = $this->CP;
+		$orderby OR $orderby = "id DESC";
+		$total     = iPHP::total(false,"SELECT count(*) FROM `#iCMS@__article` {$whereSQL}","G");
+		$looptimes = ceil($total/$perpage);
+		$offset    = $this->page*$perpage;
+		$rs        = iDB::all("SELECT `id` FROM `#iCMS@__article` {$whereSQL} order by {$orderby} LIMIT {$offset},{$perpage}");
+		$_count    = count($rs);
+		$msg       = "共<span class='label label-info'>{$total}</span>篇文章,将分成<span class='label label-info'>{$looptimes}</span>次完成<hr />开始执行第<span class='label label-info'>".($this->page+1)."</span>次生成,共<span class='label label-info'>{$_count}</span>篇<hr />";
         for($i=0;$i<$_count;$i++){
 			self::Article($rs[$i]['id']);
 			$msg.= $rs[$i]['id'].' <i class="fa fa-check"></i> ';
@@ -255,7 +251,7 @@ class htmlApp{
 		if($total>2){
 			for($ap=2;$ap<=$total;$ap++){
 				$htm	= $app->article($id,$ap);
-				$fpath	= iPHP::page_p2num($htm[1]->iurl->pagepath,$ap);
+				$fpath	= iPHP::p2num($htm[1]->iurl->pagepath,$ap);
 				iFS::write($fpath,$htm[0]);
 			}
 		}

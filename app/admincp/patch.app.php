@@ -17,12 +17,12 @@ class patchApp{
 		$this->msg		= "";
 		$this->patch	= iPatch::init(isset($_GET['force'])?true:false);
 	}
-    function docheck(){
+    function do_check(){
 		if(empty($this->patch)){
 			if($_GET['ajax']){
 				iPHP::json(array('code'=>0));
 			}else{
-				iPHP::OK("您使用的 iCMS 版本,目前是最新版本<hr />当前版本：iCMS ".iCMS_VER." [".iCMS_RELEASE."]",0,"5");
+				iPHP::success("您使用的 iCMS 版本,目前是最新版本<hr />当前版本：iCMS ".iCMS_VER." [".iCMS_RELEASE."]",0,"5");
 			}
 		}else{
 	    	switch(iCMS::$config['system']['patch']){
@@ -52,12 +52,12 @@ class patchApp{
     		iPHP::dialog($json['msg'],0,30,$moreBtn);
 		}
     }
-    function doinstall(){
+    function do_install(){
 		$this->msg.= iPatch::update();//更新文件
 		$this->msg.= iPatch::run();//数据库升级
 		include iACP::view("patch");
     }
-    function doupdate(){
+    function do_update(){
 		$this->msg	= iPatch::download();//下载文件包
 		include iACP::view("patch");
     }

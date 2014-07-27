@@ -12,23 +12,23 @@ class userApp {
     public $openid  = null;
     function __construct() {
         $this->uid      = (int)$_GET['uid'];
-        $this->userid   = (int)iPHP::getCookie('userid');
+        $this->userid   = (int)iPHP::get_cookie('userid');
         $this->nickname = iS::escapeStr(iPHP::getUniCookie('nickname'));
         $this->openid   = iS::escapeStr($_GET['openid']);
-        $this->forward  = iPHP::getCookie('forward');
+        $this->forward  = iPHP::get_cookie('forward');
         $this->forward OR $this->forward = iCMS::$config['router']['URL'];
         // iFS::config($GLOBALS['iCONFIG']['user_fs_conf']);
         iFS::$userid    = $this->userid;
         iPHP::assign('openid',$this->openid);
     }
-    public function doiCMS($a = null) {}
-    public function dohome(){
+    public function do_iCMS($a = null) {}
+    public function do_home(){
         $this->user(true);
         $u['category'] = user::category((int)$_GET['cid']);
         iPHP::append('user',$u,true);
         return iPHP::view('iTPL://user/home.htm');
     }
-    public function domanage(){
+    public function do_manage(){
         $pgArray   = array('publish','category','article','comment','favorite','share','follow','fans');
         $pg        = iS::escapeStr($_GET['pg']);
         $pg OR $pg ='article';
@@ -38,7 +38,7 @@ class userApp {
             return iPHP::view("iTPL://user/manage.htm");         
         }
     }
-    public function act_profile_base(){
+    private function act_profile_base(){
         $unick         = iS::escapeStr($_POST['unick']);
         $sex           = iS::escapeStr($_POST['sex']);
         $weibo         = iS::escapeStr($_POST['weibo']);
@@ -67,7 +67,7 @@ class userApp {
         $pskin       == iPHP::lang('user:profile:pskin') && $pskin="";
         $phair       == iPHP::lang('user:profile:phair') && $phair="";
         
-        // $user   = iDB::getRow("SELECT `nickname` FROM `#iCMS@__user` where `uid`='{$this->userid}'");
+        // $user   = iDB::row("SELECT `nickname` FROM `#iCMS@__user` where `uid`='{$this->userid}'");
         // if($unick!=$user->nickname){
         //     $unickEdit  = 1;
         //     iDB::query("UPDATE `#iCMS@__user` SET `nickname` = '$unick' WHERE `uid` = '{$this->userid}';");
@@ -76,7 +76,7 @@ class userApp {
         //$this->userinfo();
         
     //  iDB::$show_errors = true;
-        $uid = iDB::getValue("SELECT `uid` FROM `#iCMS@__user_data` where `uid`='{$this->userid}' limit 1");
+        $uid = iDB::value("SELECT `uid` FROM `#iCMS@__user_data` where `uid`='{$this->userid}' limit 1");
         if($uid){
             iDB::query("UPDATE `#iCMS@__user_data`
 SET `weibo` = '$weibo', `province` = '$province', `city` = '$city', `year` = '$year', `month` = '$month', `day` = '$day', `constellation` = '$constellation', `profession` = '$profession', `isSeeFigure` = '$isSeeFigure', `height` = '$height', `weight` = '$weight', `bwhB` = '$bwhB', `bwhW` = '$bwhW', `bwhH` = '$bwhH', `pskin` = '$pskin', `phair` = '$phair', `shoesize` = '$shoesize', `personstyle` = '$personstyle', `slogan` = '$slogan', `unickEdit` = '$unickEdit', `coverpic` = '$coverpic'
@@ -87,9 +87,9 @@ WHERE `uid` = '$this->userid';");
             (`uid`, `realname`, `mobile`, `enterprise`, `address`, `zip`, `weibo`, `province`, `city`, `year`, `month`, `day`, `constellation`, `profession`, `isSeeFigure`, `height`, `weight`, `bwhB`, `bwhW`, `bwhH`, `pskin`, `phair`, `shoesize`, `personstyle`, `slogan`, `unickEdit`, `coverpic`, `tb_nick`, `tb_buyer_credit`, `tb_seller_credit`, `tb_type`, `is_golden_seller`)
 values ('$this->userid', '$realname', '$mobile', '$enterprise', '$address', '$zip', 'weibo', '$province', '$city', '$year', '$month', '$day', '$constellation', '$profession', '$isSeeFigure', '$height', '$weight', '$bwhB', '$bwhW', '$bwhH', '$pskin', '$phair', '$shoesize', '$personstyle', '$slogan', '$unickEdit', '$coverpic', '$tb_nick', '$tb_buyer_credit', '$tb_seller_credit', '$tb_type', '$is_golden_seller');");
         }
-        iPHP::OK('user:profile:success');
+        iPHP::success('user:profile:success');
     }
-    public function act_profile_avatar(){
+    private function act_profile_avatar(){
         iFS::$watermark     = false;
         iFS::$checkFileData = true;
         $avatardir = dirname(get_avatar($this->userid));
@@ -99,7 +99,7 @@ values ('$this->userid', '$realname', '$mobile', '$enterprise', '$address', '$zi
         iPHP::code(1,'user:profile:avatar',$avatarurl,'json');
     }
 
-    public function act_profile_setpassword(){
+    private function act_profile_setpassword(){
 
         iPHP::seccode($_POST['validCode']) OR iPHP::alert('iCMS:seccode:error');
         
@@ -109,7 +109,7 @@ values ('$this->userid', '$realname', '$mobile', '$enterprise', '$address', '$zi
         
         $newPwd1!=$newPwd2 && iPHP::alert("user:password:unequal");
         
-        $password = iDB::getValue("SELECT `password` FROM `#iCMS@__user` where `uid`='{$this->userid}' limit 1");
+        $password = iDB::value("SELECT `password` FROM `#iCMS@__user` where `uid`='{$this->userid}' limit 1");
         $oldPwd!=$password && iPHP::alert("user:password:original");
         iDB::query("UPDATE `#iCMS@__user` SET `password` = '$newPwd1' WHERE `uid` = '{$this->userid}';");
         iPHP::alert("user:password:modified",'js:parent.location.reload();');
@@ -125,7 +125,7 @@ values ('$this->userid', '$realname', '$mobile', '$enterprise', '$address', '$zi
             $this->$funname();
         }
     }
-    public function doprofile(){
+    public function do_profile(){
         $pgArray   = array('base','avatar','setpassword','bind','custom');
         $pg        = iS::escapeStr($_GET['pg']);
         $pg OR $pg ='base';
@@ -139,7 +139,7 @@ values ('$this->userid', '$realname', '$mobile', '$enterprise', '$address', '$zi
             return iPHP::view("iTPL://user/profile.htm");         
         }
     }
-   function user($ud=false){
+    private function user($ud=false){
         $status = array('logined'=>false,'followed'=>false,'isme'=>false);
         if($this->uid){
             $user = user::data($this->uid);
@@ -148,7 +148,7 @@ values ('$this->userid', '$realname', '$mobile', '$enterprise', '$address', '$zi
 
         $me = user::status();
         if(empty($me) && empty($user)){
-            iPHP::setCookie('forward', '',-31536000);
+            iPHP::set_cookie('forward', '',-31536000);
             //user::status(USER_LOGIN_URL,"nologin");
             iPHP::gotourl(USER_LOGIN_URL);
         }
@@ -168,11 +168,11 @@ values ('$this->userid', '$realname', '$mobile', '$enterprise', '$address', '$zi
         iPHP::assign('user',   (array)$user);
         $ud && iPHP::assign('userdata',(array)$this->userdata());
     }
-    function userdata(){
-        $userdata = iDB::getRow("SELECT * FROM `#iCMS@__user_data` where `uid`='{$this->userid}' limit 1;");
+    private function userdata(){
+        $userdata = iDB::row("SELECT * FROM `#iCMS@__user_data` where `uid`='{$this->userid}' limit 1;");
         $userdata OR iDB::query("INSERT INTO `#iCMS@__user_data` (`uid`,`realname`,`mobile`,`enterprise`,`address`,`zip`,`weibo`,`province`,`city`,`year`,`month`,`day`,`constellation`,`profession`,`isSeeFigure`,`height`,`weight`,`bwhB`,`bwhW`,`bwhH`,`pskin`,`phair`,`shoesize`,`personstyle`,`slogan`,`unickEdit`,`coverpic`,`tb_nick`,`tb_buyer_credit`,`tb_seller_credit`,`tb_type`,`is_golden_seller`) VALUES ( '$this->userid','','','','','','','','','','','','','','1','0','0','0','0','0','','','0','','','0','','','','','','');");
-        $userdata->coverpic && $userdata->coverpic     = iFS::fp($userdata->coverpic,'+http');
-        $userdata->enterprise && $userdata->enterprise = unserialize($userdata->enterprise);
+        $userdata->coverpic  && $userdata->coverpic   = iFS::fp($userdata->coverpic,'+http');
+        $userdata->enterprise&& $userdata->enterprise = unserialize($userdata->enterprise);
         return $userdata;
     }
 
@@ -236,7 +236,7 @@ values ('$this->userid', '$realname', '$mobile', '$enterprise', '$address', '$zi
         $uid    = iDB::$insert_id;
         user::set_cookie($username,$password,array('uid'=>$uid,'username'=>$username,'nickname'=>$nickname));
         //user::setCache($uid);
-        iPHP::setCookie('forward', '',-31536000);
+        iPHP::set_cookie('forward', '',-31536000);
         iPHP::json(array('code'=>1,'forward'=>$this->forward));
     }
     public function API_check(){
@@ -295,7 +295,7 @@ values ('$this->userid', '$realname', '$mobile', '$enterprise', '$address', '$zi
     }
     public function API_register(){
         if(iCMS::$config['user']['register']){
-            iPHP::setCookie('forward',$this->forward);
+            iPHP::set_cookie('forward',$this->forward);
             user::status($this->forward,"login");
             return iPHP::view('iTPL://user/register.htm');
         }
@@ -314,7 +314,7 @@ values ('$this->userid', '$realname', '$mobile', '$enterprise', '$address', '$zi
     } 
     public function API_login(){
         if(iCMS::$config['user']['login']){
-            iPHP::setCookie('forward',$this->forward);
+            iPHP::set_cookie('forward',$this->forward);
             user::status($this->forward,"login");
             return iPHP::view('iTPL://user/login.htm');
         }

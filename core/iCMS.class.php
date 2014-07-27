@@ -31,16 +31,16 @@ class iCMS {
         iFS::init(self::$config['FS'],'filedata');
         iCache::init(self::$config['cache']);
         iURL::init(self::$config['router']);
-        iPHP::iTPL();
+        iPHP::iTemplate();
 
         iPHP_DEBUG      && iDB::$show_errors = true;
         iPHP_TPL_DEBUG  && iPHP::clear_compiled_tpl();
         
-        define('iCMS_PUBLIC', self::$config['router']['publicURL']);
-        define('iCMS_API', iCMS_PUBLIC.'/api.php');
-        define('iCMS_URL', self::$config['router']['URL']);
-        define('iCMS_REWRITE', self::$config['app']['rewrite']);
-        self::$apps   = self::$config['apps'];
+        define('iCMS_PUBLIC',   self::$config['router']['publicURL']);
+        define('iCMS_API',      iCMS_PUBLIC.'/api.php');
+        define('iCMS_URL',      self::$config['router']['URL']);
+        define('iCMS_REWRITE',  self::$config['app']['rewrite']);
+        self::$apps = self::$config['apps'];
         self::assign_site();
 	}
     public static function assign_site(){
@@ -71,7 +71,7 @@ class iCMS {
      * @param string $do 动作名称
      * @return iCMS
      */
-    public static function run($app = NULL,$do = NULL,$prefix="do") {
+    public static function run($app = NULL,$do = NULL,$prefix="do_") {
     	//empty($app) && $app	= $_GET['app']; //单一入口
     	if(empty($app)){
             $fi  = iFS::name(__SELF__);
@@ -107,7 +107,7 @@ class iCMS {
             ),            
         );
         iPHP::$iTPL->_iTPL_VARS = self::$app_vars;
-        self::$app    = iPHP::app($app);
+        self::$app = iPHP::app($app);
 		if(self::$app_do && self::$app->methods){
 			in_array(self::$app_do, self::$app->methods) OR iPHP::throwException('应用程序运行出错. <b>' .self::$app_name. '</b> 类中找不到方法定义: <b>'.self::$app_method.'</b>', 1003);
 			$method = self::$app_method;
@@ -198,7 +198,7 @@ class iCMS {
             if(strpos($val,'::')!==false){
                 list($tag,$start,$end) = explode('::',$val);
                 if($tag=='NUM'){
-                    $subject = cnNum($subject);
+                    $subject = cnum($subject);
                     if (preg_match('/\d{'.$start.','.$end.'}/i', $subject)) {
                         return $val;
                     }
@@ -269,149 +269,4 @@ class iCMS {
         $subject = str_replace($linkA,$linkArray,$subject);
         return $subject;
     }
-}
-function small($sfp,$w='',$h='',$scale=true) {
-    $ext    = iFS::getext($sfp);
-    if(strpos($sfp,'_')!==false)
-        return $sfp;
-    
-    if(empty($sfp)){
-        $twh    =iCMS::$config["FS"]['url'].'/1x1.gif';
-    }else{
-        $twh    = $sfp.'_'.$w.'x'.$h.'.jpg';
-    }
-    echo $twh;
-}
-function baiduping($href) {
-    $url    ='http://ping.baidu.com/ping/RPC2';
-    $postvar='<methodCall>
-<methodName>weblogUpdates.extendedPing</methodName>
-<params>
-<param>
-<value><string>'.iCMS::$config['site']['name'].'</string></value>
-</param>
-<param>
-<value><string>'.iCMS::$config['router']['URL'].'</string></value>
-</param>
-<param>
-<value><string>'.$href.'</string></value>
-</param>
-<param>
-<value><string>'.iCMS::$config['router']['URL'].'/s/rss.php</string></value>
-</param>
-</params>
-</methodCall>';
-    $ch = curl_init();
-    curl_setopt($ch, CURLOPT_URL, $url);
-    curl_setopt($ch, CURLOPT_RETURNTRANSFER,1);
-    curl_setopt($ch, CURLOPT_POST, 1);
-    curl_setopt($ch, CURLOPT_POSTFIELDS, $postvar);
-    curl_setopt($ch, CURLOPT_HTTPHEADER, array("Content-Type: text/xml")); 
-    $res = curl_exec ($ch);
-    curl_close ($ch);
-    var_dump($res);
-    return $res;
-}
-function userData($uid,$type,$size=0){
-    switch($type){
-        case 'avatar':
-            return rtrim(iCMS::$config['FS']['url'],'/').'/'.get_avatar($uid,$size);
-        break;
-        case 'url':
-            $url = iPHP::router(array('/{uid}/',$uid),iCMS_REWRITE);
-            return rtrim(iCMS::$config['router']['userURL'],'/').$url;
-        break;
-        case 'urls':
-            $url = rtrim(iCMS::$config['router']['userURL'],'/');
-            return array(
-                'home'      => iPHP::router(array('/{uid}/',$uid,$url),iCMS_REWRITE),
-                'favorite'  => iPHP::router(array('/{uid}/favorite/',$uid,$url),iCMS_REWRITE),
-                'share'     => iPHP::router(array('/{uid}/share/',$uid,$url),iCMS_REWRITE),
-                'follower'  => iPHP::router(array('/{uid}/follower/',$uid,$url),iCMS_REWRITE),
-                'following' => iPHP::router(array('/{uid}/following/',$uid,$url),iCMS_REWRITE),
-            );
-        break;
-
-    }
-}
-function autoformat2($html){
-    $html   = stripslashes($html);
-    $html   = preg_replace(array(
-    '/on(load|click|dbclick|mouseover|mousedown|mouseup)="[^"]+"/is',
-    '/<script[^>]*?>.*?<\/script>/si',
-    '/<style[^>]*?>.*?<\/style>/si',
-    '/<img[^>]+src=[" ]?([^"]+)[" ]?[^>]*>/is',
-    '/<br[^>]*>/i',
-    '/<div[^>]*>(.*?)<\/div>/is',
-    '/<p[^>]*>(.*?)<\/p>/is'
-    ),array('','','',"\n[img]$1[/img]","\n","$1\n","$1\n"),$html);
-
-    $html   = str_replace("&nbsp;",'',$html);
-    $html   = str_replace("　",'',$html);
-
-    $html   = preg_replace(array(
-    '/<b[^>]*>(.*?)<\/b>/i',
-    '/<strong[^>]*>(.*?)<\/strong>/i'
-    ),"[b]$1[/b]",$html);
-
-    $html   = preg_replace('/<[\/\!]*?[^<>]*?>/is','',$html);
-    $html   = preg_replace (array(
-    '/\[img\](.*?)\[\/img\]/is',
-    '/\[b\](.*?)\[\/b\]/is',
-    '/\[url=([^\]|#]+)\](.*?)\[\/url\]/is',
-    '/\[url=([^\]]+)\](.*?)\[\/url\]/is',
-    ),array('<img src="$1" />','<strong>$1</strong>','<a href="$1">$2</a>','<a href="$1">$2</a>'),$html);
-    $_htmlArray = explode("\n",$html);
-    $_htmlArray = array_map("trim", $_htmlArray);
-    $_htmlArray = array_filter($_htmlArray);
-    $isempty    = false;
-    $emptycount = 0;
-    foreach($_htmlArray as $hkey=>$_html){
-        if(empty($_html)){
-            $emptycount++;
-            $isempty    = true;
-            $emptykey   = $hkey;
-        }else{
-            if($emptycount>1 && !$pbkey){
-                $brkey  = $emptykey;
-                $isbr   = true;
-                $htmlArray[$emptykey]='<p><br /></p>';
-            }
-            $emptycount = 0;
-            $emptykey   = 0;
-            $isempty    = false;
-            $pbkey      = false;
-            $htmlArray[$hkey]   = '<p>'.$_html.'</p>';
-        }
-        if($_html=="#--iCMS.PageBreak--#"){
-            unset($htmlArray[$brkey]);
-            $pbkey              = $hkey;
-            $htmlArray[$hkey]   = $_html;
-        }
-    }
-    reset ($htmlArray);
-    if(current($htmlArray)=="<p><br /></p>"){
-        $fkey   = key($htmlArray);
-        unset($htmlArray[$fkey]);
-    }
-    $html   = implode("",$htmlArray);
-    return addslashes($html);
-}
-function cnNum($subject){
-    $searchList = array(
-        array('ⅰ','ⅱ','ⅲ','ⅳ','ⅴ','ⅵ','ⅶ','ⅷ','ⅸ','ⅹ'),
-        array('㈠','㈡','㈢','㈣','㈤','㈥','㈦','㈧','㈨','㈩'),
-        array('①','②','③','④','⑤','⑥','⑦','⑧','⑨','⑩'),
-        array('一','二','三','四','五','六','七','八','九','十'),
-        array('零','壹','贰','叁','肆','伍','陆','柒','捌','玖','拾'),
-        array('Ⅰ','Ⅱ','Ⅲ','Ⅳ','Ⅴ','Ⅵ','Ⅶ','Ⅷ','Ⅸ','Ⅹ','Ⅺ','Ⅻ'),
-        array('⑴','⑵','⑶','⑷','⑸','⑹','⑺','⑻','⑼','⑽','⑾','⑿','⒀','⒁','⒂','⒃','⒄','⒅','⒆','⒇'),
-        array('⒈','⒉','⒊','⒋','⒌','⒍','⒎','⒏','⒐','⒑','⒒','⒓','⒔','⒕','⒖','⒗','⒘','⒙','⒚','⒛')
-    );
-    $replace = array(1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20);
-    foreach ($searchList as $key => $search) {
-        $subject = str_replace($search, $replace, $subject);
-    }
-
-    return $subject;
 }

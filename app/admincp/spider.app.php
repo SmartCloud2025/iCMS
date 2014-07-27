@@ -22,7 +22,7 @@ class spiderApp {
         $this->title = $_GET['title'];
         $this->url   = $_GET['url'];
     }
-    function dobatch(){
+    function do_batch(){
         $idArray = (array)$_POST['id'];
         $idArray OR iPHP::alert("请选择要删除的项目");
         $ids     = implode(',',$idArray);
@@ -41,15 +41,15 @@ class spiderApp {
  				iDB::query("delete from `#iCMS@__spider_rule` where `id` IN($ids);");
    			break;
 		}
-		iPHP::OK('全部删除完成!','js:1');
+		iPHP::success('全部删除完成!','js:1');
 	}
-    function dodelspider() {
+    function do_delspider() {
     	$this->sid OR iPHP::alert("请选择要删除的项目");
         iDB::query("delete from `#iCMS@__spider_url` where `id` = '$this->sid';");
-        iPHP::OK('删除完成','js:1');
+        iPHP::success('删除完成','js:1');
     }
     
-    function domanage($doType = null) {
+    function do_manage($doType = null) {
         $this->category = iPHP::appClass("category",iCMS_APP_ARTICLE);
         $sql = " WHERE 1=1";
         $_GET['keywords'] && $sql.="  AND `title` REGEXP '{$_GET['keywords']}'";
@@ -71,29 +71,29 @@ class spiderApp {
         $maxperpage = (int) $_GET['perpage'] > 0 ? $_GET['perpage'] : 20;
         $total = iPHP::total(false, "SELECT count(*) FROM `#iCMS@__spider_url` {$sql}", "G");
         iPHP::pagenav($total, $maxperpage, "个网页");
-        $rs = iDB::getArray("SELECT * FROM `#iCMS@__spider_url` {$sql} order by {$orderby} LIMIT " . iPHP::$offset . " , {$maxperpage}");
+        $rs = iDB::all("SELECT * FROM `#iCMS@__spider_url` {$sql} order by {$orderby} LIMIT " . iPHP::$offset . " , {$maxperpage}");
         $_count = count($rs);
         include iACP::view("spider.manage");
     }
 
-    function doinbox() {
-        $this->domanage("inbox");
+    function do_inbox() {
+        $this->do_manage("inbox");
     }
 
-    function dotestcont() {
+    function do_testcont() {
         $this->contTest = true;
         $this->spider_content();
     }
 
-    function dotestrule() {
+    function do_testrule() {
         $this->ruleTest = true;
         $this->spider_url();
     }
 
-    function dolistpub() {
+    function do_listpub() {
         $this->spider_url('HM');
     }
-    function dodropurl() {
+    function do_dropurl() {
     	$this->pid OR iPHP::alert("请选择要删除的项目");
 
     	$type	= $_GET['type'];
@@ -101,13 +101,13 @@ class spiderApp {
     		$sql=" AND `publish`='0'";
     	}
         iDB::query("delete from `#iCMS@__spider_url` where `pid` = '$this->pid'{$sql};");
-        iPHP::OK('数据清除完成');
+        iPHP::success('数据清除完成');
     }
-    function dostart() {
+    function do_start() {
         $a	= $this->spider_url();
-        $this->dompublish($a);
+        $this->do_mpublish($a);
     }
-	function dompublish($pubArray=array()){
+	function do_mpublish($pubArray=array()){
 		iPHP::$break	= false;
 		if($_POST['pub']){
 			foreach((array)$_POST['pub'] as $i=>$a){
@@ -139,7 +139,7 @@ class spiderApp {
 	}
 	function multipublish(){
 		$a		= array();
-		$code	= $this->dopublish('multi');
+		$code	= $this->do_publish('multi');
 		//var_dump($pubRs,$pubRs==='-1');
 		$code==='-1' && $label='<br /><span class="label label-warning">该URL的文章已经发布过!请检查是否重复</span>';
 		$code===true && $label='<br /><span class="label label-success">发布成功!</span>';
@@ -149,15 +149,15 @@ class spiderApp {
 		}
 		return $a;
 	}
-    function dopublish($work = null) {
+    function do_publish($work = null) {
         $sid = $this->sid;
         if ($sid) {
-            $sRs = iDB::getRow("SELECT * FROM `#iCMS@__spider_url` WHERE `id`='$this->sid' LIMIT 1;");
+            $sRs = iDB::row("SELECT * FROM `#iCMS@__spider_url` WHERE `id`='$this->sid' LIMIT 1;");
             $this->title = $sRs->title;
             $this->url = $sRs->url;
         }
         $hash	= md5($this->url);
-        $sid	= iDB::getValue("SELECT `id` FROM `#iCMS@__spider_url` where `hash` = '$hash' and `publish`='1'");
+        $sid	= iDB::value("SELECT `id` FROM `#iCMS@__spider_url` where `hash` = '$hash' and `publish`='1'");
         $msg	= '该URL的文章已经发布过!请检查是否重复';
         if ($sid) {
             $work===NULL	&& iPHP::alert($msg.' [sid:'.$sid.']', 'js:parent.$("#' . $hash . '").remove();');
@@ -165,11 +165,15 @@ class spiderApp {
 	            return '-1';
             }
         }elseif($title) {
-            if (iDB::getValue("SELECT `id` FROM `#iCMS@__article` where `title` = '$title'")) {
+            if (iDB::value("SELECT `id` FROM `#iCMS@__article` where `title` = '$title'")) {
             	if($sid){
                 	iDB::query("UPDATE `#iCMS@__spider_url` SET `publish` = '1' WHERE `id` = '$sid';");
                 }else{
-                	iDB::query("INSERT INTO `#iCMS@__spider_url` (`cid`, `rid`,`pid`, `hash`, `title`, `url`, `status`, `publish`, `addtime`, `pubdate`) VALUES ('$this->cid', '$this->rid','$this->pid','$hash','$this->title', '$this->url', '1', '1', '" . time() . "', '" . time() . "');");
+                    $data = array(
+                        'cid'=>$this->cid,'rid'=>$this->rid,'pid'=>$this->pid, 'title'=>$this->title, 'url'=>$this->url, 
+                        'hash'=>$hash, 'status'=>'1', 'publish'=>'1', 'addtime'=>time(), 'pubdate'=>time()
+                    );
+                    iDB::insert('spider_url',$data);
                 }
                 $work===NULL	&& iPHP::alert($msg, 'js:parent.$("#' . $hash . '").remove();');
 	            if($work=='multi'){
@@ -187,7 +191,7 @@ class spiderApp {
         $sleep        = $project['sleep'];
         $poid         = $project['poid'];       
         $_POST['cid'] = $project['cid'];
-        $postRs       = iDB::getRow("SELECT * FROM `#iCMS@__spider_post` WHERE `id`='$poid' LIMIT 1;");
+        $postRs       = iDB::row("SELECT * FROM `#iCMS@__spider_post` WHERE `id`='$poid' LIMIT 1;");
         if ($postRs->post) {
             $postArray = explode("\n", $postRs->post);
             $postArray = array_filter($postArray);
@@ -203,14 +207,18 @@ class spiderApp {
         if ($callback['code'] == "1001") {
             if ($this->sid) {
                 iDB::query("UPDATE `#iCMS@__spider_url` SET `publish` = '1', `pubdate` = '" . time() . "' WHERE `id` = '$this->sid';");
-                $work===NULL	&& iPHP::OK("发布成功!",'js:1');
+                $work===NULL	&& iPHP::success("发布成功!",'js:1');
             } else {
                 $hash    = md5($this->url);
                 $title   = iS::escapeStr($_POST['title']);
                 $url     = iS::escapeStr($_POST['reurl']);
                 $indexId = $callback['indexId'];
-                iDB::query("INSERT INTO `#iCMS@__spider_url` (`cid`, `rid`,`pid`,`indexId`, `hash`, `title`, `url`, `status`, `publish`, `addtime`, `pubdate`) VALUES ('$this->cid', '$this->rid','$pid','$indexId','$hash','$title', '$url', '1', '1', '" . time() . "', '" . time() . "');");
-		        $work===NULL	&& iPHP::OK("发布成功!", 'js:parent.$("#' . $hash . '").remove();');
+                $data = array(
+                    'cid'=>$this->cid,'rid'=>$this->rid,'pid'=>$pid,'indexId'=$indexId,'title'=>$title, 'url'=>$url, 
+                    'hash'=>$hash, 'status'=>'1', 'publish'=>'1', 'addtime'=>time(), 'pubdate'=>time()
+                );
+                iDB::insert('spider_url',$data);
+		        $work===NULL	&& iPHP::success("发布成功!", 'js:parent.$("#' . $hash . '").remove();');
             }
         }
         if($work=="cmd"||$work=="multi"){
@@ -328,7 +336,7 @@ class spiderApp {
         unset($lists);
 		gc_collect_cycles();
         if ($work) {
-            $sArrayTmp = iDB::getArray("SELECT `hash` FROM `#iCMS@__spider_url` where `pid`='$pid'");
+            $sArrayTmp = iDB::all("SELECT `hash` FROM `#iCMS@__spider_url` where `pid`='$pid'");
             $_count = count($sArrayTmp);
             for ($i = 0; $i < $_count; $i++) {
                 $sArray[$sArrayTmp[$i]['hash']] = 1;
@@ -370,7 +378,7 @@ class spiderApp {
 		ini_get('safe_mode') OR set_time_limit(0); 
         $sid = $this->sid;
         if ($sid) {
-            $sRs   = iDB::getRow("SELECT * FROM `#iCMS@__spider_url` WHERE `id`='$sid' LIMIT 1;");
+            $sRs   = iDB::row("SELECT * FROM `#iCMS@__spider_url` WHERE `id`='$sid' LIMIT 1;");
             $title = $sRs->title;
             $cid   = $sRs->cid;
             $pid   = $sRs->pid;
@@ -538,7 +546,7 @@ class spiderApp {
             $content = preg_replace('/<[\/\!]*?[^<>]*?>/is', '', $content);
         }
         if ($data['format'] && $content) {
-            $content = autoformat2($content);
+            $content = autoformat($content);
             $content = stripslashes($content);
         }
 
@@ -595,7 +603,7 @@ class spiderApp {
     }
 
     function checkurl($hash) {
-        $id = iDB::getValue("SELECT `id` FROM `#iCMS@__spider_url` WHERE `hash`='$hash'");
+        $id = iDB::value("SELECT `id` FROM `#iCMS@__spider_url` WHERE `hash`='$hash'");
         return $id ? true : false;
     }
 
@@ -619,14 +627,14 @@ class spiderApp {
     }
 
     function rule($id) {
-        $rs = iDB::getRow("SELECT * FROM `#iCMS@__spider_rule` WHERE `id`='$id' LIMIT 1;", ARRAY_A);
+        $rs = iDB::row("SELECT * FROM `#iCMS@__spider_rule` WHERE `id`='$id' LIMIT 1;", ARRAY_A);
         $rs['rule'] && $rs['rule'] = stripslashes_deep(unserialize($rs['rule']));
         $rs['user_agent'] OR $rs['user_agent'] = "Mozilla/5.0 (compatible; Baiduspider/2.0; +http://www.baidu.com/search/spider.html)";
         $this->useragent = $rs['user_agent'];
         return $rs;
     }
 
-    function dorule() {
+    function do_rule() {
         if ($_GET['keywords']) {
             $sql = " WHERE `keyword` REGEXP '{$_GET['keywords']}'";
         }
@@ -634,24 +642,24 @@ class spiderApp {
         $maxperpage = (int) $_GET['perpage'] > 0 ? $_GET['perpage'] : 20;
         $total = iPHP::total(false, "SELECT count(*) FROM `#iCMS@__spider_rule` {$sql}", "G");
         iPHP::pagenav($total, $maxperpage, "个规则");
-        $rs = iDB::getArray("SELECT * FROM `#iCMS@__spider_rule` {$sql} order by {$orderby} LIMIT " . iPHP::$offset . " , {$maxperpage}");
+        $rs = iDB::all("SELECT * FROM `#iCMS@__spider_rule` {$sql} order by {$orderby} LIMIT " . iPHP::$offset . " , {$maxperpage}");
         $_count = count($rs);
         include iACP::view("spider.rule");
     }
 
-    function docopyrule() {
+    function do_copyrule() {
         iDB::query("insert into `#iCMS@__spider_rule` (`name`, `rule`) select `name`, `rule` from `#iCMS@__spider_rule` where id = '$this->rid'");
         $rid = iDB::$insert_id;
-        iPHP::OK('复制完成,编辑此规则', 'url:' . APP_URI . '&do=addrule&rid=' . $rid);
+        iPHP::success('复制完成,编辑此规则', 'url:' . APP_URI . '&do=addrule&rid=' . $rid);
     }
 
-    function dodelrule() {
+    function do_delrule() {
     	$this->rid OR iPHP::alert("请选择要删除的项目");
         iDB::query("delete from `#iCMS@__spider_rule` where `id` = '$this->rid';");
-        iPHP::OK('删除完成','js:1');
+        iPHP::success('删除完成','js:1');
     }
 
-    function doaddrule() {
+    function do_addrule() {
         $rs = array();
         $this->rid && $rs = $this->rule($this->rid);
         $rs['rule'] && $rule = $rs['rule'];
@@ -665,7 +673,7 @@ class spiderApp {
         include iACP::view("spider.addrule");
     }
 
-    function dosaverule() {
+    function do_saverule() {
         $id = (int) $_POST['id'];
         $name = iS::escapeStr($_POST['name']);
         $rule = $_POST['rule'];
@@ -674,17 +682,19 @@ class spiderApp {
         //empty($rule['list_area_rule']) 	&& iPHP::alert('列表区域规则不能为空！');
         empty($rule['list_url_rule']) && iPHP::alert('列表链接规则不能为空！');
 
-        $rule = addslashes(serialize($rule));
+        $rule   = addslashes(serialize($rule));
+        $fields = array('name', 'rule');
+        $data   = compact ($fields);
         if ($id) {
-            iDB::query("UPDATE `#iCMS@__spider_rule` SET `name` = '$name', `rule` = '$rule' WHERE `id` = '$id';");
+            iDB::update('spider_rule', $data, array('id'=>$id));
         } else {
-            iDB::query("INSERT INTO `#iCMS@__spider_rule`(`name`, `rule`) VALUES ('$name', '$rule');");
+            iDB::insert('spider_rule',$data);
         }
-        iPHP::OK('保存成功','js:1');
+        iPHP::success('保存成功','js:1');
     }
 
     function rule_opt($id = 0, $output = null) {
-        $rs = iDB::getArray("SELECT * FROM `#iCMS@__spider_rule` order by id desc");
+        $rs = iDB::all("SELECT * FROM `#iCMS@__spider_rule` order by id desc");
         foreach ((array)$rs AS $rule) {
             $rArray[$rule['id']] = $rule['name'];
             $opt.="<option value='{$rule['id']}'" . ($id == $rule['id'] ? " selected='selected'" : '') . ">{$rule['name']}[id='{$rule['id']}'] </option>";
@@ -695,7 +705,7 @@ class spiderApp {
         return $opt;
     }
 
-    function dopost() {
+    function do_post() {
         if ($_GET['keywords']) {
             $sql = " WHERE `keyword` REGEXP '{$_GET['keywords']}'";
         }
@@ -703,37 +713,39 @@ class spiderApp {
         $maxperpage = (int) $_GET['perpage'] > 0 ? $_GET['perpage'] : 20;
         $total = iPHP::total(false, "SELECT count(*) FROM `#iCMS@__spider_post` {$sql}", "G");
         iPHP::pagenav($total, $maxperpage, "个模块");
-        $rs = iDB::getArray("SELECT * FROM `#iCMS@__spider_post` {$sql} order by {$orderby} LIMIT " . iPHP::$offset . " , {$maxperpage}");
+        $rs = iDB::all("SELECT * FROM `#iCMS@__spider_post` {$sql} order by {$orderby} LIMIT " . iPHP::$offset . " , {$maxperpage}");
         $_count = count($rs);
         include iACP::view("spider.post");
     }
-    function dodelpost() {
+    function do_delpost() {
     	$this->poid OR iPHP::alert("请选择要删除的项目");
         iDB::query("delete from `#iCMS@__spider_post` where `id` = '$this->poid';");
-        iPHP::OK('删除完成','js:1');
+        iPHP::success('删除完成','js:1');
     }
-    function doaddpost() {
-        $this->poid && $rs = iDB::getRow("SELECT * FROM `#iCMS@__spider_post` WHERE `id`='$this->poid' LIMIT 1;", ARRAY_A);
+    function do_addpost() {
+        $this->poid && $rs = iDB::row("SELECT * FROM `#iCMS@__spider_post` WHERE `id`='$this->poid' LIMIT 1;", ARRAY_A);
         include iACP::view("spider.addpost");
     }
 
-    function dosavepost() {
-        $id = (int) $_POST['id'];
-        $name = trim($_POST['name']);
-        $app = iS::escapeStr($_POST['app']);
-        $post = trim($_POST['post']);
-        $fun = trim($_POST['fun']);
+    function do_savepost() {
+        $id     = (int) $_POST['id'];
+        $name   = trim($_POST['name']);
+        $app    = iS::escapeStr($_POST['app']);
+        $post   = trim($_POST['post']);
+        $fun    = trim($_POST['fun']);
 
+        $fields = array('name','app','fun', 'post');
+        $data   = compact ($fields);
         if ($id) {
-            iDB::query("UPDATE `#iCMS@__spider_post` SET `name` = '$name',`app` = '$app',`fun` = '$fun', `post` = '$post' WHERE `id` = '$id';");
+            iDB::update('spider_post', $data, array('id'=>$id));
         } else {
-            iDB::query("INSERT INTO `#iCMS@__spider_post`(`name`,`app`,`fun`, `post`) VALUES ('$name','$app','$fun', '$post');");
+            iDB::insert('spider_post',$data);
         }
-        iPHP::OK('保存成功', 'url:' . APP_URI . '&do=post');
+        iPHP::success('保存成功', 'url:' . APP_URI . '&do=post');
     }
 
     function post_opt($id = 0, $output = null) {
-        $rs = iDB::getArray("SELECT * FROM `#iCMS@__spider_post`");
+        $rs = iDB::all("SELECT * FROM `#iCMS@__spider_post`");
         foreach ((array)$rs AS $post) {
         	$pArray[$post['id']] = $post['name'];
             $opt.="<option value='{$post['id']}'" . ($id == $post['id'] ? " selected='selected'" : '') . ">{$post['name']}:{$post['app']}[id='{$post['id']}'] </option>";
@@ -745,16 +757,16 @@ class spiderApp {
     }
 
     function project($id) {
-        return iDB::getRow("SELECT * FROM `#iCMS@__spider_project` WHERE `id`='$id' LIMIT 1;", ARRAY_A);
+        return iDB::row("SELECT * FROM `#iCMS@__spider_project` WHERE `id`='$id' LIMIT 1;", ARRAY_A);
     }
 
-    function docopyproject() {
+    function do_copyproject() {
         iDB::query("INSERT INTO `#iCMS@__spider_project` (`name`, `urls`, `cid`, `rid`, `poid`, `sleep`) select `name`, `urls`, `cid`, `rid`, `poid`, `sleep` from `#iCMS@__spider_project` where id = '$this->pid'");
         $pid = iDB::$insert_id;
-        iPHP::OK('复制完成,编辑此方案', 'url:' . APP_URI . '&do=addproject&pid=' . $pid.'&copy=1');
+        iPHP::success('复制完成,编辑此方案', 'url:' . APP_URI . '&do=addproject&pid=' . $pid.'&copy=1');
     }
 
-    function doproject() {
+    function do_project() {
         $this->category = iPHP::appClass("category",iCMS_APP_ARTICLE);
         $sql = "where 1=1";
         if ($_GET['keywords']) {
@@ -781,16 +793,16 @@ class spiderApp {
         $maxperpage = (int) $_GET['perpage'] > 0 ? $_GET['perpage'] : 20;
         $total = iPHP::total(false, "SELECT count(*) FROM `#iCMS@__spider_project` {$sql}", "G");
         iPHP::pagenav($total, $maxperpage, "个方案");
-        $rs = iDB::getArray("SELECT * FROM `#iCMS@__spider_project` {$sql} order by {$orderby} LIMIT " . iPHP::$offset . " , {$maxperpage}");
+        $rs = iDB::all("SELECT * FROM `#iCMS@__spider_project` {$sql} order by {$orderby} LIMIT " . iPHP::$offset . " , {$maxperpage}");
         $_count = count($rs);
         include iACP::view("spider.project");
     }
-    function dodelproject() {
+    function do_delproject() {
     	$this->pid OR iPHP::alert("请选择要删除的项目");
         iDB::query("delete from `#iCMS@__spider_project` where `id` = '$this->pid';");
-        iPHP::OK('删除完成');
+        iPHP::success('删除完成');
     }
-    function doaddproject() {
+    function do_addproject() {
         $rs = array();
         $this->pid && $rs = $this->project($this->pid);
         $cid = empty($rs['cid']) ? $this->cid : $rs['cid'];
@@ -804,29 +816,29 @@ class spiderApp {
         include iACP::view("spider.addproject");
     }
 
-    function dosaveproject() {
-        $id = (int) $_POST['id'];
-        $name = iS::escapeStr($_POST['name']);
-        $urls = iS::escapeStr($_POST['urls']);
+    function do_saveproject() {
+        $id       = (int) $_POST['id'];
+        $name     = iS::escapeStr($_POST['name']);
+        $urls     = iS::escapeStr($_POST['urls']);
         $list_url = $_POST['list_url'];
-        $cid = iS::escapeStr($_POST['cid']);
-        $rid = iS::escapeStr($_POST['rid']);
-        $poid = iS::escapeStr($_POST['poid']);
-        $sleep = iS::escapeStr($_POST['sleep']);
-        $auto = iS::escapeStr($_POST['auto']);
+        $cid      = iS::escapeStr($_POST['cid']);
+        $rid      = iS::escapeStr($_POST['rid']);
+        $poid     = iS::escapeStr($_POST['poid']);
+        $sleep    = iS::escapeStr($_POST['sleep']);
+        $auto     = iS::escapeStr($_POST['auto']);
 
-        empty($name) && iPHP::alert('名称不能为空！');
+        empty($name)&& iPHP::alert('名称不能为空！');
         empty($cid) && iPHP::alert('请选择绑定的栏目');
         empty($rid) && iPHP::alert('请选择采集规则');
         //empty($poid)	&& iPHP::alert('请选择发布规则');
+        $fields = array('name', 'urls','list_url', 'cid', 'rid', 'poid', 'sleep', 'auto');
+        $data   = compact ($fields);
         if ($id) {
-            iDB::query("UPDATE `#iCMS@__spider_project` 
-SET `name` = '$name', `urls` = '$urls', `list_url` = '$list_url',`cid` = '$cid', `rid` = '$rid', `poid` = '$poid', `sleep` = '$sleep', `auto` = '$auto'
-WHERE `id` = '$id';");
+            iDB::update('spider_project',$data,array('id'=>$id));
         } else {
-            iDB::query("INSERT INTO `#iCMS@__spider_project` (`name`, `urls`,`list_url`, `cid`, `rid`, `poid`, `sleep`, `auto`) VALUES ('$name', '$urls','$list_url', '$cid', '$rid', '$poid', '$sleep', '$auto');");
+            iDB::insert('spider_project',$data);
         }
-        iPHP::OK('完成', 'url:' . APP_URI . '&do=project');
+        iPHP::success('完成', 'url:' . APP_URI . '&do=project');
     }
 
     function remote($url, $_referer = false, $_count = 0) {

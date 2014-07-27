@@ -15,10 +15,10 @@ define('iPATH',dirname(strtr(__FILE__,'\\','/'))."/");
 //框架初始化
 require iPATH.'config.php';			//框架初始化配置
 require iPATH.'iPHP/iPHP.php';		//iPHP框架文件
-
 require iPHP_APP_CORE.'/iCMS.define.php';
 require iPHP_APP_CORE.'/iCMS.version.php';
 require iPHP_APP_CORE.'/iCMS.class.php';
+require iPHP_APP_CORE.'/iCMS.func.php';
 require iPHP_APP_CORE.'/iURL.class.php';
 
 iCMS::Init();

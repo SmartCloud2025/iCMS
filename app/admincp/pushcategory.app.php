@@ -16,10 +16,10 @@ class pushcategoryApp extends categoryApp {
         parent::__construct(iCMS_APP_PUSH);
         $this->name_text    = "版块";
     }
-    function doadd(){
+    function do_add(){
         if($this->cid) {
             iMember::CP($this->cid,'Permission_Denied',APP_URI);
-            $rs		= iDB::getRow("SELECT * FROM `#iCMS@__category` WHERE `cid`='$this->cid' LIMIT 1;",ARRAY_A);
+            $rs		= iDB::row("SELECT * FROM `#iCMS@__category` WHERE `cid`='$this->cid' LIMIT 1;",ARRAY_A);
             $rootid	= $rs['rootid'];
         }else {
             $rootid=(int)$_GET['rootid'];
@@ -36,7 +36,7 @@ class pushcategoryApp extends categoryApp {
         iDB::query("UPDATE `#iCMS@__push` SET `cid` ='$tocid' WHERE `cid` ='$cid'"); 
     }
     function updateCount($cid){
-        $cc = iDB::getValue("SELECT count(*) FROM `#iCMS@__push` where `cid`='$cid'");
+        $cc = iDB::value("SELECT count(*) FROM `#iCMS@__push` where `cid`='$cid'");
         iDB::query("UPDATE `#iCMS@__category` SET `count` ='$cc' WHERE `cid` ='$cid'");       
     }
     function listbtn($rs){}
