@@ -27,7 +27,7 @@ class articleApp{
         }
         $bodyCount OR $bodyCount = 1;
         $cid                 = empty($rs['cid'])?(int)$_GET['cid']:$rs['cid'];
-        $cata_option         = $this->category->select($cid,0,1,0);
+        $cata_option         = $this->category->select(0,0,1,0);
         $cid && $contentprop =  unserialize($this->category->category[$cid]['contentprop']);
 
         //$metadata          = array_merge((array)$contentprop,(array)$rs['metadata']);
@@ -84,8 +84,11 @@ class articleApp{
 		            }
 		        }
 		        iPHP::success('成功移动到目标栏目!','js:1');
-    		break;
-    		case 'prop':
+            break;
+            case 'scid':
+                iPHP::success('###########','js:1');
+            break;
+            case 'prop':
                 $pid = $_POST['pid'];
                 $sql ="`pid` = '$pid'";
     		break;
@@ -163,7 +166,7 @@ class articleApp{
     function do_getjson(){
         $id = (int)$_GET['id'];
         $rs = iDB::row("SELECT * FROM `#iCMS@__article` WHERE id='$id' LIMIT 1;",ARRAY_A);
-
+        iPHP::json($rs);
     }
     function do_getmeta(){
         $cid = $_GET['cid'];
@@ -465,7 +468,7 @@ class articleApp{
             }
             $fields = array('cid','scid','orderNum', 'title', 'stitle', 'clink', 'url', 'source', 'author', 'editor', 'userid', 'pic','mpic','spic', 'picdata', 'keywords', 'tags', 'description', 'related', 'metadata', 'pubdate', 'postime', 'hits', 'comments', 'good', 'bad', 'chapter', 'pid', 'top', 'postype', 'tpl', 'status', 'isPic');
             $data   = compact ($fields);            
-            $aid    = iDB::insert('article',$fields);
+            $aid    = iDB::insert('article',$data);
 
             map::init('prop',iCMS_APP_ARTICLE);
             map::add($pid,$aid);

@@ -36,9 +36,11 @@
             <ul>
               <!--{iCMS:article:list loop="true" page="true" row="10" cid="$category.cid"}-->
               <li class="item-detail clearfix">
+                <!--{if $article_list.pic.url}-->
                 <p class="pic"><a href="<!--{$article_list.url}-->" target="_blank"><img src="<!--{$article_list.pic.url}-->"></a></p>
+                <!--{/if}-->
                 <p class="title"><a href="<!--{$article_list.url}-->" target="_blank"><!--{$article_list.title}--></a></p>
-                <p class="text"><!--{$article_list.description}--></p>
+                <p class="info"><!--{$article_list.description}--></p>
               </li>
               <!--{/iCMS}-->
             </ul>

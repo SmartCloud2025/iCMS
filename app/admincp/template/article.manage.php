@@ -70,7 +70,11 @@ $(function(){
 					}}]
 		});
 	});
-	$("#<?php echo APP_FORMID;?>").batch();
+	$("#<?php echo APP_FORMID;?>").batch({
+    scid:function(){
+      return $("#scidBatch").clone(true);
+    }
+  });
 });
 </script>
 
@@ -95,7 +99,7 @@ $(function(){
         <div class="input-prepend input-append"> <span class="add-on">栏目</span>
           <select name="cid" id="cid" class="span3 chosen-select">
             <option value="0">所有栏目</option>
-            <?php echo $this->category->select(0,0,1,'all') ; ?>
+            <?php echo $category_select = $this->category->select(0,0,1,'all') ; ?>
           </select>
           <span class="add-on">
           <input type="checkbox" name="sub" id="sub"/>
@@ -252,6 +256,7 @@ $(function(){
                       <li class="divider"></li>
                       <li><a data-toggle="batch" data-action="prop"><i class="fa fa-puzzle-piece"></i> 设置文章属性</a></li>
                       <li><a data-toggle="batch" data-action="move"><i class="fa fa-fighter-jet"></i> 移动栏目</a></li>
+                      <li><a data-toggle="batch" data-action="scid"><i class="fa fa-fighter-jet"></i> 设置副栏目</a></li>
                       <li><a data-toggle="batch" data-action="thumb"><i class="fa fa-picture-o"></i> 提取缩略图</a></li>
                       <li><a data-toggle="batch" data-action="top"><i class="fa fa-cog"></i> 设置置顶权重</a></li>
                       <li><a data-toggle="batch" data-action="keyword"><i class="fa fa-star"></i> 设置关键字</a></li>
@@ -289,6 +294,15 @@ $(function(){
   <div class="clearfloat mb10"></div>
   <div class="input-prepend"><span class="add-on">摘 要</span>
     <textarea id="eddesc" class="span6" style="height: 120px;"></textarea>
+  </div>
+</div>
+<div class='iCMS-batch'>
+  <div id="scidBatch">
+    <div class="input-prepend">
+      <select name="scid[]" id="scid" class="span3" multiple="multiple"  data-placeholder="请选择副栏目(可多选)...">
+        <?php echo $category_select;?>
+      </select>
+    </div>
   </div>
 </div>
 <?php iACP::foot();?>

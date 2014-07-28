@@ -129,7 +129,6 @@ class articleApp {
        $nextrs              = iDB::row("SELECT * FROM `#iCMS@__article` WHERE `id` > '{$rs->id}'  and `cid`='{$rs->cid}' AND `status`='1' order by id ASC LIMIT 1;");
        $nextrs && $rs->next = '<a href="'.iURL::get('article',array((array)$nextrs,$category))->href.'" class="next" target="_self">'.$nextrs->title.'</a>';
 
-        
         $rs->comment = array('url'=>iCMS_API."?app=comment&iid={$rs->id}&cid={$rs->cid}",'count'=>$rs->comments);
         if($category['mode']) {
             $rs->script['hits']    = '<script type="text/javascript" src="'.iCMS_API.'?app=article&do=hits&cid='.$rs->cid.'&id='.$rs->id.'"></script>';
@@ -138,8 +137,11 @@ class articleApp {
         }else {
             iPHP::$iTPLMode!='html' && iDB::query("UPDATE `#iCMS@__article` SET hits=hits+1 WHERE `id` ='{$rs->id}'");
         }
-		$rs->pic && $rs->pic_url=iFS::fp($rs->pic,'+http');
-        $rs->appid	= iCMS_APP_ARTICLE;
+        $rs->pic   = get_pic($rs->pic);
+        $rs->mpic  = get_pic($rs->mpic);
+        $rs->spic  = get_pic($rs->spic);
+        $rs->appid = iCMS_APP_ARTICLE;
+
         // iCMS::hooks('article',array(
         //     'appid' => $rs->appid,
         //     'cid'   => $rs->cid,

@@ -214,7 +214,7 @@ function __article($vars,$variable){
         $value['link']              = "<a href='{$value['url']}'>{$value['title']}</a>";
         $value['commentUrl']        = iCMS::$config['router']['publicURL']."/comment.php?indexId=".$value['id']."&categoryId=".$value['cid'];
         if($vars['user']){
-            $value['user']['url']  = "/u/".$value['userid'];
+            $value['user']['url']  = get_user($value['userid'],'url');
             $value['user']['name'] = $value['author'];
             $value['user']['id']   = $value['userid'];
         }
@@ -226,7 +226,7 @@ function __article($vars,$variable){
 		if($vars['meta']){
             $value['metadata'] && $value['metadata'] = unserialize($value['metadata']);
         }
-        $value['description'] && $value['description'] = nl2br($value['description']);
+        //$value['description'] && $value['description'] = nl2br($value['description']);
         if($vars['tags']){
         	$value['tags'] = tag::getag('tags',$value,$category);
         }
