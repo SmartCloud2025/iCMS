@@ -18,23 +18,16 @@ return array (
   array (
     'index' => '{iTPL}/index.htm',
     'index_name' => '',
-    'pc' => 'default',
-    'mobile_agent' => 'WAP,Smartphone,Mobile,UCWEB,Opera Mini,Windows CE,Symbian,SAMSUNG,iPhone,Android,BlackBerry,HTC,Mini,LG,SonyEricsson,J2ME,MOT',
-    'mobile' => 'mobile',
-    'device' => 
+    'pc' => 
     array (
-      0 => 
-      array (
-        'name' => 'iPhone',
-        'ua' => 'iPhone',
-        'tpl' => 'default',
-      ),
-      1 => 
-      array (
-        'name' => 'iPad',
-        'ua' => 'iPad',
-        'tpl' => 'iPad',
-      ),
+      'domain' => '',
+      'tpl' => 'default',
+    ),
+    'mobile' => 
+    array (
+      'agent' => 'WAP,Smartphone,Mobile,UCWEB,Opera Mini,Windows CE,Symbian,SAMSUNG,iPhone,Android,BlackBerry,HTC,Mini,LG,SonyEricsson,J2ME,MOT',
+      'domain' => '',
+      'tpl' => 'mobile',
     ),
   ),
   'router' => 

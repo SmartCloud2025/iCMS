@@ -112,6 +112,7 @@ border-top: 1px solid #5e5e5e;*/
 #style-switcher i:hover { cursor: pointer; }
 #style-switcher span { font-weight: bold; color: #ffffff; display: inline-block; margin: -15px 20px 0 0; vertical-align: middle; }
 #style-switcher a { display: inline-block; width: 20px; height: 20px; margin-top: 4px; border-style: solid; border-width: 1px; border-color: transparent; }
+#setting-tpl .table td{padding: 8px 0px;border-top: 1px solid #BDBDBD;}
 /* Footer */
 #footer { text-align: center; color: #777777; }
 /* Stat boxes and quick actions */

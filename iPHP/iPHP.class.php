@@ -63,7 +63,7 @@ class iPHP{
 	private static function set_tpl_default($config){
 		$template    = $config['template'];
 		$device_name = 'pc';
-		$def_tpl     = $template['pc'];				
+		$def_tpl     = $template['pc']['tpl'];				
 		foreach ((array)$template['device'] as $key => $device) {
 			$has_tpl = self::__tpl_agent($device['ua']);
         	if($device['tpl'] && $has_tpl){
@@ -73,9 +73,9 @@ class iPHP{
         	}
 		}
 		if(empty($def_tpl)){
-			if(self::__tpl_agent($template['mobile_agent'])){
+			if(self::__tpl_agent($template['mobile']['agent'])){
 				$device_name = 'mobile';
-				$def_tpl     = $template['mobile'];				
+				$def_tpl     = $template['mobile']['tpl'];				
 			}
 		}
         define('iPHP_TPL_DEFAULT',$def_tpl);

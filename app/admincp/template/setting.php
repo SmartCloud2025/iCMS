@@ -124,20 +124,30 @@ function modal_tplfile(el,a){
               <input type="hidden" name="config[template][index_name]" class="span3" id="index_name" value="<?php echo $config['template']['index_name'] ; ?>"/>
               <?php iACP::files_modal('模板','file','template_index','tplfile');?></div>
             <span class="help-inline">首页默认模板，注：最好使用<span class="label label-inverse">{iTPL}</span>代替模板目录,程序将会自行切换PC端或者移动端</span>
+            <div class="clearfloat mb10 solid"></div>
+            <div class="input-prepend"> <span class="add-on">PC端域名</span>
+              <input type="text" name="config[template][pc][domain]" class="span6" id="template_pc_domain" value="<?php echo $config['template']['pc']['domain'] ; ?>"/>
+            </div>
+            <span class="help-inline">例:<span class="label label-info">http://www.idreamsoft.com</span></span>
             <div class="clearfloat mb10"></div>
             <div class="input-prepend input-append"> <span class="add-on">PC端模板</span>
-              <input type="text" name="config[template][pc]" class="span3" id="template_pc" value="<?php echo $config['template']['pc'] ; ?>"/>
-              <?php iACP::files_modal('模板','dir','template_pc');?></div>
+              <input type="text" name="config[template][pc][tpl]" class="span3" id="template_pc_tpl" value="<?php echo $config['template']['pc']['tpl'] ; ?>"/>
+              <?php iACP::files_modal('模板','dir','template_pc_tpl');?></div>
             <span class="help-inline">网站PC端模板默认模板</span>
             <div class="clearfloat mb10 solid"></div>
             <div class="input-prepend"> <span class="add-on">移动端识别</span>
-              <input type="text" name="config[template][mobile_agent]" class="span6" id="mobile_agent" value="<?php echo $config['template']['mobile_agent'] ; ?>"/>
+              <input type="text" name="config[template][mobile][agent]" class="span3" id="template_mobile_agent" value="<?php echo $config['template']['mobile']['agent'] ; ?>"/>
             </div>
             <span class="help-inline">请用<span class="label label-info">,</span>分隔 如不启用自动识别请留空</span>
             <div class="clearfloat mb10"></div>
+            <div class="input-prepend"> <span class="add-on">移动端域名</span>
+              <input type="text" name="config[template][mobile][domain]" class="span3" id="template_mobile_domain" value="<?php echo $config['template']['mobile']['domain'] ; ?>"/>
+            </div>
+            <span class="help-inline">例:<span class="label label-info">http://m.idreamsoft.com</span></span>
+            <div class="clearfloat mb10"></div>
             <div class="input-prepend input-append"> <span class="add-on">移动端模板</span>
-              <input type="text" name="config[template][mobile]" class="span3" id="template_mobile" value="<?php echo $config['template']['mobile'] ; ?>"/>
-              <?php iACP::files_modal('模板','dir','template_mobile');?></div>
+              <input type="text" name="config[template][mobile][tpl]" class="span3" id="template_mobile_tpl" value="<?php echo $config['template']['mobile']['tpl'] ; ?>"/>
+              <?php iACP::files_modal('模板','dir','template_mobile_tpl');?></div>
             <span class="help-inline">网站移动端模板默认模板,如果不想让程序自行切换请留空</span>
             <div class="clearfloat mb10"></div>
             <table class="table table-hover">
@@ -154,12 +164,17 @@ function modal_tplfile(el,a){
                       <input type="text" name="config[template][device][<?php echo $key;?>][name]" class="span3" id="device_name_<?php echo $key;?>" value="<?php echo $device['name'];?>"/>
                       <a class="btn del_device"><i class="fa fa-trash-o"></i> 删除</a>
                     </div>
-                    <span class="help-inline"><span class="label label-info">例:iPad</span></span>
+                    <span class="help-inline"></span>
                     <div class="clearfloat mb10"></div>
-                    <div class="input-prepend"> <span class="add-on">设备识别</span>
+                    <div class="input-prepend"> <span class="add-on">设备识别符</span>
                       <input type="text" name="config[template][device][<?php echo $key;?>][ua]" class="span3" id="device_ua_<?php echo $key;?>" value="<?php echo $device['ua'];?>"/>
                     </div>
-                    <span class="help-inline">设备唯一识别符,识别设备的User agent<span class="label label-info">例:iPad</span>,如果多个请用<span class="label label-info">,</span>分隔.</span>
+                    <span class="help-inline">设备唯一识别符,识别设备的User agent,如果多个请用<span class="label label-info">,</span>分隔.</span>
+                    <div class="clearfloat mb10"></div>
+                    <div class="input-prepend"> <span class="add-on">访问域名</span>
+                      <input type="text" name="config[template][device][<?php echo $key;?>][domain]" class="span3" id="device_domain_<?php echo $key;?>" value="<?php echo $device['domain'];?>"/>
+                    </div>
+                    <span class="help-inline"></span>
                     <div class="clearfloat mb10"></div>
                     <div class="input-prepend input-append"> <span class="add-on">模板</span>
                       <input type="text" name="config[template][device][<?php echo $key;?>][tpl]" class="span3" id="device_tpl_<?php echo $key;?>" value="<?php echo $device['tpl'];?>"/>
@@ -179,10 +194,15 @@ function modal_tplfile(el,a){
                   </div>
                   <span class="help-inline"><span class="label label-info">例:iPad</span></span>
                   <div class="clearfloat mb10"></div>
-                  <div class="input-prepend"> <span class="add-on">设备识别</span>
+                  <div class="input-prepend"> <span class="add-on">设备识别符</span>
                     <input type="text" name="config[template][device][{key}][ua]" class="span3" id="device_ua_{key}" value="" disabled="disabled"/>
                   </div>
                   <span class="help-inline">设备唯一识别符,识别设备的User agent<span class="label label-info">例:iPad</span>,如果多个请用<span class="label label-info">,</span>分隔.</span>
+                  <div class="clearfloat mb10"></div>
+                  <div class="input-prepend"> <span class="add-on">访问域名</span>
+                    <input type="text" name="config[template][device][{key}][domain]" class="span3" id="device_domain_{key}" value="" disabled="disabled"/>
+                  </div>
+                  <span class="help-inline"><span class="label label-info">例:ipad.idreamsoft.com</span></span>
                   <div class="clearfloat mb10"></div>
                   <div class="input-prepend input-append"> <span class="add-on">模板</span>
                     <input type="text" name="config[template][device][{key}][tpl]" class="span3" id="device_tpl_{key}" value="" disabled="disabled"/>
