@@ -35,19 +35,19 @@ class iDB{
     private static $result;
 
     public static function connect() {
-		extension_loaded('mysql') OR die('您的 PHP 环境看起来缺少 MySQL 数据库部分，这对 iPHP 来说是必须的。');
+        extension_loaded('mysql') OR die('您的 PHP 环境看起来缺少 MySQL 数据库部分，这对 iPHP 来说是必须的。');
 
         defined('iPHP_DB_COLLATE') &&self::$collate = iPHP_DB_COLLATE;
 
-		if(isset($GLOBALS['iPHP_DB'])){
-			self::$link	= $GLOBALS['iPHP_DB'];
-			if(self::$link){
-				if(mysql_ping(self::$link))
-					return self::$link;
-			}
-		}
+        if(isset($GLOBALS['iPHP_DB'])){
+            self::$link = $GLOBALS['iPHP_DB'];
+            if(self::$link){
+                if(mysql_ping(self::$link))
+                    return self::$link;
+            }
+        }
 
-		self::$link = @mysql_connect(iPHP_DB_HOST, iPHP_DB_USER, iPHP_DB_PASSWORD);
+        self::$link = @mysql_connect(iPHP_DB_HOST, iPHP_DB_USER, iPHP_DB_PASSWORD);
         self::$link OR self::bail("<h1>数据库连接失败</h1><p>请检查 <em><strong>config.php</strong></em> 的配置是否正确!</p><ul><li>请确认主机支持MySQL?</li><li>请确认用户名和密码正确?</li><li>请确认主机名正确?(一般为localhost)</li></ul><p>如果你不确定这些情况,请询问你的主机提供商.如果你还需要帮助你可以随时浏览 <a href='http://www.iiiphp.com'>iPHP 支持论坛</a>.</p>");
 
         $GLOBALS['iPHP_DB'] = self::$link;
@@ -59,33 +59,29 @@ class iDB{
 
     }
     // ==================================================================
-    //	Basic Query	- see docs for more detail
+    //  Basic Query - see docs for more detail
 
     public static function query($query,$QT=NULL) {
         if(empty($query)){
             if (self::$show_errors) {
-                // If there is an error then take note of it
-                die("<div id='error'>
-                <p class='iPHPDBerror'><strong>iPHP database error:</strong> [$str]<br />
-                <code>$query</code></p>
-                </div>");
+                self::bail("SQL IS EMPTY");
             } else {
                 return false;
             }
         }
 
-    	self::$link OR self::connect();
+        self::$link OR self::connect();
 
         // filter the query, if filters are available
         // NOTE: some queries are made before the plugins have been loaded, and thus cannot be filtered with this method
-        $query	= str_replace(iPHP_DB_PREFIX_TAG,iPHP_DB_PREFIX, $query);
+        $query  = str_replace(iPHP_DB_PREFIX_TAG,iPHP_DB_PREFIX, $query);
 
         // initialise return
         $return_val = 0;
         self::flush();
 
         // Log how the function was called
-        self::$func_call = __CLASS__."::query(\"$query\")";
+        self::$func_call = __CLASS__.'::query("'.$query.'")';
 
         // Keep track of the last query for debug..
         self::$last_query = $query;
@@ -93,17 +89,20 @@ class iDB{
         // Perform the query via std mysql_query function..
         SAVEQUERIES && self::timer_start();
 
+        self::$result = @mysql_query($query, self::$link);
 
-        self::$result = mysql_query($query, self::$link);
         if(!self::$result){
-        	// If there is an error then take note of it..
-        	return self::print_error();
+            // If there is an error then take note of it..
+            return self::print_error();
         }
         self::$num_queries++;
 
         SAVEQUERIES && self::$queries[] = array( $query, self::timer_stop());
 
-        $QH	= strtoupper(substr($query,0,strpos($query, ' ')));
+        if($QT=='get'){
+            return self::$result;
+        }
+        $QH = strtoupper(substr($query,0,strpos($query, ' ')));
         if (in_array($QH,array("INSERT","DELETE","UPDATE","REPLACE"))) {
             $rows_affected = mysql_affected_rows(self::$link);
             // Take note of the insert_id
@@ -136,7 +135,13 @@ class iDB{
 
         return $return_val;
     }
-
+    public static function get($output = OBJECT) {
+        if ( $output == OBJECT ) {
+            return mysql_fetch_object(self::$result,MYSQL_ASSOC);
+        }else{
+            return mysql_fetch_array(self::$result,MYSQL_ASSOC);
+        }
+    }
     /**
      * Insert an array of data into a table
      * @param string $table WARNING: not sanitized!
@@ -144,7 +149,7 @@ class iDB{
      * @return mixed results of self::query()
      */
     public static function insert($table, $data) {
-//		$data = add_magic_quotes($data);
+//      $data = add_magic_quotes($data);
         $fields = array_keys($data);
         self::query("INSERT INTO ".iPHP_DB_PREFIX_TAG."{$table} (`" . implode('`,`',$fields) . "`) VALUES ('".implode("','",$data)."')");
         return self::$insert_id;
@@ -158,11 +163,11 @@ class iDB{
      * @return mixed results of self::query()
      */
     public static function update($table, $data, $where) {
-//		$data = add_magic_quotes($data);
+//      $data = add_magic_quotes($data);
         $bits = $wheres = array();
         foreach ( array_keys($data) as $k ){
             $bits[] = "`$k` = '$data[$k]'";
-		}
+        }
         if ( is_array( $where ) ){
             foreach ( $where as $c => $v )
                 $wheres[] = "$c = '" . addslashes( $v ) . "'";
@@ -286,7 +291,7 @@ class iDB{
         }
     }
     public static function version() {
-		self::$link OR self::connect();
+        self::$link OR self::connect();
         // Make sure the server has MySQL 4.0
         $mysql_version = preg_replace('|[^0-9\.]|', '', @mysql_get_server_info(self::$link));
         if ( version_compare($mysql_version, '4.0.0', '<') )
@@ -337,7 +342,7 @@ class iDB{
     //  Print SQL/DB error.
 
     public static function print_error($error = '') {
-    	self::$last_error = mysql_error(self::$link);
+        self::$last_error = mysql_error(self::$link);
         $error OR $error      = self::$last_error;
         
         $error    = htmlspecialchars($error, ENT_QUOTES);
@@ -358,6 +363,6 @@ class iDB{
             return false;
         }
         print_r($message);
-		trigger_error($message,E_USER_ERROR);
+        trigger_error($message,E_USER_ERROR);
     }
 }
