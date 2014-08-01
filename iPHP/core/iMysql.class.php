@@ -95,15 +95,14 @@ class iDB{
 
 
         self::$result = mysql_query($query, self::$link);
+        if(!self::$result){
+        	// If there is an error then take note of it..
+        	return self::print_error();
+        }
         self::$num_queries++;
 
         SAVEQUERIES && self::$queries[] = array( $query, self::timer_stop());
 
-        // If there is an error then take note of it..
-        if ( self::$last_error = mysql_error(self::$link) ) {
-            self::print_error();
-            return false;
-        }
         $QH	= strtoupper(substr($query,0,strpos($query, ' ')));
         if (in_array($QH,array("INSERT","DELETE","UPDATE","REPLACE"))) {
             $rows_affected = mysql_affected_rows(self::$link);
@@ -337,15 +336,15 @@ class iDB{
     // ==================================================================
     //  Print SQL/DB error.
 
-    public static function print_error($str = '') {
-        $str OR $str    = mysql_error(self::$link);
-        $EZSQL_ERROR[]  = array ('query' => self::$last_query, 'error_str' => $str);
-
-        $str    = htmlspecialchars($str, ENT_QUOTES);
+    public static function print_error($error = '') {
+    	self::$last_error = mysql_error(self::$link);
+        $error OR $error      = self::$last_error;
+        
+        $error    = htmlspecialchars($error, ENT_QUOTES);
         $query  = htmlspecialchars(self::$last_query, ENT_QUOTES);
         // Is error output turned on or not..
         if ( self::$show_errors ) {
-            self::bail("<strong>iPHP database error:</strong> [$str]<br /><code>$query</code>");
+            self::bail("<strong>iPHP database error:</strong> [$error]<br /><code>$query</code>");
         } else {
             return false;
         }
