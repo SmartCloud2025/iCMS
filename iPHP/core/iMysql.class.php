@@ -362,7 +362,6 @@ class iDB{
         if ( !self::$show_errors ) {
             return false;
         }
-        print_r($message);
         trigger_error($message,E_USER_ERROR);
     }
 }
