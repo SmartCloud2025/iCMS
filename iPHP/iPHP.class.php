@@ -64,22 +64,26 @@ class iPHP{
 		$template    = $config['template'];
 		$device_name = 'pc';
 		$def_tpl     = $template['pc']['tpl'];				
+		$def_domain  = $template['pc']['domain'];				
 		foreach ((array)$template['device'] as $key => $device) {
 			$has_tpl = self::__tpl_agent($device['ua']);
         	if($device['tpl'] && $has_tpl){
 				$device_name = $device['name'];
 				$def_tpl     = $device['tpl'];
+				$def_domain  = $device['domain'];				
         		break;
         	}
 		}
 		if(empty($def_tpl)){
 			if(self::__tpl_agent($template['mobile']['agent'])){
 				$device_name = 'mobile';
-				$def_tpl     = $template['mobile']['tpl'];				
+				$def_tpl     = $template['mobile']['tpl'];
+				$def_domain  = $template['mobile']['domain'];
 			}
 		}
         define('iPHP_TPL_DEFAULT',$def_tpl);
-        //var_dump($device_name,$def_tpl);
+        define('iPHP_TPL_DOMAIN',$def_domain);
+        //var_dump(iPHP_TPL_DEFAULT,iPHP_TPL_DOMAIN);
 	}
 	private static function __tpl_agent($user_agent){
 		$user_agent = str_replace(',','|',$user_agent);

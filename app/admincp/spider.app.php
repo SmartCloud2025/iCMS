@@ -214,7 +214,7 @@ class spiderApp {
                 $url     = iS::escapeStr($_POST['reurl']);
                 $indexId = $callback['indexId'];
                 $data = array(
-                    'cid'=>$this->cid,'rid'=>$this->rid,'pid'=>$pid,'indexId'=$indexId,'title'=>$title, 'url'=>$url, 
+                    'cid'=>$this->cid,'rid'=>$this->rid,'pid'=>$pid,'indexId'=>$indexId,'title'=>$title, 'url'=>$url, 
                     'hash'=>$hash, 'status'=>'1', 'publish'=>'1', 'addtime'=>time(), 'pubdate'=>time()
                 );
                 iDB::insert('spider_url',$data);

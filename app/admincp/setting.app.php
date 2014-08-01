@@ -32,7 +32,7 @@ class settingApp{
     }
     function do_save(){
     	$config		= iS::escapeStr($_POST['config']);
-		iFS::filterExt($config['router']['htmlext'],true) OR iPHP::alert('网站URL设置 > 文件后缀 设置不合法!');
+		iFS::filterExt($config['router']['html_ext'],true) OR iPHP::alert('网站URL设置 > 文件后缀 设置不合法!');
     	$config['apps']	= $this->apps;
     	foreach($config AS $n=>$v){
     		iACP::setConfig($v,$n,0);

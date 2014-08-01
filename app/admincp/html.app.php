@@ -26,7 +26,7 @@ class htmlApp{
     function do_createIndex(){
 		$indexTPL  = iCMS::$config['template']['index']	= $this->PG['indexTPL'];
 		$indexName = iCMS::$config['template']['index_name'] = $this->PG['indexName'];
-    	$indexName OR $indexName ="index".iCMS::$config['router']['htmlext'];
+    	$indexName OR $indexName ="index".iCMS::$config['router']['html_ext'];
     	iFS::filterExt($indexName,true) OR iPHP::alert('文件名后缀不合法!');
 		iACP::updateConfig('template');
     	$this->CreateIndex($indexTPL,$indexName);

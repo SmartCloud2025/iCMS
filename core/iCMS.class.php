@@ -36,10 +36,10 @@ class iCMS {
         iPHP_DEBUG      && iDB::$show_errors = true;
         iPHP_TPL_DEBUG  && iPHP::clear_compiled_tpl();
         
-        define('iCMS_PUBLIC',   self::$config['router']['publicURL']);
-        define('iCMS_API',      iCMS_PUBLIC.'/api.php');
-        define('iCMS_URL',      self::$config['router']['URL']);
-        define('iCMS_REWRITE',  self::$config['app']['rewrite']);
+        define('iCMS_PUBLIC_URL', self::$config['router']['public_url']);
+        define('iCMS_URL', self::$config['router']['URL']);
+        define('iCMS_REWRITE', self::$config['app']['rewrite']);
+        define('iCMS_API', iCMS_PUBLIC_URL.'/api.php');
         self::$apps = self::$config['apps'];
         self::assign_site();
 	}
@@ -50,15 +50,15 @@ class iCMS {
             "seotitle"    => self::$config['site']['seotitle'],
             "keywords"    => self::$config['site']['keywords'],
             "description" => self::$config['site']['description'],
-            "tpl"         => self::$config['site'][(iPHP::$mobile?'MW_TPL':'PC_TPL')],
             "icp"         => self::$config['site']['icp'],
             'url'         => $router['URL'],
+            "tpl"         => iPHP_TPL_DEFAULT,
             '404'         => $router['404'],
             'urls'        => array(
-                    "ui"     => $router['publicURL'].'/ui',
-                    "lib"    => $router['publicURL'].'/lib',
-                    "public" => $router['publicURL'],
-                    "user"   => $router['userURL'],
+                    "ui"     => iCMS_PUBLIC_URL.'/ui',
+                    "lib"    => iCMS_PUBLIC_URL.'/lib',
+                    "public" => iCMS_PUBLIC_URL,
+                    "user"   => $router['user_url'],
                     "avatar" => rtrim(self::$config['FS']['url'],'/').'/avatar/',
                     "res"    => self::$config['FS']['url'],
 			)

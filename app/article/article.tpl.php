@@ -32,11 +32,19 @@ function article_list($vars){
         }
         $where_sql.= iPHP::where($ncids,'cid','not');
     }
-    if(isset($vars['cid'])){
-        $cids = $vars['cid'];
+    if(isset($vars['cid']) && !isset($vars['cids'])){
+        $cid    = $vars['cid'];
         if($vars['sub']){
-            $cids  = iCMS::get_category_ids($vars['cid'],true);
-            array_push ($cids,$vars['cid']);
+            $cid  = iCMS::get_category_ids($vars['cid'],true);
+            array_push ($cid,$vars['cid']);
+        }
+        $where_sql.= iPHP::where($cid,'cid');
+    }
+    if(isset($vars['cids']) && !isset($vars['cid'])){
+        $cids = $vars['cids'];
+        if($vars['sub']){
+            $cids  = iCMS::get_category_ids($vars['cids'],true);
+            array_push ($cids,$vars['cids']);
         }
         if($cids){
             iPHP::import(iPHP_APP_CORE .'/iMAP.class.php');
@@ -100,7 +108,7 @@ function article_list($vars){
     }
     if(empty($resource)){
         $resource = iDB::all("SELECT * FROM `#iCMS@__article` WHERE {$where_sql} {$order_sql} LIMIT {$offset} , {$maxperpage}");
-        //iDB::debug(1);
+        // iDB::debug(1);
         $resource = __article($vars,$resource);
         $vars['cache'] && iCache::set($cache_name,$resource,$cacheTime);
     }
@@ -212,7 +220,7 @@ function __article($vars,$variable){
         $value['category']['link']  = "<a href='{$value['category']['url']}'>{$value['category']['name']}</a>";
         $value['url']               = iURL::get('article',array($value,$category))->href;
         $value['link']              = "<a href='{$value['url']}'>{$value['title']}</a>";
-        $value['commentUrl']        = iCMS::$config['router']['publicURL']."/comment.php?indexId=".$value['id']."&categoryId=".$value['cid'];
+        $value['commentUrl']        = iCMS_API."?app=comment&indexId=".$value['id']."&categoryId=".$value['cid'];
         if($vars['user']){
             $value['user']['url']  = get_user($value['userid'],'url');
             $value['user']['name'] = $value['author'];

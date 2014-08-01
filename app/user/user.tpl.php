@@ -15,7 +15,7 @@ function user_category($vars=null){
 	$rs       = iDB::all("SELECT * FROM `#iCMS@__user_category`{$whereSQL} LIMIT $row");
 	$_count   = count($rs);
 	iDB::debug();
-	$url = rtrim(iCMS::$config['router']['userURL'],'/');
+	$url = rtrim(iCMS::$config['router']['user_url'],'/');
 	for ($i=0;$i<$_count;$i++){
 		$rs[$i]['url']	= $url.iPHP::router(array('/{uid}/{cid}/',array($rs[$i]['uid'],$rs[$i]['cid'])),iCMS_REWRITE);
 	}

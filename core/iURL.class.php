@@ -45,29 +45,29 @@ class iURL {
     	$b	= $a[1];
     	$c	= self::$uriArray;
         switch($b) {
-            case 'ID':		$e=$c['id'];break;
-            case '0xID':	$e=sprintf("%08s",$c['id']);break;
-            case '0x3ID':	$e=substr(sprintf("%08s",$c['id']), 0, 4);break;
-            case '0x3,2ID':	$e=substr(sprintf("%08s",$c['id']), 4, 2);break;
-            case 'NAME':	$e=urlencode(iS::escapeStr($c['name'][0]));break;
-            case 'TITLE':	$e=urlencode(iS::escapeStr($c['title'][0]));break;
-            case 'CID':		$e=is_array($c['cid'])?$c['cid'][0]:$c['cid'];break;
-            case '0xCID':	$e=sprintf("%08s",$c['cid'][0]);break;
-            case 'CDIR':	$e=is_array($c['dir'])?$c['dir'][0]:$c['dir'];break;
-            case 'CPDIR':	$e=substr(self::CPDIR($c['cid'][0]),1);break;
-            case 'TIME':	$e=$c['pubdate'][0];break;
-            case 'YY':		$e=get_date($c['pubdate'],'y');break;
-            case 'YYYY':	$e=get_date($c['pubdate'],'Y');break;
-            case 'M':		$e=get_date($c['pubdate'],'n');break;
-            case 'MM':		$e=get_date($c['pubdate'],'m');break;
-            case 'D':		$e=get_date($c['pubdate'],'j');break;
-            case 'DD':		$e=get_date($c['pubdate'],'d');break;
-            case 'ZH_CN':	$e=$c['name'][0];break;
-            case 'TCID':	$e=$c['tcid'];break;
-            case 'TCDIR':	$e=$c['dir'][1];break;
-            case 'TKEY':	$e=$c['tkey'];break;
-            case 'EXT':		$e=empty($c['html.ext'])?self::$config['htmlext']:$c['html.ext'];break;
-            case 'MD5':		$e=md5($c['id']);$e=substr(md5($e),8,16);break;
+            case 'ID':		$e = $c['id'];break;
+            case '0xID':	$e = sprintf("%08s",$c['id']);break;
+            case '0x3ID':	$e = substr(sprintf("%08s",$c['id']), 0, 4);break;
+            case '0x3,2ID':	$e = substr(sprintf("%08s",$c['id']), 4, 2);break;
+            case 'NAME':	$e = urlencode(iS::escapeStr($c['name'][0]));break;
+            case 'TITLE':	$e = urlencode(iS::escapeStr($c['title'][0]));break;
+            case 'CID':		$e = is_array($c['cid'])?$c['cid'][0]:$c['cid'];break;
+            case '0xCID':	$e = sprintf("%08s",$c['cid'][0]);break;
+            case 'CDIR':	$e = is_array($c['dir'])?$c['dir'][0]:$c['dir'];break;
+            case 'CPDIR':	$e = substr(self::CPDIR($c['cid'][0]),1);break;
+            case 'TIME':	$e = $c['pubdate'][0];break;
+            case 'YY':		$e = get_date($c['pubdate'],'y');break;
+            case 'YYYY':	$e = get_date($c['pubdate'],'Y');break;
+            case 'M':		$e = get_date($c['pubdate'],'n');break;
+            case 'MM':		$e = get_date($c['pubdate'],'m');break;
+            case 'D':		$e = get_date($c['pubdate'],'j');break;
+            case 'DD':		$e = get_date($c['pubdate'],'d');break;
+            case 'ZH_CN':	$e = $c['name'][0];break;
+            case 'TCID':	$e = $c['tcid'];break;
+            case 'TCDIR':	$e = $c['dir'][1];break;
+            case 'TKEY':	$e = $c['tkey'];break;
+            case 'EXT':		$e = empty($c['html.ext'])?self::$config['html_ext']:$c['html.ext'];break;
+            case 'MD5':		$e = md5($c['id']);$e=substr(md5($e),8,16);break;
         }
         return $e;
     }
@@ -77,7 +77,7 @@ class iURL {
 
         $i       = new stdClass();
         $sURL    = self::$config['URL'];
-        $htmldir = self::$config['htmldir'];
+        $html_dir = self::$config['html_dir'];
         switch($uri) {
             case 'http':
                 $i->href = $a['url'];
@@ -99,17 +99,17 @@ class iURL {
                 $a      = array_merge_recursive((array)$a[0],(array)$a[1],(array)$a[1]);
                 break;
             case 'tag':
-                $htmldir= self::$config['tagDir'];
-                $sURL	= self::$config['tagURL'];
+                $html_dir= self::$config['tag_dir'];
+                $sURL	= self::$config['tag_url'];
                 $i->href= $a[0]['url'];
                 $a      = array_merge_recursive((array)$a[0],(array)$a[1],(array)$a[2]);
                 self::ma('URL.Rule','urlRule',$a);
                 $url 	= $a['URL.Rule'];
-                $url OR $url = self::$config['tagRule'];
+                $url OR $url = self::$config['tag_rule'];
                 break;
              default:$url	= $a['urlRule'];
         }
-        self::ma('html.ext','htmlext',$a);
+        self::ma('html.ext','html_ext',$a);
 
         if($i->href) return $i;
 
@@ -117,11 +117,11 @@ class iURL {
         	self::$uriArray	= $a;
 //        	strstr($url,'{') && $url = preg_replace_callback ("/\{(.*?)\}/",'self::irule($uri,"\\1",$a)',$url);
 //        	strstr($url,'{') && $url = preg_replace_callback ("/\{(.*?)\}/",'self::irule',$url);
-        	strstr($url,'{') && $url = preg_replace_callback ("/\{(.*?)\}/",'iURL_Rule',$url);
+        	strstr($url,'{') && $url = preg_replace_callback ("/\{(.*?)\}/",'__iurl_rule__',$url);
 //var_dump($url);
-            $i->path    = iFS::path(iPATH.$htmldir.$url);
-            $i->href    = iFS::path($sURL.$htmldir.$url);
-//var_dump($i);
+            $i->path    = iFS::path(iPATH.$html_dir.$url);
+            $i->href    = iFS::path($sURL.$url);
+// var_dump($i);
 			$pathA 		= pathinfo($i->path);
 //var_dump($pathA);
 
@@ -141,7 +141,7 @@ class iURL {
 
             if(empty($i->file)||substr($url,-1)=='/'||empty($pathA['extension'])) {
                 $i->name    = 'index';
-                $i->ext     = self::$config['htmlext'];
+                $i->ext     = self::$config['html_ext'];
 				$a['html.ext'] && $i->ext 	= $a['html.ext'];
                 $i->file    = $i->name.$i->ext;
                 $i->path    = $i->path.'/'.$i->file;
@@ -167,11 +167,11 @@ class iURL {
                     $__dir__ 	= $i->dir.'/'.$m->pdir;
                     $i->path 	= str_replace($i->dir,$__dir__,$i->path);
                     $i->dir  	= $__dir__;
-                    $i->dmdir	= iFS::path_join(iPATH,$htmldir.'/'.$m->pd);
+                    $i->dmdir	= iFS::path_join(iPATH,$html_dir.'/'.$m->pd);
                     $bits       = parse_url($i->href);
                     $i->domain  = $bits['scheme'].'://'.$bits['host'];
                 }else {
-                    $i->dmdir   = iFS::path_join(iPATH,$htmldir);
+                    $i->dmdir   = iFS::path_join(iPATH,$html_dir);
                     $i->domain  = $sURL;
                 }
 		        if(strstr($a['domain'][1],'http://')){
@@ -216,6 +216,6 @@ class iURL {
 		return $a[$n];
     }
 }
-function iURL_Rule($a){
+function __iurl_rule__($a){
 	return iURL::rule($a);
 }

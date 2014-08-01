@@ -29,7 +29,7 @@ iACP::head();
           <div class="input-prepend"> <span class="add-on">文 件 名</span>
             <input type="text" name="indexName" class="span3" id="indexName" value="<?php echo iCMS::$config['site']['indexName'] ; ?>"/>
           </div>
-          <span class="help-inline"><?php echo iCMS::$config['router']['htmlext'] ; ?> 首页文件名,一般为<span class="label label-important">index</span> 不用填写文件后缀名</span> </div>
+          <span class="help-inline"><?php echo iCMS::$config['router']['html_ext'] ; ?> 首页文件名,一般为<span class="label label-important">index</span> 不用填写文件后缀名</span> </div>
         <div class="form-actions">
           <button class="btn btn-primary" type="submit"><i class="fa fa-check"></i> 生成</button>
         </div>

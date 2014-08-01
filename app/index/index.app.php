@@ -12,7 +12,7 @@ class indexApp {
     function do_iCMS($indexTpl=null,$indexRule=null) {
         $indexRule  OR $indexRule = iCMS::$config['site']['indexRule'];
         $indexTpl	OR $indexTpl  = iCMS::$config['template']['index'];
-        $indexRule .= iCMS::$config['router']['htmlext'];
+        $indexRule .= iCMS::$config['router']['html_ext'];
         $iurl       = iURL::get('index',array('urlRule'=>$indexRule));
         iCMS::gotohtml($iurl->path,$iurl->href,iCMS::$config['site']['mode']);
         (iCMS::$config['site']['mode']||iPHP::$iTPLMode=="html") && iPHP::page($iurl);

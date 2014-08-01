@@ -45,12 +45,12 @@ $navbar OR $bodyClass	= 'iframe ';
 <script type="text/javascript" src="<?php echo ACP_UI;?>/iCMS-6.0.0.js"></script>
 <script type="text/javascript" src="<?php echo ACP_UI;?>/admincp-6.0.0.js"></script>
 <script type="text/javascript">
-window.iCMS.DIR		= "<?php echo trim(iCMS::$config['router']['DIR'],'/');?>/";
 window.iCMS.APP		= "<?php echo __ADMINCP__;?>";
 window.iCMS.UI		= "<?php echo ACP_UI;?>";
-window.iCMS.URL		= "<?php echo iCMS::$config['router']['URL'];?>";
-window.iCMS.PUBLIC	= "<?php echo iCMS::$config['router']['publicURL'];?>";
-window.iCMS.DEFTPL	= "<?php echo iCMS::$config['template']['pc'];?>";
+window.iCMS.DIR		= "<?php echo trim(iCMS::$config['router']['DIR'],'/');?>/";
+window.iCMS.URL		= "<?php echo iCMS_URL;?>";
+window.iCMS.PUBLIC	= "<?php echo iCMS_PUBLIC_URL;?>";
+window.iCMS.DEFTPL	= "<?php echo iPHP_TPL_DEFAULT;?>";
 
 $(function(){
 	var a = $("#iCMS-menu"),b = $("#sidebar");$("[data-menu='m<?php echo iACP::$menu->rootid; ?>']",a).addClass("active");

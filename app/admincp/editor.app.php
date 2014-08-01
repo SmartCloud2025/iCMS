@@ -15,8 +15,8 @@ class editorApp{
 		iFS::$callback		= true;
     }
     function do_imageManager(){
-		$res              = iPHP::folder(iCMS::$config['FS']['dir'],array('jpg','png','gif','jpeg'));
-		$res['publicURL'] = iCMS::$config['router']['publicURL'];
+		$res               = iPHP::folder(iCMS::$config['FS']['dir'],array('jpg','png','gif','jpeg'));
+		$res['public_url'] = iCMS_PUBLIC_URL;
 		iPHP::json($res);
     }
     function do_imageUp(){

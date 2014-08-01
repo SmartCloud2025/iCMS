@@ -202,7 +202,7 @@ function modal_tplfile(el,a){
                   <div class="input-prepend"> <span class="add-on">访问域名</span>
                     <input type="text" name="config[template][device][{key}][domain]" class="span3" id="device_domain_{key}" value="" disabled="disabled"/>
                   </div>
-                  <span class="help-inline"><span class="label label-info">例:ipad.idreamsoft.com</span></span>
+                  <span class="help-inline"><span class="label label-info">例:http://ipad.idreamsoft.com</span></span>
                   <div class="clearfloat mb10"></div>
                   <div class="input-prepend input-append"> <span class="add-on">模板</span>
                     <input type="text" name="config[template][device][{key}][tpl]" class="span3" id="device_tpl_{key}" value="" disabled="disabled"/>
@@ -221,35 +221,35 @@ function modal_tplfile(el,a){
             <div class="input-prepend"> <span class="add-on">CMS安装目录</span>
               <input type="text" name="config[router][DIR]" class="span4" id="router_dir" value="<?php echo $config['router']['DIR'] ; ?>"/>
             </div>
-            <span class="help-inline">CMS安装目录，如：http：//www.idreamsoft.com/iCMS 则安装目录为:iCMS 根目录请留空</span>
-            <div class="clearfloat mb10"></div>
-            <div class="input-prepend"> <span class="add-on">404跳转</span>
-              <input type="text" name="config[router][404]" class="span4" id="router_404" value="<?php echo $config['router']['404'] ; ?>"/>
-            </div>
-            <span class="help-inline">404页面跳转</span>
-            <div class="clearfloat mb10"></div>
-            <div class="input-prepend"> <span class="add-on">公共资源URL</span>
-              <input type="text" name="config[router][publicURL]" class="span4" id="router_publicURL" value="<?php echo $config['router']['publicURL'] ; ?>"/>
-            </div>
-            <span class="help-inline">公共资源访问URL 如果访问出错请修改public/config.php文件</span>
-            <div class="clearfloat mb10"></div>
-            <div class="input-prepend"> <span class="add-on">用户URL</span>
-              <input type="text" name="config[router][userURL]" class="span4" id="router_userURL" value="<?php echo $config['router']['userURL'] ; ?>"/>
-            </div>
-            <span class="help-inline">用户URL</span>
+            <span class="help-inline">CMS安装目录，如：http：//www.idreamsoft.com/iCMS 则安装目录为:iCMS 根目录请输入<span class="label label-info">/</span></span>
             <div class="clearfloat mb10"></div>
             <div class="input-prepend"> <span class="add-on">网站URL</span>
               <input type="text" name="config[router][URL]" class="span4" id="router_URL" value="<?php echo $config['router']['URL'] ; ?>"/>
             </div>
-            <span class="help-inline">网站网址 可绑定到静态目录 (需开启生成静态)</span>
+            <span class="help-inline">网站网址</span>
+            <div class="clearfloat mb10"></div>
+            <div class="input-prepend"> <span class="add-on">404页面</span>
+              <input type="text" name="config[router][404]" class="span4" id="router_404" value="<?php echo $config['router']['404'] ; ?>"/>
+            </div>
+            <span class="help-inline">404时跳转到的页面</span>
+            <div class="clearfloat mb10"></div>
+            <div class="input-prepend"> <span class="add-on">公共资源URL</span>
+              <input type="text" name="config[router][public_url]" class="span4" id="router_public_url" value="<?php echo $config['router']['public_url'] ; ?>"/>
+            </div>
+            <span class="help-inline">公共资源访问URL 如果访问出错请修改public/config.php文件</span>
+            <div class="clearfloat mb10"></div>
+            <div class="input-prepend"> <span class="add-on">用户URL</span>
+              <input type="text" name="config[router][user_url]" class="span4" id="router_user_url" value="<?php echo $config['router']['user_url'] ; ?>"/>
+            </div>
+            <span class="help-inline">用户URL</span>
             <div class="clearfloat mb10"></div>
             <div class="input-prepend"> <span class="add-on">静态目录</span>
-              <input type="text" name="config[router][htmldir]" class="span4" id="router_htmldir" value="<?php echo $config['router']['htmldir'] ; ?>"/>
+              <input type="text" name="config[router][html_dir]" class="span4" id="router_html_dir" value="<?php echo $config['router']['html_dir'] ; ?>"/>
             </div>
             <span class="help-inline">存放静态页面目录，相对于admin目录。可用../表示上级目录</span>
             <div class="clearfloat mb10"></div>
             <div class="input-prepend"> <span class="add-on">文件后缀</span>
-              <input type="text" name="config[router][htmlext]" class="span4" id="router_htmlext" value="<?php echo $config['router']['htmlext'] ; ?>"/>
+              <input type="text" name="config[router][html_ext]" class="span4" id="router_html_ext" value="<?php echo $config['router']['html_ext'] ; ?>"/>
             </div>
             <span class="help-inline">推荐使用.html</span>
             <div class="clearfloat mb10"></div>
@@ -259,34 +259,34 @@ function modal_tplfile(el,a){
             <span class="help-inline">一次性生成多少静态页，可根据服务器IO性能调整</span> </div>
           <div id="setting-tag" class="tab-pane hide">
             <div class="input-prepend"> <span class="add-on">标签URL</span>
-              <input type="text" name="config[router][tagURL]" class="span4" id="router_tagURL" value="<?php echo $config['router']['tagURL'] ; ?>"/>
+              <input type="text" name="config[router][tag_url]" class="span4" id="router_tag_url" value="<?php echo $config['router']['tag_url'] ; ?>"/>
             </div>
             <span class="help-inline">标签目录访问URL 可绑定域名</span>
             <div class="clearfloat mb10"></div>
             <div class="input-prepend input-append"> <span class="add-on">标签URL规则</span>
-              <input type="text" name="config[router][tagRule]" class="span4" id="router_tagRule" value="<?php echo $config['router']['tagRule'] ; ?>"/>
+              <input type="text" name="config[router][tag_rule]" class="span4" id="router_tag_rule" value="<?php echo $config['router']['tag_rule'] ; ?>"/>
               <div class="btn-group"> <a class="btn dropdown-toggle" data-toggle="dropdown" tabindex="-1"><i class="fa fa-question-circle"></i> 帮助</a>
                 <ul class="dropdown-menu">
-                  <li><a href="{ID}" data-toggle="insertContent" data-target="#router_tagRule"><span class="label label-important">{ID}</span> 标签ID</a></li>
-                  <li><a href="{TKEY}" data-toggle="insertContent" data-target="#router_tagRule"><span class="label label-important">{TKEY}</span> 标签标识</a></li>
-                  <li><a href="{ZH_CN}" data-toggle="insertContent" data-target="#router_tagRule"><span class="label label-important">{ZH_CN}</span> 标签名(中文)</a></li>
-                  <li><a href="{NAME}" data-toggle="insertContent" data-target="#router_tagRule"><span class="label label-important">{NAME}</span> 标签名</a></li>
+                  <li><a href="{ID}" data-toggle="insertContent" data-target="#router_tag_rule"><span class="label label-important">{ID}</span> 标签ID</a></li>
+                  <li><a href="{TKEY}" data-toggle="insertContent" data-target="#router_tag_rule"><span class="label label-important">{TKEY}</span> 标签标识</a></li>
+                  <li><a href="{ZH_CN}" data-toggle="insertContent" data-target="#router_tag_rule"><span class="label label-important">{ZH_CN}</span> 标签名(中文)</a></li>
+                  <li><a href="{NAME}" data-toggle="insertContent" data-target="#router_tag_rule"><span class="label label-important">{NAME}</span> 标签名</a></li>
                   <li class="divider"></li>
-                  <li><a href="{TCID}" data-toggle="insertContent" data-target="#router_tagRule"><span class="label label-inverse">{TCID}</span> 分类ID</a></li>
-                  <li><a href="{TCDIR}" data-toggle="insertContent" data-target="#router_tagRule"><span class="label label-inverse">{TCDIR}</span> 分类目录</a></li>
-                  <li><a href="{CDIR}" data-toggle="insertContent" data-target="#router_tagRule"><span class="label label-inverse">{CDIR}</span> 栏目目录</a></li>
+                  <li><a href="{TCID}" data-toggle="insertContent" data-target="#router_tag_rule"><span class="label label-inverse">{TCID}</span> 分类ID</a></li>
+                  <li><a href="{TCDIR}" data-toggle="insertContent" data-target="#router_tag_rule"><span class="label label-inverse">{TCDIR}</span> 分类目录</a></li>
+                  <li><a href="{CDIR}" data-toggle="insertContent" data-target="#router_tag_rule"><span class="label label-inverse">{CDIR}</span> 栏目目录</a></li>
                   <li class="divider"></li>
-                  <li><a href="{P}" data-toggle="insertContent" data-target="#router_tagRule"><span class="label label-inverse">{P}</span> 分页数</a></li>
-                  <li><a href="{EXT}" data-toggle="insertContent" data-target="#router_tagRule"><span class="label label-inverse">{EXT}</span> 后缀</a></li>
+                  <li><a href="{P}" data-toggle="insertContent" data-target="#router_tag_rule"><span class="label label-inverse">{P}</span> 分页数</a></li>
+                  <li><a href="{EXT}" data-toggle="insertContent" data-target="#router_tag_rule"><span class="label label-inverse">{EXT}</span> 后缀</a></li>
                   <li class="divider"></li>
-                  <li><a href="{PHP}" data-toggle="insertContent" data-target="#router_tagRule"><span class="label label-inverse">{PHP}</span> 动态程序</a></li>
+                  <li><a href="{PHP}" data-toggle="insertContent" data-target="#router_tag_rule"><span class="label label-inverse">{PHP}</span> 动态程序</a></li>
                 </ul>
               </div>
             </div>
             <span class="help-inline">伪静态模式时规则一定要包含<span class="label label-important">{ID}</span>或<span class="label label-important">{NAME}</span>或<span class="label label-important">{ZH_CN}</span></span>
             <div class="clearfloat mb10"></div>
             <div class="input-prepend"> <span class="add-on">标签目录</span>
-              <input type="text" name="config[router][tagDir]" class="span4" id="router_tagDir" value="<?php echo $config['router']['tagDir'] ; ?>"/>
+              <input type="text" name="config[router][tag_dir]" class="span4" id="router_tag_dir" value="<?php echo $config['router']['tag_dir'] ; ?>"/>
             </div>
             <span class="help-inline">存放标签静态页面目录，相对于app目录。可用../表示上级目录</span> </div>
           <div id="setting-cache" class="tab-pane hide">

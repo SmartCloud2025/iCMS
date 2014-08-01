@@ -43,7 +43,7 @@ class iUser{
 		if(file_exists(iFS::fp($avatar,'+iPATH'))){
 			return iFS::fp($avatar);
 		}else{
-			return iCMS::$config['router']['publicURL'].'/common/avatar_'.$size.'.gif';
+			return iCMS_PUBLIC_URL.'/common/avatar_'.$size.'.gif';
 		}
 	}
     //检查栏目权限

@@ -18,7 +18,7 @@ function iCMS_router($vars){
 	$vars['query'] && $url = buildurl($url,$vars['query']);
 	
 	if($url){
-		echo iCMS::$config['router']['URL'].$url;		
+		echo iCMS_URL.$url;		
 	}else{
 		echo 'javascript:;';
 	}

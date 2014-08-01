@@ -29,20 +29,30 @@ return array (
       'domain' => '',
       'tpl' => 'mobile',
     ),
+    'device' => 
+    array (
+      1 => 
+      array (
+        'name' => 'iPad',
+        'ua' => 'iPad',
+        'domain' => 'http://ipad.idreamsoft.com',
+        'tpl' => 'ipad',
+      ),
+    ),
   ),
   'router' => 
   array (
-    'DIR' => '',
-    404 => 'http://v6.icms.com',
-    'publicURL' => 'http://v6.icms.com/public',
-    'userURL' => 'http://v6.icms.com',
-    'URL' => 'http://v6.icms.com',
-    'htmldir' => '/html/',
-    'htmlext' => '.html',
+    'DIR' => '/',
+    'URL' => 'http://v6.icms.com/',
+    404 => 'http://v6.icms.com/404.html',
+    'public_url' => 'http://v6.icms.com/public',
+    'user_url' => 'http://v6.icms.com/u',
+    'html_dir' => '../html/',
+    'html_ext' => '.html',
     'speed' => '50',
-    'tagURL' => 'http://v6.icms.com',
-    'tagRule' => '{PHP}',
-    'tagDir' => '/',
+    'tag_url' => '',
+    'tag_rule' => '{PHP}',
+    'tag_dir' => '',
   ),
   'cache' => 
   array (

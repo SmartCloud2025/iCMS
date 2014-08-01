@@ -61,4 +61,5 @@ defined('iPHP_MEMORY_LIMIT') OR define('iPHP_MEMORY_LIMIT', '128M');
 //-----------------模板标签-----------------------
 defined('iPHP_TPL_VAR') OR define('iPHP_TPL_VAR',iPHP_APP);//<!--{iPHP:test }--><!--{iPHP.now}-->
 //defined('iPHP_TPL_DEFAULT') OR define('iPHP_TPL_DEFAULT','default');
+//defined('iPHP_TPL_DOMAIN') OR define('iPHP_TPL_DOMAIN','www.idreamsoft.com');
 defined('iPHP_TPL_FUN') OR define('iPHP_TPL_FUN',iPHP_APP_CORE.'/function');

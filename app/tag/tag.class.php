@@ -43,7 +43,7 @@ class tag {
         	$name				= trim($name);
         	$_cache				= self::getCache($name,$C['cid'],$TC['cid']);
 			$strA[$k]['name']	= $name;
-			$strA[$k]['url']	= $_cache['url']?$_cache['url']:iCMS::$config['router']['publicURL'].'/search.php?q='.$name;
+			$strA[$k]['url']	= $_cache['url']?$_cache['url']:iCMS_PUBLIC_URL.'/search.php?q='.$name;
 			$strLink.='<a href="'.$strA[$k]['url'].'" target="_self">'.$strA[$k]['name'].'</a> ';
         }
         $search	= $C['name'];

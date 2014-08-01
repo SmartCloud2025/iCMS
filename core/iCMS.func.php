@@ -31,13 +31,13 @@ function baiduping($href) {
 <value><string>'.iCMS::$config['site']['name'].'</string></value>
 </param>
 <param>
-<value><string>'.iCMS::$config['router']['URL'].'</string></value>
+<value><string>'.iCMS_URL.'</string></value>
 </param>
 <param>
 <value><string>'.$href.'</string></value>
 </param>
 <param>
-<value><string>'.iCMS::$config['router']['URL'].'/s/rss.php</string></value>
+<value><string>'.iCMS_API.'?app=rss</string></value>
 </param>
 </params>
 </methodCall>';
@@ -80,10 +80,10 @@ function get_user($uid,$type,$size=0){
         break;
         case 'url':
             $url = iPHP::router(array('/{uid}/',$uid),iCMS_REWRITE);
-            return rtrim(iCMS::$config['router']['userURL'],'/').$url;
+            return rtrim(iCMS::$config['router']['user_url'],'/').$url;
         break;
         case 'urls':
-            $url = rtrim(iCMS::$config['router']['userURL'],'/');
+            $url = rtrim(iCMS::$config['router']['user_url'],'/');
             return array(
                 'home'      => iPHP::router(array('/{uid}/',$uid,$url),iCMS_REWRITE),
                 'favorite'  => iPHP::router(array('/{uid}/favorite/',$uid,$url),iCMS_REWRITE),

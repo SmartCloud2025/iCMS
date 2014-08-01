@@ -93,7 +93,7 @@ $(function() {
     xiuxiu.setLaunchVars("file_name", "<?php echo $file_name;?>");
     xiuxiu.embedSWF("PhotoEditor",3,"100%","630");
          /*第1个参数是加载编辑器div容器，第2个参数是编辑器类型，第3个参数是div容器宽，第4个参数是div容器高*/
-    xiuxiu.setUploadURL("<?php echo iCMS::$config['router']['URL'];?>/admincp.php?app=files&do=IO&format=json&id=<?php echo $file_id;?>");//修改为您自己的上传接收图片程序
+    xiuxiu.setUploadURL("<?php echo iCMS_URL;?>/admincp.php?app=files&do=IO&format=json&id=<?php echo $file_id;?>");//修改为您自己的上传接收图片程序
     xiuxiu.onInit = function (){
       <?php if($src){ ?>
       xiuxiu.loadPhoto("<?php echo $src;?>?<?php echo time();?>");

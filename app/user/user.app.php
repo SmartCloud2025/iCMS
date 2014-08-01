@@ -16,7 +16,7 @@ class userApp {
         $this->nickname = iS::escapeStr(iPHP::getUniCookie('nickname'));
         $this->openid   = iS::escapeStr($_GET['openid']);
         $this->forward  = iPHP::get_cookie('forward');
-        $this->forward OR $this->forward = iCMS::$config['router']['URL'];
+        $this->forward OR $this->forward = iCMS_URL;
         // iFS::config($GLOBALS['iCONFIG']['user_fs_conf']);
         iFS::$userid    = $this->userid;
         iPHP::assign('openid',$this->openid);
