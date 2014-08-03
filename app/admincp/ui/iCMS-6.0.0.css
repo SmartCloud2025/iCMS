@@ -12,6 +12,7 @@ a:hover { text-decoration: none; }
 i { text-align: center; }
 .solid { clear: both; height: 1px; margin-top: 10px; margin-bottom: 10px; border-bottom: 1px solid #BDBDBD; }
 /* bootstrap */
+input[type="checkbox"] {margin: 0px !important;}
 a, a:hover, a:focus { color: #057AFD; }
 a.noneline { text-decoration: none !important; }
 .btn, .add-on, .navbar-inner, .label, .navbar a, .switch-left, .switch-right { background-image: none !important; -webkit-box-shadow: none !important; -moz-box-shadow: none !important; box-shadow: none !important; }
@@ -26,7 +27,7 @@ a.noneline { text-decoration: none !important; }
 .navbar .nav>.active>a { color: #057AFD; }
 .navbar .nav li.dropdown.open>.dropdown-toggle, .navbar .nav li.dropdown.active>.dropdown-toggle, .navbar .nav li.dropdown.open.active>.dropdown-toggle { color: #057AFD; }
 .dropdown-menu li a:hover i, .dropdown-submenu:hover>a i { color: #fff !important; }
-.dropdown-menu li a:hover, .dropdown-menu .active a, .dropdown-menu .active a:hover { background-color: #057AFD; background-image: none; color: #f8f8f8; }
+.dropdown-menu li a:hover, .dropdown-menu>.active>a, .dropdown-menu .active a:hover { background-color: #057AFD; background-image: none; color: #f8f8f8; }
 .nav-tabs { margin-bottom: 0px; }
 .table th { background: #fafafa url("table_head.gif") repeat-x 0 100%; }
 .table td { background-color: #fff; }

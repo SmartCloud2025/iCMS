@@ -100,7 +100,7 @@ VALUES ('".iCMS_APP_ARTICLE."', '$cid', '$iid','$suid', '$title', '$this->userid
         $type     = $_POST['type'];
         in_array($type, array("detail")) OR die();
         
-        $uId      = (int)$_POST['uId'];
+        $userid      = (int)$_POST['uId'];
         $indexId  = (int)$_POST['indexId'];
         $itemId   = (int)$_POST['itemId'];
         $content  = iS::escapeStr($_POST['content']);
@@ -113,7 +113,7 @@ VALUES ('".iCMS_APP_ARTICLE."', '$cid', '$iid','$suid', '$title', '$this->userid
 	    
 		iDB::query("INSERT INTO `#iCMS@__{$type}_cmt`
             (`uId`,`indexId`, `itemId`, `userid`, `nickname`, `content`, `type`, `addtime`, `status`)
-VALUES ('$uId','$indexId', '$itemId', '$userid', '$nickname', '$content', '$type', '".time()."', '1');");
+VALUES ('$userid','$indexId', '$itemId', '$userid', '$nickname', '$content', '$type', '".time()."', '1');");
 		
 		iDB::query("UPDATE `#iCMS@__{$type}_list` SET `comment` = comment+1 WHERE `id` = '$indexId';");
 		iPHP::json(array('code'=>1,'msg'=>''));

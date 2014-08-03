@@ -10,7 +10,7 @@
 * @$Id: tagcategory.app.php 2372 2014-03-16 07:24:56Z coolmoo $
 */
 defined('iPHP') OR exit('What are you doing?');
-iPHP::import(ACP_PATH . '/category.app.php');
+iACP::app('category','import');
 class tagcategoryApp extends categoryApp {
     function __construct() {
         parent::__construct(iCMS_APP_TAG);

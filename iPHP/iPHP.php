@@ -35,6 +35,7 @@ function_exists('date_default_timezone_set') && date_default_timezone_set(iPHP_T
 
 require iPHP_PATH.'/iPHP.compat.php';
 require iPHP_PATH.'/iPHP.class.php';
+iPHP::timer_start();
 //security
 iPHP::LoadClass("Security");
 iS::filter();

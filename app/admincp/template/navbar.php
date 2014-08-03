@@ -16,11 +16,11 @@ defined('iCMS') OR exit('What are you doing?');
           <?php echo iACP::$menu->show(); ?>
         </ul>
         <ul class="nav pull-right">
-          <li><a href="index.php" target="_blank"><i class="fa fa-home fa-lg"></i> 网站首页</a></li>
+          <li><a href="<?php echo iCMS_URL;?>" target="_blank"><i class="fa fa-home fa-lg"></i> 网站首页</a></li>
           <li class="divider-vertical"></li>
           <li class="dropdown"> <a href="#" class="dropdown-toggle" data-toggle="dropdown"><i class="fa fa-users"></i> <?php echo iMember::$group->name;?> <b class="caret"></b></a>
             <ul class="dropdown-menu">
-              <li><a href="###"><?php echo iMember::$Rs->username;?></a></li>
+              <li><a href="###"><?php echo iMember::$data->nickname;?>,你好!</a></li>
               <li class="divider"></li>
               <li><a href="<?php echo __ADMINCP__; ?>=job"><i class="fa fa-bar-chart-o"></i> 工作统计</a></li>
               <li><a href="<?php echo __ADMINCP__; ?>=account&do=edit"><i class="fa fa-user"></i> 更改信息</a></li>

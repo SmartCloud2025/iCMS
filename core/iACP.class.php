@@ -77,13 +77,16 @@ class iACP {
         $appName     = self::$app_name . 'App';
         self::$app   = new $appName();
         $app_methods = get_class_methods($appName);
-        in_array(self::$app_method, $app_methods) OR iPHP::throwException('应用程序运行出错. <b>' . self::$app_name . '</b> 类中找不到方法定义: <b>do' . self::$app_do . '</b>', 1003);
+        in_array(self::$app_method, $app_methods) OR iPHP::throwException('应用程序运行出错. <b>' . self::$app_name . '</b> 类中找不到方法定义: <b>' . self::$app_method . '</b>', 1003);
         $method = self::$app_method;
 		self::$app->$method();
     }
 
     public static function app($app = NULL, $arg = NULL) {
         iPHP::import(ACP_PATH . '/' . $app . '.app.php');
+        if ($arg === 'import') {
+            return;
+        }
         $appName = $app . 'App';
         if ($arg !== NULL) {
             return new $appName($arg);

@@ -13,6 +13,9 @@ class accountApp{
     function __construct() {
     	$this->uid	= (int)$_GET['id'];
     }
+    function do_iCMS(){
+        iPHP::gotourl(APP_URI.'&do=admin');
+    }
     function do_adduser(){
 
     }
@@ -43,12 +46,15 @@ class accountApp{
 		$rs			= iDB::row("SELECT * FROM `#iCMS@__members` WHERE `uid`='$this->uid' LIMIT 1;");
 		include iACP::view("account.job");
     }
-
+    function do_edit(){
+        $this->uid = iMember::$userid;
+        $this->do_addadmin();
+    }
     function do_addadmin(){
-        $group  = iACP::app("groups",$this->type);
+        $group  = iACP::app("groups");
         if($this->uid) {
-            $rs         = iDB::row("SELECT * FROM `#iCMS@__members` WHERE `uid`='$this->uid' LIMIT 1;");
-            $rs->info && $rs->info  =unserialize($rs->info);
+            $rs = iDB::row("SELECT * FROM `#iCMS@__members` WHERE `uid`='$this->uid' LIMIT 1;");
+            $rs->info && $rs->info = unserialize($rs->info);
         }
         include iACP::view("account.add");
     }
@@ -77,6 +83,8 @@ class accountApp{
         $username          = iS::escapeStr($_POST['uname']);
         $nickname          = iS::escapeStr($_POST['nickname']);
         $realname          = iS::escapeStr($_POST['realname']);
+        $power             = json_encode($_POST['power']);
+        $cpower            = json_encode($_POST['cpower']);
         $info['icq']       = intval($_POST['icq']);
         $info['home']      = iS::escapeStr(stripslashes($_POST['home']));
         $info['year']      = intval($_POST['year']);
@@ -101,7 +109,7 @@ class accountApp{
             $msg="账号添加完成!";
         }else {
             iDB::value("SELECT `uid` FROM `#iCMS@__members` where `username` ='$username' AND `uid` !='$uid' LIMIT 1") && iPHP::alert('该账号已经存在');
-            $fields = array('gid','gender','username','nickname','realname','info');
+            $fields = array('gid','gender','username','nickname','realname','power', 'cpower','info');
             $data   = compact ($fields);
             iDB::update('members', $data, array('uid'=>$uid));
             $password && iDB::query("UPDATE `#iCMS@__members` SET `password`='$pwd' WHERE `uid` ='".$uid);

@@ -10,18 +10,17 @@ iACP::head();
 ?>
 <script type="text/javascript">
 $(function(){
-  iCMS.select('type',"<?php echo $rs->type ; ?>");
+    iCMS.select('type',"<?php echo $rs->type ; ?>");
 });
 </script>
-
 <div class="iCMS-container">
   <div class="widget-box">
     <div class="widget-title"> <span class="icon"> <i class="fa fa-user"></i> </span>
       <h5 class="brs"><?php echo empty($this->gid)?'添加':'修改' ; ?>角色</h5>
       <ul class="nav nav-tabs" id="groups-tab">
         <li class="active"><a href="#groups-info" data-toggle="tab"><b>基本信息</b></a></li>
-        <li><a href="#groups-admincp" data-toggle="tab"><b>后台权限</b></a></li>
-        <li><a href="#groups-category" data-toggle="tab"><b>栏目权限</b></a></li>
+        <li><a href="#tab-power" data-toggle="tab"><b>后台权限</b></a></li>
+        <li><a href="#tab-cpower" data-toggle="tab"><b>栏目权限</b></a></li>
       </ul>
     </div>
     <div class="widget-content nopadding">
@@ -41,8 +40,7 @@ $(function(){
             </div>
             <div class="clearfloat mb10"></div>
           </div>
-          <div id="groups-admincp" class="tab-pane hide"> </div>
-          <div id="groups-category" class="tab-pane hide"> </div>
+          <?php include iACP::view("power"); ?>
         </div>
         <div class="form-actions">
           <button class="btn btn-primary" type="submit"><i class="fa fa-check"></i> 提交</button>

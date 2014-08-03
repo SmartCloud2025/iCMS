@@ -53,14 +53,18 @@ window.iCMS.PUBLIC	= "<?php echo iCMS_PUBLIC_URL;?>";
 window.iCMS.DEFTPL	= "<?php echo iPHP_TPL_DEFAULT;?>";
 
 $(function(){
-	var a = $("#iCMS-menu"),b = $("#sidebar");$("[data-menu='m<?php echo iACP::$menu->rootid; ?>']",a).addClass("active");
+	var a = $("#iCMS-menu"),b = $("#sidebar");
+	$("[data-menu='m<?php echo iACP::$menu->rootid; ?>']",a).addClass("active");
+	$("[data-menu='m<?php echo iACP::$menu->parentid; ?>']",a).addClass("active");
+	$("[data-menu='m<?php echo iACP::$menu->doMid; ?>']",a).addClass("active");
+
+	$("[data-menu='m<?php echo iACP::$menu->doMid; ?>']",b).addClass("active");
 	var c = $("[data-menu='m<?php echo iACP::$menu->parentid; ?>']",b).addClass("active");
 	if(c.hasClass("submenu")){
 		c.addClass("open");
 		$("ul",c).show();
 	}
 })
-
 </script>
 </head>
 <body class="<?php echo $bodyClass; ?>">

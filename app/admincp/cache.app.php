@@ -33,8 +33,8 @@ class cacheApp{
     	iPHP::success('清理完成');
     }
     function do_artCount(){
-    	$o	= iACP::app('category');
-    	$o->reCount();
+        $app = iACP::app('category');
+    	$app->recount();
     	iPHP::success('更新完成');
     }
 }

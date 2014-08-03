@@ -4,7 +4,7 @@ if ($.browser.msie && ($.browser.version == "6.0" || $.browser.version == "7.0")
 (function($) {
     $.fn.extend({
         batch: function(opt) {
-            var im   = $(this),
+            var im   = $(this),_this = this,
                 action   = $('<input type="hidden" name="batch">'),
                 content  = $('<div class="hide"></div>').appendTo(im),
                 defaults = {
@@ -18,6 +18,8 @@ if ($.browser.msie && ($.browser.version == "6.0" || $.browser.version == "7.0")
 					prop: function(){
 						var select	= $("#pid").clone().show()
 							//.removeClass("chosen-select")
+                            .attr("name",'pid[]')
+                            .attr("multiple",'multiple')
 							.attr("id",iCMS.random(3));
 						$("option:first",select).remove();
 						return select;
@@ -173,6 +175,27 @@ if ($.browser.msie && ($.browser.version == "6.0" || $.browser.version == "7.0")
         }
     })
 })(jQuery);
+
+//https://github.com/spencertipping/jquery.fix.clone/blob/master/jquery.fix.clone.js
+(function (original) {
+  jQuery.fn.clone = function () {
+    var result           = original.apply(this, arguments),
+        my_textareas     = this.find('textarea').add(this.filter('textarea')),
+        result_textareas = result.find('textarea').add(result.filter('textarea')),
+        my_selects       = this.find('select').add(this.filter('select')),
+        result_selects   = result.find('select').add(result.filter('select'));
+
+    for (var i = 0, l = my_textareas.length; i < l; ++i) $(result_textareas[i]).val($(my_textareas[i]).val());
+    for (var i = 0, l = my_selects.length;   i < l; ++i) {
+      for (var j = 0, m = my_selects[i].options.length; j < m; ++j) {
+        if (my_selects[i].options[j].selected === true) {
+          result_selects[i].options[j].selected = true;
+        }
+      }
+    }
+    return result;
+  };
+}) (jQuery.fn.clone);
 
 window.iCMS = {
     select: function(a, v) {

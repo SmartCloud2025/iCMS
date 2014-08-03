@@ -289,30 +289,69 @@ class categoryApp{
         $_count       = count($rs);
         include iACP::view("category.manage");
     }
-    function do_ajaxtree(){
-		$hasChildren=$_GET['hasChildren']?true:false;
-	 	echo $this->tree($_GET["root"],$hasChildren);
+    function do_del($cid = null,$dialog=true){
+        $cid===null && $cid=(int)$_GET['cid'];
+        iMember::CP($cid,'Permission_Denied',APP_URI);
+        $msg    = '请选择要删除的'.$this->name_text.'!';
+        if(empty($this->category->_array[$cid])) {
+            $this->delcontent($cid);
+            iDB::query("DELETE FROM `#iCMS@__category` WHERE `cid` = '$cid'");
+            $dialog && $this->category->cache(true,$this->appid);
+            $msg    = '删除成功!';
+        }else {
+            $msg    = '请先删除本'.$this->name_text.'下的子'.$this->name_text.'!';
+        }
+        $dialog && iPHP::success($msg,'js:parent.$("#'.$cid.'").parent().remove();');
     }
-    function tree($cid =0,$hasChildren=false){
+    function do_ajaxtree(){
+		$expanded=$_GET['expanded']?true:false;
+	 	echo $this->tree($_GET["root"],$expanded);
+    }
+    function power_tree($cid=0){
+        $li   = '';
+        foreach((array)$this->category->_array[$cid] AS $root=>$C) {
+            $li.= '<li>';
+            $li.= $this->power_holder($C);
+            if($this->category->_array[$C['cid']]){
+                $li.= '<ul>';
+                $li.= $this->power_tree($C['cid']);
+                $li.= '</ul>';
+            }
+            $li.= '</li>';
+        }
+        return $li;
+    }
+    function power_holder($C) {
+        return '<input type="checkbox" name="cpower[cid][]" id="cid'.$C['cid'].'" value="'.$C['cid'].'">
+        <span class="name">'.$C['name'].'</span>
+        <div class="input-prepend input-append li2"><span class="add-on">内容权限</span>
+        <span class="add-on"><input type="checkbox" class="checkbox" name="cpower[do][]" value="c:'.$C['cid'].':s" /> 查询</span>
+        <span class="add-on"><input type="checkbox" name="cpower[do][]" value="c:'.$C['cid'].':a" /> 增加</span>
+        <span class="add-on"><input type="checkbox" name="cpower[do][]" value="c:'.$C['cid'].':d" /> 删除</span>
+        <span class="add-on"><input type="checkbox" name="cpower[do][]" value="c:'.$C['cid'].':e" /> 编辑</span>
+        </div>
+        ';
+    }
+    function tree($cid =0,$expanded=false,$func='li'){
     	$cid=='source' && $cid=0;
         foreach((array)$this->category->_array[$cid] AS $root=>$C) {
 	    	if(iMember::CP($C['cid'])) {
 	        	$a=array();
-	        	$a['id']	= $C['cid'];
-	        	$a['text']	= $this->li($C,$op);
+                $a['id']   = $C['cid'];
+                $a['text'] = $this->$func($C,$op);
 	            if($this->category->_array[$C['cid']]){
-	            	if($hasChildren){
-		            	$a['hasChildren']	= false;
-		            	$a['expanded']		= true;
-		            	$a['children']		= $this->tree($C['cid'],$hasChildren);
+	            	if($expanded){
+                        $a['hasChildren'] = false;
+                        $a['expanded']    = true;
+                        $a['children']    = $this->tree($C['cid'],$expanded,$func);
 	            	}else{
-		            	$a['hasChildren']	= true;
+                        $a['hasChildren'] = true;
 	            	}
 	            }
 	            $tr[]=$a;
 		    }
         }
-        if($hasChildren && $cid!='source'){ return $tr; }
+        if($expanded && $cid!='source'){ return $tr; }
         return $tr?json_encode($tr):'[]';
     }
 
@@ -345,21 +384,8 @@ class categoryApp{
         $tr.='</span></div>';
         return $tr;
     }
-    function do_del($cid = null,$dialog=true){
-        $cid===null && $cid=(int)$_GET['cid'];
-        iMember::CP($cid,'Permission_Denied',APP_URI);
-    	$msg	= '请选择要删除的'.$this->name_text.'!';
-        if(empty($this->category->_array[$cid])) {
-            $this->delcontent($cid);
-            iDB::query("DELETE FROM `#iCMS@__category` WHERE `cid` = '$cid'");
-            $dialog && $this->category->cache(true,$this->appid);
-            $msg	= '删除成功!';
-        }else {
-        	$msg	= '请先删除本'.$this->name_text.'下的子'.$this->name_text.'!';
-        }
-		$dialog && iPHP::success($msg,'js:parent.$("#'.$cid.'").parent().remove();');
-    }
-    function reCount(){
+
+    function recount(){
         $rs     = iDB::all("SELECT `cid` FROM `#iCMS@__category` where `appid`='$this->appid'");
         $_count = count($rs);
 		for ($i=0;$i<$_count;$i++) {

@@ -23,6 +23,7 @@ class iPHP{
 	public static $iTPL         = NULL;
 	public static $iTPLMode     = null;
 	public static $mobile       = false;
+	public static $time_start   = false;
 
 	public static function config(){
         $site   = iPHP_MULTI_SITE ? $_SERVER['HTTP_HOST']:iPHP_APP;
@@ -398,6 +399,26 @@ class iPHP{
     	echo $json;
     	$break && exit();
     }
+    /**
+     * Starts the timer, for debugging purposes
+     */
+    public static function timer_start() {
+        $mtime = microtime();
+        $mtime = explode(' ', $mtime);
+        self::$time_start = $mtime[1] + $mtime[0];
+    }
+
+    /**
+     * Stops the debugging timer
+     * @return int total time spent on the query, in milliseconds
+     */
+    public static function timer_stop() {
+        $mtime = microtime();
+        $mtime = explode(' ', $mtime);
+        $time_end = $mtime[1] + $mtime[0];
+        $time_total = $time_end - self::$time_start;
+        return $time_total;
+    }
     public static function code($code=0,$msg='',$forward='',$format=''){
     	strstr($msg,':') && $msg = self::lang($msg);
     	$a = array('code'=>$code,'msg'=>$msg,'forward'=>$forward);
@@ -543,7 +564,7 @@ class iPHP{
         	$total	= iDB::value($sql);
         	//echo iDB::$last_query;
         	if($type!='G'){
-        		iCache::set('total/'.$tnkey,$total,3600);
+        		iCache::set('total/'.$tnkey,$total);
         		//self::set_cookie($tnkey,$total,3600);
         	}
         }

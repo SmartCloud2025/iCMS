@@ -10,8 +10,8 @@
 * @$Id: iMember.class.php 2279 2013-11-17 17:19:12Z coolmoo $
 */
 class iMember{
-    public static $uId         = 0;
-    public static $Rs          = array();
+    public static $userid      = 0;
+    public static $data        = array();
     public static $nickname    = NULL;
     public static $group       = array();
     public static $ajax        = false;
@@ -19,27 +19,28 @@ class iMember{
     public static $power       = array();
     public static $AUTH        = 'iCMS_AUTH';
     public static $LOGIN_TPL   = './';
-    private static $loginCount = 0;
+    private static $login_count = 0;
 
     public static function check($a,$p) {
     	if(empty($a) && empty($p)) {
         	self::LoginPage();
     	}
 
-        self::$Rs = iDB::row("SELECT * FROM `#iCMS@__members` WHERE `username`='{$a}' AND `password`='{$p}' AND `status`='1' LIMIT 1;");
-        self::$Rs OR self::LoginPage();
-        self::$Rs->info && self::$Rs->info	= unserialize(self::$Rs->info);
-        self::$uId      = self::$Rs->uid;
-        self::$group    = iDB::row("SELECT * FROM `#iCMS@__group` WHERE `gid`='".self::$Rs->gid."' LIMIT 1;");
-        self::$power    = self::smerge(self::$group->power,self::$Rs->power);
-        self::$cpower   = self::smerge(self::$group->cpower,self::$Rs->cpower);
-        self::$nickname = self::$Rs->nickname?self::$Rs->nickname:self::$Rs->username;
-        return self::$Rs;
+        self::$data = iDB::row("SELECT * FROM `#iCMS@__members` WHERE `username`='{$a}' AND `password`='{$p}' AND `status`='1' LIMIT 1;");
+        self::$data OR self::LoginPage();
+        unset(self::$data->password);
+        self::$data->info && self::$data->info	= unserialize(self::$data->info);
+        self::$userid   = self::$data->uid;
+        self::$group    = iDB::row("SELECT * FROM `#iCMS@__group` WHERE `gid`='".self::$data->gid."' LIMIT 1;");
+        self::$power    = self::smerge(self::$group->power,self::$data->power);
+        self::$cpower   = self::smerge(self::$group->cpower,self::$data->cpower);
+        self::$nickname = self::$data->nickname?self::$data->nickname:self::$data->username;
+        return self::$data;
     }
     //登陆验证
     public static function checkLogin() {
-//        self::$loginCount = (int)authcode(get_cookie('iCMS_LOGIN_COUNT'),'DECODE');
-//        if(self::$loginCount>iCMS_LOGIN_COUNT) exit();
+//        self::$login_count = (int)authcode(get_cookie('iCMS_LOGIN_COUNT'),'DECODE');
+//        if(self::$login_count>iCMS_LOGIN_COUNT) exit();
 
         $a   = iS::escapeStr($_POST['username']);
         $p   = iS::escapeStr($_POST['password']);
@@ -52,7 +53,7 @@ class iMember{
         }else {
             $p   = md5($p);
             $crs = self::check($a,$p);
-            iDB::query("UPDATE `#iCMS@__members` SET `lastip`='".$ip."',`lastlogintime`='".time()."',`logintimes`=logintimes+1 WHERE `uid`='".self::$uId."'");
+            iDB::query("UPDATE `#iCMS@__members` SET `lastip`='".$ip."',`lastlogintime`='".time()."',`logintimes`=logintimes+1 WHERE `uid`='".self::$userid."'");
             iPHP::set_cookie(self::$AUTH,authcode($a.$sep.$p,'ENCODE'));
         	self::$ajax && iPHP::json(array('code'=>1));
             return $crs;
@@ -72,7 +73,7 @@ class iMember{
 	}
     //检查栏目权限
     public static function CP($p=NULL,$T="F",$url=__REF__) {
-        if(self::$Rs->gid=="1")
+        if(self::$data->gid=="1")
             return TRUE;
 
         if(is_array($p)?array_intersect($p,self::$cpower):in_array($p,self::$cpower)) {
@@ -87,7 +88,7 @@ class iMember{
     }
     //检查后台权限
     public static function MP($p=NULL,$T="Permission_Denied",$url=__REF__) {
-        if(self::$Rs->gid=="1")
+        if(self::$data->gid=="1")
             return TRUE;
 
         if(is_array($p)?array_intersect($p,self::$power):in_array($p,self::$power)) {

@@ -122,24 +122,21 @@ class iCache{
     	return self::get($keys,$ckey);
     }
     public static function sysCache(){
-		if(!isset($GLOBALS['iFileCache_class_php'])){
-			$GLOBALS['iFileCache_class_php'] = true;
-			require iPHP_CORE.'/iFileCache.class.php';
-		}
+        iPHP::loadClass('FileCache');
 	    self::$link	= new iFC(array(
             'dirs'     => 'cache',
             'level'    => 0,
             'compress' => 1
 	    ));
 	}
-	public static function redis(){
+	public static function redis($host='127.0.0.1:6379@db:1',$time='86400'){
     	if(self::$config['engine']!='redis'){
 			iCache::init(array(
             'enable' => true,
             'reset'  => true,
-            'engine' =>'redis',
-            'host'   =>'127.0.0.1:6379@db:1',
-            'time'   =>'86400'
+            'engine' => 'redis',
+            'host'   => $host,
+            'time'   => $time
             ));
 		}
 	}

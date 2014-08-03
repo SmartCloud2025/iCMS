@@ -90,7 +90,7 @@ class tagsApp{
         $pubdate     = time();
         $metadata    = iS::escapeStr($_POST['metadata']);
 
-        $uid OR $uid= iMember::$uId;
+        $uid OR $uid= iMember::$userid;
         
         $name OR iPHP::alert('标签名称不能为空！');
         $cid OR iPHP::alert('请选择标签所属栏目！');

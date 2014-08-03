@@ -23,9 +23,12 @@ $(function(){
 	<?php if($_GET['orderby']){ ?>
 	iCMS.select('orderby',"<?php echo $_GET['orderby'] ; ?>");
 	<?php } ?>
-	<?php if($_GET['sub']=="on"){ ?>
-	$("#sub").prop("checked",true);
-	<?php } ?>
+  <?php if($_GET['sub']=="on"){ ?>
+  $("#sub").prop("checked",true);
+  <?php } ?>
+  <?php if($_GET['scid']=="on"){ ?>
+  $("#search_scid").prop("checked",true);
+  <?php } ?>
 	$(".spic[value=<?php echo $_GET['pic'] ; ?>]").prop("checked",true);
 	
 	var edialog;
@@ -101,7 +104,10 @@ $(function(){
             <option value="0">所有栏目</option>
             <?php echo $category_select = $this->category->select(0,0,1,'all') ; ?>
           </select>
-          <span class="add-on">
+          <span class="add-on tip" title="选中查询所有关联到此栏目的文章">
+          <input type="checkbox" name="scid" id="search_scid"/>
+          副栏目 </span> 
+          <span class="add-on tip" title="选中查询此栏目下面所有的子栏目,包含本栏目">
           <input type="checkbox" name="sub" id="sub"/>
           子栏目 </span> </div>
         <div class="input-prepend"> <span class="add-on">排序</span>
@@ -209,7 +215,7 @@ $(function(){
                   <a href="<?php echo APP_FURI; ?>&do=update&id=<?php echo $rs[$i]['id'] ; ?>&iDT=status:1" target="iPHP_FRAME" class="tip-bottom" title="从回收站恢复"/><i class="fa fa-reply-all"></i></a>
                   <?php } ?>
                   <a href="<?php echo APP_URI; ?>&do=purge&id=<?php echo $rs[$i]['id'] ; ?>&url=<?php echo $rs[$i]['url'] ; ?>" class="tip-bottom" data-toggle="modal" title="清除WEB缓存"><i class="fa fa-refresh"></i></a>
-                  <?php if ($C['mode'] && strstr($C['contentRule'],'{PHP}')===false && $rs[$i]['status']=="1" && empty($ourl) && iMember::$Rs->gid==1){  ?>
+                  <?php if ($C['mode'] && strstr($C['contentRule'],'{PHP}')===false && $rs[$i]['status']=="1" && empty($ourl) && iMember::$data->gid==1){  ?>
                   <a href="<?php echo __ADMINCP__; ?>=html&do=createArticle&aid=<?php echo $rs[$i]['id'] ; ?>&frame=iPHP" class="tip-bottom" target="iPHP_FRAME" title="生成静态文件"><i class="fa fa-file"></i></a>
                   <?php } ?>
                 </div>
@@ -256,7 +262,7 @@ $(function(){
                       <li class="divider"></li>
                       <li><a data-toggle="batch" data-action="prop"><i class="fa fa-puzzle-piece"></i> 设置文章属性</a></li>
                       <li><a data-toggle="batch" data-action="move"><i class="fa fa-fighter-jet"></i> 移动栏目</a></li>
-                      <li><a data-toggle="batch" data-action="scid"><i class="fa fa-fighter-jet"></i> 设置副栏目</a></li>
+                      <li><a data-toggle="batch" data-action="scid"><i class="fa fa-code-fork"></i> 设置副栏目</a></li>
                       <li><a data-toggle="batch" data-action="thumb"><i class="fa fa-picture-o"></i> 提取缩略图</a></li>
                       <li><a data-toggle="batch" data-action="top"><i class="fa fa-cog"></i> 设置置顶权重</a></li>
                       <li><a data-toggle="batch" data-action="keyword"><i class="fa fa-star"></i> 设置关键字</a></li>

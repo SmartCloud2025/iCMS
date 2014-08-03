@@ -12,33 +12,34 @@
 class iMenu {
 	public $menuArray = array();
 	public $MArray    = array();
-	public $doMid     = 0;
+	//public $doMid     = 0;
 	public $rootid    = 0;
-	public $appMid    = 0;
+	//public $appMid    = 0;
 	public $MUri      = array();
 	private $rootA    = array();
 
 	function __construct() {
+		$this->get_array(true);
 		$this->menuArray = iCache::get('iCMS/iMenu/menuArray');
 		$this->MArray    = iCache::get('iCMS/iMenu/MArray');
 		$this->rootA     = iCache::get('iCMS/iMenu/rootA');
 		$this->subA      = iCache::get('iCMS/iMenu/subA');
 		$this->parent    = iCache::get('iCMS/iMenu/parent');
 		$this->MUri      = iCache::get('iCMS/iMenu/MUri');
-		$href            = '';
-		if($_GET['app']){
-			$href         = $_GET['app'];
-			$this->appMid = $this->MUri[$href];
-		}
-		if($_GET['do']){
-			$_GET['do']	&& $href.= '&do='.$_GET['do'];
-			$this->doMid	= $this->MUri[$href];
-		}
-		$this->doMid OR $this->doMid   = $this->appMid;
-		$this->rootid                  = $this->rootid($this->doMid);
-		$this->rootid OR $this->rootid = 1;
-		$this->parentid                = $this->parent[$this->doMid];
-		$this->parentid==$this->rootid && $this->parentid=$this->doMid;
+
+		$app          = $_GET['app']?$_GET['app']:'home';
+		$this->appURI = $this->MUri[$app];
+		$_GET['do'] && $this->doURI = $app.'&do='.$_GET['do'];
+		$_GET['tab']&& $this->doURI = $app.'&tab='.$_GET['tab'];
+		$this->doMid = $this->appURI[$this->doURI];
+		$this->doMid OR $this->doMid = $this->appURI[$app];
+		$this->doMid OR $this->doMid = $this->appURI['#'];
+
+		$this->rootid   = $this->rootid($this->doMid);
+		$this->parentid = $this->parent[$this->doMid];
+		//var_dump($this->doMid,$this->parentid,$this->rootid);
+		//exit;
+		//$this->parentid==$this->rootid && $this->parentid=$this->doMid;
 		$this->menuArray OR $this->cache();
 	}
 
@@ -50,7 +51,8 @@ class iMenu {
 			$rootA[$M['rootid']][$M['id']]  = $M['id'];
 			$parent[$M['id']]               = $M['rootid'];
 	        $M['app']!='separator' && $subA[$M['rootid']][$M['id']]	= $M['id'];
-	        ($M['rootid'] && $M['href']) && $MUri[$M['href']]	= $M['id'];
+			$MUri[$M['app']][$M['href']] = $M['id'];
+			$MUri[$M['app']]['#']        = $M['rootid'];
 		}
 		if($cache){
 			iCache::set('iCMS/iMenu/menuArray',	$menuArray,0);
@@ -78,18 +80,11 @@ class iMenu {
 		}
 	}
 	function breadcrumb(){
-		if($this->appMid){
-			echo $this->a($this->appMid);
-		}
-		if($this->appMid!=$this->parentid && $this->parentid){
+		echo $this->a($this->rootid);
+		if($this->rootid!=$this->parentid){
 			echo $this->a($this->parentid);
 		}
-		if($this->appMid!=$this->doMid && $this->parentid!=$this->doMid && $this->doMid){
-			echo $this->a($this->doMid);
-		}
-		if($this->appMid==$this->doMid && $this->appMid){
-			echo '<a href="javascript:;" class="current">...</a>';
-		}
+		echo $this->a($this->doMid);
 	}
 	function a($id){
 		$a	= $this->menuArray[$id];

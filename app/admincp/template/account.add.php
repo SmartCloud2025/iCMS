@@ -24,7 +24,8 @@ $(function(){
       <h5 class="brs"><?php echo empty($this->uid)?'添加':'修改' ; ?>用户</h5>
       <ul class="nav nav-tabs" id="account-tab">
         <li class="active"><a href="#account-info" data-toggle="tab"><b>基本信息</b></a></li>
-        <li><a href="#account-power" data-toggle="tab"><b>权限</b></a></li>
+        <li><a href="#tab-power" data-toggle="tab"><b>后台权限</b></a></li>
+        <li><a href="#tab-cpower" data-toggle="tab"><b>栏目权限</b></a></li>
       </ul>
     </div>
     <div class="widget-content nopadding">
@@ -33,12 +34,14 @@ $(function(){
         <input name="type" type="hidden" value="<?php echo $this->type; ?>" />
         <div id="account-add" class="tab-content">
           <div id="account-info" class="tab-pane active">
-            <div class="input-prepend"> <span class="add-on">用户组</span>
+            <?php if(iMember::$userid=="1"){ ?>
+            <div class="input-prepend"> <span class="add-on">角色</span>
               <select name="gid" id="gid" class="chosen-select" data-placeholder="请选择用户组">
-                <option value='0'>无用户组[GID:0] </option>
-                <?php echo $group->select($this->type); ?>
+                <option value='0'>路人甲[GID:0] </option>
+                <?php echo $group->select(1); ?>
               </select>
             </div>
+            <?php }?>
             <div class="clearfloat mb10"></div>
             <div class="input-prepend"> <span class="add-on"> 账号</span>
               <input type="text" name="uname" class="span3" id="uname" value="<?php echo $rs->username ; ?>"/>
@@ -75,27 +78,11 @@ $(function(){
             <div class="clearfloat mb10"></div>
             <div class="input-prepend input-append"> <span class="add-on">生日</span>
               <select name="year" id="year" class="chosen-select"  style="width:90px;" data-placeholder="年">
-                <option value="1980">1980</option>
-                <option value="1981">1981</option>
-                <option value="1982">1982</option>
-                <option value="1983">1983</option>
-                <option value="1984">1984</option>
-                <option value="1985">1985</option>
-                <option value="1986">1986</option>
-                <option value="1987">1987</option>
-                <option value="1988">1988</option>
-                <option value="1989">1989</option>
-                <option value="1990">1990</option>
-                <option value="1991">1991</option>
-                <option value="1992">1992</option>
-                <option value="1993">1993</option>
-                <option value="1994">1994</option>
-                <option value="1995">1995</option>
-                <option value="1996">1996</option>
-                <option value="1997">1997</option>
-                <option value="1998">1998</option>
-                <option value="1999">1999</option>
-                <option value="2000">2000</option>
+                <?php
+                $year = (int)date('Y');$syear =$year-35;$eyear =$year-14;
+                for ($i=$syear; $i < $eyear; $i++) {?>
+                <option value="<?php echo $i ?>"><?php echo $i ?></option>
+                <?php } ?>
               </select>
               <select name="month" id="month" class="span1 chosen-select" data-placeholder="月">
                 <option value="1">1</option>
@@ -155,7 +142,7 @@ $(function(){
             </div>
             <div class="clearfloat mb10"></div>
           </div>
-          <div id="account-power" class="tab-pane hide"> </div>
+          <?php include iACP::view("power"); ?>
         </div>
         <div class="form-actions">
           <button class="btn btn-primary" type="submit"><i class="fa fa-check"></i> 提交</button>

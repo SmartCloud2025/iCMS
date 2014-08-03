@@ -17,8 +17,9 @@ iACP::head();
 var upordurl="<?php echo APP_URI; ?>&do=updateorder";
 $(function(){
     $("#tree").treeview({
-    	url:'<?php echo APP_URI; ?>&do=ajaxtree&hasChildren=0',
+    	url:'<?php echo APP_URI; ?>&do=ajaxtree&expanded=0',
         collapsed: false,
+        sortable: true,
         animated: "medium",
         control:"#treecontrol",
     }).sortable({

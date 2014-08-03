@@ -12,7 +12,7 @@
 class menuApp{
     function __construct() {
     	$this->menu	= new iMenu();
-    	$this->menu->array();
+    	$this->menu->get_array();
     }
     function do_add(){
     	$id	= $_GET['id'];
@@ -45,28 +45,53 @@ class menuApp{
     function do_manage($doType=null) {
         include iACP::view("menu.manage");
     }
-    function do_ajaxtree(){
-		$hasChildren=$_GET['hasChildren']?true:false;
-	 	echo $this->tree($_GET["root"],$hasChildren);
+    function power_tree($id=0){
+        $li   = '';
+        foreach((array)$this->menu->MArray[$id] AS $root=>$M) {
+            $li.= '<li>';
+            $li.= $this->power_holder($M);
+            if($this->menu->subA[$M['id']]){
+                $li.= '<ul>';
+                $li.= $this->power_tree($M['id']);
+                $li.= '</ul>';
+            }
+            $li.= '</li>';
+        }
+        return $li;
     }
-    function tree($id =0,$hasChildren=false){
+    function power_holder($M) {
+        if($M['app']=='separator'){
+            return '<div class="separator"></div>';
+        }
+        //$M['rootid']==0 && $bold =' style="font-weight:bold"';
+        $tr='<input type="checkbox" name="power[]" id="mid'.$M['id'].'" value="'.$M['id'].'">
+        <span class="name"'.$bold.'>'.$M['name'].'</span>';
+        return $tr;
+    }
+
+    function do_ajaxtree(){
+		$expanded = $_GET['expanded']?true:false;
+	 	echo $this->tree($_GET["root"],$expanded);
+    }
+
+    function tree($id =0,$expanded=false,$func='li'){
     	$id=='source' && $id=0;
         foreach((array)$this->menu->MArray[$id] AS $root=>$M) {
         	$a			= array();
         	$a['id']	= $M['id'];
-        	$a['text']	= $this->li($M);
+        	$a['text']	= $this->$func($M);
             if($this->menu->subA[$M['id']]){
-            	if($hasChildren){
-	            	$a['hasChildren']	= false;
-	            	$a['expanded']		= true;
-	            	$a['children']		= $this->tree($M['id'],$hasChildren);
+            	if($expanded){
+                    $a['hasChildren'] = false;
+                    $a['expanded']    = true;
+                    $a['children']    = $this->tree($M['id'],$expanded,$func);
             	}else{
-	            	$a['hasChildren']	= true;
+                    $a['hasChildren'] = true;
             	}
             }
             $tr[]=$a;
         }
-        if($hasChildren && $id!='source'){ return $tr; }
+        if($expanded && $id!='source'){ return $tr; }
         return $tr?json_encode($tr):'[]';
     }
     function li($M) {
@@ -80,6 +105,7 @@ class menuApp{
         <a href="'.APP_FURI.'&do=addseparator&rootid='.$M['id'].'" class="btn btn-success btn-small" target="iPHP_FRAME"><i class="fa fa-minus-square"></i> 分隔符</a> <a href="'.APP_URI.'&do=add&id='.$M['id'].'" title="编辑菜单设置"  class="btn btn-primary btn-small"><i class="fa fa-edit"></i> 编辑</a> <a href="'.APP_FURI.'&do=del&id='.$M['id'].'" class="btn btn-danger btn-small" onClick="return confirm(\'确定要删除此菜单?\');" target="iPHP_FRAME"><i class="fa fa-trash-o"></i> 删除</a></span></div>';
         return $tr;
     }
+
     function do_save(){
         $id          = $_POST['id'];
         $rootid      = $_POST['rootid'];

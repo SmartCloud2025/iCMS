@@ -24,7 +24,7 @@ iACP::head();
   </div>
   <div class="alert alert-info">
     <button type="button" class="close" data-dismiss="alert">&times;</button>
-    欢迎使用iCMS内容管理系统！<strong><?php echo iMember::$Rs->username;?></strong>。您最后一次登陆时间:<strong><?php echo get_date(iMember::$Rs->lastlogintime,"Y-n-j H:i:s") ; ?></strong>，IP地址为:<strong><?php echo iMember::$Rs->lastip; ?></strong>。如有异常请及时排查！ </div>
+    欢迎使用iCMS内容管理系统！<strong><?php echo iMember::$data->username;?></strong>。您最后一次登陆时间:<strong><?php echo get_date(iMember::$data->lastlogintime,"Y-n-j H:i:s") ; ?></strong>，IP地址为:<strong><?php echo iMember::$data->lastip; ?></strong>。如有异常请及时排查！ </div>
   <div class="widget-box">
     <div class="widget-title"> <span class="icon"> <i class="fa fa-signal"></i> </span>
       <h5>站点数据统计</h5>

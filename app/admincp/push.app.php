@@ -30,13 +30,13 @@ class pushApp{
         $_GET['url3'] 	&& $rs['url3']	= $_GET['url3'];
 
         $id && $rs	= iDB::row("SELECT * FROM `#iCMS@__push` WHERE `id`='$id' LIMIT 1;",ARRAY_A);
-        empty($rs['editor']) && $rs['editor']=empty(iMember::$Rs->nickname)?iMember::$Rs->username:iMember::$Rs->nickname;
-        empty($rs['userid']) && $rs['userid']=iMember::$uId;
+        empty($rs['editor']) && $rs['editor']=empty(iMember::$data->nickname)?iMember::$data->username:iMember::$data->nickname;
+        empty($rs['userid']) && $rs['userid']=iMember::$userid;
         $rs['addtime']	= $id?get_date(0,"Y-m-d H:i:s"):get_date($rs['addtime'],'Y-m-d H:i:s');
         $cid			= empty($rs['cid'])?(int)$_GET['cid']:$rs['cid'];
         $cata_option	= $this->pushcategory->select($cid,0,1,1);
 
-        empty($rs['userid']) && $rs['userid']=iMember::$uId;
+        empty($rs['userid']) && $rs['userid']=iMember::$userid;
         $strpos 	= strpos(__REF__,'?');
         $REFERER 	= $strpos===false?'':substr(__REF__,$strpos);
     	include iACP::view("push.add");
@@ -55,8 +55,8 @@ class pushApp{
         switch($doType){ //status:[0:草稿][1:正常][2:回收][3:审核][4:不合格]
         	case 'inbox'://草稿
         		$sql.="`status` ='0'";
-        		if(iMember::$Rs->gid!=1){
-        			$sql.=" AND `userid`='".iMember::$uId."'";
+        		if(iMember::$data->gid!=1){
+        			$sql.=" AND `userid`='".iMember::$userid."'";
         		}
         		$position="草稿";
         	break;
@@ -141,7 +141,7 @@ class pushApp{
         $metadata	= iS::escapeStr($_POST['metadata']);
         $metadata	= $metadata?addslashes(serialize($metadata)):'';
 
-		empty($userid) && $userid=iMember::$uId;
+		empty($userid) && $userid=iMember::$userid;
         empty($title) && iPHP::alert('1.标题必填');
         empty($cid) && iPHP::alert('请选择所属栏目');
 

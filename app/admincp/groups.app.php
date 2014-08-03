@@ -21,9 +21,19 @@ class groupsApp{
 			$this->all[$rs[$i]['gid']]      = $rs[$i];
 			$this->group[$rs[$i]['type']][] = $rs[$i];
 		}
+		$this->menu = new iMenu();
+    }
+
+    function do_cpower_tree(){
+		$category = iACP::app('category');
+	 	echo $category->tree($_GET["root"],true,'li2');
     }
     function do_add(){
         $this->gid && $rs = iDB::row("SELECT * FROM `#iCMS@__group` WHERE `gid`='$this->gid' LIMIT 1;");
+        if($rs){
+			//$rs->power  && $rs->power  = json_decode($rs->power);
+			//$rs->cpower && $rs->cpower = json_decode($rs->cpower);
+        }
         include iACP::view("groups.add");
     }
 	function select($type="0",$currentid=NULL){
@@ -62,9 +72,11 @@ class groupsApp{
 		}
 	}
 	function do_save(){
-		$gid  = intval($_POST['gid']);
-		$type = intval($_POST['type']);
-		$name = iS::escapeStr($_POST['name']);
+		$gid    = intval($_POST['gid']);
+		$type   = intval($_POST['type']);
+		$name   = iS::escapeStr($_POST['name']);
+		$power  = json_encode($_POST['power']);
+		$cpower = json_encode($_POST['cpower']);
 		$name OR iPHP::alert('角色名不能为空');
 		$fields = array('name', 'orderNum', 'power', 'cpower', 'type');
 		$data   = compact ($fields);

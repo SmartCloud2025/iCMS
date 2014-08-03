@@ -43,8 +43,8 @@ class articleApp{
         if(empty($this->id)){
             $rs['status']  = "1";
             $rs['postype'] = "1";
-            $rs['editor']  = empty(iMember::$Rs->nickname)?iMember::$Rs->username:iMember::$Rs->nickname;
-            $rs['userid']  = iMember::$uId;
+            $rs['editor']  = empty(iMember::$data->nickname)?iMember::$data->username:iMember::$data->nickname;
+            $rs['userid']  = iMember::$userid;
 		}
         $strpos   = strpos(__REF__,'?');
         $REFERER  = $strpos===false?'':substr(__REF__,$strpos);
@@ -74,23 +74,47 @@ class articleApp{
     		break;
     		case 'move':
 		        $_POST['cid'] OR iPHP::alert("请选择目标栏目!");
-		        $cid	=(int)$_POST['cid'];
+                iPHP::import(iPHP_APP_CORE .'/iMAP.class.php');
+                map::init('category',iCMS_APP_ARTICLE);
+                $cid = (int)$_POST['cid'];
 		        foreach((array)$_POST['id'] AS $id) {
-		            $ocid	= iDB::value("SELECT `cid` FROM `#iCMS@__article` where `id` ='$id'");
+                    $_cid = iDB::value("SELECT `cid` FROM `#iCMS@__article` where `id` ='$id'");
 		            iDB::query("UPDATE `#iCMS@__article` SET cid='$cid' WHERE `id` ='$id'");
-		            if($ocid!=$cid) {
-		                iDB::query("UPDATE `#iCMS@__category` SET `count` = count-1 WHERE `cid` ='{$ocid}' AND `count`>0");
+		            if($_cid!=$cid) {
+                        map::diff($cid,$_cid,$id);
+		                iDB::query("UPDATE `#iCMS@__category` SET `count` = count-1 WHERE `cid` ='{$_cid}' AND `count`>0");
 		                iDB::query("UPDATE `#iCMS@__category` SET `count` = count+1 WHERE `cid` ='{$cid}'");
 		            }
 		        }
 		        iPHP::success('成功移动到目标栏目!','js:1');
             break;
             case 'scid':
-                iPHP::success('###########','js:1');
+                //$_POST['scid'] OR iPHP::alert("请选择目标栏目!");
+                iPHP::import(iPHP_APP_CORE .'/iMAP.class.php');
+                map::init('category',iCMS_APP_ARTICLE);
+                $scid = implode(',', (array)$_POST['scid']);
+                foreach((array)$_POST['id'] AS $id) {
+                    $_scid = iDB::value("SELECT `scid` FROM `#iCMS@__article` where `id` ='$id'");
+                    iDB::query("UPDATE `#iCMS@__article` SET `scid`='$scid' WHERE `id` ='$id'");
+                    map::diff($scid,$_scid,$id);
+                }
+                iPHP::success('文章副栏目设置完成!','js:1');
             break;
             case 'prop':
-                $pid = $_POST['pid'];
-                $sql ="`pid` = '$pid'";
+                // $pid = $_POST['pid'];
+                // $sql ="`pid` = '$pid'";
+
+                iPHP::import(iPHP_APP_CORE .'/iMAP.class.php');
+                map::init('prop',iCMS_APP_ARTICLE);
+                
+                $pid = implode(',', (array)$_POST['pid']);
+                foreach((array)$_POST['id'] AS $id) {
+                    $_pid = iDB::value("SELECT `pid` FROM `#iCMS@__article` where `id` ='$id'");
+                    iDB::query("UPDATE `#iCMS@__article` SET `pid`='$pid' WHERE `id` ='$id'");
+                    map::diff($pid,$_pid,$id);
+                }
+                iPHP::success('文章属性设置完成!','js:1');
+
     		break;
     		case 'top':
                 $top =_int($_POST['mtop']);
@@ -117,7 +141,7 @@ class articleApp{
 			        }elseif($_POST['pattern']=='addto') {
 			        	$tags=$art->tags?$art->tags.','.iS::escapeStr($_POST['mtag']):iS::escapeStr($_POST['mtag']);
 			        }
-			        tag::diff($tags,$art->tags,iMember::$uId,$id,$this->category->rootid($art->cid));
+			        tag::diff($tags,$art->tags,iMember::$userid,$id,$this->category->rootid($art->cid));
 			 		iDB::query("UPDATE `#iCMS@__article` SET `tags` = '$tags' WHERE `id`='$id'");
 		    	}
 		    	iPHP::success('文章标签更改完成!','js:1');
@@ -185,7 +209,7 @@ class articleApp{
 		$art	= iDB::row("SELECT `cid`,`tags` FROM `#iCMS@__article` where `id` ='$id' LIMIT 1;");
 		if($tags){
 			iPHP::appClass("tag",'break');
-			tag::diff($tags,$art->tags,iMember::$uId,$id,$this->category->rootid($art->cid));
+			tag::diff($tags,$art->tags,iMember::$userid,$id,$this->category->rootid($art->cid));
 		}
 
 		if($_POST['status']=="1"){
@@ -278,18 +302,13 @@ class articleApp{
     	iPHP::dialog($msg,'js:1');
     }
     function do_manage($doType=null) {
-        $mtime         = microtime();
-        $mtime         = explode(' ', $mtime);
-        $time_start    = $mtime[1] + $mtime[0];
         $cid           = (int)$_GET['cid'];
         $sql           = " where ";
         $this->postype = (int)$_GET['pt'];
         switch($doType){ //postype: [0:用户][1:管理员][5:用户淘宝类文章] status:[0:草稿][1:正常][2:回收][3:审核][4:不合格]
         	case 'inbox'://草稿
         		$sql.="`status` ='0'".$this->postype();
-        		if(iMember::$Rs->gid!=1){
-        			$sql.=" AND `userid`='".iMember::$uId."'";
-        		}
+        		//iMember::$data->gid=="1" OR $sql.= iPHP::where(iMember::$userid,'userid');
         		$position="草稿";
         	break;
          	case 'trash'://回收站
@@ -308,8 +327,7 @@ class articleApp{
 //	       		$sql.=" `status` ='1'".$this->postype();
 	       		$sql.=" `status` ='1'";
 	       		$this->postype && $sql.=$this->postype();
-
-		       	$cid && $position=$this->category->category[$cid]['name'];
+		       	$cid && $position = $this->category->category[$cid]['name'];
 		}
 
         if($_GET['keywords']) {
@@ -327,31 +345,40 @@ class articleApp{
                 $sql.=" AND CONCAT(title,keywords,description) REGEXP '{$_GET['keywords']}'";
             }
         }
-        $_GET['title'] 			&& $sql .=" AND `title` like '%{$_GET['title']}%'";
-        $_GET['tag'] 			&& $sql .=" AND `tags` REGEXP '[[:<:]]".preg_quote(rawurldecode($_GET['tag']),'/')."[[:>:]]'";
+        $_GET['title']&& $sql .=" AND `title` like '%{$_GET['title']}%'";
+        $_GET['tag']  && $sql .=" AND `tags` REGEXP '[[:<:]]".preg_quote(rawurldecode($_GET['tag']),'/')."[[:>:]]'";
 
-        isset($_GET['pid']) && $_GET['pid']!='-1' && $sql.=" AND `pid` ='".$_GET['pid']."'";
-
-        if(iMember::$Rs->gid==1){
-	        $_GET['userid'] && $sql.=" AND `userid`='".(int)$_GET['userid']."'";
-        }else{
-        	if(!iMember::MP(array("Allow_Edit_Article","Allow_View_Article"),"F")||$doType=="inbox"||$doType=="trash"){
-	         	$sql.=" AND `userid`='".iMember::$uId."'";
-	       	}
+        if(isset($_GET['pid']) && $_GET['pid']!='-1'){
+            iPHP::import(iPHP_APP_CORE .'/iMAP.class.php');
+            map::init('prop',iCMS_APP_ARTICLE);
+            $sql.= map::exists($_GET['pid'],'`#iCMS@__article`.id'); //map 表大的用exists
         }
 
+        if(iMember::$data->gid==1){
+	        $_GET['userid'] && $sql.= iPHP::where($_GET['userid'],'userid');
+        }else{
+        	if(!iMember::MP(array("Allow_Edit_Article","Allow_View_Article"),"F")||$doType=="inbox"||$doType=="trash"){
+	         	$sql.= iPHP::where(iMember::$userid,'userid');
+	       	}
+        }
         if(iMember::CP($cid)) {
+            $cids  = $cid;
             if($_GET['sub']){
                 $cids  = iCMS::get_category_ids($cid,true);
                 array_push ($cids,$cid);
             }
-            if($cids){
-                iPHP::import(iPHP_APP_CORE .'/iMAP.class.php');
-                map::init('category',iCMS_APP_ARTICLE);
-                $sql.= map::exists($cids,'`#iCMS@__article`.id'); //map 表大的用exists
+            if($_GET['scid']){
+                if($cids){
+                    iPHP::import(iPHP_APP_CORE .'/iMAP.class.php');
+                    map::init('category',iCMS_APP_ARTICLE);
+                    $sql.= map::exists($cids,'`#iCMS@__article`.id'); //map 表大的用exists
+                }                
+            }else{
+                $cids && $sql.= iPHP::where($cids,'cid');
             }
+
         }else{
-            iMember::$cpower && $sql.=" AND cid IN(".implode(',',(array)iMember::$cpower).")";
+            iMember::$cpower && $sql.= iPHP::where(iMember::$cpower,'cid');
         }
 
 		isset($_GET['pic']) && $sql.=" AND `isPic` ='".($_GET['pic']?1:0)."'";
@@ -371,9 +398,9 @@ class articleApp{
         $maxperpage = (int)$_GET['perpage']>0?$_GET['perpage']:20;
         $total		= iPHP::total(false,"SELECT count(*) FROM `#iCMS@__article` {$sql}","G");
         iPHP::pagenav($total,$maxperpage,"篇文章");
-        $rs			= iDB::all("SELECT * FROM `#iCMS@__article` {$sql} order by {$orderby} LIMIT ".iPHP::$offset." , {$maxperpage}");
-        //iDB::debug(1);
-        $_count		= count($rs);
+        $rs     = iDB::all("SELECT * FROM `#iCMS@__article` {$sql} order by {$orderby} LIMIT ".iPHP::$offset." , {$maxperpage}");
+        // iDB::debug(1);
+        $_count = count($rs);
         include iACP::view("article.manage");
     }
     function do_save($callback=false){
@@ -410,7 +437,7 @@ class articleApp{
         $top         = _int($_POST['top']);
         $pubdate     = iPHP::str2time($_POST['pubdate']);
 
-        $userid OR $userid = iMember::$uId;
+        $userid OR $userid = iMember::$userid;
         $postype   = $_POST['postype']?$_POST['postype']:0;
         $ischapter = isset($_POST['ischapter'])?1:0;
         isset($_POST['inbox'])	&&  $status = "0";
@@ -422,8 +449,8 @@ class articleApp{
         if(empty($aid) && iCMS::$config['publish']['repeatitle']) {
 			iDB::value("SELECT `id` FROM `#iCMS@__article` where `title` = '$title'") && iPHP::alert('该标题的文章已经存在!请检查是否重复');
 		}
-        if(iMember::$Rs->gid!=1){
-	    	if(!iMember::MP("Allow_Edit_Article","F") && $userid!=iMember::$uId){
+        if(iMember::$data->gid!=1){
+	    	if(!iMember::MP("Allow_Edit_Article","F") && $userid!=iMember::$userid){
 	    		iPHP::alert('此文章已禁止编辑');
 	    	}
     	}
@@ -447,7 +474,7 @@ class articleApp{
         	$SELFURL= __SELF__.'?app=article&do=manage';
         }
 
-        $editor OR	$editor	= empty(iMember::$Rs->nickname)?iMember::$Rs->username:iMember::$Rs->nickname;
+        $editor OR	$editor	= empty(iMember::$data->nickname)?iMember::$data->username:iMember::$data->nickname;
 
         // if($aid && $ischapter){
         //     $this->article_data($body,$aid);
@@ -496,7 +523,7 @@ class articleApp{
         }else{
 			if($tags){
 				iPHP::appClass("tag",'break');
-	            $tags = tag::diff($tags,$_tags,iMember::$uId,$aid,$this->category->rootid($cid));
+	            $tags = tag::diff($tags,$_tags,iMember::$userid,$aid,$this->category->rootid($cid));
 			    $tags = addslashes($tags);
             }
             $picdata = $this->picdata($pic,$mpic,$spic);

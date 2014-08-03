@@ -9,37 +9,6 @@ return array (
     'description' => '',
     'icp' => '',
   ),
-  'debug' => 
-  array (
-    'php' => '1',
-    'tpl' => '1',
-  ),
-  'template' => 
-  array (
-    'index' => '{iTPL}/index.htm',
-    'index_name' => '',
-    'pc' => 
-    array (
-      'domain' => '',
-      'tpl' => 'default',
-    ),
-    'mobile' => 
-    array (
-      'agent' => 'WAP,Smartphone,Mobile,UCWEB,Opera Mini,Windows CE,Symbian,SAMSUNG,iPhone,Android,BlackBerry,HTC,Mini,LG,SonyEricsson,J2ME,MOT',
-      'domain' => '',
-      'tpl' => 'mobile',
-    ),
-    'device' => 
-    array (
-      1 => 
-      array (
-        'name' => 'iPad',
-        'ua' => 'iPad',
-        'domain' => 'http://ipad.idreamsoft.com',
-        'tpl' => 'ipad',
-      ),
-    ),
-  ),
   'router' => 
   array (
     'DIR' => '/',
@@ -98,14 +67,6 @@ return array (
     'loginseccode' => '0',
     'agreement' => '',
   ),
-  'openapi' => 
-  array (
-    'QQ' => 
-    array (
-      'appid' => '140',
-      'appkey' => '140',
-    ),
-  ),
   'publish' => 
   array (
     'autoformat' => '0',
@@ -124,11 +85,28 @@ return array (
     'examine' => '1',
     'seccode' => '0',
   ),
+  'debug' => 
+  array (
+    'php' => '1',
+    'tpl' => '1',
+  ),
   'time' => 
   array (
     'zone' => 'Asia/Shanghai',
     'cvtime' => '0',
     'dateformat' => 'Y-m-d H:i:s',
+  ),
+  'app' => 
+  array (
+    0 => 'index',
+    1 => 'article',
+    2 => 'tag',
+    3 => 'search',
+    4 => 'usercp',
+    5 => 'category',
+    6 => 'comment',
+    7 => 'public',
+    8 => 'user',
   ),
   'other' => 
   array (
@@ -145,6 +123,40 @@ return array (
   array (
     'host' => '127.0.0.1:9312',
     'index' => 'iCMS_article iCMS_article_delta',
+  ),
+  'openapi' => 
+  array (
+    'QQ' => 
+    array (
+      'appid' => '140',
+      'appkey' => '140',
+    ),
+  ),
+  'template' => 
+  array (
+    'index' => '{iTPL}/index.htm',
+    'index_name' => '',
+    'pc' => 
+    array (
+      'domain' => '',
+      'tpl' => 'default',
+    ),
+    'mobile' => 
+    array (
+      'agent' => 'WAP,Smartphone,Mobile,UCWEB,Opera Mini,Windows CE,Symbian,SAMSUNG,iPhone,Android,BlackBerry,HTC,Mini,LG,SonyEricsson,J2ME,MOT',
+      'domain' => '',
+      'tpl' => 'mobile',
+    ),
+    'device' => 
+    array (
+      1 => 
+      array (
+        'name' => 'iPad',
+        'ua' => 'iPad',
+        'domain' => 'http://ipad.idreamsoft.com',
+        'tpl' => 'ipad',
+      ),
+    ),
   ),
   'apps' => 
   array (
