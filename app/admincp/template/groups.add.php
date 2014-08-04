@@ -19,8 +19,8 @@ $(function(){
       <h5 class="brs"><?php echo empty($this->gid)?'添加':'修改' ; ?>角色</h5>
       <ul class="nav nav-tabs" id="groups-tab">
         <li class="active"><a href="#groups-info" data-toggle="tab"><b>基本信息</b></a></li>
-        <li><a href="#tab-power" data-toggle="tab"><b>后台权限</b></a></li>
-        <li><a href="#tab-cpower" data-toggle="tab"><b>栏目权限</b></a></li>
+        <li><a href="#groups-power" data-toggle="tab"><b>后台权限</b></a></li>
+        <li><a href="#groups-cpower" data-toggle="tab"><b>栏目权限</b></a></li>
       </ul>
     </div>
     <div class="widget-content nopadding">

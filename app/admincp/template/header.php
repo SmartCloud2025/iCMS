@@ -56,14 +56,21 @@ $(function(){
 	var a = $("#iCMS-menu"),b = $("#sidebar");
 	$("[data-menu='m<?php echo iACP::$menu->rootid; ?>']",a).addClass("active");
 	$("[data-menu='m<?php echo iACP::$menu->parentid; ?>']",a).addClass("active");
-	$("[data-menu='m<?php echo iACP::$menu->doMid; ?>']",a).addClass("active");
+	$("[data-menu='m<?php echo iACP::$menu->do_mid; ?>']",a).addClass("active");
 
-	$("[data-menu='m<?php echo iACP::$menu->doMid; ?>']",b).addClass("active");
+	$("[data-menu='m<?php echo iACP::$menu->do_mid; ?>']",b).addClass("active");
 	var c = $("[data-menu='m<?php echo iACP::$menu->parentid; ?>']",b).addClass("active");
 	if(c.hasClass("submenu")){
 		c.addClass("open");
 		$("ul",c).show();
 	}
+	<?php if($_GET['tab']){?>
+	var $itab = $("#<?php echo iACP::$app_name; ?>-tab");
+	$("li",$itab).removeClass("active");
+	$(".tab-pane").removeClass("active").addClass("hide");
+	$("a[href ='#<?php echo iACP::$app_name; ?>-<?php echo $_GET['tab']; ?>']",$itab).parent().addClass("active");
+	$("#<?php echo iACP::$app_name; ?>-<?php echo $_GET['tab']; ?>").addClass("active").removeClass("hide");
+	<?php }?>
 })
 </script>
 </head>

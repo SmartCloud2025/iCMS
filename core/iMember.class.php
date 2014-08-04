@@ -10,15 +10,15 @@
 * @$Id: iMember.class.php 2279 2013-11-17 17:19:12Z coolmoo $
 */
 class iMember{
-    public static $userid      = 0;
-    public static $data        = array();
-    public static $nickname    = NULL;
-    public static $group       = array();
-    public static $ajax        = false;
-    public static $cpower      = array();
-    public static $power       = array();
-    public static $AUTH        = 'iCMS_AUTH';
-    public static $LOGIN_TPL   = './';
+    public static $userid       = 0;
+    public static $data         = array();
+    public static $nickname     = NULL;
+    public static $group        = array();
+    public static $ajax         = false;
+    public static $mpower       = array();
+    public static $cpower       = array();
+    public static $AUTH         = 'iCMS_AUTH';
+    public static $LOGIN_TPL    = './';
     private static $login_count = 0;
 
     public static function check($a,$p) {
@@ -31,10 +31,12 @@ class iMember{
         unset(self::$data->password);
         self::$data->info && self::$data->info	= unserialize(self::$data->info);
         self::$userid   = self::$data->uid;
-        self::$group    = iDB::row("SELECT * FROM `#iCMS@__group` WHERE `gid`='".self::$data->gid."' LIMIT 1;");
-        self::$power    = self::smerge(self::$group->power,self::$data->power);
-        self::$cpower   = self::smerge(self::$group->cpower,self::$data->cpower);
         self::$nickname = self::$data->nickname?self::$data->nickname:self::$data->username;
+        
+        self::$group  = iDB::row("SELECT * FROM `#iCMS@__group` WHERE `gid`='".self::$data->gid."' LIMIT 1;");
+        self::$mpower = self::use_power(self::$group->power,self::$data->power);
+        self::$cpower = self::use_power(self::$group->cpower,self::$data->cpower);
+
         return self::$data;
     }
     //登陆验证
@@ -73,12 +75,12 @@ class iMember{
 	}
     //检查栏目权限
     public static function CP($p=NULL,$T="F",$url=__REF__) {
-        if(self::$data->gid=="1")
+        if(self::$data->gid=="1") return TRUE;
+//         var_dump($p);
+// exit;
+        if(self::check_power($p,self::$cpower)) {
             return TRUE;
-
-        if(is_array($p)?array_intersect($p,self::$cpower):in_array($p,self::$cpower)) {
-            return TRUE;
-        }else {
+        }else{
             if($T=='F') {
                 return FALSE;
             }else {
@@ -88,10 +90,9 @@ class iMember{
     }
     //检查后台权限
     public static function MP($p=NULL,$T="Permission_Denied",$url=__REF__) {
-        if(self::$data->gid=="1")
-            return TRUE;
+//         if(self::$data->gid=="1") return TRUE;
 
-        if(is_array($p)?array_intersect($p,self::$power):in_array($p,self::$power)) {
+        if(self::check_power($p,self::$mpower)) {
             return TRUE;
         }else {
             if($T=='F') {
@@ -101,12 +102,16 @@ class iMember{
             }
         }
     }
-	public static function smerge($s1,$s2){
-		$a	= array();
-		$s1 && $a[]=$s1;
-		$s2 && $a[]=$s2;
-		$s	= implode(',',$a);
-		return explode(',',$s);
+    private static function check_power($p,$power){
+        return is_array($p)?array_intersect($p,$power):in_array($p,$power);
+    }
+	private static function use_power($p1,$p2){
+        if($p1){ //用户独立权限优先
+            return json_decode($p1);
+        }elseif($p2){
+            return json_decode($p2);
+        }
+        return false;
 	}
 }
 ?>

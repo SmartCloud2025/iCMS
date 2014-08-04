@@ -10,57 +10,69 @@
 * @$Id: iMenu.class.php 2334 2014-01-04 12:18:19Z coolmoo $
 */
 class iMenu {
-	public $menuArray = array();
-	public $MArray    = array();
-	//public $doMid     = 0;
-	public $rootid    = 0;
-	//public $appMid    = 0;
-	public $MUri      = array();
-	private $rootA    = array();
+	public $menu_array = array();
+	public $root_array = array();
+	public $menu_uri   = array();
+	public $permission = array();
+	public $rootid     = 0;
+	public $parentid   = 0;
+	public $do_mid     = 0;
+	private $app_uri   = '';
+	private $do_uri    = '';
 
 	function __construct() {
-		$this->get_array(true);
-		$this->menuArray = iCache::get('iCMS/iMenu/menuArray');
-		$this->MArray    = iCache::get('iCMS/iMenu/MArray');
-		$this->rootA     = iCache::get('iCMS/iMenu/rootA');
-		$this->subA      = iCache::get('iCMS/iMenu/subA');
-		$this->parent    = iCache::get('iCMS/iMenu/parent');
-		$this->MUri      = iCache::get('iCMS/iMenu/MUri');
+		$this->menu_array  = iCache::get('iCMS/iMenu/menu_array');
+		$this->root_array  = iCache::get('iCMS/iMenu/root_array');
+		$this->child_array = iCache::get('iCMS/iMenu/child_array');
+		$this->parent      = iCache::get('iCMS/iMenu/parent');
+		$this->menu_uri    = iCache::get('iCMS/iMenu/menu_uri');
+		//$this->permission  = $p;
 
 		$app          = $_GET['app']?$_GET['app']:'home';
-		$this->appURI = $this->MUri[$app];
-		$_GET['do'] && $this->doURI = $app.'&do='.$_GET['do'];
-		$_GET['tab']&& $this->doURI = $app.'&tab='.$_GET['tab'];
-		$this->doMid = $this->appURI[$this->doURI];
-		$this->doMid OR $this->doMid = $this->appURI[$app];
-		$this->doMid OR $this->doMid = $this->appURI['#'];
+		$this->app_uri = $this->menu_uri[$app];
+		$_GET['do'] && $this->do_uri = $app.'&do='.$_GET['do'];
+		$_GET['tab']&& $this->do_uri = $app.'&tab='.$_GET['tab'];
+		$this->do_mid = $this->app_uri[$this->do_uri];
+		$this->do_mid OR $this->do_mid = $this->app_uri[$app];
+		$this->do_mid OR $this->do_mid = $this->app_uri['#'];
 
-		$this->rootid   = $this->rootid($this->doMid);
-		$this->parentid = $this->parent[$this->doMid];
-		//var_dump($this->doMid,$this->parentid,$this->rootid);
-		//exit;
-		//$this->parentid==$this->rootid && $this->parentid=$this->doMid;
-		$this->menuArray OR $this->cache();
+		$this->rootid   = $this->rootid($this->do_mid);
+		$this->parentid = $this->parent[$this->do_mid];
+		$this->menu_array OR $this->cache();
+		//$this->check();
 	}
+	function check(){
+		var_dump('rootid',$this->rootid,$this->permission);
+		// if(!$this->permission($this->rootid)){
+		// 	exit("Permission denied!");
+		// }
+		// 		var_dump('parentid',$this->parentid);
 
+		// if(!$this->permission($this->parentid)){
+		// 	exit("Permission denied!");
+		// }
+		// 		var_dump('do_mid',$this->do_mid);
+
+		// if(!$this->permission($this->do_mid)){
+		// 	exit("Permission denied!");
+		// }
+	}
 	function get_array($cache=false){
 		$rs	= iDB::all("SELECT * FROM `#iCMS@__menu` ORDER BY `orderNum` , `id` ASC",ARRAY_A);
 		foreach((array)$rs AS $M) {
-			$menuArray[$M['id']]            = $M;
-			$MArray[$M['rootid']][$M['id']] = $M;
-			$rootA[$M['rootid']][$M['id']]  = $M['id'];
-			$parent[$M['id']]               = $M['rootid'];
-	        $M['app']!='separator' && $subA[$M['rootid']][$M['id']]	= $M['id'];
-			$MUri[$M['app']][$M['href']] = $M['id'];
-			$MUri[$M['app']]['#']        = $M['rootid'];
+			$this->menu_array[$M['id']]               = $M;
+			$this->root_array[$M['rootid']][$M['id']] = $M;
+			$this->parent[$M['id']]                   = $M['rootid'];
+	        $M['app']!='separator' && $this->child_array[$M['rootid']][$M['id']]	= $M['id'];
+			$this->menu_uri[$M['app']][$M['href']] = $M['id'];
+			$this->menu_uri[$M['app']]['#']        = $M['rootid'];
 		}
 		if($cache){
-			iCache::set('iCMS/iMenu/menuArray',	$menuArray,0);
-	        iCache::set('iCMS/iMenu/MArray',	$MArray,0);
-	        iCache::set('iCMS/iMenu/rootA',	$rootA,0);
-	        iCache::set('iCMS/iMenu/subA',	$subA,0);
-	        iCache::set('iCMS/iMenu/parent',	$parent,0);
-	        iCache::set('iCMS/iMenu/MUri',	$MUri,0);
+			iCache::set('iCMS/iMenu/menu_array',	$this->menu_array,0);
+	        iCache::set('iCMS/iMenu/root_array',	$this->root_array,0);
+	        iCache::set('iCMS/iMenu/child_array',	$this->child_array,0);
+	        iCache::set('iCMS/iMenu/parent',		$this->parent,0);
+	        iCache::set('iCMS/iMenu/menu_uri',		$this->menu_uri,0);
 		}
 	}
 	function cache(){
@@ -75,7 +87,7 @@ class iMenu {
 	}
 	function h1(){
 		if($this->rootid){
-			$a	= $this->menuArray[$this->rootid];
+			$a	= $this->menu_array[$this->rootid];
 			echo $a['name'];
 		}
 	}
@@ -84,10 +96,10 @@ class iMenu {
 		if($this->rootid!=$this->parentid){
 			echo $this->a($this->parentid);
 		}
-		echo $this->a($this->doMid);
+		echo $this->a($this->do_mid);
 	}
 	function a($id){
-		$a	= $this->menuArray[$id];
+		$a	= $this->menu_array[$id];
 		$a['href'] &&	$href	= __ADMINCP__.'='.$a['href'];
 		if(strstr($a['href'], 'http://')||strstr($a['href'], '#')) $href = $a['href'];
 		$a['href']=='__SELF__' && $href = __SELF__;
@@ -100,22 +112,24 @@ class iMenu {
 	}
 	function show($mType='nav',$id="0",$level = 0){
 		$nav	= '';
-		foreach((array)$this->MArray[$id] AS $rootid=>$M) {
+		foreach((array)$this->root_array[$id] AS $rootid=>$M) {
 			$nav.= $this->li($mType,$M['id'],$level);
 		}
 		return $nav;
 	}
 	function subcount($id){
-		$_count	= count($this->subA[$id]);
-		foreach((array)$this->subA[$id] AS $rootid=>$_id) {
-			if($this->rootA[$_id]){
+		$_count	= count($this->child_array[$id]);
+		foreach((array)$this->child_array[$id] AS $rootid=>$_id) {
+			if($this->root_array[$_id]){
 				$_count+=$this->subcount($_id);
 			}
 		}
 		return $_count;
 	}
 	function li($mType,$id,$level = 1){
-		$a		= $this->menuArray[$id];
+		if(!$this->permission($id)) return false;
+
+		$a		= $this->menu_array[$id];
 		if($a['app']=="separator"){
 			return '<li class="'.$a['class'].'"></li>';
 		}
@@ -128,7 +142,7 @@ class iMenu {
 		$a['href']=='__SELF__' && $href = __SELF__;
 		$a['href']=='#' && $href = 'javascript:;';
 
-		$isSM	= count($this->rootA[$id]);
+		$isSM	= count($this->root_array[$id]);
 
 		if($isSM && $level && $mType=='nav'){
 			$a['class']	= 'dropdown-submenu';
@@ -161,7 +175,7 @@ class iMenu {
 		$li.='</a>';
 		if($isSM){
 			$SMli	= '';
-			foreach((array)$this->MArray[$id] AS $rootid=>$M) {
+			foreach((array)$this->root_array[$id] AS $rootid=>$M) {
 				$SMli.= $this->li($mType,$M['id'],$level+1);
 			}
 			$mType=='nav'		&& $SMul='<ul class="dropdown-menu">'.$SMli.'</ul>';
@@ -172,7 +186,9 @@ class iMenu {
 		$li.=$SMul.'</li>';
 		return $li;
 	}
-	function permission(){
 
-	}
+    function permission($p=0,$pms=array()){
+    	//$this->permission = $pms;
+        return is_array($p)?array_intersect($p,$this->permission):in_array($p,$this->permission);
+    }
 }

@@ -18,9 +18,9 @@ $(function(){
     var power  = <?php echo $rs->power?$rs->power:'{}'?>,
         cpower = <?php echo $rs->cpower?$rs->cpower:'{}'?>;
 
-    set_select(power,'tab-power');
-    set_select(cpower['cid'],'tab-cpower');
-    set_select(cpower['do'],'tab-cpower');
+    set_select(power,'<?php echo iACP::$app_name; ?>-power');
+    set_select(cpower['cid'],'<?php echo iACP::$app_name; ?>-cpower');
+    set_select(cpower['do'],'<?php echo iACP::$app_name; ?>-cpower');
 });
 function get_tree(e){
   return $("#"+e+"_tree").treeview({
@@ -39,9 +39,9 @@ function set_select(vars,el){
     });  
 }
 </script>   
-<div id="tab-power" class="tab-pane hide">
+<div id="<?php echo iACP::$app_name; ?>-power" class="tab-pane hide">
   <div class="input-prepend input-append"><span class="add-on">全选</span><span class="add-on">
-    <input type="checkbox" class="checkAll checkbox" data-target="#tab-power"/>
+    <input type="checkbox" class="checkAll checkbox" data-target="#<?php echo iACP::$app_name; ?>-power"/>
     </span><button class="btn btn-primary" type="submit"><i class="fa fa-check"></i> 提交</button>
   </div>
   <div class="clearfloat mb10"></div>
@@ -54,9 +54,9 @@ function set_select(vars,el){
   <?php echo iACP::app('menu')->power_tree();?>
   </ul>
 </div>
-<div id="tab-cpower" class="tab-pane hide">
+<div id="<?php echo iACP::$app_name; ?>-cpower" class="tab-pane hide">
   <div class="input-prepend input-append"><span class="add-on">全选</span><span class="add-on">
-    <input type="checkbox" class="checkAll checkbox" data-target="#tab-cpower"/>
+    <input type="checkbox" class="checkAll checkbox" data-target="#<?php echo iACP::$app_name; ?>-cpower"/>
     </span><button class="btn btn-primary" type="submit"><i class="fa fa-check"></i> 提交</button>
   </div>
   <div class="clearfloat mb10"></div>

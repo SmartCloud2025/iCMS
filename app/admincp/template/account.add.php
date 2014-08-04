@@ -24,8 +24,8 @@ $(function(){
       <h5 class="brs"><?php echo empty($this->uid)?'添加':'修改' ; ?>用户</h5>
       <ul class="nav nav-tabs" id="account-tab">
         <li class="active"><a href="#account-info" data-toggle="tab"><b>基本信息</b></a></li>
-        <li><a href="#tab-power" data-toggle="tab"><b>后台权限</b></a></li>
-        <li><a href="#tab-cpower" data-toggle="tab"><b>栏目权限</b></a></li>
+        <li><a href="#account-power" data-toggle="tab"><b>后台权限</b></a></li>
+        <li><a href="#account-cpower" data-toggle="tab"><b>栏目权限</b></a></li>
       </ul>
     </div>
     <div class="widget-content nopadding">

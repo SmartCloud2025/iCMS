@@ -15,13 +15,6 @@ $(function(){
 	iCMS.select('watermark_pos',"<?php echo (int)$config['watermark']['pos'] ; ?>");
 	iCMS.select('time_zone',"<?php echo $config['time']['zone'] ; ?>");
 	iCMS.select('system_patch',"<?php echo (int)$config['system']['patch'] ; ?>");
-	<?php if($_GET['tab']){?>
-		var $itab	= $("#<?php echo $_GET['app']; ?>-tab");
-		$("li",$itab).removeClass("active");
-		$(".tab-pane").removeClass("active").addClass("hide");
-		$("a[href='#<?php echo $_GET['app']; ?>-<?php echo $_GET['tab']; ?>']",$itab).parent().addClass("active");
-		$("#<?php echo $_GET['app']; ?>-<?php echo $_GET['tab']; ?>").addClass("active").removeClass("hide");
-	<?php }?>
 
   $(document).on("click",".del_device",function(){
       $(this).parent().parent().remove();
@@ -153,7 +146,7 @@ function modal_tplfile(el,a){
             <table class="table table-hover">
               <thead>
                 <tr>
-                  <th style="text-align:left"><span class="label label-important">模板优先级为:设备模板 &gt; 移动端模板 &gt; PC端模板</span></th>
+                  <th style="text-align:left"><span class="label label-important">模板优先级为:设备模板 &gt; 移动端模板 &gt; PC端模板</span> <span class="label label-inverse"><i class="icon-warning-sign icon-white"></i> 设备模板和移动端模板 暂时不支持生成静态模式</span></th>
                 </tr>
               </thead>
               <tbody>

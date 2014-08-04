@@ -42,6 +42,8 @@ class iACP {
         iMember::checkLogin();
         iMember::MP("ADMINCP");
         self::$menu = new iMenu();
+        self::$menu->permission('',iMember::$mpower);
+
         //self::frame();
     }
 	public static function frame(){

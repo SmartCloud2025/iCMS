@@ -11,8 +11,7 @@
 */
 class menuApp{
     function __construct() {
-    	$this->menu	= new iMenu();
-    	$this->menu->get_array();
+    	iACP::$menu->get_array();
     }
     function do_add(){
     	$id	= $_GET['id'];
@@ -28,14 +27,14 @@ class menuApp{
     	$rootid	= $_GET['rootid'];
     	$class	= $rootid?'divider':'divider-vertical';
     	iDB::query("INSERT INTO `#iCMS@__menu` (`rootid`,`app`,`class`) VALUES($rootid,'separator','$class');");
-    	$this->menu->cache();
+    	iACP::$menu->cache();
     	iPHP::success('添加完成');
     }
     function do_updateorder(){
     	foreach((array)$_POST['ordernum'] as $orderNum=>$id){
             iDB::query("UPDATE `#iCMS@__menu` SET `orderNum` = '".intval($orderNum)."' WHERE `id` ='".intval($id)."' LIMIT 1");
     	}
-		$this->menu->cache();
+		iACP::$menu->cache();
     }
     function do_iCMS(){
     	iACP::$app_method="domanage";
@@ -47,10 +46,10 @@ class menuApp{
     }
     function power_tree($id=0){
         $li   = '';
-        foreach((array)$this->menu->MArray[$id] AS $root=>$M) {
+        foreach((array)iACP::$menu->root_array[$id] AS $root=>$M) {
             $li.= '<li>';
             $li.= $this->power_holder($M);
-            if($this->menu->subA[$M['id']]){
+            if(iACP::$menu->child_array[$M['id']]){
                 $li.= '<ul>';
                 $li.= $this->power_tree($M['id']);
                 $li.= '</ul>';
@@ -76,11 +75,11 @@ class menuApp{
 
     function tree($id =0,$expanded=false,$func='li'){
     	$id=='source' && $id=0;
-        foreach((array)$this->menu->MArray[$id] AS $root=>$M) {
+        foreach((array)iACP::$menu->root_array[$id] AS $root=>$M) {
         	$a			= array();
         	$a['id']	= $M['id'];
         	$a['text']	= $this->$func($M);
-            if($this->menu->subA[$M['id']]){
+            if(iACP::$menu->child_array[$M['id']]){
             	if($expanded){
                     $a['hasChildren'] = false;
                     $a['expanded']    = true;
@@ -141,14 +140,14 @@ class menuApp{
             iDB::insert('menu',$data);
 			$msg = "添加完成!";
     	}
-		$this->menu->cache();
+		iACP::$menu->cache();
 		iPHP::success($msg,'url:' . APP_URI . '&do=manage');
     }
     function do_del(){
         $id		= (int)$_GET['id'];
-        if(empty($this->menu->MArray[$id])) {
+        if(empty(iACP::$menu->root_array[$id])) {
             iDB::query("DELETE FROM `#iCMS@__menu` WHERE `id` = '$id'");
-            $this->menu->cache();
+            iACP::$menu->cache();
             $msg	= '删除成功!';
         }else {
         	$msg	= '请先删除本菜单下的子菜单!';
@@ -156,7 +155,7 @@ class menuApp{
 		iPHP::dialog($msg,'js:parent.$("#'.$id.'").remove();');
     }
     function select($currentid="0",$id="0",$level = 1) {
-        foreach((array)$this->menu->MArray[$id] AS $root=>$M) {
+        foreach((array)iACP::$menu->root_array[$id] AS $root=>$M) {
 			$t=$level=='1'?"":"├ ";
 			$selected=($currentid==$M['id'])?"selected='selected'":"";
 			if($M['app']=='separator'){
@@ -165,7 +164,7 @@ class menuApp{
 			}
 			$text	= str_repeat("│　", $level-1).$t.$M['name'];
 			$option.="<option value='{$M['id']}' $selected>{$text}</option>";
-			$this->menu->subA[$M['id']] && $option.=$this->select($currentid,$M['id'],$level+1);
+			iACP::$menu->child_array[$M['id']] && $option.=$this->select($currentid,$M['id'],$level+1);
         }
         return $option;
     }
