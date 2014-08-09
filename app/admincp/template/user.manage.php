@@ -3,7 +3,7 @@
  * @copyright 2007-2010, iDreamSoft
  * @license http://www.idreamsoft.com iDreamSoft
  * @author coolmoo <idreamsoft@qq.com>
- * @$Id: account.manage.php 179 2013-03-29 03:21:28Z coolmoo $
+ * @$Id: user.manage.php 179 2013-03-29 03:21:28Z coolmoo $
  */
 defined('iCMS') OR exit('What are you doing?'); 
 iACP::head();
@@ -29,10 +29,10 @@ $(function(){
       <form action="<?php echo __SELF__ ; ?>" method="get" class="form-inline">
         <input type="hidden" name="app" value="<?php echo iACP::$app_name;?>" />
         <div class="input-prepend input-append"> <span class="add-on">每页</span>
-          <input type="text" name="perpage" id="perpage" value="<?php echo $_GET['perpage']?$_GET['perpage']:20 ; ?>" style="width:36px;"/>
+          <input type="text" name="perpage" id="perpage" value="<?php echo $maxperpage ; ?>" style="width:36px;"/>
           <span class="add-on">条记录</span> </div>
         <div class="input-prepend input-append"> <span class="add-on">关键字</span>
-          <input type="text" name="account" class="span2" id="account" value="<?php echo $_GET['account'] ; ?>" />
+          <input type="text" name="keyword" class="span2" id="keyword" value="<?php echo $_GET['keyword'] ; ?>" />
           <button class="btn btn-primary" type="submit"><i class="fa fa-search"></i> 搜 索</button>
         </div>
       </form>
@@ -73,7 +73,7 @@ $(function(){
                 <a href="<?php echo APP_URI; ?>&do=login&id=<?php echo $rs[$i]['uid'] ; ?>" class="btn btn-small" target="_blank">登陆</a> 
                 <a href="<?php echo APP_URI; ?>&do=job&id=<?php echo $rs[$i]['uid'] ; ?>" class="btn btn-small"><i class="fa fa-bar-chart-o"></i> 统计</a> 
                 <a href="<?php echo __ADMINCP__; ?>=article&userid=<?php echo $rs[$i]['uid'] ; ?>" class="btn btn-small"><i class="fa fa-list-alt"></i> 文章</a> 
-                <a href="<?php echo APP_URI; ?>&do=add<?php echo $rs[$i]['type'] ; ?>&id=<?php echo $rs[$i]['uid'] ; ?>" class="btn btn-small"><i class="fa fa-edit"></i> 编辑</a>
+                <a href="<?php echo APP_URI; ?>&do=add&id=<?php echo $rs[$i]['uid'] ; ?>" class="btn btn-small"><i class="fa fa-edit"></i> 编辑</a>
                 <a href="<?php echo APP_FURI; ?>&do=del&id=<?php echo $rs[$i]['uid'] ; ?>" target="iPHP_FRAME" class="del btn btn-small" title='永久删除'  onclick="return confirm('确定要删除?');"/><i class="fa fa-trash-o"></i> 删除</a>
               </td>
             </tr>

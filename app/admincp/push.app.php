@@ -11,12 +11,13 @@
 */
 class pushApp{
     function __construct() {
-    	$this->id	= (int)$_GET['id'];
-        $this->pushcategory	= iPHP::appClass("category",iCMS_APP_PUSH);
+        $this->id          = (int)$_GET['id'];
+        $this->categoryApp = iACP::app('pushcategory');
+        $this->category    = $this->categoryApp->category;
     }
     function do_add(){
-        $id		= (int)$_GET['id'];
-        $rs		= array();
+        $id = (int)$_GET['id'];
+        $rs = array();
         $_GET['title'] 	&& $rs['title']	= $_GET['title'];
         $_GET['pic'] 	&& $rs['pic']	= $_GET['pic'];
         $_GET['url'] 	&& $rs['url']	= $_GET['url'];
@@ -34,7 +35,7 @@ class pushApp{
         empty($rs['userid']) && $rs['userid']=iMember::$userid;
         $rs['addtime']	= $id?get_date(0,"Y-m-d H:i:s"):get_date($rs['addtime'],'Y-m-d H:i:s');
         $cid			= empty($rs['cid'])?(int)$_GET['cid']:$rs['cid'];
-        $cata_option	= $this->pushcategory->select($cid,0,1,1);
+        $cata_option	= $this->categoryApp->select('ca',$cid);
 
         empty($rs['userid']) && $rs['userid']=iMember::$userid;
         $strpos 	= strpos(__REF__,'?');
@@ -55,9 +56,9 @@ class pushApp{
         switch($doType){ //status:[0:草稿][1:正常][2:回收][3:审核][4:不合格]
         	case 'inbox'://草稿
         		$sql.="`status` ='0'";
-        		if(iMember::$data->gid!=1){
-        			$sql.=" AND `userid`='".iMember::$userid."'";
-        		}
+        		// if(iMember::$data->gid!=1){
+        		// 	$sql.=" AND `userid`='".iMember::$userid."'";
+        		// }
         		$position="草稿";
         	break;
          	case 'trash'://回收站
@@ -74,37 +75,28 @@ class pushApp{
         	break;
        		default:
 	       		$sql.=" `status` ='1'";
-		       	$cid && $position=$this->pushcategory->category[$cid]['name'];
+		       	$cid && $position=$this->category[$cid]['name'];
 		}
 		
         if($_GET['keywords']) {
 			$sql.=" AND CONCAT(title,title2,title3) REGEXP '{$_GET['keywords']}'";
         }
-        $cid=iMember::CP($cid)?$cid:"0";
-        if($cid) {
-            $cidIN=$this->pushcategory->cid($cid).$cid;
-            if(isset($_GET['sub']) && strstr($cidIN,',')) {
-                $sql.=" AND cid IN(".$cidIN.")";
-            }else {
-                $sql.=" AND cid ='$cid'";
-            }
-            //$sql.=" OR `vlink` REGEXP '[[:<:]]".preg_quote($cid, '/')."[[:>:]]')";
-        }else {
-            iMember::$cpower && $sql.=" AND cid IN(".implode(',',(array)iMember::$cpower).")";
-        }
-        isset($_GET['nopic'])   && $sql.=" AND `isPic` ='0'";
-        $_GET['starttime'] 	&& $sql.=" and `addtime`>=UNIX_TIMESTAMP('".$_GET['starttime']." 00:00:00')";
-        $_GET['endtime'] 	&& $sql.=" and `addtime`<=UNIX_TIMESTAMP('".$_GET['endtime']." 23:59:59')";
+
+        $sql.=$this->categoryApp->search_sql($cid);
+ 
+        isset($_GET['nopic'])&& $sql.=" AND `isPic` ='0'";
+        $_GET['starttime']   && $sql.=" and `addtime`>=UNIX_TIMESTAMP('".$_GET['starttime']." 00:00:00')";
+        $_GET['endtime']     && $sql.=" and `addtime`<=UNIX_TIMESTAMP('".$_GET['endtime']." 23:59:59')";
 
 
         isset($_GET['userid']) && $uri.='&userid='.(int)$_GET['userid'];
-        isset($_GET['keyword']) && $uri.='&keyword='.$_GET['keyword'];
-        isset($_GET['pid']) && $uri.='&pid='.$_GET['pid'];
-        isset($_GET['cid']) && $uri.='&cid='.$_GET['cid'];
+        isset($_GET['keyword'])&& $uri.='&keyword='.$_GET['keyword'];
+        isset($_GET['pid'])    && $uri.='&pid='.$_GET['pid'];
+        isset($_GET['cid'])    && $uri.='&cid='.$_GET['cid'];
         (isset($_GET['pid']) && $_GET['pid']!='-1') && $uri.='&pid='.$_GET['at'];
 
         $orderby    =$_GET['orderby']?$_GET['orderby']:"id DESC";
-        $maxperpage =(int)$_GET['perpage']>0?$_GET['perpage']:20;
+        $maxperpage = $_GET['perpage']>0?(int)$_GET['perpage']:20;
         $total      = iPHP::total(false,"SELECT count(*) FROM `#iCMS@__push` {$sql}","G");
         iPHP::pagenav($total,$maxperpage,"条记录");
         $rs     = iDB::all("SELECT * FROM `#iCMS@__push` {$sql} order by {$orderby} LIMIT ".iPHP::$offset." , {$maxperpage}");

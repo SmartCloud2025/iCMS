@@ -78,7 +78,7 @@ class htmlApp{
 		iPHP::dialog($msg,$loopurl?"src:".$loopurl:'',$dtime,$moreBtn,$updateMsg);
     }
     function do_category(){
-    	$this->category		= iPHP::appClass("category",iCMS_APP_ARTICLE);
+    	$this->category		= iPHP::appClass('category',iCMS_APP_ARTICLE);
     	include iACP::view("html.category");
     }
     function do_createCategory($cid=0,$p=1,$loop=1){
@@ -169,7 +169,7 @@ class htmlApp{
 
     }
     function do_article(){
-    	$this->category		= iPHP::appClass("category",iCMS_APP_ARTICLE);
+    	$this->category		= iPHP::appClass('category',iCMS_APP_ARTICLE);
     	include iACP::view("html.article");
     }
     function do_createArticle($aid=null){

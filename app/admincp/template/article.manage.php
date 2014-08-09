@@ -24,12 +24,12 @@ $(function(){
 	iCMS.select('orderby',"<?php echo $_GET['orderby'] ; ?>");
 	<?php } ?>
   <?php if($_GET['sub']=="on"){ ?>
-  $("#sub").prop("checked",true);
+  iCMS.checked('#sub');
   <?php } ?>
   <?php if($_GET['scid']=="on"){ ?>
-  $("#search_scid").prop("checked",true);
+    iCMS.checked('#search_scid');
   <?php } ?>
-	$(".spic[value=<?php echo $_GET['pic'] ; ?>]").prop("checked",true);
+  iCMS.checked('.spic[value=<?php echo $_GET['pic'] ; ?>]');
 	
 	var edialog;
 	$(".edit").dblclick(function(){
@@ -100,9 +100,9 @@ $(function(){
           </select>
         </div>
         <div class="input-prepend input-append"> <span class="add-on">栏目</span>
-          <select name="cid" id="cid" class="span3 chosen-select">
+          <select name="cid" id="cid" class="chosen-select" style="width: 230px;">
             <option value="0">所有栏目</option>
-            <?php echo $category_select = $this->category->select(0,0,1,'all') ; ?>
+            <?php echo $category_select = $this->categoryApp->select('cs') ; ?>
           </select>
           <span class="add-on tip" title="选中查询所有关联到此栏目的文章">
           <input type="checkbox" name="scid" id="search_scid"/>
@@ -143,7 +143,7 @@ $(function(){
           <input type="text" style="width:120px;" class="ui-datepicker" name="endtime" value="<?php echo $_GET['endtime'] ; ?>" placeholder="结束时间" />
           <span class="add-on"><i class="fa fa-calendar"></i></span> </div>
         <div class="input-prepend input-append"> <span class="add-on">每页</span>
-          <input type="text" name="perpage" id="perpage" value="<?php echo $_GET['perpage']?$_GET['perpage']:20 ; ?>" style="width:36px;"/>
+          <input type="text" name="perpage" id="perpage" value="<?php echo $maxperpage ; ?>" style="width:36px;"/>
           <span class="add-on">条记录</span> </div>
         <div class="input-prepend"> <span class="add-on">查找方式</span>
           <select name="st" id="st" class="chosen-select" style="width:120px;">
@@ -187,7 +187,7 @@ $(function(){
           <tbody>
             <?php for($i=0;$i<$_count;$i++){
                   $ourl = $rs[$i]['url'];
-                  $C    = $this->category->category[$rs[$i]['cid']];
+                  $C    = $this->category[$rs[$i]['cid']];
                   $iurl = iURL::get('article',array($rs[$i],$C));
                   empty($ourl) && $htmlurl = $iurl->path;
                   $rs[$i]['url']           = $iurl->href;
@@ -232,8 +232,10 @@ $(function(){
                 <a href="<?php echo $rs[$i]['url']; ?>" class="btn btn-success btn-mini" target="_blank">查看</a>
                 <?php } ?>
                 <!-- <a href="<?php echo APP_URI; ?>&do=add&id=<?php echo $rs[$i]['id'] ; ?>" class="btn btn-primary btn-mini">+章节</a> -->
+                <?php if(iACP::CP($rs[$i]['cid'],'ce')){ ?>
                 <a href="<?php echo APP_URI; ?>&do=add&id=<?php echo $rs[$i]['id'] ; ?>" class="btn btn-primary btn-mini">编辑</a>
-                <?php if(in_array($rs[$i]['status'],array("1","0"))){ ?>
+                <?php } ?>
+                <?php if(in_array($rs[$i]['status'],array("1","0")) && iACP::CP($rs[$i]['cid'],'cd')){ ?>
                 <a href="<?php echo APP_FURI; ?>&do=update&id=<?php echo $rs[$i]['id'] ; ?>&iDT=status:2" target="iPHP_FRAME" class="del btn btn-danger btn-mini" title="移动此文章到回收站" />删除</a>
                 <?php } ?>
                 <?php if($rs[$i]['status']=="2"){ ?>

@@ -44,7 +44,7 @@ function comment_list($vars){
 	$vars['id']  && $whereSQL .=" AND `id`='".(int)$vars['id']."'";
 	
 	$maxperpage	= isset($vars['row'])?(int)$vars['row']:"10";
-	$cacheTime	= isset($vars['time'])?(int)$vars['time']:-1;
+	$cache_time	= isset($vars['time'])?(int)$vars['time']:-1;
 	$by			= $vars['by']=='ASC'?"ASC":"DESC";
 	switch ($vars['orderby']) {
 		default: $orderSQL = " ORDER BY `id` $by";
@@ -110,7 +110,7 @@ function comment_list($vars){
 				$rs[$i]['page']  = array('total'=>$multi->totalpage,'perpage'=>$multi->perpage);
 			}
 		}
-		$vars['cache'] && iCache::set($cacheName,$rs,$cacheTime);
+		$vars['cache'] && iCache::set($cacheName,$rs,$cache_time);
 	}
 	
 	return $rs;

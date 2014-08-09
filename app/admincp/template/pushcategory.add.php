@@ -25,10 +25,10 @@ $(function(){
         <input name="cid" type="hidden" value="<?php echo $rs['cid']  ; ?>" />
         <div id="pushcategory-add" class="tab-content">
           <div class="input-prepend"> <span class="add-on">上级版块</span>
-            <?php if(iMember::CP($rootid) || empty($rootid)) {   ?>
+            <?php if(iACP::CP($rootid) || empty($rootid)) {   ?>
             <select name="rootid" class="chosen-select">
               <option value="0">======顶级版块=====</option>
-              <?php echo $this->category->select($rootid,0,1,'all',true);?>
+              <?php echo $this->select('ca',$rootid,0,1,true);?>
             </select>
             <?php }else {  ?>
             <input name="rootid" id="rootid" type="hidden" value="<?php echo $rootid ; ?>" />

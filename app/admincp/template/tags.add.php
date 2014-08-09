@@ -54,29 +54,30 @@ $(function(){
         <input name="id" type="hidden" value="<?php echo $this->id ; ?>" />
         <input name="uid" type="hidden" value="<?php echo $rs['uid'] ; ?>" />
 
+        <input name="_cid" type="hidden" value="<?php echo $rs['cid'] ; ?>" />
         <input name="_tcid" type="hidden" value="<?php echo $rs['tcid'] ; ?>" />
         <input name="_pid" type="hidden" value="<?php echo $rs['pid'] ; ?>" />
 
         <div id="tags-add" class="tab-content">
           <div id="tag-add-base" class="tab-pane active">
             <div class="input-prepend"> <span class="add-on">所属栏目</span>
-              <select name="cid" id="cid" class="chosen-select span3">
-                <option value="0"> ==== 暂无所属 ==== </option>
-                <?php echo $this->category->select($rs['cid'],0,1,'all',true);?>
+              <select name="cid" id="cid" class="chosen-select span6" multiple="multiple" data-placeholder="请选择栏目(可多选)...">
+                <option value="0"> ==== 默认 ==== </option>
+                <?php echo $this->categoryApp->select('ca',$rs['cid'],0,1,true);?>
               </select>
             </div>
             <span class="help-inline">本标签所属的栏目</span>
             <div class="clearfloat mb10"></div>
             <div class="input-prepend"> <span class="add-on">标签分类</span>
-              <select name="tcid[]" id="tcid" class="chosen-select span6" multiple="multiple">
-                <option value="0"> ==== 暂无分类 ==== </option>
-                <?php echo $this->tagcategory->select($rs['tcid'],0,1,'all',true);?>
+              <select name="tcid[]" id="tcid" class="chosen-select span6" multiple="multiple" data-placeholder="请选择标签分类(可多选)...">
+                <option value="0"> ==== 默认分类 ==== </option>
+                <?php echo $this->tagcategory->select('ca',$rs['tcid'],0,1,true);?>
               </select>
             </div>
             <span class="help-inline">本标签所属的标签分类</span>
             <div class="clearfloat mb10"></div>
             <div class="input-prepend"> <span class="add-on">标签属性</span>
-              <select name="pid[]" id="pid" class="chosen-select span6" multiple="multiple">
+              <select name="pid[]" id="pid" class="chosen-select span6" multiple="multiple" data-placeholder="请选择标签属性(可多选)...">
                 <option value="0">普通标签[pid='0']</option>
                 <?php echo iACP::getProp("pid") ; ?>
               </select>

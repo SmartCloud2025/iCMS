@@ -24,7 +24,7 @@ class cacheApp{
     	iPHP::success('更新完成','js:1');
     }
     function do_category(){
-    	$category	= iPHP::appClass("category");
+    	$category	= iPHP::appClass('category');
     	$category->cache(true,isset($_GET['type'])?$_GET['type']:null);
     	iPHP::success('更新完成');
     }

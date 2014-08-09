@@ -198,12 +198,15 @@ if ($.browser.msie && ($.browser.version == "6.0" || $.browser.version == "7.0")
 }) (jQuery.fn.clone);
 
 window.iCMS = {
-    select: function(a, v) {
+    select: function(el, v) {
         var va = v.split(',');
         $.each(va, function(i,val){      
-          $("#" + a+" option[value='"+val+"']").attr("selected", true);
+          $("#" + el+" option[value='"+val+"']").attr("selected", true);
         });      
-        $("#"+a).trigger("chosen:updated");
+        $("#"+el).trigger("chosen:updated");
+    },
+    checked:function(el){
+        $(el).prop("checked",true).closest('.checker > span').addClass('checked');
     },
     modal: function() {
         $('[data-toggle="modal"]').on("click",function() {

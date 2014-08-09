@@ -52,15 +52,16 @@ $(function(){
         <div id="category-add" class="tab-content">
           <div id="category-add-base" class="tab-pane active">
             <div class="input-prepend"> <span class="add-on">上级<?php echo $this->name_text;?></span>
-              <?php if(iMember::CP($rootid) || empty($rootid)) {   ?>
+              <?php if(iACP::CP($rootid) || empty($rootid)) {   ?>
               <select name="rootid" class="span3 chosen-select">
                 <option value="0">======顶级<?php echo $this->name_text;?>=====</option>
-                <?php echo $this->category->select($rootid,0,1,'all',true);?>
+                <?php echo $this->select('a',$rootid,0,1,true);?>
               </select>
-              <?php }else {  ?>
+              <?php }else { ?>
+              <input name="_rootid_hash" type="hidden" value="<?php echo authcode($rootid,'decode') ; ?>" /><!-- 防F12 -->
               <input name="rootid" id="rootid" type="hidden" value="<?php echo $rootid ; ?>" />
-              <input readonly="true" value="<?php echo $this->category->category[$rootid]['name'] ; ?>" type="text" class="txt" />
-              <?php }  ?>
+              <input readonly="true" value="<?php echo $this->category[$rootid]['name'] ; ?>" type="text" class="txt" />
+              <?php } ?>
               <span class="help-inline">本<?php echo $this->name_text;?>的上级<?php echo $this->name_text;?>或分类</span> </div>
             <div class="clearfloat mb10"></div>
             <div class="input-prepend"> <span class="add-on"><?php echo $this->name_text;?>属性</span>

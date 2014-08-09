@@ -11,25 +11,26 @@
 */
 class propApp{
     function __construct() {
-        $this->category = iPHP::appClass("category",'all');
-        $this->pid      = (int)$_GET['pid'];
+        $this->categoryApp = iACP::app('category','all');
+        $this->category    = $this->categoryApp->category;
+        $this->pid         = (int)$_GET['pid'];
     }
     function do_add(){
         $this->pid && $rs	= iDB::row("SELECT * FROM `#iCMS@__prop` WHERE `pid`='$this->pid' LIMIT 1;",ARRAY_A);
         if($_GET['act']=="copy"){
-        	$this->pid=0;
-        	$rs['val']='';
+            $this->pid = 0;
+            $rs['val'] = '';
         }
         include iACP::view("prop.add");
     }
     function do_save(){
-		$pid		= (int)$_POST['pid'];
-		$cid		= (int)$_POST['cid'];
-		$ordernum	= (int)$_POST['ordernum'];
-		$field		= iS::escapeStr($_POST['field']);
-		$name		= iS::escapeStr($_POST['name']);
-		$type		= iS::escapeStr($_POST['type']);
-		$val		= iS::escapeStr($_POST['val']);
+        $pid      = (int)$_POST['pid'];
+        $cid      = (int)$_POST['cid'];
+        $ordernum = (int)$_POST['ordernum'];
+        $field    = iS::escapeStr($_POST['field']);
+        $name     = iS::escapeStr($_POST['name']);
+        $type     = iS::escapeStr($_POST['type']);
+        $val      = iS::escapeStr($_POST['val']);
 		
 		($field=='pid'&& !is_numeric($val)) && iPHP::alert('pid字段的值能用数字');
         $field OR iPHP::alert('属性字段不能为空!');
@@ -86,11 +87,8 @@ class propApp{
     		break;
 		}
 	}
+
     function do_iCMS(){
-    	iACP::$app_method="domanage";
-    	$this->do_manage();
-    }
-    function do_manage(){
         $sql			= " where 1=1";
 //        $cid			= (int)$_GET['cid'];
 //
@@ -100,16 +98,16 @@ class propApp{
 //	        $sql.= iPHP::where($cids,'cid');
 //        }
 
-		$_GET['field'] && $sql.=" AND `field`='".$_GET['field']."'";
-		$_GET['field'] && $uri.='&field='.$_GET['field'];
+        $_GET['field']&& $sql.=" AND `field`='".$_GET['field']."'";
+        $_GET['field']&& $uri.='&field='.$_GET['field'];
+        
+        $_GET['type'] && $sql.=" AND `type`='".$_GET['type']."'";
+        $_GET['type'] && $uri.='&type='.$_GET['type'];
+        
+        $_GET['cid']  && $sql.=" AND `cid`='".$_GET['cid']."'";
+        $_GET['cid']  && $uri.='&cid='.$_GET['cid'];
 
-		$_GET['type'] && $sql.=" AND `type`='".$_GET['type']."'";
-		$_GET['type'] && $uri.='&type='.$_GET['type'];
-
-		$_GET['cid'] && $sql.=" AND `cid`='".$_GET['cid']."'";
-		$_GET['cid'] && $uri.='&cid='.$_GET['cid'];
-
-        $maxperpage =(int)$_GET['perpage']>0?$_GET['perpage']:20;
+        $maxperpage = $_GET['perpage']>0?(int)$_GET['perpage']:20;
         $total		= iPHP::total(false,"SELECT count(*) FROM `#iCMS@__prop` {$sql}","G");
         iPHP::pagenav($total,$maxperpage,"个属性");
         $rs     = iDB::all("SELECT * FROM `#iCMS@__prop` {$sql} order by pid DESC LIMIT ".iPHP::$offset." , {$maxperpage}");
@@ -119,9 +117,9 @@ class propApp{
     function cache(){
     	$rs	= iDB::all("SELECT * FROM `#iCMS@__prop`",ARRAY_A);
     	foreach((array)$rs AS $row) {
-    		$pkey	= $row['cid'].$row['type'].$row['field'];
-    		$cidA[$row['cid']][]=$row;
-    		$typeA[$row['type']][]=$row;
+            $pkey = $row['cid'].$row['type'].$row['field'];
+            $cidA[$row['cid']][]   = $row;
+            $typeA[$row['type']][] = $row;
     		$ctfA['c'.$row['cid'].'.'.$row['type'].'.'.$row['field']][]=$row;
     		$tfA[$row['type'].'.'.$row['field']][$row['pid']]=$row;
     	}

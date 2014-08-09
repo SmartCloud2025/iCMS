@@ -14,7 +14,8 @@ defined('iPHP') OR exit('What are you doing?');
 define('__ADMINCP__',	__SELF__ . '?app');
 define('ACP_PATH',		iPHP_APP_DIR . '/admincp');
 define('ACP_DIR',		'app/admincp');
-define('ACP_UI',		'app/admincp/ui');
+define('ACP_UI',        'app/admincp/ui');
+define('ACP_SUPERADMIN', '1');
 
 require iPHP_APP_CORE.'/iMember.class.php';
 require iPHP_APP_CORE.'/iMenu.class.php';
@@ -22,6 +23,7 @@ require iPHP_APP_CORE.'/iMenu.class.php';
 iDB::$show_errors   = true;
 iMember::$LOGIN_TPL = ACP_PATH;
 iMember::$AUTH      = 'iCMS_ADMIN_AUTH';
+iMember::$AJAX      = iPHP::PG('ajax');
 iPHP::$dialogTitle  = 'iCMS';
 
 class iACP {
@@ -37,15 +39,14 @@ class iACP {
     public static $app_file   = NULL;
 
     public static function init() {
-        self::$apps = array('home', 'category', 'pushcategory','tagcategory', 'article', 'push', 'prop', 'setting', 'filter', 'cache','tags','editor');
-        $_POST['ajax'] && iMember::$ajax	= true;
         iMember::checkLogin();
-        iMember::MP("ADMINCP");
         self::$menu = new iMenu();
-        self::$menu->permission('',iMember::$mpower);
-
+        self::MP('ADMINCP','page'); //检查是否有后台权限
+        self::MP('__MID__','page'); //检查菜单ID
+        self::$apps = array('home', 'category', 'pushcategory','tagcategory', 'article', 'push', 'prop', 'setting', 'filter', 'cache','tags','editor');
         //self::frame();
     }
+
 	public static function frame(){
 		self::$frames	= $_GET['frames']?$_GET['frames']:$_POST['frames'];
 		if(empty($_GET['app']) || self::$frames) {
@@ -135,9 +136,9 @@ class iACP {
 		iACP::setConfig(iCMS::$config[$k],$k,0);
 		iACP::cacheConfig();
 	}
-    public static function iDT($data) {
+    public static function iDT($data='') {
         $sql = array();
-        $dA = explode(',', $data);
+        $dA  = explode(',', $data);
         foreach ((array) $dA as $d) {
             list($f, $v) = explode(':', $d);
             $v == 'now' && $v = time();
@@ -146,50 +147,63 @@ class iACP {
         }
         return implode(',', $sql);
     }
-    //--------------------------function------------------------
+    public static function MP($p,$ret=''){
+        if(self::is_superadmin()) return true;
+
+        self::$menu->power = (array)iMember::$mpower;
+        if($p==='__MID__'){
+            self::$menu->rootid   && $rt1 = self::$menu->check_power(self::$menu->rootid);
+            self::$menu->parentid && $rt2 = self::$menu->check_power(self::$menu->parentid);
+            self::$menu->do_mid   && $rt3 = self::$menu->check_power(self::$menu->do_mid);
+            if($rt1 && $rt2 && $rt3){
+                return true;
+            }
+            self::permission_msg($p,$ret);
+        }
+        $rt = self::$menu->check_power($p);
+        $rt OR self::permission_msg($p,$ret);
+        return $rt;
+    }
+    public static function CP($p,$act='',$ret=''){
+        if(self::is_superadmin()) return true;
+
+        if($p==='__CID__'){
+            foreach ((array)iMember::$cpower as $key => $_cid) {
+                if(!strstr($value, ':')){
+                    self::CP($_cid,$act) && $cids[] = $_cid;
+                }
+            }
+            return $cids;
+        }
+
+        $act && $p = $p.':'.$act;
+    
+        $rt = iMember::check_power((string)$p,iMember::$cpower);
+        $rt OR self::permission_msg($p,$ret);
+        return $rt;
+    }
+    public static function permission_msg($p='',$ret=''){
+        if($ret=='alert'){
+            iPHP::alert('您没有相关权限!');
+            exit;
+        }elseif($ret=='page'){
+            include self::view("admincp.permission");
+            exit;
+        }
+    }
+    public static function is_superadmin(){
+        return (iMember::$data->gid===ACP_SUPERADMIN);
+    }
     public static function head($navbar = true) {
-        include self::view("header");
-        $navbar && include self::view("navbar");
+        include self::view("admincp.header");
+        $navbar && include self::view("admincp.navbar");
     }
 
     public static function foot() {
-        include self::view("footer");
+        include self::view("admincp.footer");
     }
     public static function picBtnGroup($callback) {
-        $unid   = rand(100,999);
-        echo '<div class="btn-group">
-              <a class="btn dropdown-toggle" data-toggle="dropdown" tabindex="-1"> <span class="caret"></span> 选择图片</a>
-              <ul class="dropdown-menu">
-                <li><a href="' . __ADMINCP__ . '=files&do=add&from=modal&callback=' . $callback . '" data-toggle="modal" data-meta=\'{"width":"300px","height":"80px"}\' title="本地上传">本地上传</a></li>
-                <li><a href="' . __ADMINCP__ . '=files&do=browse&from=modal&click=file&callback=' . $callback . '" data-toggle="modal" title="从网站选择">从网站选择</a></li>
-                <li class="divider"></li>
-                <li><a href="' . __ADMINCP__ . '=files&do=editpic&from=modal&callback=' . $callback . '" data-toggle="modal" title="编辑图片" class="modal_photo_'.$unid.'">编辑(美图秀秀)</a></li>
-                <li class="divider"></li>
-                <li><a href="' . __ADMINCP__ . '=files&do=preview&from=modal&callback=' . $callback . '" data-toggle="modal" data-check="1" title="预览" class="modal_photo_'.$unid.'">预览</a></li>
-              </ul>
-            </div>
-            <script type="text/javascript">
-            $(function(){
-                window.modal_'.$callback.' = function(el,a){
-                    $("#'.$callback.'").val(a.value);
-                    window.iCMS_MODAL.destroy();
-                }
-                $(".modal_photo_'.$unid.'").on("click",function(){
-                    var  pic=$("#'.$callback.'").val(),href = $(this).attr("href");
-                    if(pic){
-                        $(".modal-iframe").attr("src",href+"&pic="+pic);
-                    }else{
-                        var check = $(this).attr("data-check"),title=$(this).attr("title");
-                        if(check){
-                            window.iCMS_MODAL.destroy();
-                            alert("暂无图片,您现在不能"+title);
-                        }
-                    }
-                    return false;
-                });
-            });
-            </script>
-       ';
+        include self::view("admincp.picBtnGroup");
     }
     public static function propBtn($field, $type = "") {
         $type OR $type = self::$app_name;
@@ -210,13 +224,6 @@ class iACP {
         $type OR $type = self::$app_name;
         $propArray = iCache::get("iCMS/prop/{$type}.{$field}");
         $valArray  = explode(',', $val);
-
-        // $opt = '<select name="'.$field.'" id="'.$field.'" class="chosen-select span6" multiple="multiple">';
-        // if ($default){
-        //     foreach ($default AS $dval => $dname) {
-        //         $opt.='<option value="'.$dval.'" '.($val == $dval ? " selected='selected'" : '').'>'.$dname.'['.$field.'=\''.$dval.'\']</option>';
-        //     }
-        // }
         if ($propArray){
             foreach ($propArray AS $k => $P) {
                 if ($out == 'option') {

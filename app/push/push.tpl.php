@@ -8,7 +8,7 @@
  */
 function push_list($vars){
 	$maxperpage = isset($vars['row'])?(int)$vars['row']:"100";
-	$cacheTime	= isset($vars['time'])?(int)$vars['time']:"-1";
+	$cache_time	= isset($vars['time'])?(int)$vars['time']:"-1";
 
     $whereSQL	= " WHERE `status`='1'";
 
@@ -52,7 +52,7 @@ function push_list($vars){
 			$rs[$i]['pic2'] && $rs[$i]['pic2']=iFS::fp($rs[$i]['pic2'],'+http');
 			$rs[$i]['metadata'] && $rs[$i]['metadata']=unserialize($rs[$i]['metadata']);
         }
-		$vars['cache'] && iCache::set($cacheName,$rs,$cacheTime);
+		$vars['cache'] && iCache::set($cacheName,$rs,$cache_time);
 	}
 	return $rs;
 }

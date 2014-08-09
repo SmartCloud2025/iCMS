@@ -135,8 +135,9 @@ class iPHP{
             return self::$iTPL->fetch($tpl);
         }else {
             self::$iTPL->display($tpl);
-            //echo iFS::sizeUnit(xdebug_memory_usage());
-            //echo iFS::sizeUnit(xdebug_peak_memory_usage());
+            if(iPHP_DEBUG){
+	            echo '<span class="label label-success">内存:'.iFS::sizeUnit(memory_get_usage()).', 执行时间:'.iPHP::timer_stop().'s, SQL执行:'.iDB::$num_queries.'次</span>';           	
+            }
         }
     }
     public static function view($tpl,$p='index') {
@@ -240,13 +241,13 @@ class iPHP{
 		}
 		return new $app_name();
     }
-    public static function appFun($fun = NULL){
-    	$fun_dir	= $fun_name = $fun;
-    	if(is_array($fun)){
-    		$fun_dir	= $fun[0];
-    		$fun_name	= $fun[1];
+    public static function appFunc($func = NULL){
+    	$func_dir	= $func_name = $func;
+    	if(is_array($func)){
+    		$func_dir	= $func[c0];
+    		$func_name	= $func[1];
     	}
-    	self::import(iPHP_APP_DIR.'/'.$fun_dir.'/'.$fun_name.'.tpl.php');
+    	self::import(iPHP_APP_DIR.'/'.$func_dir.'/'.$func_name.'.tpl.php');
     }
     public static function appClass($class = NULL,$args = NULL){
     	$class_dir	= $class_name = $class;
@@ -256,7 +257,7 @@ class iPHP{
     	}
     	self::import(iPHP_APP_DIR.'/'.$class_dir.'/'.$class_name.'.class.php');
 
-    	if($args==="break") return;
+    	if($args==="import") return;
 
     	if($args){
 			return new $class_name($args);
@@ -367,8 +368,13 @@ class iPHP{
 	}
 
 	public static function where($vars,$field,$not=false,$noand=false) {
+		if (is_bool($vars)) return '';
+
 	    if(is_array($vars)) {
-			$vars = addslashes(implode(',',$vars));
+			foreach ($vars as $key => $value) {
+				$vas[] = "'".addslashes($value)."'";
+			}
+			$vars = implode(',',$vas);
 			$sql  = $not?" NOT IN ($vars)":" IN ($vars) ";
 	    }else {
 			$vars = addslashes($vars);
@@ -417,7 +423,8 @@ class iPHP{
         $mtime = explode(' ', $mtime);
         $time_end = $mtime[1] + $mtime[0];
         $time_total = $time_end - self::$time_start;
-        return $time_total;
+        //self::$time_start = $time_end;
+        return round($time_total,4);
     }
     public static function code($code=0,$msg='',$forward='',$format=''){
     	strstr($msg,':') && $msg = self::lang($msg);
@@ -477,20 +484,20 @@ class iPHP{
 		$dialog  = "var dialog = ".self::$dialogObject."$.dialog({
 		    id: 'iPHP_DIALOG',width: 360,height: 150,fixed: true,
 		    title: '".self::$dialogTitle." - {$title}',content: '{$content}',";
-		$autoFun = 'dialog.close();';
-		$fun     = self::js($js,true,$obj);
-		if($fun){
-      		$dialog.='cancelValue: "确定",cancel: function(){'.$fun.'return true;},';
-      		$autoFun = $fun.'dialog.close();';
+		$auto_func = 'dialog.close();';
+		$func      = self::js($js,true);
+		if($func){
+      		$dialog.='cancelValue: "确定",cancel: function(){'.$func.'return true;},';
+      		$auto_func = $func.'dialog.close();';
 		}
         if(is_array($buttons)) {
             foreach($buttons as $key=>$val) {
-            	$val['url'] && $fun 	= self::$dialogObject."location.href='{$val['url']}';";
-            	$val['src'] && $fun 	= self::$dialogObject."$('#iPHP_FRAME').attr('src','".$val['src']."');return false;";
-                $val['top'] && $fun 	= "top.window.open('{$val['url']}','_blank');";
+            	$val['url'] && $func 	= self::$dialogObject."location.href='{$val['url']}';";
+            	$val['src'] && $func 	= self::$dialogObject."$('#iPHP_FRAME').attr('src','".$val['src']."');return false;";
+                $val['top'] && $func 	= "top.window.open('{$val['url']}','_blank');";
                 $val['id']	&& $id		= "id: '".$val['id']."',";
-                $buttonA[]="{{$id}value: '".$val['text']."',callback: function () {".$fun."}}";
-                $val['next'] && $autoFun = $fun;
+                $buttonA[]="{{$id}value: '".$val['text']."',callback: function () {".$func."}}";
+                $val['next'] && $auto_func = $func;
             }
             $button	= implode(',',$buttonA);
       	}
@@ -498,7 +505,7 @@ class iPHP{
         if($update){
         	$dialog	= "var dialog = ".self::$dialogObject."$.dialog.get('PHP_DIALOG');";
 			$dialog.="dialog.content('{$content}');";
-			$autoFun = $fun;
+			$auto_func = $func;
         }
 		$button	&& $dialog.="dialog.button(".$button.");";
         self::$dialogLock && $dialog.='dialog.lock();';
@@ -506,9 +513,9 @@ class iPHP{
         $s>30	&& $timeount	= $s;
         $s===false && $timeount	= false;
         if($timeount){
-        	$dialog.='window.setTimeout(function(){'.$autoFun.'},'.$timeount.');';
+        	$dialog.='window.setTimeout(function(){'.$auto_func.'},'.$timeount.');';
         }else{
-        	$update && $dialog.=$autoFun;
+        	$update && $dialog.=$auto_func;
         }
 		echo self::$dialogCode?$dialog:'<script type="text/javascript">'.$dialog.'</script>';
         self::$break && exit();

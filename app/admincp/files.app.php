@@ -19,13 +19,14 @@ class filesApp{
     	$this->id		= (int)$_GET['id'];
 	    $this->callback OR $this->callback	= 'icms';
         $this->upload_max_filesize = get_cfg_var("upload_max_filesize");
-
     }
 	function do_add(){
+        iACP::MP('FILE.UPLOAD','page');
 		$this->id && $rs	= iFS::getFileData('id',$this->id);
 		include iACP::view("files.add");
 	}
 	function do_multi(){
+        iACP::MP('FILE.UPLOAD','page');
 		$file_upload_limit	= $_GET['UN']?$_GET['UN']:100;
 		$file_queue_limit	= $_GET['QN']?$_GET['QN']:10;
 		$file_size_limit	= (int)$this->upload_max_filesize;
@@ -34,6 +35,7 @@ class filesApp{
 		include iACP::view("files.multi");
 	}
 	function do_iCMS(){
+        iACP::MP('FILE.MANAGE','page');
     	$sql='WHERE 1=1 ';
         if($_GET['keywords']) {
             if($_GET['st']=="filename") {
@@ -54,8 +56,8 @@ class filesApp{
         
         isset($_GET['userid']) 	&& $uri.='&userid='.(int)$_GET['userid'];
 
-        $orderby	=$_GET['orderby']?$_GET['orderby']:"id DESC";
-        $maxperpage =(int)$_GET['perpage']>0?$_GET['perpage']:50;
+        $orderby	= $_GET['orderby']?$_GET['orderby']:"id DESC";
+        $maxperpage = $_GET['perpage']>0?(int)$_GET['perpage']:50;
 		$total		= iPHP::total(false,"SELECT count(*) FROM `#iCMS@__filedata` {$sql}","G");
         iPHP::pagenav($total,$maxperpage,"个文件");
         $rs     = iDB::all("SELECT * FROM `#iCMS@__filedata` {$sql} order by {$orderby} LIMIT ".iPHP::$offset." , {$maxperpage}");
@@ -80,6 +82,7 @@ class filesApp{
         iPHP::json($array);
     }
     function do_upload(){
+        iACP::MP('FILE.UPLOAD','alert');
 //iFS::$checkFileData = true;
     	$_POST['watermark'] OR iFS::$watermark = false;
     	if($this->id){
@@ -150,6 +153,7 @@ class filesApp{
 		}
 	}
     function do_del($id = null){
+        iACP::MP('FILE.DELETE','alert');
         $id ===null && $id = $this->id;
         $id OR iPHP::alert("请选择要删除的文件");
         $indexid = (int)$_GET['indexid'];
@@ -173,6 +177,7 @@ class filesApp{
     	iPHP::alert($msg);
     }
     function do_mkdir(){
+        iACP::MP('FILE.MKDIR') OR iPHP::json(array('code'=>0,'msg'=>'您没有相关权限!'));
     	$name	= $_POST['name'];
         strstr($name,'.')!==false	&& iPHP::json(array('code'=>0,'msg'=>'您输入的目录名称有问题!'));
         strstr($name,'..')!==false	&& iPHP::json(array('code'=>0,'msg'=>'您输入的目录名称有问题!'));
@@ -187,6 +192,7 @@ class filesApp{
 		iPHP::json(array('code'=>0,'msg'=>'创建失败,请检查目录权限!!'));
     }
     function explorer($dir=NULL,$type=NULL){
+        iACP::MP('FILE.BROWSE','page');
         $res    = iPHP::folder($dir,$type);
         $dirRs  = $res['DirArray'];
         $fileRs = $res['FileArray'];
@@ -206,6 +212,7 @@ class filesApp{
     	$this->explorer(iCMS::$config['FS']['dir'],array('jpg','png','gif','jpeg'));
     }
     function do_editpic(){
+        iACP::MP('FILE.EDIT','page');
         $pic       = $_GET['pic'];
         //$pic OR iPHP::alert("请选择图片!");
         if($pic){

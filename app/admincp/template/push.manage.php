@@ -48,7 +48,7 @@ hr { border-bottom:none; margin:4px 0px; }
         <div class="input-prepend input-append mb10"> <span class="add-on">版块</span>
           <select name="cid" id="cid" class="chosen-select">
             <option value="0">所有版块</option>
-            <?php echo $this->pushcategory->select(0,0,1,'all') ; ?>
+            <?php echo $this->categoryApp->select('cs') ; ?>
           </select>
           <span class="add-on">
           <input type="checkbox" name="sub" id="sub"/>
@@ -60,7 +60,7 @@ hr { border-bottom:none; margin:4px 0px; }
           <input type="text" class="span2 ui-datepicker" name="endtime" value="<?php echo $_GET['endtime'] ; ?>" placeholder="结束时间" />
           <span class="add-on"><i class="fa fa-calendar"></i></span> </div>
         <div class="input-prepend input-append"> <span class="add-on">每页</span>
-          <input type="text" name="perpage" id="perpage" value="<?php echo $_GET['perpage']?$_GET['perpage']:20 ; ?>" style="width:36px;"/>
+          <input type="text" name="perpage" id="perpage" value="<?php echo $maxperpage ; ?>" style="width:36px;"/>
           <span class="add-on">条记录</span> </div>
         <div class="input-prepend input-append"> <span class="add-on">关键字</span>
           <input type="text" name="keywords" class="span2" id="keywords" value="<?php echo $_GET['keywords'] ; ?>" />
@@ -91,8 +91,8 @@ hr { border-bottom:none; margin:4px 0px; }
           </thead>
           <tbody>
             <?php for($i=0;$i<$_count;$i++){
-        	$C		= $this->pushcategory->category[$rs[$i]['cid']];
-    	?>
+              $C = $this->category[$rs[$i]['cid']];
+            ?>
             <tr id="tr<?php echo $rs[$i]['id'] ; ?>">
               <td><input type="checkbox" name="id[]" value="<?php echo $rs[$i]['id'] ; ?>" /></td>
               <td class="ordernum"><input type="text" name="orderNum[<?php echo $rs[$i]['id'] ; ?>]" value="<?php echo $rs[$i]['orderNum'] ; ?>"/></td>

@@ -28,15 +28,18 @@ $navbar OR $bodyClass	= 'iframe ';
 <link rel="stylesheet" href="<?php echo ACP_UI;?>/bootstrap-2.3.1/css/bootstrap-switch.css" type="text/css" />
 <link rel="stylesheet" href="<?php echo ACP_UI;?>/bootstrap-2.3.1/css/font-awesome.min.css" type="text/css" />
 <link rel="stylesheet" href="<?php echo ACP_UI;?>/jquery/uniform-2.1.2.min.css" type="text/css" />
-<link rel="stylesheet" href="<?php echo ACP_UI;?>/jquery/chosen-1.0.0.min.css" type="text/css" />
+<link rel="stylesheet" href="<?php echo ACP_UI;?>/jquery/chosen-1.1.0.min.css" type="text/css" />
 <link rel="stylesheet" href="<?php echo ACP_UI;?>/artDialog-5.0.4/skins/default.css" type="text/css" />
 <link rel="stylesheet" href="<?php echo ACP_UI;?>/iCMS-6.0.0.css" type="text/css" />
 <link rel="stylesheet" href="<?php echo ACP_UI;?>/admincp-6.0.0.css" type="text/css" />
+<!--[if lt IE 9]>
+  <script src="<?php echo ACP_UI;?>/html5.js"></script>
+<![endif]-->
 <script type="text/javascript" src="<?php echo ACP_UI;?>/jquery/jquery-1.11.0.min.js"></script>
 <script type="text/javascript" src="<?php echo ACP_UI;?>/jquery/migrate-1.2.1.js"></script>
 <script type="text/javascript" src="<?php echo ACP_UI;?>/jquery/scrollUp-1.1.0.min.js"></script>
 <script type="text/javascript" src="<?php echo ACP_UI;?>/jquery/uniform-2.1.2.min.js"></script>
-<script type="text/javascript" src="<?php echo ACP_UI;?>/jquery/chosen-1.0.0.js"></script>
+<script type="text/javascript" src="<?php echo ACP_UI;?>/jquery/chosen-1.1.0.js"></script>
 <script type="text/javascript" src="<?php echo ACP_UI;?>/artDialog-5.0.4/artDialog.min.js"></script>
 <script type="text/javascript" src="<?php echo ACP_UI;?>/artDialog-5.0.4/artDialog.plugins.min.js"></script>
 <script type="text/javascript" src="<?php echo ACP_UI;?>/bootstrap-2.3.1/js/bootstrap.min.js"></script>

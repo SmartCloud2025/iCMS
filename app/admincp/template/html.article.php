@@ -26,7 +26,7 @@ iACP::head();
             <select name="cid[]" multiple="multiple" class="span3" size="15">
               <option value="all">所 有 栏 目</option>
               <optgroup label="======================================"></optgroup>
-              <?php echo $this->category->select(0,0,1,'all',true);?>
+              <?php echo $this->category->select(false,0,0,1,true);?>
             </select>
           </div>
           <hr>

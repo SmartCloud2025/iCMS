@@ -127,17 +127,17 @@ class iCMS {
     	self::run($app,null,'API_');
     }
     //------------------------------------
-	public static function get_category_ids($id = "0",$all=true) {
-	    $ids	= array();
-	    $cArray	= iCache::get('iCMS/category/rootid',$id);
-	    foreach((array)$cArray AS $_id) {
-	        $ids[]	= $_id;
-	        $all && $ids[]	= self::get_category_ids($_id,$all);
-	    }
-        $ids = array_unique($ids);
-        $ids = array_filter($ids);
-	    return $ids;
-	}
+    public static function get_category_ids($cid = "0",$all=true) {
+        $cids   = array();
+        $cArray = iCache::get('iCMS/category/rootid',$cid);
+        foreach((array)$cArray AS $_cid) {
+            $cids[] = $_cid;
+            $all && $cids[]  = self::get_category_ids($_cid,$all);
+        }
+        $cids = array_unique($cids);
+        $cids = array_filter($cids);
+        return $cids;
+    }
     public static function sphinx(){
     	iPHP::import(iPHP_APP_CORE.'/sphinx.class.php');
     	

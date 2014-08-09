@@ -9,13 +9,13 @@
 * @version 6.0.0
 * @$Id: tags.app.php 2406 2014-04-28 02:24:46Z coolmoo $
 */
+iPHP::appClass('tag','import');
 class tagsApp{
     function __construct() {
         $this->id          = (int)$_GET['id'];
         $this->appid       = iCMS_APP_TAG;
-        $this->category    = iPHP::appClass("category",'all');
-        $this->tagcategory = iPHP::appClass("category",$this->appid);
-    	iPHP::appClass("tag",'break');
+        $this->tagcategory = iACP::app('tagcategory');
+        $this->categoryApp = iACP::app('category','all');
     }
     function do_add(){
         $this->id && $rs = iDB::row("SELECT * FROM `#iCMS@__tags` WHERE `id`='$this->id' LIMIT 1;",ARRAY_A);
@@ -33,32 +33,20 @@ class tagsApp{
     	$this->do_manage();
     }
     function do_manage(){
-        $sql = " where 1=1";
-        $cid = (int)$_GET['cid'];
-        $cid = iMember::CP($cid)?$cid:"0";
+        $sql  = " where 1=1";
+        $cid  = (int)$_GET['cid'];
+        $tcid = (int)$_GET['tcid'];
+
         $_GET['keywords'] && $sql.=" AND CONCAT(name,seotitle,subtitle,keywords,description) REGEXP '{$_GET['keywords']}'";
-        if($cid) {
-            $cidIN=$this->category->cid($cid).$cid;
-            if(isset($_GET['sub']) && strstr($cidIN,',')) {
-                $sql.=" AND cid IN(".$cidIN.")";
-            }else {
-                $sql.=" AND cid ='$cid'";
-            }
-        }
-        $tcid	= (int)$_GET['tcid'];
-        if($tcid) {
-            $tcidIN=$this->tagcategory->cid($tcid).$tcid;
-            if(isset($_GET['sub']) && strstr($tcidIN,',')) {
-                $sql.=" AND tcid IN(".$cidIN.")";
-            }else {
-                $sql.=" AND tcid ='$tcid'";
-            }
-        }
+        
+        $sql.= $this->categoryApp->search_sql($cid);
+        $sql.= $this->tagcategory->search_sql($cid,'tcid');
+
 		isset($_GET['pic']) && $sql.=" AND `ispic` ='".($_GET['pic']?1:0)."'";
 		isset($_GET['pid']) && $_GET['pid']!="-1" && $sql.=" AND `pid` ='".(int)$_GET['pid']."'";
 
-        $orderby	=$_GET['orderby']?$_GET['orderby']:"id DESC";
-        $maxperpage =(int)$_GET['perpage']>0?$_GET['perpage']:20;
+        $orderby	= $_GET['orderby']?$_GET['orderby']:"id DESC";
+        $maxperpage = $_GET['perpage']>0?(int)$_GET['perpage']:20;
         $total		= iPHP::total(false,"SELECT count(*) FROM `#iCMS@__tags` {$sql}","G");
         iPHP::pagenav($total,$maxperpage,"个标签");
         $rs     = iDB::all("SELECT * FROM `#iCMS@__tags` {$sql} order by {$orderby} LIMIT ".iPHP::$offset." , {$maxperpage}");
@@ -68,9 +56,10 @@ class tagsApp{
     function do_save(){
         $id          = (int)$_POST['id'];
         $uid         = (int)$_POST['uid'];
-        $cid         = (int)$_POST['cid'];
+        $cid         = implode(',', (array)$_POST['cid']);
         $tcid        = implode(',', (array)$_POST['tcid']);
         $pid         = implode(',', (array)$_POST['pid']);
+        $_cid        = iS::escapeStr($_POST['_cid']);
         $_tcid       = iS::escapeStr($_POST['_tcid']);
         $_pid        = iS::escapeStr($_POST['_pid']);
         $name        = iS::escapeStr($_POST['name']);
@@ -122,10 +111,12 @@ class tagsApp{
             $data['count'] ='0';
             $id = iDB::insert('tags',$data);
 			tag::cache($id,'id');
+
             map::init('prop',iCMS_APP_TAG);
             map::add($pid,$id);
 
             map::init('category',iCMS_APP_TAG);
+            map::add($cid,$id);
             map::add($tcid,$id);
 
 	        iPHP::success('标签添加完成',"url:".APP_URI);
@@ -133,10 +124,12 @@ class tagsApp{
             unset($data['count']);
             iDB::update('tags', $data, array('id'=>$id));
 			tag::cache($id,'id');
+
             map::init('prop',iCMS_APP_TAG);
             map::diff($pid,$_pid,$id);
 
             map::init('category',iCMS_APP_TAG);
+            map::diff($cid,$_cid,$id);
             map::diff($tcid,$_tcid,$id);
         	iPHP::success('标签更新完成',"url:".APP_URI);
 		}

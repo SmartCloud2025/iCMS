@@ -29,7 +29,7 @@ $(function(){
       <form action="<?php echo __SELF__ ; ?>" method="get" class="form-inline">
         <input type="hidden" name="app" value="<?php echo iACP::$app_name;?>" />
         <div class="input-prepend input-append"> <span class="add-on">每页</span>
-          <input type="text" name="perpage" id="perpage" value="<?php echo $_GET['perpage']?$_GET['perpage']:20 ; ?>" style="width:36px;"/>
+          <input type="text" name="perpage" id="perpage" value="<?php echo $maxperpage ; ?>" style="width:36px;"/>
           <span class="add-on">条记录</span> </div>
         <div class="input-prepend input-append"> <span class="add-on">关键字</span>
           <input type="text" name="account" class="span2" id="account" value="<?php echo $_GET['account'] ; ?>" />
@@ -66,14 +66,14 @@ $(function(){
               <td><?php echo $rs[$i]['uid'] ; ?></td>
               <td><a class="tip-top" title="注册时间:<?php if($rs[$i]['regtime']) echo get_date($rs[$i]['regtime'],"Y-m-d") ; ?><hr />累计登陆次数:<?php echo $rs[$i]['logintimes'] ; ?>"><?php echo $rs[$i]['username'] ; ?></a></td>
               <td><?php echo $rs[$i]['nickname'] ; ?></td>
-              <td><a href="<?php echo APP_DOURI; ?>&gid=<?php echo $rs[$i]['gid'] ; ?>"><?php echo $group->all[$rs[$i]['gid']]['name'] ; ?></a></td>
+              <td><a href="<?php echo APP_DOURI; ?>&gid=<?php echo $rs[$i]['gid'] ; ?>"><?php echo $this->groupApp->array[$rs[$i]['gid']]['name'] ; ?></a></td>
               <td><?php echo $rs[$i]['lastip'] ; ?></td>
               <td><?php if($rs[$i]['lastlogintime']) echo get_date($rs[$i]['lastlogintime'],"Y-m-d") ; ?></td>
               <td>
                 <a href="<?php echo APP_URI; ?>&do=login&id=<?php echo $rs[$i]['uid'] ; ?>" class="btn btn-small" target="_blank">登陆</a> 
                 <a href="<?php echo APP_URI; ?>&do=job&id=<?php echo $rs[$i]['uid'] ; ?>" class="btn btn-small"><i class="fa fa-bar-chart-o"></i> 统计</a> 
                 <a href="<?php echo __ADMINCP__; ?>=article&userid=<?php echo $rs[$i]['uid'] ; ?>" class="btn btn-small"><i class="fa fa-list-alt"></i> 文章</a> 
-                <a href="<?php echo APP_URI; ?>&do=addadmin&id=<?php echo $rs[$i]['uid'] ; ?>" class="btn btn-small"><i class="fa fa-edit"></i> 编辑</a>
+                <a href="<?php echo APP_URI; ?>&do=add&id=<?php echo $rs[$i]['uid'] ; ?>" class="btn btn-small"><i class="fa fa-edit"></i> 编辑</a>
                 <?php if($rs[$i]['uid']!="1"){ ; ?>
                 <a href="<?php echo APP_FURI; ?>&do=del&id=<?php echo $rs[$i]['uid'] ; ?>" target="iPHP_FRAME" class="del btn btn-small" title='永久删除'  onclick="return confirm('确定要删除?');"/><i class="fa fa-trash-o"></i> 删除</a>
                 <?php } ; ?>

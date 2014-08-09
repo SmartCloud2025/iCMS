@@ -13,10 +13,10 @@ class iMenu {
 	public $menu_array = array();
 	public $root_array = array();
 	public $menu_uri   = array();
-	public $permission = array();
 	public $rootid     = 0;
 	public $parentid   = 0;
 	public $do_mid     = 0;
+	public $power      = array();
 	private $app_uri   = '';
 	private $do_uri    = '';
 
@@ -26,9 +26,8 @@ class iMenu {
 		$this->child_array = iCache::get('iCMS/iMenu/child_array');
 		$this->parent      = iCache::get('iCMS/iMenu/parent');
 		$this->menu_uri    = iCache::get('iCMS/iMenu/menu_uri');
-		//$this->permission  = $p;
 
-		$app          = $_GET['app']?$_GET['app']:'home';
+		$app           = $_GET['app']?$_GET['app']:'home';
 		$this->app_uri = $this->menu_uri[$app];
 		$_GET['do'] && $this->do_uri = $app.'&do='.$_GET['do'];
 		$_GET['tab']&& $this->do_uri = $app.'&tab='.$_GET['tab'];
@@ -39,24 +38,8 @@ class iMenu {
 		$this->rootid   = $this->rootid($this->do_mid);
 		$this->parentid = $this->parent[$this->do_mid];
 		$this->menu_array OR $this->cache();
-		//$this->check();
 	}
-	function check(){
-		var_dump('rootid',$this->rootid,$this->permission);
-		// if(!$this->permission($this->rootid)){
-		// 	exit("Permission denied!");
-		// }
-		// 		var_dump('parentid',$this->parentid);
 
-		// if(!$this->permission($this->parentid)){
-		// 	exit("Permission denied!");
-		// }
-		// 		var_dump('do_mid',$this->do_mid);
-
-		// if(!$this->permission($this->do_mid)){
-		// 	exit("Permission denied!");
-		// }
-	}
 	function get_array($cache=false){
 		$rs	= iDB::all("SELECT * FROM `#iCMS@__menu` ORDER BY `orderNum` , `id` ASC",ARRAY_A);
 		foreach((array)$rs AS $M) {
@@ -92,14 +75,18 @@ class iMenu {
 		}
 	}
 	function breadcrumb(){
-		echo $this->a($this->rootid);
-		if($this->rootid!=$this->parentid){
-			echo $this->a($this->parentid);
+		$this->a($this->rootid);
+		if($this->parentid!=$this->rootid){
+			$this->a($this->parentid);
 		}
-		echo $this->a($this->do_mid);
+		if($this->do_mid!=$this->parentid  && $this->do_mid!=$this->rootid){
+			$this->a($this->do_mid);
+		}
 	}
 	function a($id){
 		$a	= $this->menu_array[$id];
+		if(empty($a)) return;
+
 		$a['href'] &&	$href	= __ADMINCP__.'='.$a['href'];
 		if(strstr($a['href'], 'http://')||strstr($a['href'], '#')) $href = $a['href'];
 		$a['href']=='__SELF__' && $href = __SELF__;
@@ -127,12 +114,13 @@ class iMenu {
 		return $_count;
 	}
 	function li($mType,$id,$level = 1){
-		if(!$this->permission($id)) return false;
+		if(!iACP::MP($id)) return false;
 
 		$a		= $this->menu_array[$id];
 		if($a['app']=="separator"){
 			return '<li class="'.$a['class'].'"></li>';
 		}
+
 
 		$a['href'] && $href	= __ADMINCP__.'='.$a['href'];
 		$a['target']=='iPHP_FRAME' && $href.='&frame=iPHP';
@@ -156,17 +144,17 @@ class iMenu {
 		$li = '<li class="'.$a['class'].'" title="'.$a['name'].'" data-level="'.$level.'" data-menu="m'.$id.'">';
 
 		$aa = '<a href="'.$href.'"';
-		$a['title'] 		&& $aa.= ' title="'.$a['title'].'"';
-		$a['a_class'] 		&& $aa.= ' class="'.$a['a_class'].'"';
-		$a['target'] 		&& $aa.= ' target="'.$a['target'].'"';
+		$a['title']  && $aa.= ' title="'.$a['title'].'"';
+		$a['a_class']&& $aa.= ' class="'.$a['a_class'].'"';
+		$a['target'] && $aa.= ' target="'.$a['target'].'"';
 
 		if($mType=='sidebar' && $a['data-toggle']=='modal'){
 			$aa.= ' data-toggle="'.$a['data-toggle'].'"';
 		}elseif($mType=='nav'){
 			$a['data-toggle'] 	&& $aa.= ' data-toggle="'.$a['data-toggle'].'"';
 		}
-		$a['data-target'] 	&& $aa.= ' data-target="'.$a['data-target'].'"';
-		$a['data-meta'] 	&& $aa.= " data-meta='".$a['data-meta']."'";
+		$a['data-target']&& $aa.= ' data-target="'.$a['data-target'].'"';
+		$a['data-meta']  && $aa.= " data-meta='".$a['data-meta']."'";
 		$aa.=">";
 		$li.=$aa;
 		$a['icon'] && $li.='<i class="'.$a['icon'].'"></i> ';
@@ -178,7 +166,7 @@ class iMenu {
 			foreach((array)$this->root_array[$id] AS $rootid=>$M) {
 				$SMli.= $this->li($mType,$M['id'],$level+1);
 			}
-			$mType=='nav'		&& $SMul='<ul class="dropdown-menu">'.$SMli.'</ul>';
+			$mType =='nav' && $SMul='<ul class="dropdown-menu">'.$SMli.'</ul>';
 			if($mType=='sidebar'){
 				$SMul = $level>1?$SMli:'<ul style="display: none;">'.$SMli.'</ul>';
 			}
@@ -187,8 +175,7 @@ class iMenu {
 		return $li;
 	}
 
-    function permission($p=0,$pms=array()){
-    	//$this->permission = $pms;
-        return is_array($p)?array_intersect($p,$this->permission):in_array($p,$this->permission);
+    function check_power($p){
+    	return is_array($p)?array_intersect((string)$p,$this->power):in_array((string)$p,$this->power);
     }
 }

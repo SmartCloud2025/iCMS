@@ -7,7 +7,7 @@
  * @$Id: article.tpl.php 2408 2014-04-30 18:58:23Z coolmoo $
  */
 defined('iPHP') OR exit('What are you doing?');
-iPHP::appClass("tag",'break');
+iPHP::appClass('tag','import');
 function article_list($vars){
     if($vars['loop']==="rel" && empty($vars['id'])){
         return false;
@@ -17,7 +17,7 @@ function article_list($vars){
     $hidden    = iCache::get('iCMS/category/hidden');
     $hidden &&  $where_sql.=iPHP::where($hidden,'cid','not');
     $maxperpage = isset($vars['row'])?(int)$vars['row']:10;
-    $cacheTime  = isset($vars['time'])?(int)$vars['time']:-1;
+    $cache_time  = isset($vars['time'])?(int)$vars['time']:-1;
     isset($vars['userid'])&& $where_sql.= " AND `userid`='{$vars['userid']}'";
     isset($vars['author'])&& $where_sql.= " AND `author`='{$vars['author']}'";
     isset($vars['top'])   && $where_sql.= " AND `top`='"._int($vars['top'])."'";
@@ -61,19 +61,6 @@ function article_list($vars){
     $vars['id'] && $where_sql.= iPHP::where($vars['id'],'id');
     $vars['id!']&& $where_sql.= iPHP::where($vars['id!'],'id','not');
     $by=$vars['by']=="ASC"?"ASC":"DESC";
-    if($vars['keywords']){
-        if(strpos($vars['keywords'],',')===false){
-            $vars['keywords']=str_replace(array('%','_'),array('\%','\_'),$vars['keywords']);
-            $where_sql.= " AND CONCAT(title,keywords,description) like '%".addslashes($vars['keywords'])."%'";
-        }else{
-            $kw=explode(',',$vars['keywords']);
-            foreach($kw AS $v){
-                $keywords.=addslashes($v)."|";
-            }
-            $keywords  = substr($keywords,0,-1);
-            $where_sql .= " And CONCAT(title,keywords,description) REGEXP '$keywords' ";
-        }
-    }
     isset($vars['pic'])  && $where_sql.= " AND `isPic`='1'";
     isset($vars['nopic'])&& $where_sql.= " AND `isPic`='0'";        
 
@@ -110,7 +97,7 @@ function article_list($vars){
         $resource = iDB::all("SELECT * FROM `#iCMS@__article` WHERE {$where_sql} {$order_sql} LIMIT {$offset} , {$maxperpage}");
         // iDB::debug(1);
         $resource = __article($vars,$resource);
-        $vars['cache'] && iCache::set($cache_name,$resource,$cacheTime);
+        $vars['cache'] && iCache::set($cache_name,$resource,$cache_time);
     }
     //print_r($resource);
     return $resource;

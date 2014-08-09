@@ -58,7 +58,7 @@ class linksApp{
         }
         
         $orderby	=$_GET['orderby']?$_GET['orderby']:"id DESC";
-        $maxperpage =(int)$_GET['perpage']>0?$_GET['perpage']:20;
+        $maxperpage = $_GET['perpage']>0?(int)$_GET['perpage']:20;
 		$total		= iPHP::total(false,"SELECT count(*) FROM `#iCMS@__links` {$sql}","G");
         iPHP::pagenav($total,$maxperpage,"个网站");
         $rs     = iDB::all("SELECT * FROM `#iCMS@__links` {$sql} order by {$orderby} LIMIT ".iPHP::$offset." , {$maxperpage}");

@@ -11,15 +11,19 @@
 */
 class groupsApp{
 	public $group = NULL;
-	public $all   = NULL;
+	public $array = NULL;
+	public $type  = NULL;
 
     function __construct($type=null) {
     	$this->gid	= (int)$_GET['gid'];
-    	$type!==null && $sql=" and `type`='$type'";
+    	if($type!==null){
+    		$this->type = $type;
+    		$sql=" and `type`='$type'";
+    	}
 		$rs		= iDB::all("SELECT * FROM `#iCMS@__group` where 1=1{$sql} ORDER BY `orderNum` , `gid` ASC",ARRAY_A);
 		$_count	= count($rs);
 		for ($i=0;$i<$_count;$i++){
-			$this->all[$rs[$i]['gid']]      = $rs[$i];
+			$this->array[$rs[$i]['gid']]    = $rs[$i];
 			$this->group[$rs[$i]['type']][] = $rs[$i];
 		}
     }
@@ -28,7 +32,8 @@ class groupsApp{
         $this->gid && $rs = iDB::row("SELECT * FROM `#iCMS@__group` WHERE `gid`='$this->gid' LIMIT 1;");
         include iACP::view("groups.add");
     }
-	function select($type="0",$currentid=NULL){
+	function select($type=null,$currentid=NULL){
+		$type===null && $type = $this->type;
 		if($this->group[$type])foreach($this->group[$type] AS $G){
 			$selected=($currentid==$G['gid'])?" selected='selected'":'';
 			$option.="<option value='{$G['gid']}'{$selected}>".$G['name']."[GID:{$G['gid']}] </option>";
@@ -67,8 +72,8 @@ class groupsApp{
 		$gid    = intval($_POST['gid']);
 		$type   = intval($_POST['type']);
 		$name   = iS::escapeStr($_POST['name']);
-		$power  = json_encode($_POST['power']);
-		$cpower = json_encode($_POST['cpower']);
+		$power  = $_POST['power']?json_encode($_POST['power']):'';
+		$cpower = $_POST['cpower']?json_encode($_POST['cpower']):'';
 		$name OR iPHP::alert('角色名不能为空');
 		$fields = array('name', 'orderNum', 'power', 'cpower', 'type');
 		$data   = compact ($fields);

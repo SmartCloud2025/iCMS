@@ -29,7 +29,7 @@ $(function(){
         <div class="input-prepend input-append"> <span class="add-on">栏目</span>
           <select name="cid" id="cid" class="span3 chosen-select">
             <option value="0">所有栏目</option>
-            <?php echo $this->category->select(0, 0, 1, 'all'); ?>
+            <?php echo $categoryApp->select(); ?>
           </select>
           <span class="add-on">
           <input type="checkbox" name="sub" id="sub"/>
@@ -74,8 +74,8 @@ $(function(){
           <tbody>
             <?php
                 for ($i = 0; $i < $_count; $i++) {
-                    $C = $this->category->category[$rs[$i]['cid']];
-                    ?>
+                    $C = $category[$rs[$i]['cid']];
+            ?>
             <tr id="tr<?php echo $rs[$i]['id']; ?>">
               <td><input type="checkbox" name="id[]" value="<?php echo $rs[$i]['id']; ?>" /></td>
               <td><?php echo $rs[$i]['id']; ?></td>

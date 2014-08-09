@@ -15,7 +15,6 @@ class keywordsApp{
     }
     function do_add(){
         if($this->id) {
-            iMember::CP($this->cid,'Permission_Denied',APP_URI);
             $rs			= iDB::row("SELECT * FROM `#iCMS@__keywords` WHERE `id`='$this->id' LIMIT 1;",ARRAY_A);
         }else{
         	$rs['keyword']	= $_GET['keyword'];
@@ -40,7 +39,6 @@ class keywordsApp{
             $this->cache();
             $msg="关键词添加完成!";
         }else {
-            iMember::CP($id,'Permission_Denied',APP_URI);
             iDB::value("SELECT `id` FROM `#iCMS@__keywords` where `keyword` ='$keyword' AND `id` !='$id'") && iPHP::alert('该关键词已经存在!');
             iDB::update('keywords', $data, array('id'=>$id));
             $this->cache();
@@ -54,7 +52,7 @@ class keywordsApp{
 			$sql=" WHERE `keyword` REGEXP '{$_GET['keywords']}'";
         }
         $orderby	=$_GET['orderby']?$_GET['orderby']:"id DESC";
-        $maxperpage =(int)$_GET['perpage']>0?$_GET['perpage']:20;
+        $maxperpage = $_GET['perpage']>0?(int)$_GET['perpage']:20;
 		$total		= iPHP::total(false,"SELECT count(*) FROM `#iCMS@__keywords` {$sql}","G");
         iPHP::pagenav($total,$maxperpage,"个关键词");
         $rs     = iDB::all("SELECT * FROM `#iCMS@__keywords` {$sql} order by {$orderby} LIMIT ".iPHP::$offset." , {$maxperpage}");

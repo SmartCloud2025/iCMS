@@ -54,7 +54,7 @@ $(function(){
         <div class="input-prepend input-append"> <span class="add-on">栏目</span>
           <select name="cid" id="cid" class="span3 chosen-select">
             <option value="0">所有栏目</option>
-            <?php echo $this->category->select(0,0,1,'all') ; ?>
+            <?php echo $this->categoryApp->select('cs') ; ?>
           </select>
           <span class="add-on">
           <input type="checkbox" name="sub" id="sub"/>
@@ -62,7 +62,7 @@ $(function(){
         <div class="input-prepend input-append"> <span class="add-on">分类</span>
           <select name="tcid" id="tcid" class="chosen-select">
             <option value="0">所有分类</option>
-            <?php echo $this->tagcategory->select(0,0,1,'all') ; ?>
+            <?php echo $this->tagcategory->select('cs') ; ?>
           </select>
           <span class="add-on">
           <input type="checkbox" name="tfsub" id="tfsub"/>
@@ -89,7 +89,7 @@ $(function(){
           </select>
         </div>
         <div class="input-prepend input-append"> <span class="add-on">每页</span>
-          <input type="text" name="perpage" id="perpage" value="<?php echo $_GET['perpage']?$_GET['perpage']:20 ; ?>" style="width:36px;"/>
+          <input type="text" name="perpage" id="perpage" value="<?php echo $maxperpage ; ?>" style="width:36px;"/>
           <span class="add-on">条记录</span> </div>
         <div class="input-prepend input-append"> <span class="add-on">无缩略图
           <input type="checkbox" name="nopic" id="nopic"/>
@@ -129,7 +129,7 @@ $(function(){
         </thead>
         <tbody>
           <?php for($i=0;$i<$_count;$i++){
-              $C             = $this->category->category[$rs[$i]['cid']];
+              $C             = $this->categoryApp->category[$rs[$i]['cid']];
               $TC            = $this->tagcategory->category[$rs[$i]['tcid']];
               $iurl          = iURL::get('tag',array($rs[$i],$C,$TC));
               $rs[$i]['url'] = $iurl->href;

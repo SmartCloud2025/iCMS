@@ -25,13 +25,13 @@ $(function(){
         <div class="input-prepend input-append"> <span class="add-on">栏目</span>
           <select name="cid" id="cid" class="span3 chosen-select">
             <option value="0">所有栏目</option>
-            <?php echo $this->category->select(0,0,1,'all') ; ?>
+            <?php echo $this->categoryApp->select('cs') ; ?>
           </select>
           <span class="add-on">
           <input type="checkbox" name="sub" id="sub"/>
           子栏目 </span> </div>
         <div class="input-prepend input-append"> <span class="add-on">每页</span>
-          <input type="text" name="perpage" id="perpage" value="<?php echo $_GET['perpage']?$_GET['perpage']:20 ; ?>" style="width:36px;"/>
+          <input type="text" name="perpage" id="perpage" value="<?php echo $maxperpage ; ?>" style="width:36px;"/>
           <span class="add-on">条记录</span> </div>
         <div class="input-prepend input-append"> <span class="add-on">关键字</span>
           <input type="text" name="keywords" class="span2" id="keywords" value="<?php echo $_GET['keywords'] ; ?>" />
@@ -63,9 +63,9 @@ $(function(){
             </tr>
           </thead>
           <tbody>
-            <?php for($i=0;$i<$_count;$i++){
-    		$C	= $this->category->category[$rs[$i]['cid']];
-    	?>
+        <?php for($i=0;$i<$_count;$i++){
+          $C	= $this->category[$rs[$i]['cid']];
+        ?>
             <tr id="tr<?php echo $rs[$i]['pid'] ; ?>">
               <td><input type="checkbox" name="id[]" value="<?php echo $rs[$i]['pid'] ; ?>" /></td>
               <td><?php echo $rs[$i]['pid'] ; ?></td>

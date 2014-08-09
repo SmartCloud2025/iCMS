@@ -59,13 +59,14 @@ class menuApp{
         return $li;
     }
     function power_holder($M) {
+        $name ='<span class="add-on">'.$M['name'].'</span>';
         if($M['app']=='separator'){
-            return '<div class="separator"></div>';
+            $name ='<span class="add-on tip" title="分隔符权限,仅为UI美观">───分隔符───</span>';
         }
-        //$M['rootid']==0 && $bold =' style="font-weight:bold"';
-        $tr='<input type="checkbox" name="power[]" id="mid'.$M['id'].'" value="'.$M['id'].'">
-        <span class="name"'.$bold.'>'.$M['name'].'</span>';
-        return $tr;
+        return '<div class="input-prepend input-append li2">
+        <span class="add-on"><input type="checkbox" name="power[]" value="'.$M['id'].'"></span>
+        '.$name.'
+        </div>';
     }
 
     function do_ajaxtree(){
@@ -157,7 +158,7 @@ class menuApp{
     function select($currentid="0",$id="0",$level = 1) {
         foreach((array)iACP::$menu->root_array[$id] AS $root=>$M) {
 			$t=$level=='1'?"":"├ ";
-			$selected=($currentid==$M['id'])?"selected='selected'":"";
+			$selected=($currentid==$M['id'])?"selected":"";
 			if($M['app']=='separator'){
 				$M['name']	= "─────────────";
 				$M['id']	= "-1";

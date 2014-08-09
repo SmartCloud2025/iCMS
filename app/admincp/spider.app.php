@@ -50,25 +50,21 @@ class spiderApp {
     }
     
     function do_manage($doType = null) {
-        $this->category = iPHP::appClass("category",iCMS_APP_ARTICLE);
+        $categoryApp = iACP::app('category',iCMS_APP_ARTICLE);
+        $category    = $categoryApp->category;
+
         $sql = " WHERE 1=1";
         $_GET['keywords'] && $sql.="  AND `title` REGEXP '{$_GET['keywords']}'";
         $doType == "inbox" && $sql.=" AND `publish` ='0'";
         $_GET['pid'] && $sql.=" AND `pid` ='" . (int) $_GET['pid'] . "'";
         $_GET['rid'] && $sql.=" AND `rid` ='" . (int) $_GET['rid'] . "'";
-        $cid = $this->cid;
-        if ($cid) {
-            $cidIN = $this->category->cid($cid) . $cid;
-            if (isset($_GET['sub']) && strstr($cidIN, ',')) {
-                $sql.=" AND cid IN(" . $cidIN . ")";
-            } else {
-                $sql.=" AND cid ='$cid'";
-            }
-        }
+        
+        $sql.=$categoryApp->search_sql($this->cid);
+
         $ruleArray = $this->rule_opt(0, 'array');
         $postArray = $this->post_opt(0, 'array');
         $orderby = $_GET['orderby'] ? $_GET['orderby'] : "id DESC";
-        $maxperpage = (int) $_GET['perpage'] > 0 ? $_GET['perpage'] : 20;
+        $maxperpage = $_GET['perpage']>0?(int)$_GET['perpage']:20;
         $total = iPHP::total(false, "SELECT count(*) FROM `#iCMS@__spider_url` {$sql}", "G");
         iPHP::pagenav($total, $maxperpage, "个网页");
         $rs = iDB::all("SELECT * FROM `#iCMS@__spider_url` {$sql} order by {$orderby} LIMIT " . iPHP::$offset . " , {$maxperpage}");
@@ -639,7 +635,7 @@ class spiderApp {
             $sql = " WHERE `keyword` REGEXP '{$_GET['keywords']}'";
         }
         $orderby = $_GET['orderby'] ? $_GET['orderby'] : "id DESC";
-        $maxperpage = (int) $_GET['perpage'] > 0 ? $_GET['perpage'] : 20;
+        $maxperpage = $_GET['perpage']>0?(int)$_GET['perpage']:20;
         $total = iPHP::total(false, "SELECT count(*) FROM `#iCMS@__spider_rule` {$sql}", "G");
         iPHP::pagenav($total, $maxperpage, "个规则");
         $rs = iDB::all("SELECT * FROM `#iCMS@__spider_rule` {$sql} order by {$orderby} LIMIT " . iPHP::$offset . " , {$maxperpage}");
@@ -710,7 +706,7 @@ class spiderApp {
             $sql = " WHERE `keyword` REGEXP '{$_GET['keywords']}'";
         }
         $orderby = $_GET['orderby'] ? $_GET['orderby'] : "id DESC";
-        $maxperpage = (int) $_GET['perpage'] > 0 ? $_GET['perpage'] : 20;
+        $maxperpage = $_GET['perpage']>0?(int)$_GET['perpage']:20;
         $total = iPHP::total(false, "SELECT count(*) FROM `#iCMS@__spider_post` {$sql}", "G");
         iPHP::pagenav($total, $maxperpage, "个模块");
         $rs = iDB::all("SELECT * FROM `#iCMS@__spider_post` {$sql} order by {$orderby} LIMIT " . iPHP::$offset . " , {$maxperpage}");
@@ -767,20 +763,15 @@ class spiderApp {
     }
 
     function do_project() {
-        $this->category = iPHP::appClass("category",iCMS_APP_ARTICLE);
+        $categoryApp = iACP::app('category',iCMS_APP_ARTICLE);
+        $category    = $categoryApp->category;
+
         $sql = "where 1=1";
         if ($_GET['keywords']) {
             $sql.= " and `keyword` REGEXP '{$_GET['keywords']}'";
         }
-        $cid = $this->cid;
-        if ($cid) {
-            $cidIN = $this->category->cid($cid) . $cid;
-            if (isset($_GET['sub']) && strstr($cidIN, ',')) {
-                $sql.=" AND cid IN(" . $cidIN . ")";
-            } else {
-                $sql.=" AND cid ='$cid'";
-            }
-        }
+        $sql.= $categoryApp->search_sql($this->cid);
+
         if ($_GET['rid']) {
             $sql.=" AND `rid` ='" . (int) $_GET['rid'] . "'";
         }
@@ -790,7 +781,7 @@ class spiderApp {
         $ruleArray = $this->rule_opt(0, 'array');
         $postArray = $this->post_opt(0, 'array');
         $orderby = $_GET['orderby'] ? $_GET['orderby'] : "id DESC";
-        $maxperpage = (int) $_GET['perpage'] > 0 ? $_GET['perpage'] : 20;
+        $maxperpage = $_GET['perpage']>0?(int)$_GET['perpage']:20;
         $total = iPHP::total(false, "SELECT count(*) FROM `#iCMS@__spider_project` {$sql}", "G");
         iPHP::pagenav($total, $maxperpage, "个方案");
         $rs = iDB::all("SELECT * FROM `#iCMS@__spider_project` {$sql} order by {$orderby} LIMIT " . iPHP::$offset . " , {$maxperpage}");
@@ -807,8 +798,9 @@ class spiderApp {
         $this->pid && $rs = $this->project($this->pid);
         $cid = empty($rs['cid']) ? $this->cid : $rs['cid'];
 
-        $this->category = iPHP::appClass("category",iCMS_APP_ARTICLE);
-        $cata_option = $this->category->select($cid, 0, 1, 0);
+        $categoryApp = iACP::app('category',iCMS_APP_ARTICLE);
+
+        $cata_option = $categoryApp->select(false,$cid);
         $rule_option = $this->rule_opt($rs['rid']);
         $post_option = $this->post_opt($rs['poid']);
 

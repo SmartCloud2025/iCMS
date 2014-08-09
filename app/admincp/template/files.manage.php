@@ -45,7 +45,7 @@ $(function(){
         <div class="input-prepend input-append"> <span class="add-on">关键字</span>
           <input type="text" name="keywords" class="span2" id="keywords" value="<?php echo $_GET['keywords'] ; ?>" />
           <span class="add-on">每页</span>
-          <input type="text" name="perpage" id="perpage" value="<?php echo $_GET['perpage']?$_GET['perpage']:20 ; ?>" style="width:36px;"/>
+          <input type="text" name="perpage" id="perpage" value="<?php echo $maxperpage ; ?>" style="width:36px;"/>
           <span class="add-on">条记录</span>
           <button class="btn btn-primary" type="submit"><i class="fa fa-search"></i> 搜 索</button>
         </div>
@@ -69,28 +69,37 @@ $(function(){
               <th style="width:50px;">用户ID</th>
               <th >路径</th>
               <th style="width:80px;">文件大小</th>
-              <th class="span2">上传时间</th>
               <th>操作</th>
             </tr>
           </thead>
           <tbody>
             <?php for($i=0;$i<$_count;$i++){
-        	$filepath	= $rs[$i]['path'].'/'.$rs[$i]['filename'].'.'.$rs[$i]['ext'];
-        	$href		= iFS::fp($filepath,"+http");
-    	?>
+              $filepath = $rs[$i]['path'].$rs[$i]['filename'].'.'.$rs[$i]['ext'];
+              $href     = iFS::fp($filepath,"+http");
+            ?>
             <tr id="tr<?php echo $rs[$i]['id'] ; ?>">
               <td><input type="checkbox" name="id[]" value="<?php echo $rs[$i]['id'] ; ?>" /></td>
               <td><?php echo $rs[$i]['id'] ; ?></td>
               <td><?php echo $rs[$i]['indexid'] ; ?></td>
               <td><?php echo $rs[$i]['userid'] ; ?></td>
               <td><a href="<?php echo $href; ?>" title="点击查看" target="_blank"><?php echo iFS::icon($filepath,ACP_UI);?></a> <a class="tip" title="<?php echo $filepath ; ?><hr />源文件名:<?php echo $rs[$i]['ofilename'] ; ?>"><?php echo $rs[$i]['filename'].'.'.$rs[$i]['ext']; ?></a></td>
-              <td><?php echo iFS::sizeUnit($rs[$i]['size']);?></td>
-              <td><?php echo get_date($rs[$i]['time'],'Y-m-d H:i');?></td>
-              <td><a class="btn btn-small" href="<?php echo $href; ?>" data-toggle="modal" title="查看"><i class="fa fa-eye"></i> 查看</a>
+              <td><?php echo iFS::sizeUnit($rs[$i]['size']);?><br/><?php echo get_date($rs[$i]['time'],'Y-m-d');?></td>
+              <td>
+                <a class="btn btn-small" href="<?php echo $href; ?>" data-toggle="modal" title="查看"><i class="fa fa-eye"></i> 查看</a>
+                <?php if(iACP::MP('FILE.EDIT')){?>
+                <a class="btn btn-small tip" href="<?php echo APP_FURI;?>&do=editpic&from=modal&pic=<?php echo $filepath ; ?>" data-toggle="modal" title="使用美图秀秀编辑图片"><i class="fa fa-edit"></i> 编辑</a>
+                <?php }?>
                 <?php if(strstr($rs[$i]['ofilename'],'http://')){?>
-                <a href="<?php echo APP_FURI; ?>&do=download&id=<?php echo $rs[$i]['id'] ; ?>" class="btn btn-small" title="正常重新下载" target="iPHP_FRAME"><i class="fa fa-download"></i> 下载</a> <a href="<?php echo APP_FURI; ?>&do=download&id=<?php echo $rs[$i]['id'] ; ?>&unwatermark=0" class="btn btn-small" title="重新下载 不添加水印" target="iPHP_FRAME"><i class="fa fa-download"></i> 下载2</a>
-                <?php }  ?>
-                <a href="<?php echo APP_URI; ?>&do=add&from=modal&id=<?php echo $rs[$i]['id'] ; ?>" class="btn btn-small" data-toggle="modal" data-meta='{"width":"500px","height":"300px"}' title="重新上传"><i class="fa fa-upload"></i> 上传</a> <a href="<?php echo APP_FURI; ?>&do=del&id=<?php echo $rs[$i]['id'] ; ?>&indexid=<?php echo $rs[$i]['indexid'] ; ?>" target="iPHP_FRAME" class="del btn btn-small" title='永久删除'  onclick="return confirm('确定要删除?');"/><i class="fa fa-trash-o"></i> 删除</a></td>
+                <a href="<?php echo APP_FURI; ?>&do=download&id=<?php echo $rs[$i]['id'] ; ?>" class="btn btn-small" title="正常重新下载" target="iPHP_FRAME"><i class="fa fa-download"></i> 下载</a>
+                <a href="<?php echo APP_FURI; ?>&do=download&id=<?php echo $rs[$i]['id'] ; ?>&unwatermark=0" class="btn btn-small" title="重新下载 不添加水印" target="iPHP_FRAME"><i class="fa fa-download"></i> 下载2</a>
+                <?php }?>
+                <?php if(iACP::MP('FILE.UPLOAD')){?>
+                <a href="<?php echo APP_URI; ?>&do=add&from=modal&id=<?php echo $rs[$i]['id'] ; ?>" class="btn btn-small" data-toggle="modal" data-meta='{"width":"500px","height":"300px"}' title="重新上传"><i class="fa fa-upload"></i> 上传</a> 
+                <?php }?>
+                <?php if(iACP::MP('FILE.DELETE')){?>
+                <a href="<?php echo APP_FURI; ?>&do=del&id=<?php echo $rs[$i]['id'] ; ?>&indexid=<?php echo $rs[$i]['indexid'] ; ?>" target="iPHP_FRAME" class="del btn btn-small" title='永久删除'  onclick="return confirm('确定要删除?');"/><i class="fa fa-trash-o"></i> 删除</a>
+                <?php }?>
+              </td>
             </tr>
             <?php }  ?>
           </tbody>

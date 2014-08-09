@@ -72,7 +72,7 @@ iCMS.select('st',"<?php echo $_GET['st'] ; ?>");
         <input type="hidden" name="app" value="<?php echo iACP::$app_name;?>" />
         <input type="hidden" name="do" value="<?php echo iACP::$app_do;?>" />
         <div class="input-prepend input-append"> <span class="add-on">每页</span>
-          <input type="text" name="perpage" id="perpage" value="<?php echo $_GET['perpage']?$_GET['perpage']:20 ; ?>" style="width:36px;"/>
+          <input type="text" name="perpage" id="perpage" value="<?php echo $maxperpage ; ?>" style="width:36px;"/>
           <span class="add-on">条记录</span> </div>
         <div class="input-prepend"> <span class="add-on">查找方式</span>
           <select name="st" id="st" class="chosen-select" style="width:120px;">
@@ -131,12 +131,21 @@ iCMS.select('st',"<?php echo $_GET['st'] ; ?>");
               <td><?php echo $rs[$i]['cid'] ; ?></td>
               <td><?php echo $rs[$i]['pid'] ; ?></td>
               <td><?php echo $rs[$i]['rootid'] ; ?></td>
-              <td><input <?php if($rs[$i]['rootid']=="0"){ ?> style="font-weight:bold"<?php } ?> type="text" name="name[<?php echo $rs[$i]['cid'] ; ?>]" value="<?php echo $rs[$i]['name'] ; ?>">
+              <td><input <?php if($rs[$i]['rootid']=="0"){ ?> style="font-weight:bold"<?php } ?> type="text" name="name[<?php echo $rs[$i]['cid'] ; ?>]" value="<?php echo $rs[$i]['name'] ; ?>" class='tip' title='创建者:<?php echo $rs[$i]['creator']; ?><br />创建时间:<?php echo get_date($rs[$i]['createtime']); ?>'>
                 <?php if(!$rs[$i]['status']){ ?>
                 <i class="fa fa-eye-slash" title="隐藏<?php echo $this->name_text;?>"></i>
                 <?php } ?></td>
               <td><?php echo $rs[$i]['count'] ; ?></td>
-              <td><?php echo $this->listbtn($rs[$i]) ; ?> <a href="<?php echo APP_URI; ?>&do=add&rootid=<?php echo $rs[$i]['cid'] ; ?>" class="btn btn-small"><i class="fa fa-plus-square"></i> 添加子<?php echo $this->name_text;?></a> <a href="<?php echo APP_URI; ?>&do=add&cid=<?php echo $rs[$i]['cid'] ; ?>" class="btn btn-small"><i class="fa fa-edit"></i> 编辑</a> <a href="<?php echo APP_FURI; ?>&do=del&cid=<?php echo $rs[$i]['cid'] ; ?>" target="iPHP_FRAME" class="del btn btn-small" title='永久删除'  onclick="return confirm('确定要删除?');"/><i class="fa fa-trash-o"></i> 删除</a></td>
+              <td><?php echo $this->listbtn($rs[$i]) ; ?> 
+                <?php if(iACP::CP($rs[$i]['cid'],'a') ){?>
+                <a href="<?php echo APP_URI; ?>&do=add&rootid=<?php echo $rs[$i]['cid'] ; ?>" class="btn btn-small"><i class="fa fa-plus-square"></i> 添加子<?php echo $this->name_text;?></a> 
+                <?php } ?>
+                <?php if(iACP::CP($rs[$i]['cid'],'e') ){?>
+                <a href="<?php echo APP_URI; ?>&do=add&cid=<?php echo $rs[$i]['cid'] ; ?>" class="btn btn-small"><i class="fa fa-edit"></i> 编辑</a> 
+                <?php } ?>
+                <?php if(iACP::CP($rs[$i]['cid'],'d') ){?>
+                <a href="<?php echo APP_FURI; ?>&do=del&cid=<?php echo $rs[$i]['cid'] ; ?>" target="iPHP_FRAME" class="del btn btn-small" title='永久删除'  onclick="return confirm('确定要删除?');"/><i class="fa fa-trash-o"></i> 删除</a></td>
+                <?php } ?>
             </tr>
             <?php }  ?>
           </tbody>
@@ -177,7 +186,7 @@ iCMS.select('st',"<?php echo $_GET['st'] ; ?>");
           <div class="input-prepend"> <span class="add-on">请选择目标<?php echo $this->name_text;?></span>
             <select name="tocid" class="span3">
               <option value="0">===顶级<?php echo $this->name_text;?>===</option>
-              <?php echo $this->category->select(0,0,1,'all',true);?>
+              <?php echo $this->select('s',0,0,1,true);?>
             </select>
           </div>
         </div>

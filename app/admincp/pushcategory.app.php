@@ -14,16 +14,16 @@ iACP::app('category','import');
 class pushcategoryApp extends categoryApp {
     function __construct() {
         parent::__construct(iCMS_APP_PUSH);
-        $this->name_text    = "版块";
+        $this->name_text = "版块";
     }
     function do_add(){
         if($this->cid) {
-            iMember::CP($this->cid,'Permission_Denied',APP_URI);
+            iACP::CP($this->cid,'e','page');
             $rs		= iDB::row("SELECT * FROM `#iCMS@__category` WHERE `cid`='$this->cid' LIMIT 1;",ARRAY_A);
             $rootid	= $rs['rootid'];
         }else {
             $rootid=(int)$_GET['rootid'];
-            $rootid && iMember::CP($rootid,'Permission_Denied',APP_URI);
+            $rootid && iACP::CP($rootid,'a','page');;
         }
         if(empty($rs)) {
             $rs=array();
@@ -35,7 +35,7 @@ class pushcategoryApp extends categoryApp {
     function merge($tocid,$cid){
         iDB::query("UPDATE `#iCMS@__push` SET `cid` ='$tocid' WHERE `cid` ='$cid'"); 
     }
-    function updateCount($cid){
+    function update_count($cid){
         $cc = iDB::value("SELECT count(*) FROM `#iCMS@__push` where `cid`='$cid'");
         iDB::query("UPDATE `#iCMS@__category` SET `count` ='$cc' WHERE `cid` ='$cid'");       
     }

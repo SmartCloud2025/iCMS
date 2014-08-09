@@ -3,7 +3,7 @@
  * @copyright 2007-2010, iDreamSoft
  * @license http://www.idreamsoft.com iDreamSoft
  * @author coolmoo <idreamsoft@qq.com>
- * @$Id: account.add.php 179 2013-03-29 03:21:28Z coolmoo $
+ * @$Id: user.add.php 179 2013-03-29 03:21:28Z coolmoo $
  */
 defined('iCMS') OR exit('What are you doing?'); 
 iACP::head();
@@ -22,18 +22,18 @@ $(function(){
   <div class="widget-box">
     <div class="widget-title"> <span class="icon"> <i class="fa fa-user"></i> </span>
       <h5 class="brs"><?php echo empty($this->uid)?'添加':'修改' ; ?>用户</h5>
-      <ul class="nav nav-tabs" id="account-tab">
-        <li class="active"><a href="#account-info" data-toggle="tab"><b>基本信息</b></a></li>
-        <li><a href="#account-power" data-toggle="tab"><b>后台权限</b></a></li>
-        <li><a href="#account-cpower" data-toggle="tab"><b>栏目权限</b></a></li>
+      <ul class="nav nav-tabs" id="user-tab">
+        <li class="active"><a href="#user-info" data-toggle="tab"><b>基本信息</b></a></li>
+        <li><a href="#user-power" data-toggle="tab"><b>后台权限</b></a></li>
+        <li><a href="#user-cpower" data-toggle="tab"><b>栏目权限</b></a></li>
       </ul>
     </div>
     <div class="widget-content nopadding">
-      <form action="<?php echo APP_FURI; ?>&do=save" method="post" class="form-inline" id="iCMS-account" target="iPHP_FRAME">
+      <form action="<?php echo APP_FURI; ?>&do=save" method="post" class="form-inline" id="iCMS-user" target="iPHP_FRAME">
         <input name="uid" type="hidden" value="<?php echo $this->uid; ?>" />
         <input name="type" type="hidden" value="<?php echo $this->type; ?>" />
-        <div id="account-add" class="tab-content">
-          <div id="account-info" class="tab-pane active">
+        <div id="user-add" class="tab-content">
+          <div id="user-info" class="tab-pane active">
             <?php if(iACP::is_superadmin()){ ?>
             <div class="input-prepend"> <span class="add-on">角色</span>
               <select name="gid" id="gid" class="chosen-select" data-placeholder="请选择用户组">

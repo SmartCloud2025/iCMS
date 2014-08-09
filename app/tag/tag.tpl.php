@@ -32,7 +32,7 @@ function tag_list($vars){
     }
 	
 	$maxperpage	= isset($vars['row'])?(int)$vars['row']:"10";
-	$cacheTime	= isset($vars['time'])?(int)$vars['time']:-1;
+	$cache_time	= isset($vars['time'])?(int)$vars['time']:-1;
 	$by			= $vars['by']=='ASC'?"ASC":"DESC";
 	switch ($vars['orderby']) {
 		case "hot":		$orderSQL=" ORDER BY `count` $by";		break;
@@ -54,11 +54,11 @@ function tag_list($vars){
 		$rs			= iCache::get($cacheName);
 	}
 	if(empty($rs)){
-		iPHP::appClass("tag",'break');
+		iPHP::appClass('tag','import');
 		$rs = iDB::all("SELECT * FROM `#iCMS@__tags` WHERE {$where_sql} {$orderSQL} LIMIT {$offset},{$maxperpage}");
 		iDB::debug(1);
 		$rs = tag_array($vars,$rs);
-		$vars['cache'] && iCache::set($cacheName,$rs,$cacheTime);
+		$vars['cache'] && iCache::set($cacheName,$rs,$cache_time);
 	}
 	
 	return $rs;
@@ -81,7 +81,7 @@ function tag_flist($vars){
     }
 	
 	$maxperpage	= isset($vars['row'])?(int)$vars['row']:"10";
-	$cacheTime	= isset($vars['time'])?(int)$vars['time']:-1;
+	$cache_time	= isset($vars['time'])?(int)$vars['time']:-1;
 	$by			= $vars['by']=='ASC'?"ASC":"DESC";
 	switch ($vars['orderby']) {
 		case "hot":		$orderSQL=" ORDER BY `count` $by";		break;
@@ -103,10 +103,10 @@ function tag_flist($vars){
 		$rs			= iCache::get($cacheName);
 	}
 	if(empty($rs)){
-		iPHP::appClass("tag",'break');
+		iPHP::appClass('tag','import');
 		$rs		= iDB::all("SELECT * FROM `#iCMS@__ftags` WHERE {$where_sql} {$orderSQL} LIMIT {$offset},{$maxperpage}");
 		$rs		= tag_array($vars,$rs);
-		$vars['cache'] && iCache::set($cacheName,$rs,$cacheTime);
+		$vars['cache'] && iCache::set($cacheName,$rs,$cache_time);
 	}
 	
 	return $rs;

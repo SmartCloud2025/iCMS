@@ -9,50 +9,32 @@
 * @version 6.0.0
 * @$Id: account.app.php 634 2013-04-03 06:02:53Z coolmoo $
 */
-class accountApp{
+class userApp{
     function __construct() {
-        $this->uid      = (int)$_GET['id'];
-        $this->groupApp = iACP::app('groups',1);
-    }
-
-    function do_job(){
-		require_once iPHP_APP_CORE.'/job.class.php';
-		$job	= new JOB;
-		$job->countPost($this->uid);
-		$month	= $job->month();
-		$pmonth	= $job->month($job->pmonth['start']);
-		$rs			= iDB::row("SELECT * FROM `#iCMS@__members` WHERE `uid`='$this->uid' LIMIT 1;");
-		include iACP::view("account.job");
-    }
-    function do_edit(){
-        $this->uid = iMember::$userid;
-        $this->do_add();
+        $this->uid   = (int)$_GET['id'];
+        $this->group = iACP::app('groups',0);
     }
     function do_add(){
         if($this->uid) {
-            $rs = iDB::row("SELECT * FROM `#iCMS@__members` WHERE `uid`='$this->uid' LIMIT 1;");
-            $rs->info && $rs->info = unserialize($rs->info);
+            $rs = iDB::row("SELECT * FROM `#iCMS@__user` WHERE `uid`='$this->uid' LIMIT 1;");
         }
-        include iACP::view("account.add");
+        include iACP::view("user.add");
     }
+
     function do_iCMS(){
-    	if($_GET['job']){
-    		require_once iPHP_APP_CORE.'/job.class.php';
-    		$job	=new JOB;
-    	}
-    	$sql	= "WHERE 1=1";
-    	//isset($this->type)	&& $sql.=" AND `type`='$this->type'";
-		$_GET['gid'] && $sql.=" AND `gid`='{$_GET['gid']}'";
+        $sql   = "WHERE 1=1";
+        $_GET['gid'] && $sql.=" AND `gid`='{$_GET['gid']}'";        
         $orderby    = $_GET['orderby']?$_GET['orderby']:"uid DESC";
         $maxperpage = $_GET['perpage']>0?(int)$_GET['perpage']:20;
-        $total      = iPHP::total(false,"SELECT count(*) FROM `#iCMS@__members` {$sql}","G");
+        $total      = iPHP::total(false,"SELECT count(*) FROM `#iCMS@__user` {$sql}","G");
         iPHP::pagenav($total,$maxperpage,"个用户");
-        $rs         = iDB::all("SELECT * FROM `#iCMS@__members` {$sql} order by {$orderby} LIMIT ".iPHP::$offset." , {$maxperpage}");
-        $_count		= count($rs);
-    	include iACP::view("account.manage");
+        $rs     = iDB::all("SELECT * FROM `#iCMS@__user` {$sql} order by {$orderby} LIMIT ".iPHP::$offset." , {$maxperpage}");
+        $_count = count($rs);
+        include iACP::view("user.manage");
     }
     function do_save(){
         $uid      = (int)$_POST['uid'];
+        $gid      = (int)$_POST['gid'];
         $gender   = (int)$_POST['sex'];
         $type     = $_POST['type'];
         $username = iS::escapeStr($_POST['uname']);
@@ -60,25 +42,18 @@ class accountApp{
         $realname = iS::escapeStr($_POST['realname']);
         $power    = $_POST['power']?json_encode($_POST['power']):'';
         $cpower   = $_POST['cpower']?json_encode($_POST['cpower']):'';
-        $gid      = 0;
         $info     = array();
-        $info['icq']       = iS::escapeStr($_POST['icq']);
-        $info['home']      = iS::escapeStr($_POST['home']);
+        $info['icq']       = intval($_POST['icq']);
+        $info['home']      = iS::escapeStr(stripslashes($_POST['home']));
         $info['year']      = intval($_POST['year']);
         $info['month']     = intval($_POST['month']);
         $info['day']       = intval($_POST['day']);
-        $info['from']      = iS::escapeStr($_POST['from']);
-        $info['signature'] = iS::escapeStr($_POST['signature']);
+        $info['from']      = iS::escapeStr(stripslashes($_POST['from']));
+        $info['signature'] = iS::escapeStr(stripslashes($_POST['signature']));
         $info              = addslashes(serialize($info));
         $_POST['pwd'] && $password = md5($_POST['pwd']);
         
         $username OR iPHP::alert('账号不能为空');
-
-        if(iACP::is_superadmin()){
-            $gid = (int)$_POST['gid'];
-        }else{
-            isset($_POST['gid']) && iPHP::alert('您没有权限更改角色');
-        }
 
         if(empty($uid)) {
             iDB::value("SELECT `uid` FROM `#iCMS@__members` where `username` ='$username' LIMIT 1") && iPHP::alert('该账号已经存在');
@@ -119,8 +94,7 @@ class accountApp{
     function do_del($uid = null,$dialog=true){
     	$uid===null && $uid=$this->uid;
 		$uid OR iPHP::alert('请选择要删除的用户');
-		$uid=="1" && iPHP::alert('不能删除超级管理员');
-		iDB::query("DELETE FROM `#iCMS@__members` WHERE `uid` = '$uid'");
+		iDB::query("DELETE FROM `#iCMS@__user` WHERE `uid` = '$uid'");
 		$dialog && iPHP::success('用户删除完成','js:parent.$("#tr'.$uid.'").remove();');
     }
 }

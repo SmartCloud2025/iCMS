@@ -150,7 +150,7 @@ VALUES ('$uid', '$cid', '$tcid', '0', '$tkey', '$tag', '', '', '', '', '', '', '
 	    		$idA[]=$TL['iid'];
 	    	}
 	    	// if($idA){
-		    // 	iPHP::appClass("model","break");
+		    // 	iPHP::appClass('model',"break");
 		    // 	$table	= model::table(TAG_APPID);
 	    	// 	$ids	= implode(',',$idA);
 		    // 	iDB::query("UPDATE `#iCMS@__$table` SET `tags`=REPLACE(tags, '$tagA->name,',''),`tags`=REPLACE(tags, ',$tagA->name','') WHERE id IN($ids)");

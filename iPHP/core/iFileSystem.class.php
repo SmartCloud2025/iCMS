@@ -387,7 +387,7 @@ class iFS {
             iPHP::LoadClass('Pic');
             iPic::watermark($FileRootPath);
         }
-        $fid = self::insFileData(array('filename' => $file_md5, 'ofilename' => '', 'path' => $FileDir, 'ext' => $FileExt, 'size' => $FileSize), 3);
+        $fid = self::insFileData(array('filename' => $FileName, 'ofilename' => '', 'path' => $FileDir, 'ext' => $FileExt, 'size' => $FileSize), 3);
         return array('code' =>1,'fid' => $fid, 'md5' => $file_md5, 'size' => $FileSize, 'oname' => '', 'name' => $FileName, 'fname' => $FileName . "." . $FileExt, 'dir' => $FileDir, 'ext' => $FileExt, 'RootPath' => $FileRootPath, 'path' => $FilePath, 'dirRootPath' => $RootPath);
     }
     public static function base64ToFile($base64Data,$udir='',$FileExt='png'){

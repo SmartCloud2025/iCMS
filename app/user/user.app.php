@@ -6,7 +6,7 @@
  * @author coolmoo <idreamsoft@qq.com>
  * @$Id: user.app.php 2353 2014-02-13 04:04:49Z coolmoo $
  */
-iPHP::appClass("user","break");
+iPHP::appClass('user',"import");
 class userApp {
     public $methods = array('iCMS','home','article','publish','manage','profile','data','check','follow','login','logout','register','agreement');
     public $openid  = null;

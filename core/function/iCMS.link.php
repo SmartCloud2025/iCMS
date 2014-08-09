@@ -7,7 +7,7 @@
  */
 function iCMS_link($vars){
 	$limit 		= isset($vars['row'])?(int)$vars['row']:"100";
-	$cacheTime 	= isset($vars['time'])?(int)$vars['time']:-1;
+	$cache_time 	= isset($vars['time'])?(int)$vars['time']:-1;
 	
 	switch($vars['type']){
 		case "text":$sql[]=" `logo`='' ";break;
@@ -25,7 +25,7 @@ function iCMS_link($vars){
 	}
 	if(empty($rs)){
 		$rs=iDB::all("SELECT * FROM `#iCMS@__links`{$where} ORDER BY orderNum ASC,id ASC LIMIT 0 , $limit");
-		$iscache && iCache::set($cacheName,$rs,$cacheTime);
+		$iscache && iCache::set($cacheName,$rs,$cache_time);
 	}
 	return $rs;
 }
