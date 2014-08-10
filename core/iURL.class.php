@@ -73,10 +73,8 @@ class iURL {
     }
     public static function get($uri,$a=array()) {
 
-        //var_dump(self::$config);
-
-        $i       = new stdClass();
-        $sURL    = self::$config['URL'];
+        $i        = new stdClass();
+        $sURL     = self::$config['URL'];
         $html_dir = self::$config['html_dir'];
         switch($uri) {
             case 'http':
@@ -99,29 +97,29 @@ class iURL {
                 $a      = array_merge_recursive((array)$a[0],(array)$a[1],(array)$a[1]);
                 break;
             case 'tag':
-                $html_dir= self::$config['tag_dir'];
-                $sURL	= self::$config['tag_url'];
-                $i->href= $a[0]['url'];
-                $a      = array_merge_recursive((array)$a[0],(array)$a[1],(array)$a[2]);
+                $html_dir = self::$config['tag_dir'];
+                $sURL     = self::$config['tag_url'];
+                $i->href  = $a[0]['url'];
+                $a        = array_merge_recursive((array)$a[0],(array)$a[1],(array)$a[2]);
                 self::ma('URL.Rule','urlRule',$a);
-                $url 	= $a['URL.Rule'];
+                $url = $a['URL.Rule'];
                 $url OR $url = self::$config['tag_rule'];
                 break;
-             default:$url	= $a['urlRule'];
+             default:$url = $a['urlRule'];
         }
         self::ma('html.ext','html_ext',$a);
+
+//var_dump($a);
 
         if($i->href) return $i;
 
         if(strstr($url,'{PHP}')===false) {
         	self::$uriArray	= $a;
-//        	strstr($url,'{') && $url = preg_replace_callback ("/\{(.*?)\}/",'self::irule($uri,"\\1",$a)',$url);
-//        	strstr($url,'{') && $url = preg_replace_callback ("/\{(.*?)\}/",'self::irule',$url);
         	strstr($url,'{') && $url = preg_replace_callback ("/\{(.*?)\}/",'__iurl_rule__',$url);
 //var_dump($url);
             $i->path    = iFS::path(iPATH.$html_dir.$url);
-            $i->href    = iFS::path($sURL.$url);
-// var_dump($i);
+            $i->href    = iFS::path($sURL.'/'.$url);
+//var_dump($i);
 			$pathA 		= pathinfo($i->path);
 //var_dump($pathA);
 
@@ -200,7 +198,7 @@ class iURL {
 	            	$i->pageurl	= $url.'&p={P}';
 					strstr($i->pageurl,'http://') OR $i->pageurl = rtrim($sURL,'/').'/'.$i->pageurl;
 	            break;
-	            case 'tag': 	$url.='id='.$a['id'];break;
+	            case 'tag':$url.='id='.$a['id'];break;
 	        }
 			strstr($url,'http://') OR $url	= rtrim($sURL,'/').'/'.$url;
             $i->href	= $url;

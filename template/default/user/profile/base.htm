@@ -6,14 +6,14 @@
 	<div class="profile_title"> <span>基本资料</span> </div>
 	<dl>
 		<dd>昵称：</dd>
-		<dt class="unick"> <input name="unick" type="text"<!--{if $userdata.unickEdit}--> disabled<!--{/if}--> value="<!--{$me.nickname}-->">
+		<dt class="unick"> <input name="nickname" type="text"<!--{if $userdata.unickEdit}--> disabled<!--{/if}--> value="<!--{$me.nickname}-->">
 		<div class="iner" style="color:#666;"><span>*</span>昵称只能修改一次哦^_^</div>
 		</dt>
 		<dd>性别：</dd>
 		<dt class="sex" style="line-height: 30px;">
-		<input checked="" name="sex" value="2" type="radio" style="margin:0">
+		<input checked="" name="gender" value="2" type="radio" style="margin:0">
 		女
-		<input  name="sex" type="radio" value="1">
+		<input  name="gender" type="radio" value="1">
 		男 </dt>
 		<dd>邮箱：</dd>
 		<dt style="padding-top:5px;"><!--{$me.username}--></dt>
@@ -199,7 +199,7 @@
 $(function(){
 	initPlace('<!--{$userdata.city}-->','<!--{$userdata.province}-->');
 	<!--{if $me.gender}-->
-	$("[name=sex][value=<!--{$me.gender}-->]").attr("checked",true);
+	$("[name=gender][value=<!--{$me.gender}-->]").attr("checked",true);
 	<!--{/if}-->
 	<!--{if $userdata.isSeeFigure}-->
 	$("#isSeeFigure").val("<!--{$userdata.isSeeFigure}-->");

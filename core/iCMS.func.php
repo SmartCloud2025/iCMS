@@ -16,7 +16,7 @@ function small($sfp,$w='',$h='',$scale=true) {
         return $sfp;
     
     if(empty($sfp)){
-        $twh    =iCMS::$config["FS"]['url'].'/1x1.gif';
+        $twh    =iCMS_FS_URL.'1x1.gif';
     }else{
         $twh    = $sfp.'_'.$w.'x'.$h.'.jpg';
     }
@@ -75,21 +75,15 @@ function get_pic($src,$size=0,$thumb=0){
 }
 function get_user($uid,$type,$size=0){
     switch($type){
-        case 'avatar':
-            return rtrim(iCMS::$config['FS']['url'],'/').'/'.get_avatar($uid,$size);
-        break;
-        case 'url':
-            $url = iPHP::router(array('/{uid}/',$uid),iCMS_REWRITE);
-            return rtrim(iCMS::$config['router']['user_url'],'/').$url;
-        break;
+        case 'avatar':return iCMS_FS_URL.get_avatar($uid,$size);break;
+        case 'url':   return iPHP::router(array('/{uid}/',$uid),iCMS_REWRITE);break;
         case 'urls':
-            $url = rtrim(iCMS::$config['router']['user_url'],'/');
             return array(
-                'home'      => iPHP::router(array('/{uid}/',$uid,$url),iCMS_REWRITE),
-                'favorite'  => iPHP::router(array('/{uid}/favorite/',$uid,$url),iCMS_REWRITE),
-                'share'     => iPHP::router(array('/{uid}/share/',$uid,$url),iCMS_REWRITE),
-                'follower'  => iPHP::router(array('/{uid}/follower/',$uid,$url),iCMS_REWRITE),
-                'following' => iPHP::router(array('/{uid}/following/',$uid,$url),iCMS_REWRITE),
+                'home'      => iPHP::router(array('/{uid}/',$uid),iCMS_REWRITE),
+                'favorite'  => iPHP::router(array('/{uid}/favorite/',$uid),iCMS_REWRITE),
+                'share'     => iPHP::router(array('/{uid}/share/',$uid),iCMS_REWRITE),
+                'follower'  => iPHP::router(array('/{uid}/follower/',$uid),iCMS_REWRITE),
+                'following' => iPHP::router(array('/{uid}/following/',$uid),iCMS_REWRITE),
             );
         break;
 

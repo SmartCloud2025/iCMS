@@ -7,6 +7,7 @@
  * @$Id: article.tpl.php 2408 2014-04-30 18:58:23Z coolmoo $
  */
 defined('iPHP') OR exit('What are you doing?');
+
 iPHP::appClass('tag','import');
 function article_list($vars){
     if($vars['loop']==="rel" && empty($vars['id'])){

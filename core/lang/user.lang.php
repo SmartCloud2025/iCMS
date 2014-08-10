@@ -9,7 +9,8 @@
 * @version 1.0.1
 * $Id: define.php 2393 2014-04-09 13:14:23Z coolmoo $
 */
-defined('iPHP') OR exit('Access Denied');
+defined('iPHP') OR exit('What are you doing?');
+
 return array(
 	'profile'=>array(
 		'success'     =>'修改完成！',
@@ -18,6 +19,8 @@ return array(
 		'slogan'      =>"随便写点什么，让大家了解你吧。",
 		'pskin'       =>"请选择",
 		'phair'       =>"请选择",
+		'unickEdit'	  =>"你已经修改过昵称了！",
+		'nickname'	  =>"昵称已存在,请换个再试试。",
 	),
 	'follow'=>array(
 		'success'=>'已关注！',

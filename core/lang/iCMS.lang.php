@@ -9,7 +9,8 @@
 * @version 1.0.1
 * $Id: define.php 2393 2014-04-09 13:14:23Z coolmoo $
 */
-defined('iPHP') OR exit('Access Denied');
+defined('iPHP') OR exit('What are you doing?');
+
 return array(
 	'error'=>'哎呀呀呀！非常抱歉,居然出错了！<br />请稍候再试试,我们的程序猿正在努力修复中...',
 	'page'=>array(

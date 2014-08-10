@@ -11,16 +11,28 @@
 */
 class userApp{
     function __construct() {
-        $this->uid   = (int)$_GET['id'];
-        $this->group = iACP::app('groups',0);
+        $this->uid      = (int)$_GET['id'];
+        $this->groupApp = iACP::app('groups',0);
     }
     function do_add(){
         if($this->uid) {
             $rs = iDB::row("SELECT * FROM `#iCMS@__user` WHERE `uid`='$this->uid' LIMIT 1;");
+            if($rs){
+                $userdata = iDB::row("SELECT * FROM `#iCMS@__user_data` WHERE `uid`='$this->uid' LIMIT 1;");
+            }
         }
         include iACP::view("user.add");
     }
-
+    function do_login(){
+        if($this->uid) {
+            $user = iDB::row("SELECT * FROM `#iCMS@__user` WHERE `uid`='$this->uid' LIMIT 1;",ARRAY_A);
+            $authash = '#=(iCMS@'.iPHP_KEY.')=#';
+            iPHP::set_cookie('AUTH_INFO',authcode((int)$user['uid'].$authash.$user['username'].$authash.$user['password'],'ENCODE'));
+            iPHP::set_cookie('userid',(int)$user['uid']);
+            iPHP::set_cookie('nickname',str_replace('"','',json_encode($user['nickname'])));
+            iPHP::gotourl('../index.php');
+        }
+    }
     function do_iCMS(){
         $sql   = "WHERE 1=1";
         $_GET['gid'] && $sql.=" AND `gid`='{$_GET['gid']}'";        

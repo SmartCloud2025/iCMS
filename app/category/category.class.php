@@ -17,10 +17,10 @@ class category {
         $rs          = iDB::all("SELECT * FROM `#iCMS@__category` {$sql} ORDER BY `orderNum` , `cid` ASC",ARRAY_A);
         foreach((array)$rs AS $C) {
 			$C['iurl']	= iURL::get('category',$C);
-            $this->category[$C['cid']] =
             $this->_array[$C['rootid']][$C['cid']] = $C;
             $this->rootid[$C['rootid']][$C['cid']] = $C['cid'];
-            $this->parent[$C['cid']]=$C['rootid'];
+            $this->category[$C['cid']] = $C;
+            $this->parent[$C['cid']]   = $C['rootid'];
         }
     }
     function cache($one=false,$appid=null) {
@@ -29,13 +29,13 @@ class category {
 	        $C = $this->C($C);
 			$one && $this->cahce_one($C);
 
-    		$rootid[$C['rootid']][$C['cid']] = $C['cid'];
-    		$parent[$C['cid']]	= $C['rootid'];
-    		$dir2cid[$C['dir']]	= $C['cid'];
-    		$C['status'] OR $hidden[]	=$C['cid'];
-    		$appidArray[$C['appid']]=$C['appid'];
-    		$cache[$C['appid']][$C['cid']]=$C;
-    		$array[$C['appid']][$C['rootid']][$C['cid']]=$C;
+            $appidArray[$C['appid']] = $C['appid'];
+            $parent[$C['cid']]       = $C['rootid'];
+            $dir2cid[$C['dir']]      = $C['cid'];
+            $rootid[$C['rootid']][$C['cid']] = $C['cid'];
+            $C['status'] OR $hidden[]        = $C['cid'];
+            $cache[$C['appid']][$C['cid']]   = $C;
+            $array[$C['appid']][$C['rootid']][$C['cid']] = $C;
     	}
     	if($appid===null){
 	    	foreach($appidArray AS $_appid) {
@@ -48,7 +48,7 @@ class category {
     	}
         iCache::set('iCMS/category/rootid',	$rootid,0);
         iCache::set('iCMS/category/parent',	$parent,0);
-        iCache::set('iCMS/category/dir2cid',	$dir2cid,0);
+        iCache::set('iCMS/category/dir2cid',$dir2cid,0);
         iCache::set('iCMS/category/hidden',	$hidden,0);
     }
     function cahce_one($C=null){

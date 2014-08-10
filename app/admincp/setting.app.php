@@ -13,27 +13,34 @@ class settingApp{
     function __construct() {
     	$this->apps	= array('index','article','tag','search','usercp','category','comment');
 		foreach (glob(iPHP_APP_DIR."/*/*.app.php") as $filename) {
-			$path_parts = pathinfo($filename);
-			$dirname	= str_replace(iPHP_APP_DIR.'/','',$path_parts['dirname']);
+            $path_parts = pathinfo($filename);
+            $dirname    = str_replace(iPHP_APP_DIR.'/','',$path_parts['dirname']);
 			if (!in_array($dirname,array('admincp','usercp'))) {
-				$app	= str_replace('.app','',$path_parts['filename']);
-				if (!in_array($app,$this->apps)){
-					array_push($this->apps,$app);
-				}
+                $app = str_replace('.app','',$path_parts['filename']);
+				in_array($app,$this->apps) OR array_push($this->apps,$app);
 			}
 		}
     }
     function do_iCMS(){
     	$config	= iACP::getConfig(0);
     	$config['site']['indexName'] OR $config['site']['indexName'] = 'index';
-        $redis    = extension_loaded('redis');
+        //$redis    = extension_loaded('redis');
         $memcache = extension_loaded('memcache');
     	include iACP::view("setting");
     }
     function do_save(){
-    	$config		= iS::escapeStr($_POST['config']);
+        $config = iS::escapeStr($_POST['config']);
 		iFS::filterExt($config['router']['html_ext'],true) OR iPHP::alert('网站URL设置 > 文件后缀 设置不合法!');
-    	$config['apps']	= $this->apps;
+        
+        $config['router']['URL']        = trim($config['router']['URL'],'/');
+        $config['router']['DIR']        = trim($config['router']['DIR'],'/').'/';
+        $config['router']['public_url'] = trim($config['router']['public_url'],'/');
+        $config['router']['user_url']   = trim($config['router']['user_url'],'/');
+        $config['router']['tag_url']    = trim($config['router']['tag_url'],'/');
+        $config['router']['tag_dir']    = trim($config['router']['tag_dir'],'/');
+        $config['FS']['url']            = trim($config['FS']['url'],'/').'/';
+
+        $config['apps']	= $this->apps;
     	foreach($config AS $n=>$v){
     		iACP::setConfig($v,$n,0);
     	}

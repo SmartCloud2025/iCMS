@@ -11,6 +11,7 @@
  * @$Id: admincp.class.php 2361 2014-02-22 01:52:39Z coolmoo $
  */
 defined('iPHP') OR exit('What are you doing?');
+
 define('__ADMINCP__',	__SELF__ . '?app');
 define('ACP_PATH',		iPHP_APP_DIR . '/admincp');
 define('ACP_DIR',		'app/admincp');
@@ -152,6 +153,7 @@ class iACP {
 
         self::$menu->power = (array)iMember::$mpower;
         if($p==='__MID__'){
+            $rt1 = $rt2 = $rt3 = true;
             self::$menu->rootid   && $rt1 = self::$menu->check_power(self::$menu->rootid);
             self::$menu->parentid && $rt2 = self::$menu->check_power(self::$menu->parentid);
             self::$menu->do_mid   && $rt3 = self::$menu->check_power(self::$menu->do_mid);

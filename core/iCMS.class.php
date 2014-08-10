@@ -36,31 +36,34 @@ class iCMS {
         iPHP_DEBUG      && iDB::$show_errors = true;
         iPHP_TPL_DEBUG  && iPHP::clear_compiled_tpl();
         
-        define('iCMS_PUBLIC_URL', self::$config['router']['public_url']);
-        define('iCMS_URL', self::$config['router']['URL']);
-        define('iCMS_REWRITE', self::$config['app']['rewrite']);
-        define('iCMS_API', iCMS_PUBLIC_URL.'/api.php');
+        define('iCMS_DIR',       self::$config['router']['DIR']);
+        define('iCMS_URL',       self::$config['router']['URL']);
+        define('iCMS_PUBLIC_URL',self::$config['router']['public_url']);
+        define('iCMS_USER_URL',  self::$config['router']['user_url']);
+        define('iCMS_FS_URL',    self::$config['FS']['url']);
+        define('iCMS_REWRITE',   self::$config['app']['rewrite']);
+        define('iCMS_API',       iCMS_PUBLIC_URL.'/api.php');
+
         self::$apps = self::$config['apps'];
         self::assign_site();
 	}
     public static function assign_site(){
-        $router = self::$config['router'];
         iPHP::assign('site',array(
             "title"       => self::$config['site']['name'],
             "seotitle"    => self::$config['site']['seotitle'],
             "keywords"    => self::$config['site']['keywords'],
             "description" => self::$config['site']['description'],
             "icp"         => self::$config['site']['icp'],
-            'url'         => $router['URL'],
+            '404'         => self::$config['router']['404'],
+            'url'         => iCMS_URL,
             "tpl"         => iPHP_TPL_DEFAULT,
-            '404'         => $router['404'],
             'urls'        => array(
+                    "public" => iCMS_PUBLIC_URL,
+                    "user"   => iCMS_USER_URL,
+                    "res"    => iCMS_FS_URL,
                     "ui"     => iCMS_PUBLIC_URL.'/ui',
                     "lib"    => iCMS_PUBLIC_URL.'/lib',
-                    "public" => iCMS_PUBLIC_URL,
-                    "user"   => $router['user_url'],
-                    "avatar" => rtrim(self::$config['FS']['url'],'/').'/avatar/',
-                    "res"    => self::$config['FS']['url'],
+                    "avatar" => iCMS_FS_URL.'avatar/',
 			)
 		));
         iPHP::$dialogTitle  = self::$config['site']['name'];
@@ -106,6 +109,8 @@ class iCMS {
                 'method' => self::$app_method
             ),            
         );
+        define('iCMS_API_URL', iCMS_API.'?app='.self::$app_name);
+        
         iPHP::$iTPL->_iTPL_VARS = self::$app_vars;
         self::$app = iPHP::app($app);
 		if(self::$app_do && self::$app->methods){

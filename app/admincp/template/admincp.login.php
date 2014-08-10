@@ -23,7 +23,7 @@ defined('iCMS') OR exit('What are you doing?');
 <script type="text/javascript" src="<?php echo ACP_UI;?>/jquery/jquery-1.11.0.min.js"></script>
 <style>
 body { background-color:#f8f8f8;}
-.iCMS-login { margin: 240px auto 0; width:720px; }
+.iCMS-login {margin: auto;width: 720px;height: 150px;position: absolute;top: 30%;left: 22%;}
 .btn { -webkit-box-shadow: none !important; -moz-box-shadow: none !important; box-shadow: none !important; background-image: none !important; }
 .info { float:left; width:360px; }
 .login { margin-left:380px; }
@@ -82,7 +82,7 @@ $(function(){
         </div>
         <div class="control-group">
           <div class="controls">
-            <button class="btn btn-primary" type="submit"><i class="icon-ok icon-white"></i> 登 陆</button>
+            <button class="btn btn-large btn-primary" type="submit"><i class="icon-ok icon-white"></i> 登 陆</button>
           </div>
         </div>
       </form>

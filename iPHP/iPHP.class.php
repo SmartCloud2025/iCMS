@@ -58,37 +58,41 @@ class iPHP{
         @ini_set('date.timezone',$timezone);
         function_exists('date_default_timezone_set') && @date_default_timezone_set($timezone);
 
-        self::set_tpl_default($config);
+        self::multiple_device($config);
         return $config;
 	}
-	private static function set_tpl_default($config){
-		$template    = $config['template'];
-		$device_name = 'pc';
-		$def_tpl     = $template['pc']['tpl'];				
-		$def_domain  = $template['pc']['domain'];				
+	private static function multiple_device(&$config){
+		$template = $config['template'];
 		foreach ((array)$template['device'] as $key => $device) {
-			$has_tpl = self::__tpl_agent($device['ua']);
+			$has_tpl = self::device_agent($device['ua']);
         	if($device['tpl'] && $has_tpl){
 				$device_name = $device['name'];
 				$def_tpl     = $device['tpl'];
-				$def_domain  = $device['domain'];				
+				$def_domain  = $device['domain'];
         		break;
         	}
 		}
 		if(empty($def_tpl)){
-			if(self::__tpl_agent($template['mobile']['agent'])){
+			if(self::device_agent($template['mobile']['agent'])){
 				$device_name = 'mobile';
 				$def_tpl     = $template['mobile']['tpl'];
 				$def_domain  = $template['mobile']['domain'];
 			}
 		}
+		if(empty($def_tpl)){
+			$device_name = 'pc';
+			$def_tpl     = $template['pc']['tpl'];				
+			$def_domain  = false;
+		}
         define('iPHP_TPL_DEFAULT',$def_tpl);
-        define('iPHP_TPL_DOMAIN',$def_domain);
-        //var_dump(iPHP_TPL_DEFAULT,iPHP_TPL_DOMAIN);
+        if($def_domain){
+			$_router_url      = $config['router']['URL'];
+			$config['router'] = str_replace($_router_url, $def_domain, $config['router']);
+        }
 	}
-	private static function __tpl_agent($user_agent){
-		$user_agent = str_replace(',','|',$user_agent);
-		return ($user_agent && preg_match('/'.preg_quote($user_agent).'/i',$_SERVER["HTTP_USER_AGENT"]));
+	private static function device_agent($user_agent){
+		$user_agent = str_replace(',','|',preg_quote($user_agent));
+		return ($user_agent && preg_match('/'.$user_agent.'/i',$_SERVER["HTTP_USER_AGENT"]));
 	}
 	public static function iTemplate(){
         $iTPL                    = new iTemplate();
@@ -438,7 +442,7 @@ class iPHP{
     	list($label,$icon,$content)= explode(':#:',$info);
     	$msg = '<div class="iPHP-msg"><span class="label label-'.$label.'">';
     	$icon && $msg.= '<i class="fa fa-'.$icon.'"></i> ';
-    	if(preg_match('/\w+:\w+/i', $content)){
+    	if(preg_match('/([a-zA-Z]+):([a-zA-Z]+)/i', $content)){
     		$lang = self::lang($content);
     		$lang && $content = $lang;
     	}

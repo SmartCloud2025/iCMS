@@ -49,13 +49,13 @@ function set_select(vars,el){
   </div>
   <div class="clearfloat mb10"></div>
   <div class="input-prepend input-append">
-    <span class="add-on">全局权限</span>
+    <span class="add-on"><i class="fa fa-cog"></i> 全局权限</span>
     <span class="add-on">::</span>
     <span class="add-on"><input type="checkbox" name="power[]" value="ADMINCP" /> 允许登陆后台</span>
   </div>
   <div class="clearfloat mb10"></div>
   <div class="input-prepend input-append">
-    <span class="add-on">文章权限</span>
+    <span class="add-on"><i class="fa fa-list-alt"></i> 文章权限</span>
     <span class="add-on">::</span>
     <span class="add-on"><input type="checkbox" name="power[]" value="ARTICLE.VIEW" /> 查看所有</span>
     <span class="add-on"><input type="checkbox" name="power[]" value="ARTICLE.EDIT" /> 编辑所有</span>
@@ -63,7 +63,7 @@ function set_select(vars,el){
   </div>
   <div class="clearfloat mb10"></div>
   <div class="input-prepend input-append">
-    <span class="add-on">文件权限</span>
+    <span class="add-on"><i class="fa fa-folder"></i> 文件权限</span>
     <span class="add-on">::</span>
     <span class="add-on"><input type="checkbox" name="power[]" value="FILE.UPLOAD" /> 上传</span>
     <span class="add-on"><input type="checkbox" name="power[]" value="FILE.MKDIR" /> 创建目录</span>
@@ -87,15 +87,16 @@ function set_select(vars,el){
   </div>
   <div class="clearfloat mb10"></div>
   <div class="input-prepend input-append">
-    <span class="add-on">全局权限</span>
+    <span class="add-on"><i class="fa fa-cog"></i> 全局权限</span>
     <span class="add-on">::</span>
     <span class="add-on">允许添加顶级栏目</span>
     <span class="add-on"><input type="checkbox" name="cpower[]" value="0:a" /></span>
   </div>
   <div class="clearfloat mb10"></div>
+  <span class="label label-important">注:只有文章类型的栏目才有内容权限</span>
   <div id="cpower_treecontrol"> <a style="display:none;"></a> <a style="display:none;"></a> <a class="btn btn-mini btn-info" href="#">展开/收缩</a></div>
   <ul id="cpower_tree">
-    <?php echo iACP::app('category')->power_tree();?>
+    <?php echo iACP::app('category','all')->power_tree();?>
   </ul>
 </div>
         

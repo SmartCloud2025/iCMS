@@ -14,10 +14,9 @@ function user_category($vars=null){
 	$whereSQL = " WHERE `uid`='".$vars['userid']."'";
 	$rs       = iDB::all("SELECT * FROM `#iCMS@__user_category`{$whereSQL} LIMIT $row");
 	$_count   = count($rs);
-	iDB::debug();
-	$url = rtrim(iCMS::$config['router']['user_url'],'/');
+	//iDB::debug();
 	for ($i=0;$i<$_count;$i++){
-		$rs[$i]['url']	= $url.iPHP::router(array('/{uid}/{cid}/',array($rs[$i]['uid'],$rs[$i]['cid'])),iCMS_REWRITE);
+		$rs[$i]['url']	= iPHP::router(array('/{uid}/{cid}/',array($rs[$i]['uid'],$rs[$i]['cid'])),iCMS_REWRITE);
 	}
 	//var_dump($rs);
 	return $rs;
@@ -31,7 +30,7 @@ function user_follow($vars=null){
 	}
 	$rs       = iDB::all("SELECT * FROM `#iCMS@__user_follow`{$whereSQL} LIMIT $row");
 	$_count   = count($rs);
-	iDB::debug();
+	//iDB::debug();
 	for ($i=0;$i<$_count;$i++){
 		if($vars['fuid']){
 			$rs[$i]['avatar'] = get_user($rs[$i]['uid'],'avatar');

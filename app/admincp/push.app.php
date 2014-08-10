@@ -157,7 +157,7 @@ class pushApp{
         }
     }
 	function getpic($path){
-		$uri 	= parse_url(iCMS::$config['FS']['url']);
+		$uri 	= parse_url(iCMS_FS_URL);
         $pic	= iS::escapeStr($path);
         
 	    if(strstr(strtolower($pic),$uri['host'])){

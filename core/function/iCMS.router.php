@@ -13,13 +13,7 @@ function iCMS_router($vars){
 	}
 	$ukey = $vars['url'];
 	unset($vars['url'],$vars['app']);
-//	var_dump($vars);
 	$url = iPHP::router($ukey,iCMS_REWRITE);
 	$vars['query'] && $url = buildurl($url,$vars['query']);
-	
-	if($url){
-		echo iCMS_URL.$url;		
-	}else{
-		echo 'javascript:;';
-	}
+	echo $url?$url:'javascript:;';
 }

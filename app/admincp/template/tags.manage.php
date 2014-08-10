@@ -143,7 +143,7 @@ $(function(){
           </div>
         
         <?php if($rs[$i]['ispic']){ ?>
-        <a href="<?php echo APP_URI; ?>&do=preview&id=<?php echo $rs[$i]['id'] ; ?>" data-toggle="modal" title="预览"><img src="<?php echo iCMS::$config['FS']['url'] ; ?>/<?php echo $rs[$i]['pic'] ; ?>" style="height:120px;"/></a>
+        <a href="<?php echo APP_URI; ?>&do=preview&id=<?php echo $rs[$i]['id'] ; ?>" data-toggle="modal" title="预览"><img src="<?php echo iFS::fp($rs[$i]['pic']); ?>" style="height:120px;"/></a>
         <?php } ?>
           </td>
           <td><a href="<?php echo APP_DOURI; ?>&cid=<?php echo $rs[$i]['cid'] ; ?><?php echo $uri ; ?>"><?php echo $C['name'] ; ?></a></td>

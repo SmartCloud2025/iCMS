@@ -501,18 +501,18 @@ class iFS {
         $config = $_config ? $_config : self::$config;
         switch ($m) {
             case '+http':
-                $fp = $config['url'] . '/' . $f;
+                $fp = $config['url']. $f;
                 break;
             case '-http':
-                $fp = str_replace($config['url'] . '/', '', $f);
+                $fp = str_replace($config['url'], '', $f);
                 break;
             case 'http2iPATH':
-                $f = str_replace($config['url'] . '/', '', $f);
+                $f = str_replace($config['url'], '', $f);
                 $fp = self::path_join(iPATH, $config['dir']). $f;
                 break;
             case 'iPATH2http':
                 $f = str_replace(self::path_join(iPATH, $config['dir']),'', $f);
-                $fp = $config['url'] . '/' . $f;
+                $fp = $config['url']. $f;
                 break;
             case '+iPATH':
                 $fp = self::path_join(iPATH, $config['dir']).$f;

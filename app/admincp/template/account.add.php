@@ -11,7 +11,7 @@ iACP::head();
 <script type="text/javascript">
 $(function(){
 	iCMS.select('gid',"<?php echo $rs->gid ; ?>");
-	iCMS.select('sex',"<?php echo $rs->sex ; ?>");
+	iCMS.select('gender',"<?php echo $rs->gender ; ?>");
 	iCMS.select('year',"<?php echo $rs->info['year'] ; ?>");
 	iCMS.select('month',"<?php echo $rs->info['month'] ; ?>");
 	iCMS.select('day',"<?php echo $rs->info['day'] ; ?>");
@@ -61,7 +61,7 @@ $(function(){
             </div>
             <div class="clearfloat mb10"></div>
             <div class="input-prepend"> <span class="add-on">性别</span>
-              <select name="sex" id="sex" class="chosen-select">
+              <select name="gender" id="gender" class="chosen-select">
                 <option value="2">保密</option>
                 <option value="1">男</option>
                 <option value="0">女</option>

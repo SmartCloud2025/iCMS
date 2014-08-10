@@ -9,6 +9,8 @@
 * @version 6.0.0
 * @$Id: tags.app.php 2406 2014-04-28 02:24:46Z coolmoo $
 */
+defined('iPHP') OR exit('What are you doing?');
+
 iPHP::appClass('tag','import');
 class tagsApp{
     function __construct() {

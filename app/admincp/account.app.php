@@ -53,7 +53,7 @@ class accountApp{
     }
     function do_save(){
         $uid      = (int)$_POST['uid'];
-        $gender   = (int)$_POST['sex'];
+        $gender   = (int)$_POST['gender'];
         $type     = $_POST['type'];
         $username = iS::escapeStr($_POST['uname']);
         $nickname = iS::escapeStr($_POST['nickname']);
@@ -80,20 +80,20 @@ class accountApp{
             isset($_POST['gid']) && iPHP::alert('您没有权限更改角色');
         }
 
+        $fields = array('gid','gender','username','nickname','realname','power', 'cpower','info');
+        $data   = compact ($fields);
         if(empty($uid)) {
             iDB::value("SELECT `uid` FROM `#iCMS@__members` where `username` ='$username' LIMIT 1") && iPHP::alert('该账号已经存在');
-            $fields = array('gid', 'username', 'password', 'nickname', 'realname', 'gender', 'info', 'power', 'cpower', 'regtime', 'lastip', 'lastlogintime', 'logintimes', 'post', 'type', 'status');
-            $data   = compact ($fields);
-            $data['regtime']       = time();
-            $data['lastip']        = iPHP::getIp();
-            $data['lastlogintime'] = time();
-            $data['status']        = '1';
+            $_data = compact(array('password','regtime', 'lastip', 'lastlogintime', 'logintimes', 'post', 'type', 'status'));
+            $_data['regtime']       = time();
+            $_data['lastip']        = iPHP::getIp();
+            $_data['lastlogintime'] = time();
+            $_data['status']        = '1';
+            $data = array_merge($data, $_data);
             iDB::insert('members',$data);
             $msg="账号添加完成!";
         }else {
             iDB::value("SELECT `uid` FROM `#iCMS@__members` where `username` ='$username' AND `uid` !='$uid' LIMIT 1") && iPHP::alert('该账号已经存在');
-            $fields = array('gid','gender','username','nickname','realname','power', 'cpower','info');
-            $data   = compact ($fields);
             iDB::update('members', $data, array('uid'=>$uid));
             $password && iDB::query("UPDATE `#iCMS@__members` SET `password`='$password' WHERE `uid` ='".$uid."'");
             $msg="账号修改完成!";

@@ -26,7 +26,7 @@ $navbar OR $bodyClass	= 'iframe ';
 <link rel="stylesheet" href="<?php echo ACP_UI;?>/bootstrap-2.3.1/css/bootstrap-responsive.min.css" type="text/css" />
 <link rel="stylesheet" href="<?php echo ACP_UI;?>/bootstrap-2.3.1/css/datepicker.css" type="text/css" />
 <link rel="stylesheet" href="<?php echo ACP_UI;?>/bootstrap-2.3.1/css/bootstrap-switch.css" type="text/css" />
-<link rel="stylesheet" href="<?php echo ACP_UI;?>/bootstrap-2.3.1/css/font-awesome.min.css" type="text/css" />
+<link rel="stylesheet" href="<?php echo ACP_UI;?>/font-awesome-4.1.0/css/font-awesome.min.css" type="text/css" />
 <link rel="stylesheet" href="<?php echo ACP_UI;?>/jquery/uniform-2.1.2.min.css" type="text/css" />
 <link rel="stylesheet" href="<?php echo ACP_UI;?>/jquery/chosen-1.1.0.min.css" type="text/css" />
 <link rel="stylesheet" href="<?php echo ACP_UI;?>/artDialog-5.0.4/skins/default.css" type="text/css" />
@@ -50,7 +50,7 @@ $navbar OR $bodyClass	= 'iframe ';
 <script type="text/javascript">
 window.iCMS.APP		= "<?php echo __ADMINCP__;?>";
 window.iCMS.UI		= "<?php echo ACP_UI;?>";
-window.iCMS.DIR		= "<?php echo trim(iCMS::$config['router']['DIR'],'/');?>/";
+window.iCMS.DIR		= "<?php echo iCMS_DIR;?>";
 window.iCMS.URL		= "<?php echo iCMS_URL;?>";
 window.iCMS.PUBLIC	= "<?php echo iCMS_PUBLIC_URL;?>";
 window.iCMS.DEFTPL	= "<?php echo iPHP_TPL_DEFAULT;?>";

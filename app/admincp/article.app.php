@@ -9,6 +9,8 @@
 * @version 6.0.0
 * @$Id: article.app.php 2406 2014-04-28 02:24:46Z coolmoo $
 */
+defined('iPHP') OR exit('What are you doing?');
+
 define('TAG_APPID',iCMS_APP_ARTICLE);
 class articleApp{
     function __construct() {
@@ -426,7 +428,11 @@ class articleApp{
         // }
         iPHP::import(iPHP_APP_CORE .'/iMAP.class.php');
         $picdata = '';
+
+        $fields  = array('cid', 'scid', 'orderNum', 'title', 'stitle', 'clink', 'url', 'source', 'author', 'editor', 'userid', 'pic','mpic','spic', 'picdata','keywords', 'tags', 'description', 'related', 'metadata', 'pubdate', 'chapter', 'pid', 'top', 'postype', 'tpl','status', 'isPic');
+        
         if(empty($aid)) {
+            $fields  = array_merge ($fields,array('postime', 'hits', 'comments', 'good', 'bad'));
             $postime = $pubdate;
             $hits    = $good = $bad = $comments = 0;
             $ischapter && $chapter = 1;
@@ -436,9 +442,8 @@ class articleApp{
                 $tagArray = tag::add($tags,$userid,$aid,$this->categoryApp->rootid($cid));
                 $tags = addslashes(json_encode($tagArray));
             }
-            $fields = array('cid','scid','orderNum', 'title', 'stitle', 'clink', 'url', 'source', 'author', 'editor', 'userid', 'pic','mpic','spic', 'picdata', 'keywords', 'tags', 'description', 'related', 'metadata', 'pubdate', 'postime', 'hits', 'comments', 'good', 'bad', 'chapter', 'pid', 'top', 'postype', 'tpl', 'status', 'isPic');
-            $data   = compact ($fields);            
-            $aid    = iDB::insert('article',$data);
+            $data = compact ($fields);            
+            $aid  = iDB::insert('article',$data);
 
             map::init('prop',iCMS_APP_ARTICLE);
             map::add($pid,$aid);
@@ -470,7 +475,6 @@ class articleApp{
 			    $tags = addslashes($tags);
             }
             $picdata = $this->picdata($pic,$mpic,$spic);
-            $fields  = array('cid', 'scid', 'orderNum', 'title', 'stitle', 'clink', 'url', 'source', 'author', 'editor', 'userid', 'pic','mpic','spic', 'picdata','keywords', 'tags', 'description', 'related', 'metadata', 'pubdate', 'chapter', 'pid', 'top', 'postype', 'tpl','status', 'isPic');
             $data    = compact ($fields);
             iDB::update('article', $data, array('id'=>$aid));
 
@@ -597,7 +601,7 @@ class articleApp{
             $filename = substr($filename,0, 32);
             $pic      = iDB::value("SELECT `pic` FROM `#iCMS@__article` WHERE `id` = '$aid'");
             if($autopic && $key==0 && empty($pic)){
-				$uri  = parse_url(iCMS::$config['FS']['url']);
+				$uri  = parse_url(iCMS_FS_URL);
 	            if(strstr(strtolower($value),$uri['host'])){
                    $picdata = $this->picdata($_value);
 	               iDB::query("UPDATE `#iCMS@__article` SET `isPic`='1',`pic` = '$_value',`picdata` = '$picdata' WHERE `id` = '$aid'");

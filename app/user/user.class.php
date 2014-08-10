@@ -9,21 +9,25 @@
 // 	"url"=>"http://s1.ladyband.cn",
 // 	"dir"=>"../pic"
 // );
-define("USER_LOGIN_URL",    iCMS::$app_vars['SAPI'].'&do=login');
-define("USER_CALLBACK_URL", iCMS::$app_vars['SAPI']);
-//define("USER_AVATAR_PATH",  "/data3/home/guang.ladyband.com/pic");
-require_once iPHP_APP_DIR.'/user/msg.class.php';
+defined('iPHP') OR exit('What are you doing?');
+
+
+//require_once iPHP_APP_DIR.'/user/msg.class.php';
+define("USER_CALLBACK_URL", iCMS_API_URL);
+define("USER_LOGIN_URL",    iCMS_API_URL.'&do=login');
+define("USER_AUTHASH",      '#=(iCMS@'.iPHP_KEY.')=#');
+
 class user {
 	public static $cookietime = 0;
 	public static $format     = false;
 
 	public static function check($val,$field='username'){
-		$check = iDB::value("SELECT uid FROM `#iCMS@__user` where `$field`='{$val}'");
-		return empty($check)?true:false;
+		$uid = iDB::value("SELECT uid FROM `#iCMS@__user` where `$field`='{$val}'");
+		return empty($uid)?true:$uid;
 	}
 	public static function follow($uid=0,$fuid=0){
-		$check = iDB::row("SELECT `fuid` FROM `#iCMS@__user_follow` where `uid`='{$uid}' and `fuid`='$fuid' limit 1");
-		return $check?true:false;
+		$fuid = iDB::row("SELECT `fuid` FROM `#iCMS@__user_follow` where `uid`='{$uid}' and `fuid`='$fuid' limit 1");
+		return $fuid?$fuid:false;
 	}
 	public static function openid($uid=0){
 		$pf = array();
@@ -41,7 +45,7 @@ class user {
 		// $t=='wboi' 	&& $f	= 'wbopenid';
 		// $t=='tboi' 	&& $f	= 'tbopenid';
 
-		$user     = iDB::row("SELECT `uid`,`nickname`,`password`,`username` FROM `#iCMS@__user` where `{$f}`='{$v}' and `password`='$pass' limit 1");
+		$user = iDB::row("SELECT `uid`,`nickname`,`password`,`username` FROM `#iCMS@__user` where `{$f}`='{$v}' and `password`='$pass' AND `status`='1' limit 1");
 		if(empty($user)){
 			return false;
 		}
@@ -51,13 +55,12 @@ class user {
 		$user->urls   = get_user($user->uid,'urls');
 		return $user;
 	}
-	public static function setCache($uid){
+	public static function set_cache($uid){
 		$user	= iDB::row("SELECT * FROM `#iCMS@__user` where `uid`='{$uid}'",ARRAY_A);
 		iCache::set('user:'.$user['uid'],$user,0);
 	}
-	public static function set_cookie($a,$p,$user){
-		$authash = '#=(iCMS@'.iPHP_KEY.')=#';
-		iPHP::set_cookie('AUTH_INFO',authcode((int)$user['uid'].$authash.$a.$authash.$p,'ENCODE'),self::$cookietime);
+	public static function set_cookie($username,$password,$user){
+		iPHP::set_cookie('AUTH_INFO',authcode((int)$user['uid'].USER_AUTHASH.$username.USER_AUTHASH.$password,'ENCODE'),self::$cookietime);
 		iPHP::set_cookie('userid',(int)$user['uid'],self::$cookietime);
 		iPHP::set_cookie('nickname',str_replace('"','',json_encode($user['nickname'])),self::$cookietime);
 	}
@@ -71,7 +74,7 @@ class user {
 		if(empty($uid)) return false;
 
 		$user         = iDB::row("SELECT * FROM `#iCMS@__user` where `uid`='".(int)$uid."' limit 1");
-		$user->sex    = $user->gender?'male':'female';
+		$user->gender = $user->gender?'male':'female';
 		$user->avatar = get_user($user->uid,'avatar');
 		$user->urls   = get_user($user->uid,'urls');
 	   	if($unpass) unset($user->password);
@@ -82,11 +85,9 @@ class user {
 		$auth   = iPHP::get_cookie('AUTH_INFO');
 		$userid = (int)iPHP::get_cookie('userid');
 		if($auth && $userid){
-			$authash = '#=(iCMS@'.iPHP_KEY.')=#';
-			list($_userid,$_username,$_password) = explode($authash,authcode($auth));
-
+			list($_userid,$_username,$_password) = explode(USER_AUTHASH,authcode($auth));
 	        if($_userid==$userid){
-				$user	= self::data($userid,false);
+				$user = self::data($userid,false);
 				if($_username==$user->username && $_password==$user->password){
 					$status = true;
 				}

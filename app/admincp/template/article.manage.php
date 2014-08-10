@@ -220,7 +220,7 @@ $(function(){
                   <?php } ?>
                 </div>
                 <?php if($rs[$i]['pic'] && iCMS::$config['publish']['showpic']){ ?>
-                <a href="<?php echo APP_URI; ?>&do=preview&id=<?php echo $rs[$i]['id'] ; ?>" data-toggle="modal" title="预览"><img src="<?php echo iCMS::$config['FS']['url'] ; ?>/<?php echo $rs[$i]['pic'] ; ?>" style="height:120px;"/></a>
+                <a href="<?php echo APP_URI; ?>&do=preview&id=<?php echo $rs[$i]['id'] ; ?>" data-toggle="modal" title="预览"><img src="<?php echo iFS::fp($rs[$i]['pic']); ?>" style="height:120px;"/></a>
                 <?php } ?></td>
               <td><?php if($rs[$i]['pubdate']) echo get_date($rs[$i]['pubdate'],'Y-m-d H:i');?><br />
                 <?php if($rs[$i]['postime']) echo get_date($rs[$i]['postime'],'Y-m-d H:i');?></td>

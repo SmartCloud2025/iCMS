@@ -10,6 +10,7 @@
 * @$Id: patch.app.php 1665 2013-06-21 05:57:53Z coolmoo $
 */
 defined('iPHP') OR exit('What are you doing?');
+
 iPHP::import(iPHP_APP_CORE .'/iPatch.class.php');
 class patchApp{
 	

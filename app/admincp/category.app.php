@@ -9,6 +9,7 @@
 * @version 6.0.0
 * @$Id: category.app.php 2406 2014-04-28 02:24:46Z coolmoo $
 */
+defined('iPHP') OR exit('What are you doing?');
 iPHP::appClass('category','import');
 class categoryApp extends category{
     function __construct($appid = 1) {
@@ -32,23 +33,31 @@ class categoryApp extends category{
             $rootid && iACP::CP($rootid,'a','page');
         }
         if(empty($rs)) {
-            $rs                 = array();
-            $rs['pid']          = '0';
-            $rs['status']       = '1';
-            $rs['isexamine']    = '1';
-            $rs['issend']       = '1';
-            $rs['orderNum']     = $rs['mode'] = '0';
-            $rs['htmlext']      = '.html';
-            $rs['categoryURI']  = 'category';
-            $rs['categoryRule'] = '{CDIR}/index{EXT}';
-            $rs['contentRule']  = '{CDIR}/{YYYY}/{MM}{DD}/{ID}{EXT}';
-            $rs['metadata']     ='';
-            $rs['contentprop']  ='';
+            $rs = array(
+                'pid'          => '0',
+                'status'       => '1',
+                'isexamine'    => '1',
+                'issend'       => '1',
+                'orderNum'     => '0',
+                'mode'         => '0',
+                'htmlext'      => '.html',
+                'categoryURI'  => 'category',
+                'categoryRule' => '{CDIR}/index{EXT}',
+                'contentRule'  => '{CDIR}/{YYYY}/{MM}{DD}/{ID}{EXT}',
+                'indexTPL'     => '{iTPL}/index.htm',
+                'listTPL'      => '{iTPL}/category.index.htm',
+                'contentTPL'   => '{iTPL}/category.list.htm',
+                'metadata'     => '',
+                'contentprop'  => '',
+            );
 	        if($rootid){
-                $rootRs             = iDB::row("SELECT * FROM `#iCMS@__category` WHERE `cid`='".$rootid."' LIMIT 1;",ARRAY_A);
+                $rootRs = iDB::row("SELECT * FROM `#iCMS@__category` WHERE `cid`='".$rootid."' LIMIT 1;",ARRAY_A);
                 $rs['htmlext']      = $rootRs['htmlext'];
                 $rs['categoryRule'] = $rootRs['categoryRule'];
                 $rs['contentRule']  = $rootRs['contentRule'];
+                $rs['indexTPL']     = $rootRs['indexTPL'];
+                $rs['listTPL']      = $rootRs['listTPL'];
+                $rs['contentTPL']   = $rootRs['contentTPL'];
 	        }
         }
         include iACP::view("category.add");
@@ -152,6 +161,8 @@ class categoryApp extends category{
                 $data['userid']     = iMember::$userid;
                 $data['creator']    = iMember::$nickname;
                 $data['createtime'] = time();
+                var_dump($data);
+                exit;
                 $cid = iDB::insert('category',$data);
                 map::add($pid,$cid);
 	            $this->cache(false,$this->appid);
@@ -347,20 +358,27 @@ class categoryApp extends category{
         return $li;
     }
     function power_holder($C) {
-        return '
-<div class="input-prepend input-append li2"><span class="add-on">'.$C['name'].'</span>
-    <span class="add-on"><input type="checkbox" name="cpower[]" value="'.$C['cid'].'"> 查询</span>
-    <span class="add-on tip" title="添加子'.$this->name_text.'的权限"><input type="checkbox" name="cpower[]" value="'.$C['cid'].':a" /> 添加</span>
-    <span class="add-on"><input type="checkbox" name="cpower[]" value="'.$C['cid'].':e" /> 编辑</span>
-    <span class="add-on"><input type="checkbox" name="cpower[]" value="'.$C['cid'].':d" /> 删除</span>
-</div>
-<div class="input-prepend input-append li2"><span class="add-on">内容权限</span>
-    <span class="add-on"><input type="checkbox" class="checkbox" name="cpower[]" value="'.$C['cid'].':cs" /> 查询</span>
-    <span class="add-on"><input type="checkbox" name="cpower[]" value="'.$C['cid'].':ca" /> 添加</span>
-    <span class="add-on"><input type="checkbox" name="cpower[]" value="'.$C['cid'].':ce" /> 编辑</span>
-    <span class="add-on"><input type="checkbox" name="cpower[]" value="'.$C['cid'].':cd" /> 删除</span>
-</div>
-        ';
+        $app_array = array(
+            iCMS_APP_ARTICLE =>'<i class="fa fa-file-text"></i>',
+            iCMS_APP_TAG     =>'<i class="fa fa-tags"></i>',
+            iCMS_APP_PUSH    =>'<i class="fa fa-thumb-tack"></i>',
+        );
+        $div = '
+        <div class="input-prepend input-append li2">
+            <span class="add-on">'.$app_array[$C['appid']].'</span>
+            <span class="add-on">'.$C['name'].'</span>
+            <span class="add-on"><input type="checkbox" name="cpower[]" value="'.$C['cid'].'"> 查询</span>
+            <span class="add-on tip" title="添加子'.$this->name_text.'的权限"><input type="checkbox" name="cpower[]" value="'.$C['cid'].':a" /> 添加</span>
+            <span class="add-on"><input type="checkbox" name="cpower[]" value="'.$C['cid'].':e" /> 编辑</span>
+            <span class="add-on"><input type="checkbox" name="cpower[]" value="'.$C['cid'].':d" /> 删除</span>
+        </div>';
+        $C['appid']==='1' && $div.= ' <div class="input-prepend input-append li2"><span class="add-on">内容权限</span>
+            <span class="add-on"><input type="checkbox" class="checkbox" name="cpower[]" value="'.$C['cid'].':cs" /> 查询</span>
+            <span class="add-on"><input type="checkbox" name="cpower[]" value="'.$C['cid'].':ca" /> 添加</span>
+            <span class="add-on"><input type="checkbox" name="cpower[]" value="'.$C['cid'].':ce" /> 编辑</span>
+            <span class="add-on"><input type="checkbox" name="cpower[]" value="'.$C['cid'].':cd" /> 删除</span>
+        </div>';
+        return $div;
     }
     function tree($cid = 0,$expanded=false,$ret=false){
     	$cid=='source' && $cid=0;

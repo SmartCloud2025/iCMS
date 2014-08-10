@@ -10,6 +10,7 @@
 * @$Id: pushcategory.app.php 2374 2014-03-17 11:46:13Z coolmoo $
 */
 defined('iPHP') OR exit('What are you doing?');
+
 iACP::app('category','import');
 class pushcategoryApp extends categoryApp {
     function __construct() {
