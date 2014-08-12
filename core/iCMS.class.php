@@ -66,7 +66,7 @@ class iCMS {
                     "avatar" => iCMS_FS_URL.'avatar/',
 			)
 		));
-        iPHP::$dialogTitle  = self::$config['site']['name'];
+        iPHP::$dialog_title  = self::$config['site']['name'];
     }
     /**
      * 运行应用程序
@@ -173,7 +173,7 @@ class iCMS {
     }
     //------------------------------------
     public static function gotohtml($fp,$url='',$fmode='0') {
-    	if(iPHP::$iTPLMode=='html') return;
+    	if(iPHP::$iTPL_mode=='html') return;
     	
         ($fmode==1 && @is_file($fp) && stristr($fp, '.php?') === FALSE) && iPHP::gotourl($url);
     }

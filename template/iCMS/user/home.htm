@@ -8,7 +8,7 @@
     <meta name="mobile-agent" content="format=html5;url=<!--{$article.url}-->"/>
     <!--{iCMS:public:ui}-->
     <link rel="stylesheet" href="<!--{$site.urls.public}-->/theme/default.css" type="text/css" />
-    <link rel="stylesheet" href="<!--{$site.urls.ui}-->/user-6.0.0.css" type="text/css" />
+    <link rel="stylesheet" href="<!--{$site.urls.ui}-->/userApp-6.0.0.css" type="text/css" />
     <script type="text/javascript">
     $(function(){
     //$("[data-tip^='uid']").tooltip({html: 'html'});
@@ -22,8 +22,8 @@
   </head>
   <body>
     <!--{include file="{iTPL}/header.htm"}-->
-    <div class="iCMS-home-wrap clearfix">
-      <div class="user_header">
+    <div class="userApp_home clearfix">
+      <div class="userApp_header">
         <div class="card_banner">
           <img src="http://pic2.52pk.com/files/130617/1283568_104827_7094.jpg" alt="">
         </div>
@@ -80,7 +80,7 @@
         <!--{/if}-->
         <div id="artList">
           <ul>
-            <!--{iCMS:article:list loop="true" page="true" row="10" userid=$user.uid scid=$cid}-->
+            <!--{iCMS:article:list loop="true" page="true" row="10" userid=$user.uid}-->
             <li class="clearfix">
               <div class="list_top">
                 <div class="rep_num" title="回复"><!--{$article_list.hits}--></div>
@@ -96,8 +96,8 @@
               </div>
               <div class="list_detail clearfix">
                 <div class="text"><!--{$article_list.description}--></div>
-                <!--{if $article_list.pic}-->
-                <div class="pic"><img src="<!--{$article_list.pic}-->" onload="iCMS.imgFix(this,550,150);"></div>
+                <!--{if $article_list.pic.url}-->
+                <div class="pic"><img src="<!--{$article_list.pic.url}-->" onload="iCMS.imgFix(this,550,150);"></div>
                 <!--{/if}-->
               </div>
               <div class="list_fun clearfix" data-param='{"iid":"<!--{$article_list.id}-->","suid":"<!--{$article_list.userid}-->","title":"<!--{$article_list.title|unicode}-->"}'>
@@ -115,7 +115,7 @@
       </div>
       <div class="right-col">
         <!--{if $status.isme}-->
-        <div class="mod" id="home_fun">
+        <div class="mod" id="home_btn">
           <a href="<!--{iCMS:router url='/user/publish'}-->" class="btn"><i class="icon_edit"></i> <span>发表文章</span></a>
           <a href="<!--{iCMS:router url='/user/manage'}-->" class="btn"><i class="icon_setting"></i> <span>主页管理</span></a>
         </div>
@@ -138,7 +138,7 @@
             <h3>粉丝<span>FANS</span></h3>
             <a href="<!--{iCMS:router url='/user/manage/fans'}-->" target="_blank" class="more">管理&gt;&gt;</a>
           </div>
-          <ul class="avatarList">
+          <ul class="avatar_list">
             <!--{iCMS:user:follow loop="true" row="30" fuid=$user.uid}-->
             <li><a href="<!--{$user_follow.url}-->" title="<!--{$user_follow.name}-->"><img class="avatar_30" data-tip="iCMS:ucard:<!--{$user_follow.uid}-->" src="<!--{$user_follow.avatar}-->"></a></li>
             <!--{/iCMS}-->

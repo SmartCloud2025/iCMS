@@ -466,7 +466,7 @@ class articleApp{
                     array("text" =>"返回文章列表","url"=>$SELFURL),
                     array("text" =>"查看网站首页","url"=>"../index.php","o"=>'target="_blank"')
             );
-            iPHP::$dialogLock	= true;
+            iPHP::$dialog_lock	= true;
             iPHP::dialog('success:#:check:#:文章添加完成!<br />10秒后返回文章列表','url:'.$SELFURL,10,$moreBtn);
         }else{
 			if($tags){
@@ -504,7 +504,7 @@ class articleApp{
         $msg = $this->delArticle($this->id);
         $msg.= $this->del_msg('文章删除完成!');
         $msg.= $this->del_msg('10秒后返回文章列表!');
-        iPHP::$dialogLock   = true;
+        iPHP::$dialog_lock   = true;
         iPHP::dialog($msg,'js:1');
     }
     function del_msg($str){

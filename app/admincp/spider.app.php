@@ -113,7 +113,7 @@ class spiderApp {
 		}
 		if(empty($pubArray)){
 			iPHP::$break		= true;
-			iPHP::$dialogLock	= true;
+			iPHP::$dialog_lock	= true;
 			iPHP::alert('暂无最新内容',0,30);
 		}
 		ob_implicit_flush();

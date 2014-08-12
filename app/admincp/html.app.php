@@ -11,7 +11,7 @@
 */
 class htmlApp{
     function __construct() {
-		iPHP::$iTPLMode	= "html";
+		iPHP::$iTPL_mode	= "html";
 		$this->page	= $GLOBALS['page'];
 		$this->PG	= $_POST?$_POST:$_GET;
 		$this->CP	= iCMS::$config['router']['speed'];

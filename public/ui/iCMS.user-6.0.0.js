@@ -22,26 +22,26 @@
                 param = iCMS.param(p),
                 page = 1,
                 def = '写下你的评论…',
-                box = $('.zm-comment-box', pp);
+                box = $('.commentApp-box', pp);
             if (box.length > 0) {
                 box.remove();
                 return false;
             }
             // console.log(param);
 
-            var spike = '<i class="iCMS-icon iCMS-icon-spike zm-comment-bubble" style="display: inline; left: 481px;"></i>',
-                box = $('<div class="zm-comment-box">'),
-                list = $('<div class="zm-comment-list">'),
-                form = $('<div class="zm-comment-form">');
-            form.html('<div class="zm-comment-ipt">' +
-                '<input class="zm-comment-textarea" type="text" value="' + def + '">' +
+            var spike = '<i class="iCMS-icon iCMS-icon-spike commentApp-bubble" style="display: inline; left: 481px;"></i>',
+                box = $('<div class="commentApp-box">'),
+                list = $('<div class="commentApp-list">'),
+                form = $('<div class="commentApp-form">');
+            form.html('<div class="commentApp-ipt">' +
+                '<input class="commentApp-textarea" type="text" value="' + def + '">' +
                 '</div>' +
-                '<div class="zm-command clearfix">' +
+                '<div class="app-command clearfix">' +
                 '<a href="#" name="addnew" class="btn btn-primary">评论</a>' +
-                '<a href="###" name="closeform" class="zm-command-cancel">取消</a>' +
+                '<a href="###" name="closeform" class="app-command-cancel">取消</a>' +
                 '</div>'
             );
-            var loging = $('<div class="zm-comment-spinner">正在加载，请稍等 <i class="spinner-lightgray"></i></div>');
+            var loging = $('<div class="commentApp-spinner">正在加载，请稍等 <i class="spinner-lightgray"></i></div>');
             box.html(loging);
             box.append(spike, list, form);
             p.after(box);
@@ -49,15 +49,15 @@
             comment_list();
 
             //----------绑定事件----------------
-            //box.on('focus', 'zm-comment-textarea', function(event) {
-            $('.zm-comment-textarea', box).focus(function() {
+            //box.on('focus', 'commentApp-textarea', function(event) {
+            $('.commentApp-textarea', box).focus(function() {
                 form.addClass('expanded');
                 if (this.value == def) this.value = '';
 
                 $(this).css({
                     color: '#222'
                 });
-                //}).on('blur', 'zm-comment-textarea', function(event) {
+                //}).on('blur', 'commentApp-textarea', function(event) {
             }).blur(function() {
                 close_form();
             });
@@ -73,7 +73,7 @@
                 //$('a[name="addnew"]',box).click(function() {
                 event.preventDefault();
                 var cform = $(this).parent().parent(),
-                    textarea = $('.zm-comment-textarea', cform),
+                    textarea = $('.commentApp-textarea', cform),
                     cparam = comment_param(textarea);
 
                 if (!cparam.content) {
@@ -105,18 +105,18 @@
                 event.preventDefault();
                 var item = $(this).parent().parent(),
                     reply_param = iCMS.param($(this)),
-                    item_form = $('.zm-comment-form', item);
+                    item_form = $('.commentApp-form', item);
 
                 if (item_form.length > 0) {
                     item_form.remove();
                     return false;
                 }
                 item_form = form.clone();
-                item_form.addClass('expanded').removeClass('zm-comment-box-ft');
+                item_form.addClass('expanded').removeClass('commentApp-box-ft');
                 $(this).parent().after(item_form);
 
 
-                $('.zm-comment-textarea', item_form).data('reply_param', reply_param)
+                $('.commentApp-textarea', item_form).data('reply_param', reply_param)
                     .val("").focus().css({
                         color: '#222'
                     });
@@ -202,7 +202,7 @@
             }
 
             function close_form(d, p) {
-                var textarea = $('.zm-comment-textarea', (p || box));
+                var textarea = $('.commentApp-textarea', (p || box));
                 if (textarea.val() == "" || d) {
                     textarea.val(def).css({
                         color: '#999'
@@ -224,15 +224,15 @@
                             return false;
 
                         var totalpage = 0;
-                        form.addClass('zm-comment-box-ft');
+                        form.addClass('commentApp-box-ft');
                         $.each(json, function(i, c) {
                             //console.log(c.reply);
-                            var item = '<div class="zm-item-comment" data-id="' + c.id + '">' +
-                                '<a title="' + c.user.name + '" data-tip="iCMS:ucard:' + c.user.uid + '" class="zm-item-link-avatar" href="' + c.user.url + '">' +
-                                '<img src="' + c.user.avatar + '" class="zm-item-img-avatar">' +
+                            var item = '<div class="commentApp-item" data-id="' + c.id + '">' +
+                                '<a title="' + c.user.name + '" data-tip="iCMS:ucard:' + c.user.uid + '" class="app-item-link-avatar" href="' + c.user.url + '">' +
+                                '<img src="' + c.user.avatar + '" class="app-item-img-avatar">' +
                                 '</a>' +
-                                '<div class="zm-comment-content-wrap">' +
-                                '<div class="zm-comment-hd">' +
+                                '<div class="commentApp-content-wrap">' +
+                                '<div class="commentApp-hd">' +
                                 '<a data-tip="iCMS:ucard:' + c.user.uid + '" href="' + c.user.url + '" class="zg-link">' + c.user.name + '</a>';
                             if (c.suid == c.uid) {
                                 item += '<span class="desc">（作者）</span>';
@@ -242,18 +242,18 @@
                                     '<a data-tip="iCMS:ucard:' + c.reply.uid + '" href="' + c.reply.url + '" class="zg-link">' + c.reply.name + '</a>';
                             }
                             item += '</div>' +
-                                '<div class="zm-comment-content">' + c.content + '</div>' +
-                                '<div class="zm-comment-ft">' +
+                                '<div class="commentApp-content">' + c.content + '</div>' +
+                                '<div class="commentApp-ft">' +
                                 '<span class="date">' + c.addtime + '</span>' +
-                                '<a href="javascript:;" class="reply zm-comment-op-link" name="reply_comment" data-param=\'{"uid":"' + c.user.uid + '","name":"' + c.user.name + '"}\'>' +
+                                '<a href="javascript:;" class="reply commentApp-op-link" name="reply_comment" data-param=\'{"uid":"' + c.user.uid + '","name":"' + c.user.name + '"}\'>' +
                                 '<i class="iCMS-icon iCMS-icon-comment-reply"></i>回复</a>' +
-                                '<a href="javascript:;" class="like zm-comment-op-link" name="like_comment" data-param=\'{"id":"' + c.id + '"}\'>' +
+                                '<a href="javascript:;" class="like commentApp-op-link" name="like_comment" data-param=\'{"id":"' + c.id + '"}\'>' +
                                 '<i class="iCMS-icon iCMS-icon-comment-like"></i>赞</a>';
                             if (c.up > 1) {
                                 item += '<span class="like-num" data-tip="iCMS:s:' + c.up + ' 人觉得这个很赞">' +
                                     '<em>' + c.up + '</em> <span>赞</span></span>';
                             }
-                            item += '<a href="javascript:;" name="report_comment" data-param=\'{"id":"' + c.id + '","uid":"' + c.user.uid + '"}\' class="report zm-comment-op-link needsfocus">' +
+                            item += '<a href="javascript:;" name="report_comment" data-param=\'{"id":"' + c.id + '","uid":"' + c.user.uid + '"}\' class="report commentApp-op-link needsfocus">' +
                                 '<i class="iCMS-icon iCMS-icon-no-help"></i>举报</a>' +
                                 '</div>' +
                                 '</div>' +

@@ -29,7 +29,7 @@ class articleApp {
     public function article($id,$page=1,$tpl=true){
         $aRs		= iDB::row("SELECT * FROM `#iCMS@__article` WHERE id='".(int)$id."' AND `status` ='1' LIMIT 1;",ARRAY_A);
         if($aRs['url']) {
-            if(iPHP::$iTPLMode=="html") {
+            if(iPHP::$iTPL_mode=="html") {
                 return false;
             }else {
             	iDB::query("UPDATE `#iCMS@__article` SET hits=hits+1 WHERE `id` ='$id'");
@@ -49,7 +49,7 @@ class articleApp {
         
         if($category['status']==0) return false;
         
-        if(iPHP::$iTPLMode=="html" && (strstr($category['contentRule'],'{PHP}')||$category['outurl']||$category['mode']==0)) return false;
+        if(iPHP::$iTPL_mode=="html" && (strstr($category['contentRule'],'{PHP}')||$category['outurl']||$category['mode']==0)) return false;
 
         $_iurlArray = array((array)$rs,$category);
         $rs->iurl   = iURL::get('article',$_iurlArray,$page);
@@ -135,7 +135,7 @@ class articleApp {
             $rs->script['digg']    = '<script type="text/javascript" src="'.iCMS_API.'?app=article&do=digg&id='.$rs->id.'"></script>';
             $rs->script['comment'] = '<script type="text/javascript" src="'.iCMS_API.'?app=article&do=comment&id='.$rs->id.'"></script>';
         }else {
-            iPHP::$iTPLMode!='html' && iDB::query("UPDATE `#iCMS@__article` SET hits=hits+1 WHERE `id` ='{$rs->id}'");
+            iPHP::$iTPL_mode!='html' && iDB::query("UPDATE `#iCMS@__article` SET hits=hits+1 WHERE `id` ='{$rs->id}'");
         }
         $rs->pic   = get_pic($rs->pic);
         $rs->mpic  = get_pic($rs->mpic);
@@ -155,7 +155,7 @@ class articleApp {
             $articletpl	= empty($rs->tpl)?$category['contentTPL']:$rs->tpl;
             strstr($tpl,'.htm') && $articletpl	= $tpl;
             $html	= iPHP::view($articletpl,'article');
-            if(iPHP::$iTPLMode=="html") return array($html,$rs);
+            if(iPHP::$iTPL_mode=="html") return array($html,$rs);
         }
     }
 }

@@ -16,12 +16,12 @@ class iPHP{
 	public static $pagenav      = NULL;
 	public static $offset       = NULL;
 	public static $break        = true;
-	public static $dialogTitle  = 'iPHP';
-	public static $dialogCode   = false;
-	public static $dialogLock   = false;
-	public static $dialogObject = 'parent.';
+	public static $dialog_title = 'iPHP';
+	public static $dialog_code  = false;
+	public static $dialog_lock  = false;
+	public static $dialog_obj   = 'parent.';
 	public static $iTPL         = NULL;
-	public static $iTPLMode     = null;
+	public static $iTPL_mode    = null;
 	public static $mobile       = false;
 	public static $time_start   = false;
 
@@ -40,9 +40,9 @@ class iPHP{
         $config = require $app_config_file;
 
         //config.php 中开启后 此处设置无效
-        defined('iPHP_DEBUG')       OR define('iPHP_DEBUG', $config['debug']['php']);       //程序调试模式
-        defined('iPHP_TPL_DEBUG')   OR define('iPHP_TPL_DEBUG',$config['debug']['tpl']);    //模板调试
-        defined('iPHP_TIME_CORRECT')OR define('iPHP_TIME_CORRECT',$config['time']['cvtime']);
+        defined('iPHP_DEBUG')        OR define('iPHP_DEBUG', $config['debug']['php']);       //程序调试模式
+        defined('iPHP_TPL_DEBUG')    OR define('iPHP_TPL_DEBUG',$config['debug']['tpl']);    //模板调试
+        defined('iPHP_TIME_CORRECT') OR define('iPHP_TIME_CORRECT',$config['time']['cvtime']);
         //config.php --END--
 
         define('iPHP_URL_404',$config['router']['404']);//404定义
@@ -135,12 +135,12 @@ class iPHP{
     	return self::$iTPL->fetch($tpl);
     }
     public static function pl($tpl) {
-        if(self::$iTPLMode=='html') {
+        if(self::$iTPL_mode=='html') {
             return self::$iTPL->fetch($tpl);
         }else {
             self::$iTPL->display($tpl);
             if(iPHP_DEBUG){
-	            echo '<span class="label label-success">内存:'.iFS::sizeUnit(memory_get_usage()).', 执行时间:'.iPHP::timer_stop().'s, SQL执行:'.iDB::$num_queries.'次</span>';           	
+	            //echo '<span class="label label-success">内存:'.iFS::sizeUnit(memory_get_usage()).', 执行时间:'.iPHP::timer_stop().'s, SQL执行:'.iDB::$num_queries.'次</span>';           	
             }
         }
     }
@@ -149,12 +149,15 @@ class iPHP{
         if(strpos($tpl,'APP:/')!==false){
             $tpl = 'file::'.self::$app_tpl."||".str_replace('APP:/','',$tpl);
             return iPHP::pl($tpl);
-        }
-
-        strpos($tpl,iPHP_APP.':/') !==false && $tpl = str_replace(iPHP_APP.':/',iPHP_APP,$tpl);
-        strpos($tpl,'iTPL:/') !==false && $tpl = str_replace('iTPL:/',iPHP_TPL_DEFAULT,$tpl);
-        strpos($tpl,'{iTPL}') !==false && $tpl = str_replace('{iTPL}',iPHP_TPL_DEFAULT,$tpl);
-
+        }elseif(strpos($tpl,iPHP_APP.':/') !==false){
+			$tpl = str_replace(iPHP_APP.':/',iPHP_APP,$tpl);
+			if(@is_file(iPHP_TPL_DIR."/".$tpl)) {
+				return iPHP::pl($tpl);
+			}
+			$tpl = str_replace(iPHP_APP.':/',iPHP_TPL_DEFAULT,$tpl);
+		}elseif(strpos($tpl,'{iTPL}') !==false){
+			$tpl = str_replace('{iTPL}',iPHP_TPL_DEFAULT,$tpl);
+		}
         if(@is_file(iPHP_TPL_DIR."/".$tpl)) {
             return iPHP::pl($tpl);
         }else{
@@ -455,14 +458,14 @@ class iPHP{
         switch ($A[0]){
         	case 'js':
 				$A[1] 		&& $code	= $A[1];
-				$A[1]=="0"	&& $code	= self::$dialogObject.'history.go(-1);';
-				$A[1]=="1"	&& $code	= self::$dialogObject.'location.reload();';
+				$A[1]=="0"	&& $code	= self::$dialog_obj.'history.go(-1);';
+				$A[1]=="1"	&& $code	= self::$dialog_obj.'location.reload();';
         	break;
         	case 'url':
 				$A[1]=="1" && $A[1]	= __REF__;
-	        	$code	= self::$dialogObject."location.href='".$A[1]."';";
+	        	$code	= self::$dialog_obj."location.href='".$A[1]."';";
         	break;
-        	case 'src':	$code	= self::$dialogObject."$('#iPHP_FRAME').attr('src','".$A[1]."');";break;
+        	case 'src':	$code	= self::$dialog_obj."$('#iPHP_FRAME').attr('src','".$A[1]."');";break;
         	default:	$code	= '';
         }
 
@@ -472,11 +475,11 @@ class iPHP{
         self::$break && exit();
     }
 	public static function alert($msg,$js=null,$s=3) {
-		self::$dialogLock = true;
+		self::$dialog_lock = true;
 		self::dialog('warning:#:warning:#:'.$msg,$js,$s);
     }
 	public static function success($msg,$js=null,$s=3) {
-		self::$dialogLock = true;
+		self::$dialog_lock = true;
 		self::dialog('success:#:check:#:'.$msg,$js,$s);
     }
 	public static function dialog($info=array(),$js='js:',$s=3,$buttons=null,$update=false) {
@@ -485,9 +488,9 @@ class iPHP{
 		$content = $info[0];
         strstr($content,':#:') && $content=self::msg($content,true);
 		$content = addslashes($content);
-		$dialog  = "var dialog = ".self::$dialogObject."$.dialog({
+		$dialog  = "var dialog = ".self::$dialog_obj."$.dialog({
 		    id: 'iPHP_DIALOG',width: 360,height: 150,fixed: true,
-		    title: '".self::$dialogTitle." - {$title}',content: '{$content}',";
+		    title: '".self::$dialog_title." - {$title}',content: '{$content}',";
 		$auto_func = 'dialog.close();';
 		$func      = self::js($js,true);
 		if($func){
@@ -496,8 +499,8 @@ class iPHP{
 		}
         if(is_array($buttons)) {
             foreach($buttons as $key=>$val) {
-            	$val['url'] && $func 	= self::$dialogObject."location.href='{$val['url']}';";
-            	$val['src'] && $func 	= self::$dialogObject."$('#iPHP_FRAME').attr('src','".$val['src']."');return false;";
+            	$val['url'] && $func 	= self::$dialog_obj."location.href='{$val['url']}';";
+            	$val['src'] && $func 	= self::$dialog_obj."$('#iPHP_FRAME').attr('src','".$val['src']."');return false;";
                 $val['top'] && $func 	= "top.window.open('{$val['url']}','_blank');";
                 $val['id']	&& $id		= "id: '".$val['id']."',";
                 $buttonA[]="{{$id}value: '".$val['text']."',callback: function () {".$func."}}";
@@ -507,12 +510,12 @@ class iPHP{
       	}
 		$dialog.="});";
         if($update){
-        	$dialog	= "var dialog = ".self::$dialogObject."$.dialog.get('PHP_DIALOG');";
+        	$dialog	= "var dialog = ".self::$dialog_obj."$.dialog.get('PHP_DIALOG');";
 			$dialog.="dialog.content('{$content}');";
 			$auto_func = $func;
         }
 		$button	&& $dialog.="dialog.button(".$button.");";
-        self::$dialogLock && $dialog.='dialog.lock();';
+        self::$dialog_lock && $dialog.='dialog.lock();';
         $s<=30	&& $timeount	= $s*1000;
         $s>30	&& $timeount	= $s;
         $s===false && $timeount	= false;
@@ -521,7 +524,7 @@ class iPHP{
         }else{
         	$update && $dialog.=$auto_func;
         }
-		echo self::$dialogCode?$dialog:'<script type="text/javascript">'.$dialog.'</script>';
+		echo self::$dialog_code?$dialog:'<script type="text/javascript">'.$dialog.'</script>';
         self::$break && exit();
     }
 
@@ -711,7 +714,7 @@ function iPHP_ERROR_HANDLER($errno, $errstr, $errfile, $errline){
 	@header("Pragma: no-cache");
     $_GET['frame'] OR exit($html);
     $html	= str_replace("\n",'<br />',$html);
-    iPHP::$dialogLock	= true;
+    iPHP::$dialog_lock	= true;
     iPHP::dialog(array("warning:#:warning-sign:#:".$html,'系统错误!可发邮件到 idreamsoft@qq.com 反馈错误!我们将及时处理'),'js:1',30);
     exit;
 }

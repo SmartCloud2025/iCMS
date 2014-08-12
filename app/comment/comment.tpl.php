@@ -82,7 +82,7 @@ function comment_list($vars){
 	}
 	if(empty($rs)){
 		$rs		= iDB::all("SELECT * FROM `#iCMS@__comment` WHERE {$whereSQL} {$orderSQL} {$limit}");
-		iDB::debug();
+		//iDB::debug();
 		$_count	= count($rs);
 		$ln		=($GLOBALS['page']-1)<0?0:$GLOBALS['page']-1;
 		for ($i=0;$i<$_count;$i++){

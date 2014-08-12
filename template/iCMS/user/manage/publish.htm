@@ -1,8 +1,14 @@
-<div class="profile_basic">
+<div class="basic">
 	<form action="<!--{iCMS:router url='/user'}-->" method="post" target="iCMS_FRAME">
 		<input name="action" type="hidden" value="profile" />
 		<input name="pg" type="hidden" value="base" />
-		<div class="profile_title"> <span>基本资料</span> </div>
+		<div class="title"> <span>发表文章</span> </div>
+		<dl>
+			<dd>标 题：</dd>
+			<dt>
+				<input name="title" type="text" value="<!--{$userdata.weibo}-->">
+			</dt>
+		</dl>
 	</form>
 </div>
 <script type="text/javascript">

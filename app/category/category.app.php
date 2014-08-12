@@ -71,7 +71,7 @@ class categoryApp{
             }
             $GLOBALS['page']>1 && $tpl='list';
             $html	= iPHP::view($rs[$tpl.'TPL'],'category.'.$tpl);
-            if(iPHP::$iTPLMode=="html") return array($html,$rs);
+            if(iPHP::$iTPL_mode=="html") return array($html,$rs);
         }else{
         	return $rs;
         }

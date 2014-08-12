@@ -31,24 +31,24 @@
 .iCMS-comment-item .like-num { float: right; margin-top: -1px }
 .iCMS-comment-item .like-num>span, .iCMS-comment-item .like-num>em { font-style: normal; vertical-align: -2px }
 .iCMS-comment-item .like-num.nil { display: none }
-.iCMS-comment-item.focusin .zm-comment-op-link, .iCMS-comment-item:hover .zm-comment-op-link { visibility: visible }
+.iCMS-comment-item.focusin .commentApp-op-link, .iCMS-comment-item:hover .commentApp-op-link { visibility: visible }
 .iCMS-comment-item+.iCMS-comment-item { border-top: dotted 1px #eee }
-.iCMS-comment-item .zm-comment-form { padding: 15px 0 }
+.iCMS-comment-item .commentApp-form { padding: 15px 0 }
 
 
-.zm-comment-info { text-align: center }
-.zm-comment-form .zm-comment-textarea { padding: 7px 8px; color: #999; font-size: 13px; line-height: 22px; min-height: 22px; width: 95% }
-.zm-comment-form.expanded .zm-command { display: block; line-height: 33px; }
-.zm-comment-form .zm-command { display: none; padding: 10px 0; text-align: right }
-.zm-comment-form .zm-command .btn-primary { float: right; }
-.zm-comment-form .zm-command .zm-command-cancel { float: right; }
-.with-self-avatar .zm-comment-form .avatar { display: block }
-.zm-comment-form .avatar { float: left; display: none; margin: 2px 10px 0 0; width: 34px; height: 34px; border-radius: 4px }
-.zm-comment-form .avatar+.editable { overflow: hidden }
-.zm-comment-op-link { margin-left: .5em; color: #999; font-size: 12px; visibility: hidden }
-.zm-command-cancel { margin: 0 15px 0 0; cursor: pointer; float: left; }
-.zm-command-cancel:hover { text-decoration: underline }
-.zg-icon-comment-like, .zm-comment-op-link>.iCMS-icon { margin-right: 5px; width: 11px; height: 11px; vertical-align: -1px }
+.commentApp-info { text-align: center }
+.commentApp-form .commentApp-textarea { padding: 7px 8px; color: #999; font-size: 13px; line-height: 22px; min-height: 22px; width: 95% }
+.commentApp-form.expanded .app-command { display: block; line-height: 33px; }
+.commentApp-form .app-command { display: none; padding: 10px 0; text-align: right }
+.commentApp-form .app-command .btn-primary { float: right; }
+.commentApp-form .app-command .app-command-cancel { float: right; }
+.with-self-avatar .commentApp-form .avatar { display: block }
+.commentApp-form .avatar { float: left; display: none; margin: 2px 10px 0 0; width: 34px; height: 34px; border-radius: 4px }
+.commentApp-form .avatar+.editable { overflow: hidden }
+.commentApp-op-link { margin-left: .5em; color: #999; font-size: 12px; visibility: hidden }
+.app-command-cancel { margin: 0 15px 0 0; cursor: pointer; float: left; }
+.app-command-cancel:hover { text-decoration: underline }
+.zg-icon-comment-like, .commentApp-op-link>.iCMS-icon { margin-right: 5px; width: 11px; height: 11px; vertical-align: -1px }
 
 		</style>
 		<div class="iCMS-comment-list-wrap">
@@ -73,15 +73,15 @@
 	<div class="cmt-content"><!--{$comment_list.content}--></div>
 	<div class="cmt-ft">
 		<span class="date"><!--{$comment_list.addtime|format_date}--></span>
-		<a href="javascript:;" class="reply zm-comment-op-link" name="reply_comment" data-param='{"uid":"<!--{$comment_list.user.uid}-->","name":"<!--{$comment_list.user.name}-->"}'>
+		<a href="javascript:;" class="reply commentApp-op-link" name="reply_comment" data-param='{"uid":"<!--{$comment_list.user.uid}-->","name":"<!--{$comment_list.user.name}-->"}'>
 		<i class="iCMS-icon iCMS-icon-comment-reply"></i>回复</a>
-		<a href="javascript:;" class="like zm-comment-op-link" name="like_comment" data-param='{"id":"<!--{$comment_list.id}-->"}'>
+		<a href="javascript:;" class="like commentApp-op-link" name="like_comment" data-param='{"id":"<!--{$comment_list.id}-->"}'>
 		<i class="iCMS-icon iCMS-icon-comment-like"></i>赞</a>
 		<!--{if $comment_list.up>1}-->
 		<span class="like-num" data-tip="iCMS:s:<!--{$comment_list.up}--> 人觉得这个很赞">
 		<em><!--{$comment_list.up}--></em> <span>赞</span></span>
 		<!--{/if}-->
-		<a href="javascript:;" name="report_comment" data-param='{"id":"<!--{$comment_list.id}-->","uid":"<!--{$comment_list.user.uid}-->"}' class="report zm-comment-op-link needsfocus">
+		<a href="javascript:;" name="report_comment" data-param='{"id":"<!--{$comment_list.id}-->","uid":"<!--{$comment_list.user.uid}-->"}' class="report commentApp-op-link needsfocus">
 		<i class="iCMS-icon iCMS-icon-no-help"></i>举报</a>
 	</div>
 </div>

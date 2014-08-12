@@ -18,7 +18,7 @@ class commentApp {
         return iPHP::view('iCMS://comment/list.default.htm');
     }
     public function API_form(){
-        $_GET['title']   = iS::escapeStr($_GET['title']);
+        $_GET['title'] = iS::escapeStr($_GET['title']);
         iPHP::assign('vars',$_GET);
         return iPHP::view('iCMS://comment/form.default.htm');
     }
@@ -32,9 +32,14 @@ class commentApp {
         iPHP::code(1,'iCMS:comment:like',0,'json');
     }
     public function API_json(){
-        iPHP::assign('appid',iCMS_APP_ARTICLE);
-        iPHP::assign('id',(int)$_GET['id']);
-        iPHP::assign('iid',(int)$_GET['iid']);
+        $vars = array('appid'=>iCMS_APP_ARTICLE,
+            'id'  => (int)$_GET['id'],
+            'iid' => (int)$_GET['iid'],
+            'date_format'=> 'Y-m-d H:i'
+        );
+        $_GET['by'] && $vars['by'] = iS::escapeStr($_GET['by']);
+        $_GET['date_format'] && $vars['date_format'] = iS::escapeStr($_GET['date_format']);
+        iPHP::assign('vars',$vars);
         iPHP::view('iCMS://comment/api.json.htm');
     }
     public function ACTION_add(){
@@ -50,11 +55,19 @@ class commentApp {
 
         $addtime = time();
         $ip      = iPHP::getIp();
-        iDB::query("INSERT INTO `#iCMS@__comment`
-            (`appid`, `cid`, `iid`,`suid`, `title`,`uid`, `name`,  `content`, `reply_uid`,`reply_name`, `addtime`, `status`, `up`, `down`, `ip`, `quote`, `floor`)
-VALUES ('".iCMS_APP_ARTICLE."', '$cid', '$iid','$suid', '$title', '$this->userid', '$this->nickname', '$content', '$reply_uid','$reply_name', '$addtime', '1', '0', '0', '$ip', '0', '0');");
+        $appid   = iCMS_APP_ARTICLE;
+        $uid     = $this->userid;
+        $name    = $this->nickname;
+        $status  = '1';
+        $up      = '0';
+        $down    = '0';
+        $quote   = '0';
+        $floor   = '0';
+
+        $fields = array('appid', 'cid', 'iid','suid', 'title','uid', 'name',  'content', 'reply_uid','reply_name', 'addtime', 'status', 'up', 'down', 'ip', 'quote', 'floor');
+        $data   = compact ($fields);
+        $id     = iDB::insert('comment',$data);
         iDB::query("UPDATE `#iCMS@__article` SET comments=comments+1 WHERE `id` ='{$iid}' limit 1");
-        $id = iDB::$insert_id;
         iPHP::code(1,'iCMS:comment:success',$id,'json');
     }
     public function ACTION_report(){
@@ -68,10 +81,13 @@ VALUES ('".iCMS_APP_ARTICLE."', '$cid', '$iid','$suid', '$title', '$this->userid
 
         $addtime = time();
         $ip      = iPHP::getIp();
-        iDB::query("INSERT INTO `#iCMS@__report`
-        (`appid`, `userid`, `iid`, `uid`, `reason`, `content`, `ip`, `addtime`, `status`)
- VALUES ('".iCMS_APP_COMMENT."', '$this->userid', '$iid', '$uid','$reason', '$content', '$ip', '$addtime', '0');");
-        $id = iDB::$insert_id;
+        $appid   = iCMS_APP_COMMENT;
+        $appid   = $this->userid;
+        $status  = 0;
+
+        $fields = array('appid', 'userid', 'iid', 'uid', 'reason', 'content', 'ip', 'addtime', 'status');
+        $data   = compact ($fields);
+        $id     = iDB::insert('report',$data);
         iPHP::code(1,'iCMS:comment:reason_success',$id,'json');
     }
     //---------------------------

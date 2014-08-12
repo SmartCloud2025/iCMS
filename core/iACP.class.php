@@ -25,7 +25,7 @@ iDB::$show_errors   = true;
 iMember::$LOGIN_TPL = ACP_PATH;
 iMember::$AUTH      = 'iCMS_ADMIN_AUTH';
 iMember::$AJAX      = iPHP::PG('ajax');
-iPHP::$dialogTitle  = 'iCMS';
+iPHP::$dialog_title  = 'iCMS';
 
 class iACP {
     public static $apps       = NULL;

@@ -1,9 +1,9 @@
-<div class="profile_basic">
+<div class="basic">
 	<form action="<!--{iCMS:router url='/user'}-->" method="post" target="iCMS_FRAME">
 	<input name="action" type="hidden" value="profile" />
 	<input name="pg" type="hidden" value="base" />
 
-	<div class="profile_title"> <span>基本资料</span> </div>
+	<div class="title"> <span>基本资料</span> </div>
 	<dl>
 		<dd>昵称：</dd>
 		<dt class="unick"> <input name="nickname" type="text"<!--{if $userdata.unickEdit}--> disabled<!--{/if}--> value="<!--{$me.nickname}-->">
@@ -119,7 +119,7 @@
 	</dl>
 
 <!-- 
-<div class="profile_title mt30"> <span>身材信息</span> <span style="font-weight:normal;font-size:12px;padding-left:10px;">^_^ 用心填写这几项信息，会帮助女人邦给你推荐合适的衣服和鞋子哦~</span>
+<div class="title mt30"> <span>身材信息</span> <span style="font-weight:normal;font-size:12px;padding-left:10px;">^_^ 用心填写这几项信息，会帮助女人邦给你推荐合适的衣服和鞋子哦~</span>
 		<select name="isSeeFigure" id="isSeeFigure" class="is_show_sel">
 			<option value="1" selected="">我关注的人可见</option>
 			<option value="2">所有人可见</option>
@@ -169,7 +169,7 @@
 		码 </dt>
 	</dl>
 -->
-	<div class="profile_title mt30"> <span>其他信息</span> </div>
+	<div class="title mt30"> <span>其他信息</span> </div>
 	<dl>
 		<dd>个人标签：</dd>
 		<dt style="margin-bottom:5px;position:relative;">

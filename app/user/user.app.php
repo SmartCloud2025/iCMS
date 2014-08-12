@@ -30,7 +30,7 @@ class userApp {
         $this->user(true);
         $u['category'] = user::category((int)$_GET['cid']);
         iPHP::append('user',$u,true);
-        return iPHP::view('iTPL://user/home.htm');
+        return iPHP::view('iCMS://user/home.htm');
     }
     public function do_manage(){
         $pgArray   = array('publish','category','article','comment','favorite','share','follow','fans');
@@ -39,7 +39,7 @@ class userApp {
         if (in_array ($pg,$pgArray)) {
             $this->user(true);
             iPHP::assign('pg',$pg);
-            return iPHP::view("iTPL://user/manage.htm");         
+            return iPHP::view("iCMS://user/manage.htm");         
         }
     }
     public function do_profile(){
@@ -53,7 +53,7 @@ class userApp {
                 $platform = user::openid($this->userid);
                 iPHP::assign('platform',$platform);
             }
-            return iPHP::view("iTPL://user/profile.htm");         
+            return iPHP::view("iCMS://user/profile.htm");         
         }
     }
 
@@ -313,9 +313,9 @@ class userApp {
         if(iCMS::$config['user']['register']){
             iPHP::set_cookie('forward',$this->forward);
             user::status($this->forward,"login");
-            return iPHP::view('iTPL://user/register.htm');
+            return iPHP::view('iCMS://user/register.htm');
         }
-        iPHP::view('iTPL://user/register.close.htm');
+        iPHP::view('iCMS://user/register.close.htm');
     }
     public function API_data($uid=0){
         //$uid OR $uid  = $this->userid;
@@ -331,11 +331,11 @@ class userApp {
         if(iCMS::$config['user']['login']){
             iPHP::set_cookie('forward',$this->forward);
             user::status($this->forward,"login");
-            return iPHP::view('iTPL://user/login.htm');
+            return iPHP::view('iCMS://user/login.htm');
         }
-        iPHP::view('iTPL://user/login.close.htm');
+        iPHP::view('iCMS://user/login.close.htm');
     }
     public function API_agreement(){
-    	return iPHP::view('iTPL://user/agreement.htm');
+    	return iPHP::view('iCMS://user/agreement.htm');
     }    
 }
