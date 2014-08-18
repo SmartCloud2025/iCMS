@@ -76,35 +76,4 @@ class category {
     	return $rootid?$this->rootid($rootid):$cid;
     }
 
-    function user_select($currentid="0",$cid="0",$level = 1,$pid=NULL,$url=NULL) {
-        foreach((array)$this->_array[$cid] AS $root=>$C) {
-
-        	if(!$C['status']) continue;
-
-        	if($C['isucshow']){
-                $t=$level=='1'?"":"├ ";
-                $selected=($currentid==$C['cid'])?"selected='selected'":"";
-                $text=str_repeat("│　", $level-1).$t.$C['name']."[cid:{$C['cid']}]";
-                if($C['issend']){
-                    if(empty($C['url'])){
-                        if($pid===NULL||$pid=='all'){
-							$option.="<option value='{$C['cid']}' $selected>{$text}</option>";
-                        }else {
-                            $pid==$C['pid'] && $option.="<option value='{$C['cid']}' $selected>{$text}</option>";
-                        }
-                    }else{
-                        if($url){
-                            $option.="<option value='{$C['cid']}' $selected>{$text}</option>";
-                        }else {
-                            $option.="<optgroup label=\"{$text}\"></optgroup>";
-                        }
-                    }
-                }else{
-                	$option.="<optgroup label=\"{$text}\"></optgroup>";
-                }
-            }
-            $this->rootid[$C['cid']] && $option.=$this->user_select($currentid,$C['cid'],$level+1,$pid,$mid);
-        }
-        return $option;
-    }
 }

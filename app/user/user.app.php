@@ -38,6 +38,16 @@ class userApp {
         $pg OR $pg ='article';
         if (in_array ($pg,$pgArray)) {
             $this->user(true);
+            if($pg=='publish'){
+                $id    = (int)$_GET['id'];
+                $rs    = iDB::row("SELECT * FROM `#iCMS@__article` WHERE `id`='$id' LIMIT 1;",ARRAY_A);
+                //$adsql = $this->dataid?" and `id`='{$this->dataid}'":'';
+                $rs && $adRs  = iDB::row("SELECT * FROM `#iCMS@__article_data` WHERE `aid`='$id'",ARRAY_A);
+                $cid = empty($rs['cid'])?(int)$_GET['cid']:$rs['cid'];
+                iPHP::assign('article',$rs);
+                iPHP::assign('article_data',$adRs);
+                iPHP::assign('option',$this->select('',$cid));
+            }
             iPHP::assign('pg',$pg);
             return iPHP::view("iCMS://user/manage.htm");         
         }
@@ -176,6 +186,20 @@ class userApp {
         $oldPwd!=$password && iPHP::alert("user:password:original");
         iDB::query("UPDATE `#iCMS@__user` SET `password` = '$newPwd1' WHERE `uid` = '{$this->userid}';");
         iPHP::alert("user:password:modified",'js:parent.location.reload();');
+    }
+    public function act_manage_publish(){
+        print_r($_POST);
+    }
+    public function ACTION_manage(){
+        $this->me = user::status(USER_LOGIN_URL,"nologin");
+
+        $pgArray = array('publish','category','article','comment','favorite','share','follow','fans');
+        $pg      = iS::escapeStr($_POST['pg']);
+        $funname ='act_manage_'.$pg;
+        //var_dump($funname);
+        if (in_array ($pg,$pgArray)) {
+            $this->$funname();
+        }
     }
 
     public function ACTION_profile(){
@@ -337,5 +361,19 @@ class userApp {
     }
     public function API_agreement(){
     	return iPHP::view('iCMS://user/agreement.htm');
-    }    
+    }
+    function select($permission='',$_cid="0",$cid="0",$level = 1) {
+        $array = iCache::get('iCMS/category.'.iCMS_APP_ARTICLE.'/array');
+        foreach((array)$array[$cid] AS $root=>$C) {
+            if($C['status'] && $C['isucshow'] && $C['issend'] && empty($C['url'])) {
+                $tag      = ($level=='1'?"":"├ ");
+                $selected = ($_cid==$C['cid'])?"selected":"";
+                $text     = str_repeat("│　", $level-1).$tag.$C['name']."[cid:{$C['cid']}][pid:{$C['pid']}]".($C['url']?"[∞]":"");
+                $option.="<option value='{$C['cid']}' $selected>{$text}</option>";
+            }
+           $array[$C['cid']] && $option.=$this->select($permission,$_cid,$C['cid'],$level+1,$url);
+        }
+        return $option;
+    }
+
 }

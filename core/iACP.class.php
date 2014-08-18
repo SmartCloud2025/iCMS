@@ -241,7 +241,7 @@ class iACP {
         // $opt.='</select>';
         return $opt;
     }
-    public static function files_modal($title='',$click='file',$target='template_index',$callback='',$do='seltpl',$from='modal') {
+    public static function files_modal_btn($title='',$click='file',$target='template_index',$callback='',$do='seltpl',$from='modal') {
         $href = __ADMINCP__."=files&do={$do}&from={$from}&click={$click}&target={$target}&callback={$callback}";
         $_title=$title.'文件';
         $click=='dir' && $_title=$title.'目录';

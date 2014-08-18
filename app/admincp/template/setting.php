@@ -115,7 +115,7 @@ function modal_tplfile(el,a){
             <div class="input-prepend input-append"> <span class="add-on">首页模板</span>
               <input type="text" name="config[template][index]" class="span3" id="template_index" value="<?php echo $config['template']['index'] ; ?>"/>
               <input type="hidden" name="config[template][index_name]" class="span3" id="index_name" value="<?php echo $config['template']['index_name'] ; ?>"/>
-              <?php iACP::files_modal('模板','file','template_index','tplfile');?></div>
+              <?php iACP::files_modal_btn('模板','file','template_index','tplfile');?></div>
             <span class="help-inline">首页默认模板，注：最好使用<span class="label label-inverse">{iTPL}</span>代替模板目录,程序将会自行切换PC端或者移动端</span>
             <div class="clearfloat mb10 solid"></div>
             <div class="input-prepend"> <span class="add-on">PC端域名</span>
@@ -125,7 +125,7 @@ function modal_tplfile(el,a){
             <div class="clearfloat mb10"></div>
             <div class="input-prepend input-append"> <span class="add-on">PC端模板</span>
               <input type="text" name="config[template][pc][tpl]" class="span3" id="template_pc_tpl" value="<?php echo $config['template']['pc']['tpl'] ; ?>"/>
-              <?php iACP::files_modal('模板','dir','template_pc_tpl');?></div>
+              <?php iACP::files_modal_btn('模板','dir','template_pc_tpl');?></div>
             <span class="help-inline">网站PC端模板默认模板</span>
             <div class="clearfloat mb10 solid"></div>
             <div class="input-prepend"> <span class="add-on">移动端识别</span>
@@ -140,7 +140,7 @@ function modal_tplfile(el,a){
             <div class="clearfloat mb10"></div>
             <div class="input-prepend input-append"> <span class="add-on">移动端模板</span>
               <input type="text" name="config[template][mobile][tpl]" class="span3" id="template_mobile_tpl" value="<?php echo $config['template']['mobile']['tpl'] ; ?>"/>
-              <?php iACP::files_modal('模板','dir','template_mobile_tpl');?></div>
+              <?php iACP::files_modal_btn('模板','dir','template_mobile_tpl');?></div>
             <span class="help-inline">网站移动端模板默认模板,如果不想让程序自行切换请留空</span>
             <div class="clearfloat mb10"></div>
             <table class="table table-hover">
@@ -171,7 +171,7 @@ function modal_tplfile(el,a){
                     <div class="clearfloat mb10"></div>
                     <div class="input-prepend input-append"> <span class="add-on">模板</span>
                       <input type="text" name="config[template][device][<?php echo $key;?>][tpl]" class="span3" id="device_tpl_<?php echo $key;?>" value="<?php echo $device['tpl'];?>"/>
-                      <?php iACP::files_modal('模板','dir','device_tpl_'.$key);?>
+                      <?php iACP::files_modal_btn('模板','dir','device_tpl_'.$key);?>
                     </div>
                     <span class="help-inline">识别到的设备会使用这个模板设置</span>
                   </td>
@@ -199,7 +199,7 @@ function modal_tplfile(el,a){
                   <div class="clearfloat mb10"></div>
                   <div class="input-prepend input-append"> <span class="add-on">模板</span>
                     <input type="text" name="config[template][device][{key}][tpl]" class="span3" id="device_tpl_{key}" value="" disabled="disabled"/>
-                    <?php iACP::files_modal('模板','dir','device_tpl_{key}');?>
+                    <?php iACP::files_modal_btn('模板','dir','device_tpl_{key}');?>
                   </div>
                   <span class="help-inline">识别到的设备会使用这个模板设置</span>
                 </td>

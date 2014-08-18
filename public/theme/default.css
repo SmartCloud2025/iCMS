@@ -95,13 +95,10 @@
 -------------------------------------------------- */
 .list-item { }
 .list-item .item-detail { border-bottom: 1px solid #ddd; padding: 5px; }
-.list-item .item-detail .pic { width: 120px; height: 110px; text-align: center;  margin: 10px 10px 0 0; overflow: hidden; display: inline; float: left; border: 1px solid #ddd; padding: 2px; background-color: #fff; }
-.list-item .item-detail .pic img{ height: 110px;}
-.list-item .item-detail .title { position: relative; top: 10px;color: #369;font-weight: bold;font-size: 18px; }
-.list-item .item-detail .info {margin: 25px 0;
-text-indent: 28px;
-font-size: 14px;
-line-height: 24px;}
+.list-item .item-detail .pic { width: 120px; height: 110px; text-align: center; margin: 10px 10px 0 0; overflow: hidden; display: inline; float: left; border: 1px solid #ddd; padding: 2px; background-color: #fff; }
+.list-item .item-detail .pic img { height: 110px; }
+.list-item .item-detail .title { position: relative; top: 10px; color: #369; font-weight: bold; font-size: 18px; }
+.list-item .item-detail .info { margin: 25px 0; text-indent: 28px; font-size: 14px; line-height: 24px; }
 /* Footer
 -------------------------------------------------- */
 #footer { margin-top: 20px; padding: 10px 0; width: 100%; border-top: 3px solid #ccc; text-align: center; }

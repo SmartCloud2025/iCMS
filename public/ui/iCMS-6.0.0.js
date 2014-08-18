@@ -365,7 +365,7 @@
                 //this.userinfo();
                 $("#iCMS-nav-login").hide();
                 $("#iCMS-nav-profile").show();
-                this.hover(".iCMS-user-home", "#iCMS-user-menu", 21);
+                this.hover("#iCMS-nav-profile",".iCMS-user-home", "#iCMS-user-menu", 21);
             }
             $(document).on("click", '.iCMS-user-follow', function(event) {
                 event.preventDefault();
@@ -456,21 +456,21 @@
             });
         },
 
-        hover: function(a, b, t, l) {
-            var timeOutID = null;
+        hover: function(p,a, b, t, l) {
+            var timeOutID = null,$p=$(p),
             t = t || 0, l = l || 0;
-            $(a).hover(function() {
+            $(a,$p).hover(function() {
                 var position = $(this).position();
-                $(b).show().css({
+                $(b,$p).show().css({
                     top: position.top + t,
                     left: position.left + l
                 });
             }, function() {
                 timeOutID = setTimeout(function() {
-                    $(b).hide();
-                }, 1000);
+                    $(b,$p).hide();
+                }, 2500);
             });
-            $(b).hover(function() {
+            $(b,$p).hover(function() {
                 window.clearTimeout(timeOutID);
                 $(this).show();
             }, function() {
