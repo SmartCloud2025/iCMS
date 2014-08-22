@@ -15,16 +15,16 @@ class iTemplate {
 	public $plugins_dir               = "plugins";	// where the plugins are to be found
 	public $compile_dir               = "cache";	// the directory to store the compiled files in
 	public $tpl_tags                  = array();	// the directory to store the compiled files in
-	
+
 	public $php_extract_vars          = false;	// Set this to true if you want the $this->_tpl variables to be extracted for use by PHP code inside the template.
 	public $php_handling              = "PHP_QUOTE";//2007-7-23 0:01 quote php tags
 	public $default_modifiers         = array();
 	public $debugging                 = false;
-	
+
 	public $_error_reporting          = "<?php defined('iPHP') OR exit('What are you doing?');error_reporting(iPHP_TPL_DEBUG?E_ALL ^ E_NOTICE:0);?>\n";
-	
+
 	public $reserved_template_varname = iPHP_TPL_VAR;
-	
+
 	// private internal variables
 	public $_vars                     = array();	// stores all internal assigned variables
 	public $_plugins                  = array('modifier'=> array(),'function' => array(),'block' => array(),'compiler' => array());
@@ -32,7 +32,7 @@ class iTemplate {
 	public $_file                     = "";		// the current file we are processing
 	public $_include_file             = false;		// the current file we are processing
 	public $_version                  = 'V2.10 Template Lite 4 January 2007  (c) 2005-2007 Mark Dickenson. All rights reserved. Released LGPL.';
-		
+
 	public $_templatelite_debug_info  = array();
 	public $_templatelite_debug_loop  = false;
 	public $_templatelite_debug_dir   = "";
@@ -286,7 +286,7 @@ class iTemplate {
 		$keys			= isset($a['as'])?$a['as']:$a['app'];
 		if($a['method']){
 			$callback	= $a['app'].'_'.$a['method'];
-			function_exists($callback) OR $this->require_one(iPHP_APP_DIR."/".$a['app']."/".$a['app'].".tpl.php");
+			function_exists($callback) OR $this->require_one(iPHP_APP_DIR."/".$a['app']."/".$a['app'].".func.php");
 			isset($a['as']) OR $keys.= '_'.$a['method'];
 		}else{
 			$callback	= iPHP_TPL_VAR.'_' . $a['app'];
@@ -330,7 +330,7 @@ class iTemplate {
 		$key	= str_replace(iPATH,'iPHP://',$path);
 		//$key	= str_replace(array('/','.'),'_',$key);
       	if(isset($GLOBALS['_iPHP_REQ'][$key])) return;
-      	
+
 		$GLOBALS['_iPHP_REQ'][$key] = true;
 		require $path;
     }
@@ -343,7 +343,7 @@ class iTemplate_Compiler extends iTemplate {
 	public $template_dir              = "";
 	public $reserved_template_varname = "";
 	public $default_modifiers         = array();
-	
+
 	public $php_extract_vars          = true;	// Set this to false if you do not want the $this->_tpl variables to be extracted for use by PHP code inside the template.
 	public $error                     = true;
 	// private internal variables
@@ -356,13 +356,13 @@ class iTemplate_Compiler extends iTemplate {
 	public $_for_stack                = 0;
 	public $_sectionelse_stack        = array();	// keeps track of whether section had 'else' part
 	public $_iPHPelse_stack           = array();	// keeps track of whether section had 'else' part
-	public $_iPHP_stack               = array(); 
+	public $_iPHP_stack               = array();
 	public $_switch_stack             = array();
 	public $_tag_stack                = array();
 	public $_require_stack            = array();	// stores all files that are "required" inside of the template
 	public $_php_blocks               = array();	// stores all of the php blocks
 	public $_error_level              = null;
-	
+
 	public $_db_qstr_regexp           = null;		// regexps are setup in the constructor
 	public $_si_qstr_regexp           = null;
 	public $_qstr_regexp              = null;
@@ -449,7 +449,7 @@ class iTemplate_Compiler extends iTemplate {
 
 		// replace all php start and end tags
 //		$file_contents = preg_replace('%(<\?(?!php|=|$))%i', '<?php echo \'\\1\'? >'."\n", $file_contents);
-		
+
 //2007-7-22 23:41 coolmoo add
         /* match anything resembling php tags */
         if (preg_match_all('~(<\?(?:\w+|=)?|\?>|language\s*=\s*[\"\']?\s*php\s*[\"\']?)~is', $file_contents, $sp_match)) {
@@ -473,7 +473,7 @@ class iTemplate_Compiler extends iTemplate {
                     }
                 }
             }
-//2007-7-22 23:46 
+//2007-7-22 23:46
 		// remove literal blocks
 
 		preg_match_all("!{$ldq}\s*literal\s*{$rdq}(.*?){$ldq}\s*/literal\s*{$rdq}!s", $file_contents, $_match);
@@ -568,7 +568,7 @@ class iTemplate_Compiler extends iTemplate {
 					$this->internal('compile_iPHP');
 					$compile_iPHP	= compile_iPHP($arguments, $this);
 				}
-				isset($_args['app']) OR $this->trigger_error("missing 'app' attribute in '".iPHP_TPL_VAR."'", E_USER_ERROR, __FILE__, __LINE__);				
+				isset($_args['app']) OR $this->trigger_error("missing 'app' attribute in '".iPHP_TPL_VAR."'", E_USER_ERROR, __FILE__, __LINE__);
 
 				foreach ($_args as $key => $value){
 					$arg_list[] = "'$key' => $value";
@@ -1007,7 +1007,7 @@ class iTemplate_Compiler extends iTemplate {
 		return $_result;
 	}
 
-	function _parse_modifier($variable, $modifiers){	
+	function _parse_modifier($variable, $modifiers){
 		$_match = array();
 		$_mods  = array();		// stores all modifiers
 		$_args  = array();		// modifier arguments

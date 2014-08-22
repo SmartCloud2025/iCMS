@@ -14,7 +14,7 @@ class cacheApp{
     }
     function do_iCMS(){
 		if (in_array($_GET['acp'], array('setting','prop','filter','keywords'))) {
-	    	$acp	= iACP::app($_GET['acp']);
+	    	$acp = iACP::app($_GET['acp']);
 	    	$acp->cache();
 	    	iPHP::success('更新完成');
 		}
@@ -23,10 +23,22 @@ class cacheApp{
     	iACP::$menu->cache();
     	iPHP::success('更新完成','js:1');
     }
-    function do_category(){
-    	$category	= iPHP::appClass('category');
-    	$category->cache(true,isset($_GET['type'])?$_GET['type']:null);
+    function do_allcategory(){
+    	$category = iPHP::app('category.class');
+    	$category->cache(true);
     	iPHP::success('更新完成');
+    }
+    function do_category(){
+        $categoryApp = iACP::app('category');
+        $categoryApp->do_cache();
+    }
+    function do_pushcategory(){
+        $categoryApp = iACP::app('pushcategory');
+        $categoryApp->do_cache();
+    }
+    function do_tagcategory(){
+        $categoryApp = iACP::app('tagcategory');
+        $categoryApp->do_cache();
     }
     function do_tpl(){
     	iCMS::clear_compiled_tpl();

@@ -20,7 +20,7 @@ class categoryApp{
 			$cid	= iCache::get('iCMS/category/dir2cid',$dir);
 		}
 		empty($cid) && iPHP::throwException('应用程序运行出错.找不到该栏目: '.($dir?"<b>dir:$dir</b>":"<b>cid:$id</b>").' 请确认栏目是否存在', 3001);
-		
+
     	return $this->category($cid,$tpl);
     }
     public function category($id,$tpl='index') {
@@ -29,7 +29,7 @@ class categoryApp{
        	$rs OR iPHP::throwException('应用程序运行出错.找不到该栏目: <b>cid:'. $id.'</b> 请更新栏目缓存或者确认栏目是否存在', 3002);
        	$rs['outurl']	= $rs['url'];
         if($tpl && $rs['outurl']) return iPHP::gotourl($rs['outurl']);
-		
+
         $iurl         = $rs['iurl'];
         $rs['iurl']   = (array)$iurl;
         $rs['url']    = $iurl->href;
@@ -59,7 +59,7 @@ class categoryApp{
         $rs['spic'] = get_pic($rs['spic']);
 
         $rs['body'] && $rs['body'] = iCache::get('iCMS/category.'.$rs['cid'].'/body');
-        ($rs['mode'] && $tpl) && iPHP::page($iurl);
+        ($rs['mode'] && $tpl) && iCMS::setpage($iurl);
         $rs['appid']  = iCMS_APP_CATEGORY;
 
 

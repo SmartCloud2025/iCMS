@@ -10,15 +10,18 @@ function user_list($vars=null){
 	//return iPHP::view('iCMS','public.js');
 }
 function user_category($vars=null){
-	$row      = isset($vars['row'])?(int)$vars['row']:"30";
+	$row      = isset($vars['row'])?(int)$vars['row']:"10";
 	$whereSQL = " WHERE `uid`='".$vars['userid']."'";
-	$rs       = iDB::all("SELECT * FROM `#iCMS@__user_category`{$whereSQL} LIMIT $row");
+	$rs       = iDB::all("SELECT * FROM `#iCMS@__user_category`{$whereSQL} ORDER BY `cid` ASC LIMIT $row");
 	$_count   = count($rs);
-	//iDB::debug();
+	//iDB::debug(1);
 	for ($i=0;$i<$_count;$i++){
 		$rs[$i]['url']	= iPHP::router(array('/{uid}/{cid}/',array($rs[$i]['uid'],$rs[$i]['cid'])),iCMS_REWRITE);
+		isset($vars['array']) && $array[$rs[$i]['cid']]=$rs[$i];
 	}
-	//var_dump($rs);
+	if(isset($vars['array'])){
+		return $array;
+	}
 	return $rs;
 }
 function user_follow($vars=null){
@@ -37,7 +40,7 @@ function user_follow($vars=null){
 			$rs[$i]['url']    = get_user($rs[$i]['uid'],'url');
 		}else{
 			$rs[$i]['avatar'] = get_user($rs[$i]['fuid'],'avatar');
-			$rs[$i]['url']    = get_user($rs[$i]['fuid'],'url');			
+			$rs[$i]['url']    = get_user($rs[$i]['fuid'],'url');
 			$rs[$i]['uid']    = $rs[$i]['fuid'];
 			$rs[$i]['name']   = $rs[$i]['fname'];
 		}
@@ -46,5 +49,5 @@ function user_follow($vars=null){
 	return $rs;
 }
 function user_stat($vars=null){
-	
+
 }

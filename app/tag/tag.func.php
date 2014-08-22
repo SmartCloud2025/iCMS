@@ -54,7 +54,7 @@ function tag_list($vars){
 		$rs			= iCache::get($cacheName);
 	}
 	if(empty($rs)){
-		iPHP::appClass('tag','import');
+		iPHP::app('tag.class','import');
 		$rs = iDB::all("SELECT * FROM `#iCMS@__tags` WHERE {$where_sql} {$orderSQL} LIMIT {$offset},{$maxperpage}");
 		iDB::debug(1);
 		$rs = tag_array($vars,$rs);
@@ -103,7 +103,7 @@ function tag_flist($vars){
 		$rs			= iCache::get($cacheName);
 	}
 	if(empty($rs)){
-		iPHP::appClass('tag','import');
+		iPHP::app('tag.class','import');
 		$rs		= iDB::all("SELECT * FROM `#iCMS@__ftags` WHERE {$where_sql} {$orderSQL} LIMIT {$offset},{$maxperpage}");
 		$rs		= tag_array($vars,$rs);
 		$vars['cache'] && iCache::set($cacheName,$rs,$cache_time);
@@ -155,7 +155,7 @@ function tag_search($vars){
 	$vars['orderBy'] 	&& $orderBy	= $vars['orderBy'];
 	$vars['orderSQL'] 	&& $orderSQL= ' order by '.$vars['orderSQL'];
 
-	$vars['pic'] && $SPH->SetFilter('ispic',array(1));
+	$vars['pic'] && $SPH->SetFilter('haspic',array(1));
 	$vars['id!'] && $SPH->SetFilter('@id',array($vars['id!']),true);
 	
 	$SPH->setSortMode(SPH_SORT_EXTENDED,$orderBy);

@@ -110,7 +110,7 @@ class tag {
 	    }else {
 	        $tkey	= pinyin($tag,iCMS::$config['other']['CLsplit']);
 	        iDB::query("INSERT INTO `#iCMS@__tags`
-            (`uid`, `cid`, `tcid`, `pid`, `tkey`, `name`, `seotitle`, `subtitle`, `keywords`, `description`, `ispic`, `pic`, `url`, `related`, `count`, `weight`, `tpl`, `ordernum`, `pubdate`, `status`)
+            (`uid`, `cid`, `tcid`, `pid`, `tkey`, `name`, `seotitle`, `subtitle`, `keywords`, `description`, `haspic`, `pic`, `url`, `related`, `count`, `weight`, `tpl`, `ordernum`, `pubdate`, `status`)
 VALUES ('$uid', '$cid', '$tcid', '0', '$tkey', '$tag', '', '', '', '', '', '', '', '', '1', '0', '', '0', '".time()."', '1');");
 	        $tid = iDB::$insert_id;
 	        self::cache($tag);

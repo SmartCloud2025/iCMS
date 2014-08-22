@@ -107,7 +107,7 @@ iCMS.select('st',"<?php echo $_GET['st'] ; ?>");
         </div>
         <div class="form-actions">
           <button class="btn btn-primary" type="submit"><i class="fa fa-check"></i> 提交</button>
-          <a class="btn" href="<?php echo __ADMINCP__; ?>=cache&do=category&type=0&frame=iPHP" target="iPHP_FRAME"><i class="fa fa-refresh"></i> 更新缓存</button>
+          <a class="btn" href="<?php echo APP_FURI; ?>&do=cache" target="iPHP_FRAME"><i class="fa fa-refresh"></i> 更新缓存</a>
         </div>
       </form>
       <?php } ?>

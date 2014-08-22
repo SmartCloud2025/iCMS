@@ -25,7 +25,7 @@ class iCMS {
     public static $app_args    = null;
     public static $app_vars    = null;
     public static $hooks       = array();
-    
+
 	public static function Init(){
         self::$config = iPHP::config();
         iFS::init(self::$config['FS'],'filedata');
@@ -35,7 +35,7 @@ class iCMS {
 
         iPHP_DEBUG      && iDB::$show_errors = true;
         iPHP_TPL_DEBUG  && iPHP::clear_compiled_tpl();
-        
+
         define('iCMS_DIR',       self::$config['router']['DIR']);
         define('iCMS_URL',       self::$config['router']['URL']);
         define('iCMS_PUBLIC_URL',self::$config['router']['public_url']);
@@ -107,10 +107,10 @@ class iCMS {
                 'name'   => self::$app_name,
                 'do'     => self::$app_do,
                 'method' => self::$app_method
-            ),            
+            ),
         );
         define('iCMS_API_URL', iCMS_API.'?app='.self::$app_name);
-        
+
         iPHP::$iTPL->_iTPL_VARS = self::$app_vars;
         self::$app = iPHP::app($app);
 		if(self::$app_do && self::$app->methods){
@@ -145,9 +145,9 @@ class iCMS {
     }
     public static function sphinx(){
     	iPHP::import(iPHP_APP_CORE.'/sphinx.class.php');
-    	
+
 		if(isset($GLOBALS['iSPH'])) return $GLOBALS['iSPH'];
-		
+
 		$hosts				= self::$config['sphinx']['hosts'];
 		$GLOBALS['iSPH']	= new SphinxClient();
 		if(strstr($hosts, 'unix:')){
@@ -161,9 +161,9 @@ class iCMS {
     }
     public static function TBAPI(){
     	iPHP::import(iPHP_APP_CORE.'/tbapi.class.php');
-    	
+
     	if(isset($GLOBALS['TBAPI'])) return $GLOBALS['TBAPI'];
-    	
+
 		$GLOBALS['TBAPI'] = new TBAPI;
 		return $GLOBALS['TBAPI'];
     }
@@ -174,7 +174,7 @@ class iCMS {
     //------------------------------------
     public static function gotohtml($fp,$url='',$fmode='0') {
     	if(iPHP::$iTPL_mode=='html') return;
-    	
+
         ($fmode==1 && @is_file($fp) && stristr($fp, '.php?') === FALSE) && iPHP::gotourl($url);
     }
     //翻页函数
@@ -185,10 +185,16 @@ class iCMS {
         if($iPages->totalpage>1) {
             $pagenav = $a['pagenav']?$a['pagenav']:'nav';
             $pnstyle = $a['pnstyle']?$a['pnstyle']:0;
-            iPHP::assign('page',array('totalRow'=>$a['total'],'total'=>$iPages->totalpage,'current'=>$iPages->nowindex,$pagenav=>$iPages->show($pnstyle)));
+            iPHP::assign('page',array('count'=>$a['total'],'total'=>$iPages->totalpage,'current'=>$iPages->nowindex,$pagenav=>$iPages->show($pnstyle)));
             iPHP::assign('iPAGE',$iPages);
         }
         return $iPages;
+    }
+    public static function setpage($iurl){
+        if(isset($GLOBALS['iPage'])) return;
+
+        $GLOBALS['iPage']['url']  = $iurl->pageurl;
+        $GLOBALS['iPage']['html'] = array('enable'=>true,'index'=>$iurl->href,'ext'=>$iurl->ext);
     }
     //过滤
     public static function filter(&$content){
@@ -200,6 +206,7 @@ class iCMS {
         $pattern = '/(~|`|!|@|\#|\$|%|\^|&|\*|\(|\)|\-|=|_|\+|\{|\}|\[|\]|;|:|"|\'|<|>|\?|\/|,|\.|\s|\n|。|，|、|；|：|？|！|…|-|·|ˉ|ˇ|¨|‘|“|”|々|～|‖|∶|＂|＇|｀|｜|〃|〔|〕|〈|〉|《|》|「|」|『|』|．|〖|〗|【|】|（|）|［|］|｛|｝|°|′|″|＄|￡|￥|‰|％|℃|¤|￠|○|§|№|☆|★|○|●|◎|◇|◆|□|■|△|▲|※|→|←|↑|↓|〓|＃|＆|＠|＾|＿|＼|№|)*/i';
         $subject = preg_replace($pattern, '', $subject);
         foreach ((array)$disable AS $val) {
+            $val = trim($val);
             if(strpos($val,'::')!==false){
                 list($tag,$start,$end) = explode('::',$val);
                 if($tag=='NUM'){

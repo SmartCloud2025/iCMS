@@ -10,7 +10,7 @@
 * @$Id: category.app.php 2406 2014-04-28 02:24:46Z coolmoo $
 */
 defined('iPHP') OR exit('What are you doing?');
-iPHP::appClass('category','import');
+iPHP::app('category.class','import');
 class categoryApp extends category{
     function __construct($appid = 1) {
         $this->name_text = "栏目";
@@ -331,6 +331,10 @@ class categoryApp extends category{
     function do_ajaxtree(){
 		$expanded=$_GET['expanded']?true:false;
 	 	echo $this->tree($_GET["root"],$expanded);
+    }
+    function do_cache(){
+        $this->cache(true,$this->appid);
+        iPHP::success('更新完成');
     }
     function search_sql($cid,$field='cid'){
         if($cid) {

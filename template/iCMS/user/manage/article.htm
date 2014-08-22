@@ -1,11 +1,44 @@
-<div class="profile_basic">
-	<form action="<!--{iCMS:router url='/user'}-->" method="post" target="iCMS_FRAME">
-		<input name="action" type="hidden" value="profile" />
-		<input name="pg" type="hidden" value="base" />
-		<div class="profile_title"> <span>基本资料</span> </div>
-	</form>
-</div>
+<form action="<!--{iCMS:router url='/user'}-->" method="post" target="iCMS_FRAME">
+	<input name="action" type="hidden" value="manage" />
+	<input name="pg" type="hidden" value="article" />
+	<div class="article">
+		<table class="table table-striped">
+			<thead>
+				<tr>
+					<th>#</th>
+					<th><span class="label label-info">分类</span> 标题</th>
+					<th>点/评</th>
+					<th>栏目</th>
+					<th>操作</th>
+				</tr>
+			</thead>
+			<tbody>
+<!--{iCMS:article:list loop="true" page="true" row="12" call="user" total_cache="G" cid=$cid userid=$user.uid}-->
+				<tr>
+					<td><!--{$article_list.id}--></td>
+					<td><!--{if $article_list.status=="0"}-->
+						<span class="label label-important">审核中</span>
+						<!--{/if}-->
+						<span class="label label-info"><!--{$category[$article_list.ucid].name}--></span> <a href="<!--{$article_list.url}-->" target="_blank"><!--{$article_list.title}--></a></td>
+					<td><!--{$article_list.hits}-->/<!--{$article_list.comments}--></td>
+					<td><a href="<!--{$article.manage}-->&cid=<!--{$article_list.cid}-->"><!--{$article_list.category.name}--></a></td>
+					<td><a href="<!--{$article.edit}-->&id=<!--{$article_list.id}-->" title="编辑"><i class="fa fa-edit"></i></a>
+						<a href="javascript:;" title="删除" style="margin-left: 10px;"><i class="fa fa-times"></i></a></td>
+				</tr>
+<!--{/iCMS}-->
+			</tbody>
+			<tfoot>
+	            <tr>
+	              <td colspan="5"><div class="iCMS-pagination"><!--{$page.nav}--></div></td>
+	            </tr>
+          </tfoot>
+		</table>
+	</div>
+</form>
 <script type="text/javascript">
 $(function(){
-})
+
+});
 </script>
+
+

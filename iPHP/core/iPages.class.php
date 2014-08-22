@@ -16,12 +16,12 @@ class iPages {
 	* config ,public
 	*/
 	public $page_name = "page";//page标签，用来控制url页。比如说xxx.php?page=2中的page
-	public $is_ajax   = false;//是否支持AJAX分页模式 
+	public $is_ajax   = false;//是否支持AJAX分页模式
 
 	/**
 	* private
 	*
-	*/ 
+	*/
 	public $pagebarnum =8;//控制记录条的个数。
 	public $totalpage  =0;//总页数
 	public $ajax_fun   ='';//AJAX动作名
@@ -42,7 +42,7 @@ class iPages {
 		$this->perpage   = $_config['perpage']?(int)$_config['perpage']:10;
 		$url             = isset($_config['url'])?$_config['url']:($GLOBALS['iPage']['url']?$GLOBALS['iPage']['url']:$_SERVER['REQUEST_URI']);
 		$this->totalpage = ceil($this->total/$this->perpage);
-		$GLOBALS['iPage']['total'] = (int)$this->totalpage;	
+		$GLOBALS['iPage']['total'] = (int)$this->totalpage;
 		if($this->totalpage<1) return;
 		$_config['page_name'] && $this->set('page_name',$_config['page_name']);//设置pagename
 		$this->html          = $GLOBALS['iPage']['html'];
@@ -50,7 +50,7 @@ class iPages {
 		$lang && $this->lang = $lang;
 		$this->unit          = $_config['unit']?$_config['unit']:$this->lang['sql'];
 		$this->_set_nowindex($nowindex);//设置当前页
-		$this->_set_url($url);//设置链接地址
+		$this->_set_url($url,$_config['total_type']);//设置链接地址
 		$this->nowindex      = min($this->totalpage,$this->nowindex);
 		$this->offset        = (int)($this->nowindex-1<0?0:$this->nowindex-1)*$this->perpage;
 		$_config['ajax'] && $this->ajax($_config['ajax']);//打开AJAX模式
@@ -74,7 +74,7 @@ class iPages {
 		else
 			$this->error(" does not belong to PB_Page!",1003);
 	}
-	
+
 	/**
 	* 打开倒AJAX模式
 	*
@@ -84,11 +84,11 @@ class iPages {
 		$this->is_ajax  = true;
 		$this->ajax_fun = $action;
 	}
-	
-	
+
+
 	/**
 	* 获取显示"下一页"的代码
-	* 
+	*
 	* @param string $style
 	* @return string
 	*/
@@ -147,7 +147,7 @@ class iPages {
 			if($i<=$this->totalpage){
 				if($i!=$this->nowindex){
 		    		$return.=$this->_get_text($this->_get_link($this->_get_url($i),$i,$style,$target));
-				}else{ 
+				}else{
 		    		$return.=$this->_get_text('<span class="'.$nowindex_style.'">'.$i.'</span>');
 		    	}
 			}else{
@@ -157,7 +157,7 @@ class iPages {
 		unset($begin);
 		return $return;
 	}
-	
+
 	/**
 	* 获取显示跳转按钮的代码
 	*
@@ -229,19 +229,17 @@ class iPages {
 	* @param: String $url
 	* @return boolean
 	*/
-	function _set_url($url=""){
+	function _set_url($url="",$total_type=null){
 		if($this->html['enable']){
 			$this->url	= $url;
 		}else{
-			$urlArray	= parse_url($url);
-			$query		= $urlArray["query"];
-			parse_str($query, $output);
-			$output[$this->page_name]="";
-			$urlArray["query"]	= http_build_query($output);
-			$this->url			= $urlArray["path"]."?".$urlArray["query"].'{P}';
+			$query = array();
+			$total_type ==="G" && $query['total_num'] = $this->total;
+			$query[$this->page_name] ="";
+			$this->url = buildurl($url,$query).'{P}';
 		}
 	}
-	
+
 	/**
 	* 设置当前页面
 	*
@@ -258,7 +256,7 @@ class iPages {
 		}
 	}
 
-	
+
 	/**
 	* 为指定的页面返回地址值
 	*
@@ -282,12 +280,12 @@ class iPages {
 	*
 	* @param String $str
 	* @return string $url
-	*/ 
+	*/
 	function _get_text($str){
 		return $this->lang['format_left'].$str.$this->lang['format_right'];
 	}
 
-	
+
 	/**
 	* 获取链接地址
 	*/
@@ -301,8 +299,8 @@ class iPages {
 			return '<a '.$style.' href="'.$url.'" target="'.$target.'">'.$text.'</a>';
 		}
 	}
-	
-	
+
+
 	/**
 	* 出错处理方式
 	*/

@@ -84,7 +84,7 @@ class pushApp{
 
         $sql.=$this->categoryApp->search_sql($cid);
  
-        isset($_GET['nopic'])&& $sql.=" AND `isPic` ='0'";
+        isset($_GET['nopic'])&& $sql.=" AND `haspic` ='0'";
         $_GET['starttime']   && $sql.=" and `addtime`>=UNIX_TIMESTAMP('".$_GET['starttime']." 00:00:00')";
         $_GET['endtime']     && $sql.=" and `addtime`<=UNIX_TIMESTAMP('".$_GET['endtime']." 23:59:59')";
 
@@ -137,10 +137,10 @@ class pushApp{
         empty($title) && iPHP::alert('1.标题必填');
         empty($cid) && iPHP::alert('请选择所属栏目');
 
-        $ispic	= empty($pic)?0:1;
+        $haspic	= empty($pic)?0:1;
         
         $status	= 1;
-        $fields = array('cid', 'rootid', 'pid', 'ispic', 'editor', 'userid', 'title', 'pic', 'url', 'description', 'title2', 'pic2', 'url2', 'description2', 'title3', 'pic3', 'url3', 'description3', 'orderNum', 'metadata', 'addtime','hits', 'status');
+        $fields = array('cid', 'rootid', 'pid', 'haspic', 'editor', 'userid', 'title', 'pic', 'url', 'description', 'title2', 'pic2', 'url2', 'description2', 'title3', 'pic3', 'url3', 'description3', 'orderNum', 'metadata', 'addtime','hits', 'status');
         $data   = compact ($fields);
 
         if(empty($id)) {

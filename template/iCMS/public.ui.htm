@@ -1,26 +1,27 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <meta content="iDreamSoft Inc." name="Copyright" />
-<link rel="stylesheet" href="<!--{$site.urls.lib}-->/bootstrap/css/bootstrap.min.css" type="text/css" />
-<link rel="stylesheet" href="<!--{$site.urls.lib}-->/font-awesome-4.1.0/css/font-awesome.min.css" type="text/css" />
-<link rel="stylesheet" href="<!--{$site.urls.ui}-->/artDialog-5.0.4/skins/default.css" type="text/css" />
-<link rel="stylesheet" href="<!--{$site.urls.ui}-->/iCMS-6.0.0.css" type="text/css" />
+<link href="<!--{$site.urls.lib}-->/bootstrap/css/bootstrap.min.css" type="text/css" rel="stylesheet"/>
+<link href="<!--{$site.urls.lib}-->/font-awesome-4.1.0/css/font-awesome.min.css" type="text/css" rel="stylesheet"/>
+<link href="<!--{$site.urls.ui}-->/artDialog-5.0.4/skins/default.css" type="text/css" rel="stylesheet"/>
+<link href="<!--{$site.urls.ui}-->/iCMS-6.0.0.css" type="text/css" rel="stylesheet"/>
 <script src="<!--{$site.urls.lib}-->/jquery.min.js"></script>
 <!--{if $ui.script}-->
 <script src="<!--{$site.urls.lib}-->/bootstrap/js/bootstrap.min.js"></script>
-<script type="text/javascript" src="<!--{$site.urls.ui}-->/artDialog-5.0.4/artDialog.min.js"></script>
-<script type="text/javascript" src="<!--{$site.urls.ui}-->/artDialog-5.0.4/artDialog.plugins.min.js"></script>
+<script src="<!--{$site.urls.ui}-->/artDialog-5.0.4/artDialog.min.js"></script>
+<script src="<!--{$site.urls.ui}-->/artDialog-5.0.4/artDialog.plugins.min.js"></script>
 <script src="<!--{$site.urls.ui}-->/iCMS-6.0.0.js"></script>
 <script>
+iCMS.API    = "<!--{iCMS:router url='/api'}-->";
+iCMS.PUBLIC = "<!--{$site.urls.public}-->";
 iCMS.config = {
 	'COOKIE_PRE':'<!--{$iCMS.COOKIE_PRE}-->',
-	'API':"<!--{iCMS:router url='/api'}-->",
-	'public':'<!--{$site.urls.public}-->',
 }
 
 $(function(){
 	iCMS.Init();
 })
+//console.log(iCMS);
 
 </script>
 <!--{/if}-->

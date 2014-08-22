@@ -11,7 +11,7 @@
 */
 defined('iPHP') OR exit('What are you doing?');
 
-iPHP::appClass('tag','import');
+iPHP::app('tag.class','import');
 class tagsApp{
     function __construct() {
         $this->id          = (int)$_GET['id'];
@@ -25,7 +25,7 @@ class tagsApp{
         include iACP::view('tags.add');
     }
     function do_update(){
-        $sql = iACP::iDT($_GET['iDT']);
+        $sql = iACP::fields($_GET['iDT']);
     	$sql &&	iDB::query("UPDATE `#iCMS@__tags` SET $sql WHERE `id` ='$this->id' LIMIT 1 ");
     	$this->id && tag::cache($this->id,'id');
     	iPHP::success('操作成功!','js:1');
@@ -44,7 +44,7 @@ class tagsApp{
         $sql.= $this->categoryApp->search_sql($cid);
         $sql.= $this->tagcategory->search_sql($cid,'tcid');
 
-		isset($_GET['pic']) && $sql.=" AND `ispic` ='".($_GET['pic']?1:0)."'";
+		isset($_GET['pic']) && $sql.=" AND `haspic` ='".($_GET['pic']?1:0)."'";
 		isset($_GET['pid']) && $_GET['pid']!="-1" && $sql.=" AND `pid` ='".(int)$_GET['pid']."'";
 
         $orderby	= $_GET['orderby']?$_GET['orderby']:"id DESC";
@@ -77,7 +77,7 @@ class tagsApp{
         $weight      = _int($_POST['weight']);
         $ordernum    = _int($_POST['ordernum']);
         $status      = (int)$_POST['status'];
-        $ispic       = $pic?'1':'0';
+        $haspic       = $pic?'1':'0';
         $pubdate     = time();
         $metadata    = iS::escapeStr($_POST['metadata']);
 
@@ -106,7 +106,7 @@ class tagsApp{
 		strstr($pic, 'http://') && $pic = iFS::http($pic);
 		iPHP::import(iPHP_APP_CORE .'/iMAP.class.php');
 
-        $fields = array('uid', 'cid', 'tcid', 'pid', 'tkey', 'name', 'seotitle', 'subtitle', 'keywords', 'description', 'metadata','ispic', 'pic', 'url', 'related', 'count', 'weight', 'tpl', 'ordernum', 'pubdate', 'status');
+        $fields = array('uid', 'cid', 'tcid', 'pid', 'tkey', 'name', 'seotitle', 'subtitle', 'keywords', 'description', 'metadata','haspic', 'pic', 'url', 'related', 'count', 'weight', 'tpl', 'ordernum', 'pubdate', 'status');
         $data   = compact ($fields);
 
 		if(empty($id)){
@@ -219,7 +219,7 @@ class tagsApp{
     			}
     		break;
     		default:
-				$sql	= iACP::iDT($batch);
+				$sql	= iACP::fields($batch);
 
 		}
 		iDB::query("UPDATE `#iCMS@__tags` SET {$sql} WHERE `id` IN ($ids)");

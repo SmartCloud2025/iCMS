@@ -138,7 +138,8 @@
 /* 百度地图 */
 .edui-dialog-map-body { width: 580px; height: 400px; }
 /* 链接 */
-.edui-dialog-link-body { width: 400px; height: 200px; }
+.edui-dialog-link-body { width: 400px; height: 200px;}
+.edui-dialog-link-body label { font-size: 12px;display: inline-block;}
 .edui-popup { display: none; background: url('../images/pop-bg.png') repeat #fff; padding: 2px; }
 .edui-popup .edui-popup-body { border: 1px solid #bfbfbf; background-color: #fff; }
 .edui-popup .edui-popup-caret { width: 21px; height: 11px; }
@@ -148,7 +149,7 @@
 .edui-tab-nav .edui-tab-item { float: left; margin-bottom: -1px; margin-top: 1px; margin-top: 0\9; }
 .edui-tab-nav .edui-tab-item .edui-tab-text { display: block; padding: 8px 12px; border: 1px solid transparent; color: #0088cc; text-decoration: none; outline: 0; _border: 1px solid #fff; cursor: pointer; }
 .edui-tab-nav .edui-tab-item .edui-tab-text:FOCUS { outline: none; }
-.edui-tab-nav .edui-tab-item.edui-active  .edui-tab-text { border: 1px solid #ddd; border-bottom-color: transparent; background-color: #fff; padding: 8px 12px; color: #555555; cursor: default; }
+.edui-tab-nav .edui-tab-item.edui-active  .edui-tab-text { border: 1px solid #ddd; border-bottom-color: transparent; background-color: #fff; padding: 5px 12px; color: #555555; cursor: default; }
 .edui-tab-content .edui-tab-pane { padding: 1px; position: relative; display: none; background-color: #fff; clear: both; }
 .edui-tab-content .edui-tab-pane.edui-active { display: block; }
 .edui-btn-toolbar .edui-tooltip { position: absolute; padding: 5px 0; display: none; /* opacity: 0.8;  */

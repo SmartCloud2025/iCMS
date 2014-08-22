@@ -8,7 +8,7 @@
  */
 defined('iPHP') OR exit('What are you doing?');
 
-iPHP::appClass('tag','import');
+iPHP::app('tag.class','import');
 function article_list($vars){
     if($vars['loop']==="rel" && empty($vars['id'])){
         return false;
@@ -33,7 +33,7 @@ function article_list($vars){
         }
         $where_sql.= iPHP::where($ncids,'cid','not');
     }
-    if(isset($vars['cid']) && !isset($vars['cids'])){
+    if($vars['cid'] && !isset($vars['cids'])){
         $cid    = $vars['cid'];
         if($vars['sub']){
             $cid  = iCMS::get_category_ids($vars['cid'],true);
@@ -41,7 +41,7 @@ function article_list($vars){
         }
         $where_sql.= iPHP::where($cid,'cid');
     }
-    if(isset($vars['cids']) && !isset($vars['cid'])){
+    if(isset($vars['cids']) && !$vars['cid']){
         $cids = $vars['cids'];
         if($vars['sub']){
             $cids  = iCMS::get_category_ids($vars['cids'],true);
@@ -62,8 +62,8 @@ function article_list($vars){
     $vars['id'] && $where_sql.= iPHP::where($vars['id'],'id');
     $vars['id!']&& $where_sql.= iPHP::where($vars['id!'],'id','not');
     $by=$vars['by']=="ASC"?"ASC":"DESC";
-    isset($vars['pic'])  && $where_sql.= " AND `isPic`='1'";
-    isset($vars['nopic'])&& $where_sql.= " AND `isPic`='0'";        
+    isset($vars['pic'])  && $where_sql.= " AND `haspic`='1'";
+    isset($vars['nopic'])&& $where_sql.= " AND `haspic`='0'";
 
     switch ($vars['orderby']) {
         case "id":          $order_sql =" ORDER BY `id` $by";            break;
@@ -78,15 +78,16 @@ function article_list($vars){
     isset($vars['startdate'])&& $where_sql .= " AND `pubdate`>='".strtotime($vars['startdate'])."'";
     isset($vars['enddate'])  && $where_sql .= " AND `pubdate`<='".strtotime($vars['enddate'])."'";
     isset($vars['where'])    && $where_sql .= $vars['where'];
-    
+
     $md5    = md5($where_sql.$order_sql.$maxperpage);
     $offset = 0;
     if($vars['page']){
-        $total   = iPHP::total($md5,"SELECT count(*) FROM `#iCMS@__article` WHERE {$where_sql}");
-        $pagenav = isset($vars['pagenav'])?$vars['pagenav']:"pagenav";
-        $pnstyle = isset($vars['pnstyle'])?$vars['pnstyle']:0;
-        $multi   = iCMS::page(array('total'=>$total,'perpage'=>$maxperpage,'unit'=>iPHP::lang('iCMS:page:list'),'nowindex'=>$GLOBALS['page']));
-        $offset  = $multi->offset;
+        $total_type = $vars['total_cache']?$vars['total_cache']:null;
+        $total      = iPHP::total($md5,"SELECT count(*) FROM `#iCMS@__article` WHERE {$where_sql}",$total_type);
+        $pagenav    = isset($vars['pagenav'])?$vars['pagenav']:"pagenav";
+        $pnstyle    = isset($vars['pnstyle'])?$vars['pnstyle']:0;
+        $multi      = iCMS::page(array('total_type'=>$total_type,'total'=>$total,'perpage'=>$maxperpage,'unit'=>iPHP::lang('iCMS:page:list'),'nowindex'=>$GLOBALS['page']));
+        $offset     = $multi->offset;
         //$where_sql.=' `id` >= (SELECT id FROM table LIMIT 1000000, 1) '
         iPHP::assign("article_list_total",$total);
     }
@@ -120,7 +121,7 @@ function article_search($vars){
         $FieldWeights OR $FieldWeights=array("title" => 100,"tags" => 80,"name" => 60,"keywords" => 40);
         $SPH->SetFieldWeights($FieldWeights);
     }
-    
+
 
     $page       = (int)$_GET['page'];
     $maxperpage = isset($vars['row'])?(int)$vars['row']:10;
@@ -133,10 +134,10 @@ function article_search($vars){
         $vars['mode'] =="SPH_MATCH_ALL" && $SPH->SetMatchMode(SPH_MATCH_ALL);
         $vars['mode'] =="SPH_MATCH_EXTENDED" && $SPH->SetMatchMode(SPH_MATCH_EXTENDED);
     }
-    
+
     isset($vars['userid']) && $SPH->SetFilter('userid',array($vars['userid']));
     isset($vars['postype'])&& $SPH->SetFilter('postype',array($vars['postype']));
-    
+
     if(isset($vars['cid'])){
         $cids    = $vars['sub']?iCMS::get_category_ids($vars['cid'],true):$vars['cid'];
         $cids OR $cids = (array)$vars['cid'];
@@ -149,24 +150,24 @@ function article_search($vars){
         $SPH->SetFilterRange('pubdate',$startime,$enddate);
     }
     $SPH->SetLimits($start,$maxperpage,10000);
-    
+
     $orderBy   = '@id DESC, @weight DESC';
     $order_sql = ' order by id DESC';
-    
+
     $vars['orderBy']  && $orderBy  = $vars['orderBy'];
     $vars['order_sql']&& $order_sql= ' order by '.$vars['order_sql'];
 
-    $vars['pic'] && $SPH->SetFilter('isPic',array(1));
+    $vars['pic'] && $SPH->SetFilter('haspic',array(1));
     $vars['id!'] && $SPH->SetFilter('@id',array($vars['id!']),true);
-    
+
     $SPH->setSortMode(SPH_SORT_EXTENDED,$orderBy);
-    
+
     $query    = $vars['q'];
     $vars['acc']&& $query = '"'.$vars['q'].'"';
     $vars['@']  && $query = '@('.$vars['@'].') '.$query;
 
     $res = $SPH->Query($query,iCMS::$config['sphinx']['index']);
-    
+
     if (is_array($res["matches"])){
         foreach ( $res["matches"] as $docinfo ){
             $aid[]=$docinfo['id'];
@@ -174,7 +175,7 @@ function article_search($vars){
         $aids=implode(',',(array)$aid);
     }
     if(empty($aids)) return;
-    
+
     $where_sql=" `id` in($aids)";
     $offset    = 0;
     if($vars['page']){
@@ -191,7 +192,7 @@ function article_search($vars){
 }
 
 function __article($vars,$variable){
-    if($variable)foreach ($variable as $key => $value) {  
+    if($variable)foreach ($variable as $key => $value) {
         if($vars['page']){
             $value['page']  = $GLOBALS['page']?$GLOBALS['page']:1;
             $value['total'] = $total;

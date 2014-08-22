@@ -35,7 +35,7 @@
 //                }
 
                 return arr.push({
-                    _src: node.src,
+                    //_src: node.src,
                     src: node.src
                 });
             });
@@ -261,7 +261,7 @@
                             Base.createImgBase64(img, f, me.dialog);
 
                             var xhr = new XMLHttpRequest();
-                            xhr.open("post", me.editor.getOpt('imageUrl') + "?type=ajax", true);
+                            xhr.open("post", me.editor.getOpt('imageUrl') + "&type=ajax", true);
                             xhr.setRequestHeader("X-Requested-With", "XMLHttpRequest");
 
                             //模拟数据

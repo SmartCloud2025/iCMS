@@ -25,8 +25,8 @@ function push_list($vars){
         $whereSQL.= iPHP::where($cids,'cid');
     }
     isset($vars['pid']) 	&& $whereSQL.= " AND `type` ='{$vars['pid']}'";
-    isset($vars['pic']) 	&& $whereSQL.= " AND `ispic`='1'";
-    isset($vars['nopic']) 	&& $whereSQL.= " AND `ispic`='0'";
+    isset($vars['pic']) 	&& $whereSQL.= " AND `haspic`='1'";
+    isset($vars['nopic']) 	&& $whereSQL.= " AND `haspic`='0'";
 
 	isset($vars['startdate'])    && $whereSQL.=" AND `addtime`>='".strtotime($vars['startdate'])."'";
 	isset($vars['enddate'])     && $whereSQL.=" AND `addtime`<='".strtotime($vars['enddate'])."'";

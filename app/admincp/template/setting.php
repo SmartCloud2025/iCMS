@@ -684,14 +684,14 @@ source iCMS_article
 	sql_query_pre	=  SET NAMES utf8
 	sql_query_pre 	= REPLACE INTO sph_counter SELECT 1, MAX(id) FROM icms_article
 
-	sql_query = SELECT a.id, a.cid,a.userid, a.comments, a.pubdate, a.hits, a.isPic, a.title, a.keywords, a.tags, a.status FROM icms_article a,icms_category c WHERE a.cid=c.cid AND a.status ='1' AND a.id<=( SELECT max_doc_id FROM sph_counter WHERE counter_id=1 )
+	sql_query = SELECT a.id, a.cid,a.userid, a.comments, a.pubdate, a.hits, a.haspic, a.title, a.keywords, a.tags, a.status FROM icms_article a,icms_category c WHERE a.cid=c.cid AND a.status ='1' AND a.id<=( SELECT max_doc_id FROM sph_counter WHERE counter_id=1 )
 	sql_attr_uint		= cid
 	sql_attr_uint		= userid
 	sql_attr_uint		= comments
 	sql_attr_uint		= hits
 	sql_attr_uint		= status
 	sql_attr_timestamp	= pubdate
-	sql_attr_bool		= isPic
+	sql_attr_bool		= haspic
 
 	sql_ranged_throttle	= 0
 	sql_query_info		= SELECT * FROM icms_article WHERE id=$id
@@ -700,7 +700,7 @@ source iCMS_article
 source iCMS_article_delta : iCMS_article
 {
 	sql_query_pre	=  SET NAMES utf8
-	sql_query = SELECT a.id, a.cid,a.userid,a.comments, a.pubdate, a.hits, a.isPic, a.title, a.keywords, a.tags, a.status FROM icms_article a,icms_category c WHERE a.cid=c.cid AND a.status ='1' AND a.id>( SELECT max_doc_id FROM sph_counter WHERE counter_id=1 )
+	sql_query = SELECT a.id, a.cid,a.userid,a.comments, a.pubdate, a.hits, a.haspic, a.title, a.keywords, a.tags, a.status FROM icms_article a,icms_category c WHERE a.cid=c.cid AND a.status ='1' AND a.id>( SELECT max_doc_id FROM sph_counter WHERE counter_id=1 )
 }
 index iCMS_article
 {

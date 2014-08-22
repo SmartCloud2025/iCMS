@@ -24,7 +24,7 @@ class tagApp {
             $val   = iS::escapeStr($_GET['tkey']);
         } elseif ($_GET['id']) {
             $field = 'id';
-            $val   = (int)$_GET['id'];            
+            $val   = (int)$_GET['id'];
         }
         return $this->tag($val, $field);
     }
@@ -67,7 +67,7 @@ class tagApp {
         $rs['url'] OR $rs['url'] = $rs['iurl']->href;
 
 
-        $category['mode'] && iPHP::page($rs['iurl']);
+        $category['mode'] && iCMS::setpage($rs['iurl']);
 
         if ($rs['related']) {
             $relArray = explode(',', $rs['related']);

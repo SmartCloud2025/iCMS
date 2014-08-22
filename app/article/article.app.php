@@ -27,7 +27,7 @@ class articleApp {
     }
 
     public function article($id,$page=1,$tpl=true){
-        $aRs		= iDB::row("SELECT * FROM `#iCMS@__article` WHERE id='".(int)$id."' AND `status` ='1' LIMIT 1;",ARRAY_A);
+        $aRs = iDB::row("SELECT * FROM `#iCMS@__article` WHERE id='".(int)$id."' AND `status` ='1' LIMIT 1;",ARRAY_A);
         if($aRs['url']) {
             if(iPHP::$iTPL_mode=="html") {
                 return false;
@@ -37,18 +37,18 @@ class articleApp {
             }
         }
         if($aRs){
-	        $dRs	= iDB::row("SELECT body,subtitle FROM `#iCMS@__article_data` WHERE aid='".(int)$id."' LIMIT 1;",ARRAY_A);
-	        $rs		= (Object)array_merge($aRs,$dRs);
+            $dRs = iDB::row("SELECT body,subtitle FROM `#iCMS@__article_data` WHERE aid='".(int)$id."' LIMIT 1;",ARRAY_A);
+            $rs  = (Object)array_merge($aRs,$dRs);
 	        unset($dRs);
         }
         unset($aRs);
         empty($rs) && iPHP::throwException('应用程序运行出错.找不到该文章: <b>ID:'. $id.'</b>', 4001);
-        
+
         $categoryApp	= iPHP::app("category");
         $category		= $categoryApp->category($rs->cid,false);
-        
+
         if($category['status']==0) return false;
-        
+
         if(iPHP::$iTPL_mode=="html" && (strstr($category['contentRule'],'{PHP}')||$category['outurl']||$category['mode']==0)) return false;
 
         $_iurlArray = array((array)$rs,$category);
@@ -56,10 +56,10 @@ class articleApp {
         $pageurl    = $rs->iurl->pageurl;
         $rs->url    = $rs->iurl->href;
         $tpl && iCMS::gotohtml($rs->iurl->path,$rs->iurl->href,$category['mode']);
-        $picbody	=	preg_replace('/<div\sclass="ke_items">.*?<\/ul>\s*<\/div>/is', '', $rs->body);
-        preg_match_all("/<img.*?src\s*=[\"|'|\s]*(http:\/\/.*?\.(gif|jpg|jpeg|bmp|png)).*?>/is",$picbody,$picArray);
-        $pA = array_unique($picArray[1]);
-        if($pA)foreach($pA as $key =>$pVal) {
+        //$picbody	=	preg_replace('/<div\sclass="ke_items">.*?<\/ul>\s*<\/div>/is', '', $rs->body);
+        preg_match_all("/<img.*?src\s*=[\"|'|\s]*(http:\/\/.*?\.(gif|jpg|jpeg|bmp|png)).*?>/is",$rs->body,$pic_array);
+        $photo_array = array_unique($pic_array[1]);
+        if($photo_array)foreach($photo_array as $key =>$pVal) {
             $rs->photo[]=trim($pVal);
         }
         $body     = explode('#--iCMS.PageBreak--#',$rs->body);
@@ -82,15 +82,16 @@ class articleApp {
                 $flag++;
                 if($flag==6)break;
             }
-            $rs->pagenav.='<a href="'.iPHP::p2num($pageurl,(($total-$page>0)?$page+1:$page)).'" class="next" target="_self">'.iPHP::lang('iCMS:page:next').'</a>';
+            $next_url    = iPHP::p2num($pageurl,(($total-$page>0)?$page+1:$page));
+            $rs->pagenav.='<a href="'.$next_url.'" class="next" target="_self">'.iPHP::lang('iCMS:page:next').'</a>';
             $rs->pagenav.='<a href="'.iPHP::p2num($pageurl,$total).'" class="end" target="_self">共'.$total.'页</a>';
         }
        $rs->page = array('total'=>$total,'count'=>$count,'current'=>$current,'nav'=>$rs->pagenav,'prev'=>$ppHref,'next'=>$npHref);
         if($page<$total){
-            $imgA = array_unique($picArray[0]);
-            foreach($imgA as $key =>$img){
-                $rs->body =str_replace($img,'<p align="center"><a href="'.$npHref.'"><b>'.iPHP::lang('iCMS:article:clicknext').'</b></a></p>
-                <p align="center"><a href="'.$npHref.'" title="'.$rs->title.'">'.$_img.'</a></p>',$rs->body);
+            $img_array = array_unique($pic_array[0]);
+            foreach($img_array as $key =>$img){
+                $rs->body =str_replace($img,'<p align="center"><a href="'.$next_url.'"><b>'.iPHP::lang('iCMS:article:clicknext').'</b></a></p>
+                <p align="center"><a href="'.$next_url.'" title="'.$rs->title.'">'.$img.'</a></p>',$rs->body);
             }
         }
         if($rs->tags) {
@@ -110,12 +111,12 @@ class articleApp {
         }
         $rs->relTags = $relTags?$relTags:$category['name'];
         $rs->rel     = $rs->related;
-        
+
         if(strstr($rs->source, '|')){
             list($sourceName,$sourceUrl) = explode('|',$rs->source);
             $rs->source                  = '<a href="'.$sourceUrl.'" target="_blank">'.$sourceName.'</a>';
         }
-        
+
         if($rs->metadata){
         	$rs->meta	= unserialize($rs->metadata);
         	unset($rs->metadata);
@@ -150,7 +151,7 @@ class articleApp {
         //     'title' => $rs->title,
         // ));
         iPHP::assign('article',(array)$rs);
-        
+
         if($tpl) {
             $articletpl	= empty($rs->tpl)?$category['contentTPL']:$rs->tpl;
             strstr($tpl,'.htm') && $articletpl	= $tpl;

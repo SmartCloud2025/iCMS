@@ -257,7 +257,7 @@
                         return false;
                     });
 
-                    //iCMS.dialog(report_box,opts); 
+                    //iCMS.dialog(report_box,opts);
                 });
 
                 function comment_param(textarea) {
@@ -354,8 +354,8 @@
             if (!param) return {};
             return $.parseJSON(param);
         },
-        api: function(app, ido) {
-            return iCMS.config.API + '?app=' + app + (ido || '');
+        api: function(app, _do) {
+            return iCMS.API + '?app=' + app + (_do || '');
         },
         Init: function() {
             this.user_status = this.user.status();
@@ -405,7 +405,7 @@
                 $("#iCMS-seccode-img").attr('src', iCMS.api('public', '&do=seccode&') + Math.random());
             });
             $(".iCMS-API-iframe").load(function() {
-                $(this).height(0); //用于每次刷新时控制IFRAME高度初始化 
+                $(this).height(0); //用于每次刷新时控制IFRAME高度初始化
                 var height = $(this).contents().height();
                 $(this).height(height);
             });

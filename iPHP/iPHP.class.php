@@ -81,7 +81,7 @@ class iPHP{
 		}
 		if(empty($def_tpl)){
 			$device_name = 'pc';
-			$def_tpl     = $template['pc']['tpl'];				
+			$def_tpl     = $template['pc']['tpl'];
 			$def_domain  = false;
 		}
         define('iPHP_TPL_DEFAULT',$def_tpl);
@@ -140,7 +140,7 @@ class iPHP{
         }else {
             self::$iTPL->display($tpl);
             if(iPHP_DEBUG){
-	            //echo '<span class="label label-success">内存:'.iFS::sizeUnit(memory_get_usage()).', 执行时间:'.iPHP::timer_stop().'s, SQL执行:'.iDB::$num_queries.'次</span>';           	
+	            //echo '<span class="label label-success">内存:'.iFS::sizeUnit(memory_get_usage()).', 执行时间:'.iPHP::timer_stop().'s, SQL执行:'.iDB::$num_queries.'次</span>';
             }
         }
     }
@@ -236,41 +236,37 @@ class iPHP{
 	}
 
     public static function app($app = NULL,$args = NULL){
-    	$app_dir	= $app_name = $app;
+		$app_dir   = $app_name = $app;
+		$file_type = 'app';
     	if(is_array($app)){
     		$app_dir	= $app[0];
     		$app_name	= $app[1];
+    	}elseif(strpos($app,'.')!==false){
+    		list($app_name,$file_type) = explode('.', $app);
+    		$app_dir = $app_name;
     	}
-    	self::import(iPHP_APP_DIR.'/'.$app_dir.'/'.$app_name.'.app.php');
-    	$app_name	= $app_name.'App';
-    	if($args){
-			return new $app_name($args);
-		}
-		return new $app_name();
-    }
-    public static function appFunc($func = NULL){
-    	$func_dir	= $func_name = $func;
-    	if(is_array($func)){
-    		$func_dir	= $func[c0];
-    		$func_name	= $func[1];
+    	switch ($file_type) {
+    		case 'class': $obj_name = $app_name;break;
+    		case 'table':
+				$obj_name = $app_name.'Table';
+				$args     = "import";
+    		break;
+    		case 'func':
+				$args     = "import";
+    		break;
+    		default:$obj_name = $app_name.'App';break;
     	}
-    	self::import(iPHP_APP_DIR.'/'.$func_dir.'/'.$func_name.'.tpl.php');
-    }
-    public static function appClass($class = NULL,$args = NULL){
-    	$class_dir	= $class_name = $class;
-    	if(is_array($class)){
-    		$class_dir	= $class[0];
-    		$class_name	= $class[1];
-    	}
-    	self::import(iPHP_APP_DIR.'/'.$class_dir.'/'.$class_name.'.class.php');
+
+    	self::import(iPHP_APP_DIR.'/'.$app_dir.'/'.$app_name.'.'.$file_type.'.php');
 
     	if($args==="import") return;
 
     	if($args){
-			return new $class_name($args);
+			return new $obj_name($args);
 		}
-		return new $class_name();
+		return new $obj_name();
     }
+
 	public static function throwException($msg, $code,$name='',$h404=true) {
 		if(!headers_sent() && $h404){
 			self::http_status(404,$code);
@@ -284,12 +280,7 @@ class iPHP{
 		}
 		return str_replace('{P}',$page,$path);
 	}
-	public static function page($iurl){
-		if(isset($GLOBALS['iPage'])) return;
 
-		$GLOBALS['iPage']['url']  = $iurl->pageurl;
-		$GLOBALS['iPage']['html'] = array('enable'=>true,'index'=>$iurl->href,'ext'=>$iurl->ext);
-	}
 	public static function router($key,$static=false){
 		if($static) return $key;
 
@@ -299,7 +290,7 @@ class iPHP{
 		$router = self::import($path,true);
 
 		if(is_array($key)){
-			if(is_array($key[1])){
+			if(is_array($key[1])){ /* 多个{} 例:/{uid}/{cid}/ */
 				$url = $router[$key[0]];
 				preg_match_all('/\{(\w+)\}/i',$url, $matches);
 				$url = str_replace($matches[0], $key[1], $url);
@@ -463,10 +454,10 @@ class iPHP{
         	break;
         	case 'url':
 				$A[1]=="1" && $A[1]	= __REF__;
-	        	$code	= self::$dialog_obj."location.href='".$A[1]."';";
+	        	$code = self::$dialog_obj."location.href='".$A[1]."';";
         	break;
-        	case 'src':	$code	= self::$dialog_obj."$('#iPHP_FRAME').attr('src','".$A[1]."');";break;
-        	default:	$code	= '';
+        	case 'src':	$code = self::$dialog_obj."$('#iPHP_FRAME').attr('src','".$A[1]."');";break;
+        	default:	$code = '';
         }
 
         if($ret) return $code;
@@ -536,7 +527,7 @@ class iPHP{
 		$page      = min($lastpg,$page);
 		$prepg     = (($page-1)<0)?"0":$page-1; //上一页
 		$nextpg    = ($page==$lastpg ? 0 : $page+1); //下一页
-		$url       = buildurl($url,array('totalNum'=>$total,'page'=>''));
+		$url       = buildurl($url,array('total_num'=>$total,'page'=>''));
 	    self::$offset	= ($page-1)*$displaypg;
 	    self::$offset<0 && self::$offset=0;
 	    self::$pagenav="<ul><li><a href='{$url}1' target='_self'>首页</a></li>";
@@ -568,18 +559,15 @@ class iPHP{
 	    //(int)$lastpg<2 &&UCP::$pagenav='';
 	}
 	public static function total($tnkey,$sql,$type=null){
-    	$tnkey	= substr($tnkey,8,16);
-    	$total	= (int)$_GET['totalNum'];
-    	if(empty($total) && $type!='G'){
-//    		$total	= (int)self::get_cookie($tnkey);
-    		$total	= (int)iCache::get('total/'.$tnkey);
+		$tnkey = substr($tnkey,8,16);
+		$total = (int)$_GET['total_num'];
+    	if(empty($total) && $type===null){
+    		$total = (int)iCache::get('total/'.$tnkey);
 		}
-    	if(empty($total) || $GLOBALS['removeTotal']){
-        	$total	= iDB::value($sql);
-        	//echo iDB::$last_query;
-        	if($type!='G'){
+    	if(empty($total) || $GLOBALS['removeTotal']||$type==='no'){
+        	$total = iDB::value($sql);
+        	if($type===null){
         		iCache::set('total/'.$tnkey,$total);
-        		//self::set_cookie($tnkey,$total,3600);
         	}
         }
         return $total;

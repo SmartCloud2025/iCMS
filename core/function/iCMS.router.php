@@ -11,9 +11,9 @@ function iCMS_router($vars){
 		echo 'javascript:;';
 		return;
 	}
-	$ukey = $vars['url'];
+	$router = $vars['url'];
 	unset($vars['url'],$vars['app']);
-	$url = iPHP::router($ukey,iCMS_REWRITE);
+	$url = iPHP::router($router,iCMS_REWRITE);
 	$vars['query'] && $url = buildurl($url,$vars['query']);
 	echo $url?$url:'javascript:;';
 }

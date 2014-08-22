@@ -131,13 +131,32 @@ a:hover>.iCMS-icon-comment-like { background-position: -222px -79px }
 a:hover>.iCMS-icon-no-help { background-position: -71px -170px }
 .iCMS-icon-spike { position: absolute; top: -8px; left: 23px; width: 13px; height: 8px; background-position: -200px -165px }
 a, a:hover, a:focus { color: #057AFD }
-.btn, .add-on, .navbar-inner, .label, .navbar a, .switch-left, .switch-right { background-image: none !important; -webkit-box-shadow: none !important; -moz-box-shadow: none !important; box-shadow: none !important }
-.d-content { color: #222 }
+/* bootstrap */
+input[type="checkbox"] { margin: 0px !important; }
+a, a:hover, a:focus { color: #057AFD; }
+a.noneline { text-decoration: none !important; }
+.btn, .add-on, .navbar-inner, .label, .navbar a, .switch-left, .switch-right { background-image: none !important; -webkit-box-shadow: none !important; -moz-box-shadow: none !important; box-shadow: none !important; }
+.form-inline input, .form-inline textarea, .form-inline select { color: #1A1A1A !important; }
+.tab-content { overflow: visible; /* background-color: #fff; border: 1px solid #ddd;  */ padding: 10px; border-top: 0px; -webkit-border-radius: 4px; -moz-border-radius: 4px; border-radius: 4px; -webkit-border-top-left-radius: 0; -moz-border-radius-topleft: 0; border-top-left-radius: 0; -webkit-border-top-right-radius: 0; -moz-border-radius-topright: 0; border-top-right-radius: 0; }
+.add-on { background-color: #DFDFDF !important; background-clip: padding-box; box-shadow: 0 0 3px #fff inset, 0 1px 1px rgba(0, 0, 0, .1); color: #696969; }
+.input-prepend textarea { -webkit-border-top-left-radius: 0; -moz-border-radius-topleft: 0; border-top-left-radius: 0; -webkit-border-bottom-left-radius: 0; -moz-border-radius-bottomleft: 0; border-bottom-left-radius: 0; }
+.input-append textarea { -webkit-border-top-right-radius: 0; -moz-border-radius-topright: 0; border-top-right-radius: 0; -webkit-border-bottom-right-radius: 0; -moz-border-radius-bottomright: 0; border-bottom-right-radius: 0; }
+.btn-group-vertical > input { display: block; float: none; max-width: 100%; -webkit-border-bottom-right-radius: 0; -moz-border-radius-bottomright: 0; border-bottom-right-radius: 0; -webkit-border-bottom-left-radius: 0; -moz-border-radius-bottomleft: 0; border-bottom-left-radius: 0; }
+.navbar .divider-vertical { border-left: 1px solid #D4D4D4; }
+.navbar .nav>li>a { color: #888888; text-shadow: none; /* font-weight: bold; text-shadow: 0 1px 0 #f8f8f8;  */ }
+.navbar .nav>.active>a { color: #057AFD; }
+.navbar .nav li.dropdown.open>.dropdown-toggle, .navbar .nav li.dropdown.active>.dropdown-toggle, .navbar .nav li.dropdown.open.active>.dropdown-toggle { color: #057AFD; }
+.dropdown-menu li a:hover i, .dropdown-submenu:hover>a i { color: #fff !important; }
+.dropdown-menu li a:hover, .dropdown-menu>.active>a, .dropdown-menu .active a:hover { background-color: #057AFD; background-image: none; color: #f8f8f8; }
+.nav-tabs { margin-bottom: 0px; }
+.input-append a.btn { border: 1px solid #ccc !important; }
+.btn-primary:hover, .btn-primary:focus, .btn-primary:active, .btn-primary.active, .btn-primary.disabled, .btn-primary[disabled] { background-color: #08c; }
 /* ==iPHP== */
 .iPHP-msg { text-align: center; margin: 5px; padding: 4px }
 .iPHP-msg .label { padding: 8px 10px; font-size: 14px; letter-spacing: 1px; line-height: 160% }
 .iPHP-msg pre { width: 800px; text-align: left }
 .iPHP-msg i { font-size: 18px }
+.d-content { color: #222 }
 /* ==modal== */
 .modal { margin: 0px !important }
 .modal .modal-header { background-color: #1575d5; background-image: -moz-linear-gradient(top, #1d7fe2, #0865c2); background-image: -ms-linear-gradient(top, #1d7fe2, #0865c2); background-image: -webkit-gradient(linear, 0 0, 0 100%, from(#1d7fe2), to(#0865c2)); background-image: -webkit-linear-gradient(top, #1d7fe2, #0865c2); background-image: -o-linear-gradient(top, #1d7fe2, #0865c2); background-image: linear-gradient(top, #1d7fe2, #0865c2); background-repeat: repeat-x; filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#1d7fe2', endColorstr='#0865c2', GradientType=0); padding: 3px 15px; border-radius: 6px 6px 0 0; border: 1px solid #0D6EB8; box-shadow: 0 1px 0 rgba(255, 255, 255, .1) inset, 0 1px 1px rgba(0, 0, 0, .2); margin: -1px -1px 0; line-height: 14px }

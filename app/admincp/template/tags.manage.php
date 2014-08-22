@@ -138,11 +138,11 @@ $(function(){
             <td><input type="checkbox" name="id[]" value="<?php echo $rs[$i]['id'] ; ?>" /></td>
             <td><?php echo $rs[$i]['id'] ; ?></td>
             <td class="ordernum"><input type="text" name="ordernum[<?php echo $rs[$i]['id'] ; ?>]" value="<?php echo $rs[$i]['ordernum'] ; ?>" tid="<?php echo $rs[$i]['id'] ; ?>"/></td>
-            <td><?php if($rs[$i]['ispic'])echo '<img src="'.ACP_UI.'/image.gif" align="absmiddle">';?>
+            <td><?php if($rs[$i]['haspic'])echo '<img src="'.ACP_UI.'/image.gif" align="absmiddle">';?>
               <a href="<?php echo $rs[$i]['url'] ; ?>" class="noneline" target="_blank"><?php echo $rs[$i]['name'] ; ?></a>
           </div>
         
-        <?php if($rs[$i]['ispic']){ ?>
+        <?php if($rs[$i]['haspic']){ ?>
         <a href="<?php echo APP_URI; ?>&do=preview&id=<?php echo $rs[$i]['id'] ; ?>" data-toggle="modal" title="预览"><img src="<?php echo iFS::fp($rs[$i]['pic']); ?>" style="height:120px;"/></a>
         <?php } ?>
           </td>

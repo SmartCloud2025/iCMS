@@ -137,16 +137,16 @@ class iACP {
 		iACP::setConfig(iCMS::$config[$k],$k,0);
 		iACP::cacheConfig();
 	}
-    public static function iDT($data='') {
-        $sql = array();
-        $dA  = explode(',', $data);
+    public static function fields($data='') {
+        $fields = array();
+        $dA     = explode(',', $data);
         foreach ((array) $dA as $d) {
             list($f, $v) = explode(':', $d);
             $v == 'now' && $v = time();
             $v = (int) $v;
-            $sql[] = "`$f`='$v'";
+            $fields[$f] = $v;
         }
-        return implode(',', $sql);
+        return $fields;
     }
     public static function MP($p,$ret=''){
         if(self::is_superadmin()) return true;

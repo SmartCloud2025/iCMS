@@ -47,7 +47,7 @@ class htmlApp{
 		iFS::write($fpath,$htm[0]);
 		$_total	= $total?$total:"1";
 		$msg="共<span class='label label-info'>{$_total}</span>页 已生成<span class='label label-info'>".$GLOBALS['page']."</span>页,";
-		
+
 //		$surplus		= ceil($total-$p);
 		if($loop<$this->CP && $GLOBALS['page']<$total) {
 			$loop++;
@@ -78,7 +78,7 @@ class htmlApp{
 		iPHP::dialog($msg,$loopurl?"src:".$loopurl:'',$dtime,$moreBtn,$updateMsg);
     }
     function do_category(){
-    	$this->category		= iPHP::appClass('category',iCMS_APP_ARTICLE);
+    	$this->category		= iPHP::app('category.class',iCMS_APP_ARTICLE);
     	include iACP::view("html.category");
     }
     function do_createCategory($cid=0,$p=1,$loop=1){
@@ -100,10 +100,10 @@ class htmlApp{
 		}else{
 			iCache::set('iCMS/create.category',$category,0);
 		}
-    	
+
     	$_GET['loop']	&&	$loop=0;
 		$GLOBALS['page']	= $p+$this->page;
-		
+
 		$len	= count($category)-1;
 		$cid	= $category[$k];
 
@@ -149,7 +149,7 @@ class htmlApp{
 				$query["k"]		= $k+1;
 				$query["alltime"]	= 0;
 				$GLOBALS['page']	= 0;
-				
+
 				$loopurl	= $this->loopurl(1,$query);
 		        $msg.="<hr />准备开始生成下一个栏目";
 				$moreBtn	= array(
@@ -169,7 +169,7 @@ class htmlApp{
 
     }
     function do_article(){
-    	$this->category		= iPHP::appClass('category',iCMS_APP_ARTICLE);
+    	$this->category		= iPHP::app('category.class',iCMS_APP_ARTICLE);
     	include iACP::view("html.article");
     }
     function do_createArticle($aid=null){
@@ -187,7 +187,7 @@ class htmlApp{
 			$title	= self::Article($aid);
 			iPHP::success($title.'<hr />生成静态完成!');
 		}
-		
+
 		if($category[0]=='all'){
 			$rs	= iCache::get('iCMS/category.'.iCMS_APP_ARTICLE.'/cache');
 			$category	= array();
@@ -218,7 +218,7 @@ class htmlApp{
         $GLOBALS['page']++;
 		$use_time	= $this->use_time();
 		$msg.="<hr />用时<span class='label label-info'>{$use_time}</span>秒";
-		$query["totalNum"]	= $total;
+		$query["total_num"]	= $total;
 		$query["alltime"]	= $this->alltime+$use_time;
 		$loopurl	= $this->loopurl($looptimes,$query);
 		if($loopurl){
@@ -243,11 +243,11 @@ class htmlApp{
     	$app	= iPHP::app("article");
 		$htm	= $app->article($id);
 		$total	= $htm[1]->page['total'];
-		
+
 		iFS::filterExt($htm[1]->iurl->path,true) OR iPHP::alert("文件后缀不安全,禁止生成!<hr />请更改栏目->URL规则设置->内容规则");
 		iFS::mkdir($htm[1]->iurl->dir);
 		iFS::write($htm[1]->iurl->path,$htm[0]);
-		
+
 		if($total>2){
 			for($ap=2;$ap<=$total;$ap++){
 				$htm	= $app->article($id,$ap);

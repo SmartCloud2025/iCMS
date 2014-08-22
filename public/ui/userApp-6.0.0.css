@@ -148,13 +148,13 @@ html.no-touch .commentApp-box .load-more:hover { background: #fefefe; text-decor
 .userApp-box .sidebar .base_info { margin: 10px 0 20px 14px; }
 .userApp-box .sidebar a.c { font-weight: bold; }
 .userApp-box .sidebar a { padding: 0 10px; line-height: 28px; font-size: 14px; }
-.userApp-box .contents { font-size: 14px; width: 685px; margin-left: 35px; margin-top: 22px; }
+.userApp-box .contents { font-size: 14px; width: 710px; margin-left: 35px; margin-top: 22px; }
 .userApp-box #user_form { position: relative; }
 .userApp-box #user_form dl { margin-bottom: 12px; }
 .userApp-box #user_form dd { float: left; width: 105px; text-align: right; line-height: 26px; vertical-align: middle; color: #666; }
 .userApp-box #user_form dt { margin-bottom: 12px; font-size: 12px; color: #666;font-weight: normal; }
 .userApp-box .iner { _padding-top: -50px; display: inline; *vertical-align: 10px; }
-.userApp-box .title { background: url(img/profile_title_bg.png) no-repeat; width: 649px; height: 30px; line-height: 30px; padding-left: 20px; margin-bottom: 10px; }
+.userApp-box .title { background: url(img/profile_title_bg.png) no-repeat; width: 100%; height: 30px; line-height: 30px; padding-left: 20px; margin-bottom: 10px; }
 .userApp-box .title span { color: #70A700; font-size: 14px; font-weight: bold; height: 30px; line-height: 30px; }
 
 #profile_box .base select { width: 90px; font-size: 14px; }
@@ -199,5 +199,3 @@ html.no-touch .commentApp-box .load-more:hover { background: #fefefe; text-decor
 .account_bind .bind_logo .bind_web .addSuccess { color: #690; line-height: 23px; padding-left: 12px; vertical-align: center; }
 .account_bind p.bind_tip { margin-top: 0; text-align: left; color: #999; }
 /*==manage==*/
-.publish{}
-.publish dd{width:auto !important;text-align:left;margin:0px 8px;}

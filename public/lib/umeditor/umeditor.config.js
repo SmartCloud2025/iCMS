@@ -22,47 +22,31 @@
     var URL = window.UMEDITOR_HOME_URL || (function() {
 
         function PathStack() {
-
             this.documentURL = self.document.URL || self.location.href;
-
             this.separator = '/';
             this.separatorPattern = /\\|\//g;
             this.currentDir = './';
             this.currentDirPattern = /^[.]\/]/;
-
             this.path = this.documentURL;
             this.stack = [];
-
             this.push(this.documentURL);
-
         }
-
         PathStack.isParentPath = function(path) {
             return path === '..';
         };
-
         PathStack.hasProtocol = function(path) {
             return !!PathStack.getProtocol(path);
         };
-
         PathStack.getProtocol = function(path) {
-
             var protocol = /^[^:]*:\/*/.exec(path);
-
             return protocol ? protocol[0] : null;
-
         };
-
         PathStack.prototype = {
             push: function(path) {
-
                 this.path = path;
-
                 update.call(this);
                 parse.call(this);
-
                 return this;
-
             },
             getPath: function() {
                 return this + "";
@@ -73,33 +57,23 @@
         };
 
         function update() {
-
             var protocol = PathStack.getProtocol(this.path || '');
-
             if (protocol) {
-
                 //根协议
                 this.protocol = protocol;
-
                 //local
                 this.localSeparator = /\\|\//.exec(this.path.replace(protocol, ''))[0];
-
                 this.stack = [];
             } else {
                 protocol = /\\|\//.exec(this.path);
                 protocol && (this.localSeparator = protocol[0]);
             }
-
         }
-
         function parse() {
-
             var parsedStack = this.path.replace(this.currentDirPattern, '');
-
             if (PathStack.hasProtocol(this.path)) {
                 parsedStack = parsedStack.replace(this.protocol, '');
             }
-
             parsedStack = parsedStack.split(this.localSeparator);
             parsedStack.length = parsedStack.length - 1;
 
@@ -112,19 +86,11 @@
                         root.push(tempPath);
                     }
                 }
-
             }
-
-
         }
-
         var currentPath = document.getElementsByTagName('script');
-
         currentPath = currentPath[currentPath.length - 1].src;
-
         return new PathStack().push(currentPath) + "";
-
-
     })();
 
     /**
@@ -136,25 +102,24 @@
         UMEDITOR_HOME_URL: URL
 
         //图片上传配置区
-        ,
-        imageUrl: URL + "php/imageUp.php" //图片上传提交地址
-        ,
-        imagePath: URL + "php/" //图片修正地址，引用了fixedImagePath,如有特殊需求，可自行配置
-        ,
-        imageFieldName: "upfile" //图片数据的key,若此处修改，需要在后台对应文件修改对应参数
+        ,imageUrl: iCMS.API + "?app=user&do=imageUp" //图片上传提交地址
+        ,imagePath: '' //图片修正地址，引用了fixedImagePath,如有特殊需求，可自行配置
+        ,imageFieldName: "upfile" //图片数据的key,若此处修改，需要在后台对应文件修改对应参数
+        // ,imageUrl: URL + "php/imageUp.php" //图片上传提交地址
+        // ,imagePath: URL + "php/" //图片修正地址，引用了fixedImagePath,如有特殊需求，可自行配置
+        // ,imageFieldName: "upfile" //图片数据的key,若此处修改，需要在后台对应文件修改对应参数
 
 
         //工具栏上的所有的功能按钮和下拉框，可以在new编辑器的实例时选择自己需要的从新定义
-        ,
-        toolbar: [
-            'cleardoc drafts preview | undo redo | bold italic underline strikethrough | superscript subscript | forecolor backcolor |',
+        ,toolbar: [
+            'bold italic underline strikethrough | superscript subscript | forecolor backcolor |',
             'justifyleft justifycenter justifyright justifyjustify | ',
             'insertorderedlist insertunorderedlist |',
-            'link unlink | emotion image video',
-            'paragraph fontfamily fontsize |',
-            'horizontal fullscreen', 'formula selectall removeformat'
-        ],
-        textarea: 'body' // 提交表单时，服务器获取编辑器提交内容的所用的参数，多实例时可以给容器name属性，会将name给定的值最为每个实例的键值，不用每次实例化的时候都设置这个值
+            'link unlink | image video | undo redo | formula removeformat horizontal |',
+            'paragraph fontfamily fontsize ',
+            'fullscreen'
+        ]
+        ,textarea: 'body' // 提交表单时，服务器获取编辑器提交内容的所用的参数，多实例时可以给容器name属性，会将name给定的值最为每个实例的键值，不用每次实例化的时候都设置这个值
 
         //语言配置项,默认是zh-cn。有需要的话也可以使用如下这样的方式来自动多语言切换，当然，前提条件是lang文件夹下存在对应的语言文件：
         //lang值也可以通过自动获取 (navigator.language||navigator.browserLanguage ||navigator.userLanguage).toLowerCase()
