@@ -125,6 +125,7 @@ class userApp {
         iPHP::success('user:category:success','js:1');
     }
     private function manage_pg_article(){
+        iPHP::assign('status',isset($_GET['status'])?(int)$_GET['status']:'1');
         iPHP::assign('cid',(int)$_GET['cid']);
         iPHP::assign('article',array(
             'manage' => iPHP::router('/user/article'),
@@ -185,17 +186,22 @@ class userApp {
 
             $data    = compact ($fields);
             $aid     = articleTable::insert($data);
-            map::init('category',iCMS_APP_ARTICLE);
-            map::add($cid,$aid);
-
             $article_data = compact ($data_fields);
             articleTable::data_insert($article_data);
+
+            map::init('category',iCMS_APP_ARTICLE);
+            map::add($cid,$aid);
+            iDB::query("UPDATE `#iCMS@__user_category` SET `count` = count+1 WHERE `cid` = '$ucid' AND `uid`='{$this->userid}';");
             $lang = $status ? 'user:article:add_success':'user:article:add_examine';
         }else{
             articleTable::update(compact($fields),array('id'=>$aid));
             articleTable::data_update(compact ($data_fields),array('aid'=>$aid));
             map::init('category',iCMS_APP_ARTICLE);
             map::diff($cid,$_cid,$aid);
+            if($ucid!=$_ucid){
+                iDB::query("UPDATE `#iCMS@__user_category` SET `count` = count+1 WHERE `cid` = '$ucid' AND `uid`='{$this->userid}';");
+                iDB::query("UPDATE `#iCMS@__user_category` SET `count` = count-1 WHERE `cid` = '$_ucid' AND `uid`='{$this->userid} AND `count`>0';");
+            }
             $lang = $status ? 'user:article:update_success':'user:article:update_examine';
         }
         iPHP::success($lang,'js:0');

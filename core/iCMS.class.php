@@ -62,7 +62,6 @@ class iCMS {
                     "user"   => iCMS_USER_URL,
                     "res"    => iCMS_FS_URL,
                     "ui"     => iCMS_PUBLIC_URL.'/ui',
-                    "lib"    => iCMS_PUBLIC_URL.'/lib',
                     "avatar" => iCMS_FS_URL.'avatar/',
 			)
 		));

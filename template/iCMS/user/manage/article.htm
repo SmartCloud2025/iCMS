@@ -2,6 +2,9 @@
 	<input name="action" type="hidden" value="manage" />
 	<input name="pg" type="hidden" value="article" />
 	<div class="article">
+		<div class="btn-group">
+			<a class="btn btn-danger" href="<!--{$article.manage}-->&status=0"><i class="fa fa-circle-o-notch"></i> 审核中文章</a>
+		</div>
 		<table class="table table-striped">
 			<thead>
 				<tr>
@@ -13,7 +16,7 @@
 				</tr>
 			</thead>
 			<tbody>
-<!--{iCMS:article:list loop="true" page="true" row="12" call="user" total_cache="G" cid=$cid userid=$user.uid}-->
+			<!--{iCMS:article:list loop="true" page="true" row="12" call="user" total_cache="G" status=$status cid=$cid userid=$user.uid}-->
 				<tr>
 					<td><!--{$article_list.id}--></td>
 					<td><!--{if $article_list.status=="0"}-->
@@ -25,7 +28,7 @@
 					<td><a href="<!--{$article.edit}-->&id=<!--{$article_list.id}-->" title="编辑"><i class="fa fa-edit"></i></a>
 						<a href="javascript:;" title="删除" style="margin-left: 10px;"><i class="fa fa-times"></i></a></td>
 				</tr>
-<!--{/iCMS}-->
+			<!--{/iCMS}-->
 			</tbody>
 			<tfoot>
 	            <tr>

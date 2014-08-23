@@ -10,19 +10,19 @@ class articleTable {
     public static function count_sql($sql=''){
         return "SELECT count(*) FROM `#iCMS@__article` {$sql}";
     }
-    public static function select($sql='',$orderby='',$offset=0,$maxperpage=10){        
-        $rs = iDB::all("SELECT * FROM `#iCMS@__article` {$sql} order by {$orderby} LIMIT ".iPHP::$offset." , {$maxperpage}");
-        // iDB::debug(1);
+    public static function select($sql='',$orderby='',$offset=0,$maxperpage=10){
+        $rs = iDB::all("SELECT * FROM `#iCMS@__article` {$sql} order by {$orderby} LIMIT {$offset},{$maxperpage}");
+        //iDB::debug(1);
         return $rs;
     }
     public static function fields($update=false){
-        $fields  = array('cid', 'scid','ucid','pid', 
+        $fields  = array('cid', 'scid','ucid','pid',
             'title', 'stitle','keywords', 'tags', 'description','source',
-            'author', 'editor', 'userid', 
+            'author', 'editor', 'userid',
             'haspic','pic','mpic','spic', 'picdata',
-            'related', 'metadata', 'pubdate', 'chapter', 'url','clink', 
+            'related', 'metadata', 'pubdate', 'chapter', 'url','clink',
             'orderNum','top', 'postype', 'creative', 'tpl','status');
-        
+
         $update OR $fields = array_merge ($fields,array('postime', 'hits', 'comments', 'good', 'bad'));
 
         return $fields;
@@ -30,7 +30,7 @@ class articleTable {
     public static function chapterCount($aid){
         $count = iDB::value("SELECT count(id) FROM `#iCMS@__article_data` where `aid` = '$aid'");
         iDB::query("UPDATE `#iCMS@__article` SET `chapter`='$count'  WHERE `id` = '$aid'");
-    }    
+    }
     public static function check_title($title){
         return iDB::value("SELECT `id` FROM `#iCMS@__article` where `title` = '$title'");
     }
@@ -49,7 +49,7 @@ class articleTable {
         if($rs){
             $aid   = $rs['id'];
             $adsql = $adid?" AND `id`='{$adid}'":'';
-            $adrs  = iDB::row("SELECT * FROM `#iCMS@__article_data` WHERE `aid`='$aid' {$adsql}",ARRAY_A);            
+            $adrs  = iDB::row("SELECT * FROM `#iCMS@__article_data` WHERE `aid`='$aid' {$adsql}",ARRAY_A);
         }
         return array($rs,$adrs);
     }
@@ -97,7 +97,7 @@ class articleTable {
             $sql = " AND `count`>0";
         }
         iDB::query("UPDATE `#iCMS@__category` SET `count` = count".$math."1 WHERE `cid` ='$cid' {$sql}");
-        
+
     }
     public static function del_filedata($var='',$field='indexid'){
         iDB::query("DELETE FROM `#iCMS@__filedata` WHERE `$field` = '{$var}'");
@@ -110,9 +110,9 @@ class articleTable {
     }
     public static function filedata_update_indexid($indexid='',$filename=''){
         return iDB::query("UPDATE `#iCMS@__filedata` SET `indexid` = '$indexid' WHERE `filename` ='$filename'");
-    }  
+    }
     public static function del_comment($iid){
-        iDB::query("DELETE FROM `#iCMS@__comment` WHERE iid='$iid' and appid='".iCMS_APP_ARTICLE."'");        
+        iDB::query("DELETE FROM `#iCMS@__comment` WHERE iid='$iid' and appid='".iCMS_APP_ARTICLE."'");
     }
 
 

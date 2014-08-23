@@ -14,16 +14,17 @@ function article_list($vars){
         return false;
     }
     $resource  = array();
-    $where_sql = " `status`='1'";
+    $status    = '1';
+    isset($vars['status']) && $status = (int)$vars['status'];
+    $where_sql = " `status`='{$status}'";
+    $vars['call'] =='user'  && $where_sql.= " AND `postype`='0'";
+    $vars['call'] =='admin' && $where_sql.= " AND `postype`='1'";
     $hidden    = iCache::get('iCMS/category/hidden');
     $hidden &&  $where_sql.=iPHP::where($hidden,'cid','not');
     $maxperpage = isset($vars['row'])?(int)$vars['row']:10;
-    $cache_time  = isset($vars['time'])?(int)$vars['time']:-1;
+    $cache_time = isset($vars['time'])?(int)$vars['time']:-1;
     isset($vars['userid'])&& $where_sql.= " AND `userid`='{$vars['userid']}'";
-    isset($vars['author'])&& $where_sql.= " AND `author`='{$vars['author']}'";
     isset($vars['top'])   && $where_sql.= " AND `top`='"._int($vars['top'])."'";
-    $vars['call'] =='user'  && $where_sql .= " AND `postype`='0'";
-    $vars['call'] =='admin' && $where_sql .= " AND `postype`='1'";
 
     if(isset($vars['cid!'])){
     	$ncids    = $vars['cid!'];
@@ -97,7 +98,7 @@ function article_list($vars){
     }
     if(empty($resource)){
         $resource = iDB::all("SELECT * FROM `#iCMS@__article` WHERE {$where_sql} {$order_sql} LIMIT {$offset} , {$maxperpage}");
-        // iDB::debug(1);
+        //iDB::debug(1);
         $resource = __article($vars,$resource);
         $vars['cache'] && iCache::set($cache_name,$resource,$cache_time);
     }
