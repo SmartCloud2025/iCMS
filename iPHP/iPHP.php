@@ -11,6 +11,9 @@
 */
 // ini_set('display_errors','OFF');
 // error_reporting(0);//iPHP默认 不显示错误信息
+// error_reporting(E_ALL & ~E_DEPRECATED); //Production
+//define('iPHP', TRUE);
+defined('iPHP') OR exit('What are you doing?');
 
 ini_set('display_errors','ON');
 error_reporting(E_ALL & ~E_NOTICE);
@@ -21,7 +24,6 @@ version_compare('5.1',phpversion(),'>') && die('您的服务器运行的 PHP 版
 @ini_set('magic_quotes_sybase', 0);
 @ini_set("magic_quotes_runtime",0);
 
-define('iPHP', TRUE);
 define('iPHP_PATH',dirname(strtr(__FILE__,'\\','/')));
 
 require iPHP_PATH.'/iPHP.version.php';

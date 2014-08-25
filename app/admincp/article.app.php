@@ -138,7 +138,7 @@ class articleApp{
     			}
     		break;
     		case 'tag':
-    			iPHP::app('tag.class','import');
+    			iPHP::app('tag.class','include');
 		     	foreach($_POST['id'] AS $id){
 		    		$art = articleTable::row($id,'tags,cid');
 			        if($_POST['pattern']=='replace') {
@@ -214,7 +214,7 @@ class articleApp{
 
 		$art = articleTable::row($id,'tags,cid');
 		if($tags){
-			iPHP::app('tag.class','import');
+			iPHP::app('tag.class','include');
 			tag::diff($tags,$art['tags'],iMember::$userid,$id,$this->categoryApp->rootid($art['cid']));
 		}
         $data = compact('cid','pid','title','tags','description');
@@ -432,7 +432,7 @@ class articleApp{
             $ischapter && $chapter = 1;
 
             if($tags){
-                iPHP::app('tag.class','import');
+                iPHP::app('tag.class','include');
                 $tagArray = tag::add($tags,$userid,$aid,$this->categoryApp->rootid($cid));
                 $tags = addslashes(json_encode($tagArray));
             }
@@ -464,7 +464,7 @@ class articleApp{
             iPHP::dialog('success:#:check:#:文章添加完成!<br />10秒后返回文章列表','url:'.$SELFURL,10,$moreBtn);
         }else{
 			if($tags){
-				iPHP::app('tag.class','import');
+				iPHP::app('tag.class','include');
 	            $tags = tag::diff($tags,$_tags,iMember::$userid,$aid,$this->categoryApp->rootid($cid));
 			    $tags = addslashes($tags);
             }
@@ -532,7 +532,7 @@ class articleApp{
             }
         }
         if($art['tags']){
-            iPHP::app('tag.class','import');
+            iPHP::app('tag.class','include');
             $msg.=tag::del($art['tags']);
         }
         articleTable::del_filedata($id,'indexid');

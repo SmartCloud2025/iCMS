@@ -10,7 +10,7 @@
 * @$Id: category.app.php 2406 2014-04-28 02:24:46Z coolmoo $
 */
 defined('iPHP') OR exit('What are you doing?');
-iPHP::app('category.class','import');
+iPHP::app('category.class','include');
 class categoryApp extends category{
     function __construct($appid = 1) {
         $this->name_text = "栏目";
@@ -20,7 +20,7 @@ class categoryApp extends category{
         $_GET['appid']  && $this->appid = (int)$_GET['appid'];
         parent::__construct($this->appid);
     }
-    function do_add(){        
+    function do_add(){
         if($this->cid) {
             iACP::CP($this->cid,'e','page');
             $rs		= iDB::row("SELECT * FROM `#iCMS@__category` WHERE `cid`='$this->cid' LIMIT 1;",ARRAY_A);
@@ -128,11 +128,11 @@ class categoryApp extends category{
 			}
 			$contentprop = addslashes(serialize($ca));
 		}
-		
+
         if(empty($dir) && empty($url)) {
             $dir = strtolower(pinyin($name));
         }
-        
+
         if($mode=="2"){
         	if(strpos($categoryRule,'{CDIR}')=== FALSE && strpos($categoryRule,'{CID}')=== FALSE){
         		iPHP::alert('伪静态模式下版块URL规则<hr />必需要有<br />{CDIR}版块目录<br />或者<br />{CID}版块ID');
@@ -143,7 +143,7 @@ class categoryApp extends category{
         }
         iPHP::import(iPHP_APP_CORE .'/iMAP.class.php');
         map::init('prop',iCMS_APP_CATEGORY);
-        
+
         $fields = array('rootid','appid','orderNum','name','subname','password','title','keywords','description','dir','mode','domain','url','pic','mpic','spic','htmlext','categoryURI','categoryRule','contentRule','urlRule','indexTPL','listTPL','contentTPL','metadata','contentprop','body','pid','isexamine','issend','isucshow','status');
         $data   = compact ($fields);
 
@@ -196,11 +196,11 @@ class categoryApp extends category{
         $batch    = $_POST['batch'];
         switch($batch){
             case 'move':
-                $tocid = (int)$_POST['tocid'];                
+                $tocid = (int)$_POST['tocid'];
                 $key   = array_search($tocid,$id_array);
                 if($tocid) unset($id_array[$key]);//清除同ID
                 foreach($id_array as $k=>$cid){
-                    iDB::query("UPDATE `#iCMS@__category` SET `rootid` ='$tocid' WHERE `cid` ='$cid'"); 
+                    iDB::query("UPDATE `#iCMS@__category` SET `rootid` ='$tocid' WHERE `cid` ='$cid'");
                 }
                 $this->cache(true,$this->appid);
                 iPHP::success('更新完成!','js:1');
@@ -343,7 +343,7 @@ class categoryApp extends category{
                 $cids  = $this->get_ids($cid,true);
                 array_push ($cids,$cid);
             }
-        } 
+        }
         $cids && $sql= iPHP::where($cids,$field);
         return $sql;
     }
@@ -424,7 +424,7 @@ class categoryApp extends category{
         $C['url'] && $html.=' <span class="label label-warning">∞</span> ';
         $html.='<span class="label label-inverse">pid:'.$C['pid'].'</span> ';
         ($C['mode'] && $C['domain']) && $html.='<span class="label label-important">绑定域名</span> ';
-        $html.='<span class="label label-info">'.$C['count'].'条记录</span> <span class="label">创建者:'.$C['creator'].'</span></span><span class="operation">';        
+        $html.='<span class="label label-info">'.$C['count'].'条记录</span> <span class="label">创建者:'.$C['creator'].'</span></span><span class="operation">';
         iACP::CP($C['cid'],'a')  && $html.='<a href="'.APP_URI.'&do=add&rootid='.$C['cid'].'" class="btn btn-small"><i class="fa fa-plus-square"></i> 添加子'.$this->name_text.'</a> ';
         $html.=$this->treebtn($C);
         iACP::CP($C['cid'],'e') && $html.='<a href="'.APP_URI.'&do=add&cid='.$C['cid'].'" title="编辑'.$this->name_text.'设置"  class="btn btn-small"><i class="fa fa-edit"></i> 编辑</a>';
@@ -435,7 +435,7 @@ class categoryApp extends category{
     function check_dir($dir,$appid,$url,$cid=0){
         $sql ="SELECT `dir` FROM `#iCMS@__category` where `dir` ='$dir' AND `appid`='$appid'";
         $cid && $sql.=" AND `cid` !='$cid'";
-        iDB::value($sql) && empty($url) && iPHP::alert('该'.$this->name_text.'静态目录已经存在!<br />请重新填写(URL规则设置->静态目录)');    
+        iDB::value($sql) && empty($url) && iPHP::alert('该'.$this->name_text.'静态目录已经存在!<br />请重新填写(URL规则设置->静态目录)');
     }
 
     function recount(){
@@ -476,14 +476,14 @@ class categoryApp extends category{
 
     }
     function merge($tocid,$cid){
-        iDB::query("UPDATE `#iCMS@__article` SET `cid` ='$tocid' WHERE `cid` ='$cid'"); 
-        iDB::query("UPDATE `#iCMS@__tags` SET `cid` ='$tocid' WHERE `cid` ='$cid'"); 
-        //iDB::query("UPDATE `#iCMS@__push` SET `cid` ='$tocid' WHERE `cid` ='$cid'"); 
-        iDB::query("UPDATE `#iCMS@__prop` SET `cid` ='$tocid' WHERE `cid` ='$cid'"); 
+        iDB::query("UPDATE `#iCMS@__article` SET `cid` ='$tocid' WHERE `cid` ='$cid'");
+        iDB::query("UPDATE `#iCMS@__tags` SET `cid` ='$tocid' WHERE `cid` ='$cid'");
+        //iDB::query("UPDATE `#iCMS@__push` SET `cid` ='$tocid' WHERE `cid` ='$cid'");
+        iDB::query("UPDATE `#iCMS@__prop` SET `cid` ='$tocid' WHERE `cid` ='$cid'");
     }
     function update_count($cid){
         $cc = iDB::value("SELECT count(*) FROM `#iCMS@__article` where `cid`='$cid'");
-        iDB::query("UPDATE `#iCMS@__category` SET `count` ='$cc' WHERE `cid` ='$cid'");       
+        iDB::query("UPDATE `#iCMS@__category` SET `count` ='$cc' WHERE `cid` ='$cid'");
     }
     function listbtn($rs){
         $a='<a href="'.iURL::get('category',$rs)->href.'" class="btn btn-small"><i class="fa fa-link"></i> 访问</a> ';

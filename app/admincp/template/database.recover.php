@@ -5,7 +5,7 @@
  * @author coolmoo <idreamsoft@qq.com>
  * @$Id: filter.php 2322 2013-12-09 04:00:09Z coolmoo $
  */
-defined('iCMS') OR exit('What are you doing?'); 
+defined('iPHP') OR exit('What are you doing?');
 iACP::head();
 ?>
 <div class="iCMS-container">

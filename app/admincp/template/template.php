@@ -5,7 +5,7 @@
  * @author coolmoo <idreamsoft@qq.com>
  * @$Id: files.manage.php 179 2013-03-29 03:21:28Z coolmoo $
  */
-defined('iCMS') OR exit('What are you doing?'); 
+defined('iPHP') OR exit('What are you doing?');
 iACP::head();
 ?>
 <script type="text/javascript">
@@ -38,7 +38,7 @@ $(function(){
 			        }else{
 			        	$.post('<?php echo APP_URI; ?>&do=mkdir',{name: n,'pwd':'<?php echo $pwd;?>'},
 			        	function(j){
-			        		if(j.code){ 
+			        		if(j.code){
 				        		d.content(j.msg)
 			        			.button({id: 'mkdir-btn',value: '完成',callback: function () {window.location.reload();}});
 			        			window.setTimeout(function(){
@@ -49,7 +49,7 @@ $(function(){
 			        			a.focus();
 			        			return false;
 			        		}
-			        	},"json"); 
+			        	},"json");
 			        }
 			        return false;
 				}}]
@@ -149,7 +149,7 @@ $(function(){
               <td colspan="7"><a href="<?php echo $URI.$parent; ?>"><i class="fa fa-angle-double-up"></i> 返回上级</a></td>
             </tr>
             <?php }  ?>
-            <?php 
+            <?php
             $_count		= count($fileRs);
             for($i=0;$i<$_count;$i++){
             	$icon	= iFS::icon($fileRs[$i]['name'],ACP_UI);

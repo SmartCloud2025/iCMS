@@ -5,7 +5,7 @@
  * @author coolmoo <idreamsoft@qq.com>
  * @$Id: push.manage.php 2371 2014-03-16 05:33:13Z coolmoo $
  */
-defined('iCMS') OR exit('What are you doing?'); 
+defined('iPHP') OR exit('What are you doing?');
 iACP::head();
 ?>
 <script type="text/javascript">

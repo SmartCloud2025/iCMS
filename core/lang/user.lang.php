@@ -15,6 +15,7 @@ return array(
 	'profile'=>array(
 		'success'     =>'修改完成！',
 		'avatar'      =>'头像上传成功！',
+		'custom'      =>'更新封面成功！',
 		'personstyle' =>'多个标签之间请用逗号隔开',
 		'slogan'      =>"随便写点什么，让大家了解你吧。",
 		'pskin'       =>"请选择",
@@ -26,7 +27,7 @@ return array(
 		'success' =>'已关注！',
 		'failure' =>'关注失败！',
 		'self'    =>'不能关注自己！',
-	),	
+	),
 	'login'=>array(
 		'def_uname' =>'邮箱 或 昵称',
 		'error'     =>'用户名或者密码错误！',
@@ -52,12 +53,12 @@ return array(
 	'register' => array(
 		'forbidden'=>'系统已经关闭注册功能！',
 		'nickname'=> array(
-			'empty'=>'请填写昵称！',			
+			'empty'=>'请填写昵称！',
 			'error'=>'昵称只能4~20位，每个中文字算2位字符。',
 			'exist'=>'昵称已经被注册了,请换个再试试。',
 		),
 		'username'=> array(
-			'empty'=>'请填写电子邮箱！',			
+			'empty'=>'请填写电子邮箱！',
 			'error'=>'电子邮箱格式不正确！',
 			'exist'=>'邮件地址已经注册过了,请直接登陆或者换个邮件再试试。',
 		),

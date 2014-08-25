@@ -8,21 +8,22 @@
  */
 class articleApp {
 	public $methods	= array('iCMS','good','like_comment','comment');
-    function __construct() {
-        $this->userid   = (int)iPHP::get_cookie('userid');
-        $this->nickname = iS::escapeStr(iPHP::getUniCookie('nickname'));
-    }
+    function __construct() {}
+
     public function do_iCMS($a = null) {
     	return $this->article((int)$_GET['id'],isset($_GET['p'])?(int)$_GET['p']:1);
     }
     public function API_good(){
+        iPHP::app('user.class','static');
+        user::get_cookie() OR iPHP::code(0,'iCMS:!login',0,'json');
+
         $aid = (int)$_GET['iid'];
         $aid OR iPHP::code(0,'iCMS:article:empty_id',0,'json');
         $ackey = 'article_good_'.$aid;
         $good  = (int)iPHP::get_cookie($ackey);
         $good && iPHP::code(0,'iCMS:article:!good',0,'json');
         iDB::query("UPDATE `#iCMS@__article` SET `good`=good+1 WHERE `id` ='{$aid}' limit 1");
-        iPHP::set_cookie($ackey,$this->userid,86400);
+        iPHP::set_cookie($ackey,user::$userid,86400);
         iPHP::code(1,'iCMS:article:good',0,'json');
     }
 

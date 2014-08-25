@@ -26,7 +26,7 @@ function buildurl($url=false,$qs='') {
     $query2 = $qs;
     is_array($qs) OR parse_str($qs, $query2);
 	$query         = array_merge($query1,$query2);
-	$urlA['query'] = http_build_query($query); 
+	$urlA['query'] = http_build_query($query);
 	$nurl          = glue_url($urlA);
 	return $nurl?$nurl:$url;
 }
@@ -41,7 +41,7 @@ function glue_url($parsed) {
 	$uri .= isset($parsed['query']) ? '?'.$parsed['query'] : '';
 	$uri .= isset($parsed['fragment']) ? '#'.$parsed['fragment'] : '';
 	return $uri;
-} 
+}
 
 
 function bitscale($a) {
@@ -91,47 +91,47 @@ function cstrlen($str) {
 //中文截取
 function csubstr($str,$len,$end=''){
 	$len!='strlen' && $len=$len*2;
-    //获取总的字节数  
+    //获取总的字节数
     $ll = strlen($str);
-    //字节数  
-    $i = 0;  
-    //显示字节数  
-    $l = 0;       
-    //返回的字符串  
-    $s = $str;  
+    //字节数
+    $i = 0;
+    //显示字节数
+    $l = 0;
+    //返回的字符串
+    $s = $str;
     while ($i < $ll)  {
-        //获取字符的asscii  
-        $byte = ord($str{$i});  
-        //如果是1字节的字符  
+        //获取字符的asscii
+        $byte = ord($str{$i});
+        //如果是1字节的字符
         if ($byte < 0x80)  {
             $l++;
             $i++;
         }elseif ($byte < 0xe0){  //如果是2字节字符
-            $l += 2;  
-            $i += 2;  
+            $l += 2;
+            $i += 2;
         }elseif ($byte < 0xf0){   //如果是3字节字符
-            $l += 2;  
-            $i += 3;  
+            $l += 2;
+            $i += 3;
         }else{  //其他，基本用不到
-            $l += 2;  
-            $i += 4;  
+            $l += 2;
+            $i += 4;
         }
         if($len!='strlen'){
-	        //如果显示字节达到所需长度  
+	        //如果显示字节达到所需长度
 	        if ($l >= $len){
 	            //截取字符串
-	            $s = substr($str, 0, $i);  
-	            //如果所需字符串字节数，小于原字符串字节数  
+	            $s = substr($str, 0, $i);
+	            //如果所需字符串字节数，小于原字符串字节数
 	            if($i < $ll){
-	                //则加上省略符号  
-	                $s = $s . $end; break;  
+	                //则加上省略符号
+	                $s = $s . $end; break;
 	            }
-	            //跳出字符串截取 
-	            break;  
+	            //跳出字符串截取
+	            break;
 	        }
         }
     }
-    //返回所需字符串 
+    //返回所需字符串
     return $len!='strlen'?$s:$l;
 }
 
@@ -277,34 +277,38 @@ function random($length, $numeric = 0) {
     }
     return $hash;
 }
-function get_avatar($uid,$size=0) {
-	$nuid = abs(intval($uid));
-	$nuid = sprintf("%08d", $nuid);
-	$dir1 = substr($nuid, 0, 3);
-	$dir2 = substr($nuid, 3, 2);
-	$avatar	= 'avatar/'.$dir1.'/'.$dir2.'/'.$uid.".jpg";
+function get_user_dir($uid,$dir='avatar'){
+    $nuid = abs(intval($uid));
+    $nuid = sprintf("%08d", $nuid);
+    $dir1 = substr($nuid, 0, 3);
+    $dir2 = substr($nuid, 3, 2);
+    $path = $dir.'/'.$dir1.'/'.$dir2;
+    return $path;
+}
+function get_user_file($uid,$size=0,$dir='avatar') {
+    $path = get_user_dir($uid,$dir).'/'.$uid.".jpg";
 	if ($size) {
-		$avatar.= '_'.$size.'x'.$size.'.jpg';
+		$path.= '_'.$size.'x'.$size.'.jpg';
 	}
-	return $avatar;
+	return $path;
 }
 
 function authcode($string, $operation = 'DECODE', $key = '', $expiry = 0) {
-	$ckey_length   = 4;
+	$ckey_length   = 8;
 	$key           = md5($key ? $key : iPHP_KEY);
 	$keya          = md5(substr($key, 0, 16));
 	$keyb          = md5(substr($key, 16, 16));
 	$keyc          = $ckey_length ? ($operation == 'DECODE' ? substr($string, 0, $ckey_length): substr(md5(microtime()), -$ckey_length)) : '';
-	
+
 	$cryptkey      = $keya.md5($keya.$keyc);
 	$key_length    = strlen($cryptkey);
-	
+
 	$string        = $operation == 'DECODE' ? base64_decode(substr($string, $ckey_length)) : sprintf('%010d', $expiry ? $expiry + time() : 0).substr(md5($string.$keyb), 0, 16).$string;
 	$string_length = strlen($string);
-	
+
 	$result        = '';
 	$box           = range(0, 255);
-	
+
 	$rndkey        = array();
     for($i = 0; $i <= 255; $i++) {
         $rndkey[$i] = ord($cryptkey[$i % $key_length]);

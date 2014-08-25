@@ -5,7 +5,7 @@
  * @author coolmoo <idreamsoft@qq.com>
  * @$Id: menu.manage.php 2070 2013-09-09 15:34:49Z coolmoo $
  */
-defined('iCMS') OR exit('What are you doing?'); 
+defined('iPHP') OR exit('What are you doing?');
 iACP::head();
 ?>
 <link rel="stylesheet" href="<?php echo ACP_UI;?>/jquery/treeview-0.1.0.css" type="text/css" />
@@ -39,7 +39,7 @@ $(function(){
             	var id = $(this).attr("data-id");
             	ordernum.push(id);
             });
-            $.post(upordurl,{ordernum: ordernum}); 
+            $.post(upordurl,{ordernum: ordernum});
         }
     }).disableSelection();
 });

@@ -5,7 +5,7 @@
  * @author coolmoo <idreamsoft@qq.com>
  * @$Id: user.add.php 179 2013-03-29 03:21:28Z coolmoo $
  */
-defined('iCMS') OR exit('What are you doing?'); 
+defined('iPHP') OR exit('What are you doing?');
 iACP::head();
 ?>
 <script type="text/javascript">
@@ -224,7 +224,7 @@ $(function(){
             <div class="input-prepend"> <span class="add-on">个人标签</span>
               <input type="text" name="personstyle" id="personstyle" class="span3" value="<?php echo $userdata->personstyle ; ?>" />
             </div>
-            <div class="clearfloat mb10"></div> 
+            <div class="clearfloat mb10"></div>
             <div class="input-prepend"> <span class="add-on">自我介绍</span>
               <textarea name="slogan" id="slogan" cols="45" rows="5" class="span3"><?php echo $userdata->slogan ; ?></textarea>
             </div>
@@ -236,28 +236,28 @@ $(function(){
             <div class="input-prepend"> <span class="add-on">自定义封面</span>
               <input type="text" name="coverpic" id="coverpic" class="span3" value="<?php echo $userdata->coverpic ; ?>" />
             </div>
-            <div class="clearfloat mb10"></div> 
+            <div class="clearfloat mb10"></div>
 
             <div class="input-prepend"> <span class="add-on">淘宝用户名</span>
               <input type="text" name="tb_nick" id="tb_nick" class="span3" value="<?php echo $userdata->tb_nick ; ?>" />
             </div>
-            <div class="clearfloat mb10"></div> 
+            <div class="clearfloat mb10"></div>
             <div class="input-prepend"> <span class="add-on">买家信用</span>
               <input type="text" name="tb_buyer_credit" id="tb_buyer_credit" class="span3" value="<?php echo $userdata->tb_buyer_credit ; ?>" />
             </div>
-            <div class="clearfloat mb10"></div> 
+            <div class="clearfloat mb10"></div>
             <div class="input-prepend"> <span class="add-on">卖家信用</span>
               <input type="text" name="tb_seller_credit" id="tb_seller_credit" class="span3" value="<?php echo $userdata->tb_seller_credit ; ?>" />
             </div>
-            <div class="clearfloat mb10"></div> 
+            <div class="clearfloat mb10"></div>
             <div class="input-prepend"> <span class="add-on">淘宝用户类型</span>
               <input type="text" name="tb_type" id="tb_type" class="span3" value="<?php echo $userdata->tb_type ; ?>" />
             </div>
-            <div class="clearfloat mb10"></div> 
+            <div class="clearfloat mb10"></div>
             <div class="input-prepend"> <span class="add-on">是否金牌卖家</span>
               <input type="text" name="is_golden_seller" id="is_golden_seller" class="span3" value="<?php echo $userdata->is_golden_seller ; ?>" />
             </div>
-            <div class="clearfloat mb10"></div> 
+            <div class="clearfloat mb10"></div>
           </div>
         </div>
         <div class="form-actions">

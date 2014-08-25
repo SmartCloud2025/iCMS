@@ -9,7 +9,7 @@
 * @version 6.0.0
 * $Id: iCMS.php 2408 2014-04-30 18:58:23Z coolmoo $
 */
-define('iCMS',TRUE);
+define('iPHP',TRUE);
 define('iPHP_APP','iCMS'); //应用名
 define('iPATH',dirname(strtr(__FILE__,'\\','/'))."/");
 //框架初始化

@@ -5,10 +5,11 @@
     <title><!--{$user.nickname}-->的<!--{$site.title}-->_<!--{$site.seotitle}--></title>
     <meta name="keywords" content="<!--{$site.keywords}-->" />
     <meta name="description" content="<!--{$user.nickname}-->的<!--{$site.title}-->"/>
-    <meta name="mobile-agent" content="format=html5;url=<!--{$article.url}-->"/>
+    <meta name="mobile-agent" content="format=html5;url=<!--{$user.urls.home}-->"/>
     <!--{iCMS:public:ui}-->
-    <link rel="stylesheet" href="<!--{$site.urls.public}-->/theme/default.css" type="text/css" />
-    <link rel="stylesheet" href="<!--{$site.urls.ui}-->/userApp-6.0.0.css" type="text/css" />
+    <link href="<!--{$site.urls.public}-->/theme/default.css" type="text/css" rel="stylesheet" />
+    <link href="<!--{$site.urls.ui}-->/userApp-6.0.0.css" type="text/css" rel="stylesheet" />
+    <script src="<!--{$site.urls.ui}-->/iCMS.comment-6.0.0.js"></script>
     <script type="text/javascript">
     $(function(){
     //$("[data-tip^='uid']").tooltip({html: 'html'});
@@ -25,7 +26,7 @@
     <div class="userApp_home clearfix">
       <div class="userApp_header">
         <div class="card_banner">
-          <img src="http://pic2.52pk.com/files/130617/1283568_104827_7094.jpg" alt="">
+          <img src="<!--{$userdata.coverpic}-->" alt="<!--{$user.nickname}-->的封面">
         </div>
         <div class="card_top">
           <div class="card_info">
@@ -88,9 +89,6 @@
                   <a href="<!--{$article_list.url}-->" target="_blank" class="i_th_tit"><!--{$article_list.title}--></a>
                 </div>
                 <div class="info">
-                  <span class="icon_author">
-                  <a class="sign_highlight" data-tip="iCMS:ucard:<!--{$article_list.userid}-->" href="" target="_blank"><!--{$article_list.author}--></a>
-                  </span>
                   <span class="date"><!--{$article_list.pubdate|date:'Y-m-d'}--></span>
                 </div>
               </div>
@@ -100,7 +98,7 @@
                 <div class="pic"><img src="<!--{$article_list.pic.url}-->" onload="iCMS.imgFix(this,550,150);"></div>
                 <!--{/if}-->
               </div>
-              <div class="list_fun clearfix" data-param='{"iid":"<!--{$article_list.id}-->","suid":"<!--{$article_list.userid}-->","title":"<!--{$article_list.title|unicode}-->"}'>
+              <div class="list_fun clearfix" data-param='{"iid":"<!--{$article_list.id}-->","cid":"<!--{$article_list.cid}-->","suid":"<!--{$article_list.userid}-->","title":"<!--{$article_list.title|unicode}-->"}'>
                 <a href="###" data-param='{"do":"good"}' class="iCMS-article-do" title="32个赞"><i class="icon-thumbs-up"></i> (<span><!--{$article_list.good}--></span>)</a>
                 <a href="###" data-param='{"do":"comment"}' class="iCMS-article-do" title="评论"><i class="icon-comment"></i> (<span><!--{$article_list.comments}--></span>)</a>
                 <a href="###" data-param='{"do":"favorite"}' class="iCMS-article-do" title="收藏"><i class="icon-heart"></i></a>

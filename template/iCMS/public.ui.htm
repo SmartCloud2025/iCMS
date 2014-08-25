@@ -6,22 +6,23 @@
 <link href="<!--{$site.urls.ui}-->/artDialog-5.0.4/skins/default.css" type="text/css" rel="stylesheet"/>
 <link href="<!--{$site.urls.ui}-->/iCMS-6.0.0.css" type="text/css" rel="stylesheet"/>
 <script src="<!--{$site.urls.ui}-->/jquery.min.js"></script>
+<!--[if lt IE 9]>
+<script src="<!--{$site.urls.ui}-->/html5shiv.min.js"></script>
+<script src="<!--{$site.urls.ui}-->/respond.min.js"></script>
+<![endif]-->
 <!--{if $ui.script}-->
 <script src="<!--{$site.urls.ui}-->/bootstrap/js/bootstrap.min.js"></script>
 <script src="<!--{$site.urls.ui}-->/artDialog-5.0.4/artDialog.min.js"></script>
 <script src="<!--{$site.urls.ui}-->/artDialog-5.0.4/artDialog.plugins.min.js"></script>
 <script src="<!--{$site.urls.ui}-->/iCMS-6.0.0.js"></script>
 <script>
-iCMS.API    = "<!--{iCMS:router url='/api'}-->";
-iCMS.PUBLIC = "<!--{$site.urls.public}-->";
-iCMS.config = {
-	'COOKIE_PRE':'<!--{$iCMS.COOKIE_PRE}-->',
-}
-
+iCMS.config({
+	API:"<!--{iCMS:router url='/api'}-->",
+	PUBLIC:"<!--{$site.urls.public}-->",
+	COOKIE:'<!--{$iCMS.COOKIE_PRE}-->',
+});
 $(function(){
-	iCMS.Init();
+	iCMS.run();
 })
-//console.log(iCMS);
-
 </script>
 <!--{/if}-->

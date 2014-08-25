@@ -6,7 +6,7 @@
  * @author coolmoo <idreamsoft@qq.com>
  * @$Id: files.manage.php 179 2013-03-29 03:21:28Z coolmoo $
  */
-defined('iCMS') OR exit('What are you doing?');
+defined('iPHP') OR exit('What are you doing?');
 iACP::head(false);
 ?>
 <style type="text/css">
@@ -62,7 +62,7 @@ $(function() {
         }else{
           $("#newfn").hide();
         }
-    }) 
+    })
     $("#local").click(function() {
         $("#localfile").click();
     })
@@ -97,7 +97,7 @@ $(function() {
     xiuxiu.onInit = function (){
       <?php if($src){ ?>
       xiuxiu.loadPhoto("<?php echo $src;?>?<?php echo time();?>");
-      <?php } ?>  
+      <?php } ?>
       xiuxiu.setUploadDataFieldName ('upfile');
       xiuxiu.setUploadType(1);
       //xiuxiu.setUploadArgs();
@@ -118,11 +118,11 @@ $(function() {
         content: browse,
       });
     }
-    xiuxiu.onBeforeUpload = function (data, id){  
+    xiuxiu.onBeforeUpload = function (data, id){
       var size = data.size;
-      if(size ><?php echo $max_size;?>) {    
+      if(size ><?php echo $max_size;?>) {
           alert("图片不能超过<?php echo $this->upload_max_filesize;?>");
-         return false;   
+         return false;
       }
       return true;
     }

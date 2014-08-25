@@ -5,7 +5,7 @@
  * @author coolmoo <idreamsoft@qq.com>
  * @$Id: category.add.php 2379 2014-03-19 02:37:47Z coolmoo $
  */
-defined('iCMS') OR exit('What are you doing?'); 
+defined('iPHP') OR exit('What are you doing?');
 iACP::head();
 ?>
 <script type="text/javascript">
@@ -16,7 +16,7 @@ $(function(){
 	iCMS.select('isucshow',"<?php echo $rs['isucshow'] ; ?>");
 	iCMS.select('issend',"<?php echo $rs['issend'] ; ?>");
 	iCMS.select('isexamine',"<?php echo $rs['isexamine'] ; ?>");
-  
+
 	$(document).on("click",".delprop",function(){
    		$(this).parent().parent().remove();
 	});

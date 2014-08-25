@@ -5,8 +5,8 @@
  * @author coolmoo <idreamsoft@qq.com>
  * @$Id: header.php 2412 2014-05-04 09:52:07Z coolmoo $
  */
-defined('iCMS') OR exit('What are you doing?');
-if(iCMS::$config['other']['sidebar_enable']){ 
+defined('iPHP') OR exit('What are you doing?');
+if(iCMS::$config['other']['sidebar_enable']){
 	iCMS::$config['other']['sidebar'] OR $bodyClass	= 'sidebar-mini';
 	$bodyClass	= $_COOKIE['iCMS_APC_sidebar_mini']?'sidebar-mini':'';
 }else{

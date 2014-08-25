@@ -5,7 +5,7 @@
  * @author coolmoo <idreamsoft@qq.com>
  * @$Id: navbar.php 2412 2014-05-04 09:52:07Z coolmoo $
  */
-defined('iCMS') OR exit('What are you doing?'); 
+defined('iPHP') OR exit('What are you doing?');
 ?>
 
 <div id="header" class="navbar navbar-static-top">

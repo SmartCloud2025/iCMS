@@ -238,6 +238,7 @@ a.noneline { text-decoration: none !important; }
 .iCMS-login-wrap .lb_bd .lb_s .lb_s_img { display: block; float: left; width: 43px; height: 43px }
 .iCMS-login-wrap .lb_bd .lb_s .lb_s_t { display: block; float: left; margin: 12px 0 0 12px; width: 120px; color: #333; font-size: 22px }
 .iCMS-API-iframe { width: 100% }
+/*===========comment===========*/
 .iCMS-comment-form-wrap { margin: 8px auto 20px auto; width: 600px; font-size: 14px }
 .iCMS-comment-form-wrap .alert { margin: 10px 0px; padding: 4px 10px; font-size: 12px }
 
@@ -270,3 +271,57 @@ a.noneline { text-decoration: none !important; }
 .iCMS-agreement-wrap { padding-right: 40px; padding-left: 40px; width: 880px; _width: 880px }
 .iCMS-agreement-wrap .agr_h { margin-bottom: 50px; text-align: center; font-weight: bold; font-size: 26px }
 .iCMS-agreement-wrap pre { font-size: 12px; width: 99%; color: #666; padding: 10px; white-space: pre-wrap; white-space: -moz-pre-wrap !important; white-space: -pre-wrap; white-space: -o-pre-wrap; word-wrap: break-word }
+/*===========commentApp===========*/
+.spinner-gray, .spinner-lightgray { display: inline-block; margin: 0 5px; width: 14px; height: 15px; vertical-align: -3px; background-size: 14px 15px; background-repeat: no-repeat; background-image: url(/img/grey-loading.gif); }
+.spinner-lightgray { background-image: url(img/lightgray-loading.gif); }
+.commentApp-box { margin: 10px 0 0 35px; background: #fff; max-width: 540px; position: relative; border: 1px solid #ddd; border-radius: 4px; box-shadow: 0 1px 1px rgba(0, 0, 0, .05) }
+.commentApp-box .load-more { padding: 8px 0; display: block; font-size: 13px; height: 22px; text-align: center; border: 1px solid #eee; border-width: 1px 0 0; color: #698ebf; box-shadow: 0 0 5px rgba(180, 180, 180, .1) inset; text-shadow: 0 1px 0 #fff }
+.commentApp-box .load-more .text { position: relative }
+.commentApp-box .load-more .spinner { position: absolute; top: 0; right: -20px; display: none }
+.commentApp-box .load-more.loading .spinner { display: block }
+html.no-touch .commentApp-box .load-more:hover { background: #fefefe; text-decoration: none }
+.commentApp-box .load-more:active { background: #fbfbfb; box-shadow: 0 0 5px rgba(180, 180, 180, .2) inset }
+.commentApp-box .load-more+.commentApp-item { margin: 0; padding: 8px 12px; border-top: 1px solid #eee }
+.commentApp-box .commentApp-bubble { position: absolute; top: -8px; left: 81px; display: none }
+.commentApp-box.empty { border: 0; box-shadow: none }
+.commentApp-box.empty.cannot-comment { border: 1px solid #ddd }
+.commentApp-box.cannot-comment .editable, .commentApp-box.cannot-comment .app-command, .commentApp-box.cannot-comment .commentApp-op-link.reply { display: none !important }
+.commentApp-box.empty .commentApp-bubble { display: none !important }
+.commentApp-box.empty.cannot-comment .commentApp-bubble { display: block !important }
+.commentApp-box.empty .commentApp-box-ft { margin: 0 30px 0 0; padding: 0; border: 0 !important; background: 0 }
+.commentApp-box.empty.cannot-comment .commentApp-form { margin: 0 }
+.commentApp-box.empty.cannot-comment .commentApp-form, .commentApp-box .commentApp-form { padding: 15px }
+.commentApp-box.empty.cannot-comment .commentApp-box-ft, .commentApp-box .commentApp-box-ft { background: #fbfbfb; border-radius: 0 0 4px 4px; border-top: 1px solid #EEE; position: relative }
+.commentApp-box.empty.cannot-comment .commentApp-box-ft { background: #fff }
+.commentApp-spinner { padding: 6px 12px; font-size: 13px; }
+.commentApp-item { position: relative; margin: 0 12px; padding: 8px 0 }
+.commentApp-item .commentApp-content-wrap { margin: 0 0 0 35px }
+.commentApp-item>.app-item-link-avatar { float: left; margin: 4px 0 0 }
+.commentApp-item .app-item-img-avatar { width: 25px; height: 25px; border-radius: 2px }
+.commentApp-item .commentApp-content { color: #222; min-height: 22px }
+.commentApp-item .commentApp-hd, .commentApp-item .commentApp-ft { color: #999 }
+.commentApp-item .commentApp-hd .desc, .commentApp-item .commentApp-ft .desc { font-size: 12px }
+.commentApp-item .commentApp-ft { font-size: 12px }
+.commentApp-item .like-num { float: right; margin-top: -1px }
+.commentApp-item .like-num>span, .commentApp-item .like-num>em { font-style: normal; vertical-align: -2px }
+.commentApp-item .like-num.nil { display: none }
+.commentApp-item.focusin .commentApp-op-link, .commentApp-item:hover .commentApp-op-link { visibility: visible }
+.commentApp-item+.commentApp-item { border-top: solid 1px #eee }
+.commentApp-item .commentApp-form { padding: 15px 0 }
+.commentApp-info { text-align: center }
+.commentApp-form .commentApp-textarea { padding: 7px 8px; color: #999; font-size: 13px; line-height: 22px; min-height: 22px; width: 95% }
+.commentApp-form.expanded .app-command { display: block; line-height: 33px; }
+.commentApp-form .app-command { display: none; padding: 10px 0; text-align: right }
+.commentApp-form .app-command .btn-primary { float: right; }
+.commentApp-form .app-command .app-command-cancel { float: right; }
+.with-self-avatar .commentApp-form .avatar { display: block }
+.commentApp-form .avatar { float: left; display: none; margin: 2px 10px 0 0; width: 34px; height: 34px; border-radius: 4px }
+.commentApp-form .avatar+.editable { overflow: hidden }
+.commentApp-op-link { margin-left: .5em; color: #999; font-size: 12px; visibility: hidden }
+.app-command-cancel { margin: 0 15px 0 0; cursor: pointer; float: left; }
+.app-command-cancel:hover { text-decoration: underline }
+.commentApp-op-link>.iCMS-icon { margin-right: 5px; width: 11px; height: 11px; vertical-align: -1px }
+
+#iCMS-comment-list-box .commentApp-box{ margin:2px; background: #fff;position: relative; border:none;max-width: 99%;}
+#iCMS-comment-list-box .app-item-img-avatar { width: 36px; height: 36px; border-radius: 2px;box-shadow: 0 1px 3px rgba(0,0,0,0.22);padding: 2px;}
+#iCMS-comment-list-box .commentApp-content-wrap{margin: 0 0 0 48px}

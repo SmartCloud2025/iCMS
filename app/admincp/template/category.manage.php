@@ -5,7 +5,7 @@
  * @author coolmoo <idreamsoft@qq.com>
  * @$Id: category.manage.php 2381 2014-03-21 04:03:07Z coolmoo $
  */
-defined('iCMS') OR exit('What are you doing?'); 
+defined('iPHP') OR exit('What are you doing?');
 iPHP::set_cookie(iACP::$app_name.'_tabs',iACP::$app_do);
 iACP::head();
 ?>
@@ -41,7 +41,7 @@ $(function(){
             	var id = $(this).attr("data-id");
             	ordernum.push(id);
             });
-            $.post(upordurl,{ordernum: ordernum}); 
+            $.post(upordurl,{ordernum: ordernum});
         }
     }).disableSelection();
 });
@@ -137,12 +137,12 @@ iCMS.select('st',"<?php echo $_GET['st'] ; ?>");
                 <i class="fa fa-eye-slash" title="隐藏<?php echo $this->name_text;?>"></i>
                 <?php } ?></td>
               <td><?php echo $rs[$i]['count'] ; ?></td>
-              <td><?php echo $this->listbtn($rs[$i]) ; ?> 
+              <td><?php echo $this->listbtn($rs[$i]) ; ?>
                 <?php if(iACP::CP($rs[$i]['cid'],'a') ){?>
-                <a href="<?php echo APP_URI; ?>&do=add&rootid=<?php echo $rs[$i]['cid'] ; ?>" class="btn btn-small"><i class="fa fa-plus-square"></i> 添加子<?php echo $this->name_text;?></a> 
+                <a href="<?php echo APP_URI; ?>&do=add&rootid=<?php echo $rs[$i]['cid'] ; ?>" class="btn btn-small"><i class="fa fa-plus-square"></i> 添加子<?php echo $this->name_text;?></a>
                 <?php } ?>
                 <?php if(iACP::CP($rs[$i]['cid'],'e') ){?>
-                <a href="<?php echo APP_URI; ?>&do=add&cid=<?php echo $rs[$i]['cid'] ; ?>" class="btn btn-small"><i class="fa fa-edit"></i> 编辑</a> 
+                <a href="<?php echo APP_URI; ?>&do=add&cid=<?php echo $rs[$i]['cid'] ; ?>" class="btn btn-small"><i class="fa fa-edit"></i> 编辑</a>
                 <?php } ?>
                 <?php if(iACP::CP($rs[$i]['cid'],'d') ){?>
                 <a href="<?php echo APP_FURI; ?>&do=del&cid=<?php echo $rs[$i]['cid'] ; ?>" target="iPHP_FRAME" class="del btn btn-small" title='永久删除'  onclick="return confirm('确定要删除?');"/><i class="fa fa-trash-o"></i> 删除</a></td>

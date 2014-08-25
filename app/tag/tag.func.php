@@ -12,12 +12,12 @@ function tag_list($vars){
 	if(isset($vars['tcid'])){
         iPHP::import(iPHP_APP_CORE .'/iMAP.class.php');
         map::init('category',iCMS_APP_TAG);
-        $where_sql.= map::exists($vars['tcid'],'`#iCMS@__tags`.id'); //map 表大的用exists          
+        $where_sql.= map::exists($vars['tcid'],'`#iCMS@__tags`.id'); //map 表大的用exists
 	}
 	if(isset($vars['pid'])){
         iPHP::import(iPHP_APP_CORE .'/iMAP.class.php');
         map::init('prop',iCMS_APP_TAG);
-        $where_sql.= map::exists($vars['pid'],'`#iCMS@__tags`.id'); //map 表大的用exists          
+        $where_sql.= map::exists($vars['pid'],'`#iCMS@__tags`.id'); //map 表大的用exists
 	}
 
     if(isset($vars['cid!'])){
@@ -30,7 +30,7 @@ function tag_list($vars){
         $cids OR $cids	= $vars['cid'];
         $where_sql.= iPHP::where($cids,'cid');
     }
-	
+
 	$maxperpage	= isset($vars['row'])?(int)$vars['row']:"10";
 	$cache_time	= isset($vars['time'])?(int)$vars['time']:-1;
 	$by			= $vars['by']=='ASC'?"ASC":"DESC";
@@ -54,13 +54,13 @@ function tag_list($vars){
 		$rs			= iCache::get($cacheName);
 	}
 	if(empty($rs)){
-		iPHP::app('tag.class','import');
+		iPHP::app('tag.class','include');
 		$rs = iDB::all("SELECT * FROM `#iCMS@__tags` WHERE {$where_sql} {$orderSQL} LIMIT {$offset},{$maxperpage}");
 		iDB::debug(1);
 		$rs = tag_array($vars,$rs);
 		$vars['cache'] && iCache::set($cacheName,$rs,$cache_time);
 	}
-	
+
 	return $rs;
 }
 function tag_flist($vars){
@@ -79,7 +79,7 @@ function tag_flist($vars){
         $cids OR $cids	= $vars['cid'];
         $where_sql.= iPHP::where($cids,'cid');
     }
-	
+
 	$maxperpage	= isset($vars['row'])?(int)$vars['row']:"10";
 	$cache_time	= isset($vars['time'])?(int)$vars['time']:-1;
 	$by			= $vars['by']=='ASC'?"ASC":"DESC";
@@ -103,12 +103,12 @@ function tag_flist($vars){
 		$rs			= iCache::get($cacheName);
 	}
 	if(empty($rs)){
-		iPHP::app('tag.class','import');
+		iPHP::app('tag.class','include');
 		$rs		= iDB::all("SELECT * FROM `#iCMS@__ftags` WHERE {$where_sql} {$orderSQL} LIMIT {$offset},{$maxperpage}");
 		$rs		= tag_array($vars,$rs);
 		$vars['cache'] && iCache::set($cacheName,$rs,$cache_time);
 	}
-	
+
 	return $rs;
 }
 function tag_search($vars){
@@ -148,24 +148,24 @@ function tag_search($vars){
     	$SPH->SetFilterRange('pubdate',$startime,$enddate);
     }
 	$SPH->SetLimits($start,$maxperpage,10000);
-	
+
 	$orderBy	= '@id DESC, @weight DESC';
 	$orderSQL	= ' order by id DESC';
-	
+
 	$vars['orderBy'] 	&& $orderBy	= $vars['orderBy'];
 	$vars['orderSQL'] 	&& $orderSQL= ' order by '.$vars['orderSQL'];
 
 	$vars['pic'] && $SPH->SetFilter('haspic',array(1));
 	$vars['id!'] && $SPH->SetFilter('@id',array($vars['id!']),true);
-	
+
 	$SPH->setSortMode(SPH_SORT_EXTENDED,$orderBy);
-	
+
 	$query	= $vars['q'];
 	$vars['acc'] 	&& 	$query	= '"'.$vars['q'].'"';
 	$vars['@'] 		&& 	$query	= '@('.$vars['@'].') '.$query;
-	
+
 	$res = $SPH->Query($query,"ladyband_tag");
-	
+
 	if (is_array($res["matches"])){
 		foreach ( $res["matches"] as $docinfo ){
 			$tid[]=$docinfo['id'];
@@ -173,7 +173,7 @@ function tag_search($vars){
 		$tids=implode(',',(array)$tid);
 	}
 	if(empty($tids)) return;
-	
+
 	$where_sql=" `id` in($tids)";
 	$offset	= 0;
 	if($vars['page']){
@@ -199,11 +199,11 @@ function tag_array($vars,$rs){
         $rs[$i]['category']['link']		= "<a href='{$rs[$i]['category']['url']}'>{$rs[$i]['category']['name']}</a>";
 
 		$rs[$i]['iurl']					= iURL::get('tag',array($rs[$i],$category,$tcategory));
-		
+
 		empty($rs[$i]['url']) &&	$rs[$i]['url']	= $rs[$i]['iurl']->href;
-		
+
 		$rs[$i]['pic'] && $rs[$i]['pic']=iFS::fp($rs[$i]['pic'],'+http');
-		
+
 		$rs[$i]['link']	= '<a href="'.$rs[$i]['url'].'" class="tag" target="_self">'.$rs[$i]['name'].'</a> ';
     }
     return $rs;

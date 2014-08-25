@@ -5,7 +5,7 @@
  * @author coolmoo <idreamsoft@qq.com>
  * @$Id: user.manage.php 179 2013-03-29 03:21:28Z coolmoo $
  */
-defined('iCMS') OR exit('What are you doing?'); 
+defined('iPHP') OR exit('What are you doing?');
 iACP::head();
 ?>
 <style type="text/css">
@@ -70,9 +70,9 @@ $(function(){
               <td><?php echo $rs[$i]['lastloginip'] ; ?></td>
               <td><?php if($rs[$i]['lastlogintime']) echo get_date($rs[$i]['lastlogintime'],"Y-m-d") ; ?></td>
               <td>
-                <a href="<?php echo APP_URI; ?>&do=login&id=<?php echo $rs[$i]['uid'] ; ?>" class="btn btn-small" target="_blank">登陆</a> 
-                <a href="<?php echo APP_URI; ?>&do=job&id=<?php echo $rs[$i]['uid'] ; ?>" class="btn btn-small"><i class="fa fa-bar-chart-o"></i> 统计</a> 
-                <a href="<?php echo __ADMINCP__; ?>=article&userid=<?php echo $rs[$i]['uid'] ; ?>" class="btn btn-small"><i class="fa fa-list-alt"></i> 文章</a> 
+                <a href="<?php echo APP_URI; ?>&do=login&id=<?php echo $rs[$i]['uid'] ; ?>" class="btn btn-small" target="_blank">登陆</a>
+                <a href="<?php echo APP_URI; ?>&do=job&id=<?php echo $rs[$i]['uid'] ; ?>" class="btn btn-small"><i class="fa fa-bar-chart-o"></i> 统计</a>
+                <a href="<?php echo __ADMINCP__; ?>=article&userid=<?php echo $rs[$i]['uid'] ; ?>" class="btn btn-small"><i class="fa fa-list-alt"></i> 文章</a>
                 <a href="<?php echo APP_URI; ?>&do=add&id=<?php echo $rs[$i]['uid'] ; ?>" class="btn btn-small"><i class="fa fa-edit"></i> 编辑</a>
                 <a href="<?php echo APP_FURI; ?>&do=del&id=<?php echo $rs[$i]['uid'] ; ?>" target="iPHP_FRAME" class="del btn btn-small" title='永久删除'  onclick="return confirm('确定要删除?');"/><i class="fa fa-trash-o"></i> 删除</a>
               </td>

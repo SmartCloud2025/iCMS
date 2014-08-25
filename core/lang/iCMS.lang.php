@@ -12,6 +12,7 @@
 defined('iPHP') OR exit('What are you doing?');
 
 return array(
+	'!login'=>'请登陆!',
 	'error'=>'哎呀呀呀！非常抱歉,居然出错了！<br />请稍候再试试,我们的程序猿正在努力修复中...',
 	'page'=>array(
 		'index'   =>'首页',

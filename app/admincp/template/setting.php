@@ -5,7 +5,7 @@
  * @author coolmoo <idreamsoft@qq.com>
  * @$Id: setting.php 2412 2014-05-04 09:52:07Z coolmoo $
  */
-defined('iCMS') OR exit('What are you doing?');
+defined('iPHP') OR exit('What are you doing?');
 iACP::head();
 ?>
 <script type="text/javascript">
@@ -471,6 +471,11 @@ function modal_tplfile(el,a){
             <div class="input-prepend"> <span class="add-on">注册条款</span>
               <textarea name="config[user][agreement]" id="user_agreement" class="span6" style="height: 150px;"><?php echo $config['user']['agreement'] ; ?></textarea>
             </div>
+            <div class="clearfloat mb10"></div>
+            <div class="input-prepend"> <span class="add-on">默认封面</span>
+              <input type="text" name="config[user][coverpic]" class="span4" id="user_coverpic" value="<?php echo $config['user']['coverpic'] ; ?>"/>
+            </div>
+            <span class="help-inline">请将图片放在public目录下</span>
             <fieldset class="openid r3">
               <legend>QQ开放平台</legend>
               <div class="input-prepend"> <span class="add-on" style="width:60px;">APPID:</span>

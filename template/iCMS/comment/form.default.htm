@@ -3,31 +3,30 @@
 	<head>
 		<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
 		<title><!--{$vars.title}-->评论_<!--{$site.title}-->_<!--{$site.seotitle}--></title>
+		<script></script>
 		<!--{iCMS:public:ui script="false"}-->
 		<script>
+		var iCMS = window.parent.iCMS;
 		$(function(){
+            if (iCMS.user_status) {
+            	//iCMS.user.data();
+                $("#iCMS-cmt-login").hide();
+                $("#iCMS-cmt-profile").show();
+                iCMS.hover("#iCMS-cmt-profile",".iCMS-user-home", "#iCMS-user-menu", 21);
+            }
 			$('.iCMS-user-login').on("click", function() {
 				event.preventDefault();
-				window.parent.iCMS.LoginBox();
+				iCMS.LoginBox();
 				return false;
 			});
 		})
 		</script>
 	</head>
 	<body class="iCMS-comment-page">
-		<!--{/if}-->
+<!--{/if}-->
 		<div class="iCMS-comment-form-wrap">
 			<div id="iCMS-cmt-profile">
-				<div class="iCMS-profile-wrap">
-					<a class="iCMS-user-home hover-toggle" href="<!--{iCMS:router url='/user/home'}-->"><img class="avatar" src="<!--{$site.urls.ui}-->/avatar.gif"><span class="name">iCMS</span><b class="caret"></b></a>
-					<ul class="dropdown-menu iCMS-hover-wrap" id="iCMS-user-menu">
-						<li> <a href="<!--{iCMS:router url='/user/home'}-->" target="_blank"> <i class="fa fa-user"></i> 我的主页</a> </li>
-						<li> <a href="<!--{iCMS:router url='/user/article'}-->" target="_blank"> <i class="fa fa-cog"></i> 我的文章</a> </li>
-						<li> <a href="<!--{iCMS:router url='/user/comment'}-->" target="_blank"> <i class="fa fa-cog"></i> 我的评论</a> </li>
-						<li> <a href="<!--{iCMS:router url='/user/profile'}-->" target="_blank"> <i class="fa fa-cog"></i> 设置</a> </li>
-						<li> <a href="javascript:;" class="iCMS-user-logout" target="_blank"> <i class="fa fa-power-off"></i> 退出</a> </li>
-					</ul>
-				</div>
+				<!--{include file="iCMS://user/topnavbar.htm"}-->
 			</div>
 			<div id="iCMS-cmt-login">
 				<a href="<!--{iCMS:router url='/api/user/login'}-->" class="iCMS-user-login" title="登录"><i class="fa fa-user"></i> 登录</a>
@@ -37,28 +36,69 @@
 				<i class="fa fa-warning "></i> 请自觉遵守互联网相关的政策法规，严禁发布色情、暴力、反动的言论！
 			</div>
 			<div class="iCMS-cmt-editor">
-				<textarea class="iCMS-editor-text" name="comment[content]"></textarea>
+				<textarea class="iCMS-editor-text" name="comment_content" placeholder="写下你的评论…"></textarea>
 			</div>
 			<div class="iCMS-cmt-command clearfix">
-				<input type="hidden" id="comment_title"	name="comment[title]" value="<!--{$vars.title}-->">
-				<input type="hidden" id="comment_appid"	name="comment[appid]" value="<!--{$vars.appid}-->">
-				<input type="hidden" id="comment_iid" name="comment[iid]" value="<!--{$vars.iid}-->">
-				<input type="hidden" id="comment_cid" name="comment[cid]" value="<!--{$vars.cid}-->">
+				<input type="hidden" name="comment_title" value="<!--{$vars.title}-->">
+				<input type="hidden" name="comment_appid" value="<!--{$vars.appid}-->">
+				<input type="hidden" name="comment_suid" value="<!--{$vars.suid}-->">
+				<input type="hidden" name="comment_iid" value="<!--{$vars.iid}-->">
+				<input type="hidden" name="comment_cid" value="<!--{$vars.cid}-->">
 				<button class="btn btn-primary cmt-add" type="submit"><i class="fa fa-check"></i> 评 论</button>
 				<a href="javascript:;" class="cmt-cancel">取 消</a>
 			</div>
 		</div>
 		<script>
 		$(function(){
-            if (iCMS.user_status) {
-                iCMS.user.data();
-                $("#iCMS-cmt-login").hide();
-                $("#iCMS-cmt-profile").show();
-                iCMS.hover("#iCMS-cmt-profile",".iCMS-user-home", "#iCMS-user-menu", 21);
-            }
+			var doc = window.parent.document;
+
+            //提交评论
+            $(".iCMS-cmt-command").on('click', '.cmt-add', function(event) {
+                event.preventDefault();
+                if (!iCMS.user_status) {
+                    iCMS.LoginBox();
+                    return false;
+                }
+                var $textarea = $('[name="comment_content"]'),
+                //placeholder = $textarea.attr('placeholder');
+                param ={
+                	'title':$('[name="comment_title"]').val(),
+                	'appid':$('[name="comment_appid"]').val(),
+                	'suid':$('[name="comment_suid"]').val(),
+                	'iid':$('[name="comment_iid"]').val(),
+                	'cid':$('[name="comment_cid"]').val(),
+                	'content':$textarea.val(),
+                	'action':'add',
+                };
+
+                if (!param.content) {
+                    $textarea.focus();
+                    return false;
+                }
+                $.post(iCMS.api('comment'), param, function(c) {
+                    if (c.code) {
+                    	var list_iframe = $(".commentApp-list-iframe",doc);
+                    	if(list_iframe.length){
+	                    	list_iframe_src =list_iframe.attr('src');
+	                    	if(list_iframe_src){
+	                    		list_iframe.attr('src', list_iframe_src);
+	                    	}
+                    	}
+                    	var list_box = $(".commentApp-list-box",doc);
+                    	if(list_box.length){
+                    		var pagination = $(".iCMS-pagination > .page_nowindex",doc);
+                    		//console.log(pagination);
+                    		window.parent.iCMS.comment.page(1,pagination);
+                    	}
+                    	$textarea.val("");
+                    } else {
+                        iCMS.alert(c.msg);
+                    }
+                }, 'json');
+            });
 		})
 		</script>
-		<!--{if $vars.display=="iframe"}-->
+<!--{if $vars.display=="iframe"}-->
 	</body>
 </html>
 <!--{/if}-->

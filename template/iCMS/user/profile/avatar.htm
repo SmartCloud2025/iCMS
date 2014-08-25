@@ -15,6 +15,7 @@ window.onload=function(){
     xiuxiu.setUploadDataFieldName ('avatar');
     xiuxiu.setUploadType(2);
   }
+
   xiuxiu.onUploadResponse = function (data){
     var a = $.parseJSON(data);
     if(a.code){

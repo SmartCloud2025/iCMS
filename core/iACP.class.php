@@ -23,9 +23,9 @@ require iPHP_APP_CORE.'/iMenu.class.php';
 
 iDB::$show_errors   = true;
 iMember::$LOGIN_TPL = ACP_PATH;
-iMember::$AUTH      = 'iCMS_ADMIN_AUTH';
+iMember::$AUTH      = 'ADMIN_AUTH';
 iMember::$AJAX      = iPHP::PG('ajax');
-iPHP::$dialog_title  = 'iCMS';
+iPHP::$dialog_title = 'iCMS';
 
 class iACP {
     public static $apps       = NULL;
@@ -179,7 +179,7 @@ class iACP {
         }
 
         $act && $p = $p.':'.$act;
-    
+
         $rt = iMember::check_power((string)$p,iMember::$cpower);
         $rt OR self::permission_msg($p,$ret);
         return $rt;

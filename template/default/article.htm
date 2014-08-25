@@ -18,9 +18,9 @@
         <div id="page">
           <h1><!--{$article.title}--></h1>
           <div class="article-info">
-            <div class="article-author-time"> 
+            <div class="article-author-time">
               <a href="<!--{$article.user.url}-->" target="_blank"><!--{$article.author}--></a>
-              <span class="time"><!--{$article.pubdate|date:"Y-m-d H:s"}--></span> 
+              <span class="time"><!--{$article.pubdate|date:"Y-m-d H:s"}--></span>
             </div>
             <div class="share-area">
               <!-- Baidu Button BEGIN -->
@@ -30,8 +30,8 @@
               <script type="text/javascript">
               var bds_config = {
               'bdText':'一篇好文,推荐之-【'+$('#page h1').text()+'】（来自:<!--{$site.title}-->）',
-              <!--{if $article.pic_url}-->
-              'bdPic' : '<!--{$article.pic_url}-->'
+              <!--{if $article.pic.url}-->
+              'bdPic' : '<!--{$article.pic.url}-->'
               <!--{/if}-->
               }
               document.getElementById("bdshell_js").src = "http://bdimg.share.baidu.com/static/js/shell_v2.js?cdnversion=" + Math.ceil(new Date()/3600000)
@@ -44,8 +44,8 @@
           </div>
           <blockquote><!--{$article.description}--></blockquote>
           <div class="article-detail">
-            <!--{if $article.pic_url}-->
-            <p class="image"><img src="<!--{$article.pic_url}-->"/></p>
+            <!--{if $article.pic.url}-->
+            <p class="image"><img src="<!--{$article.pic.url}-->"/></p>
             <!--{/if}-->
             <div class="l-main-inner-ad"><!--正文内嵌图片广告 250x250--></div>
             <!--{if $article.author}-->
@@ -62,32 +62,30 @@
           </div>
           <div class="tip clr">提示：键盘也能翻页，试试"← →"键</div>
         </div>
-<div class="up_down">
-  <a id="up_article" class="up_down_btn" href="javascript:void(0);" style="text-decoration:none;">
-    <i id="up_icon" class="up_down_icon up"></i>
-    <span class="up_down_btn_num" id="up_btn_num"><!--{$article.good}--></span>
-    <span class="up_down_txt" id="up_txt">赞</span>
-  </a>
-  <a id="down_article" class="up_down_btn" href="javascript:void(0);" style="text-decoration:none;">
-    <i id="down_icon" class="up_down_icon down"></i>
-    <span class="up_down_btn_num" id="down_btn_num"><!--{$article.bad}--></span>
-    <span class="up_down_txt" id="down_txt">踩</span>
-  </a>
-</div>
-<div class="prev-next">
-  <p>上一篇 : <!--{$article.prev}--></p>
-  <p>下一篇 : <!--{$article.next}--></p>
-</div>
-<div class="clearfix"></div>
-
+        <div class="up_down">
+          <a id="up_article" class="up_down_btn" href="javascript:void(0);" style="text-decoration:none;">
+            <i id="up_icon" class="up_down_icon up"></i>
+            <span class="up_down_btn_num" id="up_btn_num"><!--{$article.good}--></span>
+            <span class="up_down_txt" id="up_txt">赞</span>
+          </a>
+          <a id="down_article" class="up_down_btn" href="javascript:void(0);" style="text-decoration:none;">
+            <i id="down_icon" class="up_down_icon down"></i>
+            <span class="up_down_btn_num" id="down_btn_num"><!--{$article.bad}--></span>
+            <span class="up_down_txt" id="down_txt">踩</span>
+          </a>
+        </div>
+        <div class="prev-next">
+          <p>上一篇 : <!--{$article.prev}--></p>
+          <p>下一篇 : <!--{$article.next}--></p>
+        </div>
+        <div class="clearfix mb20"></div>
         <div class="comments_list clearfix">
           <h3 class="label label-info"><i class="fa fa-comments"></i> 精彩评论</h3>
-          <!--{iCMS:comment:list page="true" display="default" row="1" appid="$article.appid" iid="$article.id"}-->
-          <!--{iCMS:comment:list display="ajax" appid="$article.appid" iid="$article.id"}-->
+          <!--{iCMS:comment:list page="true" display="default" row="5" appid="$article.appid" iid="$article.id"}-->
           <!--{iCMS:comment:list page="true" display="iframe" appid="$article.appid" iid="$article.id"}-->
         </div>
         <div class="comment_form clearfix">
-          <!--{iCMS:comment:form ref="true"}-->
+          <!--{iCMS:comment:form display="iframe" ref="true"}-->
         </div>
       </div>
       <div class="right-col">

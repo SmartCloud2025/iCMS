@@ -6,36 +6,39 @@
  * @author coolmoo <idreamsoft@qq.com>
  * @$Id: comment.app.php 2406 2014-04-28 02:24:46Z coolmoo $
  */
+defined('iPHP') OR exit('What are you doing?');
+
 class commentApp {
-	public $methods	= array('like','json','add','report','form','list');
+	public $methods	= array('like','json','add','report','form_iframe','list');
     function __construct() {
-        $this->userid   = (int)iPHP::get_cookie('userid');
-        $this->nickname = iS::escapeStr(iPHP::getUniCookie('nickname'));
-        $this->id       = (int)$_GET['id'];
+        $this->id = (int)$_GET['id'];
     }
     public function API_list(){
         iPHP::assign('vars',$_GET);
         return iPHP::view('iCMS://comment/list.default.htm');
     }
-    public function API_form(){
+    public function API_form_iframe(){
         $_GET['title'] = iS::escapeStr($_GET['title']);
         iPHP::assign('vars',$_GET);
         return iPHP::view('iCMS://comment/form.default.htm');
     }
+
     public function API_like(){
+        user::get_cookie() OR iPHP::code(0,'iCMS:!login',0,'json');
         $this->id OR iPHP::code(0,'iCMS:article:empty_id',0,'json');
         $lckey = 'like_comment_'.$this->id;
         $like  = (int)iPHP::get_cookie($lckey);
         $like && iPHP::code(0,'iCMS:comment:!like',0,'json');
         iDB::query("UPDATE `#iCMS@__comment` SET `up`=up+1 WHERE `id`='$this->id'");
-        iPHP::set_cookie($lckey,$this->userid,86400);
+        iPHP::set_cookie($lckey,user::$userid,86400);
         iPHP::code(1,'iCMS:comment:like',0,'json');
     }
     public function API_json(){
-        $vars = array('appid'=>iCMS_APP_ARTICLE,
-            'id'  => (int)$_GET['id'],
-            'iid' => (int)$_GET['iid'],
-            'date_format'=> 'Y-m-d H:i'
+        $vars = array(
+            'appid'       => iCMS_APP_ARTICLE,
+            'id'          => (int)$_GET['id'],
+            'iid'         => (int)$_GET['iid'],
+            'date_format' => 'Y-m-d H:i'
         );
         $_GET['by'] && $vars['by'] = iS::escapeStr($_GET['by']);
         $_GET['date_format'] && $vars['date_format'] = iS::escapeStr($_GET['date_format']);
@@ -43,9 +46,14 @@ class commentApp {
         iPHP::view('iCMS://comment/api.json.htm');
     }
     public function ACTION_add(){
+        iPHP::app('user.class','static');
+        user::get_cookie() OR iPHP::code(0,'iCMS:!login',0,'json');
+
+        $appid      = (int)$_POST['appid'];
         $iid        = (int)$_POST['iid'];
         $cid        = (int)$_POST['cid'];
         $suid       = (int)$_POST['suid'];
+        $reply_id   = (int)$_POST['id'];
         $reply_uid  = (int)$_POST['uid'];
         $reply_name = iS::escapeStr($_POST['name']);
         $title      = iS::escapeStr($_POST['title']);
@@ -53,24 +61,27 @@ class commentApp {
         $iid OR iPHP::code(0,'iCMS:article:empty_id',0,'json');
         $content OR iPHP::code(0,'iCMS:comment:empty',0,'json');
 
+        $appid OR $appid = iCMS_APP_ARTICLE;
         $addtime = time();
         $ip      = iPHP::getIp();
-        $appid   = iCMS_APP_ARTICLE;
-        $uid     = $this->userid;
-        $name    = $this->nickname;
+        $uid     = user::$userid;
+        $name    = user::$nickname;
         $status  = '1';
         $up      = '0';
         $down    = '0';
         $quote   = '0';
         $floor   = '0';
 
-        $fields = array('appid', 'cid', 'iid','suid', 'title','uid', 'name',  'content', 'reply_uid','reply_name', 'addtime', 'status', 'up', 'down', 'ip', 'quote', 'floor');
+        $fields = array('appid', 'cid', 'iid','suid', 'title','uid', 'name',  'content', 'reply_id','reply_uid','reply_name', 'addtime', 'status', 'up', 'down', 'ip', 'quote', 'floor');
         $data   = compact ($fields);
         $id     = iDB::insert('comment',$data);
         iDB::query("UPDATE `#iCMS@__article` SET comments=comments+1 WHERE `id` ='{$iid}' limit 1");
         iPHP::code(1,'iCMS:comment:success',$id,'json');
     }
     public function ACTION_report(){
+        iPHP::app('user.class','static');
+        user::get_cookie() OR iPHP::code(0,'iCMS:!login',0,'json');
+
         $iid     = (int)$_POST['id'];
         $uid     = (int)$_POST['uid'];
         $reason  = (int)$_POST['reason'];
@@ -82,56 +93,12 @@ class commentApp {
         $addtime = time();
         $ip      = iPHP::getIp();
         $appid   = iCMS_APP_COMMENT;
-        $appid   = $this->userid;
+        $appid   = user::$userid;
         $status  = 0;
 
         $fields = array('appid', 'userid', 'iid', 'uid', 'reason', 'content', 'ip', 'addtime', 'status');
         $data   = compact ($fields);
         $id     = iDB::insert('report',$data);
         iPHP::code(1,'iCMS:comment:reason_success',$id,'json');
-    }
-    //---------------------------
-    public function do_Ajax($a = null) {
-    	$type	= $_GET['type'];
-		in_array($type, array("detail")) OR die();
-		
-    	$ln		= ($GLOBALS['page']-1)<0?0:$GLOBALS['page']-1;
-    	$id		= (int)$_GET['id'];
-    	$total	= iDB::value("SELECT count(*) FROM `#iCMS@__{$type}_cmt` WHERE `indexId`='$id' AND `status`='1'");
-    	$rs		= iDB::all("SELECT * FROM `#iCMS@__{$type}_cmt` WHERE `indexId`='$id' AND `status`='1' ORDER BY id DESC LIMIT 10");
-        $_count=count($rs);
-        for ($i=0;$i<$_count;$i++){
-        	$rs[$i]['lou']			= $total-($i+$ln*$maxperpage);
-            $rs[$i]['user']['url']	= get_user($rs[$i]['userid'],'url');
-            $rs[$i]['user']['name']	= $rs[$i]['nickname'];
-            $rs[$i]['user']['id']	= $rs[$i]['userid'];
-            $rs[$i]['user']['face']	= get_user($rs[$i]['userid'],'face',48);
-            $rs[$i]['date']			= get_date($rs[$i]['addtime'],"m月d日 H:m");
-            
-        }
-    	echo $_GET['callback'].'('.json_encode($rs).')';
-    }
-
-    public function do_Post($a = null) {
-        $type     = $_POST['type'];
-        in_array($type, array("detail")) OR die();
-        
-        $userid      = (int)$_POST['uId'];
-        $indexId  = (int)$_POST['indexId'];
-        $itemId   = (int)$_POST['itemId'];
-        $content  = iS::escapeStr($_POST['content']);
-        
-        $userid   = iPHP::get_cookie('userid');
-        $nickname = iPHP::getUniCookie('nickname');
-		
-		empty($userid) && iPHP::json(array('code'=>0,'msg'=>'nologin'));
-	    empty($content) && iPHP::json(array('code'=>0,'msg'=>'你也可以顺便说点什么 O(∩_∩)O'));
-	    
-		iDB::query("INSERT INTO `#iCMS@__{$type}_cmt`
-            (`uId`,`indexId`, `itemId`, `userid`, `nickname`, `content`, `type`, `addtime`, `status`)
-VALUES ('$userid','$indexId', '$itemId', '$userid', '$nickname', '$content', '$type', '".time()."', '1');");
-		
-		iDB::query("UPDATE `#iCMS@__{$type}_list` SET `comment` = comment+1 WHERE `id` = '$indexId';");
-		iPHP::json(array('code'=>1,'msg'=>''));
     }
 }

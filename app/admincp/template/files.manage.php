@@ -5,7 +5,7 @@
  * @author coolmoo <idreamsoft@qq.com>
  * @$Id: files.manage.php 179 2013-03-29 03:21:28Z coolmoo $
  */
-defined('iCMS') OR exit('What are you doing?'); 
+defined('iPHP') OR exit('What are you doing?');
 iACP::head();
 ?>
 <script type="text/javascript">
@@ -94,7 +94,7 @@ $(function(){
                 <a href="<?php echo APP_FURI; ?>&do=download&id=<?php echo $rs[$i]['id'] ; ?>&unwatermark=0" class="btn btn-small" title="重新下载 不添加水印" target="iPHP_FRAME"><i class="fa fa-download"></i> 下载2</a>
                 <?php }?>
                 <?php if(iACP::MP('FILE.UPLOAD')){?>
-                <a href="<?php echo APP_URI; ?>&do=add&from=modal&id=<?php echo $rs[$i]['id'] ; ?>" class="btn btn-small" data-toggle="modal" data-meta='{"width":"500px","height":"300px"}' title="重新上传"><i class="fa fa-upload"></i> 上传</a> 
+                <a href="<?php echo APP_URI; ?>&do=add&from=modal&id=<?php echo $rs[$i]['id'] ; ?>" class="btn btn-small" data-toggle="modal" data-meta='{"width":"500px","height":"300px"}' title="重新上传"><i class="fa fa-upload"></i> 上传</a>
                 <?php }?>
                 <?php if(iACP::MP('FILE.DELETE')){?>
                 <a href="<?php echo APP_FURI; ?>&do=del&id=<?php echo $rs[$i]['id'] ; ?>&indexid=<?php echo $rs[$i]['indexid'] ; ?>" target="iPHP_FRAME" class="del btn btn-small" title='永久删除'  onclick="return confirm('确定要删除?');"/><i class="fa fa-trash-o"></i> 删除</a>

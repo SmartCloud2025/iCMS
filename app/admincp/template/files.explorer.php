@@ -5,7 +5,7 @@
  * @author coolmoo <idreamsoft@qq.com>
  * @$Id: files.manage.php 179 2013-03-29 03:21:28Z coolmoo $
  */
-defined('iCMS') OR exit('What are you doing?'); 
+defined('iPHP') OR exit('What are you doing?');
 iACP::head($navbar);
 ?>
 <script type="text/javascript">
@@ -37,7 +37,7 @@ $(function(){
               modal_callback(this);
             }
         });
-    });  
+    });
     <?php }?>
     $('#mkdir').click(function() {
   		$.dialog({
@@ -56,7 +56,7 @@ $(function(){
   			        }else{
   			        	$.post('<?php echo APP_URI; ?>&do=mkdir',{name: n,'pwd':'<?php echo $pwd;?>'},
   			        	function(j){
-  			        		if(j.code){ 
+  			        		if(j.code){
   				        		d.content(j.msg)
   			        			.button({id: 'mkdir-btn',value: '完成',callback: function () {window.location.reload();}});
   			        			window.setTimeout(function(){
@@ -67,7 +67,7 @@ $(function(){
   			        			a.focus();
   			        			return false;
   			        		}
-  			        	},"json"); 
+  			        	},"json");
   			        }
   			        return false;
   				}}]
@@ -92,7 +92,7 @@ $(function(){
       </span>
       <h5 class="brs">文件管理</h5>
       <span class="label label-info pwd"><a href="<?php echo $URI.$parent; ?>" class="tip-bottom" title="当前路径 ">iCMS://<?php echo $pwd;?></a></span>
-      <div class="buttons"> 
+      <div class="buttons">
         <a href="#" class="btn btn-mini btn-success" id="mkdir"><i class="fa fa-folder"></i> 创建新目录</a> <a href="<?php echo __ADMINCP__; ?>=files&do=multi&from=modal&dir=<?php echo $pwd;?>" title="上传文件" data-toggle="modal" data-meta='{"width":"98%","height":"580px"}' class="btn btn-mini btn-primary" id="upload"> <i class="fa fa-upload"></i> 上传文件</a> </div>
     </div>
     <div class="widget-content nopadding">
@@ -144,7 +144,7 @@ $(function(){
               <td class="op">
                 <?php if(0){ ?>
                 <a class="btn btn-small mv_dir"><i class="fa fa-edit"></i> 重命名</a>
-                <a href="<?php echo __ADMINCP__; ?>=files&do=multi&from=modal&dir=<?php echo $dirRs[$i]['path'] ; ?>" class="btn btn-small" data-toggle="modal" data-meta='{"width":"98%","height":"580px"}' title="上传到此目录"><i class="fa fa-upload"></i> 上传</a> 
+                <a href="<?php echo __ADMINCP__; ?>=files&do=multi&from=modal&dir=<?php echo $dirRs[$i]['path'] ; ?>" class="btn btn-small" data-toggle="modal" data-meta='{"width":"98%","height":"580px"}' title="上传到此目录"><i class="fa fa-upload"></i> 上传</a>
                 <?php } ?>
                 <a href="<?php echo __ADMINCP__; ?>=files&frame=iPHP&do=del&id=<?php echo $rs[$i]['id'] ; ?>&indexid=<?php echo $rs[$i]['indexid'] ; ?>" target="iPHP_FRAME" class="del btn btn-small" title='永久删除'  onclick="return confirm('确定要删除?');"/><i class="fa fa-trash-o"></i> 删除</a></td>
             </tr>
@@ -173,7 +173,7 @@ $(function(){
               <td colspan="7"><a href="<?php echo $URI.$parent; ?>"><i class="fa fa-angle-double-up"></i> 返回上级</a></td>
             </tr>
             <?php }  ?>
-            <?php 
+            <?php
             $_count		= count($fileRs);
             for($i=0;$i<$_count;$i++){
             	$icon	= iFS::icon($fileRs[$i]['name'],ACP_UI);
@@ -192,10 +192,10 @@ $(function(){
                   <?php if(0){ ?>
               	  <a class="btn btn-small mv_file"><i class="fa fa-edit"></i> 编辑</a>
               	  <a class="btn btn-small ed_file"><i class="fa fa-pencil-square"></i> 重命名</a>
-                  <a class="btn btn-small" href="<?php echo $href; ?>" data-toggle="modal" title="上传并覆盖文件"><i class="fa fa-upload"></i> 上传</a> 
+                  <a class="btn btn-small" href="<?php echo $href; ?>" data-toggle="modal" title="上传并覆盖文件"><i class="fa fa-upload"></i> 上传</a>
               	  <?php }?>
                   <?php if($href){?>
-              	  <a class="btn btn-small" href="<?php echo $href; ?>" data-toggle="modal" title="查看文件"><i class="fa fa-eye"></i> 查看</a> 
+              	  <a class="btn btn-small" href="<?php echo $href; ?>" data-toggle="modal" title="查看文件"><i class="fa fa-eye"></i> 查看</a>
               	  <?php }?>
               	  <a class="btn btn-small" href="<?php echo $href; ?>" data-toggle="modal" title="删除文件"><i class="fa fa-trash-o"></i> 删除</a>
               </td>

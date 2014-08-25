@@ -5,7 +5,7 @@
  * @author coolmoo <idreamsoft@qq.com>
  * @$Id: article.add.php 2412 2014-05-04 09:52:07Z coolmoo $
  */
-defined('iCMS') OR exit('What are you doing?'); 
+defined('iPHP') OR exit('What are you doing?');
 iACP::head();
 ?>
 <script type="text/javascript" charset="utf-8" src="app/editor/iCMS.editor-6.0.0.js"></script>
@@ -35,7 +35,7 @@ $(function(){
           $("#article-add-metadata").html(MD_Box);
         }
       })
-		}); 
+		});
 	});
   $("#article-add-metadata").on("click",".delMD",function(){
       $(this).parent().parent().remove();
@@ -73,8 +73,8 @@ $(function(){
       $("#subtitle").focus();
       return false;
     }
-	}); 
-	
+	});
+
 });
 
 function addEditorPage(){
@@ -88,7 +88,7 @@ function addEditorPage(){
 }
 function delEditorPage(){
 	if($(".iCMS-editor-page:eq(0) option").length==1) return;
-	
+
 	var s = $(".iCMS-editor-page option:selected"),
     i = s.val(),p = s.prev(),n = s.next();
 	if(n.length){
@@ -108,7 +108,7 @@ function delEditorPage(){
 }
 function modal_picture(el,a){
   if(!a.checked) return;
-  
+
   var i       = iCMS.editor.Id,
   ed          = iCMS.editor[i],
   url         = $(a).attr("url");
@@ -135,12 +135,12 @@ function modal_sweditor(el){
   image    = e.attr('_image'),
   fileType = e.attr('_fileType'),
   original = e.attr('_original'),
-  url      = e.attr('url'),  
+  url      = e.attr('url'),
   ed       = iCMS.editor[iCMS.editor.Id];
 
   if(url=='undefined') return;
   var html = '<p class="attachment icon_'+fileType+'"><a href="'+url+'" target="_blank">' + original + '</a></p>';
-	
+
   if(image=="1") html='<p><img src="'+url+'" /></p>';
 
 	ed.execCommand("insertHTML",html);
@@ -160,7 +160,7 @@ function _modal_dialog(cancel){
         cancel: function(){
           return true;
       }
-  });  
+  });
 }
 </script>
 
@@ -275,7 +275,7 @@ function _modal_dialog(cancel){
             <div class="clearfloat mb10"></div>
             <div class="input-prepend"> <span class="add-on"><i class="fa fa-building-o"></i> 内容</span>
               <select class="iCMS-editor-page chosen-select">
-            <?php 
+            <?php
               $option ='';
               for($i=0;$i<$bodyCount;$i++){
                 $idNum  = $i+1;
@@ -291,7 +291,7 @@ function _modal_dialog(cancel){
               章节模式</span>  -->
               <span class="add-on wauto">
               <input name="inbox" type="checkbox" id="inbox" value="1" <?php if($rs['status']=="0")echo 'checked="checked"'  ?>/>
-              存为草稿</span> 
+              存为草稿</span>
               <span class="add-on wauto">
               <input name="remote" type="checkbox" id="remote" value="1" <?php if(iCMS::$config['publish']['remote']=="1")echo 'checked="checked"'  ?>/>
               下载远程图片</span> <span class="add-on wauto">
@@ -314,7 +314,7 @@ function _modal_dialog(cancel){
             <div class="clearfloat mb10"></div>
             <?php for($i=0;$i<$bodyCount;$i++){
                 $idNum  = $i+1;
-            ?>          
+            ?>
             <div class="iCMS-editor<?php if($i){ echo ' hide';}?>" id="editor-<?php echo $idNum;?>">
               <textarea type="text/plain" id="iCMS-editor-<?php echo $idNum;?>" name="body[]"><?php echo $bodyArray[$i];?></textarea>
             </div>

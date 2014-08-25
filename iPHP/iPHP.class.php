@@ -249,17 +249,17 @@ class iPHP{
     		case 'class': $obj_name = $app_name;break;
     		case 'table':
 				$obj_name = $app_name.'Table';
-				$args     = "import";
+				$args     = "static";
     		break;
     		case 'func':
-				$args     = "import";
+				$args     = "include";
     		break;
     		default:$obj_name = $app_name.'App';break;
     	}
 
     	self::import(iPHP_APP_DIR.'/'.$app_dir.'/'.$app_name.'.'.$file_type.'.php');
 
-    	if($args==="import") return;
+    	if($args==="include"||$args==="static") return;
 
     	if($args){
 			return new $obj_name($args);
@@ -290,12 +290,12 @@ class iPHP{
 		$router = self::import($path,true);
 
 		if(is_array($key)){
+			$url = $router[$key[0]];
 			if(is_array($key[1])){ /* 多个{} 例:/{uid}/{cid}/ */
-				$url = $router[$key[0]];
 				preg_match_all('/\{(\w+)\}/i',$url, $matches);
 				$url = str_replace($matches[0], $key[1], $url);
 			}else{
-				$url = preg_replace('/\{\w+\}/i',$key[1], $router[$key[0]]);
+				$url = preg_replace('/\{\w+\}/i',$key[1], $url);
 			}
 			$key[2] && $url = $key[2].$url;
 		}else{
@@ -392,17 +392,6 @@ class iPHP{
 		(int)iPHP_TIME_CORRECT && $correct = (int)iPHP_TIME_CORRECT*60;
 	    return $time+$correct;
 	}
-    public static function json($a,$break=true,$ret=false){
-    	$callback	= $_GET['callback'];
-    	header("Access-Control-Allow-Origin: ".__HOST__);
-    	$json	= json_encode($a);
-    	$callback && $json	=$callback.'('.$json.')';
-    	if($ret){
-    		return $json;
-    	}
-    	echo $json;
-    	$break && exit();
-    }
     /**
      * Starts the timer, for debugging purposes
      */
@@ -423,6 +412,22 @@ class iPHP{
         $time_total = $time_end - self::$time_start;
         //self::$time_start = $time_end;
         return round($time_total,4);
+    }
+    public static function json($a,$break=true,$ret=false){
+    	$callback	= $_GET['callback'];
+    	header("Access-Control-Allow-Origin: ".__HOST__);
+    	$json	= json_encode($a);
+    	$callback && $json	=$callback.'('.$json.')';
+    	if($ret){
+    		return $json;
+    	}
+    	echo $json;
+    	$break && exit();
+    }
+    public static function js_callback($a,$obj='parent.'){
+    	$json = json_encode($a);
+    	echo "<script type=\"text/javascript\">window.{$obj}callback($json);</script>";
+    	exit;
     }
     public static function code($code=0,$msg='',$forward='',$format=''){
     	strstr($msg,':') && $msg = self::lang($msg);

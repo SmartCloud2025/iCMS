@@ -5,7 +5,7 @@
  * @author coolmoo <idreamsoft@qq.com>
  * @$Id: spider.php 586 2013-04-02 14:44:18Z coolmoo $
  */
-defined('iCMS') OR exit('What are you doing?'); 
+defined('iPHP') OR exit('What are you doing?');
 iACP::head();
 ?>
 <style>
@@ -25,16 +25,16 @@ $(function(){
 	$('#spider-data').on("click",".delprop",function(){
    		$(this).parent().parent().remove();
 	});
-	
+
 	$(".addprop").click(function(){
-		var length=$("#spider-data tbody tr").length; 
+		var length=$("#spider-data tbody tr").length;
 		var href = $(this).attr("href");
 		var tb	= $(href),tbody=$("tbody",tb);
 		var ntr=$(".aclone",tb).clone(true).removeClass("hide aclone");
 		$('input,textarea',ntr).removeAttr("disabled");
 		$('input,textarea',ntr).each(function(i){
 			this.name=this.name.replace('[__NO__]','['+length+']');
-		}); 
+		});
 		$('.tip',ntr).tooltip();
 		ntr.appendTo(tbody);
 		return false;

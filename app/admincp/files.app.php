@@ -53,7 +53,7 @@ class filesApp{
 		$_GET['indexid'] 	&& $sql.=" AND `indexid`='{$_GET['indexid']}'";
         $_GET['starttime'] 	&& $sql.=" and `time`>=UNIX_TIMESTAMP('".$_GET['starttime']." 00:00:00')";
         $_GET['endtime'] 	&& $sql.=" and `time`<=UNIX_TIMESTAMP('".$_GET['endtime']." 23:59:59')";
-        
+
         isset($_GET['userid']) 	&& $uri.='&userid='.(int)$_GET['userid'];
 
         $orderby	= $_GET['orderby']?$_GET['orderby']:"id DESC";
@@ -107,7 +107,7 @@ class filesApp{
 		if($this->format=='json'){
 	    	iPHP::json($array);
 		}else{
-			$this->callback($array);
+			iPHP::js_callback($array);
 		}
     }
     function do_download(){
@@ -130,11 +130,6 @@ class filesApp{
     	}else{
     		iPHP::alert("下载远程文件失败!",'js:1',3);
     	}
-    }
-    function callback($a){
-    	$json	= json_encode($a);
-    	echo "<script type=\"text/javascript\">window.parent.callback($json);</script>";
-    	exit;
     }
     function do_batch(){
         $idArray = (array)$_POST['id'];

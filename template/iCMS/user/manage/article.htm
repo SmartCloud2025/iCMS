@@ -3,7 +3,9 @@
 	<input name="pg" type="hidden" value="article" />
 	<div class="article">
 		<div class="btn-group">
-			<a class="btn btn-danger" href="<!--{$article.manage}-->&status=0"><i class="fa fa-circle-o-notch"></i> 审核中文章</a>
+			<a class="btn" href="<!--{$article.manage}-->"><i class="fa fa-dashboard"></i> 我的文章</a>
+			<a class="btn" href="<!--{$article.manage}-->&status=3"><i class="fa fa-circle-o-notch"></i> 审核中文章</a>
+			<a class="btn" href="<!--{$article.manage}-->&status=2"><i class="fa fa-trash-o"></i> 回收站</a>
 		</div>
 		<table class="table table-striped">
 			<thead>
@@ -19,14 +21,17 @@
 			<!--{iCMS:article:list loop="true" page="true" row="12" call="user" total_cache="G" status=$status cid=$cid userid=$user.uid}-->
 				<tr>
 					<td><!--{$article_list.id}--></td>
-					<td><!--{if $article_list.status=="0"}-->
+					<td><!--{if $article_list.status=="3"}-->
 						<span class="label label-important">审核中</span>
+						<!--{/if}-->
+						<!--{if $article_list.status=="2"}-->
+						<span class="label">回收站</span>
 						<!--{/if}-->
 						<span class="label label-info"><!--{$category[$article_list.ucid].name}--></span> <a href="<!--{$article_list.url}-->" target="_blank"><!--{$article_list.title}--></a></td>
 					<td><!--{$article_list.hits}-->/<!--{$article_list.comments}--></td>
 					<td><a href="<!--{$article.manage}-->&cid=<!--{$article_list.cid}-->"><!--{$article_list.category.name}--></a></td>
 					<td><a href="<!--{$article.edit}-->&id=<!--{$article_list.id}-->" title="编辑"><i class="fa fa-edit"></i></a>
-						<a href="javascript:;" title="删除" style="margin-left: 10px;"><i class="fa fa-times"></i></a></td>
+						<a href="javascript:;" class="del_article" _id="<!--{$article_list.id}-->" title="删除" style="margin-left: 10px;"><i class="fa fa-times"></i></a></td>
 				</tr>
 			<!--{/iCMS}-->
 			</tbody>
@@ -40,7 +45,14 @@
 </form>
 <script type="text/javascript">
 $(function(){
-
+	$(".del_article").on('click',function(event) {
+		event.preventDefault();
+		var id = $(this).attr("_id");
+		$.post('<!--{iCMS:router url='/user'}-->',{action:'delete',pg:'article',id:id},
+			function(data) {
+				console.log(data);
+		});
+	});
 });
 </script>
 

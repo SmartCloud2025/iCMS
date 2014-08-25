@@ -11,7 +11,7 @@
 */
 defined('iPHP') OR exit('What are you doing?');
 
-iPHP::app('tag.class','import');
+iPHP::app('tag.class','include');
 class tagsApp{
     function __construct() {
         $this->id          = (int)$_GET['id'];
@@ -40,7 +40,7 @@ class tagsApp{
         $tcid = (int)$_GET['tcid'];
 
         $_GET['keywords'] && $sql.=" AND CONCAT(name,seotitle,subtitle,keywords,description) REGEXP '{$_GET['keywords']}'";
-        
+
         $sql.= $this->categoryApp->search_sql($cid);
         $sql.= $this->tagcategory->search_sql($cid,'tcid');
 
@@ -82,7 +82,7 @@ class tagsApp{
         $metadata    = iS::escapeStr($_POST['metadata']);
 
         $uid OR $uid= iMember::$userid;
-        
+
         $name OR iPHP::alert('标签名称不能为空！');
         $cid OR iPHP::alert('请选择标签所属栏目！');
 
@@ -136,7 +136,7 @@ class tagsApp{
         	iPHP::success('标签更新完成',"url:".APP_URI);
 		}
     }
-    
+
     function do_cache(){
     	tag::cache($this->id,'id');
     	iPHP::success("标签缓存更新成功");

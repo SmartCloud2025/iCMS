@@ -10,7 +10,7 @@
  * @version 1.0.1
  * @package FileSystem
  * @$Id: iFileSystem.class.php 2412 2014-05-04 09:52:07Z coolmoo $
- * 
+ *
  * CREATE TABLE `iPHP_filedata` (
  *   `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
  *   `indexid` int(10) unsigned NOT NULL DEFAULT '0',
@@ -29,14 +29,14 @@
  *   KEY `ofilename` (`ofilename`),
  *   KEY `indexid` (`indexid`),
  *   KEY `fn_userid` (`filename`,`userid`)
- * ) ENGINE=MyISAM AUTO_INCREMENT=0 DEFAULT CHARSET=utf8 
+ * ) ENGINE=MyISAM AUTO_INCREMENT=0 DEFAULT CHARSET=utf8
  */
 class iFS {
 
     public static $TABLE         = null;
     public static $forceExt      = false;
     public static $isRedirect    = false;
-    public static $checkFileData = false;
+    public static $checkFileData = true;
     public static $isValidext    = true;
     public static $config        = null;
     public static $userid        = 0;
@@ -199,7 +199,7 @@ class iFS {
     }
 
     public static function path_join($base, $path) {
-    	
+
         if (!self::path_is_absolute($base))
             $path = rtrim($base, '/') . '/' . ltrim($path, '/');
 
@@ -237,7 +237,7 @@ class iFS {
 					unset($responses,$info);
 	                return self::remote($url, $_referer, $_count);
 	            }else{
-					$curl_error = curl_error($ch); 
+					$curl_error = curl_error($ch);
 					curl_close($ch);
 					unset($responses,$info);
 					echo "cURL Error ($errno): $curl_error\n";
@@ -252,7 +252,7 @@ class iFS {
 			    	preg_match ('|Location: (.*)|i',$header,$matches);
 			    	$newurl 	= ltrim($matches[1],'/');
 				    if(empty($newurl)) return false;
-				    
+
 			    	if(!strstr($newurl,'http://')){
 				    	$host	= $uri['scheme'].'://'.$uri['host'];
 			    		$newurl = $host.'/'.$newurl;
@@ -407,7 +407,7 @@ class iFS {
 	}
     public static function upload($field, $udir = '', $FileName = '',$ext='') {
         list($RootPath,$FileDir) = self::mk_udir($udir); // 文件保存目录方式
-        
+
         if ($_FILES[$field]['name']) {
             $tmp_file = $_FILES[$field]['tmp_name'];
             if(!is_uploaded_file($tmp_file)){
@@ -453,7 +453,7 @@ class iFS {
             }
             $ret	= self::save_ufile($tmp_file, $FileRootPath);
             if(self::$callback && is_array($ret) && $ret['code']=="0") return $ret;
-            
+
             @unlink($tmp_file);
             if (in_array($FileExt, array('gif', 'jpg', 'jpeg', 'png')) && self::$watermark) {
                 iPHP::LoadClass('Pic');
@@ -526,8 +526,7 @@ class iFS {
 
 //--------upload---end-------------------------------
     public static function insFileData($data, $type = 0) {
-        if (self::$checkFileData)
-            return;
+        if (!self::$checkFileData) return;
 
         $userid = self::$userid === false ? 0 : self::$userid;
         $data['userid'] = $userid;
@@ -538,8 +537,7 @@ class iFS {
     }
 
     public static function getFileData($f, $v) {
-        if (self::$checkFileData)
-            return;
+        if (!self::$checkFileData) return;
 
         $sql = self::$userid === false ? '' : " AND `userid`='" . self::$userid . "'";
         $rs = iDB::row("SELECT * FROM ".iPHP_DB_PREFIX.self::$TABLE." WHERE `$f`='$v' {$sql} LIMIT 1");
@@ -621,7 +619,7 @@ class iFS {
 		    	preg_match ('|Location: (.*)|i',$header,$matches);
 		    	$newurl 	= ltrim($matches[1],'/');
 			    if(empty($newurl)) return false;
-			    
+
 		    	if(!strstr($newurl,'http://')){
 			    	$host	= $uri['scheme'].'://'.$uri['host'];
 		    		$newurl = $host.'/'.$newurl;

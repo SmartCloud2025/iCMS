@@ -14,7 +14,7 @@ function small($sfp,$w='',$h='',$scale=true) {
     $ext    = iFS::getext($sfp);
     if(strpos($sfp,'_')!==false)
         return $sfp;
-    
+
     if(empty($sfp)){
         $twh    =iCMS_FS_URL.'1x1.gif';
     }else{
@@ -46,7 +46,7 @@ function baiduping($href) {
     curl_setopt($ch, CURLOPT_RETURNTRANSFER,1);
     curl_setopt($ch, CURLOPT_POST, 1);
     curl_setopt($ch, CURLOPT_POSTFIELDS, $postvar);
-    curl_setopt($ch, CURLOPT_HTTPHEADER, array("Content-Type: text/xml")); 
+    curl_setopt($ch, CURLOPT_HTTPHEADER, array("Content-Type: text/xml"));
     $res = curl_exec ($ch);
     curl_close ($ch);
     var_dump($res);
@@ -73,22 +73,7 @@ function get_pic($src,$size=0,$thumb=0){
     }
     return $data;
 }
-function get_user($uid,$type,$size=0){
-    switch($type){
-        case 'avatar':return iCMS_FS_URL.get_avatar($uid,$size);break;
-        case 'url':   return iPHP::router(array('/{uid}/',$uid),iCMS_REWRITE);break;
-        case 'urls':
-            return array(
-                'home'      => iPHP::router(array('/{uid}/',$uid),iCMS_REWRITE),
-                'favorite'  => iPHP::router(array('/{uid}/favorite/',$uid),iCMS_REWRITE),
-                'share'     => iPHP::router(array('/{uid}/share/',$uid),iCMS_REWRITE),
-                'follower'  => iPHP::router(array('/{uid}/follower/',$uid),iCMS_REWRITE),
-                'following' => iPHP::router(array('/{uid}/following/',$uid),iCMS_REWRITE),
-            );
-        break;
 
-    }
-}
 function autoformat($html){
     $html = stripslashes($html);
     $html = preg_replace(array(
@@ -103,7 +88,7 @@ function autoformat($html){
 
     $html = str_replace("&nbsp;",'',$html);
     $html = str_replace("　",'',$html);
-    
+
     $html = preg_replace(array(
     '/<b[^>]*>(.*?)<\/b>/i',
     '/<strong[^>]*>(.*?)<\/strong>/i'

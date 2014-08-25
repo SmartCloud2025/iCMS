@@ -8,7 +8,7 @@
  */
 defined('iPHP') OR exit('What are you doing?');
 
-iPHP::app('tag.class','import');
+iPHP::app('tag.class','include');
 function article_list($vars){
     if($vars['loop']==="rel" && empty($vars['id'])){
         return false;
@@ -25,6 +25,7 @@ function article_list($vars){
     $cache_time = isset($vars['time'])?(int)$vars['time']:-1;
     isset($vars['userid'])&& $where_sql.= " AND `userid`='{$vars['userid']}'";
     isset($vars['top'])   && $where_sql.= " AND `top`='"._int($vars['top'])."'";
+
 
     if(isset($vars['cid!'])){
     	$ncids    = $vars['cid!'];
@@ -79,9 +80,9 @@ function article_list($vars){
     isset($vars['startdate'])&& $where_sql .= " AND `pubdate`>='".strtotime($vars['startdate'])."'";
     isset($vars['enddate'])  && $where_sql .= " AND `pubdate`<='".strtotime($vars['enddate'])."'";
     isset($vars['where'])    && $where_sql .= $vars['where'];
-
     $md5    = md5($where_sql.$order_sql.$maxperpage);
     $offset = 0;
+    $limit  = "LIMIT {$maxperpage}";
     if($vars['page']){
         $total_type = $vars['total_cache']?$vars['total_cache']:null;
         $total      = iPHP::total($md5,"SELECT count(*) FROM `#iCMS@__article` WHERE {$where_sql}",$total_type);
@@ -89,7 +90,11 @@ function article_list($vars){
         $pnstyle    = isset($vars['pnstyle'])?$vars['pnstyle']:0;
         $multi      = iCMS::page(array('total_type'=>$total_type,'total'=>$total,'perpage'=>$maxperpage,'unit'=>iPHP::lang('iCMS:page:list'),'nowindex'=>$GLOBALS['page']));
         $offset     = $multi->offset;
-        //$where_sql.=' `id` >= (SELECT id FROM table LIMIT 1000000, 1) '
+        $limit      = "LIMIT {$offset},{$maxperpage}";
+        // if($offset>1000){
+        //     $where_sql.=" AND `id` >= (SELECT `id` FROM `#iCMS@__article` WHERE {$where_sql} {$order_sql} LIMIT {$offset},1)";
+        //     $limit  = "LIMIT {$maxperpage}";
+        // }
         iPHP::assign("article_list_total",$total);
     }
     if($vars['cache']){
@@ -97,7 +102,7 @@ function article_list($vars){
         $resource   = iCache::get($cache_name);
     }
     if(empty($resource)){
-        $resource = iDB::all("SELECT * FROM `#iCMS@__article` WHERE {$where_sql} {$order_sql} LIMIT {$offset} , {$maxperpage}");
+        $resource = iDB::all("SELECT * FROM `#iCMS@__article` WHERE {$where_sql} {$order_sql} {$limit}");
         //iDB::debug(1);
         $resource = __article($vars,$resource);
         $vars['cache'] && iCache::set($cache_name,$resource,$cache_time);
@@ -212,15 +217,9 @@ function __article($vars,$variable){
         $value['link']              = "<a href='{$value['url']}'>{$value['title']}</a>";
         $value['commentUrl']        = iCMS_API."?app=comment&indexId=".$value['id']."&categoryId=".$value['cid'];
         if($vars['user']){
-            $value['user']['url']  = get_user($value['userid'],'url');
-            $value['user']['name'] = $value['author'];
-            $value['user']['id']   = $value['userid'];
+            iPHP::app('user.class','static');
+            $value['user'] = user::info($value['userid'],$value['author']);
         }
-        // if($vars['urls']){
-        //     $value['urls']['url']      = "/u/".$value['userid'];
-        //     $value['urls']['url']      = "/u/".$value['userid'];
-        //     $value['urls']['url']      = "/u/".$value['userid'];
-        // }
 		if($vars['meta']){
             $value['metadata'] && $value['metadata'] = unserialize($value['metadata']);
         }

@@ -5,7 +5,7 @@
  * @author coolmoo <idreamsoft@qq.com>
  * @$Id: filter.php 2003 2013-07-22 07:27:56Z coolmoo $
  */
-defined('iCMS') OR exit('What are you doing?'); 
+defined('iPHP') OR exit('What are you doing?');
 iACP::head(false);
 ?>
 <style>
@@ -46,11 +46,11 @@ iACP::head(false);
     </div>
   </div>
 </div>
-<script type="text/javascript" src="<?php echo ACP_UI;?>/ZeroClipboard-1.2.3.min.js"></script> 
-<script type="text/javascript" src="<?php echo ACP_UI;?>/swfupload-2.2.0/swfupload.js"></script> 
-<script type="text/javascript" src="<?php echo ACP_UI;?>/swfupload-2.2.0/swfupload.queue.js"></script> 
-<script type="text/javascript" src="<?php echo ACP_UI;?>/swfupload-2.2.0/fileprogress.js"></script> 
-<script type="text/javascript" src="<?php echo ACP_UI;?>/swfupload-2.2.0/callbacks.js"></script> 
+<script type="text/javascript" src="<?php echo ACP_UI;?>/ZeroClipboard-1.2.3.min.js"></script>
+<script type="text/javascript" src="<?php echo ACP_UI;?>/swfupload-2.2.0/swfupload.js"></script>
+<script type="text/javascript" src="<?php echo ACP_UI;?>/swfupload-2.2.0/swfupload.queue.js"></script>
+<script type="text/javascript" src="<?php echo ACP_UI;?>/swfupload-2.2.0/fileprogress.js"></script>
+<script type="text/javascript" src="<?php echo ACP_UI;?>/swfupload-2.2.0/callbacks.js"></script>
 <script type="text/javascript">
     var APP_URI = '<?php echo APP_URI; ?>',watermark=$("#watermark").prop("checked");
     var swfupload,
@@ -132,9 +132,9 @@ iACP::head(false);
     		return;
     	}
     	var checked = $('input:checkbox:checked', $('#uploadProgress'));
-    	
+
     	if(!checked.length) alert("您没有选择任何文件!");
-    	
+
 	    checked.each(function() {
 			window.parent.modal_<?php echo $_GET['callback'];?>(this)
 	    });

@@ -1,55 +1,4 @@
 body { background-color: #fff; background-image: url(img/bg-v6.png); _background-attachment: fixed; }
-/*===========commentApp===========*/
-.spinner-gray, .spinner-lightgray { display: inline-block; margin: 0 5px; width: 14px; height: 15px; vertical-align: -3px; background-size: 14px 15px; background-repeat: no-repeat; background-image: url(/img/grey-loading.gif); }
-.spinner-lightgray { background-image: url(img/lightgray-loading.gif); }
-.commentApp-box { margin: 10px 0 0 35px; background: #fff; max-width: 540px; position: relative; border: 1px solid #ddd; border-radius: 4px; box-shadow: 0 1px 1px rgba(0, 0, 0, .05) }
-.commentApp-box .load-more { padding: 8px 0; display: block; font-size: 13px; height: 22px; text-align: center; border: 1px solid #eee; border-width: 1px 0 0; color: #698ebf; box-shadow: 0 0 5px rgba(180, 180, 180, .1) inset; text-shadow: 0 1px 0 #fff }
-.commentApp-box .load-more .text { position: relative }
-.commentApp-box .load-more .spinner { position: absolute; top: 0; right: -20px; display: none }
-.commentApp-box .load-more.loading .spinner { display: block }
-html.no-touch .commentApp-box .load-more:hover { background: #fefefe; text-decoration: none }
-.commentApp-box .load-more:active { background: #fbfbfb; box-shadow: 0 0 5px rgba(180, 180, 180, .2) inset }
-.commentApp-box .load-more+.commentApp-item { margin: 0; padding: 8px 12px; border-top: 1px solid #eee }
-.commentApp-box .commentApp-bubble { position: absolute; top: -8px; left: 81px; display: none }
-.commentApp-box.empty { border: 0; box-shadow: none }
-.commentApp-box.empty.cannot-comment { border: 1px solid #ddd }
-.commentApp-box.cannot-comment .editable, .commentApp-box.cannot-comment .app-command, .commentApp-box.cannot-comment .commentApp-op-link.reply { display: none !important }
-.commentApp-box.empty .commentApp-bubble { display: none !important }
-.commentApp-box.empty.cannot-comment .commentApp-bubble { display: block !important }
-.commentApp-box.empty .commentApp-box-ft { margin: 0 30px 0 0; padding: 0; border: 0 !important; background: 0 }
-.commentApp-box.empty.cannot-comment .commentApp-form { margin: 0 }
-.commentApp-box.empty.cannot-comment .commentApp-form, .commentApp-box .commentApp-form { padding: 15px }
-.commentApp-box.empty.cannot-comment .commentApp-box-ft, .commentApp-box .commentApp-box-ft { background: #fbfbfb; border-radius: 0 0 4px 4px; border-top: 1px solid #EEE; position: relative }
-.commentApp-box.empty.cannot-comment .commentApp-box-ft { background: #fff }
-.commentApp-spinner { padding: 6px 12px; font-size: 13px; }
-.commentApp-item { position: relative; margin: 0 12px; padding: 8px 0 }
-.commentApp-item .commentApp-content-wrap { margin: 0 0 0 35px }
-.commentApp-item>.app-item-link-avatar { float: left; margin: 4px 0 0 }
-.commentApp-item .app-item-img-avatar { width: 25px; height: 25px; border-radius: 2px }
-.commentApp-item .commentApp-content { color: #222; min-height: 22px }
-.commentApp-item .commentApp-hd, .commentApp-item .commentApp-ft { color: #999 }
-.commentApp-item .commentApp-hd .desc, .commentApp-item .commentApp-ft .desc { font-size: 12px }
-.commentApp-item .commentApp-ft { font-size: 12px }
-.commentApp-item .like-num { float: right; margin-top: -1px }
-.commentApp-item .like-num>span, .commentApp-item .like-num>em { font-style: normal; vertical-align: -2px }
-.commentApp-item .like-num.nil { display: none }
-.commentApp-item.focusin .commentApp-op-link, .commentApp-item:hover .commentApp-op-link { visibility: visible }
-.commentApp-item+.commentApp-item { border-top: solid 1px #eee }
-.commentApp-item .commentApp-form { padding: 15px 0 }
-.commentApp-info { text-align: center }
-.commentApp-form .commentApp-textarea { padding: 7px 8px; color: #999; font-size: 13px; line-height: 22px; min-height: 22px; width: 95% }
-.commentApp-form.expanded .app-command { display: block; line-height: 33px; }
-.commentApp-form .app-command { display: none; padding: 10px 0; text-align: right }
-.commentApp-form .app-command .btn-primary { float: right; }
-.commentApp-form .app-command .app-command-cancel { float: right; }
-.with-self-avatar .commentApp-form .avatar { display: block }
-.commentApp-form .avatar { float: left; display: none; margin: 2px 10px 0 0; width: 34px; height: 34px; border-radius: 4px }
-.commentApp-form .avatar+.editable { overflow: hidden }
-.commentApp-op-link { margin-left: .5em; color: #999; font-size: 12px; visibility: hidden }
-.app-command-cancel { margin: 0 15px 0 0; cursor: pointer; float: left; }
-.app-command-cancel:hover { text-decoration: underline }
-.commentApp-op-link>.iCMS-icon { margin-right: 5px; width: 11px; height: 11px; vertical-align: -1px }
-
 
 /* userApp */
 .userApp_home { margin: 0 auto; width: 960px; background-color: #fff; }
@@ -199,3 +148,5 @@ html.no-touch .commentApp-box .load-more:hover { background: #fefefe; text-decor
 .account_bind .bind_logo .bind_web .addSuccess { color: #690; line-height: 23px; padding-left: 12px; vertical-align: center; }
 .account_bind p.bind_tip { margin-top: 0; text-align: left; color: #999; }
 /*==manage==*/
+#coverpic_box  {width: 480px;height: 150px;border: 1px solid #D4D4D4;padding: 1px;}
+#coverpic {height: 150px;}

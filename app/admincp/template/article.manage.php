@@ -5,7 +5,7 @@
  * @author coolmoo <idreamsoft@qq.com>
  * @$Id: article.manage.php 2405 2014-04-17 06:59:42Z coolmoo $
  */
-defined('iCMS') OR exit('What are you doing?'); 
+defined('iPHP') OR exit('What are you doing?');
 iACP::head();
 ?>
 <script type="text/javascript">
@@ -30,7 +30,7 @@ $(function(){
     iCMS.checked('#search_scid');
   <?php } ?>
   iCMS.checked('.spic[value=<?php echo $_GET['pic'] ; ?>]');
-	
+
 	var edialog;
 	$(".edit").dblclick(function(){
 		var a=$(this),aid=a.attr("aid"),box=$('#ed-box'),title=$.trim(a.text());
@@ -47,9 +47,9 @@ $(function(){
 			edcid.val(d.cid).trigger("chosen:updated");	edpid.val(d.pid).trigger("chosen:updated");
 			edtags.val(d.tags);	edsource.val(d.source);
 			eddesc.val(d.description);
-		}); 
+		});
 		if(edialog) edialog.close();
-		
+
 		edialog	= $.dialog({
 			lock:true,id:'edialog',title: '简易编辑 ['+title+']',content: document.getElementById('ed-box'),
 		    button: [{value: '保存',callback: function () {
@@ -69,7 +69,7 @@ $(function(){
 							if(o=="1"){
 								window.location.reload();
 							}
-						}); 
+						});
 					}}]
 		});
 	});
@@ -106,7 +106,7 @@ $(function(){
           </select>
           <span class="add-on tip" title="选中查询所有关联到此栏目的文章">
           <input type="checkbox" name="scid" id="search_scid"/>
-          副栏目 </span> 
+          副栏目 </span>
           <span class="add-on tip" title="选中查询此栏目下面所有的子栏目,包含本栏目">
           <input type="checkbox" name="sub" id="sub"/>
           子栏目 </span> </div>
@@ -202,9 +202,9 @@ $(function(){
                   <?php if($rs[$i]['status']!="2"){ ?>
                   <a href="<?php echo __ADMINCP__; ?>=comment&aid=<?php echo $rs[$i]['id'] ; ?>" class="tip-bottom" title="文章评论管理" target="_blank"><i class="fa fa-comment"></i></a>
                   <?php } ?>
-                  
+
                   <!-- <a href="<?php echo __ADMINCP__; ?>=chapter&aid=<?php echo $rs[$i]['id'] ; ?>" class="tip-bottom" title="章节管理" target="_blank"><i class="fa fa-sitemap"></i></a> -->
-                  
+
                   <?php if($rs[$i]['status']=="1"){ ?>
                   <a href="<?php echo __ADMINCP__; ?>=push&do=add&title=<?php echo $rs[$i]['title'] ; ?>&pic=<?php echo $rs[$i]['pic'] ; ?>&url=<?php echo $rs[$i]['url'] ; ?>" class="tip-bottom" title="推送此文章"><i class="fa fa-thumb-tack"></i></a> <a href="<?php echo APP_URI; ?>&do=update&id=<?php echo $rs[$i]['id'] ; ?>&iDT=status:0" class="tip-bottom" target="iPHP_FRAME" title="转为草稿"><i class="fa fa-inbox"></i></a> <a href="<?php echo APP_URI; ?>&do=update&id=<?php echo $rs[$i]['id'] ; ?>&iDT=pubdate:now" class="tip-bottom" target="iPHP_FRAME" title="更新文章时间"><i class="fa fa-clock-o"></i></a>
                   <?php } ?>

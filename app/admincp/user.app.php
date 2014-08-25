@@ -26,16 +26,15 @@ class userApp{
     function do_login(){
         if($this->uid) {
             $user = iDB::row("SELECT * FROM `#iCMS@__user` WHERE `uid`='$this->uid' LIMIT 1;",ARRAY_A);
-            $authash = '#=(iCMS@'.iPHP_KEY.')=#';
-            iPHP::set_cookie('AUTH_INFO',authcode((int)$user['uid'].$authash.$user['username'].$authash.$user['password'],'ENCODE'));
-            iPHP::set_cookie('userid',(int)$user['uid']);
-            iPHP::set_cookie('nickname',str_replace('"','',json_encode($user['nickname'])));
-            iPHP::gotourl('../index.php');
+            iPHP::app('user.class','static');
+            user::set_cookie($user['username'],$user['password'],$user);
+            $url = iPHP::router(array('/{uid}/',$this->uid));
+            iPHP::gotourl($url);
         }
     }
     function do_iCMS(){
         $sql   = "WHERE 1=1";
-        $_GET['gid'] && $sql.=" AND `gid`='{$_GET['gid']}'";        
+        $_GET['gid'] && $sql.=" AND `gid`='{$_GET['gid']}'";
         $orderby    = $_GET['orderby']?$_GET['orderby']:"uid DESC";
         $maxperpage = $_GET['perpage']>0?(int)$_GET['perpage']:20;
         $total      = iPHP::total(false,"SELECT count(*) FROM `#iCMS@__user` {$sql}","G");
@@ -64,7 +63,7 @@ class userApp{
         $info['signature'] = iS::escapeStr(stripslashes($_POST['signature']));
         $info              = addslashes(serialize($info));
         $_POST['pwd'] && $password = md5($_POST['pwd']);
-        
+
         $username OR iPHP::alert('账号不能为空');
 
         if(empty($uid)) {

@@ -4,97 +4,52 @@
 		<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
 		<title><!--{$vars.title}-->评论_<!--{$site.title}-->_<!--{$site.seotitle}--></title>
 		<!--{iCMS:public:ui script="false"}-->
-		<script>
-		$(function(){
-		})
-		</script>
+		<script>var iCMS = window.parent.iCMS;</script>
 	</head>
 	<body class="iCMS-comment-page">
-		<!--{/if}-->
-		<style>
-.iCMS-comment-list-wrap {background: #fff; position: relative; }
-.iCMS-comment-list-wrap .load-more { padding: 8px 0; display: block; font-size: 13px; height: 22px; text-align: center; border: 1px solid #eee; border-width: 1px 0 0; color: #698ebf; box-shadow: 0 0 5px rgba(180, 180, 180, .1) inset; text-shadow: 0 1px 0 #fff }
-.iCMS-comment-list-wrap .load-more .text { position: relative }
-.iCMS-comment-list-wrap .load-more .spinner { position: absolute; top: 0; right: -20px; display: none }
-.iCMS-comment-list-wrap .load-more.loading .spinner { display: block }
-.iCMS-comment-list-wrap .load-more:active { background: #fbfbfb; box-shadow: 0 0 5px rgba(180, 180, 180, .2) inset }
-.iCMS-comment-list-wrap .load-more+.iCMS-comment-item { margin: 0; padding: 8px 12px; border-top: 1px solid #eee }
-
-.iCMS-comment-item { position: relative; margin: 0 12px; padding: 8px 0 }
-.iCMS-comment-item .cmt-content-wrap { margin: 0 0 0 48px }
-.iCMS-comment-item .cmt-item-link-avatar { float: left; margin: 0px 8px 0px 0px; }
-.iCMS-comment-item .cmt-item-img-avatar { width: 36px; height: 36px; border-radius: 2px;box-shadow: 0 1px 3px rgba(0,0,0,0.22);padding: 2px;}
-.iCMS-comment-item .cmt-content { color: #222; min-height: 22px }
-.iCMS-comment-item .cmt-hd, .iCMS-comment-item .cmt-ft { color: #999 }
-.iCMS-comment-item .cmt-hd .desc, .iCMS-comment-item .cmt-ft .desc { font-size: 12px }
-.iCMS-comment-item .cmt-ft { font-size: 12px }
-.iCMS-comment-item .like-num { float: right; margin-top: -1px }
-.iCMS-comment-item .like-num>span, .iCMS-comment-item .like-num>em { font-style: normal; vertical-align: -2px }
-.iCMS-comment-item .like-num.nil { display: none }
-.iCMS-comment-item.focusin .commentApp-op-link, .iCMS-comment-item:hover .commentApp-op-link { visibility: visible }
-.iCMS-comment-item+.iCMS-comment-item { border-top: dotted 1px #eee }
-.iCMS-comment-item .commentApp-form { padding: 15px 0 }
-
-
-.commentApp-info { text-align: center }
-.commentApp-form .commentApp-textarea { padding: 7px 8px; color: #999; font-size: 13px; line-height: 22px; min-height: 22px; width: 95% }
-.commentApp-form.expanded .app-command { display: block; line-height: 33px; }
-.commentApp-form .app-command { display: none; padding: 10px 0; text-align: right }
-.commentApp-form .app-command .btn-primary { float: right; }
-.commentApp-form .app-command .app-command-cancel { float: right; }
-.with-self-avatar .commentApp-form .avatar { display: block }
-.commentApp-form .avatar { float: left; display: none; margin: 2px 10px 0 0; width: 34px; height: 34px; border-radius: 4px }
-.commentApp-form .avatar+.editable { overflow: hidden }
-.commentApp-op-link { margin-left: .5em; color: #999; font-size: 12px; visibility: hidden }
-.app-command-cancel { margin: 0 15px 0 0; cursor: pointer; float: left; }
-.app-command-cancel:hover { text-decoration: underline }
-.zg-icon-comment-like, .commentApp-op-link>.iCMS-icon { margin-right: 5px; width: 11px; height: 11px; vertical-align: -1px }
-
-		</style>
-		<div class="iCMS-comment-list-wrap">
-			<ul class="iCMS-comment-list" id="iCMS-comment-list-box">
-				<!--{iCMS:comment:list loop="true" page="true" vars=$vars}-->
-				<li class="iCMS-comment-item" data-id="<!--{$comment_list.id}-->">
-
-<a title="<!--{$comment_list.user.name}-->" data-tip="iCMS:ucard:<!--{$comment_list.user.uid}-->" class="cmt-item-link-avatar" href="<!--{$comment_list.user.url}-->">
-<img src="<!--{$comment_list.user.avatar}-->" class="cmt-item-img-avatar">
-</a>
-<div class="cmt-content-wrap">
-	<div class="cmt-hd">
-		<a data-tip="iCMS:ucard:<!--{$comment_list.user.uid}-->" href="<!--{$comment_list.user.url}-->" class="zg-link"><!--{$comment_list.user.name}--></a>
-		<!--{if $comment_list.suid == $comment_list.uid}-->
-		<span class="desc">（作者）</span>
-		<!--{/if}-->
-		<!--{if $comment_list.reply}-->
-		<span class="desc">回复 </span>
-		<a data-tip="iCMS:ucard:<!--{$comment_list.reply.uid}-->" href="<!--{$comment_list.reply.url}-->" class="zg-link"><!--{$comment_list.reply.name}--></a>
-		<!--{/if}-->
-	</div>
-	<div class="cmt-content"><!--{$comment_list.content}--></div>
-	<div class="cmt-ft">
-		<span class="date"><!--{$comment_list.addtime|format_date}--></span>
-		<a href="javascript:;" class="reply commentApp-op-link" name="reply_comment" data-param='{"uid":"<!--{$comment_list.user.uid}-->","name":"<!--{$comment_list.user.name}-->"}'>
-		<i class="iCMS-icon iCMS-icon-comment-reply"></i>回复</a>
-		<a href="javascript:;" class="like commentApp-op-link" name="like_comment" data-param='{"id":"<!--{$comment_list.id}-->"}'>
-		<i class="iCMS-icon iCMS-icon-comment-like"></i>赞</a>
-		<!--{if $comment_list.up>1}-->
-		<span class="like-num" data-tip="iCMS:s:<!--{$comment_list.up}--> 人觉得这个很赞">
-		<em><!--{$comment_list.up}--></em> <span>赞</span></span>
-		<!--{/if}-->
-		<a href="javascript:;" name="report_comment" data-param='{"id":"<!--{$comment_list.id}-->","uid":"<!--{$comment_list.user.uid}-->"}' class="report commentApp-op-link needsfocus">
-		<i class="iCMS-icon iCMS-icon-no-help"></i>举报</a>
-	</div>
-</div>
-
+<!--{/if}-->
+<!--{if $vars.display=="default"}-->
+<script src="<!--{$site.urls.ui}-->/iCMS.comment-6.0.0.js"></script>
+<!--{/if}-->
+		<div class="commentApp-list-box" id="iCMS-comment-list-box">
+			<ul class="commentApp-box">
+				<!--{iCMS:comment:list loop="true" page="true" row="5" vars=$vars}-->
+				<li class="commentApp-item" data-id="<!--{$comment_list.id}-->">
+					<a title="<!--{$comment_list.user.name}-->" data-tip="iCMS:ucard:<!--{$comment_list.user.uid}-->" class="app-item-link-avatar" href="<!--{$comment_list.user.url}-->">
+						<img src="<!--{$comment_list.user.avatar}-->" class="app-item-img-avatar">
+					</a>
+					<div class="commentApp-content-wrap">
+						<div class="commentApp-hd">
+							<a data-tip="iCMS:ucard:<!--{$comment_list.user.uid}-->" href="<!--{$comment_list.user.url}-->" class="zg-link"><!--{$comment_list.user.name}--></a>
+							<!--{if $comment_list.suid == $comment_list.uid}-->
+							<span class="desc">（作者）</span>
+							<!--{/if}-->
+							<!--{if $comment_list.reply}-->
+							<span class="desc">回复 </span>
+							<a data-tip="iCMS:ucard:<!--{$comment_list.reply.uid}-->" href="<!--{$comment_list.reply.url}-->" class="zg-link"><!--{$comment_list.reply.name}--></a>
+							<!--{/if}-->
+						</div>
+						<div class="commentApp-content"><!--{$comment_list.content}--></div>
+						<div class="commentApp-ft">
+							<span class="date"><!--{$comment_list.addtime|format_date}--></span>
+							<a href="javascript:;" class="reply commentApp-op-link" name="reply_comment" data-param='{"id":"<!--{$comment_list.id}-->","uid":"<!--{$comment_list.user.uid}-->","name":"<!--{$comment_list.user.name}-->"}'>
+							<i class="iCMS-icon iCMS-icon-comment-reply"></i>回复</a>
+							<a href="javascript:;" class="like commentApp-op-link" name="like_comment" data-param='{"id":"<!--{$comment_list.id}-->"}'>
+							<i class="iCMS-icon iCMS-icon-comment-like"></i>赞</a>
+							<!--{if $comment_list.up>1}-->
+							<span class="like-num" data-tip="iCMS:s:<!--{$comment_list.up}--> 人觉得这个很赞">
+							<em><!--{$comment_list.up}--></em> <span>赞</span></span>
+							<!--{/if}-->
+							<a href="javascript:;" name="report_comment" data-param='{"id":"<!--{$comment_list.id}-->","uid":"<!--{$comment_list.user.uid}-->"}' class="report commentApp-op-link needsfocus">
+							<i class="iCMS-icon iCMS-icon-no-help"></i>举报</a>
+						</div>
+					</div>
 				</li>
 				<!--{/iCMS}-->
 			</ul>
-			<script>
-			var comment_param = <!--{$vars|json_encode}-->
-			</script>
 			<div class="iCMS-pagination" data-query="<!--{$vars.query}-->"><!--{$iPAGE|method:'show(4)'}--></div>
 		</div>
-		<!--{if $vars.display=="iframe"}-->
+<!--{if $vars.display=="iframe"}-->
 	</body>
 </html>
 <!--{/if}-->

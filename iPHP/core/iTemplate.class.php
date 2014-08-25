@@ -21,7 +21,7 @@ class iTemplate {
 	public $default_modifiers         = array();
 	public $debugging                 = false;
 
-	public $_error_reporting          = "<?php defined('iPHP') OR exit('What are you doing?');error_reporting(iPHP_TPL_DEBUG?E_ALL ^ E_NOTICE:0);?>\n";
+	public $_error_reporting          = "<?php defined('iPHP') OR exit('What are you doing?');error_reporting(iPHP_TPL_DEBUG?E_ALL & ~E_NOTICE:0);?>\n";
 
 	public $reserved_template_varname = iPHP_TPL_VAR;
 
@@ -174,13 +174,21 @@ class iTemplate {
 
 		$file = ltrim($file,'/');
 		strpos($file,'..') && $this->trigger_error("resource file has '..'", E_USER_ERROR);
-		strpos($file,'./')     !==false && $file = str_replace('./',dirname($this->_file).'/',$file);
-		strpos($file,'{iTPL}') !==false && $file = str_replace('{iTPL}',iPHP_TPL_DEFAULT,$file);
-
 		if(strpos($file, 'file::')!==false){
 			list($_dir,$file)   = explode('||',str_replace('file::','',$file));
 			$this->template_dir = $_dir;
+		}else{
+			strpos($file,'./') !==false && $file = str_replace('./',dirname($this->_file).'/',$file);
+	        if(strpos($file,iPHP_APP.':/') !==false){
+				$file = str_replace(iPHP_APP.':/',iPHP_APP,$file);
+				if(!is_file(iPHP_TPL_DIR."/".$file)) {
+					$file = str_replace(iPHP_APP.':/',iPHP_TPL_DEFAULT,$file);
+				}
+			}elseif(strpos($file,'{iTPL}') !==false){
+				$file = str_replace('{iTPL}',iPHP_TPL_DEFAULT,$file);
+			}
 		}
+
 		$this->template_dir = $this->_get_dir($this->template_dir);
 		$RootPath           = $this->template_dir.$file;
 		@is_file($RootPath) OR $this->trigger_error("file '$RootPath' does not exist", E_USER_ERROR);

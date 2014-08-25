@@ -5,7 +5,7 @@
  * @author coolmoo <idreamsoft@qq.com>
  * @$Id: groups.add.php 179 2013-03-29 03:21:28Z coolmoo $
  */
-defined('iCMS') OR exit('What are you doing?'); 
+defined('iPHP') OR exit('What are you doing?');
 ?>
 <link rel="stylesheet" href="<?php echo ACP_UI;?>/jquery/treeview-0.1.0.css" type="text/css" />
 <script type="text/javascript" src="<?php echo ACP_UI;?>/jquery/treeview-0.1.0.js"></script>
@@ -36,12 +36,12 @@ function set_select(vars,el){
     $.each(vars, function(i,val){
       $('input[value="'+val+'"]',$("#"+el))
       .prop("checked", true).closest('.checker > span').addClass('checked');
-    });  
+    });
 }
 </script>
 <style>
 .separator .checker{margin-top: -20px !important;}
-</style> 
+</style>
 <div id="<?php echo iACP::$app_name; ?>-power" class="tab-pane hide">
   <div class="input-prepend input-append"><span class="add-on">全选</span><span class="add-on">
     <input type="checkbox" class="checkAll checkbox" data-target="#<?php echo iACP::$app_name; ?>-power"/>
@@ -99,4 +99,4 @@ function set_select(vars,el){
     <?php echo iACP::app('category','all')->power_tree();?>
   </ul>
 </div>
-        
+
