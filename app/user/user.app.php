@@ -10,7 +10,7 @@ defined('iPHP') OR exit('What are you doing?');
 
 iPHP::app('user.class','static');
 class userApp {
-    public $methods = array('iCMS','home','article','publish','manage','profile','data','check','follow','login','logout','register','agreement','add_category','upload','delete');
+    public $methods = array('iCMS','home','article','publish','manage','profile','data','check','follow','login','logout','register','agreement','add_category','upload','delete','report');
     public $openid  = null;
     public $user    = array();
     public $me      = array();
@@ -410,6 +410,29 @@ class userApp {
         $cid && iPHP::code(1,'user:category:success',$cid,'json');
         iPHP::code(0,'user:category:failure',0,'json');
     }
+    public function ACTION_report(){
+        iPHP::app('user.class','static');
+        user::get_cookie() OR iPHP::code(0,'iCMS:!login',0,'json');
+
+        $iid     = (int)$_POST['iid'];
+        $uid     = (int)$_POST['uid'];
+        $appid   = (int)$_POST['appid'];
+        $reason  = (int)$_POST['reason'];
+        $content = iS::escapeStr($_POST['content']);
+
+        $iid OR iPHP::code(0,'iCMS:error',0,'json');
+        $reason OR $content OR iPHP::code(0,'iCMS:comment:reason_empty',0,'json');
+
+        $addtime = time();
+        $ip      = iPHP::getIp();
+        $userid  = user::$userid;
+        $status  = 0;
+
+        $fields = array('appid', 'userid', 'iid', 'uid', 'reason', 'content', 'ip', 'addtime', 'status');
+        $data   = compact ($fields);
+        $id     = iDB::insert('user_report',$data);
+        iPHP::code(1,'iCMS:comment:reason_success',$id,'json');
+    }
     public function API_check(){
         $name  = iS::escapeStr($_GET['name']);
         $value = iS::escapeStr($_GET['value']);
@@ -509,6 +532,7 @@ class userApp {
         ));
         //{"originalName":"68_3628586_7be5ac630b669d5.jpg","name":"14086682227692.jpg","url":"upload\/20140822\/14086682227692.jpg","size":1003170,"type":".jpg","state":"SUCCESS"}
     }
+
     function select($permission='',$_cid="0",$cid="0",$level = 1) {
         $array = iCache::get('iCMS/category.'.iCMS_APP_ARTICLE.'/array');
         foreach((array)$array[$cid] AS $root=>$C) {

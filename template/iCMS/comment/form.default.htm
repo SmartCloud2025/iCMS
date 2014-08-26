@@ -1,19 +1,13 @@
-<!--{if $vars.display=="iframe"}-->
+<!--{if $comment_vars.display=="iframe"}-->
 <html lang="zh-CN">
 	<head>
 		<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-		<title><!--{$vars.title}-->评论_<!--{$site.title}-->_<!--{$site.seotitle}--></title>
+		<title><!--{$comment_vars.title}-->评论_<!--{$site.title}-->_<!--{$site.seotitle}--></title>
 		<script></script>
 		<!--{iCMS:public:ui script="false"}-->
 		<script>
 		var iCMS = window.parent.iCMS;
 		$(function(){
-            if (iCMS.user_status) {
-            	//iCMS.user.data();
-                $("#iCMS-cmt-login").hide();
-                $("#iCMS-cmt-profile").show();
-                iCMS.hover("#iCMS-cmt-profile",".iCMS-user-home", "#iCMS-user-menu", 21);
-            }
 			$('.iCMS-user-login').on("click", function() {
 				event.preventDefault();
 				iCMS.LoginBox();
@@ -36,46 +30,38 @@
 				<i class="fa fa-warning "></i> 请自觉遵守互联网相关的政策法规，严禁发布色情、暴力、反动的言论！
 			</div>
 			<div class="iCMS-cmt-editor">
-				<textarea class="iCMS-editor-text" name="comment_content" placeholder="写下你的评论…"></textarea>
+				<textarea class="iCMS-editor-text commentApp-textarea" placeholder="写下你的评论…"></textarea>
 			</div>
 			<div class="iCMS-cmt-command clearfix">
-				<input type="hidden" name="comment_title" value="<!--{$vars.title}-->">
-				<input type="hidden" name="comment_appid" value="<!--{$vars.appid}-->">
-				<input type="hidden" name="comment_suid" value="<!--{$vars.suid}-->">
-				<input type="hidden" name="comment_iid" value="<!--{$vars.iid}-->">
-				<input type="hidden" name="comment_cid" value="<!--{$vars.cid}-->">
 				<button class="btn btn-primary cmt-add" type="submit"><i class="fa fa-check"></i> 评 论</button>
 				<a href="javascript:;" class="cmt-cancel">取 消</a>
 			</div>
 		</div>
 		<script>
+        var param =<!--{$comment_vars.param|json_encode}-->;
 		$(function(){
-			var doc = window.parent.document;
+            if (iCMS.user_status) {
+            	//iCMS.user.data();
+                $("#iCMS-cmt-login").hide();
+                $("#iCMS-cmt-profile").show();
+                iCMS.hover("#iCMS-cmt-profile",".iCMS-user-home", "#iCMS-user-menu", 21);
+            }
 
+			var doc = window.parent.document||document;
+			// 取消
+			$('.cmt-cancel').click(function(event) {
+				var pp = $(this).parent().parent();
+                pp.removeClass('expanded');
+                $('.commentApp-textarea', pp).val("").focus();
+			});
             //提交评论
-            $(".iCMS-cmt-command").on('click', '.cmt-add', function(event) {
+            $('.cmt-add').click(function(event) {
                 event.preventDefault();
                 if (!iCMS.user_status) {
                     iCMS.LoginBox();
                     return false;
                 }
-                var $textarea = $('[name="comment_content"]'),
-                //placeholder = $textarea.attr('placeholder');
-                param ={
-                	'title':$('[name="comment_title"]').val(),
-                	'appid':$('[name="comment_appid"]').val(),
-                	'suid':$('[name="comment_suid"]').val(),
-                	'iid':$('[name="comment_iid"]').val(),
-                	'cid':$('[name="comment_cid"]').val(),
-                	'content':$textarea.val(),
-                	'action':'add',
-                };
-
-                if (!param.content) {
-                    $textarea.focus();
-                    return false;
-                }
-                $.post(iCMS.api('comment'), param, function(c) {
+                iCMS.comment.addnew(this,param,function(c){
                     if (c.code) {
                     	var list_iframe = $(".commentApp-list-iframe",doc);
                     	if(list_iframe.length){
@@ -84,21 +70,17 @@
 	                    		list_iframe.attr('src', list_iframe_src);
 	                    	}
                     	}
-                    	var list_box = $(".commentApp-list-box",doc);
+                    	var list_box = $(".commentApp-list",doc);
                     	if(list_box.length){
-                    		var pagination = $(".iCMS-pagination > .page_nowindex",doc);
-                    		//console.log(pagination);
-                    		window.parent.iCMS.comment.page(1,pagination);
+                    		var pagenav = $(".commentApp-pagenav > .page_nowindex",doc);
+                    		iCMS.comment.page(1,pagenav);
                     	}
-                    	$textarea.val("");
-                    } else {
-                        iCMS.alert(c.msg);
                     }
-                }, 'json');
+                })
             });
 		})
 		</script>
-<!--{if $vars.display=="iframe"}-->
+<!--{if $comment_vars.display=="iframe"}-->
 	</body>
 </html>
 <!--{/if}-->

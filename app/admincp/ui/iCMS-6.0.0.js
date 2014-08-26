@@ -26,7 +26,7 @@ if ($.browser.msie && ($.browser.version == "6.0" || $.browser.version == "7.0")
 					},
 				},
 				options	= $.extend(defaults, opt);
-					
+
 			im.dialog = function(title,obj,h){
 				window.batch_dialog	= $.dialog({id: 'batch',width:"320px",lock: true,
 					title:title,content:obj,
@@ -70,7 +70,7 @@ if ($.browser.msie && ($.browser.version == "6.0" || $.browser.version == "7.0")
 
 (function($) {
     $.fn.modal = function(options) {
-        var im = $(this), 
+        var im = $(this),
         defaults = {
         	width: "360px",height: "300px",
             title: im.attr('title') || "iCMS 提示",
@@ -78,18 +78,18 @@ if ($.browser.msie && ($.browser.version == "6.0" || $.browser.version == "7.0")
             target: im.attr('data-target') || "#iCMS_MODAL",
             zIndex: im.attr('data-zIndex')||false,
         };
-      
+
         $("body").css({"overflow-y": "hidden"});
         var meta = im.attr('data-meta')?$.parseJSON(im.attr('data-meta')):{};
         var opts = $.extend(defaults,options,meta);
         var mOverlay = $('<div id="modal-overlay" class="modal-overlayBG"></div>');
         return im.each(function() {
-            var m = $(opts.target), 
-            mBody = m.find(".modal-body"), 
+            var m = $(opts.target),
+            mBody = m.find(".modal-body"),
             mTitle = m.find(".modal-header h3");
             opts.title && mTitle.html(opts.title);
             mBody.empty();
-            
+
             if (opts.html) {
             	var html = opts.html;
             	if(typeof(opts.html)=="object"){
@@ -113,11 +113,10 @@ if ($.browser.msie && ($.browser.version == "6.0" || $.browser.version == "7.0")
                 opts.zIndex && m.css({"cssText":'z-index:'+opts.zIndex + '!important'});
                 m.css({width: opts.width});
                 mBody.height(opts.height);
-                var left = ($(window).width() - m.width()) / 2, 
+                var left = ($(window).width() - m.width()) / 2,
                 top = ($(window).height() - m.height()) / 2;
-                m.css({left: left + "px",top: top + "px"})
-                .css({"position": "fixed"});
-                
+                m.css({"position": "fixed",left: left + "px",top: top + "px"});
+
             //console.log({left:left+"px",top:top+"px"});
 
             };
@@ -140,7 +139,7 @@ if ($.browser.msie && ($.browser.version == "6.0" || $.browser.version == "7.0")
         insertContent: function(myValue, t) {
             event.preventDefault();
             var $t = $(this)[0];
-            
+
             if (document.selection) { //ie
                 this.focus();
                 var sel = document.selection.createRange();
@@ -167,7 +166,7 @@ if ($.browser.msie && ($.browser.version == "6.0" || $.browser.version == "7.0")
                     $t.setSelectionRange(startPos - t, $t.selectionEnd + t);
                     this.focus();
                 }
-            } 
+            }
             else {
                 this.value += myValue;
                 this.focus();
@@ -200,9 +199,9 @@ if ($.browser.msie && ($.browser.version == "6.0" || $.browser.version == "7.0")
 window.iCMS = {
     select: function(el, v) {
         var va = v.split(',');
-        $.each(va, function(i,val){      
+        $.each(va, function(i,val){
           $("#" + el+" option[value='"+val+"']").attr("selected", true);
-        });      
+        });
         $("#"+el).trigger("chosen:updated");
     },
     checked:function(el){
@@ -218,10 +217,10 @@ window.iCMS = {
     setcookie: function(cookieName, cookieValue, seconds, path, domain, secure) {
         var expires = new Date();
         expires.setTime(expires.getTime() + seconds);
-        document.cookie = escape(cookieName) + '=' + escape(cookieValue) 
-        + (expires ? '; expires=' + expires.toGMTString() : '') 
-        + (path ? '; path=' + path : '/') 
-        + (domain ? '; domain=' + domain : '') 
+        document.cookie = escape(cookieName) + '=' + escape(cookieValue)
+        + (expires ? '; expires=' + expires.toGMTString() : '')
+        + (path ? '; path=' + path : '/')
+        + (domain ? '; domain=' + domain : '')
         + (secure ? '; secure' : '');
     },
     getcookie: function(name) {
@@ -236,5 +235,5 @@ window.iCMS = {
 	        code += chars.charAt( Math.floor( Math.random() * chars.length ) )
 	    }
 	    return code;
-	} 
+	}
 }

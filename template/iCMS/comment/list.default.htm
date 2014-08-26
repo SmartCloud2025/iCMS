@@ -11,17 +11,17 @@
 <!--{if $vars.display=="default"}-->
 <script src="<!--{$site.urls.ui}-->/iCMS.comment-6.0.0.js"></script>
 <!--{/if}-->
-		<div class="commentApp-list-box" id="iCMS-comment-list-box">
-			<ul class="commentApp-box">
+		<div class="commentApp-list-wrap" id="iCMS-comment-list-box">
+			<div class="commentApp-list">
 				<!--{iCMS:comment:list loop="true" page="true" row="5" vars=$vars}-->
-				<li class="commentApp-item" data-id="<!--{$comment_list.id}-->">
-					<a title="<!--{$comment_list.user.name}-->" data-tip="iCMS:ucard:<!--{$comment_list.user.uid}-->" class="app-item-link-avatar" href="<!--{$comment_list.user.url}-->">
-						<img src="<!--{$comment_list.user.avatar}-->" class="app-item-img-avatar">
+				<div class="commentApp-item" data-id="<!--{$comment_list.id}-->">
+					<a title="<!--{$comment_list.user.name}-->" data-tip="iCMS:ucard:<!--{$comment_list.userid}-->" class="cmt-item-link-avatar" href="<!--{$comment_list.user.url}-->">
+						<img src="<!--{$comment_list.user.avatar}-->" class="cmt-item-img-avatar">
 					</a>
 					<div class="commentApp-content-wrap">
-						<div class="commentApp-hd">
-							<a data-tip="iCMS:ucard:<!--{$comment_list.user.uid}-->" href="<!--{$comment_list.user.url}-->" class="zg-link"><!--{$comment_list.user.name}--></a>
-							<!--{if $comment_list.suid == $comment_list.uid}-->
+						<div class="commentApp-content-hd">
+							<a data-tip="iCMS:ucard:<!--{$comment_list.userid}-->" href="<!--{$comment_list.user.url}-->" class="zg-link"><!--{$comment_list.user.name}--></a>
+							<!--{if $comment_list.suid == $comment_list.userid}-->
 							<span class="desc">（作者）</span>
 							<!--{/if}-->
 							<!--{if $comment_list.reply}-->
@@ -30,24 +30,64 @@
 							<!--{/if}-->
 						</div>
 						<div class="commentApp-content"><!--{$comment_list.content}--></div>
-						<div class="commentApp-ft">
+						<div class="commentApp-content-ft">
 							<span class="date"><!--{$comment_list.addtime|format_date}--></span>
-							<a href="javascript:;" class="reply commentApp-op-link" name="reply_comment" data-param='{"id":"<!--{$comment_list.id}-->","uid":"<!--{$comment_list.user.uid}-->","name":"<!--{$comment_list.user.name}-->"}'>
+							<a href="javascript:;" class="reply commentApp-op-link" name="reply_comment" data-param='{"id":"<!--{$comment_list.id}-->","userid":"<!--{$comment_list.userid}-->","name":"<!--{$comment_list.user.name}-->"}'>
 							<i class="iCMS-icon iCMS-icon-comment-reply"></i>回复</a>
 							<a href="javascript:;" class="like commentApp-op-link" name="like_comment" data-param='{"id":"<!--{$comment_list.id}-->"}'>
 							<i class="iCMS-icon iCMS-icon-comment-like"></i>赞</a>
-							<!--{if $comment_list.up>1}-->
+							<!--{if $comment_list.up!='0'}-->
 							<span class="like-num" data-tip="iCMS:s:<!--{$comment_list.up}--> 人觉得这个很赞">
 							<em><!--{$comment_list.up}--></em> <span>赞</span></span>
 							<!--{/if}-->
-							<a href="javascript:;" name="report_comment" data-param='{"id":"<!--{$comment_list.id}-->","uid":"<!--{$comment_list.user.uid}-->"}' class="report commentApp-op-link needsfocus">
-							<i class="iCMS-icon iCMS-icon-no-help"></i>举报</a>
+							<a href="javascript:;" name="iCMS-report" data-param='{"appid":"5","iid":"<!--{$comment_list.id}-->","userid":"<!--{$comment_list.userid}-->"}' class="report commentApp-op-link needsfocus">
+							<i class="iCMS-icon iCMS-icon-report"></i>举报</a>
 						</div>
 					</div>
-				</li>
+				</div>
 				<!--{/iCMS}-->
-			</ul>
-			<div class="iCMS-pagination" data-query="<!--{$vars.query}-->"><!--{$iPAGE|method:'show(4)'}--></div>
+			</div>
+			<script>
+			$(function() {
+				var list_box = $('#iCMS-comment-list-box');
+	            //回复评论
+	            list_box.on('click', 'a[name="reply_comment"]', function(event) {
+	                event.preventDefault();
+					var form = $('<div class="commentApp-form">');
+		            form.html('<div class="commentApp-ipt">' +
+		                '<input class="commentApp-textarea" type="text" placeholder="写下你的评论…">' +
+		                '</div>' +
+		                '<div class="cmt-command clearfix">' +
+		                '<a href="javascript:;" name="addnew" class="btn btn-primary">评论</a>' +
+		                '<a href="javascript:;" name="closeform" class="cmt-command-cancel">取消</a>' +
+		                '</div>'
+		            );
+		            iCMS.comment.reply(this,form);
+	            });
+	            //提交评论
+	            list_box.on('click', 'a[name="addnew"]', function(event) {
+	                //$('a[name="addnew"]',box).click(function() {
+	                event.preventDefault();
+	                var cform = $(this).parent().parent(),
+	                    $textarea = $('.commentApp-textarea', cform),
+	                    cparam = iCMS.comment.param($textarea);
+
+	                if (!cparam.content) {
+	                    $textarea.focus();
+	                    return false;
+	                }
+	                $.post(iCMS.api('comment'), cparam, function(c) {
+	                    if (c.code) {
+	                        //comment_list(0, c.forward);
+	                    } else {
+	                        iCMS.alert(c.msg);
+	                    }
+	                }, 'json');
+	            });
+			});
+			</script>
+			<div class="iCMS-pagination commentApp-pagenav" data-query="<!--{$vars.query}-->"><!--{$iPAGE|method:'show(4)'}--></div>
+			<div class="clearfix mb10"></div>
 		</div>
 <!--{if $vars.display=="iframe"}-->
 	</body>

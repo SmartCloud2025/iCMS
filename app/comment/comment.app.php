@@ -9,7 +9,7 @@
 defined('iPHP') OR exit('What are you doing?');
 
 class commentApp {
-	public $methods	= array('like','json','add','report','form_iframe','list');
+	public $methods	= array('like','json','add','form_iframe','list');
     function __construct() {
         $this->id = (int)$_GET['id'];
     }
@@ -19,12 +19,22 @@ class commentApp {
     }
     public function API_form_iframe(){
         $_GET['title'] = iS::escapeStr($_GET['title']);
-        iPHP::assign('vars',$_GET);
+        $param = array(
+            'suid'  => $_GET['suid'],
+            'iid'   => $_GET['iid'],
+            'cid'   => $_GET['cid'],
+            'appid' => $_GET['appid'],
+            'title' => $_GET['title'],
+        );
+        iPHP::assign('comment_param',$param);
+        iPHP::assign('comment_vars',$_GET);
         return iPHP::view('iCMS://comment/form.default.htm');
     }
 
     public function API_like(){
+        iPHP::app('user.class','static');
         user::get_cookie() OR iPHP::code(0,'iCMS:!login',0,'json');
+
         $this->id OR iPHP::code(0,'iCMS:article:empty_id',0,'json');
         $lckey = 'like_comment_'.$this->id;
         $like  = (int)iPHP::get_cookie($lckey);
@@ -64,7 +74,7 @@ class commentApp {
         $appid OR $appid = iCMS_APP_ARTICLE;
         $addtime = time();
         $ip      = iPHP::getIp();
-        $uid     = user::$userid;
+        $userid  = user::$userid;
         $name    = user::$nickname;
         $status  = '1';
         $up      = '0';
@@ -72,33 +82,11 @@ class commentApp {
         $quote   = '0';
         $floor   = '0';
 
-        $fields = array('appid', 'cid', 'iid','suid', 'title','uid', 'name',  'content', 'reply_id','reply_uid','reply_name', 'addtime', 'status', 'up', 'down', 'ip', 'quote', 'floor');
+        $fields = array('appid', 'cid', 'iid','suid', 'title','userid', 'name',  'content', 'reply_id','reply_uid','reply_name', 'addtime', 'status', 'up', 'down', 'ip', 'quote', 'floor');
         $data   = compact ($fields);
         $id     = iDB::insert('comment',$data);
         iDB::query("UPDATE `#iCMS@__article` SET comments=comments+1 WHERE `id` ='{$iid}' limit 1");
         iPHP::code(1,'iCMS:comment:success',$id,'json');
     }
-    public function ACTION_report(){
-        iPHP::app('user.class','static');
-        user::get_cookie() OR iPHP::code(0,'iCMS:!login',0,'json');
 
-        $iid     = (int)$_POST['id'];
-        $uid     = (int)$_POST['uid'];
-        $reason  = (int)$_POST['reason'];
-        $content = iS::escapeStr($_POST['content']);
-
-        $iid OR iPHP::code(0,'iCMS:error',0,'json');
-        $reason OR $content OR iPHP::code(0,'iCMS:comment:reason_empty',0,'json');
-
-        $addtime = time();
-        $ip      = iPHP::getIp();
-        $appid   = iCMS_APP_COMMENT;
-        $appid   = user::$userid;
-        $status  = 0;
-
-        $fields = array('appid', 'userid', 'iid', 'uid', 'reason', 'content', 'ip', 'addtime', 'status');
-        $data   = compact ($fields);
-        $id     = iDB::insert('report',$data);
-        iPHP::code(1,'iCMS:comment:reason_success',$id,'json');
-    }
 }

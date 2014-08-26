@@ -188,7 +188,7 @@
                     return false;
                 });
 
-                //iCMS.dialog(report_box,opts); 
+                //iCMS.dialog(report_box,opts);
             });
 
             function comment_param(textarea) {
@@ -254,7 +254,7 @@
                                     '<em>' + c.up + '</em> <span>赞</span></span>';
                             }
                             item += '<a href="javascript:;" name="report_comment" data-param=\'{"id":"' + c.id + '","uid":"' + c.user.uid + '"}\' class="report commentApp-op-link needsfocus">' +
-                                '<i class="iCMS-icon iCMS-icon-no-help"></i>举报</a>' +
+                                '<i class="iCMS-icon iCMS-icon-report"></i>举报</a>' +
                                 '</div>' +
                                 '</div>' +
                                 '</div>';

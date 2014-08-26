@@ -64,6 +64,48 @@
                 return avatar;
             },
         },
+        report:function(a) {
+            var $this = $(a),
+                report_box = document.getElementById("iCMS-comment-report"),
+                report_modal = $this.modal({
+                    title: '为什么举报这个评论?',
+                    width: "460px",
+                    html: report_box,
+                    scroll: true
+                });
+            $("li", report_box).click(function(event) {
+                $("li", report_box).removeClass('checked');
+                $(this).addClass('checked');
+            });
+            $('[name="cancel"]', report_box).click(function(event) {
+                report_modal.destroy();
+            });
+            $('[name="ok"]', report_box).click(function(event) {
+                event.preventDefault();
+                var report_param = iCMS.param($this),
+                content = $("[name='content']", report_box);
+                report_param['reason'] = $("[name='reason']:checked", report_box).val();
+                if (!report_param['reason']) {
+                    iCMS.alert("请选择举报的原因");
+                    return false;
+                }
+                if (report_param['reason'] == "0") {
+                    report_param['content'] = content.val();
+                    if (!report_param['content']) {
+                        iCMS.alert("请填写举报的原因");
+                        return false;
+                    }
+                }
+                report_param.action = 'report';
+                $.post(iCMS.api('user'), report_param, function(c) {
+                    content.val('');
+                    iCMS.alert(c.msg, c.code);
+                    if(c.code){
+                        report_modal.destroy();
+                    }
+                }, 'json');
+            });
+        },
         article: {
             good: function(a) {
                 var $this = $(a),
@@ -91,6 +133,7 @@
         },
 
         run: function() {
+            var doc = $(document);
             this.user_status = this.user.status();
              // console.log(this.user_status);
             if (this.user_status) {
@@ -100,7 +143,7 @@
                 $("#iCMS-nav-profile").show();
                 this.hover("#iCMS-nav-profile",".iCMS-user-home", "#iCMS-user-menu", 21);
             }
-            $(document).on("click", '.iCMS-user-follow', function(event) {
+            doc.on("click", '.iCMS-user-follow', function(event) {
                 event.preventDefault();
                 if (!iCMS.user_status) {
                     iCMS.LoginBox();
@@ -109,7 +152,7 @@
                 iCMS.user.follow(this);
                 return false;
             });
-            $(document).on("click", '.iCMS-article-do', function(event) {
+            doc.on("click", '.iCMS-article-do', function(event) {
                 event.preventDefault();
                 if (!iCMS.user_status) {
                     iCMS.LoginBox();
@@ -123,17 +166,20 @@
                 }
                 return false;
             });
-            $(document).on("click", '.iCMS-user-logout', function(event) {
+            doc.on("click", '.iCMS-user-logout', function(event) {
                 event.preventDefault();
                 iCMS.user.logout();
                 return false;
             });
-            $(document).on("click", '.iCMS-user-login', function(event) {
+            doc.on("click", '.iCMS-user-login', function(event) {
                 event.preventDefault();
                 iCMS.LoginBox();
                 return false;
             });
-
+            doc.on('click', 'a[name="iCMS-report"]', function(event) {
+                event.preventDefault();
+                iCMS.report(this);
+            });
             $("#iCMS-seccode-img,#iCMS-seccode-text").click(function() {
                 $("#iCMS-seccode-img").attr('src', iCMS.api('public', '&do=seccode&') + Math.random());
             });
@@ -326,12 +372,10 @@
                 var left = ($(window).width() - m.width()) / 2,
                     top = ($(window).height() - m.height()) / 2;
                 m.css({
+                    "position": "fixed",
                     left: left + "px",
                     top: top + "px"
-                })
-                    .css({
-                        "position": "fixed"
-                    });
+                });
 
                 //console.log({left:left+"px",top:top+"px"});
 
@@ -357,4 +401,26 @@
 function pad(num, n) {
     num = num.toString();
     return Array(n > num.length ? (n - ('' + num).length + 1) : 0).join(0) + num;
+}
+
+$(function(){
+    if(!placeholderSupport()){   // 判断浏览器是否支持 placeholder
+        $('[placeholder]').focus(function() {
+            var input = $(this);
+            if (input.val() == input.attr('placeholder')) {
+                input.val('');
+                input.removeClass('placeholder');
+            }
+        }).blur(function() {
+            var input = $(this);
+            if (input.val() == '' || input.val() == input.attr('placeholder')) {
+                input.addClass('placeholder');
+                input.val(input.attr('placeholder'));
+            }
+        }).blur();
+    };
+})
+
+function placeholderSupport() {
+    return 'placeholder' in document.createElement('input');
 }

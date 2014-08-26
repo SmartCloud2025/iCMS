@@ -82,10 +82,9 @@
         <div class="comments_list clearfix">
           <h3 class="label label-info"><i class="fa fa-comments"></i> 精彩评论</h3>
           <!--{iCMS:comment:list page="true" display="default" row="5" appid="$article.appid" iid="$article.id"}-->
-          <!--{iCMS:comment:list page="true" display="iframe" appid="$article.appid" iid="$article.id"}-->
         </div>
         <div class="comment_form clearfix">
-          <!--{iCMS:comment:form display="iframe" ref="true"}-->
+          <!--{iCMS:comment:form ref="true"}-->
         </div>
       </div>
       <div class="right-col">
@@ -95,13 +94,13 @@
           </div>
           <div class="bd">
           <ul class="artical-top artical-top-num">
-            <!--{iCMS:article:list loop="true" row="10" orderby="hot" cid="$category.cid"}-->
+          <!--{iCMS:article:list loop="true" row="10" orderby="hot" cid="$category.cid"}-->
             <!--{if $article_list.rownum<4}-->
             <li class="top-1"><span><!--{$article_list.rownum}--></span><p><a href="<!--{$article_list.url}-->" target="_blank"><!--{$article_list.title}--></a></p><p><!--{$article_list.description}--></p></li>
             <!--{else}-->
             <li><span><!--{$article_list.rownum}--></span><a href="<!--{$article_list.url}-->" target="_blank"><!--{$article_list.title}--></a></li>
             <!--{/if}-->
-            <!--{/iCMS}-->
+          <!--{/iCMS}-->
           </ul>
         </div>
       </div>
