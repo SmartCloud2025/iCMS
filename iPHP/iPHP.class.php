@@ -19,7 +19,6 @@ class iPHP{
 	public static $dialog_title = 'iPHP';
 	public static $dialog_code  = false;
 	public static $dialog_lock  = false;
-	public static $dialog_obj   = 'parent.';
 	public static $iTPL         = NULL;
 	public static $iTPL_mode    = null;
 	public static $mobile       = false;
@@ -454,14 +453,14 @@ class iPHP{
         switch ($A[0]){
         	case 'js':
 				$A[1] 		&& $code	= $A[1];
-				$A[1]=="0"	&& $code	= self::$dialog_obj.'history.go(-1);';
-				$A[1]=="1"	&& $code	= self::$dialog_obj.'location.reload();';
+				$A[1]=="0"	&& $code	= 'iTOP.history.go(-1);';
+				$A[1]=="1"	&& $code	= 'iTOP.location.reload();';
         	break;
         	case 'url':
 				$A[1]=="1" && $A[1]	= __REF__;
-	        	$code = self::$dialog_obj."location.href='".$A[1]."';";
+	        	$code = "iTOP.location.href='".$A[1]."';";
         	break;
-        	case 'src':	$code = self::$dialog_obj."$('#iPHP_FRAME').attr('src','".$A[1]."');";break;
+        	case 'src':	$code = "iTOP.$('#iPHP_FRAME').attr('src','".$A[1]."');";break;
         	default:	$code = '';
         }
 
@@ -484,9 +483,10 @@ class iPHP{
 		$content = $info[0];
         strstr($content,':#:') && $content=self::msg($content,true);
 		$content = addslashes($content);
-		$dialog  = "var dialog = ".self::$dialog_obj."$.dialog({
+		$dialog  = "var iTOP = window.top,dialog = iTOP.$.dialog({
 		    id: 'iPHP_DIALOG',width: 360,height: 150,fixed: true,
-		    title: '".self::$dialog_title." - {$title}',content: '{$content}',";
+		    title: '".self::$dialog_title." - {$title}',
+		    content: '{$content}',";
 		$auto_func = 'dialog.close();';
 		$func      = self::js($js,true);
 		if($func){
@@ -495,9 +495,9 @@ class iPHP{
 		}
         if(is_array($buttons)) {
             foreach($buttons as $key=>$val) {
-            	$val['url'] && $func 	= self::$dialog_obj."location.href='{$val['url']}';";
-            	$val['src'] && $func 	= self::$dialog_obj."$('#iPHP_FRAME').attr('src','".$val['src']."');return false;";
-                $val['top'] && $func 	= "top.window.open('{$val['url']}','_blank');";
+            	$val['url'] && $func 	= "iTOP.location.href='{$val['url']}';";
+            	$val['src'] && $func 	= "iTOP.$('#iPHP_FRAME').attr('src','".$val['src']."');return false;";
+                $val['top'] && $func 	= "iTOP.window.open('{$val['url']}','_blank');";
                 $val['id']	&& $id		= "id: '".$val['id']."',";
                 $buttonA[]="{{$id}value: '".$val['text']."',callback: function () {".$func."}}";
                 $val['next'] && $auto_func = $func;
@@ -506,8 +506,8 @@ class iPHP{
       	}
 		$dialog.="});";
         if($update){
-        	$dialog	= "var dialog = ".self::$dialog_obj."$.dialog.get('PHP_DIALOG');";
-			$dialog.="dialog.content('{$content}');";
+        	$dialog	= "var dialog = iTOP.$.dialog.get('PHP_DIALOG');";
+			$dialog.= "dialog.content('{$content}');";
 			$auto_func = $func;
         }
 		$button	&& $dialog.="dialog.button(".$button.");";
@@ -566,10 +566,10 @@ class iPHP{
 	public static function total($tnkey,$sql,$type=null){
 		$tnkey = substr($tnkey,8,16);
 		$total = (int)$_GET['total_num'];
-    	if(empty($total) && $type===null){
+    	if(empty($total) && $type===null &&!isset($_GET['total_cahce'])){
     		$total = (int)iCache::get('total/'.$tnkey);
 		}
-    	if(empty($total) || $GLOBALS['removeTotal']||$type==='no'){
+    	if(empty($total) || $GLOBALS['removeTotal']||$type==='no'||isset($_GET['total_cahce'])){
         	$total = iDB::value($sql);
         	if($type===null){
         		iCache::set('total/'.$tnkey,$total);

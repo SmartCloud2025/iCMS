@@ -81,10 +81,13 @@
         <div class="clearfix mb20"></div>
         <div class="comments_list clearfix">
           <h3 class="label label-info"><i class="fa fa-comments"></i> 精彩评论</h3>
-          <!--{iCMS:comment:list page="true" display="default" row="5" appid="$article.appid" iid="$article.id"}-->
+          <!--{iCMS:comment:list display="default" page="true" row="5" appid="$article.appid" iid="$article.id"}-->
         </div>
         <div class="comment_form clearfix">
           <!--{iCMS:comment:form ref="true"}-->
+          <hr/>
+          iframe
+          <!--{iCMS:comment:form display="iframe" ref="true"}-->
         </div>
       </div>
       <div class="right-col">

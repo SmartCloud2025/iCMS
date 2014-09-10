@@ -22,18 +22,25 @@ function comment_array($vars){
 	}
 	return $rs;
 }
+function comment_list_display($vars){
+	$vars['do']          = 'list';
+	$vars['page_ajax']   = 1;
+	$vars['total_cahce'] = 1;
+	$tpl = 'list.default';
+	if($vars['display'] == 'iframe'){
+		$vars['page_ajax'] = 0;
+		$tpl = 'list.iframe';
+	}
+	isset($vars['_display']) && $vars['display'] = $vars['_display'];
+	unset($vars['method'],$vars['_display']);
+	$vars['query'] = http_build_query($vars);
+	$vars['param'] = iCMS::app_ref(true);
+	iPHP::assign('comment_vars',$vars);
+	iPHP::view("iCMS://comment/{$tpl}.htm");
+}
 function comment_list($vars){
-	if ($vars['display']) {
-		$vars['do'] = 'list';
-		$vars['display'] OR $vars['display'] = 'default';
-		if($vars['display'] != 'iframe'){
-			$vars['ajax'] = true;
-		}
-		unset($vars['method']);
-		$vars['query'] = http_build_query($vars);
-		iPHP::assign('vars',$vars);
-		iPHP::view("iCMS://comment/list.{$vars['display']}.htm");
-		return;
+	if ($vars['display'] && empty($vars['loop'])) {
+		return comment_list_display($vars);
 	}
 
 	if(isset($vars['vars'])){
@@ -73,10 +80,10 @@ function comment_list($vars){
 			'total'     => $total,
 			'perpage'   => $maxperpage,
 			'unit'      => iPHP::lang('iCMS:page:comment'),
-			'ajax'      => $vars['ajax']?'iCMS.comment.page':FALSE,
+			'ajax'      => $vars['page_ajax']?'iCMS.comment.page':FALSE,
 			'nowindex'  => $GLOBALS['page'],
 		);
-		if($vars['display'] == 'iframe' || $vars['ajax']){
+		if($vars['display'] == 'iframe' || $vars['page_ajax']){
 			iS::gp('pn','GP',2);
 			$pgconf['page_name'] = 'pn';
 			$pgconf['nowindex']  = $GLOBALS['pn'];
@@ -99,7 +106,7 @@ function comment_list($vars){
 		$rs		= iDB::all("SELECT * FROM `#iCMS@__comment` WHERE {$where_sql} {$order_sql} {$limit}");
 		//iDB::debug(1);
 		$_count	= count($rs);
-		$ln		=($GLOBALS['page']-1)<0?0:$GLOBALS['page']-1;
+		$ln		= ($GLOBALS['page']-1)<0?0:$GLOBALS['page']-1;
 		for ($i=0;$i<$_count;$i++){
 			if($vars['date_format']){
 				$rs[$i]['addtime'] = get_date($rs[$i]['addtime'],$vars['date_format']);
@@ -121,56 +128,34 @@ function comment_list($vars){
 	return $rs;
 }
 function comment_form($vars){
-	$ref = $vars['ref'];
-	if($ref){
-		$ref===true && $ref=iCMS::$app_name;
-		$rs	= iPHP::get_vars($ref);
-		switch ($ref) {
-			case 'article':
-				$vars['suid']	= (int)$rs['userid'];
-				$vars['iid']	= (int)$rs['id'];
-				$vars['cid']	= (int)$rs['cid'];
-				$vars['appid']	= iCMS_APP_ARTICLE;
-				$vars['title']	= $rs['title'];
-			break;
-			case 'category':
-				$vars['suid']	= (int)$rs['userid'];
-				$vars['iid']	= (int)$rs['cid'];
-				$vars['cid']	= (int)$rs['rootid'];
-				$vars['appid']	= iCMS_APP_CATEGORY;
-				$vars['title']	= $rs['name'];
-			break;
-			case 'tag':
-				$vars['suid']	= (int)$rs['uid'];
-				$vars['iid']	= (int)$rs['id'];
-				$vars['cid']	= (int)$rs['cid'];
-				$vars['appid']	= iCMS_APP_TAG;
-				$vars['title']	= $rs['name'];
-			break;
-		}
+	if($vars['ref']){
+		$_vars = iCMS::app_ref($vars['ref']);
+		unset($vars['ref']);
+		$vars  = array_merge($vars,$_vars);
 	}
-
 	$vars['iid']   OR iPHP::msg('warning:#:warning:#:iCMS:comment:form 标签出错! 缺少"iid"属性或"iid"值为空.');
 	$vars['cid']   OR iPHP::msg('warning:#:warning:#:iCMS:comment:form 标签出错! 缺少"cid"属性或"cid"值为空.');
 	$vars['appid'] OR iPHP::msg('warning:#:warning:#:iCMS:comment:form 标签出错! 缺少"appid"属性或"appid"值为空.');
 	$vars['title'] OR iPHP::msg('warning:#:warning:#:iCMS:comment:form 标签出错! 缺少"title"属性或"title"值为空.');
-	$vars['param'] = array(
-		'suid'  => $vars['suid'],
-		'iid'   => $vars['iid'],
-		'cid'   => $vars['cid'],
-		'appid' => $vars['appid'],
-		'title' => $vars['title'],
-	);
 	switch ($vars['display']) {
 		case 'iframe':
 			$tpl        = 'form.iframe';
-			$vars['do'] = 'form_iframe';
+			$vars['do'] = 'form';
 			break;
 		default:
+			isset($vars['_display']) && $vars['display'] = $vars['_display'];
+			$vars['param'] = array(
+				'suid'  => $vars['suid'],
+				'iid'   => $vars['iid'],
+				'cid'   => $vars['cid'],
+				'appid' => $vars['appid'],
+				'title' => $vars['title'],
+			);
 			$tpl = 'form.default';
 			break;
 	}
-	$vars['query'] = http_build_query($vars['param']);
+	unset($vars['method'],$vars['_display']);
+	$vars['query'] = http_build_query($vars);
 	iPHP::assign('comment_vars',$vars);
 	return iPHP::view('iCMS://comment/'.$tpl.'.htm');
 }

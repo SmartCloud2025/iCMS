@@ -1,12 +1,12 @@
 <!--{if $comment_vars.display=="iframe"}-->
+<!DOCTYPE html>
 <html lang="zh-CN">
-	<head>
+  <head>
 		<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
 		<title><!--{$comment_vars.title}-->评论_<!--{$site.title}-->_<!--{$site.seotitle}--></title>
-		<script></script>
 		<!--{iCMS:public:ui script="false"}-->
 		<script>
-		var iCMS = window.parent.iCMS;
+		var iCMS  = window.top.iCMS; //父框架接口 用于对话框
 		$(function(){
 			$('.iCMS-user-login').on("click", function() {
 				event.preventDefault();
@@ -18,6 +18,7 @@
 	</head>
 	<body class="iCMS-comment-page">
 <!--{/if}-->
+		<script src="<!--{$site.urls.ui}-->/iCMS.comment-6.0.0.js"></script>
 		<div class="iCMS-comment-form-wrap">
 			<div id="iCMS-cmt-profile">
 				<!--{include file="iCMS://user/topnavbar.htm"}-->
@@ -38,16 +39,20 @@
 			</div>
 		</div>
 		<script>
+		//console.log(window.top == window.self);
         var param =<!--{$comment_vars.param|json_encode}-->;
 		$(function(){
+			var doc = window.top.document||document;
             if (iCMS.user_status) {
+            	//var topnavbar = $("#iCMS-nav-profile",doc).clone(true);
+            	//$("#iCMS-cmt-profile").html(topnavbar);
             	//iCMS.user.data();
+                //iCMS.hover("#iCMS-cmt-profile",".iCMS-user-home", "#iCMS-user-menu", 21);
+
                 $("#iCMS-cmt-login").hide();
                 $("#iCMS-cmt-profile").show();
-                iCMS.hover("#iCMS-cmt-profile",".iCMS-user-home", "#iCMS-user-menu", 21);
             }
 
-			var doc = window.parent.document||document;
 			// 取消
 			$('.cmt-cancel').click(function(event) {
 				var pp = $(this).parent().parent();
@@ -72,8 +77,8 @@
                     	}
                     	var list_box = $(".commentApp-list",doc);
                     	if(list_box.length){
-                    		var pagenav = $(".commentApp-pagenav > .page_nowindex",doc);
-                    		iCMS.comment.page(1,pagenav);
+                    		var pagenav = $(".commentApp-pagenav-api",doc);
+                    		iCMS.comment.page(999999,pagenav);
                     	}
                     }
                 })

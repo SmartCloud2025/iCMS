@@ -131,6 +131,41 @@ class iCMS {
     	self::run($app,null,'API_');
     }
     //------------------------------------
+    public static function app_ref($app_name=true) {
+        $app_name===true && $app_name = self::$app_name;
+        $rs    = iPHP::get_vars($app_name);
+        $param = array();
+        switch ($app_name) {
+            case 'article':
+                $param = array(
+                    'suid'  => (int)$rs['userid'],
+                    'iid'   => (int)$rs['id'],
+                    'cid'   => (int)$rs['cid'],
+                    'appid' => iCMS_APP_ARTICLE,
+                    'title' => $rs['title'],
+                );
+            break;
+            case 'category':
+                $param = array(
+                    'suid'  => (int)$rs['userid'],
+                    'iid'   => (int)$rs['cid'],
+                    'cid'   => (int)$rs['rootid'],
+                    'appid' => iCMS_APP_CATEGORY,
+                    'title' => $rs['name'],
+                );
+            break;
+            case 'tag':
+                $param = array(
+                    'suid'  => (int)$rs['uid'],
+                    'iid'   => (int)$rs['id'],
+                    'cid'   => (int)$rs['cid'],
+                    'appid' => iCMS_APP_TAG,
+                    'title' => $rs['name'],
+                );
+            break;
+        }
+        return $param;
+    }
     public static function get_category_ids($cid = "0",$all=true) {
         $cids   = array();
         $cArray = iCache::get('iCMS/category/rootid',$cid);

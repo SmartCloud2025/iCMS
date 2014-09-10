@@ -9,26 +9,21 @@
 defined('iPHP') OR exit('What are you doing?');
 
 class commentApp {
-	public $methods	= array('like','json','add','form_iframe','list');
+	public $methods	= array('like','json','add','form','list');
     function __construct() {
         $this->id = (int)$_GET['id'];
     }
     public function API_list(){
-        iPHP::assign('vars',$_GET);
-        return iPHP::view('iCMS://comment/list.default.htm');
+        $_GET['_display'] = $_GET['display'];
+        $_GET['display']  = 'default';
+        iPHP::app('comment.func');
+        return comment_list($_GET);
     }
-    public function API_form_iframe(){
-        $_GET['title'] = iS::escapeStr($_GET['title']);
-        $param = array(
-            'suid'  => $_GET['suid'],
-            'iid'   => $_GET['iid'],
-            'cid'   => $_GET['cid'],
-            'appid' => $_GET['appid'],
-            'title' => $_GET['title'],
-        );
-        iPHP::assign('comment_param',$param);
-        iPHP::assign('comment_vars',$_GET);
-        return iPHP::view('iCMS://comment/form.default.htm');
+    public function API_form(){
+        $_GET['_display'] = $_GET['display'];
+        $_GET['display']  = 'default';
+        iPHP::app('comment.func');
+        return comment_form($_GET);
     }
 
     public function API_like(){

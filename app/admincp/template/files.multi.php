@@ -136,7 +136,7 @@ iACP::head(false);
     	if(!checked.length) alert("您没有选择任何文件!");
 
 	    checked.each(function() {
-			window.parent.modal_<?php echo $_GET['callback'];?>(this)
+			window.top.modal_<?php echo $_GET['callback'];?>(this)
 	    });
 	    //swfupload.destroy();
     })

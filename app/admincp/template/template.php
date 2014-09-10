@@ -14,9 +14,9 @@ $(function(){
 	<?php if($this->click){?>
     $('[data-click="<?php echo $this->click;?>"]').click(function() {
     	if (this.checked) {
-			var state	= window.parent.modal_<?php echo $this->callback;?>('<?php echo $this->target; ?>',this);
+			var state	= window.top.modal_<?php echo $this->callback;?>('<?php echo $this->target; ?>',this);
 	    	if(!state){
-	    		window.parent.iCMS_MODAL.destroy();
+	    		window.top.iCMS_MODAL.destroy();
 	    	}
     	}
     });

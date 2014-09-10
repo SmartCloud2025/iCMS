@@ -1,19 +1,17 @@
-<!--{if $vars.display=="iframe"}-->
+<!--{if $comment_vars.display=="iframe"}-->
 <html lang="zh-CN">
 	<head>
 		<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-		<title><!--{$vars.title}-->评论_<!--{$site.title}-->_<!--{$site.seotitle}--></title>
+		<title><!--{$comment_vars.title}-->评论_<!--{$site.title}-->_<!--{$site.seotitle}--></title>
 		<!--{iCMS:public:ui script="false"}-->
-		<script>var iCMS = window.parent.iCMS;</script>
+		<script>var iCMS = window.top.iCMS;</script>
 	</head>
 	<body class="iCMS-comment-page">
 <!--{/if}-->
-<!--{if $vars.display=="default"}-->
-<script src="<!--{$site.urls.ui}-->/iCMS.comment-6.0.0.js"></script>
-<!--{/if}-->
+		<script src="<!--{$site.urls.ui}-->/iCMS.comment-6.0.0.js"></script>
 		<div class="commentApp-list-wrap" id="iCMS-comment-list-box">
 			<div class="commentApp-list">
-				<!--{iCMS:comment:list loop="true" page="true" row="5" vars=$vars}-->
+				<!--{iCMS:comment:list loop="true" page="true" row="5" by="ASC" vars="$comment_vars"}-->
 				<div class="commentApp-item" data-id="<!--{$comment_list.id}-->">
 					<a title="<!--{$comment_list.user.name}-->" data-tip="iCMS:ucard:<!--{$comment_list.userid}-->" class="cmt-item-link-avatar" href="<!--{$comment_list.user.url}-->">
 						<img src="<!--{$comment_list.user.avatar}-->" class="cmt-item-img-avatar">
@@ -49,47 +47,34 @@
 			</div>
 			<script>
 			$(function() {
+				var param = <!--{$comment_vars.param|json_encode}-->;
 				var list_box = $('#iCMS-comment-list-box');
 	            //回复评论
 	            list_box.on('click', 'a[name="reply_comment"]', function(event) {
 	                event.preventDefault();
-					var form = $('<div class="commentApp-form">');
-		            form.html('<div class="commentApp-ipt">' +
-		                '<input class="commentApp-textarea" type="text" placeholder="写下你的评论…">' +
-		                '</div>' +
-		                '<div class="cmt-command clearfix">' +
-		                '<a href="javascript:;" name="addnew" class="btn btn-primary">评论</a>' +
-		                '<a href="javascript:;" name="closeform" class="cmt-command-cancel">取消</a>' +
-		                '</div>'
-		            );
+					var form = iCMS.comment.form;
 		            iCMS.comment.reply(this,form);
 	            });
 	            //提交评论
 	            list_box.on('click', 'a[name="addnew"]', function(event) {
-	                //$('a[name="addnew"]',box).click(function() {
 	                event.preventDefault();
-	                var cform = $(this).parent().parent(),
-	                    $textarea = $('.commentApp-textarea', cform),
-	                    cparam = iCMS.comment.param($textarea);
-
-	                if (!cparam.content) {
-	                    $textarea.focus();
-	                    return false;
-	                }
-	                $.post(iCMS.api('comment'), cparam, function(c) {
-	                    if (c.code) {
-	                        //comment_list(0, c.forward);
-	                    } else {
-	                        iCMS.alert(c.msg);
-	                    }
-	                }, 'json');
+	                iCMS.comment.addnew(this,param,function(c){
+	                    var count = parseInt($('span', $this).text());
+	                    $('span', $this).text(count + 1);
+	                    comment_list(c.forward);
+	                })
 	            });
 			});
 			</script>
-			<div class="iCMS-pagination commentApp-pagenav" data-query="<!--{$vars.query}-->"><!--{$iPAGE|method:'show(4)'}--></div>
+			<div class="iCMS-pagination commentApp-pagenav" data-query="<!--{$comment_vars.query}-->">
+				<!--{$iPAGE|method:'show(4)'}-->
+			</div>
+			<div class="hide" data-query="<!--{$comment_vars.query}-->">
+				<div class="commentApp-pagenav-api"></div>
+			</div>
 			<div class="clearfix mb10"></div>
 		</div>
-<!--{if $vars.display=="iframe"}-->
+<!--{if $comment_vars.display=="iframe"}-->
 	</body>
 </html>
 <!--{/if}-->

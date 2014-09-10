@@ -19,9 +19,9 @@ $(function() {
     })
 })
 function callback(obj) {
-	var state	= window.parent.modal_<?php echo $this->callback;?>('<?php echo $this->target;?>',obj);
+	var state	= window.top.modal_<?php echo $this->callback;?>('<?php echo $this->target;?>',obj);
 	if(!state){
-		window.parent.iCMS_MODAL.destroy();
+		window.top.iCMS_MODAL.destroy();
 	}
 }
 </script>
