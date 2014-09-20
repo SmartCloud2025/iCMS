@@ -46,20 +46,20 @@
                 </a>
               </li>
               <li>
-                <a href="<!--{$user.urls.follower}-->">
-                <span class="text_count">48864</span>
+                <a href="<!--{$user.urls.fans}-->">
+                <span class="text_count"><!--{$user.fans}--></span>
                 <span class="text_atr">粉丝</span>
                 </a>
               </li>
               <li>
-                <a href="<!--{$user.urls.following}-->">
-                <span class="text_count">48864</span>
+                <a href="<!--{$user.urls.follow}-->">
+                <span class="text_count"><!--{$user.follow}--></span>
                 <span class="text_atr">关注</span>
                 </a>
               </li>
               <li class='first'>
                 <a href="<!--{$user.urls.home}-->">
-                <span class="text_count">22390</span>
+                <span class="text_count"><!--{$user.article}--></span>
                 <span class="text_atr">文章</span>
                 </a>
               </li>
@@ -107,8 +107,8 @@
             <!--{/iCMS}-->
           </ul>
         </div>
-        <div id="artpagenav" class="iCMS-pagination">
-          <!--{$page.nav}-->
+        <div id="artpagenav" class="iCMS_pagination">
+          <!--{$iCMS.page.nav}-->
         </div>
       </div>
       <div class="right-col">
@@ -145,9 +145,9 @@
         <div class="mod">
           <div class="hd">
             <h3>关注<span>FOLLOW</span></h3>
-            <a href="<!--{iCMS:router url='/user/manage/following'}-->" target="_blank" class="more">管理&gt;&gt;</a>
+            <a href="<!--{iCMS:router url='/user/manage/follow'}-->" target="_blank" class="more">管理&gt;&gt;</a>
           </div>
-          <ul>
+          <ul class="avatar_list">
             <!--{iCMS:user:follow loop="true" row="30" userid=$user.uid}-->
             <li><a href="<!--{$user_follow.url}-->" title="<!--{$user_follow.name}-->"><img class="avatar_30" data-tip="iCMS:ucard:<!--{$user_follow.uid}-->" src="<!--{$user_follow.avatar}-->"></a></li>
             <!--{/iCMS}-->

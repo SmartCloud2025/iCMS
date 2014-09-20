@@ -77,14 +77,15 @@ function get_pic($src,$size=0,$thumb=0){
 function autoformat($html){
     $html = stripslashes($html);
     $html = preg_replace(array(
-    '/on(load|click|dbclick|mouseover|mousedown|mouseup)="[^"]+"/is',
+    '/on(\w+)="[^"]+"/is',
     '/<script[^>]*?>.*?<\/script>/si',
     '/<style[^>]*?>.*?<\/style>/si',
-    '/<img[^>]+src=[" ]?([^"]+)[" ]?[^>]*>/is',
+    '/style=[" ]?([^"]+)[" ]/is',
     '/<br[^>]*>/i',
     '/<div[^>]*>(.*?)<\/div>/is',
-    '/<p[^>]*>(.*?)<\/p>/is'
-    ),array('','','',"\n[img]$1[/img]","\n","$1\n","$1\n"),$html);
+    '/<p[^>]*>(.*?)<\/p>/is',
+    '/<img[^>]+src=[" ]?([^"]+)[" ]?[^>]*>/is'
+    ),array('','','','',"\n","$1\n","$1\n","\n[img]$1[/img]"),$html);
 
     $html = str_replace("&nbsp;",'',$html);
     $html = str_replace("　",'',$html);
@@ -100,7 +101,7 @@ function autoformat($html){
     '/\[b\](.*?)\[\/b\]/is',
     '/\[url=([^\]|#]+)\](.*?)\[\/url\]/is',
     '/\[url=([^\]]+)\](.*?)\[\/url\]/is',
-    ),array('<img src="$1" />','<strong>$1</strong>','<a href="$1">$2</a>','<a href="$1">$2</a>'),$html);
+    ),array('<img src="$1" />','<strong>$1</strong>','$2','<a target="_blank" href="$1">$2</a>'),$html);
     $_htmlArray = explode("\n",$html);
     $_htmlArray = array_map("trim", $_htmlArray);
     $_htmlArray = array_filter($_htmlArray);

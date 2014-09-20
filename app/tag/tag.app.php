@@ -73,6 +73,9 @@ class tagApp {
             $relArray = explode(',', $rs['related']);
             iPHP::assign('relArray', $relArray);
         }
+        $rs['appid']  = iCMS_APP_TAG;
+        iCMS::hooks('enable_comment',true);
+
         iPHP::assign("tag", $rs);
         if ($tpl) {
             if ($_GET['debug']) {

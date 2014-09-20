@@ -4,22 +4,12 @@
   <head>
 		<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
 		<title><!--{$comment_vars.title}-->评论_<!--{$site.title}-->_<!--{$site.seotitle}--></title>
-		<!--{iCMS:public:ui script="false"}-->
-		<script>
-		var iCMS  = window.top.iCMS; //父框架接口 用于对话框
-		$(function(){
-			$('.iCMS-user-login').on("click", function() {
-				event.preventDefault();
-				iCMS.LoginBox();
-				return false;
-			});
-		})
-		</script>
+		<!--{iCMS:public:ui}-->
 	</head>
 	<body class="iCMS-comment-page">
 <!--{/if}-->
 		<script src="<!--{$site.urls.ui}-->/iCMS.comment-6.0.0.js"></script>
-		<div class="iCMS-comment-form-wrap">
+		<div class="iCMS_comment_form_wrap">
 			<div id="iCMS-cmt-profile">
 				<!--{include file="iCMS://user/topnavbar.htm"}-->
 			</div>
@@ -30,25 +20,19 @@
 			<div class="alert">
 				<i class="fa fa-warning "></i> 请自觉遵守互联网相关的政策法规，严禁发布色情、暴力、反动的言论！
 			</div>
-			<div class="iCMS-cmt-editor">
-				<textarea class="iCMS-editor-text commentApp-textarea" placeholder="写下你的评论…"></textarea>
+			<div class="iCMS_cmt_editor">
+				<textarea class="iCMS_editor_text commentApp-textarea" placeholder="写下你的评论…"></textarea>
 			</div>
-			<div class="iCMS-cmt-command clearfix">
+			<div class="iCMS_cmt_command clearfix">
 				<button class="btn btn-primary cmt-add" type="submit"><i class="fa fa-check"></i> 评 论</button>
 				<a href="javascript:;" class="cmt-cancel">取 消</a>
 			</div>
 		</div>
 		<script>
-		//console.log(window.top == window.self);
         var param =<!--{$comment_vars.param|json_encode}-->;
 		$(function(){
-			var doc = window.top.document||document;
             if (iCMS.user_status) {
-            	//var topnavbar = $("#iCMS-nav-profile",doc).clone(true);
-            	//$("#iCMS-cmt-profile").html(topnavbar);
-            	//iCMS.user.data();
-                //iCMS.hover("#iCMS-cmt-profile",".iCMS-user-home", "#iCMS-user-menu", 21);
-
+                iCMS.hover("#iCMS-cmt-profile",".iCMS_user_home", "#iCMS-user-menu", 21);
                 $("#iCMS-cmt-login").hide();
                 $("#iCMS-cmt-profile").show();
             }
@@ -67,12 +51,13 @@
                     return false;
                 }
                 iCMS.comment.addnew(this,param,function(c){
+                	var doc = window.top.document;
                     if (c.code) {
                     	var list_iframe = $(".commentApp-list-iframe",doc);
                     	if(list_iframe.length){
 	                    	list_iframe_src =list_iframe.attr('src');
 	                    	if(list_iframe_src){
-	                    		list_iframe.attr('src', list_iframe_src);
+	                    		list_iframe.attr('src', list_iframe_src+'&pn=999999');
 	                    	}
                     	}
                     	var list_box = $(".commentApp-list",doc);

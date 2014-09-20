@@ -1,0 +1,44 @@
+<div class="title"><span>我的关注</span></div>
+<div class="pg_follow w670">
+  <ul class="avatar_list">
+    <!--{iCMS:user:follow loop="true" row="30" userid=$user.uid}-->
+    <li id="id_<!--{$user_follow.uid}-->">
+    	<a href="<!--{$user_follow.url}-->" target="_blank" ttitle="<!--{$user_follow.name}-->"><img class="avatar_90" data-tip="iCMS:ucard:<!--{$user_follow.uid}-->" src="<!--{$user_follow.avatar}-->"></a>
+		<span class="label label-info"><!--{$user_follow.name}--></span>
+		<a href="javascript:;" data-param='{"fuid":"<!--{$user_follow.uid}-->","fname":"<!--{$user_follow.name}-->"}' class="btn cancel_follow">取消关注</a>
+    </li>
+	<!--{iCMSelse}-->
+	<div class="alert alert-info"><i class="fa fa-ban"></i> 暂无关注</div>
+    <!--{/iCMS}-->
+  </ul>
+</div>
+<script>
+	var al = $(".avatar_list");
+	$("li", al).each(function() {
+		var a = $(this);
+		a.hover(function() {
+			$(".label",a).hide();
+			$(".cancel_follow",a).css('display','block');
+		}, function() {
+		    setTimeout(function() {
+		    	$(".label",a).show();
+		        $(".cancel_follow",a).hide();
+		    }, 3000);
+		});
+	});
+	$(".cancel_follow").click(function(event) {
+		event.preventDefault();
+		var $this = $(this),param = iCMS.param($this);
+		param['follow'] = 0;
+		$.post(iCMS.api('user', "&do=follow"),param,
+			function(c) {
+				if (c.code) {
+					$("#id_"+param['fuid']).hide('500',function() {
+						$(this).remove();
+					});
+				}else{
+					iCMS.alert(c.msg);
+				}
+		},'json');
+	});
+</script>

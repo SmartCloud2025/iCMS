@@ -21,6 +21,7 @@
 		}, function(response) {
 			function createNode(parent) {
 				//	alert(this.text);
+				$("#tree-loading").remove();
 				var current = $("<li/>").attr("id", this.id || "").html(this.text).appendTo(parent);
 				current.mouseover(function() {
 					$(this).css("background-color", "#E7E7E7");

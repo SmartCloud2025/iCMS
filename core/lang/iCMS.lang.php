@@ -37,14 +37,16 @@ return array(
 		'!good'     =>'亲!您已经点过赞了啦 ！',
 		'good'      =>'亲!谢谢你的赞',
 	),
+	'report'=>array(
+		'reason_empty'=>'请填写举报的原因!',
+		'reason_success'=>'谢谢您的反馈!我们会尽快处理的!',
+	),
 	'comment'=> array(
 		'empty'   =>'请输入内容！',
 		//'error' =>'验证码不对哦!认真看清楚!要不换一张试试。',
 		'success' =>'评论成功!',
 		'!like'   =>'亲!您已经点过赞了啦 ！',
 		'like'    =>'亲!谢谢你的赞',
-		'reason_empty'=>'请填写举报的原因!',
-		'reason_success'=>'谢谢您的反馈!我们会尽快处理的!',
 	),
 	'seccode'=> array(
 		'empty'=>'请输入验证码！',

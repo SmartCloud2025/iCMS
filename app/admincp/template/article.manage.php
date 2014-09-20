@@ -55,12 +55,12 @@ $(function(){
 		    button: [{value: '保存',callback: function () {
 						var title=edtitle.val(),cid=edcid.val();
 						if(title==""){
-							alert("请填写标题!");
+							iCMS.alert("请填写标题!");
 							edtitle.focus();
 							return false;
 						}
 						if(cid==0){
-							alert("请选择栏目!");
+							iCMS.alert("请选择栏目!");
 							return false;
 						}
 						$(box).trigger("chosen:updated");
@@ -251,7 +251,7 @@ $(function(){
                 <div class="input-prepend input-append mt20"> <span class="add-on">全选
                   <input type="checkbox" class="checkAll checkbox" data-target="#<?php echo APP_BOXID;?>" />
                   </span>
-                  <div class="btn-group dropup" id="batch"> <a class="btn dropdown-toggle" data-toggle="dropdown" tabindex="-1"><i class="fa fa-wrench"></i> 批 量 操 作 </a><a class="btn dropdown-toggle" data-toggle="dropdown" tabindex="-1"> <span class="caret"></span></a>
+                  <div class="btn-group dropup" id="iCMS-batch"> <a class="btn dropdown-toggle" data-toggle="dropdown" tabindex="-1"><i class="fa fa-wrench"></i> 批 量 操 作 </a><a class="btn dropdown-toggle" data-toggle="dropdown" tabindex="-1"> <span class="caret"></span></a>
                     <ul class="dropdown-menu">
                       <li><a data-toggle="batch" data-action="pubdate:now"><i class="fa fa-clock-o"></i> 更新发布时间</a></li>
                       <?php if($doType=="inbox"||$doType=="trash"){ ?>

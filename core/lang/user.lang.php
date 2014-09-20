@@ -37,7 +37,8 @@ return array(
 		'empty'   =>'请输入分类名称!',
 		'filter'  =>'分类名称包含被系统屏蔽的字符，请重新填写!',
 		'max'     =>'最多只能创建10个分类!',
-		'success' =>'更新成功！',
+		'success' =>'添加成功！',
+		'update'  =>'更新成功！',
 	),
 	'article'=>array(
 		'add_success'    =>'添加成功!',

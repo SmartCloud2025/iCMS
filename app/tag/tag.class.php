@@ -47,16 +47,16 @@ class tag {
 			$strLink.='<a href="'.$strA[$k]['url'].'" target="_self">'.$strA[$k]['name'].'</a> ';
         }
         $search	= $C['name'];
-        
+
         $sstrA	= $strArray;
         count($strArray)>3 && $sstrA = array_slice($strArray,0,3);
         $sstr	= implode(',',$sstrA);
         $sstr && $search = $sstr;
-        
+
         $array[$key.'link']		= $strLink;
         $array[$key.'_array']	= $strA;
         $array['search'][$key]	= $search;
-        
+
         return array(
         	$key.'link'		=> $strLink,
         	$key.'_array'	=> $strA,
@@ -99,12 +99,12 @@ class tag {
 	}
 	public function update($tag,$uid="0",$iid="0",$cid='0',$tcid='0') {
 	    if(empty($tag)) return;
-	    
+
 	    $tid	= iDB::value("SELECT `id` FROM `#iCMS@__tags` WHERE `name`='$tag'");
 	    if($tid) {
 	        $tlid = iDB::value("SELECT `id` FROM `#iCMS@__tags_map` WHERE `iid`='$iid' and `tid`='$tid' and `appid`='".TAG_APPID."'");
 	        if(empty($tlid)) {
-	            iDB::query("INSERT INTO `#iCMS@__tags_map` (`iid`, `tid`, `appid`) VALUES ('$iid', '$tid', '".TAG_APPID."')");
+	            iDB::query("INSERT INTO `#iCMS@__tags_map` (`tid`, `iid`, `appid`) VALUES ('$iid', '$tid', '".TAG_APPID."')");
 	            iDB::query("UPDATE `#iCMS@__tags` SET  `count`=count+1,`pubdate`='".time()."'  WHERE `id`='$tid'");
 	        }
 	    }else {
@@ -114,7 +114,7 @@ class tag {
 VALUES ('$uid', '$cid', '$tcid', '0', '$tkey', '$tag', '', '', '', '', '', '', '', '', '1', '0', '', '0', '".time()."', '1');");
 	        $tid = iDB::$insert_id;
 	        self::cache($tag);
-	        iDB::query("INSERT INTO `#iCMS@__tags_map` (`iid`, `tid`, `appid`) VALUES ('$iid', '$tid', '".TAG_APPID."')");
+	        iDB::query("INSERT INTO `#iCMS@__tags_map` (`tid`, `iid`, `appid`) VALUES ('$iid', '$tid', '".TAG_APPID."')");
 	    	$tmid = iDB::$insert_id;
 	    }
 	    return array($tag,$tid,$cid,$tcid,$tmid);

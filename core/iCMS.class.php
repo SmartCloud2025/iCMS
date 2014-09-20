@@ -43,7 +43,8 @@ class iCMS {
         define('iCMS_FS_URL',    self::$config['FS']['url']);
         define('iCMS_REWRITE',   self::$config['app']['rewrite']);
         define('iCMS_API',       iCMS_PUBLIC_URL.'/api.php');
-
+        define('iCMS_UI',        iCMS_DIR.'app/ui/common');
+        define('iCMS_UI_URL',    iCMS_URL.'/app/ui/common');
         self::$apps = self::$config['apps'];
         self::assign_site();
 	}
@@ -98,6 +99,8 @@ class iCMS {
             'version'    => iCMS_VER,
             "is_mobile"  => iPHP::$mobile,
             'API'        => iCMS_API,
+            'UI'         => iCMS_UI,
+            'UI_URL'     => iCMS_UI_URL,
             'SAPI'       => iCMS_API.'?app='.self::$app_name,
             'COOKIE_PRE' => iPHP_COOKIE_PRE,
             'refer'      => __REF__,
@@ -131,7 +134,7 @@ class iCMS {
     	self::run($app,null,'API_');
     }
     //------------------------------------
-    public static function app_ref($app_name=true) {
+    public static function app_ref($app_name=true,$out=false) {
         $app_name===true && $app_name = self::$app_name;
         $rs    = iPHP::get_vars($app_name);
         $param = array();
@@ -164,6 +167,12 @@ class iCMS {
                 );
             break;
         }
+        // if($out==='js'){
+        //     if($param){
+        //          echo '<script type="text/javascript"> var comment_param = '.json_encode($param).';</script>';
+        //     }
+        //     return;
+        // }
         return $param;
     }
     public static function get_category_ids($cid = "0",$all=true) {
@@ -202,7 +211,6 @@ class iCMS {
 		return $GLOBALS['TBAPI'];
     }
     public static function hooks($key,$array){
-        self::$hooks['app'] = $key;
         self::$hooks[$key]  = $array;
     }
     //------------------------------------
@@ -219,8 +227,8 @@ class iCMS {
         if($iPages->totalpage>1) {
             $pagenav = $a['pagenav']?$a['pagenav']:'nav';
             $pnstyle = $a['pnstyle']?$a['pnstyle']:0;
-            iPHP::assign('page',array('count'=>$a['total'],'total'=>$iPages->totalpage,'current'=>$iPages->nowindex,$pagenav=>$iPages->show($pnstyle)));
-            iPHP::assign('iPAGE',$iPages);
+            iPHP::$iTPL->_iTPL_VARS['page']  = array('count'=>$a['total'],'total'=>$iPages->totalpage,'current'=>$iPages->nowindex,$pagenav=>$iPages->show($pnstyle));
+            iPHP::$iTPL->_iTPL_VARS['PAGES'] = $iPages;
         }
         return $iPages;
     }

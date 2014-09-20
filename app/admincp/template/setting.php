@@ -214,7 +214,7 @@ function modal_tplfile(el,a){
             <div class="input-prepend"> <span class="add-on">CMS安装目录</span>
               <input type="text" name="config[router][DIR]" class="span4" id="router_dir" value="<?php echo $config['router']['DIR'] ; ?>"/>
             </div>
-            <span class="help-inline">CMS安装目录，如：http：//www.idreamsoft.com/iCMS 则安装目录为:iCMS 根目录请输入<span class="label label-info">/</span></span>
+            <span class="help-inline">CMS安装目录，如：http：//www.idreamsoft.com/iCMS/ 则安装目录为:iCMS/ 根目录请输入<span class="label label-info">/</span></span>
             <div class="clearfloat mb10"></div>
             <div class="input-prepend"> <span class="add-on">网站URL</span>
               <input type="text" name="config[router][URL]" class="span4" id="router_URL" value="<?php echo $config['router']['URL'] ; ?>"/>

@@ -122,14 +122,14 @@ class menuApp{
         $caret       = '';
         $data_meta   = $_POST['data-meta'];
         $data_target = '';
-    	
+
     	if($data_toggle=="dropdown"){
     		$class		= 'dropdown';
     		$a_class	= 'dropdown-toggle';
     		$caret		= '<b class="caret"></b>';
     	}else if($data_toggle=="modal"){
     		$data_meta	OR	$data_meta	= '{"width":"800px","height":"600px"}';
-    		$data_target	= '#iCMS_MODAL';
+    		$data_target	= '#iCMS-MODAL';
     	}
         $fields = array('rootid', 'orderNum', 'app', 'name', 'title', 'href', 'icon', 'class', 'a_class', 'target', 'caret', 'data-toggle', 'data-meta', 'data-target');
         $data   = compact ($fields);

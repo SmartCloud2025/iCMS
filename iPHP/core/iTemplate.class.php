@@ -300,8 +300,11 @@ class iTemplate {
 			$callback	= iPHP_TPL_VAR.'_' . $a['app'];
 			function_exists($callback) OR $this->require_one(iPHP_TPL_FUN."/".iPHP_TPL_VAR.".".$a['app'].".php");
 		}
-		//$this->assign($keys,call_user_func($callback, (array)$a));
-		//$this->clear_assign($keys);
+		if(isset($a['vars'])){
+			$_a = $a['vars'];
+			unset($a['vars']);
+		 	$a = array_merge($a,$_a);
+		}
 		$this->assign($keys,$callback($a));
 	}
 
@@ -363,7 +366,7 @@ class iTemplate_Compiler extends iTemplate {
 	public $_foreachelse_stack        = array();
 	public $_for_stack                = 0;
 	public $_sectionelse_stack        = array();	// keeps track of whether section had 'else' part
-	public $_iPHPelse_stack           = array();	// keeps track of whether section had 'else' part
+	public $_iPHP_else_stack          = false;	// keeps track of whether section had 'else' part
 	public $_iPHP_stack               = array();
 	public $_switch_stack             = array();
 	public $_tag_stack                = array();
@@ -585,11 +588,16 @@ class iTemplate_Compiler extends iTemplate {
 				return '<?php $this->_run_iPHP(array('.implode(',', (array)$arg_list).')); ?>'.$compile_iPHP;
 				break;
 			case iPHP_TPL_VAR.'else':
-				return "<?php }else{ ?>";
+				$this->_iPHP_else_stack = true;
+				return "<?php }}else{ ?>";
 				break;
 			case '/'.iPHP_TPL_VAR:
 				array_pop($this->_iPHP_stack) OR $this->trigger_error("missing 'loop' attribute in '".iPHP_TPL_VAR."'", E_USER_ERROR, __FILE__, __LINE__);
-				return "<?php }?>";
+				if($this->_iPHP_else_stack){
+					$this->_iPHP_else_stack = false;
+					return "<?php } ?>";
+				}
+				return "<?php }} ?>";
 				break;
 			case 'ldelim':
 				return $this->left_delimiter;

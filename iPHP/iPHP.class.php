@@ -229,8 +229,12 @@ class iPHP{
 	public static function loadClass($name,$msg=''){
 		if (!class_exists($name)){
 		    $path = iPHP_CORE.'/i'.$name.'.class.php';
-			$msg && self::throwException($msg,0020);
-		    self::import($path);
+		    if(@is_file($path)) {
+		    	self::import($path);
+		    }else{
+		    	$msg OR $msg = 'file '.$path.' not exist';
+				self::throwException($msg,0020);
+		    }
 	    }
 	}
 
@@ -423,9 +427,9 @@ class iPHP{
     	echo $json;
     	$break && exit();
     }
-    public static function js_callback($a,$obj='parent.'){
+    public static function js_callback($a){
     	$json = json_encode($a);
-    	echo "<script type=\"text/javascript\">window.{$obj}callback($json);</script>";
+    	echo "<script type=\"text/javascript\">window.top.callback($json);</script>";
     	exit;
     }
     public static function code($code=0,$msg='',$forward='',$format=''){
@@ -435,6 +439,9 @@ class iPHP{
     		self::json($a);
     	}
         return $a;
+    }
+    public static function warning($info) {
+    	iPHP::msg('warning:#:warning:#:'.$info);
     }
     public static function msg($info,$ret=false) {
     	list($label,$icon,$content)= explode(':#:',$info);
@@ -484,7 +491,7 @@ class iPHP{
         strstr($content,':#:') && $content=self::msg($content,true);
 		$content = addslashes($content);
 		$dialog  = "var iTOP = window.top,dialog = iTOP.$.dialog({
-		    id: 'iPHP_DIALOG',width: 360,height: 150,fixed: true,
+		    id: 'iPHP-DIALOG',width: 360,height: 150,fixed: true,
 		    title: '".self::$dialog_title." - {$title}',
 		    content: '{$content}',";
 		$auto_func = 'dialog.close();';
@@ -569,7 +576,7 @@ class iPHP{
     	if(empty($total) && $type===null &&!isset($_GET['total_cahce'])){
     		$total = (int)iCache::get('total/'.$tnkey);
 		}
-    	if(empty($total) || $GLOBALS['removeTotal']||$type==='no'||isset($_GET['total_cahce'])){
+    	if(empty($total) ||$type==='no'||isset($_GET['total_cahce'])){
         	$total = iDB::value($sql);
         	if($type===null){
         		iCache::set('total/'.$tnkey,$total);

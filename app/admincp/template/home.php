@@ -13,7 +13,7 @@ iACP::head();
   <div class="row-fluid">
     <div class="span12 center" style="text-align: center;">
       <ul class="quick-actions">
-        <li><a href="#"><i class="icon-calendar"></i>日程管理</a></li>
+        <li><a href="javascript:;" title="开发中..."><i class="icon-calendar"></i>日程管理</a></li>
         <li><a href="<?php echo __ADMINCP__; ?>=article"><i class="icon-survey"></i>文章管理</a></li>
         <li><a href="<?php echo __ADMINCP__; ?>=tags"><i class="icon-tag"></i>标签管理</a></li>
         <li><a href="<?php echo __ADMINCP__; ?>=spider&do=project"><i class="icon-download"></i>采集管理</a></li>
@@ -33,7 +33,7 @@ iACP::head();
       <div class="row-fluid">
         <div class="span3">
           <ul class="site-stats">
-            <li><i class="fa fa-list-alt"></i> <strong><?php echo $acc ; ?></strong> <small>文章栏目</small></li>
+            <li><i class="fa fa-sitemap"></i> <strong><?php echo $acc ; ?></strong> <small>文章栏目</small></li>
             <li><i class="fa fa-sitemap"></i> <strong><?php echo $tac ; ?></strong> <small>标签分类</small></li>
             <li><i class="fa fa-sitemap"></i> <strong><?php echo $pac ; ?></strong> <small>推送分类</small></li>
             <li class="divider"></li>
@@ -132,7 +132,7 @@ iACP::head();
         </tr>
         <tr>
           <td>被屏蔽的函数</td>
-          <td><?php echo get_cfg_var("disable_functions")?'<a class="tip" href="javascript:void(0);" title="'.get_cfg_var("disable_functions").'">查看</a>':"无" ; ?></td>
+          <td><?php echo get_cfg_var("disable_functions")?'<a class="tip" href="javascript:;" title="'.get_cfg_var("disable_functions").'">查看</a>':"无" ; ?></td>
           <td>安全模式</td>
           <td><?php echo $this->okorno(ini_get('safe_mode')); ?></td>
         </tr>
@@ -166,7 +166,7 @@ iACP::head();
           </tr>
           <tr>
             <td>相关链接</td>
-            <td><a class="btn btn-small" href="http://www.idreamsoft.com" target="_blank">iDreamSoft</a> <a class="btn btn-small" href="http://www.idreamsoft.com/categorydisplay.php?cid=6" target="_blank">iCMS</a> <a class="btn btn-small" href="http://www.idreamsoft.com/categorydisplay.php?cid=7" target="_blank">&#x6A21;&#x677F;</a> <a class="btn btn-small" href="http://www.idreamsoft.com/doc/iCMS/index.html" target="_blank">&#x6587;&#x6863;</a> <a class="btn btn-small" href="http://www.idreamsoft.com/categorydisplay.php?cid=6" target="_blank">&#x8BA8;&#x8BBA;&#x533A;</a></td>
+            <td><a class="btn btn-small" href="http://www.idreamsoft.com" target="_blank">iDreamSoft</a> <a class="btn btn-small" href="http://www.idreamsoft.com/iCMS/" target="_blank">iCMS</a> <a class="btn btn-small" href="http://www.idreamsoft.com/template/" target="_blank">&#x6A21;&#x677F;</a> <a class="btn btn-small" href="http://www.idreamsoft.com/iCMS/doc" target="_blank">&#x6587;&#x6863;</a> <a class="btn btn-small" href="http://www.idreamsoft.com/feedback/" target="_blank">&#x8BA8;&#x8BBA;&#x533A;</a></td>
           </tr>
         </table>
       </div>
@@ -178,11 +178,11 @@ iACP::head();
         <h5>BUG提交</h5>
       </div>
       <div class="widget-content nopadding">
-        <textarea id="bug_content" class="tip" title="为了保证效率，请务必描述清楚你的问题，例如包含 iCMS 版本号、服务器操作系统、WEB服务器版本、浏览器版本等必要信息，不合格问题将可能会被清理" style="width:95%; height: 158px; margin:4px 0px 4px 10px;">
-iCMS 版本号:
-服务器操作系统:
-WEB服务器版本:
-浏览器版本:
+        <textarea id="bug_content" class="tip" title="为了保证效率，请务必描述清楚你的问题，例如包含 iCMS 版本号、服务器操作系统、WEB服务器版本、浏览器版本等必要信息，不合格问题将可能会被无视掉" style="width:95%; height: 158px; margin:4px 0px 4px 10px;">
+iCMS 版本号:iCMS <?php echo iCMS_VER ; ?>[<?php echo iCMS_RELEASE ; ?>]
+服务器操作系统:<?php echo PHP_OS ; ?>;
+WEB服务器版本:<?php echo $_SERVER['SERVER_SOFTWARE'] ; ?>;
+浏览器版本:<?php echo $_SERVER['HTTP_USER_AGENT'] ; ?>;
 问题:</textarea>
         <input id="bug_url" type="text" style="width:420px;margin:8px 0px 0px 10px;" value="" placeholder="出问题的URL">
         <a id="bug_submit" class="btn btn-primary" style="margin:8px 50px 8px 8px;float:right;"><i class="fa fa-check"></i> 提交</a>

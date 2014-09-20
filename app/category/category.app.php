@@ -61,7 +61,7 @@ class categoryApp{
         $rs['body'] && $rs['body'] = iCache::get('iCMS/category.'.$rs['cid'].'/body');
         ($rs['mode'] && $tpl) && iCMS::setpage($iurl);
         $rs['appid']  = iCMS_APP_CATEGORY;
-
+        iCMS::hooks('enable_comment',true);
 
 		iPHP::assign('category',$rs);
         if($tpl) {

@@ -1,4 +1,17 @@
 body { background-color: #EDEDED; color: #000; }
+/* bootstrap */
+.table th { background: #fafafa url("table_head.gif") repeat-x 0 100%; }
+.table td { background-color: #fff; }
+.table tbody .checker { margin-left: 3px !important; }
+/* chosen */
+.chosen-container-single .chosen-single { background-image: none !important; -webkit-box-shadow: none !important; -moz-box-shadow: none !important; box-shadow: none !important; }
+.input-prepend .chosen-container-single .chosen-single { -webkit-border-top-left-radius: 0; -moz-border-radius-topleft: 0; border-top-left-radius: 0; -webkit-border-bottom-left-radius: 0; -moz-border-radius-bottomleft: 0; border-bottom-left-radius: 0; }
+.input-append .chosen-container-single .chosen-single { -webkit-border-top-right-radius: 0; -moz-border-radius-topright: 0; border-top-right-radius: 0; -webkit-border-bottom-right-radius: 0; -moz-border-radius-bottomright: 0; border-bottom-right-radius: 0; }
+.input-prepend .chosen-container-multi .chosen-choices { -webkit-border-radius: 0 4px 4px 0; -moz-border-radius: 0 4px 4px 0; border-radius: 0 4px 4px 0; font-size: 12px; padding: 0px 6px; }
+.chosen-container-single .chosen-single { height: 28px; border: 1px solid #ccc; color: #696969; font-size: 14px; line-height: 28px; }
+.chosen-container-single .chosen-single div b { background-position-y: 5px; }
+/* uniform */
+.add-on .checker { margin-right: 0px; margin-bottom: 4px; }
 /* iCMS */
 #header { display: block; position: relative; margin: 0; background-color: #f8f8f8; background-image: -webkit-gradient(linear, 0 0, 0 100%, from(#f8f8f8), to(#e2e2e2)); background-image: -webkit-linear-gradient(top, #f8f8f8, #e2e2e2); background-image: -webkit-gradient(linear, top left, bottom left, from(#f8f8f8), to(#e2e2e2)); background-image: -webkit-linear-gradient(top, #f8f8f8, #e2e2e2); background-image: linear-gradient(to bottom, #f8f8f8, #e2e2e2); background-repeat: repeat-x; }
 #header .navbar-inner { background-image: none; padding-right: 0; padding-left: 8px; background-color: #f8f8f8; -webkit-box-shadow: aliceblue; -moz-box-shadow: 0 1px 10px rgba(0, 0, 0, 0.1); box-shadow: none; }

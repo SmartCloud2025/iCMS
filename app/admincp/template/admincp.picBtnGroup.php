@@ -29,17 +29,17 @@ $unid = uniqid();
 $(function(){
     window.modal_<?php echo $callback;?> = function(el,a){
         $("#<?php echo $callback;?>").val(a.value);
-        window.iCMS_MODAL.destroy();
+        window.top.iCMS_MODAL.destroy();
     }
     $(".modal_photo_<?php echo $unid;?>").on("click",function(){
-        var  pic=$("#<?php echo $callback;?>").val(),href = $(this).attr("href");
+        var  pic = $("#<?php echo $callback;?>").val(),href = $(this).attr("href");
         if(pic){
             $(".modal-iframe").attr("src",href+"&pic="+pic);
         }else{
             var check = $(this).attr("data-check"),title=$(this).attr("title");
             if(check){
                 window.iCMS_MODAL.destroy();
-                alert("暂无图片,您现在不能"+title);
+                iCMS.alert("暂无图片,您现在不能"+title);
             }
         }
         return false;

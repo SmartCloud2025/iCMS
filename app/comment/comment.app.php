@@ -9,9 +9,17 @@
 defined('iPHP') OR exit('What are you doing?');
 
 class commentApp {
-	public $methods	= array('like','json','add','form','list');
+	public $methods	= array('like','json','add','form','list','goto');
     function __construct() {
         $this->id = (int)$_GET['id'];
+    }
+    public function API_goto(){
+        $appid = (int)$_GET['appid'];
+        $iid   = (int)$_GET['iid'];
+
+        iPHP::import(iPHP_APP_CORE .'/iAPP.class.php');
+        $url = app::get_url($appid,$iid);
+        iPHP::gotourl($url);
     }
     public function API_list(){
         $_GET['_display'] = $_GET['display'];
@@ -22,6 +30,7 @@ class commentApp {
     public function API_form(){
         $_GET['_display'] = $_GET['display'];
         $_GET['display']  = 'default';
+        iCMS::hooks('enable_comment',true);
         iPHP::app('comment.func');
         return comment_form($_GET);
     }
@@ -59,7 +68,7 @@ class commentApp {
         $cid        = (int)$_POST['cid'];
         $suid       = (int)$_POST['suid'];
         $reply_id   = (int)$_POST['id'];
-        $reply_uid  = (int)$_POST['uid'];
+        $reply_uid  = (int)$_POST['userid'];
         $reply_name = iS::escapeStr($_POST['name']);
         $title      = iS::escapeStr($_POST['title']);
         $content    = iS::escapeStr($_POST['content']);

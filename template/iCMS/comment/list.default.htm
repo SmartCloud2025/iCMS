@@ -1,10 +1,10 @@
 <!--{if $comment_vars.display=="iframe"}-->
+<!DOCTYPE html>
 <html lang="zh-CN">
 	<head>
 		<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
 		<title><!--{$comment_vars.title}-->评论_<!--{$site.title}-->_<!--{$site.seotitle}--></title>
-		<!--{iCMS:public:ui script="false"}-->
-		<script>var iCMS = window.top.iCMS;</script>
+		<!--{iCMS:public:ui}-->
 	</head>
 	<body class="iCMS-comment-page">
 <!--{/if}-->
@@ -18,28 +18,28 @@
 					</a>
 					<div class="commentApp-content-wrap">
 						<div class="commentApp-content-hd">
-							<a data-tip="iCMS:ucard:<!--{$comment_list.userid}-->" href="<!--{$comment_list.user.url}-->" class="zg-link"><!--{$comment_list.user.name}--></a>
+							<a data-tip="iCMS:ucard:<!--{$comment_list.userid}-->" href="<!--{$comment_list.user.url}-->" target="_blank" class="zg-link"><!--{$comment_list.user.name}--></a>
 							<!--{if $comment_list.suid == $comment_list.userid}-->
 							<span class="desc">（作者）</span>
 							<!--{/if}-->
 							<!--{if $comment_list.reply}-->
 							<span class="desc">回复 </span>
-							<a data-tip="iCMS:ucard:<!--{$comment_list.reply.uid}-->" href="<!--{$comment_list.reply.url}-->" class="zg-link"><!--{$comment_list.reply.name}--></a>
+							<a data-tip="iCMS:ucard:<!--{$comment_list.reply.uid}-->" href="<!--{$comment_list.reply.url}-->" target="_blank" class="zg-link"><!--{$comment_list.reply.name}--></a>
 							<!--{/if}-->
 						</div>
 						<div class="commentApp-content"><!--{$comment_list.content}--></div>
 						<div class="commentApp-content-ft">
 							<span class="date"><!--{$comment_list.addtime|format_date}--></span>
 							<a href="javascript:;" class="reply commentApp-op-link" name="reply_comment" data-param='{"id":"<!--{$comment_list.id}-->","userid":"<!--{$comment_list.userid}-->","name":"<!--{$comment_list.user.name}-->"}'>
-							<i class="iCMS-icon iCMS-icon-comment-reply"></i>回复</a>
-							<a href="javascript:;" class="like commentApp-op-link" name="like_comment" data-param='{"id":"<!--{$comment_list.id}-->"}'>
-							<i class="iCMS-icon iCMS-icon-comment-like"></i>赞</a>
+							<i class="iCMS_icon iCMS_icon_comment_reply"></i>回复</a>
+							<a href="javascript:;" class="like commentApp-op-link" name="like_comment" data-param='{"id":"<!--{$comment_list.id}-->","userid":"<!--{$comment_list.userid}-->","name":"<!--{$comment_list.user.name}-->"}'>
+							<i class="iCMS_icon iCMS_icon_comment_like"></i>赞</a>
 							<!--{if $comment_list.up!='0'}-->
 							<span class="like-num" data-tip="iCMS:s:<!--{$comment_list.up}--> 人觉得这个很赞">
 							<em><!--{$comment_list.up}--></em> <span>赞</span></span>
 							<!--{/if}-->
 							<a href="javascript:;" name="iCMS-report" data-param='{"appid":"5","iid":"<!--{$comment_list.id}-->","userid":"<!--{$comment_list.userid}-->"}' class="report commentApp-op-link needsfocus">
-							<i class="iCMS-icon iCMS-icon-report"></i>举报</a>
+							<i class="iCMS_icon iCMS_icon_report"></i>举报</a>
 						</div>
 					</div>
 				</div>
@@ -47,27 +47,46 @@
 			</div>
 			<script>
 			$(function() {
-				var param = <!--{$comment_vars.param|json_encode}-->;
+				var param    = <!--{$comment_vars.param|json_encode}-->;
 				var list_box = $('#iCMS-comment-list-box');
 	            //回复评论
 	            list_box.on('click', 'a[name="reply_comment"]', function(event) {
 	                event.preventDefault();
-					var form = iCMS.comment.form;
-		            iCMS.comment.reply(this,form);
+	                if (!iCMS.user_status) {
+	                    iCMS.LoginBox();
+	                    return false;
+	                }
+		            iCMS.comment.reply(this);
+		            <!--{if $comment_vars.display=="iframe"}-->
+		            iCMS.api_iframe_height(false,'.commentApp-list-iframe');
+		            <!--{/if}-->
 	            });
 	            //提交评论
 	            list_box.on('click', 'a[name="addnew"]', function(event) {
 	                event.preventDefault();
+	                if (!iCMS.user_status) {
+	                    iCMS.LoginBox();
+	                    return false;
+	                }
 	                iCMS.comment.addnew(this,param,function(c){
-	                    var count = parseInt($('span', $this).text());
-	                    $('span', $this).text(count + 1);
-	                    comment_list(c.forward);
+	                    //var count = parseInt($('span', $this).text());
+	                    //$('span', $this).text(count + 1);
+	                    iCMS.comment.list(list_box,param['iid'],c.forward);
 	                })
+	            });
+	            //赞评论
+	            list_box.on('click', 'a[name="like_comment"]', function(event) {
+	                event.preventDefault();
+	                if (!iCMS.user_status) {
+	                    iCMS.LoginBox();
+	                    return false;
+	                }
+	                iCMS.comment.like(this);
 	            });
 			});
 			</script>
-			<div class="iCMS-pagination commentApp-pagenav" data-query="<!--{$comment_vars.query}-->">
-				<!--{$iPAGE|method:'show(4)'}-->
+			<div class="iCMS_pagination commentApp-pagenav" data-query="<!--{$comment_vars.query}-->">
+				<!--{$iCMS.PAGES|method:'show(4)'}-->
 			</div>
 			<div class="hide" data-query="<!--{$comment_vars.query}-->">
 				<div class="commentApp-pagenav-api"></div>

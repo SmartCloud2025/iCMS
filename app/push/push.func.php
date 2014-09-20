@@ -10,27 +10,27 @@ function push_list($vars){
 	$maxperpage = isset($vars['row'])?(int)$vars['row']:"100";
 	$cache_time	= isset($vars['time'])?(int)$vars['time']:"-1";
 
-    $whereSQL	= " WHERE `status`='1'";
+    $where_sql	= "WHERE `status`='1'";
 
-    isset($vars['userid'])    &&     $whereSQL.=" AND `userid`='{$vars['userid']}'";
+    isset($vars['userid'])    &&     $where_sql.=" AND `userid`='{$vars['userid']}'";
 
     if(isset($vars['cid!'])){
         $cids	= $vars['sub']?iCMS::get_category_ids($vars['cid!'],true):$vars['cid!'];
         $cids OR $cids	= $vars['cid!'];
-        $whereSQL.= iPHP::where($cids,'cid','not');
+        $where_sql.= iPHP::where($cids,'cid','not');
     }
     if(isset($vars['cid'])){
         $cids	= $vars['sub']?iCMS::get_category_ids($vars['cid'],true):$vars['cid'];
         $cids OR $cids	= $vars['cid'];
-        $whereSQL.= iPHP::where($cids,'cid');
+        $where_sql.= iPHP::where($cids,'cid');
     }
-    isset($vars['pid']) 	&& $whereSQL.= " AND `type` ='{$vars['pid']}'";
-    isset($vars['pic']) 	&& $whereSQL.= " AND `haspic`='1'";
-    isset($vars['nopic']) 	&& $whereSQL.= " AND `haspic`='0'";
+    isset($vars['pid']) 	&& $where_sql.= " AND `type` ='{$vars['pid']}'";
+    isset($vars['pic']) 	&& $where_sql.= " AND `haspic`='1'";
+    isset($vars['nopic']) 	&& $where_sql.= " AND `haspic`='0'";
 
-	isset($vars['startdate'])    && $whereSQL.=" AND `addtime`>='".strtotime($vars['startdate'])."'";
-	isset($vars['enddate'])     && $whereSQL.=" AND `addtime`<='".strtotime($vars['enddate'])."'";
-	
+	isset($vars['startdate'])    && $where_sql.=" AND `addtime`>='".strtotime($vars['startdate'])."'";
+	isset($vars['enddate'])     && $where_sql.=" AND `addtime`<='".strtotime($vars['enddate'])."'";
+
 	$by=$vars['by']=="ASC"?"ASC":"DESC";
     switch ($vars['orderby']) {
         case "id":		$orderSQL=" ORDER BY `id` $by";			break;
@@ -39,20 +39,20 @@ function push_list($vars){
         default:        $orderSQL=" ORDER BY `id` DESC";
     }
 	if($vars['cache']){
-		$cacheName	= 'push/'.md5($whereSQL);
-		$rs			= iCache::get($cacheName);
+        $cache_name = 'push/'.md5($where_sql);
+        $resource   = iCache::get($cache_name);
 	}
-	if(empty($rs)){
-		$rs		= iDB::all("SELECT * FROM `#iCMS@__push`{$whereSQL} {$orderSQL} LIMIT $maxperpage");
-		//echo iDB::$last_query;
-        $_count	= count($rs);
-        for ($i=0;$i<$_count;$i++){
-			$rs[$i]['pic'] && $rs[$i]['pic']=iFS::fp($rs[$i]['pic'],'+http');
-			$rs[$i]['pic2'] && $rs[$i]['pic2']=iFS::fp($rs[$i]['pic2'],'+http');
-			$rs[$i]['pic2'] && $rs[$i]['pic2']=iFS::fp($rs[$i]['pic2'],'+http');
-			$rs[$i]['metadata'] && $rs[$i]['metadata']=unserialize($rs[$i]['metadata']);
+	if(empty($resource)){
+        $resource = iDB::all("SELECT * FROM `#iCMS@__push` {$where_sql} {$orderSQL} LIMIT $maxperpage");
+		//iDB::debug(1);
+        if($resource)foreach ($resource as $key => $value) {
+            $value['pic']     && $value['pic']  = iFS::fp($value['pic'],'+http');
+            $value['pic2']    && $value['pic2'] = iFS::fp($value['pic2'],'+http');
+            $value['pic2']    && $value['pic2'] = iFS::fp($value['pic2'],'+http');
+            $value['metadata']&& $value['metadata'] = unserialize($value['metadata']);
+            $resource[$key] = $value;
         }
-		$vars['cache'] && iCache::set($cacheName,$rs,$cache_time);
+		$vars['cache'] && iCache::set($cache_name,$resource,$cache_time);
 	}
-	return $rs;
+	return $resource;
 }

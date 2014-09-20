@@ -14,13 +14,19 @@ defined('iPHP') OR exit('What are you doing?');
 <title>iCMS Administrator's Control Panel</title>
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <meta content="iDreamSoft Inc." name="Copyright" />
-<link rel="stylesheet" href="<?php echo ACP_UI;?>/bootstrap-2.3.1/css/bootstrap.min.css" type="text/css" />
-<link rel="stylesheet" href="<?php echo ACP_UI;?>/bootstrap-2.3.1/css/bootstrap-responsive.min.css" type="text/css" />
-<link rel="stylesheet" href="<?php echo ACP_UI;?>/iCMS-6.0.0.css" type="text/css" />
+<link rel="stylesheet" href="<?php echo iCMS_UI;?>/bootstrap-2.3.1/css/bootstrap.min.css" type="text/css" />
+<link rel="stylesheet" href="<?php echo iCMS_UI;?>/bootstrap-2.3.1/css/bootstrap-responsive.min.css" type="text/css" />
+<link rel="stylesheet" href="<?php echo iCMS_UI;?>/font-awesome-4.1.0/css/font-awesome.min.css" type="text/css" />
+<link rel="stylesheet" href="<?php echo iCMS_UI;?>/artDialog-5.0.4/skins/default.css" type="text/css" />
+<link rel="stylesheet" href="<?php echo iCMS_UI;?>/iCMS-6.0.0.css" type="text/css" />
 <!--[if lt IE 9]>
-  <script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
+  <script src="<?php echo iCMS_UI;?>/ie/html5shiv.min.js"></script>
+  <script src="<?php echo iCMS_UI;?>/ie/respond.min.js"></script>
 <![endif]-->
-<script type="text/javascript" src="<?php echo ACP_UI;?>/jquery/jquery-1.11.0.min.js"></script>
+<script type="text/javascript" src="<?php echo iCMS_UI;?>/jquery-1.11.0.min.js"></script>
+<script type="text/javascript" src="<?php echo iCMS_UI;?>/artDialog-5.0.4/artDialog.min.js"></script>
+<script type="text/javascript" src="<?php echo iCMS_UI;?>/artDialog-5.0.4/artDialog.plugins.min.js"></script>
+<script type="text/javascript" src="<?php echo iCMS_UI;?>/iCMS-6.0.0.js"></script>
 <style>
 body { background-color:#f8f8f8;}
 .iCMS-login {margin: auto;width: 720px;height: 150px;position: absolute;top: 30%;left: 22%;}
@@ -42,12 +48,14 @@ $(function(){
 	$("form").submit(function(){
 		var username = $("#username").val(),password = $("#password").val();
 		if(username==""){
-			alert("请填写账号!!");
+      $(".btn").blur();
+			iCMS.alert("请填写账号!!");
 			$("#username").focus();
 			return false;
 		}
 		if(password==""){
-			alert("请填写密码!!");
+      $(".btn").blur();
+			iCMS.alert("请填写密码!!");
 			$("#password").focus();
 			return false;
 		}
@@ -56,7 +64,7 @@ $(function(){
 				if(json.code=="1"){
 					window.location.href ='<?php echo __SELF__; ?>';
 				}else{
-					alert("账号或密码错误!!");
+					iCMS.alert("账号或密码错误!!");
 				}
 		},'json');
 		return false;

@@ -50,7 +50,7 @@ $(function(){
   				callback: function () {
   			        var a = $("#newdirname"),n = a.val(),d=this;
   			        if(n==""){
-  			        	alert("请输入目录名称!");
+  			        	iCMS.alert("请输入目录名称!");
   			        	a.focus();
   			        	return false;
   			        }else{

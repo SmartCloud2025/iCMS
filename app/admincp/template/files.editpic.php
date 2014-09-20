@@ -14,7 +14,7 @@ iACP::head(false);
 #onBrowse{width:200px;text-align: center;}
 #onBeforeUpload{width: 320px;}
 </style>
-<script src="<?php echo ACP_UI;?>/meitu/xiuxiu.js" type="text/javascript"></script>
+<script src="<?php echo iCMS_UI;?>/meitu/xiuxiu.js" type="text/javascript"></script>
 <div id="onBrowse" class="well" style="display:none;">
   <a class="btn btn-success" href="<?php echo __ADMINCP__; ?>=files&do=picture&from=modal&click=file&callback=xxfile" data-toggle="modal" data-meta='{"width":"75%","height":"480px"}' data-zIndex="9999999" title="从网站选择图片"><i class="fa fa-picture-o"></i> 从网站选择</a>
   <hr />
@@ -112,23 +112,28 @@ $(function() {
       sel_channel          = channel;
 // console.log(sel_channel);
 // console.log(channel, multipleSelection, canClose, id);
-      sel_dialog  = $.dialog({
-        id: 'iPHP_DIALOG',width: 360,height: 150,fixed: true,lock:true,
+//
+      sel_dialog = iCMS.dialog({
         title: 'iCMS - 打开图片',
         content: browse,
       });
+      // sel_dialog  = $.dialog({
+      //   id: 'iPHP-DIALOG',width: 360,height: 150,fixed: true,lock:true,
+      //   title: 'iCMS - 打开图片',
+      //   content: browse,
+      // });
     }
     xiuxiu.onBeforeUpload = function (data, id){
       var size = data.size;
       if(size ><?php echo $max_size;?>) {
-          alert("图片不能超过<?php echo $this->upload_max_filesize;?>");
+          iCMS.alert("图片不能超过<?php echo $this->upload_max_filesize;?>");
          return false;
       }
       return true;
     }
     xiuxiu.onUpload = function(id) {
       var BeforeUpload = document.getElementById("onBeforeUpload");
-      $.dialog({id: 'iPHP_DIALOG',width: 360,height: 150,fixed: true,lock:true,
+      iCMS.dialog({
         title: 'iCMS - 保存图片',
         content: BeforeUpload,
         okValue: '保存',

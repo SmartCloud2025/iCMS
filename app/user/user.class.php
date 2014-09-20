@@ -30,11 +30,11 @@ class user {
 	        case 'url':   return iPHP::router(array('/{uid}/',$uid),iCMS_REWRITE);break;
 	        case 'urls':
 	            return array(
-	                'home'      => iPHP::router(array('/{uid}/',$uid),iCMS_REWRITE),
-	                'favorite'  => iPHP::router(array('/{uid}/favorite/',$uid),iCMS_REWRITE),
-	                'share'     => iPHP::router(array('/{uid}/share/',$uid),iCMS_REWRITE),
-	                'follower'  => iPHP::router(array('/{uid}/follower/',$uid),iCMS_REWRITE),
-	                'following' => iPHP::router(array('/{uid}/following/',$uid),iCMS_REWRITE),
+					'home'     => iPHP::router(array('/{uid}/',$uid),iCMS_REWRITE),
+					'favorite' => iPHP::router(array('/{uid}/favorite/',$uid),iCMS_REWRITE),
+					'share'    => iPHP::router(array('/{uid}/share/',$uid),iCMS_REWRITE),
+					'fans'     => iPHP::router(array('/{uid}/fans/',$uid),iCMS_REWRITE),
+					'follow'   => iPHP::router(array('/{uid}/follow/',$uid),iCMS_REWRITE),
 	            );
 	        break;
 	    }
@@ -54,6 +54,10 @@ class user {
 	public static function follow($uid=0,$fuid=0){
 		$fuid = iDB::row("SELECT `fuid` FROM `#iCMS@__user_follow` where `uid`='{$uid}' and `fuid`='$fuid' limit 1");
 		return $fuid?$fuid:false;
+	}
+	public static function update_count($uid=0,$count=0,$field='article',$math='+'){
+		$math=='-' && $sql = " AND `{$field}`>0";
+		iDB::query("UPDATE `#iCMS@__user` SET `{$field}` = {$field}{$math}{$count} WHERE `uid`='{$uid}' {$sql} LIMIT 1;");
 	}
 	public static function openid($uid=0){
 		$pf = array();
@@ -119,7 +123,10 @@ class user {
 	public static function get($uid=0,$unpass=true){
 		if(empty($uid)) return false;
 
-		$user         = iDB::row("SELECT * FROM `#iCMS@__user` where `uid`='".(int)$uid."' AND `status`='1' limit 1");
+		$user = iDB::row("SELECT * FROM `#iCMS@__user` where `uid`='".(int)$uid."' AND `status`='1' limit 1");
+		if(empty($user)){
+			return false;
+		}
 		$user->gender = $user->gender?'male':'female';
 		$user->avatar = self::router($user->uid,'avatar');
 		$user->url    = self::router($user->uid,'url');

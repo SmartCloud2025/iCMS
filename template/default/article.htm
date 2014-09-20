@@ -57,23 +57,12 @@
           </div>
           <script type="text/javascript">(function(){$("img",".article-detail").each(function(i){iCMS.imgFix(this,550,600);});})($);</script>
           <script type="text/javascript">(function(){$(window).keydown(function(event){switch(event.keyCode) {case 37: window.location.href='<!--{$article.page.prev}-->';break;case 39: window.location.href='<!--{$article.page.next}-->';break;}});})($);</script>
-          <div class="article-pagenav iCMS-pagination clearfix">
+          <div class="article-pagenav iCMS_pagination clearfix">
             <!--{$article.pagenav}-->
           </div>
           <div class="tip clr">提示：键盘也能翻页，试试"← →"键</div>
         </div>
-        <div class="up_down">
-          <a id="up_article" class="up_down_btn" href="javascript:void(0);" style="text-decoration:none;">
-            <i id="up_icon" class="up_down_icon up"></i>
-            <span class="up_down_btn_num" id="up_btn_num"><!--{$article.good}--></span>
-            <span class="up_down_txt" id="up_txt">赞</span>
-          </a>
-          <a id="down_article" class="up_down_btn" href="javascript:void(0);" style="text-decoration:none;">
-            <i id="down_icon" class="up_down_icon down"></i>
-            <span class="up_down_btn_num" id="down_btn_num"><!--{$article.bad}--></span>
-            <span class="up_down_txt" id="down_txt">踩</span>
-          </a>
-        </div>
+        <!--{iCMS:article:up_down}-->
         <div class="prev-next">
           <p>上一篇 : <!--{$article.prev}--></p>
           <p>下一篇 : <!--{$article.next}--></p>
@@ -81,12 +70,9 @@
         <div class="clearfix mb20"></div>
         <div class="comments_list clearfix">
           <h3 class="label label-info"><i class="fa fa-comments"></i> 精彩评论</h3>
-          <!--{iCMS:comment:list display="default" page="true" row="5" appid="$article.appid" iid="$article.id"}-->
+          <!--{iCMS:comment:list display="iframe" page="true" row="5" appid="$article.appid" iid="$article.id"}-->
         </div>
         <div class="comment_form clearfix">
-          <!--{iCMS:comment:form ref="true"}-->
-          <hr/>
-          iframe
           <!--{iCMS:comment:form display="iframe" ref="true"}-->
         </div>
       </div>

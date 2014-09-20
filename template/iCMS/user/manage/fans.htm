@@ -1,5 +1,14 @@
-<div class="profile_title"> <span>我的粉丝</span> </div>
-<script type="text/javascript">
-$(function(){
-})
-</script>
+<div class="title"><span>我的粉丝</span></div>
+<div class="pg_follow w670">
+  <ul class="avatar_list">
+    <!--{iCMS:user:follow loop="true" row="30" fuid=$user.uid}-->
+    <li id="id_<!--{$user_follow.uid}-->">
+    	<a href="<!--{$user_follow.url}-->" target="_blank" ttitle="<!--{$user_follow.name}-->"><img class="avatar_90" data-tip="iCMS:ucard:<!--{$user_follow.uid}-->" src="<!--{$user_follow.avatar}-->"></a>
+		<span class="label label-info"><!--{$user_follow.name}--></span>
+		<a href="javascript:;" data-param='{"fuid":"<!--{$user_follow.uid}-->","fname":"<!--{$user_follow.name}-->"}' class="btn cancel_follow">取消关注</a>
+    </li>
+	<!--{iCMSelse}-->
+	<div class="alert alert-info"><i class="fa fa-ban"></i> 暂无粉丝</div>
+    <!--{/iCMS}-->
+  </ul>
+</div>

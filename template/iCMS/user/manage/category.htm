@@ -9,7 +9,7 @@
 			<span class="add-on"><!--{$user_category.rownum}--></span>
 			<input class="span3" name="name[<!--{$user_category.cid}-->]" type="text" value="<!--{$user_category.name}-->">
 			<span class="add-on" style="width:85px;text-align:left;">文章数:<!--{$user_category.count}--></span>
-			<a href="javascript:;" class="btn del_uc" title="删除">删除</a>
+			<a href="javascript:;" class="btn del_uc" title="删除后请记得更新">删除</a>
 		</div>
 		<div class="clearfix"></div>
 		<!--{/iCMS}-->
@@ -19,6 +19,8 @@
 		</div>
 		<div class="clearfix"></div>
 		<button class="btn btn-primary" type="submit"><i class="fa fa-check"></i> 更新</button>
+		<div class="clearfix mb10"></div>
+		<div class="alert alert-error">有任何操作，都要记得更新哦！</div>
 	</div>
 </form>
 <script type="text/javascript">

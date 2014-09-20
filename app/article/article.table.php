@@ -92,13 +92,7 @@ class articleTable {
     public static function del_data($id){
         iDB::query("DELETE FROM `#iCMS@__article_data` WHERE `aid`='$id'");
     }
-    public static function update_category_count($cid,$math='+'){
-        if($math=='-'){
-            $sql = " AND `count`>0";
-        }
-        iDB::query("UPDATE `#iCMS@__category` SET `count` = count".$math."1 WHERE `cid` ='$cid' {$sql}");
 
-    }
     public static function del_filedata($var='',$field='indexid'){
         iDB::query("DELETE FROM `#iCMS@__filedata` WHERE `$field` = '{$var}'");
     }

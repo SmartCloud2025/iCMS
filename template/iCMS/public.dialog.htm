@@ -9,7 +9,7 @@
   </div>
 </div>
 <div id="iCMS-login-box">
-  <div class="iCMS-login-wrap">
+  <div class="iCMS_login_wrap">
     <div class="login_box">
       <p class="login_fail err_uname err_seccode"></p>
       <div class="login_form">
@@ -26,7 +26,7 @@
           <dd>验证码：</dd>
           <dt>
           <input id="iCMS-seccode" type="text" maxlength="4" name="seccode" class="r3">
-          <img class="r3" id="iCMS-seccode-img" src="<!--{iCMS:router url='/api/seccode'}-->" /> <a href="javascript:void(0);" id="iCMS-seccode-text" style="float: none">换一张</a>
+          <img class="r3" id="iCMS-seccode-img" src="<!--{iCMS:router url='/api/seccode'}-->" alt="验证码"/> <a href="javascript:;" id="iCMS-seccode-text" style="float: none">换一张</a>
           </dt>
           <!--{/if}-->
           <dd>&nbsp;</dd>
@@ -54,8 +54,8 @@
 <script type="text/javascript">
 <!--{include file="/iCMS/user/login.js"}-->
 </script>
-<div id="iCMS-comment-report">
-  <div class="report_dialog">
+<div id="iCMS-report-box">
+  <div class="iCMS_report_dialog">
     <div class="header">请选择理由</div>
     <ul class="options clearfix">
       <li><label><input value="1" name="reason" type="radio">不友善内容</label></li>

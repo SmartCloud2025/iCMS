@@ -235,8 +235,9 @@ class iPages {
 		}else{
 			$query = array();
 			$total_type ==="G" && $query['total_num'] = $this->total;
-			$query[$this->page_name] ="";
-			$this->url = buildurl($url,$query).'{P}';
+			$query[$this->page_name] ="---PN---";
+			$this->url = buildurl($url,$query);
+			$this->url = str_replace('---PN---','{P}',$this->url);
 		}
 	}
 

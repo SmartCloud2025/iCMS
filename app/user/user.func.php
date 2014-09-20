@@ -13,43 +13,43 @@ function user_list($vars=null){
 	//return iPHP::view('iCMS','public.js');
 }
 function user_category($vars=null){
-	$row      = isset($vars['row'])?(int)$vars['row']:"10";
-	$whereSQL = " WHERE `uid`='".$vars['userid']."'";
-	$rs       = iDB::all("SELECT * FROM `#iCMS@__user_category`{$whereSQL} ORDER BY `cid` ASC LIMIT $row");
-	$_count   = count($rs);
+	$row       = isset($vars['row'])?(int)$vars['row']:"10";
+	$where_sql = "WHERE `uid`='".$vars['userid']."'";
+	$resource  = iDB::all("SELECT * FROM `#iCMS@__user_category` {$where_sql} ORDER BY `cid` ASC LIMIT $row");
 	//iDB::debug(1);
-	for ($i=0;$i<$_count;$i++){
-		$rs[$i]['url']	= iPHP::router(array('/{uid}/{cid}/',array($rs[$i]['uid'],$rs[$i]['cid'])),iCMS_REWRITE);
-		isset($vars['array']) && $array[$rs[$i]['cid']]=$rs[$i];
+	if($resource)foreach ($resource as $key => $value) {
+		$value['url']	= iPHP::router(array('/{uid}/{cid}/',array($value['uid'],$value['cid'])),iCMS_REWRITE);
+		isset($vars['array']) && $array[$value['cid']]=$value;
+		$resource[$key] = $value;
 	}
 	if(isset($vars['array'])){
 		return $array;
 	}
-	return $rs;
+	return $resource;
 }
 function user_follow($vars=null){
 	$row = isset($vars['row'])?(int)$vars['row']:"30";
 	if($vars['fuid']){
-		$whereSQL = " WHERE `fuid`='".$vars['fuid']."'";
+		$where_sql = "WHERE `fuid`='".$vars['fuid']."'";
 	}else{
-		$whereSQL = " WHERE `uid`='".$vars['userid']."'";
+		$where_sql = "WHERE `uid`='".$vars['userid']."'";
 	}
-	$rs     = iDB::all("SELECT * FROM `#iCMS@__user_follow`{$whereSQL} LIMIT $row");
-	$_count = count($rs);
+	$resource = iDB::all("SELECT * FROM `#iCMS@__user_follow` {$where_sql} LIMIT $row");
 	//iDB::debug();
-	for ($i=0;$i<$_count;$i++){
+	if($resource)foreach ($resource as $key => $value) {
 		if($vars['fuid']){
-			$rs[$i]['avatar'] = user::router($rs[$i]['uid'],'avatar');
-			$rs[$i]['url']    = user::router($rs[$i]['uid'],'url');
+			$value['avatar'] = user::router($value['uid'],'avatar');
+			$value['url']    = user::router($value['uid'],'url');
 		}else{
-			$rs[$i]['avatar'] = user::router($rs[$i]['fuid'],'avatar');
-			$rs[$i]['url']    = user::router($rs[$i]['fuid'],'url');
-			$rs[$i]['uid']    = $rs[$i]['fuid'];
-			$rs[$i]['name']   = $rs[$i]['fname'];
+			$value['avatar'] = user::router($value['fuid'],'avatar');
+			$value['url']    = user::router($value['fuid'],'url');
+			$value['uid']    = $value['fuid'];
+			$value['name']   = $value['fname'];
 		}
+		$resource[$key] = $value;
 	}
 	//var_dump($rs);
-	return $rs;
+	return $resource;
 }
 function user_stat($vars=null){
 

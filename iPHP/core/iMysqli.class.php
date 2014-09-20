@@ -10,8 +10,6 @@
 * @package iDB
 * @$Id: iMysql.class.php 2412 2014-05-04 09:52:07Z coolmoo $
 */
-extension_loaded('mysqli') OR die('您的 PHP 环境看起来缺少 MySQL 数据库部分，这对 iPHP 来说是必须的。');
-
 define('OBJECT', 'OBJECT', true);
 define('ARRAY_A', 'ARRAY_A', false);
 define('ARRAY_N', 'ARRAY_N', false);
@@ -36,6 +34,7 @@ class iDB {
     private static $result;
 
     public static function connect() {
+        extension_loaded('mysqli') OR die('您的 PHP 环境看起来缺少 MySQL 数据库部分，这对 iPHP 来说是必须的。');
 
         if(isset($GLOBALS['iPHP_DB'])){
             self::$link = $GLOBALS['iPHP_DB'];
@@ -314,7 +313,7 @@ class iDB {
         var_dump($explain);
         if(!$show) echo "-->\n";
     }
-    
+
     // ==================================================================
     //  Kill cached query results
 
@@ -350,7 +349,7 @@ class iDB {
     public static function print_error($error = '') {
         self::$last_error = self::$link->error;
         $error OR $error  = self::$last_error;
-        
+
         $error = htmlspecialchars($error, ENT_QUOTES);
         $query = htmlspecialchars(self::$last_query, ENT_QUOTES);
         // Is error output turned on or not..

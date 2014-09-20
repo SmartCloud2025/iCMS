@@ -75,5 +75,9 @@ class category {
     	$rootid = $this->parent[$cid];
     	return $rootid?$this->rootid($rootid):$cid;
     }
+    function update_count_one($cid,$math='+'){
+        $math=='-' && $sql = " AND `count`>0";
+        iDB::query("UPDATE `#iCMS@__category` SET `count` = count".$math."1 WHERE `cid` ='$cid' {$sql}");
 
+    }
 }

@@ -101,8 +101,7 @@ iCMS.select('st',"<?php echo $_GET['st'] ; ?>");
       <form action="<?php echo APP_FURI; ?>&do=update" method="post" class="form-inline" id="<?php echo APP_FORMID;?>" target="iPHP_FRAME">
         <div id="category-list" class="tab-content">
           <div id="category-tree" class="row-fluid category-treeview">
-            <ul id="tree">
-            </ul>
+            <ul id="tree"><p id="tree-loading"><img src="<?php echo ACP_UI;?>/loading.gif" /></p></ul>
           </div>
         </div>
         <div class="form-actions">
@@ -156,7 +155,7 @@ iCMS.select('st',"<?php echo $_GET['st'] ; ?>");
                 <div class="input-prepend input-append mt20"> <span class="add-on">全选
                   <input type="checkbox" class="checkAll checkbox" data-target="#<?php echo APP_BOXID;?>" />
                   </span>
-                  <div class="btn-group" id="batch"> <a class="btn dropdown-toggle" data-toggle="dropdown" tabindex="-1"><i class="fa fa-wrench"></i> 批 量 操 作 </a><a class="btn dropdown-toggle" data-toggle="dropdown" tabindex="-1"> <span class="caret"></span></a>
+                  <div class="btn-group" id="iCMS-batch"> <a class="btn dropdown-toggle" data-toggle="dropdown" tabindex="-1"><i class="fa fa-wrench"></i> 批 量 操 作 </a><a class="btn dropdown-toggle" data-toggle="dropdown" tabindex="-1"> <span class="caret"></span></a>
                     <ul class="dropdown-menu">
                       <li><a data-toggle="batch" data-action="merge"><i class="fa fa-random"></i> 合并<?php echo $this->name_text;?></a></li>
                       <li><a data-toggle="batch" data-action="move"><i class="fa fa-fighter-jet"></i> 移动<?php echo $this->name_text;?></a></li>

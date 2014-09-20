@@ -308,7 +308,7 @@ class iDB{
         var_dump($explain);
         if(!$show) echo "-->\n";
     }
-    
+
     // ==================================================================
     //  Kill cached query results
 
@@ -344,7 +344,7 @@ class iDB{
     public static function print_error($error = '') {
         self::$last_error = mysql_error(self::$link);
         $error OR $error      = self::$last_error;
-        
+
         $error    = htmlspecialchars($error, ENT_QUOTES);
         $query  = htmlspecialchars(self::$last_query, ENT_QUOTES);
         // Is error output turned on or not..

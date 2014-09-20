@@ -14,13 +14,13 @@ $(function(){
 
 	$("#iCMS-push").submit(function(){
 		if($("#cid option:selected").attr("value")=="0"){
-			alert("请选择所属版块");
+			iCMS.alert("请选择所属版块");
 			$("#cid").focus();
 			window.scrollTo(0,0);
 			return false;
 		}
 		if($("#title").val()==''){
-			alert("1.标题必填!");
+			iCMS.alert("1.标题必填!");
 			$("#title").focus();
 			return false;
 		}

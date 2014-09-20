@@ -161,8 +161,9 @@ class categoryApp extends category{
                 $data['userid']     = iMember::$userid;
                 $data['creator']    = iMember::$nickname;
                 $data['createtime'] = time();
-                var_dump($data);
-                exit;
+                $data['count']      = '0';
+                $data['comments']   = '0';
+
                 $cid = iDB::insert('category',$data);
                 map::add($pid,$cid);
 	            $this->cache(false,$this->appid);

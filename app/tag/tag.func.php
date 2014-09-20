@@ -50,18 +50,18 @@ function tag_list($vars){
         $offset	= $multi->offset;
 	}
 	if($vars['cache']){
-		$cacheName	= 'tags/'.$md5."/".(int)$GLOBALS['page'];
-		$rs			= iCache::get($cacheName);
+		$cache_name = 'tags/'.$md5."/".(int)$GLOBALS['page'];
+		$resource   = iCache::get($cache_name);
 	}
-	if(empty($rs)){
+	if(empty($resource)){
 		iPHP::app('tag.class','include');
-		$rs = iDB::all("SELECT * FROM `#iCMS@__tags` WHERE {$where_sql} {$orderSQL} LIMIT {$offset},{$maxperpage}");
-		iDB::debug(1);
-		$rs = tag_array($vars,$rs);
-		$vars['cache'] && iCache::set($cacheName,$rs,$cache_time);
+		$resource = iDB::all("SELECT * FROM `#iCMS@__tags` WHERE {$where_sql} {$orderSQL} LIMIT {$offset},{$maxperpage}");
+		//iDB::debug(1);
+		$resource = tag_array($vars,$resource);
+		$vars['cache'] && iCache::set($cache_name,$resource,$cache_time);
 	}
 
-	return $rs;
+	return $resource;
 }
 function tag_flist($vars){
 	$where_sql=" status='1'";
@@ -99,17 +99,17 @@ function tag_flist($vars){
         $offset	= $multi->offset;
 	}
 	if($vars['cache']){
-		$cacheName	= 'tags/'.$md5."/".(int)$GLOBALS['page'];
-		$rs			= iCache::get($cacheName);
+		$cache_name = 'tags/'.$md5."/".(int)$GLOBALS['page'];
+		$resource   = iCache::get($cache_name);
 	}
-	if(empty($rs)){
+	if(empty($resource)){
 		iPHP::app('tag.class','include');
-		$rs		= iDB::all("SELECT * FROM `#iCMS@__ftags` WHERE {$where_sql} {$orderSQL} LIMIT {$offset},{$maxperpage}");
-		$rs		= tag_array($vars,$rs);
-		$vars['cache'] && iCache::set($cacheName,$rs,$cache_time);
+		$resource = iDB::all("SELECT * FROM `#iCMS@__ftags` WHERE {$where_sql} {$orderSQL} LIMIT {$offset},{$maxperpage}");
+		$resource = tag_array($vars,$resource);
+		$vars['cache'] && iCache::set($cache_name,$resource,$cache_time);
 	}
 
-	return $rs;
+	return $resource;
 }
 function tag_search($vars){
 	$SPH	= iCMS::sphinx();
@@ -143,68 +143,66 @@ function tag_search($vars){
 		$SPH->SetFilter('cid',$cids);
     }
     if(isset($vars['startdate'])){
-    	$startime	=strtotime($vars['startdate']);
-    	$enddate	=empty($vars['enddate'])?time():strtotime($vars['enddate']);
+		$startime = strtotime($vars['startdate']);
+		$enddate  = empty($vars['enddate'])?time():strtotime($vars['enddate']);
     	$SPH->SetFilterRange('pubdate',$startime,$enddate);
     }
 	$SPH->SetLimits($start,$maxperpage,10000);
 
-	$orderBy	= '@id DESC, @weight DESC';
-	$orderSQL	= ' order by id DESC';
+	$orderBy  = '@id DESC, @weight DESC';
+	$orderSQL = ' order by id DESC';
 
-	$vars['orderBy'] 	&& $orderBy	= $vars['orderBy'];
-	$vars['orderSQL'] 	&& $orderSQL= ' order by '.$vars['orderSQL'];
+	$vars['orderBy'] && $orderBy	= $vars['orderBy'];
+	$vars['orderSQL']&& $orderSQL= ' order by '.$vars['orderSQL'];
 
 	$vars['pic'] && $SPH->SetFilter('haspic',array(1));
 	$vars['id!'] && $SPH->SetFilter('@id',array($vars['id!']),true);
 
 	$SPH->setSortMode(SPH_SORT_EXTENDED,$orderBy);
 
-	$query	= $vars['q'];
-	$vars['acc'] 	&& 	$query	= '"'.$vars['q'].'"';
-	$vars['@'] 		&& 	$query	= '@('.$vars['@'].') '.$query;
+	$query = $vars['q'];
+	$vars['acc']&& 	$query	= '"'.$vars['q'].'"';
+	$vars['@']  && 	$query	= '@('.$vars['@'].') '.$query;
 
 	$res = $SPH->Query($query,"ladyband_tag");
 
 	if (is_array($res["matches"])){
 		foreach ( $res["matches"] as $docinfo ){
-			$tid[]=$docinfo['id'];
+			$tid[] = $docinfo['id'];
 		}
 		$tids=implode(',',(array)$tid);
 	}
 	if(empty($tids)) return;
 
-	$where_sql=" `id` in($tids)";
-	$offset	= 0;
+	$where_sql = " `id` in($tids)";
+	$offset    = 0;
 	if($vars['page']){
-		$total	= $res['total'];
-		$pagenav= isset($vars['pagenav'])?$vars['pagenav']:"pagenav";
-		$pnstyle= isset($vars['pnstyle'])?$vars['pnstyle']:0;
-        $multi	= iCMS::page(array('total'=>$total,'perpage'=>$maxperpage,'unit'=>iPHP::lang('iCMS:page:list'),'nowindex'=>$GLOBALS['page']));
-        $offset	= $multi->offset;
+		$total   = $res['total'];
+		$pagenav = isset($vars['pagenav'])?$vars['pagenav']:"pagenav";
+		$pnstyle = isset($vars['pnstyle'])?$vars['pnstyle']:0;
+		$multi   = iCMS::page(array('total'=>$total,'perpage'=>$maxperpage,'unit'=>iPHP::lang('iCMS:page:list'),'nowindex'=>$GLOBALS['page']));
+		$offset  = $multi->offset;
 	}
-	$rs	= iDB::all("SELECT * FROM `#iCMS@__tags` WHERE {$where_sql} {$orderSQL} LIMIT {$maxperpage}");
-	$rs	= tag_array($vars,$rs);
-	return $rs;
+	$resource = iDB::all("SELECT * FROM `#iCMS@__tags` WHERE {$where_sql} {$orderSQL} LIMIT {$maxperpage}");
+	$resource = tag_array($vars,$resource);
+	return $resource;
 }
-function tag_array($vars,$rs){
-    $_count		= count($rs);
-    for ($i=0;$i<$_count;$i++){
-		$category		= iCache::get('iCMS/category/'.$rs[$i]['cid']);
-		$tcategory		= iCache::get('iCMS/category/'.$rs[$i]['tcid']);
+function tag_array($vars,$resource){
+    if($resource)foreach ($resource as $key => $value) {
+		$category  = iCache::get('iCMS/category/'.$value['cid']);
+		$tcategory = iCache::get('iCMS/category/'.$value['tcid']);
 
-        $rs[$i]['category']['name']		= $category['name'];
-        $rs[$i]['category']['subname']	= $category['subname'];
-        $rs[$i]['category']['url']		= $category['iurl']->href;
-        $rs[$i]['category']['link']		= "<a href='{$rs[$i]['category']['url']}'>{$rs[$i]['category']['name']}</a>";
+		$value['category']['name']    = $category['name'];
+		$value['category']['subname'] = $category['subname'];
+		$value['category']['url']     = $category['iurl']->href;
+		$value['category']['link']    = "<a href='{$value['category']['url']}'>{$value['category']['name']}</a>";
 
-		$rs[$i]['iurl']					= iURL::get('tag',array($rs[$i],$category,$tcategory));
+		$value['iurl']                = iURL::get('tag',array($value,$category,$tcategory));
 
-		empty($rs[$i]['url']) &&	$rs[$i]['url']	= $rs[$i]['iurl']->href;
-
-		$rs[$i]['pic'] && $rs[$i]['pic']=iFS::fp($rs[$i]['pic'],'+http');
-
-		$rs[$i]['link']	= '<a href="'.$rs[$i]['url'].'" class="tag" target="_self">'.$rs[$i]['name'].'</a> ';
+		empty($value['url']) &&	$value['url'] = $value['iurl']->href;
+		$value['pic'] && $value['pic']=iFS::fp($value['pic'],'+http');
+		$value['link']  = '<a href="'.$value['url'].'" class="tag" target="_self">'.$value['name'].'</a> ';
+		$resource[$key] = $value;
     }
-    return $rs;
+    return $resource;
 }

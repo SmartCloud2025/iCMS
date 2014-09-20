@@ -34,19 +34,23 @@ function comment_list_display($vars){
 	isset($vars['_display']) && $vars['display'] = $vars['_display'];
 	unset($vars['method'],$vars['_display']);
 	$vars['query'] = http_build_query($vars);
-	$vars['param'] = iCMS::app_ref(true);
+	$vars['param'] = array(
+		'suid'  => $vars['suid'],
+		'iid'   => $vars['iid'],
+		'cid'   => $vars['cid'],
+		'appid' => $vars['appid'],
+		'title' => $vars['title'],
+	);
 	iPHP::assign('comment_vars',$vars);
 	iPHP::view("iCMS://comment/{$tpl}.htm");
 }
 function comment_list($vars){
 	if ($vars['display'] && empty($vars['loop'])) {
+		if(empty($vars['_display'])){
+			$_vars = iCMS::app_ref(true);
+			$vars  = array_merge($vars,$_vars);
+		}
 		return comment_list_display($vars);
-	}
-
-	if(isset($vars['vars'])){
-		$_vars = $vars['vars'];
-		unset($vars['vars']);
-	 	$vars = array_merge($vars,$_vars);
 	}
 
 	$where_sql = " `status`='1'";
@@ -75,6 +79,7 @@ function comment_list($vars){
 	$offset	= 0;
 	$limit  = "LIMIT {$maxperpage}";
 	if($vars['page']){
+		isset($vars['total_cache']) && $_GET['total_cahce'] = true;
 		$total  = iPHP::total($md5,"SELECT count(*) FROM `#iCMS@__comment` WHERE {$where_sql} limit 1");
 		$pgconf = array(
 			'total'     => $total,
@@ -89,6 +94,8 @@ function comment_list($vars){
 			$pgconf['nowindex']  = $GLOBALS['pn'];
 		}
 
+		isset($vars['total_cache']) && $pgconf['total_type'] = $vars['total_cache'];
+
 		$multi  = iCMS::page($pgconf);
 		$offset = $multi->offset;
 		$limit  = "LIMIT {$offset},{$maxperpage}";
@@ -99,44 +106,47 @@ function comment_list($vars){
 		iPHP::assign("comment_total",$total);
 	}
 	if($vars['cache']){
-		$cacheName	= 'comment/'.$md5."/".(int)$offset;
-		$rs			= iCache::get($cacheName);
+		$cache_name = 'comment/'.$md5."/".(int)$offset;
+		$resource   = iCache::get($cache_name);
 	}
-	if(empty($rs)){
-		$rs		= iDB::all("SELECT * FROM `#iCMS@__comment` WHERE {$where_sql} {$order_sql} {$limit}");
+	if(empty($resource)){
+		$resource		= iDB::all("SELECT * FROM `#iCMS@__comment` WHERE {$where_sql} {$order_sql} {$limit}");
 		//iDB::debug(1);
-		$_count	= count($rs);
 		$ln		= ($GLOBALS['page']-1)<0?0:$GLOBALS['page']-1;
-		for ($i=0;$i<$_count;$i++){
+		if($resource)foreach ($resource as $key => $value) {
 			if($vars['date_format']){
-				$rs[$i]['addtime'] = get_date($rs[$i]['addtime'],$vars['date_format']);
+				$value['addtime'] = get_date($value['addtime'],$vars['date_format']);
 			}
-			$rs[$i]['url']     = iCMS_API.'?app=comment&iid='.$rs[$i]['iid'].'&appid='.$rs[$i]['appid'].'&cid='.$rs[$i]['cid'];
-			$rs[$i]['lou']     = $total-($i+$ln*$maxperpage);
-			$rs[$i]['content'] = nl2br($rs[$i]['content']);
-			$rs[$i]['user']    = user::info($rs[$i]['userid'],$rs[$i]['name'],$vars['facesize']);
-			$rs[$i]['reply_uid'] && $rs[$i]['reply'] = user::info($rs[$i]['reply_uid'],$rs[$i]['reply_name'],$vars['facesize']);
+			$value['url']     = iCMS_API.'?app=comment&do=goto&iid='.$value['iid'].'&appid='.$value['appid'].'&cid='.$value['cid'];
+			$value['lou']     = $total-($i+$ln*$maxperpage);
+			$value['content'] = nl2br($value['content']);
+			$value['user']    = user::info($value['userid'],$value['name'],$vars['facesize']);
+			$value['reply_uid'] && $value['reply'] = user::info($value['reply_uid'],$value['reply_name'],$vars['facesize']);
 
-			$rs[$i]['total'] = $total;
+			$value['total'] = $total;
 			if($vars['page']){
-				$rs[$i]['page']  = array('total'=>$multi->totalpage,'perpage'=>$multi->perpage);
+				$value['page']  = array('total'=>$multi->totalpage,'perpage'=>$multi->perpage);
 			}
+			$resource[$key] = $value;
 		}
-		$vars['cache'] && iCache::set($cacheName,$rs,$cache_time);
+		$vars['cache'] && iCache::set($cache_name,$resource,$cache_time);
 	}
 
-	return $rs;
+	return $resource;
 }
 function comment_form($vars){
+	if(!iCMS::$hooks['enable_comment']){
+		iPHP::warning('此页面禁止调用 iCMS&#x3a;comment&#x3a;form 标签！');
+	}
 	if($vars['ref']){
 		$_vars = iCMS::app_ref($vars['ref']);
 		unset($vars['ref']);
 		$vars  = array_merge($vars,$_vars);
 	}
-	$vars['iid']   OR iPHP::msg('warning:#:warning:#:iCMS:comment:form 标签出错! 缺少"iid"属性或"iid"值为空.');
-	$vars['cid']   OR iPHP::msg('warning:#:warning:#:iCMS:comment:form 标签出错! 缺少"cid"属性或"cid"值为空.');
-	$vars['appid'] OR iPHP::msg('warning:#:warning:#:iCMS:comment:form 标签出错! 缺少"appid"属性或"appid"值为空.');
-	$vars['title'] OR iPHP::msg('warning:#:warning:#:iCMS:comment:form 标签出错! 缺少"title"属性或"title"值为空.');
+	$vars['iid']   OR iPHP::warning('iCMS&#x3a;comment&#x3a;form 标签出错! 缺少"iid"属性或"iid"值为空.');
+	$vars['cid']   OR iPHP::warning('iCMS&#x3a;comment&#x3a;form 标签出错! 缺少"cid"属性或"cid"值为空.');
+	$vars['appid'] OR iPHP::warning('iCMS&#x3a;comment&#x3a;form 标签出错! 缺少"appid"属性或"appid"值为空.');
+	$vars['title'] OR iPHP::warning('iCMS&#x3a;comment&#x3a;form 标签出错! 缺少"title"属性或"title"值为空.');
 	switch ($vars['display']) {
 		case 'iframe':
 			$tpl        = 'form.iframe';

@@ -143,14 +143,7 @@ class articleApp {
         $rs->mpic  = get_pic($rs->mpic);
         $rs->spic  = get_pic($rs->spic);
         $rs->appid = iCMS_APP_ARTICLE;
-
-        // iCMS::hooks('article',array(
-        //     'appid' => $rs->appid,
-        //     'cid'   => $rs->cid,
-        //     'ctype' => $rs->cid,
-        //     'iid'   => $rs->id,
-        //     'title' => $rs->title,
-        // ));
+        iCMS::hooks('enable_comment',true);
         iPHP::assign('article',(array)$rs);
 
         if($tpl) {

@@ -1,16 +1,5 @@
 (function($) {
-    window.iCMS = {
-        comment:{},
-        config: function(options) {
-            var defaults = {
-                API: '/public/api.php',
-                PUBLIC: '/',
-                COOKIE: 'iCMS_',
-                AUTH:'USER_AUTH',
-            }
-            this.config = $.extend(defaults,options);
-        },
-        user: {
+    iCMS.user = {
             uid: function() {
                 return iCMS.getcookie('userid');
             },
@@ -24,7 +13,7 @@
             data: function(param) {
                 $.get(iCMS.api('user', '&do=data'), param, function(c) {
                     //if(!c.code) return false;
-                    var user_home = $(".iCMS-user-home")
+                    var user_home = $(".iCMS_user_home")
                     user_home.attr("href", c.url);
                     $(".avatar", user_home).attr("src", c.avatar);
                     $(".name", user_home).text(c.nickname);
@@ -42,22 +31,39 @@
                 var $this = $(a),
                     param = iCMS.param($this);
                 param['follow'] = $this.hasClass('follow') ? 1 : 0;
-                $.get(iCMS.api('user', "&do=follow"), param, function(c) {
+                $.post(iCMS.api('user', "&do=follow"), param, function(c) {
                     if (c.code) {
                         $this.removeClass((param['follow'] ? 'follow' : 'unfollow'));
                         $this.addClass((param['follow'] ? 'unfollow' : 'follow'));
                     } else {
                         iCMS.alert(c.msg);
-                        //iCMS.dialog(c.msg);
                         return false;
                     }
                     // window.location.href = c.forward
                 }, 'json');
             }
-        },
+    };
+    iCMS.article = {
+            good: function(a) {
+                var $this = $(a),
+                    p = $this.parent(),
+                    param = iCMS.param(p);
+                param['do'] = 'good';
+                $.get(iCMS.api('article'), param, function(c) {
+                    iCMS.alert(c.msg, c.code);
+                    if (c.code) {
+                        var count = parseInt($('span', $this).text());
+                        $('span', $this).text(count + 1);
+                    } else {
+                        return false;
+                    }
+                }, 'json');
+            }
+    };
+    var _iCMS = {
         report:function(a) {
             var $this = $(a),
-                report_box = document.getElementById("iCMS-comment-report"),
+                report_box = document.getElementById("iCMS-report-box"),
                 report_modal = $this.modal({
                     title: '为什么举报这个评论?',
                     width: "460px",
@@ -90,37 +96,23 @@
                 report_param.action = 'report';
                 $.post(iCMS.api('user'), report_param, function(c) {
                     content.val('');
-                    iCMS.alert(c.msg, c.code);
+                    iCMS.alert(c.msg,c.code);
+                    $("li", report_box).removeClass('checked');
+                    $("[name='reason']", report_box).removeAttr('checked');
                     if(c.code){
                         report_modal.destroy();
                     }
                 }, 'json');
             });
         },
-        article: {
-            good: function(a) {
-                var $this = $(a),
-                    p = $this.parent(),
-                    param = iCMS.param(p);
-                param['do'] = 'good';
-                $.get(iCMS.api('article'), param, function(c) {
-                    iCMS.alert(c.msg, c.code);
-                    if (c.code) {
-                        var count = parseInt($('span', $this).text());
-                        $('span', $this).text(count + 1);
-                    } else {
-                        return false;
-                    }
-                }, 'json');
-            }
-        },
+
         param: function(a) {
             var param = a.attr('data-param') || false;
             if (!param) return {};
             return $.parseJSON(param);
         },
         api: function(app, _do) {
-            return this.config.API + '?app=' + app + (_do || '');
+            return iCMS.config.API + '?app=' + app + (_do || '');
         },
 
         run: function() {
@@ -130,7 +122,7 @@
                 this.user.data();
                 $("#iCMS-nav-login").hide();
                 $("#iCMS-nav-profile").show();
-                this.hover("#iCMS-nav-profile",".iCMS-user-home", "#iCMS-user-menu", 21);
+                this.hover("#iCMS-nav-profile",".iCMS_user_home", "#iCMS-user-menu", 21);
             }
             doc.on("click", '.iCMS-user-follow', function(event) {
                 event.preventDefault();
@@ -167,57 +159,30 @@
             });
             doc.on('click', 'a[name="iCMS-report"]', function(event) {
                 event.preventDefault();
-                iCMS.report(this);
+                if (!iCMS.user_status) {
+                    iCMS.LoginBox();
+                    return false;
+                }
+                window.top.iCMS.report(this);
             });
             $("#iCMS-seccode-img,#iCMS-seccode-text").click(function() {
                 $("#iCMS-seccode-img").attr('src', iCMS.api('public', '&do=seccode&') + Math.random());
             });
-            $(".iCMS-API-iframe").load(function() {
-                $(this).height(0); //用于每次刷新时控制IFRAME高度初始化
-                var height = $(this).contents().height();
-                $(this).height(height);
+            $(".iCMS_API_iframe").load(function() {
+                iCMS.api_iframe_height($(this));
             });
         },
-        alert: function(msg, ok) {
-            var opts = ok ? {
-                label: 'success',
-                icon: 'check'
-            } : {
-                label: 'warning',
-                icon: 'warning'
-            }
-            iCMS.dialog(msg, opts);
-        },
-        dialog: function(msg, options, _parent) {
-            var a = window,
-                defaults = {
-                    id: 'iPHP-DIALOG',
-                    title: 'iCMS - 提示信息',
-                    content: msg,
-                    width: 360,
-                    height: 150,
-                    fixed: true,
-                    lock: true,
-                    time: 300000,
-                    label: 'success',
-                    icon: 'check'
-                },
-                opts = $.extend(defaults, options);
-            _parent = _parent || false;
-            //console.log(opts);
-            if (_parent) a = window.parent
-
-            if (msg.jquery) opts.content = msg.html();
-            if (typeof msg == "string") {
-                opts.content = '<div class=\"iPHP-msg\"><span class=\"label label-' + opts.label + '\"><i class=\"fa fa-' + opts.icon + '\"></i> ' + msg + '</span></div>';
-            }
-            var dialog = a.$.dialog(opts);
+        api_iframe_height:function(a,b){
+            var a = a||window.top.$(b);
+            a.height(0); //用于每次刷新时控制IFRAME高度初始化
+            var height = a.contents().height();
+            a.height(height);
+            //window.top.$('.iCMS_API_iframe-loading').hide();
         },
         LoginBox: function() {
-            //var loginBox    = $('#iCMS-login-box');
-            var loginBox = document.getElementById("iCMS-login-box");
+            var loginBox = window.top.document.getElementById("iCMS-login-box");
             //console.log(typeof(loginBox));
-            window.iCMS_Login_MODAL = $(this).modal({
+            iCMS_Login_MODAL = window.top.$(this).modal({
                 width: "560px",
                 html: loginBox,
                 scroll: true
@@ -249,7 +214,7 @@
         modal: function() {
             $('[data-toggle="modal"]').on("click", function(event) {
                 event.preventDefault();
-                window.iCMS_MODAL = $(this).modal({
+                window.top.iCMS_MODAL = $(this).modal({
                     width: "85%",
                     height: "640px"
                 });
@@ -257,160 +222,6 @@
                 return false;
             });
         },
-        setcookie: function(cookieName, cookieValue, seconds, path, domain, secure) {
-            var expires = new Date();
-            expires.setTime(expires.getTime() + seconds);
-            cookieName = this.config.COOKIE + '_' + cookieName;
-            document.cookie = escape(cookieName) + '=' + escape(cookieValue) + (expires ? '; expires=' + expires.toGMTString() : '') + (path ? '; path=' + path : '/') + (domain ? '; domain=' + domain : '') + (secure ? '; secure' : '');
-        },
-        getcookie: function(name) {
-            name = this.config.COOKIE + '_' + name;
-            var cookie_start = document.cookie.indexOf(name);
-            var cookie_end = document.cookie.indexOf(";", cookie_start);
-            return cookie_start == -1 ? '' : unescape(document.cookie.substring(cookie_start + name.length + 1, (cookie_end > cookie_start ? cookie_end : document.cookie.length)));
-        },
-        random: function(len) {
-            len = len || 16;
-            var chars = "abcdefhjmnpqrstuvwxyz23456789ABCDEFGHJKLMNPQRSTUVWYXZ",
-                code = '';
-            for (i = 0; i < len; i++) {
-                code += chars.charAt(Math.floor(Math.random() * chars.length))
-            }
-            return code;
-        },
-        imgFix: function(im, x, y) {
-            x = x || 99999
-            y = y || 99999
-            im.removeAttribute("width");
-            im.removeAttribute("height");
-            if (im.width / im.height > x / y && im.width > x) {
-                im.height = im.height * (x / im.width)
-                im.width = x
-                im.parentNode.style.height = im.height * (x / im.width) + 'px'
-            } else if (im.width / im.height <= x / y && im.height > y) {
-                im.width = im.width * (y / im.height)
-                im.height = y
-                im.parentNode.style.height = y + 'px'
-            }
-        }
     };
+    iCMS = $.extend(iCMS,_iCMS);//扩展 or 替换 iCMS属性
 })(jQuery);
-
-(function($) {
-    $.fn.modal = function(options) {
-        var im = $(this),
-            defaults = {
-                width: "360px",
-                height: "auto",
-                title: im.attr('title') || "iCMS 提示",
-                href: im.attr('href') || false,
-                target: im.attr('data-target') || "#iCMS-MODAL",
-                zIndex: im.attr('data-zIndex') || false,
-                overflow: im.attr('data-overflow') || false,
-            };
-
-        var meta = im.attr('data-meta') ? $.parseJSON(im.attr('data-meta')) : {};
-        var opts = $.extend(defaults, options, meta);
-        var mOverlay = $('<div id="modal-overlay" class="modal-overlayBG"></div>');
-
-        return im.each(function() {
-
-            var m = $(opts.target),
-                mBody = m.find(".modal-body"),
-                mTitle = m.find(".modal-header h3");
-            opts.title && mTitle.html(opts.title);
-            mBody.empty();
-
-            if (opts.overflow) $("body").css({
-                "overflow-y": "hidden"
-            });
-
-            if (opts.html) {
-                var html = opts.html;
-                if (typeof opts.html == "object") {
-                    if (opts.html.jquery) {
-                        opts.html.show();
-                        html = opts.html.html();
-                    } else {
-                        opts.html.style.display = 'block';
-                    }
-                }
-                mBody.html(html).css({
-                    "overflow-y": "auto"
-                });
-            } else if (opts.href) {
-                var mFrame = $('<iframe class="modal-iframe" frameborder="no" allowtransparency="true" scrolling="auto" hidefocus="" src="' + opts.href + '"></iframe>');
-                mFrameFix = $('<div id="modal-iframeFix" class="modal-iframeFix"></div>');
-                mFrame.appendTo(mBody);
-                mFrameFix.appendTo(mBody);
-            }
-            mOverlay.insertBefore(m).click(function() {
-                im.destroy();
-            });
-            $('[data-dismiss="modal"][aria-hidden="true"]').on('click', function() {
-                im.destroy();
-            });
-            im.size = function(o) {
-                var opts = $.extend(opts, o);
-                opts.zIndex && m.css({
-                    "cssText": 'z-index:' + opts.zIndex + '!important'
-                });
-                m.css({
-                    width: opts.width
-                });
-                mBody.height(opts.height);
-                var left = ($(window).width() - m.width()) / 2,
-                    top = ($(window).height() - m.height()) / 2;
-                m.css({
-                    "position": "fixed",
-                    left: left + "px",
-                    top: top + "px"
-                });
-
-                //console.log({left:left+"px",top:top+"px"});
-
-            };
-            im.destroy = function() {
-                window.stop ? window.stop() : document.execCommand("Stop");
-                m.hide();
-                mOverlay.remove();
-                m.find(".modal-header h3").html("iCMS 提示");
-                if (opts.overflow) {
-                    $("body").css({
-                        "overflow-y": "auto"
-                    });
-                }
-            };
-            im.size(opts);
-            m.show();
-            return im;
-        });
-    }
-})(jQuery);
-
-function pad(num, n) {
-    num = num.toString();
-    return Array(n > num.length ? (n - ('' + num).length + 1) : 0).join(0) + num;
-}
-
-$(function(){
-    if(!placeholderSupport()){   // 判断浏览器是否支持 placeholder
-        $('[placeholder]').focus(function() {
-            var input = $(this);
-            if (input.val() == input.attr('placeholder')) {
-                input.val('');
-                input.removeClass('placeholder');
-            }
-        }).blur(function() {
-            var input = $(this);
-            if (input.val() == '' || input.val() == input.attr('placeholder')) {
-                input.addClass('placeholder');
-                input.val(input.attr('placeholder'));
-            }
-        }).blur();
-    };
-})
-
-function placeholderSupport() {
-    return 'placeholder' in document.createElement('input');
-}

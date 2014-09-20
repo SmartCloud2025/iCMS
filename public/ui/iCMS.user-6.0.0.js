@@ -29,7 +29,7 @@
             }
             // console.log(param);
 
-            var spike = '<i class="iCMS-icon iCMS-icon-spike commentApp-bubble" style="display: inline; left: 481px;"></i>',
+            var spike = '<i class="iCMS_icon iCMS_icon_spike commentApp-bubble" style="display: inline; left: 481px;"></i>',
                 box = $('<div class="commentApp-box">'),
                 list = $('<div class="commentApp-list">'),
                 form = $('<div class="commentApp-form">');
@@ -246,15 +246,15 @@
                                 '<div class="commentApp-ft">' +
                                 '<span class="date">' + c.addtime + '</span>' +
                                 '<a href="javascript:;" class="reply commentApp-op-link" name="reply_comment" data-param=\'{"uid":"' + c.user.uid + '","name":"' + c.user.name + '"}\'>' +
-                                '<i class="iCMS-icon iCMS-icon-comment-reply"></i>回复</a>' +
+                                '<i class="iCMS_icon iCMS_icon_comment_reply"></i>回复</a>' +
                                 '<a href="javascript:;" class="like commentApp-op-link" name="like_comment" data-param=\'{"id":"' + c.id + '"}\'>' +
-                                '<i class="iCMS-icon iCMS-icon-comment-like"></i>赞</a>';
+                                '<i class="iCMS_icon iCMS_icon_comment_like"></i>赞</a>';
                             if (c.up > 1) {
                                 item += '<span class="like-num" data-tip="iCMS:s:' + c.up + ' 人觉得这个很赞">' +
                                     '<em>' + c.up + '</em> <span>赞</span></span>';
                             }
                             item += '<a href="javascript:;" name="report_comment" data-param=\'{"id":"' + c.id + '","uid":"' + c.user.uid + '"}\' class="report commentApp-op-link needsfocus">' +
-                                '<i class="iCMS-icon iCMS-icon-report"></i>举报</a>' +
+                                '<i class="iCMS_icon iCMS_icon_report"></i>举报</a>' +
                                 '</div>' +
                                 '</div>' +
                                 '</div>';

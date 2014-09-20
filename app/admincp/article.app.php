@@ -20,6 +20,7 @@ class articleApp{
         $this->categoryApp = iACP::app('category',iCMS_APP_ARTICLE);
         $this->category    = $this->categoryApp->category;
     }
+
     function do_add(){
         $_GET['cid'] && iACP::CP($_GET['cid'],'ca','page');//添加权限
         $rs      = array();
@@ -88,8 +89,8 @@ class articleApp{
                     articleTable::update(compact('cid'),compact('id'));
 		            if($_cid!=$cid) {
                         map::diff($cid,$_cid,$id);
-                        articleTable::update_category_count($_cid,'-');
-                        articleTable::update_category_count($cid);
+                        $this->categoryApp->update_count_one($_cid,'-');
+                        $this->categoryApp->update_count_one($cid);
 		            }
 		        }
 		        iPHP::success('成功移动到目标栏目!','js:1');
@@ -449,7 +450,7 @@ class articleApp{
             $tagArray && tag::map_iid($tagArray,$aid);
 
             $url OR $this->article_data($body,$aid);
-            articleTable::update_category_count($cid);
+            $this->categoryApp->update_count_one($cid);
             if($callback){
             	return array("code"=>$callback,'indexId'=>$aid);
             }
@@ -483,8 +484,8 @@ class articleApp{
 
             //$ischapter && $this->chapterCount($aid);
             if($_cid!=$cid) {
-                articleTable::update_category_count($_cid,'-');
-                articleTable::update_category_count($cid);
+                $this->categoryApp->update_count_one($_cid,'-');
+                $this->categoryApp->update_count_one($cid);
             }
 
             if(!strstr($this->category[$cid]['contentRule'],'{PHP}')&&!$this->category[$cid]['url']&&$this->category[$cid]['mode']=="1" && $status) {
@@ -542,7 +543,7 @@ class articleApp{
         articleTable::del($id);
         articleTable::del_data($id);
         $msg.= $this->del_msg('文章数据删除');
-        articleTable::update_category_count($art['cid'],'-');
+        $this->categoryApp->update_count_one($art['cid'],'-');
         $msg.= $this->del_msg('栏目数据更新');
         $msg.= $this->del_msg('删除完成');
         return $msg;

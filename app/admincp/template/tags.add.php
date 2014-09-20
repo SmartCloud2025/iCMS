@@ -16,12 +16,12 @@ $(function(){
 	iCMS.select('status',"<?php echo $rs['status'] ; ?>");
 	$("#iCMS-tags").submit(function(){
 		if($("#cid option:selected").val()=="0"){
-			alert("请选择所属栏目");
+			iCMS.alert("请选择所属栏目");
 			$("#cid").focus();
 			return false;
 		}
 		if($("#name").val()==''){
-			alert("标签名称不能为空!");
+			iCMS.alert("标签名称不能为空!");
 			$("#name").focus();
 			return false;
 		}

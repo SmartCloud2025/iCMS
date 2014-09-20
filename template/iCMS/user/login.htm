@@ -2,7 +2,7 @@
 <html lang="zh-CN">
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-    <title><!--{$site.title}-->_<!--{$site.seotitle}--></title>
+    <title>用户登录 <!--{$site.title}-->_<!--{$site.seotitle}--></title>
     <meta name="keywords" content="<!--{$site.keywords}-->" />
     <meta name="description" content="<!--{$site.description}-->"/>
     <meta name="mobile-agent" content="format=html5;url=<!--{$site.url}-->"/>
@@ -34,7 +34,7 @@
                 <!--{if $iCMS.config.user.loginseccode }-->
                 <div class="lg_check"><span>验证码：</span>
                   <input id="iCMS-seccode" type="text" maxlength="4" name="seccode" class="r3">
-                  <img class="r3" id="iCMS-seccode-img" src="<!--{iCMS:router url='/api/seccode'}-->" /> <a href="javascript:void(0);" id="iCMS-seccode-text" style="float: none">换一张</a>
+                  <img class="r3" id="iCMS-seccode-img" src="<!--{iCMS:router url='/api/seccode'}-->"  alt="验证码"/> <a href="javascript:;" id="iCMS-seccode-text" style="float: none">换一张</a>
                 </div>
                 <div class="err_seccode"><span><i class="fa fa-minus-circle"></i> 请输入验证码</span></div>
                 <!--{/if}-->

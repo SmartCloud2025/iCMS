@@ -37,7 +37,7 @@ class userApp {
         $pg OR $pg ='article';
         if (in_array ($pg,$pgArray)) {
             $this->user(true);
-            $funname ='manage_pg_'.$pg;
+            $funname ='__do_manage_'.$pg;
             $class_methods  =  get_class_methods(__CLASS__);
             in_array($funname,$class_methods) && $this->$funname();
             iPHP::assign('pg',$pg);
@@ -89,10 +89,29 @@ class userApp {
         $ud && iPHP::assign('userdata',(array)user::data());
     }
 
-    public function ACTION_manage_category(){
+    private function __do_manage_article(){
+        iPHP::assign('status',isset($_GET['status'])?(int)$_GET['status']:'1');
+        iPHP::assign('cid',(int)$_GET['cid']);
+        iPHP::assign('article',array(
+            'manage' => iPHP::router('/user/article'),
+            'edit'   => iPHP::router('/user/publish'),
+        ));
+        iPHP::app('user.func');
+        iPHP::assign('category',user_category(array('userid'=>user::$userid,'array'=>true)));
+    }
+    private function __do_manage_publish(){
+        $id    = (int)$_GET['id'];
+        iPHP::app('article.table');
+        list($article,$article_data) = articleTable::data($id,0,user::$userid);
+        $cid = empty($article['cid'])?(int)$_GET['cid']:$article['cid'];
+        iPHP::assign('article',$article);
+        iPHP::assign('article_data',$article_data);
+        iPHP::assign('option',$this->select('',$cid));
+    }
+    private function __action_manage_category(){
         $uid        = user::$userid;
-        $name_array = $_POST['name'];
-        $cid_array  = $_POST['_cid'];
+        $name_array = (array)$_POST['name'];
+        $cid_array  = (array)$_POST['_cid'];
         foreach ($name_array as $cid => $name) {
             iDB::query("
                 UPDATE `#iCMS@__user_category`
@@ -114,28 +133,9 @@ class userApp {
         $newname = iS::escapeStr($_POST['newname']);
         $newname && iDB::insert('user_category',array('uid'=>user::$userid, 'name'=>$newname, 'count'=>0));
 
-        iPHP::success('user:category:success','js:1');
+        iPHP::success('user:category:update','js:1');
     }
-    private function manage_pg_article(){
-        iPHP::assign('status',isset($_GET['status'])?(int)$_GET['status']:'1');
-        iPHP::assign('cid',(int)$_GET['cid']);
-        iPHP::assign('article',array(
-            'manage' => iPHP::router('/user/article'),
-            'edit'   => iPHP::router('/user/publish'),
-        ));
-        iPHP::app('user.func');
-        iPHP::assign('category',user_category(array('userid'=>user::$userid,'array'=>true)));
-    }
-    private function manage_pg_publish(){
-        $id    = (int)$_GET['id'];
-        iPHP::app('article.table');
-        list($article,$article_data) = articleTable::data($id,0,user::$userid);
-        $cid = empty($article['cid'])?(int)$_GET['cid']:$article['cid'];
-        iPHP::assign('article',$article);
-        iPHP::assign('article_data',$article_data);
-        iPHP::assign('option',$this->select('',$cid));
-    }
-    public function ACTION_manage_publish(){
+    private function __action_manage_publish(){
         $aid         = (int)$_POST['id'];
         $cid         = (int)$_POST['cid'];
         $_cid        = (int)$_POST['_cid'];
@@ -185,6 +185,7 @@ class userApp {
             map::init('category',iCMS_APP_ARTICLE);
             map::add($cid,$aid);
             iDB::query("UPDATE `#iCMS@__user_category` SET `count` = count+1 WHERE `cid` = '$ucid' AND `uid`='".user::$userid."';");
+            user::update_count(user::$userid,1,'article');
             $lang = $status ? 'user:article:add_success':'user:article:add_examine';
         }else{
             articleTable::update(compact($fields),array('id'=>$aid));
@@ -205,15 +206,14 @@ class userApp {
 
         $pgArray = array('publish','category','article','comment','favorite','share','follow','fans');
         $pg      = iS::escapeStr($_POST['pg']);
-        $funname ='ACTION_manage_'.$pg;
+        $funname ='__action_manage_'.$pg;
         $methods = get_class_methods(__CLASS__);
         if (in_array ($pg,$pgArray) && in_array ($funname,$methods)) {
             $this->$funname();
         }
     }
 
-
-    private function ACTION_profile_base(){
+    private function __action_profile_base(){
         $nickname      = iS::escapeStr($_POST['nickname']);
         $gender        = iS::escapeStr($_POST['gender']);
         $weibo         = iS::escapeStr($_POST['weibo']);
@@ -272,7 +272,7 @@ class userApp {
         }
         iPHP::success('user:profile:success');
     }
-    private function ACTION_profile_custom(){
+    private function __action_profile_custom(){
         iFS::$watermark     = false;
         iFS::$checkFileData = false;
         $dir = get_user_dir(user::$userid,'coverpic');
@@ -293,7 +293,7 @@ class userApp {
         );
        iPHP::js_callback($array);
     }
-    private function ACTION_profile_avatar(){
+    private function __action_profile_avatar(){
         iFS::$watermark     = false;
         iFS::$checkFileData = false;
         $dir = get_user_dir(user::$userid);
@@ -303,7 +303,7 @@ class userApp {
         iPHP::code(1,'user:profile:avatar',$avatarurl,'json');
     }
 
-    private function ACTION_profile_setpassword(){
+    private function __action_profile_setpassword(){
 
         iPHP::seccode($_POST['validCode']) OR iPHP::alert('iCMS:seccode:error');
 
@@ -324,7 +324,7 @@ class userApp {
 
         $pgArray = array('base','avatar','setpassword','bind','custom');
         $pg      = iS::escapeStr($_POST['pg']);
-        $funname ='ACTION_profile_'.$pg;
+        $funname ='__action_profile_'.$pg;
         $methods = get_class_methods(__CLASS__);
         if (in_array ($pg,$pgArray) && in_array ($funname,$methods)) {
             $this->$funname();
@@ -384,10 +384,10 @@ class userApp {
         $regip   = iS::escapeStr(iPHP::getIp());
         $regdate = time();
         $gid     = 0;
-        $fans    = $follow = $credit = $type = 0;
+        $fans    = $follow = $article = $share = $credit = $type = 0;
         $lastloginip = $lastlogintime = '';
         $status = 1;
-        $fields = array('gid', 'username', 'nickname', 'password', 'gender', 'fans', 'follow', 'credit', 'regip', 'regdate', 'lastloginip', 'lastlogintime', 'type', 'status');
+        $fields = array('gid', 'username', 'nickname', 'password', 'gender', 'fans', 'follow', 'article', 'share', 'credit', 'regip', 'regdate', 'lastloginip', 'lastlogintime', 'type', 'status');
         $data   = compact ($fields);
         $uid    = iDB::insert('user',$data);
         user::set_cookie($username,$password,array('uid'=>$uid,'username'=>$username,'nickname'=>$nickname));
@@ -421,7 +421,7 @@ class userApp {
         $content = iS::escapeStr($_POST['content']);
 
         $iid OR iPHP::code(0,'iCMS:error',0,'json');
-        $reason OR $content OR iPHP::code(0,'iCMS:comment:reason_empty',0,'json');
+        $reason OR $content OR iPHP::code(0,'iCMS:report:reason_empty',0,'json');
 
         $addtime = time();
         $ip      = iPHP::getIp();
@@ -431,7 +431,30 @@ class userApp {
         $fields = array('appid', 'userid', 'iid', 'uid', 'reason', 'content', 'ip', 'addtime', 'status');
         $data   = compact ($fields);
         $id     = iDB::insert('user_report',$data);
-        iPHP::code(1,'iCMS:comment:reason_success',$id,'json');
+        iPHP::code(1,'iCMS:report:reason_success',$id,'json');
+    }
+    private function __action_delete_comment(){
+        $id = (int)$_POST['id'];
+        $id OR iPHP::code(0,'iCMS:error',0,'json');
+        $comment = iDB::row("SELECT `appid`,`iid` FROM `#iCMS@__comment` WHERE `userid` = '".user::$userid."' AND `id`='$id' LIMIT 1;");
+
+        iPHP::import(iPHP_APP_CORE .'/iAPP.class.php');
+        $table = app::get_table($comment->appid);
+
+        iDB::query("UPDATE {$table['name']} SET comments = comments-1 WHERE `comments`>0 AND `{$table['primary']}`='{$comment->iid}' LIMIT 1;");
+        iDB::query("DELETE FROM `#iCMS@__comment` WHERE `userid` = '".user::$userid."' AND `id`='$id' LIMIT 1;");
+        iPHP::code(1,0,0,'json');
+    }
+    public function ACTION_delete(){
+        $this->me = user::status(USER_LOGIN_URL,"nologin");
+
+        $pgArray = array('comment');
+        $pg      = iS::escapeStr($_POST['pg']);
+        $funname ='__action_delete_'.$pg;
+        $methods = get_class_methods(__CLASS__);
+        if (in_array ($pg,$pgArray) && in_array ($funname,$methods)) {
+            $this->$funname();
+        }
     }
     public function API_check(){
         $name  = iS::escapeStr($_GET['name']);
@@ -467,9 +490,9 @@ class userApp {
 
         $uid    = (int)$user->uid;
         $name   = $user->nickname;
-        $fuid   = (int)$_GET['fuid'];
-        $fname  = iS::escapeStr($_GET['fname']);
-        $follow = (bool)$_GET['follow'];
+        $fuid   = (int)$_POST['fuid'];
+        $fname  = iS::escapeStr($_POST['fname']);
+        $follow = (bool)$_POST['follow'];
 
         if($follow){
             $check = user::follow($uid,$fuid);
@@ -481,10 +504,14 @@ class userApp {
                 $fields = array('uid','name','fuid','fname');
                 $data   = compact ($fields);
                 iDB::insert('user_follow',$data);
+                user::update_count($uid,1,'follow');
+                user::update_count($fuid,1,'fans');
                 iPHP::code(1,'user:follow:success',0,'json');
             }
         }else{
             iDB::query("DELETE FROM `#iCMS@__user_follow` WHERE `uid` = '$uid' AND `fuid`='$fuid' LIMIT 1;");
+            user::update_count($uid,1,'follow','-');
+            user::update_count($fuid,1,'fans','-');
             iPHP::code(1,0,0,'json');
         }
     }

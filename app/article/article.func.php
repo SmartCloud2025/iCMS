@@ -197,8 +197,8 @@ function article_search($vars){
     return $resource;
 }
 
-function __article($vars,$variable){
-    if($variable)foreach ($variable as $key => $value) {
+function __article($vars,$resource){
+    if($resource)foreach ($resource as $key => $value) {
         if($vars['page']){
             $value['page']  = $GLOBALS['page']?$GLOBALS['page']:1;
             $value['total'] = $total;
@@ -232,4 +232,6 @@ function __article($vars,$variable){
     }
     return $resource;
 }
-
+function article_up_down($vars){
+    return iPHP::view('iCMS://article.up_down.htm');
+}

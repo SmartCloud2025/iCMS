@@ -10,7 +10,7 @@ iACP::head();
 ?>
 <script type="text/javascript">
 $(function(){
-iCMS.select('app',"<?php echo $rs['app'] ; ?>");
+  iCMS.select('app',"<?php echo $rs['app'] ; ?>");
 });
 
 </script>

@@ -7,7 +7,21 @@
  */
 defined('iPHP') OR exit('What are you doing?');
 ?>
+<script type="text/javascript">
+$(function(){
+  var a = $("#iCMS-menu"),b = $("#sidebar");
+  $("[data-menu='m<?php echo iACP::$menu->rootid; ?>']",a).addClass("active");
+  $("[data-menu='m<?php echo iACP::$menu->parentid; ?>']",a).addClass("active");
+  $("[data-menu='m<?php echo iACP::$menu->do_mid; ?>']",a).addClass("active");
 
+  $("[data-menu='m<?php echo iACP::$menu->do_mid; ?>']",b).addClass("active");
+  var c = $("[data-menu='m<?php echo iACP::$menu->parentid; ?>']",b).addClass("active");
+  if(c.hasClass("submenu")){
+    c.addClass("open");
+    $("ul",c).show();
+  }
+})
+</script>
 <div id="header" class="navbar navbar-static-top">
   <div class="navbar-inner">
     <a class="btn btn-navbar" data-toggle="collapse" data-target=".nav-collapse"> <span class="fa fa-bars"></span> </a> <a class="brand iCMS-logo" href="http://www.idreamsoft.com" target="_blank"><img src="<?php echo ACP_UI;?>/iCMS.logo-6.0.png" /></a>

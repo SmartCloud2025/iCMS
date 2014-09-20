@@ -110,7 +110,8 @@ class tagsApp{
         $data   = compact ($fields);
 
 		if(empty($id)){
-            $data['count'] ='0';
+            $data['count']    ='0';
+            $data['comments'] ='0';
             $id = iDB::insert('tags',$data);
 			tag::cache($id,'id');
 
@@ -123,7 +124,7 @@ class tagsApp{
 
 	        iPHP::success('标签添加完成',"url:".APP_URI);
 		}else{
-            unset($data['count']);
+            unset($data['count'],$data['comments']);
             iDB::update('tags', $data, array('id'=>$id));
 			tag::cache($id,'id');
 

@@ -8,11 +8,11 @@
 defined('iPHP') OR exit('What are you doing?');
 iACP::head();
 ?>
-<script type="text/javascript" charset="utf-8" src="app/editor/iCMS.editor-6.0.0.js"></script>
-<script type="text/javascript" charset="utf-8" src="app/editor/ueditor/ueditor.all.min.js"></script>
+<script type="text/javascript" charset="utf-8" src="<?php echo iCMS_UI;?>/iCMS.editor-6.0.0.js"></script>
+<script type="text/javascript" charset="utf-8" src="<?php echo iCMS_UI;?>/ueditor/ueditor.all.min.js"></script>
 <script type="text/javascript">
 $(function(){
-	window.iCMS.fileTypes	= "<?php echo '*.'.str_replace(',',';*.',iCMS::$config['FS']['allow_ext']);?>";
+	iCMS.config.fileTypes	= "<?php echo '*.'.str_replace(',',';*.',iCMS::$config['FS']['allow_ext']);?>";
   iCMS.editor.create();
   $("#title").focus();
 	$(".iCMS-editor-page").change(function(){
@@ -31,7 +31,11 @@ $(function(){
       $.each(prop,function(n,v){
         var mdId='md_'+cid+'_'+n;
         if($("#"+mdId).length==0){
-          var MD_Box='<div class="MD_Box" id="'+mdId+'"><div class="input-prepend input-append">  <span class="add-on">'+v+'</span><textarea  id="md_'+n+'" name="metadata['+n+']" class="metadata span6" style="height: 100px;"></textarea><a class="btn btn-small delMD"><i class="fa fa-trash-o"></i> 删除</a></div><div class="clearfloat mb10"></div></div>';
+          var MD_Box='<div class="MD_Box" id="'+mdId+'">'+
+          '<div class="input-prepend input-append">  '+
+          '<span class="add-on">'+v+'</span><textarea  id="md_'+n+'" name="metadata['+n+']" class="metadata span6" style="height: 100px;"></textarea>'+
+          '<a class="btn btn-small delMD"><i class="fa fa-trash-o"></i> 删除</a>'+
+          '</div><div class="clearfloat mb10"></div></div>';
           $("#article-add-metadata").html(MD_Box);
         }
       })
@@ -49,28 +53,28 @@ $(function(){
   })
 	$("#iCMS-article").submit(function(){
 		if($("#cid option:selected").val()=="0"){
-			alert("请选择所属栏目");
-			$("#cid").focus();
+      $("#cid").focus();
+			iCMS.alert("请选择所属栏目");
 			return false;
 		}
 		if($("#title").val()==''){
-			alert("标题不能为空!");
-			$("#title").focus();
+      $("#title").focus();
+			iCMS.alert("标题不能为空!");
 			return false;
 		}
 		if($("#url").val()==''){
 			var n=$(".iCMS-editor-page:eq(0) option:first").val(),ed = iCMS.editor[n];
 			if(!ed.hasContents()){
-				alert("第"+n+"页内容不能为空!");
+        ed.focus();
+				iCMS.alert("第"+n+"页内容不能为空!");
 				$('#editor-'+n).show();
 				$(".iCMS-editor-page").val(n).trigger("chosen:updated");
-				ed.focus();
 				return false;
 			}
 		}
     if($('#ischapter').prop("checked") && $("#subtitle").val()==''){
-      alert("章节模式下 章节标题不能为空!");
       $("#subtitle").focus();
+      iCMS.alert("章节模式下 章节标题不能为空!");
       return false;
     }
 	});
@@ -146,19 +150,16 @@ function modal_sweditor(el){
 	ed.execCommand("insertHTML",html);
   _modal_dialog("继续上传");
 }
-function _modal_dialog(cancel){
-  $.dialog({
-        id: 'iPHP_DIALOG',width: 360,height: 150,fixed: true,time:3000,
-        title: 'iCMS - 提示信息',
-        content: '<div class=\"iPHP-msg\"><span class=\"label label-success\"><i class=\"fa fa-check\"></i> 插入成功!</span></div>',
-        okValue: '完成',
-        ok: function () {
-          window.iCMS_MODAL.destroy();
-          return true;
-        },
-        cancelValue: cancel,
-        cancel: function(){
-          return true;
+function _modal_dialog(cancel_text){
+  iCMS.dialog('插入成功!',{
+      okValue: '完成',
+      ok: function () {
+        window.iCMS_MODAL.destroy();
+        return true;
+      },
+      cancelValue: cancel_text,
+      cancel: function(){
+        return true;
       }
   });
 }

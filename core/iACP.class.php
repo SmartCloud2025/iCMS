@@ -14,9 +14,9 @@ defined('iPHP') OR exit('What are you doing?');
 
 define('__ADMINCP__',	__SELF__ . '?app');
 define('ACP_PATH',		iPHP_APP_DIR . '/admincp');
-define('ACP_DIR',		'app/admincp');
-define('ACP_UI',        'app/admincp/ui');
-define('ACP_SUPERADMIN', '1');
+define('ACP_DIR',		iCMS_DIR.'app/admincp');
+define('ACP_UI',        iCMS_DIR.'app/admincp/ui');
+define('iCMS_SUPERADMIN_UID', '1');
 
 require iPHP_APP_CORE.'/iMember.class.php';
 require iPHP_APP_CORE.'/iMenu.class.php';
@@ -194,11 +194,20 @@ class iACP {
         }
     }
     public static function is_superadmin(){
-        return (iMember::$data->gid===ACP_SUPERADMIN);
+        return (iMember::$data->gid===iCMS_SUPERADMIN_UID);
     }
     public static function head($navbar = true) {
+        $body_class = '';
+        if(iCMS::$config['other']['sidebar_enable']){
+            iCMS::$config['other']['sidebar'] OR $body_class = 'sidebar-mini';
+            $body_class = iPHP::get_cookie('ACP_sidebar_mini') ?'sidebar-mini':'';
+        }else{
+            $body_class = 'sidebar-display';
+        }
+        $navbar===false && $body_class = 'iframe ';
+
         include self::view("admincp.header");
-        $navbar && include self::view("admincp.navbar");
+        $navbar===true && include self::view("admincp.navbar");
     }
 
     public static function foot() {
