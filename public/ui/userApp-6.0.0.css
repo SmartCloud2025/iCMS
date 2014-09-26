@@ -18,7 +18,7 @@ body { background-color: #fff; background-image: url(img/bg-v6.png); _background
 /* --icon--- */
 .icon_manage { display: inline-block; width: 16px; height: 16px; background: url(img/manage.png) no-repeat top left; }
 .icon_user { display: inline-block; width: 16px; height: 16px; background: url(img/user.png) no-repeat top left; }
-.icon_male, .icon_female { float: left; width: 16px; height: 16px; overflow: hidden; margin-right: 2px; vertical-align: middle; background: url(img/gender.png) no-repeat top left; }
+.icon_male, .icon_female { float: left; width: 16px; height: 16px; overflow: hidden; margin: 4px 2px 0px 5px; vertical-align: middle; background: url(img/gender.png) no-repeat top left; }
 .icon_female { background-position: 4px 0px; }
 .icon_male { background-position: -12px 0px; }
 .icon_edit { display: inline-block; width: 91px; height: 71px; background: url(img/home_edit.png) no-repeat top left; }
@@ -34,7 +34,7 @@ body { background-color: #fff; background-image: url(img/bg-v6.png); _background
 .card_title_name:hover { }
 .card_title_name:visited { text-decoration: none; color: #333 }
 .card_slogan { color: #8E8E8E; font-size: 12px; height: 16px; overflow: hidden; float: left; padding-right: 30px; clear: both; margin-top: 5px; }
-.follow_btn { height: 28px; float: left; margin-left: 20px; _margin-top: 0; }
+.follow_btn { height: 28px; float: left; margin-left: 10px; _margin-top: 0; }
 .follow { width: 72px; background: url(img/follow.png) no-repeat top left; float: left; }
 .follow:hover { background-position: 0 -36px }
 .follow:active { background-position: 0 -73px }
@@ -156,4 +156,4 @@ body { background-color: #fff; background-image: url(img/bg-v6.png); _background
 .pg_follow .avatar_list li { margin-right: 5px; }
 .pg_follow .avatar_list li .label-info { padding: 8px 5px; font-size: 14px; width: 80px; text-align: center; display: block; border-top-left-radius: 0; border-top-right-radius: 0; }
 .pg_follow .avatar_list li .avatar_90 { border-bottom-left-radius: 0; border-bottom-right-radius: 0; }
-.pg_follow .avatar_list li .cancel_follow { display: none; width: 64px; border-top-left-radius: 0; border-top-right-radius: 0; }
+.pg_follow .avatar_list li .btn_follow { display: none; width: 64px; border-top-left-radius: 0; border-top-right-radius: 0; }

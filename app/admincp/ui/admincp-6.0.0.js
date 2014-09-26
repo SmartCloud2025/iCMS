@@ -18,11 +18,11 @@ $(function() {
     iCMS.modal();
     $(':checkbox[data-type!=switch],:radio[data-type!=switch]').uniform();
     $('.ui-datepicker').datepicker({format: 'yyyy-mm-dd'});
-    $('.tip').tooltip({html: 'html'});
-    $('.tip-left').tooltip({placement: 'left',html: 'html'});
-    $('.tip-right').tooltip({placement: 'right',html: 'html'});
-    $('.tip-top').tooltip({placement: 'top',html: 'html'});
-    $('.tip-bottom').tooltip({placement: 'bottom',html: 'html'});
+    $('.tip').tooltip({html:true});
+    $('.tip-left').tooltip({placement:'left',html:true});
+    $('.tip-right').tooltip({placement:'right',html:true});
+    $('.tip-top').tooltip({placement:'top',html:true});
+    $('.tip-bottom').tooltip({placement:'bottom',html:true});
     $(".chosen-select").chosen({disable_search_threshold: 30});
     $(".checkAll").click(function() {
         var target = $(this).attr('data-target'), checkedStatus = $(this).prop("checked");

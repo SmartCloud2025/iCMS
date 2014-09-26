@@ -3,9 +3,9 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
     <title><!--{$category.name}-->_<!--{$site.title}-->_<!--{$site.seotitle}--></title>
-    <meta name="keywords" content="<!--{$article.keywords}-->" />
-    <meta name="description" content="<!--{$article.description}-->"/>
-    <meta name="mobile-agent" content="format=html5;url=<!--{$article.url}-->"/>
+    <meta name="keywords" content="<!--{$category.keywords}-->" />
+    <meta name="description" content="<!--{$category.description}-->"/>
+    <meta name="mobile-agent" content="format=html5;url=<!--{$category.url}-->"/>
     <!--{iCMS:public:ui}-->
     <link rel="stylesheet" href="<!--{$site.urls.public}-->/theme/default.css" type="text/css" />
   </head>
@@ -24,8 +24,8 @@
         <script type="text/javascript">
         var bds_config = {
         'bdText':'一篇好文,推荐之-【'+$('#page h1').text()+'】（来自:<!--{$site.title}-->）',
-        <!--{if $article.pic_url}-->
-        'bdPic' : '<!--{$article.pic_url}-->'
+        <!--{if $category.pic_url}-->
+        'bdPic' : '<!--{$category.pic_url}-->'
         <!--{/if}-->
         }
         document.getElementById("bdshell_js").src = "http://bdimg.share.baidu.com/static/js/shell_v2.js?cdnversion=" + Math.ceil(new Date()/3600000)
@@ -66,6 +66,16 @@
               <!--{/if}-->
               <!--{/iCMS}-->
             </ul>
+          </div>
+        </div>
+        <div class="mod" id="tags">
+          <div class="hd">
+            <h3>相关标签<span>RELATED</span></h3>
+          </div>
+          <div class="bd">
+            <!--{iCMS:tag:list loop="true" row="10" cid="$category.cid"}-->
+            <a href="<!--{$tag_list.url}-->" target="_blank"><!--{$tag_list.name}--></a>
+            <!--{/iCMS}-->
           </div>
         </div>
       </div>

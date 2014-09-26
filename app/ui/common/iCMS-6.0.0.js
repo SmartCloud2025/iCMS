@@ -85,6 +85,16 @@
                 im.height = y
                 im.parentNode.style.height = y + 'px'
             }
+        },
+        json2str:function(o){
+            var arr = [];
+            var fmt = function(s) {
+                if (typeof s == 'object' && s != null) return iCMS.json2str(s);
+                return /^(string|number)$/.test(typeof s) ? '"' + s + '"' : s;
+            }
+            for (var i in o)
+                 arr.push('"' + i + '":'+ fmt(o[i]));
+            return '{' + arr.join(',') + '}';
         }
     };
 })(jQuery);

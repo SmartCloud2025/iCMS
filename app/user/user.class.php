@@ -31,6 +31,7 @@ class user {
 	        case 'urls':
 	            return array(
 					'home'     => iPHP::router(array('/{uid}/',$uid),iCMS_REWRITE),
+					'comment'  => iPHP::router(array('/{uid}/comment/',$uid),iCMS_REWRITE),
 					'favorite' => iPHP::router(array('/{uid}/favorite/',$uid),iCMS_REWRITE),
 					'share'    => iPHP::router(array('/{uid}/share/',$uid),iCMS_REWRITE),
 					'fans'     => iPHP::router(array('/{uid}/fans/',$uid),iCMS_REWRITE),
@@ -52,6 +53,18 @@ class user {
 		return empty($uid)?true:$uid;
 	}
 	public static function follow($uid=0,$fuid=0){
+		if($uid==='all'){ //all fans
+			$rs = iDB::all("SELECT `uid` AS `F`,`name` AS `N` FROM `#iCMS@__user_follow` where `fuid`='{$fuid}'");
+		}
+		if($fuid==='all'){ // all follow
+			$rs = iDB::all("SELECT `fuid` AS `F`,`fname` AS `N` FROM `#iCMS@__user_follow` where `uid`='{$uid}'");
+		}
+		if(isset($rs)){
+			foreach ((array)$rs as $key => $value) {
+				$follow[$value['F']] = $value['N'];
+			}
+			return $follow;
+		}
 		$fuid = iDB::row("SELECT `fuid` FROM `#iCMS@__user_follow` where `uid`='{$uid}' and `fuid`='$fuid' limit 1");
 		return $fuid?$fuid:false;
 	}

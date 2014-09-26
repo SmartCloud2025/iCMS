@@ -8,9 +8,9 @@
  */
 class categoryApp{
 	public $methods	= array('iCMS');
-    function __construct($appid=1) {
-    	$this->appid	= 1;
-    	$appid && $this->appid	= $appid;
+    function __construct($appid = iCMS_APP_ARTICLE) {
+    	$this->appid = iCMS_APP_ARTICLE;
+    	$appid && $this->appid = $appid;
     	$_GET['appid'] && $this->appid	= (int)$_GET['appid'];
     }
     public function do_iCMS($tpl = 'index') {
@@ -18,74 +18,56 @@ class categoryApp{
         $dir = iS::escapeStr($_GET['dir']);
 		if(empty($cid) && $dir){
 			$cid	= iCache::get('iCMS/category/dir2cid',$dir);
+            empty($cid) && iPHP::throwException('运行出错！找不到该栏目<b>dir:'.$dir.'</b> 请更新栏目缓存或者确认栏目是否存在', 20002);
 		}
-		empty($cid) && iPHP::throwException('应用程序运行出错.找不到该栏目: '.($dir?"<b>dir:$dir</b>":"<b>cid:$id</b>").' 请确认栏目是否存在', 3001);
-
     	return $this->category($cid,$tpl);
     }
     public function category($id,$tpl='index') {
-        $rs	= iCache::get('iCMS/category/'.$id);
+        $category = iCache::get('iCMS/category/'.$id);
 
-       	$rs OR iPHP::throwException('应用程序运行出错.找不到该栏目: <b>cid:'. $id.'</b> 请更新栏目缓存或者确认栏目是否存在', 3002);
-       	$rs['outurl']	= $rs['url'];
-        if($tpl && $rs['outurl']) return iPHP::gotourl($rs['outurl']);
+       	$category OR iPHP::throwException('运行出错！找不到该栏目<b>cid:'. $id.'</b> 请更新栏目缓存或者确认栏目是否存在', 20001);
+        if($tpl && $category['outurl']) return iPHP::gotourl($category['outurl']);
 
-        $iurl         = $rs['iurl'];
-        $rs['iurl']   = (array)$iurl;
-        $rs['url']    = $iurl->href;
-        $rs['link']   = "<a href='{$rs['url']}'>{$rs['name']}</a>";
-        $rs['nav']    = $this->nav($rs);
-        $rootidA      = iCache::get('iCMS/category/rootid');
-        $rs['subid']  = $rootidA[$id];
-        $rs['subids'] = implode(',',(array)$rs['subid']);
+        $iurl = $category['iurl'];
+        $tpl && iCMS::gotohtml($iurl->path,$iurl->href,$category['mode']);
 
-        $rs['parent']	= array();
-        if($rs['rootid']){
-        	$rs['parent']			= iCache::get('iCMS/category/'.$rs['rootid']);
-	        $rs['parent']['url']	= $rs['parent']['iurl']->href;
-	        $rs['parent']['link']	= "<a href='{$rs['parent']['url']}'>{$rs['parent']['name']}</a>";
+        $category['iurl']   = (array)$iurl;
+        $category['subid']  = iCache::get('iCMS/category/rootid',$id);
+        $category['subids'] = implode(',',(array)$category['subid']);
+
+        $category['parent'] = array();
+        if($category['rootid']){
+            $_parent = iCache::get('iCMS/category/'.$category['rootid']);
+            $category['parent'] = iCMS::get_category_lite($_parent);
+            unset($_parent);
         }
-        if($rs['password']){
+        if($category['password']){
             $categoryAuth         = iPHP::get_cookie('categoryAuth_'.$id);
             list($CA_cid,$CA_psw) = explode('#=iCMS!=#',authcode($categoryAuth,'DECODE'));
-        	if($CA_psw!=md5($rs['password'])){
+        	if($CA_psw!=md5($category['password'])){
         		iPHP::assign('forward',__REF__);
 	        	iPHP::view('{iTPL}/category.password.htm','category.password');
 	        	exit;
         	}
         }
-        $rs['pic']  = get_pic($rs['pic']);
-        $rs['mpic'] = get_pic($rs['mpic']);
-        $rs['spic'] = get_pic($rs['spic']);
 
-        $rs['body'] && $rs['body'] = iCache::get('iCMS/category.'.$rs['cid'].'/body');
-        ($rs['mode'] && $tpl) && iCMS::setpage($iurl);
-        $rs['appid']  = iCMS_APP_CATEGORY;
-        iCMS::hooks('enable_comment',true);
+        $category['hasbody'] && $category['body'] = iCache::get('iCMS/category/'.$category['cid'].'.body');
+        ($category['mode'] && $tpl) && iCMS::setpage($iurl);
+        $category['appid']  = iCMS_APP_CATEGORY;
 
-		iPHP::assign('category',$rs);
         if($tpl) {
-            iCMS::gotohtml($iurl->path,$iurl->href,$rs['mode']);
+            iCMS::hooks('enable_comment',true);
+            iPHP::assign('category',$category);
+
             if(strstr($tpl,'.htm')){
             	return iPHP::view($tpl,'category');
             }
             $GLOBALS['page']>1 && $tpl='list';
-            $html	= iPHP::view($rs[$tpl.'TPL'],'category.'.$tpl);
-            if(iPHP::$iTPL_mode=="html") return array($html,$rs);
+            $html	= iPHP::view($category[$tpl.'TPL'],'category.'.$tpl);
+            if(iPHP::$iTPL_mode=="html") return array($html,$category);
         }else{
-        	return $rs;
+        	return $category;
         }
     }
-    function nav($C) {
-        if($C) {
-        	$iurl	= (array)$C['iurl'];
-            $_nav	= "<a href='{$iurl['href']}'>{$C['name']}</a>";
-            if($C['rootid']){
-            	$rc	= iCache::get('iCMS/category/'.$C['rootid']);
-            	$nav.=$this->nav($rc).iPHP::lang('iCMS:navTag');
-        	}
-            $nav.= $_nav;
-        }
-        return $nav;
-    }
+
 }

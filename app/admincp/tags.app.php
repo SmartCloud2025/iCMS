@@ -11,7 +11,7 @@
 */
 defined('iPHP') OR exit('What are you doing?');
 
-iPHP::app('tag.class','include');
+iPHP::app('tag.class','static');
 class tagsApp{
     function __construct() {
         $this->id          = (int)$_GET['id'];

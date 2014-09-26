@@ -26,6 +26,7 @@
                 pagenav = $(".commentApp-pagenav",$(html)).html();
                 $(".commentApp-list",pp).html(box);
                 $(".commentApp-pagenav",pp).html(pagenav);
+                iCMS.api_iframe_height(false,'.commentApp-list-iframe');
             });
         },
         reply:function (a) {
@@ -129,7 +130,7 @@
                             item += '<span class="desc">（作者）</span>';
                         }
                         if (c.reply) {
-                            item += '<span class="desc">回复 </span>' +
+                            item += '<span class="desc"> 回复 </span>' +
                                 '<a data-tip="iCMS:ucard:' + c.reply.uid + '" href="' + c.reply.url + '" target="_blank" class="zg-link">' + c.reply.name + '</a>';
                         }
                         item += '</div>' +

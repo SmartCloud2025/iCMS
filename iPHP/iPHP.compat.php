@@ -55,7 +55,13 @@ function bitscale($a) {
 	}
 	return $a;
 }
-
+function num10K($num){
+    if($num<10000){
+        return $num;
+    }else{
+        return round($num/10000,1) . 'K';
+    }
+}
 function format_date($date,$isShowDate=true){
     $limit = time() - $date;
     if($limit < 60){
@@ -71,7 +77,7 @@ function format_date($date,$isShowDate=true){
         return floor($limit/86400) . '天之前';
     }
     if($limit >= 259200 and $isShowDate){
-        return get_date($date,'Y-m-d');
+        return get_date($date,'Y-m-d H:i');
     }else{
         return '';
     }

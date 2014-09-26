@@ -1,5 +1,5 @@
 (function() {
-    var editor_app	= window.iCMS.config.API + '?app=editor';
+    var editor_app	= window.iCMS.config.API + '?app=user';
     window.UEDITOR_CONFIG = {
 		UEDITOR_HOME_URL : window.iCMS.config.UI+'/ueditor/'
         //图片上传配置区
@@ -28,6 +28,7 @@
         //,localDomain:[]                            //本地顶级域名，当开启远程图片抓取时，除此之外的所有其它域名下的图片都将被抓取到本地,默认不抓取127.0.0.1和localhost
 
         //图片在线管理配置区
+        ,imageManagerEnable:false //图片在线管理,默认开启
         ,imageManagerUrl: editor_app + "&do=imageManager" //图片在线管理的处理地址
         ,imageManagerPath: '' //图片修正地址，同imagePath
 

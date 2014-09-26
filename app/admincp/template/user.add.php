@@ -25,7 +25,6 @@ $(function(){
       <ul class="nav nav-tabs" id="user-tab">
         <li class="active"><a href="#user-info" data-toggle="tab"><b>基本信息</b></a></li>
         <li><a href="#user-data" data-toggle="tab"><b>用户资料</b></a></li>
-        <li><a href="#user-cpower" data-toggle="tab"><b>栏目权限</b></a></li>
       </ul>
     </div>
     <div class="widget-content nopadding">

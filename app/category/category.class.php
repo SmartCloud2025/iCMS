@@ -10,7 +10,7 @@ class category {
     public $_array     = array();
     public $rootid     = array();
 
-    function __construct($appid=1) {
+    function __construct($appid=iCMS_APP_ARTICLE) {
         $this->appid = $appid;
         $sql         = "WHERE `appid`='$this->appid'";
         $this->appid === 'all' && $sql='';
@@ -68,7 +68,14 @@ class category {
 	    	}
 	    	$C['metadata']=$mdArray;
 	    }
-		$C['iurl']	= iURL::get('category',$C);
+        $C['iurl']   = iURL::get('category',$C);
+        $C['outurl'] = $C['url'];
+        $C['url']    = $C['iurl']->href;
+        $C['link']   = "<a href='{$C['url']}' target='_blank'>{$C['name']}</a>";
+        $C['pic']    = get_pic($C['pic']);
+        $C['mpic']   = get_pic($C['mpic']);
+        $C['spic']   = get_pic($C['spic']);
+        $C['nav']    = $this->nav($C);
 		return $C;
     }
     function rootid($cid="0"){
@@ -78,6 +85,17 @@ class category {
     function update_count_one($cid,$math='+'){
         $math=='-' && $sql = " AND `count`>0";
         iDB::query("UPDATE `#iCMS@__category` SET `count` = count".$math."1 WHERE `cid` ='$cid' {$sql}");
-
+    }
+    function nav($C) {
+        if($C) {
+            $iurl = (array)$C['iurl'];
+            $_nav = "<a href='{$iurl['href']}'>{$C['name']}</a>";
+            if($C['rootid']){
+                $rc = iCache::get('iCMS/category/'.$C['rootid']);
+                $nav.=$this->nav($rc).iPHP::lang('iCMS:navTag');
+            }
+            $nav.= $_nav;
+        }
+        return $nav;
     }
 }

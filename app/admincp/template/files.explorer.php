@@ -12,7 +12,7 @@ iACP::head($navbar);
 var click_type = {'file':'文件','dir':'目录'};
 
 function modal_callback(obj){
-  var state = window.top.modal_<?php echo $this->callback;?>('<?php echo $this->target; ?>',obj);
+  var state = window.parent.modal_<?php echo $this->callback;?>('<?php echo $this->target; ?>',obj);
   if(state=='off'){
     window.top.iCMS_MODAL.destroy();
   }

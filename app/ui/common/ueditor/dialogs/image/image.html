@@ -15,7 +15,7 @@
             <div id="tabHeads" class="tabhead">
                 <span tabSrc="remote"  class="focus"><var id="lang_tab_remote"></var></span>
                 <span tabSrc="local"><var id="lang_tab_local"></var></span>
-                <span tabSrc="imgManager"><var id="lang_tab_imgManager"></var></span>
+                <span tabSrc="imgManager" id="_imgManager"><var id="lang_tab_imgManager"></var></span>
                 <span tabSrc="imgSearch"><var id="lang_tab_imgSearch"></var></span>
             </div>
             <div id="tabBodys" class="tabbody">
@@ -165,6 +165,9 @@ border-bottom: 1px solid #CDCDCD; height: 36px; }
     <script type="text/javascript" src="image.js"></script>
 
     <script type="text/javascript">
+    	if(!editor.options.imageManagerEnable){
+    		 baidu.g("_imgManager").style.display = "none";
+    	}
         //全局变量
         var imageUrls = [],          //用于保存从服务器返回的图片信息数组
             selectedImageCount = 0,  //当前已选择的但未上传的图片数量

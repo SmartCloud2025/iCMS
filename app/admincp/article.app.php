@@ -20,7 +20,16 @@ class articleApp{
         $this->categoryApp = iACP::app('category',iCMS_APP_ARTICLE);
         $this->category    = $this->categoryApp->category;
     }
-
+    function detag($tags){
+        if($tags{0}.$tags{1}=='[['){
+            $tagsArray = json_decode($tags);
+            foreach ((array)$tagsArray as $k => $_tag) {
+                $_tagArray[] = $_tag[0];
+            }
+            $tags =implode(',', (array)$_tagArray);
+        }
+        return $tags;
+    }
     function do_add(){
         $_GET['cid'] && iACP::CP($_GET['cid'],'ca','page');//添加权限
         $rs      = array();
@@ -39,13 +48,7 @@ class articleApp{
         //$metadata          = array_merge((array)$contentprop,(array)$rs['metadata']);
         $rs['pubdate']       = get_date($rs['pubdate'],'Y-m-d H:i:s');
         $rs['metadata'] && $rs['metadata'] = unserialize($rs['metadata']);
-        if($rs['tags']{0}.$rs['tags']{1}=='[['){
-            $tagsArray   = json_decode($rs['tags']);
-            foreach ((array)$tagsArray as $k => $_tag) {
-                $_tagArray[] = $_tag[0];
-            }
-            $rs['tags']=implode(',', (array)$_tagArray);
-        }
+        $rs['tags'] = $this->detag($rs['tags']);
         if(empty($this->id)){
             $rs['status']  = "1";
             $rs['postype'] = "1";
@@ -139,15 +142,16 @@ class articleApp{
     			}
     		break;
     		case 'tag':
-    			iPHP::app('tag.class','include');
+    			iPHP::app('tag.class','static');
 		     	foreach($_POST['id'] AS $id){
 		    		$art = articleTable::row($id,'tags,cid');
 			        if($_POST['pattern']=='replace') {
-			        	$tags = iS::escapeStr($_POST['mtag']);
+			        	$mtag = iS::escapeStr($_POST['mtag']);
 			        }elseif($_POST['pattern']=='addto') {
-			        	$tags = $art['tags']?$art['tags'].','.iS::escapeStr($_POST['mtag']):iS::escapeStr($_POST['mtag']);
+			        	$mtag = $art['tags']?$art['tags'].','.iS::escapeStr($_POST['mtag']):iS::escapeStr($_POST['mtag']);
 			        }
-			        tag::diff($tags,$art['tags'],iMember::$userid,$id,$this->categoryApp->rootid($art['cid']));
+			        $tags = tag::diff($mtag,$art['tags'],iMember::$userid,$id,$this->categoryApp->rootid($art['cid']));
+                    $tags = addslashes($tags);
                     articleTable::update(compact('tags'),compact('id'));
 		    	}
 		    	iPHP::success('文章标签更改完成!','js:1');
@@ -197,6 +201,7 @@ class articleApp{
     function do_getjson(){
         $id = (int)$_GET['id'];
         $rs = articleTable::row($id);
+        $rs['tags'] && $rs['tags'] = $this->detag($rs['tags']);
         iPHP::json($rs);
     }
     function do_getmeta(){
@@ -215,9 +220,10 @@ class articleApp{
 
 		$art = articleTable::row($id,'tags,cid');
 		if($tags){
-			iPHP::app('tag.class','include');
-			tag::diff($tags,$art['tags'],iMember::$userid,$id,$this->categoryApp->rootid($art['cid']));
-		}
+			iPHP::app('tag.class','static');
+			$tags = tag::diff($tags,$art['tags'],iMember::$userid,$id,$this->categoryApp->rootid($art['cid']));
+		    $tags = addslashes($tags);
+        }
         $data = compact('cid','pid','title','tags','description');
 		if($_POST['status']=="1"){
             $data['status'] = 1;
@@ -433,7 +439,7 @@ class articleApp{
             $ischapter && $chapter = 1;
 
             if($tags){
-                iPHP::app('tag.class','include');
+                iPHP::app('tag.class','static');
                 $tagArray = tag::add($tags,$userid,$aid,$this->categoryApp->rootid($cid));
                 $tags = addslashes(json_encode($tagArray));
             }
@@ -465,7 +471,7 @@ class articleApp{
             iPHP::dialog('success:#:check:#:文章添加完成!<br />10秒后返回文章列表','url:'.$SELFURL,10,$moreBtn);
         }else{
 			if($tags){
-				iPHP::app('tag.class','include');
+				iPHP::app('tag.class','static');
 	            $tags = tag::diff($tags,$_tags,iMember::$userid,$aid,$this->categoryApp->rootid($cid));
 			    $tags = addslashes($tags);
             }
@@ -533,7 +539,7 @@ class articleApp{
             }
         }
         if($art['tags']){
-            iPHP::app('tag.class','include');
+            iPHP::app('tag.class','static');
             $msg.=tag::del($art['tags']);
         }
         articleTable::del_filedata($id,'indexid');

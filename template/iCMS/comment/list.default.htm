@@ -23,7 +23,7 @@
 							<span class="desc">（作者）</span>
 							<!--{/if}-->
 							<!--{if $comment_list.reply}-->
-							<span class="desc">回复 </span>
+							<span class="desc"> 回复 </span>
 							<a data-tip="iCMS:ucard:<!--{$comment_list.reply.uid}-->" href="<!--{$comment_list.reply.url}-->" target="_blank" class="zg-link"><!--{$comment_list.reply.name}--></a>
 							<!--{/if}-->
 						</div>
@@ -43,6 +43,8 @@
 						</div>
 					</div>
 				</div>
+				<!--{iCMSelse}-->
+				<div class="iCMS_no_comment"><i class="fa fa-ban"></i> 暂无评论...</div>
 				<!--{/iCMS}-->
 			</div>
 			<script>

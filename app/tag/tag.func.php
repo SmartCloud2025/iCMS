@@ -54,10 +54,9 @@ function tag_list($vars){
 		$resource   = iCache::get($cache_name);
 	}
 	if(empty($resource)){
-		iPHP::app('tag.class','include');
 		$resource = iDB::all("SELECT * FROM `#iCMS@__tags` WHERE {$where_sql} {$orderSQL} LIMIT {$offset},{$maxperpage}");
 		//iDB::debug(1);
-		$resource = tag_array($vars,$resource);
+		$resource = __tag_array($vars,$resource);
 		$vars['cache'] && iCache::set($cache_name,$resource,$cache_time);
 	}
 
@@ -103,9 +102,9 @@ function tag_flist($vars){
 		$resource   = iCache::get($cache_name);
 	}
 	if(empty($resource)){
-		iPHP::app('tag.class','include');
+		iPHP::app('tag.class','static');
 		$resource = iDB::all("SELECT * FROM `#iCMS@__ftags` WHERE {$where_sql} {$orderSQL} LIMIT {$offset},{$maxperpage}");
-		$resource = tag_array($vars,$resource);
+		$resource = __tag_array($vars,$resource);
 		$vars['cache'] && iCache::set($cache_name,$resource,$cache_time);
 	}
 
@@ -184,25 +183,13 @@ function tag_search($vars){
 		$offset  = $multi->offset;
 	}
 	$resource = iDB::all("SELECT * FROM `#iCMS@__tags` WHERE {$where_sql} {$orderSQL} LIMIT {$maxperpage}");
-	$resource = tag_array($vars,$resource);
+	$resource = __tag_array($vars,$resource);
 	return $resource;
 }
-function tag_array($vars,$resource){
+function __tag_array($vars,$resource){
+	$tagApp = iPHP::app("tag");
     if($resource)foreach ($resource as $key => $value) {
-		$category  = iCache::get('iCMS/category/'.$value['cid']);
-		$tcategory = iCache::get('iCMS/category/'.$value['tcid']);
-
-		$value['category']['name']    = $category['name'];
-		$value['category']['subname'] = $category['subname'];
-		$value['category']['url']     = $category['iurl']->href;
-		$value['category']['link']    = "<a href='{$value['category']['url']}'>{$value['category']['name']}</a>";
-
-		$value['iurl']                = iURL::get('tag',array($value,$category,$tcategory));
-
-		empty($value['url']) &&	$value['url'] = $value['iurl']->href;
-		$value['pic'] && $value['pic']=iFS::fp($value['pic'],'+http');
-		$value['link']  = '<a href="'.$value['url'].'" class="tag" target="_self">'.$value['name'].'</a> ';
-		$resource[$key] = $value;
+		$resource[$key] = $tagApp->value($value);
     }
     return $resource;
 }

@@ -10,7 +10,7 @@ defined('iPHP') OR exit('What are you doing?');
 
 iPHP::app('user.class','static');
 class userApp {
-    public $methods = array('iCMS','home','article','publish','manage','profile','data','check','follow','login','logout','register','agreement','add_category','upload','delete','report');
+    public $methods = array('iCMS','home','article','publish','manage','profile','data','check','follow','login','logout','register','agreement','add_category','upload','imageUp','delete','report','ucard');
     public $openid  = null;
     public $user    = array();
     public $me      = array();
@@ -384,10 +384,10 @@ class userApp {
         $regip   = iS::escapeStr(iPHP::getIp());
         $regdate = time();
         $gid     = 0;
-        $fans    = $follow = $article = $share = $credit = $type = 0;
+        $fans    = $follow = $article = $comments = $share = $credit = $type = 0;
         $lastloginip = $lastlogintime = '';
         $status = 1;
-        $fields = array('gid', 'username', 'nickname', 'password', 'gender', 'fans', 'follow', 'article', 'share', 'credit', 'regip', 'regdate', 'lastloginip', 'lastlogintime', 'type', 'status');
+        $fields = array('gid', 'username', 'nickname', 'password', 'gender', 'fans', 'follow', 'article', 'comments','share', 'credit', 'regip', 'regdate', 'lastloginip', 'lastlogintime', 'type', 'status');
         $data   = compact ($fields);
         $uid    = iDB::insert('user',$data);
         user::set_cookie($username,$password,array('uid'=>$uid,'username'=>$username,'nickname'=>$nickname));
@@ -442,7 +442,9 @@ class userApp {
         $table = app::get_table($comment->appid);
 
         iDB::query("UPDATE {$table['name']} SET comments = comments-1 WHERE `comments`>0 AND `{$table['primary']}`='{$comment->iid}' LIMIT 1;");
+
         iDB::query("DELETE FROM `#iCMS@__comment` WHERE `userid` = '".user::$userid."' AND `id`='$id' LIMIT 1;");
+        user::update_count(user::$userid,1,'comments','-');
         iPHP::code(1,0,0,'json');
     }
     public function ACTION_delete(){
@@ -490,11 +492,16 @@ class userApp {
 
         $uid    = (int)$user->uid;
         $name   = $user->nickname;
-        $fuid   = (int)$_POST['fuid'];
-        $fname  = iS::escapeStr($_POST['fname']);
+        $fuid   = (int)$_POST['uid'];
+        $fname  = iS::escapeStr($_POST['name']);
         $follow = (bool)$_POST['follow'];
 
-        if($follow){
+        if($follow){ //1 取消关注
+            iDB::query("DELETE FROM `#iCMS@__user_follow` WHERE `uid` = '$uid' AND `fuid`='$fuid' LIMIT 1;");
+            user::update_count($uid,1,'follow','-');
+            user::update_count($fuid,1,'fans','-');
+            iPHP::code(1,0,0,'json');
+        }else{
             $check = user::follow($uid,$fuid);
             $uid==$fuid && iPHP::code(0,'user:follow:self',0,'json');
 
@@ -508,11 +515,6 @@ class userApp {
                 user::update_count($fuid,1,'fans');
                 iPHP::code(1,'user:follow:success',0,'json');
             }
-        }else{
-            iDB::query("DELETE FROM `#iCMS@__user_follow` WHERE `uid` = '$uid' AND `fuid`='$fuid' LIMIT 1;");
-            user::update_count($uid,1,'follow','-');
-            user::update_count($fuid,1,'fans','-');
-            iPHP::code(1,0,0,'json');
         }
     }
     public function API_register(){
@@ -543,23 +545,25 @@ class userApp {
     public function API_agreement(){
     	return iPHP::view('iCMS://user/agreement.htm');
     }
-    public function API_upload(){
+    public function API_imageUp(){
         $stateInfo ='SUCCESS';
         $F         = iFS::upload('upfile');
         $F['code']  OR  $stateInfo = $F['state'];
 
         $F['path'] && $url  = iFS::fp($F['path'],'+http');
-        $oname  = $F['oname'];
-        $title  = htmlspecialchars($_POST['pictitle'], ENT_QUOTES);
         iPHP::json(array(
-            'title'        => $title,
-            'originalName' => $oname,
+            'title'        => htmlspecialchars($_POST['pictitle'], ENT_QUOTES),
+            'originalName' => $F['oname'],
             'url'          => $url,
             'state'        => $stateInfo
         ));
-        //{"originalName":"68_3628586_7be5ac630b669d5.jpg","name":"14086682227692.jpg","url":"upload\/20140822\/14086682227692.jpg","size":1003170,"type":".jpg","state":"SUCCESS"}
     }
-
+    public function API_ucard(){
+        $this->user(true);
+        //iPHP::assign('user',(array)user::get($userid));
+        //iPHP::assign('userdata',(array)user::data());
+        return iPHP::view('iCMS://user/card.htm');
+    }
     function select($permission='',$_cid="0",$cid="0",$level = 1) {
         $array = iCache::get('iCMS/category.'.iCMS_APP_ARTICLE.'/array');
         foreach((array)$array[$cid] AS $root=>$C) {

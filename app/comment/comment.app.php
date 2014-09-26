@@ -90,6 +90,7 @@ class commentApp {
         $data   = compact ($fields);
         $id     = iDB::insert('comment',$data);
         iDB::query("UPDATE `#iCMS@__article` SET comments=comments+1 WHERE `id` ='{$iid}' limit 1");
+        user::update_count($userid,1,'comments');
         iPHP::code(1,'iCMS:comment:success',$id,'json');
     }
 

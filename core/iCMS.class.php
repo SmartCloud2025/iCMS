@@ -81,11 +81,11 @@ class iCMS {
             $app = $fi['name'];
     	}
 		if (!in_array($app, self::$apps) && iPHP_DEBUG){
-			iPHP::throwException('应用程序运行出错.找不到应用程序: <b>' . $app.'</b>', 1001);
+			iPHP::throwException('运行出错！找不到应用程序: <b>' . $app.'</b>', 0001);
 		}
         self::$app_path   = iPHP_APP_DIR.'/'.$app;
         self::$app_file   = self::$app_path.'/'.$app.'.app.php';
-        is_file(self::$app_file) OR iPHP::throwException('应用程序运行出错.找不到文件: <b>' . self::$app_name.'.app.php</b>', 1002);
+        is_file(self::$app_file) OR iPHP::throwException('运行出错！找不到文件: <b>' . self::$app_name.'.app.php</b>', 0002);
         $do OR $do        = $_GET['do']?(string)$_GET['do']:iPHP_APP;
         if($_POST['action']){
             $do     = $_POST['action'];
@@ -116,7 +116,7 @@ class iCMS {
         iPHP::$iTPL->_iTPL_VARS = self::$app_vars;
         self::$app = iPHP::app($app);
 		if(self::$app_do && self::$app->methods){
-			in_array(self::$app_do, self::$app->methods) OR iPHP::throwException('应用程序运行出错. <b>' .self::$app_name. '</b> 类中找不到方法定义: <b>'.self::$app_method.'</b>', 1003);
+			in_array(self::$app_do, self::$app->methods) OR iPHP::throwException('运行出错！ <b>' .self::$app_name. '</b> 类中找不到方法定义: <b>'.self::$app_method.'</b>', 0003);
 			$method = self::$app_method;
 			$args 	= self::$app_args;
 			if ($args){
@@ -125,7 +125,7 @@ class iCMS {
 				return self::$app->$method();
 			}
 		}else{
-			iPHP::throwException('应用程序运行出错. <b>' .self::$app_name. '</b> 类中 <b>do'. self::$app_do.'</b> 方法不存在', 1004);
+			iPHP::throwException('运行出错！ <b>' .self::$app_name. '</b> 类中 <b>do'. self::$app_do.'</b> 方法不存在', 0004);
 		}
 
     }
@@ -174,6 +174,16 @@ class iCMS {
         //     return;
         // }
         return $param;
+    }
+    public static function get_category_lite($c){
+        $category = array();
+        $category['name']        = $c['name'];
+        $category['description'] = $c['description'];
+        $category['sname']       = $c['subname'];
+        $category['pic']         = $c['pic'];
+        $category['url']         = $c['iurl']->href;
+        $category['link']        = "<a href='{$category['url']}'>{$c['name']}</a>";
+        return $category;
     }
     public static function get_category_ids($cid = "0",$all=true) {
         $cids   = array();

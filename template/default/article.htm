@@ -39,7 +39,7 @@
               <!-- Baidu Button END -->
             </div>
             <div class="article-tags">
-              <!--{$article.taglink}-->
+              <!--{$article.tags_link}-->
             </div>
           </div>
           <blockquote><!--{$article.description}--></blockquote>
@@ -49,7 +49,7 @@
             <!--{/if}-->
             <div class="l-main-inner-ad"><!--正文内嵌图片广告 250x250--></div>
             <!--{if $article.author}-->
-            <p class="text"><strong><strong>文 /&nbsp; <!--{$article.author}--></strong></strong></p>
+            <p class="text"><strong>文 /&nbsp; <!--{$article.author}--></strong></p>
             <!--{/if}-->
             <div class="article-body">
               <!--{$article.body}-->
@@ -93,6 +93,16 @@
           </ul>
         </div>
       </div>
+        <div class="mod" id="tags">
+          <div class="hd">
+            <h3>相关标签<span>RELATED</span></h3>
+          </div>
+          <div class="bd">
+            <!--{iCMS:tag:list loop="true" row="10" cid="$category.cid"}-->
+            <a href="<!--{$tag_list.url}-->" target="_blank"><!--{$tag_list.name}--></a>
+            <!--{/iCMS}-->
+          </div>
+        </div>
     </div>
   </div>
   <!--{include file="./footer.htm"}-->

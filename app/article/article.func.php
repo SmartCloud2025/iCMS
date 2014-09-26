@@ -8,7 +8,7 @@
  */
 defined('iPHP') OR exit('What are you doing?');
 
-iPHP::app('tag.class','include');
+iPHP::app('tag.class','static');
 function article_list($vars){
     if($vars['loop']==="rel" && empty($vars['id'])){
         return false;
@@ -16,7 +16,7 @@ function article_list($vars){
     $resource  = array();
     $status    = '1';
     isset($vars['status']) && $status = (int)$vars['status'];
-    $where_sql = " `status`='{$status}'";
+    $where_sql = "`status`='{$status}'";
     $vars['call'] =='user'  && $where_sql.= " AND `postype`='0'";
     $vars['call'] =='admin' && $where_sql.= " AND `postype`='1'";
     $hidden    = iCache::get('iCMS/category/hidden');
@@ -59,6 +59,11 @@ function article_list($vars){
         iPHP::import(iPHP_APP_CORE .'/iMAP.class.php');
         map::init('prop',iCMS_APP_ARTICLE);
         $where_sql.= map::exists($vars['pid'],'`#iCMS@__article`.id'); //map 表大的用exists
+    }
+    if(isset($vars['tid'])){
+        iPHP::import(iPHP_APP_CORE .'/iMAP.class.php');
+        map::init('tags',iCMS_APP_ARTICLE);
+        $where_sql.= map::exists($vars['tid'],'`#iCMS@__article`.id'); //map 表大的用exists
     }
 
     $vars['id'] && $where_sql.= iPHP::where($vars['id'],'id');
@@ -104,7 +109,7 @@ function article_list($vars){
     if(empty($resource)){
         $resource = iDB::all("SELECT * FROM `#iCMS@__article` WHERE {$where_sql} {$order_sql} {$limit}");
         //iDB::debug(1);
-        $resource = __article($vars,$resource);
+        $resource = __article_array($vars,$resource);
         $vars['cache'] && iCache::set($cache_name,$resource,$cache_time);
     }
     //print_r($resource);
@@ -193,11 +198,11 @@ function article_search($vars){
         $offset  = $multi->offset;
     }
     $resource = iDB::all("SELECT * FROM `#iCMS@__article` WHERE {$where_sql} {$order_sql} LIMIT {$maxperpage}");
-    $resource = __article($vars,$resource);
+    $resource = __article_array($vars,$resource);
     return $resource;
 }
 
-function __article($vars,$resource){
+function __article_array($vars,$resource){
     if($resource)foreach ($resource as $key => $value) {
         if($vars['page']){
             $value['page']  = $GLOBALS['page']?$GLOBALS['page']:1;
@@ -208,24 +213,31 @@ function __article($vars,$resource){
         $value['mpic'] = get_pic($value['mpic'],$picdata["m"]);
         $value['spic'] = get_pic($value['spic'],$picdata["s"]);
 
-        $category	= iCache::get('iCMS/category/'.$value['cid']);
-        $value['category']['name']  = $category['name'];
-        $value['category']['sname'] = $category['subname'];
-        $value['category']['url']   = $category['iurl']->href;
-        $value['category']['link']  = "<a href='{$value['category']['url']}'>{$value['category']['name']}</a>";
-        $value['url']               = iURL::get('article',array($value,$category))->href;
-        $value['link']              = "<a href='{$value['url']}'>{$value['title']}</a>";
-        $value['commentUrl']        = iCMS_API."?app=comment&indexId=".$value['id']."&categoryId=".$value['cid'];
+        $category = iCache::get('iCMS/category/'.$value['cid']);
+        $value['category'] = iCMS::get_category_lite($category);
+        $value['url']      = iURL::get('article',array($value,$category))->href;
+        $value['link']     = "<a href='{$value['url']}'>{$value['title']}</a>";
+
+        $value['comment'] = array(
+            'url'   => iCMS_API."?app=comment&iid={$value['id']}&cid={$value['cid']}",
+            'count' => $value['comments']
+        );
         if($vars['user']){
             iPHP::app('user.class','static');
             $value['user'] = user::info($value['userid'],$value['author']);
         }
 		if($vars['meta']){
-            $value['metadata'] && $value['metadata'] = unserialize($value['metadata']);
+            $value['metadata'] && $value['meta'] = unserialize($value['metadata']);
         }
-        //$value['description'] && $value['description'] = nl2br($value['description']);
         if($vars['tags']){
-        	$value['tags'] = tag::getag('tags',$value,$category);
+            $tagApp   = iPHP::app("tag");
+            $tagArray = $tagApp->decode($value['tags']);
+            $value['tags'] = array();
+            foreach((array)$tagArray AS $tk=>$tag) {
+                $value['tags'][$tk]['name'] = $tag['name'];
+                $value['tags'][$tk]['url']  = $tag['url'];
+                $value['tags_link'] .= $tag['link'];
+            }
         }
         unset($value['picdata'],$value['metadata'],$value['tags']);
         $resource[$key] = $value;

@@ -11,7 +11,7 @@
 		</dt>
 		<dd>性别：</dd>
 		<dt class="sex" style="line-height: 30px;">
-		<input checked="" name="gender" value="2" type="radio" style="margin:0">
+		<input checked="" name="gender" value="0" type="radio" style="margin:0">
 		女
 		<input  name="gender" type="radio" value="1">
 		男 </dt>
@@ -118,7 +118,7 @@
 		</dt>
 	</dl>
 
-<!-- 
+<!--
 <div class="title mt30"> <span>身材信息</span> <span style="font-weight:normal;font-size:12px;padding-left:10px;">^_^ 用心填写这几项信息，会帮助女人邦给你推荐合适的衣服和鞋子哦~</span>
 		<select name="isSeeFigure" id="isSeeFigure" class="is_show_sel">
 			<option value="1" selected="">我关注的人可见</option>
@@ -194,7 +194,7 @@
 	</dl>
 </form>
 </div>
-<script type="text/javascript" src="http://s.ladyband.cn/js/city_utf8.js?v=1366268649"></script> 
+<script type="text/javascript" src="http://s.ladyband.cn/js/city_utf8.js?v=1366268649"></script>
 <script type="text/javascript">
 $(function(){
 	initPlace('<!--{$userdata.city}-->','<!--{$userdata.province}-->');
@@ -207,7 +207,7 @@ $(function(){
 	<!--{if $userdata.province=="" && $userdata.city==""}-->
 	$.getScript("http://int.dpool.sina.com.cn/iplookup/iplookup.php?format=js", function(){
 		initPlace(remote_ip_info.city,remote_ip_info.province);
-	}); 
+	});
 	<!--{/if}-->
 	<!--{if $userdata.year}-->
 	$("#year").val("<!--{$userdata.year}-->");
@@ -232,7 +232,7 @@ $(function(){
 	<!--{/if}-->
 	$("#month, #day").change(function() {
 		var c = $("#constellation")[0], b = $("#month").val(), d = $("#day").val();
-		c.selectedIndex = b == 1 && d >= 20 || b == 2 && d <= 18 ? 1 : b == 2 && d >= 19 || b == 3 && d <= 20 ? 2 : b == 3 && d >= 21 || b == 4 && d <= 19 ? 3 : b == 4 && d >= 20 || b == 5 && 
+		c.selectedIndex = b == 1 && d >= 20 || b == 2 && d <= 18 ? 1 : b == 2 && d >= 19 || b == 3 && d <= 20 ? 2 : b == 3 && d >= 21 || b == 4 && d <= 19 ? 3 : b == 4 && d >= 20 || b == 5 &&
 		d <= 20 ? 4 : b == 5 && d >= 21 || b == 6 && d <= 21 ? 5 : b == 6 && d >= 22 || b == 7 && d <= 22 ? 6 : b == 7 && d >= 23 || b == 8 && d <= 22 ? 7 : b == 8 && d >= 23 || b == 9 && d <= 22 ? 8 : b == 9 && d >= 23 || b == 10 && d <= 22 ? 9 : b == 10 && d >= 23 || b == 11 && d <= 21 ? 10 : b == 11 && d >= 22 || b == 12 && d <= 21 ? 11 : b == 12 && d >= 22 || b == 1 && d <= 19 ? 12 : 0
 	});
     $("#user_style").focus(function() {
@@ -245,7 +245,7 @@ $(function(){
         })
     });
     $(".tags_list .tag a").click(function() {
-        var c = 
+        var c =
         $("#user_style"), b = $.trim(c.val());
         b == "\u591a\u4e2a\u6807\u7b7e\u4e4b\u95f4\u8bf7\u7528\u9017\u53f7\u9694\u5f00" && (b = "");
         b = b != "" ? b + "," + $(this).text() : $(this).text();
@@ -254,7 +254,7 @@ $(function(){
     $(".tags_list .close").click(function() {
         $(".tags_list").hide()
     })
-	
+
 })
 function isParent(a, b) {
 	for (; a != void 0 && a != null && a.tagName.toUpperCase() != "BODY"; ) {
@@ -264,4 +264,4 @@ function isParent(a, b) {
 	}
 	return !1
 }
-</script> 
+</script>

@@ -144,7 +144,7 @@ class iPHP{
         }
     }
     public static function view($tpl,$p='index') {
-        $tpl OR iPHP::throwException('应用程序运行出错. 请设置模板文件', 0010,'TPL');
+        $tpl OR iPHP::throwException('运行出错！ 请设置模板文件', 001,'TPL');
         if(strpos($tpl,'APP:/')!==false){
             $tpl = 'file::'.self::$app_tpl."||".str_replace('APP:/','',$tpl);
             return iPHP::pl($tpl);
@@ -160,7 +160,7 @@ class iPHP{
         if(@is_file(iPHP_TPL_DIR."/".$tpl)) {
             return iPHP::pl($tpl);
         }else{
-        	iPHP::throwException('应用程序运行出错. 找不到模板文件 <b>' .$tpl. '</b>', 0011,'TPL');
+        	iPHP::throwException('运行出错！ 找不到模板文件 <b>' .$tpl. '</b>', 002,'TPL');
         }
     }
 
@@ -270,11 +270,11 @@ class iPHP{
 		return new $obj_name();
     }
 
-	public static function throwException($msg, $code,$name='',$h404=true) {
+	public static function throwException($msg,$code,$name='',$h404=true) {
 		if(!headers_sent() && $h404){
 			self::http_status(404,$code);
 		}
-	    trigger_error('<B>iPHP '.$name.' Fatal Error:</B>'.$msg. '(' . $code . ')',E_USER_ERROR);
+	    trigger_error(iPHP_APP.''.$msg. '(' . $code . ')',E_USER_ERROR);
 	}
 	public static function p2num($path,$page=false){
 		$page===false && $page	= $GLOBALS['page'];
@@ -683,9 +683,9 @@ function iPHP_ERROR_HANDLER($errno, $errstr, $errfile, $errline){
         case E_CORE_WARNING:       $html.="Core Warning";           break;
         case E_COMPILE_ERROR:      $html.="Compile Error";          break;
         case E_COMPILE_WARNING:    $html.="Compile Warning";        break;
-        case E_USER_ERROR:         $html.="User Error";             break;
-        case E_USER_WARNING:       $html.="User Warning";           break;
-        case E_USER_NOTICE:        $html.="User Notice";            break;
+        case E_USER_ERROR:         $html.="iPHP Error";             break;
+        case E_USER_WARNING:       $html.="iPHP Warning";           break;
+        case E_USER_NOTICE:        $html.="iPHP Notice";            break;
         case E_STRICT:             $html.="Strict Notice";          break;
         case E_RECOVERABLE_ERROR:  $html.="Recoverable Error";      break;
         default:                   $html.="Unknown error ($errno)"; break;
@@ -695,6 +695,7 @@ function iPHP_ERROR_HANDLER($errno, $errstr, $errfile, $errline){
         //print "backtrace:\n";
         $backtrace = debug_backtrace();
         array_shift($backtrace);
+        array_shift($backtrace);
         foreach($backtrace as $i=>$l){
             $html.="[$i] in function <b>{$l['class']}{$l['type']}{$l['function']}</b>";
             $l['file'] && $html.=" in <b>{$l['file']}</b>";
@@ -703,8 +704,8 @@ function iPHP_ERROR_HANDLER($errno, $errstr, $errfile, $errline){
         }
     }
     $html.="\n</pre>";
-    $html	= str_replace('\\','/',$html);
-    $html	= str_replace(iPATH,'iPHP://',$html);
+	$html = str_replace('\\','/',$html);
+	$html = str_replace(iPATH,'iPHP://',$html);
 	@header('HTTP/1.1 500 Internal Server Error');
 	@header('Status: 500 Internal Server Error');
 	@header("Expires: Mon, 26 Jul 1997 05:00:00 GMT");
@@ -713,8 +714,7 @@ function iPHP_ERROR_HANDLER($errno, $errstr, $errfile, $errline){
 	@header("Cache-Control: post-check=0, pre-check=0", false);
 	@header("Pragma: no-cache");
     $_GET['frame'] OR exit($html);
-    $html	= str_replace("\n",'<br />',$html);
-    iPHP::$dialog_lock	= true;
-    iPHP::dialog(array("warning:#:warning-sign:#:".$html,'系统错误!可发邮件到 idreamsoft@qq.com 反馈错误!我们将及时处理'),'js:1',30);
+    iPHP::$dialog_lock = true;
+    iPHP::dialog(array("warning:#:warning-sign:#:".nl2br($html),'系统错误!可发邮件到 idreamsoft@qq.com 反馈错误!我们将及时处理'),'js:1',30);
     exit;
 }

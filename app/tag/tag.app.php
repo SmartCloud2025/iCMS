@@ -11,9 +11,9 @@ class tagApp {
 
     public $methods = array('iCMS');
 
-    function __construct() {}
+    public function __construct() {}
 
-    function do_iCMS($a = null) {
+    public function do_iCMS($a = null) {
         if ($_GET['name']) {
             $name  = $_GET['name'];
             mb_check_encoding($name, "UTF-8") OR $name = mb_convert_encoding($name, "UTF-8", "gbk");
@@ -29,65 +29,51 @@ class tagApp {
         return $this->tag($val, $field);
     }
 
-    function tag($val, $field = 'name', $tpl = 'tag') {
-        $val OR iPHP::throwException('应用程序运行出错.TAG不能为空', 6001);
-        $ftags	= false;
-		if($field == "name"){
-			$rs = iDB::row("SELECT * FROM `#iCMS@__ftags` where `name`='$val' AND `status`='1' LIMIT 1;", ARRAY_A);
-			$rs	&&	$ftags	= true;
-		}
-		if(empty($rs)){
-        	$rs = iDB::row("SELECT * FROM `#iCMS@__tags` where `$field`='$val' LIMIT 1;", ARRAY_A);
-		}
-        if ($field == "name" && empty($rs)) {
-            header('HTTP/1.1 301 Moved Permanently');
-            header('Location: http://www.ladyband.com/search?q=' . $val . '&t=a');
-            exit;
+    public function decode($tags) {
+        if(empty($tags)){
+            return;
         }
-
-        iPHP::http404($rs, 'TAG:empty');
-
-        $category = $tCategory = array();
-        if ($rs['cid']) {
-            $categoryApp = iPHP::app("category");
-            $category = $categoryApp->category($rs['cid'], false);
+        $array  = json_decode($tags);
+        foreach ($array as $key => $value) {
+            $tag_array[$key] = $this->tag($value[1],'id',false);
         }
+        return $tag_array;
+    }
 
-        if ($rs['pid'] == "1" && $rs['tkey'] && $category && $field == "name" && $ftags==false) {
-            $url = "http://www.ladyband.com/" . $category['dir'] . '/' . $rs['tkey'];
-            header('HTTP/1.1 301 Moved Permanently');
-            header('Location: ' . $url);
-            exit;
-        }
-        if ($rs['tcid']) {
-            $tCategory = iCache::get('iCMS/category/' . $rs['tcid']);
-        }
-        $rs['iurl'] = iURL::get('tag', array($rs, $category, $tCategory));
+    public function tag($val, $field = 'name', $tpl = 'tag') {
+        $val OR iPHP::throwException('运行出错！TAG不能为空', 30001);
+        $tag = iDB::row("SELECT * FROM `#iCMS@__tags` where `$field`='$val' LIMIT 1;", ARRAY_A);
 
-        $rs['url'] OR $rs['url'] = $rs['iurl']->href;
-
-
-        $category['mode'] && iCMS::setpage($rs['iurl']);
-
-        if ($rs['related']) {
-            $relArray = explode(',', $rs['related']);
-            iPHP::assign('relArray', $relArray);
-        }
-        $rs['appid']  = iCMS_APP_TAG;
-        iCMS::hooks('enable_comment',true);
-
-        iPHP::assign("tag", $rs);
+        iPHP::http404($tag, 'TAG:empty');
+        $tag = $this->value($tag);
         if ($tpl) {
-            if ($_GET['debug']) {
-                iCMS::clear_compiled_tpl('2013/zt.htm');
-            }
+            iCMS::hooks('enable_comment',true);
+            iPHP::assign("tag", $tag);
             if (strstr($tpl, '.htm')) {
                 return iPHP::view($tpl, 'tag');
             }
-            return iPHP::view($rs['tpl'] ? $rs['tpl'] : '{iTPL}/tag.htm', 'tag');
-        } else {
-            return $rs;
+            $html = iPHP::view($tag['tpl'] ? $tag['tpl'] : '{iTPL}/tag.index.htm', 'tag');
+            if(iPHP::$iTPL_mode=="html") return array($html,$tag);
+        }else{
+            return $tag;
         }
     }
-
+    public function value($tag) {
+        if($tag['cid']){
+            $category        = iCache::get('iCMS/category/' . $tag['cid']);
+            $tag['category'] = iCMS::get_category_lite($category);
+        }
+        if($tag['tcid']){
+            $tag_category        = iCache::get('iCMS/category/' . $tag['tcid']);
+            $tag['tag_category'] = iCMS::get_category_lite($tag_category);
+        }
+        $tag['iurl'] = iURL::get('tag', array($tag, $category, $tag_category));
+        $tag['url'] OR $tag['url'] = $tag['iurl']->href;
+        $tag['link']  = '<a href="'.$tag['url'].'" class="tag" target="_blank">'.$tag['name'].'</a>';
+        $category['mode']&& iCMS::setpage($tag['iurl']);
+        $tag['related']  && $tag['relArray'] = explode(',', $tag['related']);
+        $tag['appid'] = iCMS_APP_TAG;
+        $tag['pic']   = get_pic($tag['pic']);
+        return $tag;
+    }
 }

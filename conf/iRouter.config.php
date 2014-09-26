@@ -36,6 +36,7 @@ return array(
 	'/api/seccode'              => iCMS_API.'?app=public&do=seccode',
 
 	'/api/user'                 => iCMS_API.'?app=user',
+	'/api/user/ucard'           => iCMS_API.'?app=user&do=ucard',
 	'/api/user/register'        => iCMS_API.'?app=user&do=register',
 	'/api/user/logout'          => iCMS_API.'?app=user&do=logout',
 	'/api/user/login'           => iCMS_API.'?app=user&do=login',
@@ -46,10 +47,11 @@ return array(
 	'/api/user/follow'          => iCMS_API.'?app=user&do=follow',
 	'/api/user/check'           => iCMS_API.'?app=user&do=check',
 
-	'/{uid}/'                   => iCMS_URL.'/user.php?do=home&uid={uid}',
-	'/{uid}/share/'             => iCMS_URL.'/user.php?do=share&uid={uid}',
-	'/{uid}/favorite/'          => iCMS_URL.'/user.php?do=favorite&uid={uid}',
-	'/{uid}/fans/'              => iCMS_URL.'/user.php?do=fans&uid={uid}',
-	'/{uid}/follow/'            => iCMS_URL.'/user.php?do=follow&uid={uid}',
-	'/{uid}/{cid}/'             => iCMS_URL.'/user.php?do=home&uid={uid}&cid={cid}',
+	'/{uid}/'          => iCMS_URL.'/user.php?do=home&uid={uid}',
+	'/{uid}/comment/'  => iCMS_URL.'/user.php?do=comment&uid={uid}',
+	'/{uid}/share/'    => iCMS_URL.'/user.php?do=share&uid={uid}',
+	'/{uid}/favorite/' => iCMS_URL.'/user.php?do=favorite&uid={uid}',
+	'/{uid}/fans/'     => iCMS_URL.'/user.php?do=fans&uid={uid}',
+	'/{uid}/follow/'   => iCMS_URL.'/user.php?do=follow&uid={uid}',
+	'/{uid}/{cid}/'    => iCMS_URL.'/user.php?do=home&uid={uid}&cid={cid}',
 );

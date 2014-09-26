@@ -27,14 +27,32 @@
             status: function() {
                 return iCMS.getcookie(iCMS.config.AUTH) ? true : false;
             },
+            ucard:function(){
+              $("[data-tip^='iCMS:ucard']").poshytip({
+                className: 'iCMS_tooltip',
+                alignTo: 'target',alignX: 'center',
+                offsetX: 0,offsetY: 5,
+                fade: false,slide: false,
+                content: function(updateCallback) {
+                    $.get(iCMS.api('user', "&do=ucard"),
+                        {'uid': $(this).attr('data-tip').replace('iCMS:ucard:','')},
+                      function(html) {
+                        updateCallback(html);
+                    });
+                    return '<div class="tip_info"><img src="'+iCMS.config.PUBLIC+'/ui/img/lightgray-loading.gif"><span> 用户信息加载中……</span></div>';
+                }
+              });
+            },
             follow: function(a) {
                 var $this = $(a),
                     param = iCMS.param($this);
-                param['follow'] = $this.hasClass('follow') ? 1 : 0;
+                    //console.log(param);
                 $.post(iCMS.api('user', "&do=follow"), param, function(c) {
                     if (c.code) {
-                        $this.removeClass((param['follow'] ? 'follow' : 'unfollow'));
-                        $this.addClass((param['follow'] ? 'unfollow' : 'follow'));
+                        param['follow'] = (param['follow']=='1'?'0':'1');
+                        iCMS.param($this,param);
+                        $this.removeClass((param['follow']=='1'? 'follow' : 'unfollow'));
+                        $this.addClass((param['follow']=='1' ? 'unfollow' : 'follow'));
                     } else {
                         iCMS.alert(c.msg);
                         return false;
@@ -106,7 +124,11 @@
             });
         },
 
-        param: function(a) {
+        param: function(a,_param) {
+            if(_param){
+                a.attr('data-param',iCMS.json2str(_param));
+                return;
+            }
             var param = a.attr('data-param') || false;
             if (!param) return {};
             return $.parseJSON(param);
@@ -117,6 +139,7 @@
 
         run: function() {
             var doc = $(document);
+            this.user.ucard();
             this.user_status = this.user.status();
             if (this.user_status) {
                 this.user.data();

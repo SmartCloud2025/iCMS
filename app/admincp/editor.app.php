@@ -11,8 +11,8 @@
 */
 class editorApp{
     function __construct() {
-		$this->stateInfo	= 'SUCCESS';
-		iFS::$callback		= true;
+		$this->stateInfo = 'SUCCESS';
+		iFS::$callback   = true;
     }
     function do_imageManager(){
 		$res               = iPHP::folder(iCMS::$config['FS']['dir'],array('jpg','png','gif','jpeg'));
@@ -20,17 +20,15 @@ class editorApp{
 		iPHP::json($res);
     }
     function do_imageUp(){
-    	$F		= iFS::upload('upfile');
-    	$F['code']	OR	$this->stateInfo = $F['state'];
-    	
-    	$F['path'] && $url	= iFS::fp($F['path'],'+http');
-    	$oname	= $F['oname'];
-		$title	= htmlspecialchars($_POST['pictitle'], ENT_QUOTES);
+		$F = iFS::upload('upfile');
+    	$F['code'] OR $this->stateInfo = $F['state'];
+
+    	$F['path'] && $url = iFS::fp($F['path'],'+http');
 		iPHP::json(array(
-					'title'=>$title,
-					'original'=>$oname,
-					'url'=>$url,
-					'state'=>$this->stateInfo
+			'title'    => htmlspecialchars($_POST['pictitle'], ENT_QUOTES),
+			'original' => $F['oname'],
+			'url'      => $url,
+			'state'    => $this->stateInfo
 		));
     }
     function do_fileUp(){
@@ -38,10 +36,10 @@ class editorApp{
 		$F['code']	OR	$this->stateInfo = $F['state'];
 		$F['path'] && $url	= iFS::fp($F['path'],'+http');
     	iPHP::json(array(
-			"url"=>$url,
-			"fileType"=>$F["ext"],
-			"original"=>$F["oname"],
-			"state"=>$this->stateInfo
+			"url"      =>$url,
+			"fileType" =>$F["ext"],
+			"original" =>$F["oname"],
+			"state"    =>$this->stateInfo
 		));
     }
     function do_scrawlUp(){
@@ -57,8 +55,8 @@ class editorApp{
 			$tmp 	= iFS::get_dir()."scrawl/tmp/";
 			iFS::rmdir($tmp);
 	    	iPHP::json(array(
-				"url"=>$url,
-				"state"=>$this->stateInfo
+				"url"   =>$url,
+				"state" =>$this->stateInfo
 			));
 		}
     }

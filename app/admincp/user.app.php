@@ -67,22 +67,22 @@ class userApp{
         $username OR iPHP::alert('账号不能为空');
 
         if(empty($uid)) {
-            iDB::value("SELECT `uid` FROM `#iCMS@__members` where `username` ='$username' LIMIT 1") && iPHP::alert('该账号已经存在');
-            $fields = array('gid', 'username', 'password', 'nickname', 'realname', 'gender', 'info', 'power', 'cpower', 'regtime', 'lastip', 'lastlogintime', 'logintimes', 'post', 'type', 'status');
-            $data   = compact ($fields);
-            $data['regtime']       = time();
-            $data['lastip']        = iPHP::getIp();
-            $data['lastlogintime'] = time();
-            $data['status']        = '1';
-            iDB::insert('members',$data);
-            $msg="账号添加完成!";
+            // iDB::value("SELECT `uid` FROM `#iCMS@__members` where `username` ='$username' LIMIT 1") && iPHP::alert('该账号已经存在');
+            // $fields = array('gid', 'username', 'password', 'nickname', 'realname', 'gender', 'info', 'power', 'cpower', 'regtime', 'lastip', 'lastlogintime', 'logintimes', 'post', 'type', 'status');
+            // $data   = compact ($fields);
+            // $data['regtime']       = time();
+            // $data['lastip']        = iPHP::getIp();
+            // $data['lastlogintime'] = time();
+            // $data['status']        = '1';
+            // iDB::insert('members',$data);
+            // $msg="账号添加完成!";
         }else {
-            iDB::value("SELECT `uid` FROM `#iCMS@__members` where `username` ='$username' AND `uid` !='$uid' LIMIT 1") && iPHP::alert('该账号已经存在');
-            $fields = array('gid','gender','username','nickname','realname','power', 'cpower','info');
-            $data   = compact ($fields);
-            iDB::update('members', $data, array('uid'=>$uid));
-            $password && iDB::query("UPDATE `#iCMS@__members` SET `password`='$password' WHERE `uid` ='".$uid."'");
-            $msg="账号修改完成!";
+            // iDB::value("SELECT `uid` FROM `#iCMS@__members` where `username` ='$username' AND `uid` !='$uid' LIMIT 1") && iPHP::alert('该账号已经存在');
+            // $fields = array('gid','gender','username','nickname','realname','power', 'cpower','info');
+            // $data   = compact ($fields);
+            // iDB::update('members', $data, array('uid'=>$uid));
+            // $password && iDB::query("UPDATE `#iCMS@__members` SET `password`='$password' WHERE `uid` ='".$uid."'");
+            // $msg="账号修改完成!";
         }
         iPHP::success($msg,'url:'.APP_URI);
     }

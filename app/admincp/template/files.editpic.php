@@ -25,8 +25,10 @@ iACP::head(false);
   <a class="btn btn-success" href="<?php echo __ADMINCP__; ?>=files&do=picture&from=modal&click=dir&callback=xxdir" data-toggle="modal" data-meta='{"width":"75%","height":"480px"}' data-zIndex="9999999" title="保存到新目录"><i class="fa fa-save"></i> 保存到..</a>
   <hr />
     <div class="input-prepend input-append">
-    <span class="add-on"><input type="checkbox" class="checkbox" id="watermark"/></span>
-    <span class="add-on">不添加水印</span>
+    <span class="add-on">添加水印</span>
+    <div class="switch">
+      <input type="checkbox" data-type="switch" id="watermark"/>
+    </div>
   </div>
   <div class="clearfloat mb10"></div>
     <div class="input-prepend input-append">
@@ -113,15 +115,11 @@ $(function() {
 // console.log(sel_channel);
 // console.log(channel, multipleSelection, canClose, id);
 //
-      sel_dialog = iCMS.dialog({
+      sel_dialog  = $.dialog({
+        id: 'iPHP-DIALOG',width: 360,height: 150,fixed: true,lock:true,
         title: 'iCMS - 打开图片',
         content: browse,
       });
-      // sel_dialog  = $.dialog({
-      //   id: 'iPHP-DIALOG',width: 360,height: 150,fixed: true,lock:true,
-      //   title: 'iCMS - 打开图片',
-      //   content: browse,
-      // });
     }
     xiuxiu.onBeforeUpload = function (data, id){
       var size = data.size;
@@ -133,7 +131,7 @@ $(function() {
     }
     xiuxiu.onUpload = function(id) {
       var BeforeUpload = document.getElementById("onBeforeUpload");
-      iCMS.dialog({
+      $.dialog({id: 'iPHP-DIALOG',width: 360,height: 150,fixed: true,lock:true,
         title: 'iCMS - 保存图片',
         content: BeforeUpload,
         okValue: '保存',

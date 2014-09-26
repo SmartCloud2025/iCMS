@@ -11,7 +11,7 @@
     <script src="http://s.ladyband.cn/js/jquery.slider.js"></script>
     <script type="text/javascript">
     $(function(){
-      $(".content_player").slider();
+    $(".content_player").slider();
     })
     </script>
   </head>
@@ -51,7 +51,6 @@
             </ul>
           </div>
         </div>
-        
         <!--{iCMS:category:list loop="true" stype='top' row="10" pid='0'}-->
         <div class="mod lbox <!--{cycle values="fl,fr"}-->">
         <div class="hd">
@@ -90,63 +89,67 @@
         <div class="reg_wrap mt5">
           <input type="checkbox" value="1" checked="checked" id="rem_me" class="">
           <label for="rem_me" class="ft6">记住我</label>
-        <a href="/register/" class="reg ft6">立即注册</a> <a href="/usersecurity/findpwd/" class="get_password ft6">忘记密码</a> </div>
-      </form>
-    </div>
-    <div class="clearfix mb10"></div>
-    <div class="mod" id="hot_artical">
-      <div class="hd">
-        <h3>热门文章<span>HOT</span></h3>
+          <a href="/register/" class="reg ft6">立即注册</a> <a href="/usersecurity/findpwd/" class="get_password ft6">忘记密码</a> </div>
+        </form>
       </div>
-      <div class="bd"><!--{iCMS:article:list row="10" orderby="hot"}-->
-      <ul class="artical-top">
-        <!--{if $article_list[0].pic.url}-->
-        <li class="first-item clearfix"><span><a href="<!--{$article_list[0].url}-->" target="_blank"><img src="<!--{$article_list[0].pic.url}-->" style="height: 72px;"></a></span>
-        <p class="title"><a href="<!--{$article_list[0].url}-->" target="_blank"><!--{$article_list[0].title}--></a></p>
-        <p class="text"><!--{$article_list[0].description|html2txt}--></p>
-      </li>
-      <!--{/if}-->
-      <!--{for start=1 stop=10 value=i}-->
-      <li><a href="<!--{$article_list[$i].url}-->" target="_blank"><!--{$article_list[$i].title}--></a></li>
-      <!--{/for}-->
-    </ul>
-  </div>
-</div>
-<div class="mod" id="author_list">
-  <div class="hd">
-    <h3>作家推荐<span>AUTHORS</span></h3>
-  <a href="/?tn=listauthor" target="_blank" class="more">更多&gt;&gt;</a></div>
-  <div class="bd">
-    <!--{iCMS:user:list loop="true" row="10" pid="1"}-->
-    <div class="author-m clearfix">
-      <div class="author-pic"><a href="http://wuli.baijia.baidu.com/" mon="name=recommend&amp;pos=pic&amp;pn=1" target="_blank"><img src="/news/pic/item/960a304e251f95cafa342cddcb177f3e66095293.jpg"></a></div>
-      <div class="author-name"><a href="http://wuli.baijia.baidu.com/" mon="name=recommend&amp;pos=name&amp;pn=1" target="_blank">吴澧</a></div>
-      <div class="author-text">旅美学者，《南方周末》专栏作者</div>
-      <div class="author-artical"><a href="http://wuli.baijia.baidu.com/article/2748" mon="name=recommend&amp;pos=title&amp;pn=1" target="_blank">从英语四六级考试看语文程度</a></div>
+      <div class="clearfix mb10"></div>
+      <div class="mod" id="hot_artical">
+        <div class="hd">
+          <h3>热门文章<span>HOT</span></h3>
+        </div>
+        <div class="bd"><!--{iCMS:article:list row="10" orderby="hot"}-->
+        <ul class="artical-top">
+          <!--{if $article_list[0].pic.url}-->
+          <li class="first-item clearfix"><span><a href="<!--{$article_list[0].url}-->" target="_blank"><img src="<!--{$article_list[0].pic.url}-->" style="height: 72px;"></a></span>
+          <p class="title"><a href="<!--{$article_list[0].url}-->" target="_blank"><!--{$article_list[0].title}--></a></p>
+          <p class="text"><!--{$article_list[0].description|html2txt}--></p>
+        </li>
+        <!--{/if}-->
+        <!--{for start=1 stop=10 value=i}-->
+        <li><a href="<!--{$article_list[$i].url}-->" target="_blank"><!--{$article_list[$i].title}--></a></li>
+        <!--{/for}-->
+      </ul>
     </div>
-    <!--{/iCMS}-->
   </div>
-</div>
-<div class="mod" id="tags">
-  <div class="hd">
-    <h3>热门标签<span>TAG</span></h3>
+  <div class="mod" id="author_list">
+    <div class="hd">
+      <h3>作家推荐<span>AUTHORS</span></h3>
+      <a href="/?tn=listauthor" target="_blank" class="more">更多&gt;&gt;</a></div>
+      <div class="bd">
+        <!--{iCMS:user:list loop="true" row="10" pid="1"}-->
+        <div class="author-m clearfix">
+          <div class="author-pic"><a href="http://wuli.baijia.baidu.com/" mon="name=recommend&amp;pos=pic&amp;pn=1" target="_blank"><img src="/news/pic/item/960a304e251f95cafa342cddcb177f3e66095293.jpg"></a></div>
+          <div class="author-name"><a href="http://wuli.baijia.baidu.com/" mon="name=recommend&amp;pos=name&amp;pn=1" target="_blank">吴澧</a></div>
+          <div class="author-text">旅美学者，《南方周末》专栏作者</div>
+          <div class="author-artical"><a href="http://wuli.baijia.baidu.com/article/2748" mon="name=recommend&amp;pos=title&amp;pn=1" target="_blank">从英语四六级考试看语文程度</a></div>
+        </div>
+        <!--{/iCMS}-->
+      </div>
+    </div>
+    <div class="mod" id="tags">
+      <div class="hd">
+        <h3>热门标签<span>TAG</span></h3>
+      </div>
+      <div class="bd">
+        <!--{iCMS:tag:list loop="true" row="10" orderby="hot"}-->
+        <a href="<!--{$tag_list.url}-->" target="_blank"><!--{$tag_list.name}--></a>
+        <!--{/iCMS}-->
+      </div>
+    </div>
   </div>
-  <div class="bd"> <a href="/?tn=listarticle&amp;labelid=11809" target="_blank" title="共产党">共产党</a> <a href="/?tn=listarticle&amp;labelid=11810" target="_blank" title="国民党">国民党</a> <a href="/?tn=listarticle&amp;labelid=11808" target="_blank" title="台湾">台湾</a> <a href="/?tn=listarticle&amp;labelid=11534" target="_blank" title="中日关系">中日关系</a> <a href="/?tn=listarticle&amp;labelid=11812" target="_blank" title="安倍晋三">安倍晋三</a> <a href="/?tn=listarticle&amp;labelid=11647" target="_blank" title="性观念">性观念</a> <a href="/?tn=listarticle&amp;labelid=11795" target="_blank" title="聚众淫乱">聚众淫乱</a> <a href="/?tn=listarticle&amp;labelid=11589" target="_blank" title="咖啡">咖啡</a> <a href="/?tn=listarticle&amp;labelid=11782" target="_blank" title="狗不理">狗不理</a> <a href="/?tn=listarticle&amp;labelid=11783" target="_blank" title="美国">美国</a> </div>
-</div>
-</div>
-<div class="clearfix mb10"></div>
-<div id="links">
-<div class="mod">
-  <div class="hd">
-    <h3>友情链接<span>LINK</span></h3>
+  <div class="clearfix mb10"></div>
+  <div id="links">
+    <div class="mod">
+      <div class="hd">
+        <h3>友情链接<span>LINK</span></h3>
+      </div>
+      <div class="bd">
+        <!--{iCMS:link loop='true'}-->
+        <a target="_blank" href="<!--{$link.url}-->"><!--{$link.name}--></a>
+        <!--{/iCMS}-->
+      </div>
+    </div>
   </div>
-  <div class="bd">
-    <!--{iCMS:link loop='true'}-->
-    <a target="_blank" href="<!--{$link.url}-->"><!--{$link.name}--></a>
-    <!--{/iCMS}-->
-  </div>
-</div>
-</div>
 </div>
 <!--{include file="./footer.htm"}-->
 </body>

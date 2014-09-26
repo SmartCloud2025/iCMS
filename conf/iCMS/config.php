@@ -1,7 +1,7 @@
 <?php
 defined('iPHP') OR exit('Access Denied');
 return array (
-  'site' =>
+  'site' => 
   array (
     'name' => 'iCMS V6',
     'seotitle' => '网站标题',
@@ -9,28 +9,28 @@ return array (
     'description' => '',
     'icp' => '',
   ),
-  'debug' =>
+  'debug' => 
   array (
     'php' => '1',
     'tpl' => '1',
   ),
-  'template' =>
+  'template' => 
   array (
     'index' => '{iTPL}/index.htm',
     'index_name' => '',
-    'pc' =>
+    'pc' => 
     array (
       'tpl' => 'default',
     ),
-    'mobile' =>
+    'mobile' => 
     array (
       'agent' => 'WAP,Smartphone,Mobile,UCWEB,Opera Mini,Windows CE,Symbian,SAMSUNG,iPhone,Android,BlackBerry,HTC,Mini,LG,SonyEricsson,J2ME,MOT',
       'domain' => 'http://m.idreamsoft.com',
       'tpl' => 'mobile',
     ),
-    'device' =>
+    'device' => 
     array (
-      1 =>
+      1 => 
       array (
         'name' => 'iPad',
         'ua' => 'iPad',
@@ -39,7 +39,7 @@ return array (
       ),
     ),
   ),
-  'router' =>
+  'router' => 
   array (
     'URL' => 'http://v6.icms.com',
     'DIR' => '/',
@@ -49,11 +49,11 @@ return array (
     'html_dir' => '../html/',
     'html_ext' => '.html',
     'speed' => '50',
-    'tag_url' => 'http://v6.icms.com/tag',
+    'tag_url' => 'http://v6.icms.com',
     'tag_rule' => '{PHP}',
     'tag_dir' => '',
   ),
-  'cache' =>
+  'cache' => 
   array (
     'enable' => '1',
     'engine' => 'file',
@@ -61,20 +61,20 @@ return array (
     'time' => '300',
     'compress' => '1',
   ),
-  'FS' =>
+  'FS' => 
   array (
     'url' => 'http://v6.icms.com/res/',
     'dir' => 'res',
     'dir_format' => 'Y/m-d/H',
     'allow_ext' => 'gif,jpg,rar,swf,jpeg,png',
   ),
-  'thumb' =>
+  'thumb' => 
   array (
     'enable' => '1',
     'width' => '140',
     'height' => '140',
   ),
-  'watermark' =>
+  'watermark' => 
   array (
     'enable' => '1',
     'width' => '140',
@@ -89,7 +89,7 @@ return array (
     'transparent' => '80',
     'thumb' => '1',
   ),
-  'user' =>
+  'user' => 
   array (
     'register' => '1',
     'regseccode' => '1',
@@ -98,15 +98,15 @@ return array (
     'agreement' => '',
     'coverpic' => '/ui/coverpic.jpg',
   ),
-  'openapi' =>
+  'openapi' => 
   array (
-    'QQ' =>
+    'QQ' => 
     array (
       'appid' => '140',
       'appkey' => '140',
     ),
   ),
-  'publish' =>
+  'publish' => 
   array (
     'autoformat' => '0',
     'remote' => '0',
@@ -118,35 +118,35 @@ return array (
     'repeatitle' => '0',
     'showpic' => '1',
   ),
-  'comment' =>
+  'comment' => 
   array (
     'enable' => '1',
     'examine' => '1',
     'seccode' => '0',
   ),
-  'time' =>
+  'time' => 
   array (
     'zone' => 'Asia/Shanghai',
     'cvtime' => '0',
     'dateformat' => 'Y-m-d H:i:s',
   ),
-  'other' =>
+  'other' => 
   array (
     'CLsplit' => ',',
     'kwCount' => '1',
     'sidebar_enable' => '1',
     'sidebar' => '1',
   ),
-  'system' =>
+  'system' => 
   array (
     'patch' => '2',
   ),
-  'sphinx' =>
+  'sphinx' => 
   array (
     'host' => '127.0.0.1:9312',
     'index' => 'iCMS_article iCMS_article_delta',
   ),
-  'apps' =>
+  'apps' => 
   array (
     0 => 'index',
     1 => 'article',

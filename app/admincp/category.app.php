@@ -27,7 +27,7 @@ class categoryApp extends category{
             $rootid	= $rs['rootid'];
             $rs['metadata'] && $rs['metadata']=unserialize($rs['metadata']);
             $rs['contentprop'] && $rs['contentprop']=unserialize($rs['contentprop']);
-            $rs['body'] = iCache::get('iCMS/category.'.$this->cid.'/body');
+            $rs['body'] = iCache::get('iCMS/category/'.$this->cid.'.body');
         }else {
             $rootid = (int)$_GET['rootid'];
             $rootid && iACP::CP($rootid,'a','page');
@@ -97,8 +97,8 @@ class categoryApp extends category{
         $contentTPL   = iS::escapeStr($_POST['contentTPL']);
         $metadata     = iS::escapeStr($_POST['metadata']);
         $contentprop  = iS::escapeStr($_POST['contentprop']);
-        $bodyData     = $_POST['body'];
-        $body         = $bodyData?1:0;
+        $body         = $_POST['body'];
+        $hasbody      = $body?1:0;
 
         if($_rootid_hash){
             $_rootid = authcode($_rootid_hash);
@@ -144,7 +144,7 @@ class categoryApp extends category{
         iPHP::import(iPHP_APP_CORE .'/iMAP.class.php');
         map::init('prop',iCMS_APP_CATEGORY);
 
-        $fields = array('rootid','appid','orderNum','name','subname','password','title','keywords','description','dir','mode','domain','url','pic','mpic','spic','htmlext','categoryURI','categoryRule','contentRule','urlRule','indexTPL','listTPL','contentTPL','metadata','contentprop','body','pid','isexamine','issend','isucshow','status');
+        $fields = array('rootid','appid','orderNum','name','subname','password','title','keywords','description','dir','mode','domain','url','pic','mpic','spic','htmlext','categoryURI','categoryRule','contentRule','urlRule','indexTPL','listTPL','contentTPL','metadata','contentprop','hasbody','pid','isexamine','issend','isucshow','status');
         $data   = compact ($fields);
 
         if(empty($cid)) {
@@ -178,7 +178,7 @@ class categoryApp extends category{
             $this->cahce_one($cid);
             $msg=$this->name_text."编辑完成!";
         }
-        $body && iCache::set('iCMS/category.'.$cid.'/body',$bodyData,0);
+        $hasbody && iCache::set('iCMS/category/'.$cid.'.body',$body,0);
         iPHP::success($msg,'url:'.APP_URI);
     }
 

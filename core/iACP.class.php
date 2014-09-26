@@ -59,7 +59,7 @@ class iACP {
         self::init();
         $app = $_GET['app'];
         $app OR $app = 'home';
-        //in_array($app, self::$apps) OR iPHP::throwException('应用程序运行出错.找不到应用程序:' . $app, 1001);
+        //in_array($app, self::$apps) OR iPHP::throwException('运行出错！找不到应用程序:' . $app, 1001);
         $do OR $do = $_GET['do'] ? (string) $_GET['do'] : 'iCMS';
         if($_POST['action']){
             $do     = $_POST['action'];
@@ -76,12 +76,12 @@ class iACP {
         define('APP_DOURI', APP_URI.($do != 'iCMS' ? '&do=' . $do : ''));
         define('APP_BOXID',	self::$app_name.'-box');
 		define('APP_FORMID','iCMS-'.APP_BOXID);
-        is_file(self::$app_file) OR iPHP::throwException('应用程序运行出错.找不到文件: <b>' . self::$app_name . '.app.php</b>', 1002);
+        is_file(self::$app_file) OR iPHP::throwException('运行出错！找不到文件: <b>' . self::$app_name . '.app.php</b>', 1002);
 		iPHP::import(self::$app_file);
         $appName     = self::$app_name . 'App';
         self::$app   = new $appName();
         $app_methods = get_class_methods($appName);
-        in_array(self::$app_method, $app_methods) OR iPHP::throwException('应用程序运行出错. <b>' . self::$app_name . '</b> 类中找不到方法定义: <b>' . self::$app_method . '</b>', 1003);
+        in_array(self::$app_method, $app_methods) OR iPHP::throwException('运行出错！ <b>' . self::$app_name . '</b> 类中找不到方法定义: <b>' . self::$app_method . '</b>', 1003);
         $method = self::$app_method;
 		self::$app->$method();
     }

@@ -614,6 +614,9 @@ var imageUploader = {},imageManagerUrl = null,
                 list.style.display = "none";
                 //切换到图片管理时，ajax请求后台图片列表
                 if (id == "imgManager") {
+                	if(!editor.options.imageManagerEnable){
+                		return false;
+                	}
                     list.style.display = "";
                     //已经初始化过时不再重复提交请求
                     if (!list.children.length) {

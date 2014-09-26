@@ -30,9 +30,12 @@ function user_category($vars=null){
 function user_follow($vars=null){
 	$row = isset($vars['row'])?(int)$vars['row']:"30";
 	if($vars['fuid']){
-		$where_sql = "WHERE `fuid`='".$vars['fuid']."'";
+		$where_sql = "WHERE `fuid`='".$vars['fuid']."'";	//fans
+		if(isset($vars['check'])){
+			$follow = user::follow($vars['fuid'],'all'); //all follow
+		}
 	}else{
-		$where_sql = "WHERE `uid`='".$vars['userid']."'";
+		$where_sql = "WHERE `uid`='".$vars['userid']."'";	//follow
 	}
 	$resource = iDB::all("SELECT * FROM `#iCMS@__user_follow` {$where_sql} LIMIT $row");
 	//iDB::debug();
@@ -45,6 +48,9 @@ function user_follow($vars=null){
 			$value['url']    = user::router($value['fuid'],'url');
 			$value['uid']    = $value['fuid'];
 			$value['name']   = $value['fname'];
+		}
+		if(isset($vars['check'])){
+			$value['followed'] = $follow[$value['uid']];
 		}
 		$resource[$key] = $value;
 	}

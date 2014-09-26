@@ -33,6 +33,8 @@
 								<p class="alert alert-success cmt-reply">
 									<a href="<!--{$comment_array.user.url}-->" target="_blank">@<!--{$comment_array.user.name}-->：</a>
 									<!--{$comment_array.content}-->
+									<span class="label"><!--{$comment_list.addtime|format_date}--></span>
+									<span class="label label-info"><i class="fa fa-thumbs-o-up"></i> <!--{$comment_array.up}--></span>
 								</p>
 							<!--{else}-->
 								<p class="alert alert-error cmt-reply">评论已被删除!</p>
@@ -40,7 +42,8 @@
 							<div class="clearfix"></div>
 						<!--{/if}-->
 						<div class="info">
-							<!--{$comment_list.addtime|format_date}-->
+							<span class="label"><!--{$comment_list.addtime|format_date}--></span>
+							<span class="label label-info"><i class="fa fa-thumbs-o-up"></i> <!--{$comment_list.up}--></span>
 						</div>
 					</td>
 					<td><a href="javascript:;" class="del_comment" data-id="<!--{$comment_list.id}-->" title="删除" style="margin-left: 10px;"><i class="fa fa-times"></i></a></td>
