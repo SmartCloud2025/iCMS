@@ -29,19 +29,23 @@ class userApp {
         $this->user(true);
         $u['category'] = user::category((int)$_GET['cid']);
         iPHP::append('user',$u,true);
-        return iPHP::view('iCMS://user/home.htm');
+        iPHP::view('iCMS://user/home.htm');
     }
     public function do_manage(){
         $pgArray   = array('publish','category','article','comment','favorite','share','follow','fans');
         $pg        = iS::escapeStr($_GET['pg']);
         $pg OR $pg ='article';
         if (in_array ($pg,$pgArray)) {
+            if($_GET['pg']=='comment'){
+                $app_array  = iCache::get('iCMS/app/cache_id');
+                iPHP::assign('iAPP',$app_array);
+            }
             $this->user(true);
             $funname ='__do_manage_'.$pg;
             $class_methods  =  get_class_methods(__CLASS__);
             in_array($funname,$class_methods) && $this->$funname();
             iPHP::assign('pg',$pg);
-            return iPHP::view("iCMS://user/manage.htm");
+            iPHP::view("iCMS://user/manage.htm");
         }
     }
     public function do_profile(){
@@ -55,7 +59,7 @@ class userApp {
                 $platform = user::openid(user::$userid);
                 iPHP::assign('platform',$platform);
             }
-            return iPHP::view("iCMS://user/profile.htm");
+            iPHP::view("iCMS://user/profile.htm");
         }
     }
 
@@ -86,7 +90,7 @@ class userApp {
 
         iPHP::assign('status', $status);
         iPHP::assign('user',   (array)$this->user);
-        $ud && iPHP::assign('userdata',(array)user::data());
+        $ud && iPHP::assign('userdata',(array)user::data($this->user->uid));
     }
 
     private function __do_manage_article(){
@@ -246,7 +250,7 @@ class userApp {
         if($nickname!=user::$nickname){
             $has_nick = iDB::value("SELECT uid FROM `#iCMS@__user` where `nickname`='{$nickname}' AND `uid` <> '".user::$userid."'");
             $has_nick && iPHP::alert('user:profile:nickname');
-            $userdata = user::data();
+            $userdata = user::data(user::$userid);
             if($userdata->unickEdit>1){
                 iPHP::alert('user:profile:unickEdit');
             }
@@ -521,14 +525,20 @@ class userApp {
         if(iCMS::$config['user']['register']){
             iPHP::set_cookie('forward',$this->forward);
             user::status($this->forward,"login");
-            return iPHP::view('iCMS://user/register.htm');
+            iPHP::view('iCMS://user/register.htm');
         }
         iPHP::view('iCMS://user/register.close.htm');
     }
     public function API_data($uid=0){
         $user   = user::status();
         $user OR $user = iPHP::code(0,0,$this->forward);
-        iPHP::json($user);
+        $array = array(
+            'uid'      => $user->uid,
+            'url'      => $user->url,
+            'avatar'   => $user->avatar,
+            'nickname' => $user->nickname
+        );
+        iPHP::json($array);
     }
     public function API_logout(){
         user::logout();
@@ -538,12 +548,12 @@ class userApp {
         if(iCMS::$config['user']['login']){
             iPHP::set_cookie('forward',$this->forward);
             user::status($this->forward,"login");
-            return iPHP::view('iCMS://user/login.htm');
+            iPHP::view('iCMS://user/login.htm');
         }
         iPHP::view('iCMS://user/login.close.htm');
     }
     public function API_agreement(){
-    	return iPHP::view('iCMS://user/agreement.htm');
+    	iPHP::view('iCMS://user/agreement.htm');
     }
     public function API_imageUp(){
         $stateInfo ='SUCCESS';
@@ -560,17 +570,15 @@ class userApp {
     }
     public function API_ucard(){
         $this->user(true);
-        //iPHP::assign('user',(array)user::get($userid));
-        //iPHP::assign('userdata',(array)user::data());
-        return iPHP::view('iCMS://user/card.htm');
+        iPHP::view('iCMS://user/card.htm');
     }
     function select($permission='',$_cid="0",$cid="0",$level = 1) {
         $array = iCache::get('iCMS/category.'.iCMS_APP_ARTICLE.'/array');
         foreach((array)$array[$cid] AS $root=>$C) {
-            if($C['status'] && $C['isucshow'] && $C['issend'] && empty($C['url'])) {
+            if($C['status'] && $C['isucshow'] && $C['issend'] && empty($C['outurl'])) {
                 $tag      = ($level=='1'?"":"├ ");
                 $selected = ($_cid==$C['cid'])?"selected":"";
-                $text     = str_repeat("│　", $level-1).$tag.$C['name']."[cid:{$C['cid']}][pid:{$C['pid']}]".($C['url']?"[∞]":"");
+                $text     = str_repeat("│　", $level-1).$tag.$C['name']."[cid:{$C['cid']}][pid:{$C['pid']}]".($C['outurl']?"[∞]":"");
                 $C['isexamine'] && $text.= '[审核]';
                 $option.="<option value='{$C['cid']}' $selected>{$text}</option>";
             }

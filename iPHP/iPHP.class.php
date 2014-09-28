@@ -20,7 +20,7 @@ class iPHP{
 	public static $dialog_code  = false;
 	public static $dialog_lock  = false;
 	public static $iTPL         = NULL;
-	public static $iTPL_mode    = null;
+	public static $iTPL_MODE    = null;
 	public static $mobile       = false;
 	public static $time_start   = false;
 
@@ -134,7 +134,7 @@ class iPHP{
     	return self::$iTPL->fetch($tpl);
     }
     public static function pl($tpl) {
-        if(self::$iTPL_mode=='html') {
+        if(self::$iTPL_MODE=='html') {
             return self::$iTPL->fetch($tpl);
         }else {
             self::$iTPL->display($tpl);
@@ -695,7 +695,6 @@ function iPHP_ERROR_HANDLER($errno, $errstr, $errfile, $errline){
         //print "backtrace:\n";
         $backtrace = debug_backtrace();
         array_shift($backtrace);
-        array_shift($backtrace);
         foreach($backtrace as $i=>$l){
             $html.="[$i] in function <b>{$l['class']}{$l['type']}{$l['function']}</b>";
             $l['file'] && $html.=" in <b>{$l['file']}</b>";
@@ -714,7 +713,8 @@ function iPHP_ERROR_HANDLER($errno, $errstr, $errfile, $errline){
 	@header("Cache-Control: post-check=0, pre-check=0", false);
 	@header("Pragma: no-cache");
     $_GET['frame'] OR exit($html);
+    $html = str_replace("\n",'<br />',$html);
     iPHP::$dialog_lock = true;
-    iPHP::dialog(array("warning:#:warning-sign:#:".nl2br($html),'系统错误!可发邮件到 idreamsoft@qq.com 反馈错误!我们将及时处理'),'js:1',30);
+    iPHP::dialog(array("warning:#:warning-sign:#:{$html}",'系统错误!可发邮件到 idreamsoft@qq.com 反馈错误!我们将及时处理'),'js:1',30);
     exit;
 }

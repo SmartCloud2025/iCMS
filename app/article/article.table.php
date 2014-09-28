@@ -23,7 +23,7 @@ class articleTable {
             'related', 'metadata', 'pubdate', 'chapter', 'url','clink',
             'orderNum','top', 'postype', 'creative', 'tpl','status');
 
-        $update OR $fields = array_merge ($fields,array('postime', 'hits', 'comments', 'good', 'bad'));
+        $update OR $fields = array_merge ($fields,array('postime', 'hits','hits_toady','hits_toady','hits_yday','hits_week','hits_month','hits_year','comments', 'good', 'bad'));
 
         return $fields;
     }

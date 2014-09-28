@@ -18,7 +18,7 @@ function comment_array($vars){
 	$rs = iDB::row("SELECT * FROM `#iCMS@__comment` WHERE {$where_sql} LIMIT 1;",ARRAY_A);
 	//iDB::debug(1);
 	if($rs){
-		$rs['user'] = user::info($rs['userid'],$rs['name']);
+		$rs['user'] = user::info($rs['userid'],$rs['username']);
 	}
 	return $rs;
 }
@@ -42,7 +42,7 @@ function comment_list_display($vars){
 		'title' => $vars['title'],
 	);
 	iPHP::assign('comment_vars',$vars);
-	iPHP::view("iCMS://comment/{$tpl}.htm");
+	echo iPHP::view("iCMS://comment/{$tpl}.htm");
 }
 function comment_list($vars){
 	if ($vars['display'] && empty($vars['loop'])) {
@@ -120,7 +120,7 @@ function comment_list($vars){
 			$value['url']     = iCMS_API.'?app=comment&do=goto&iid='.$value['iid'].'&appid='.$value['appid'].'&cid='.$value['cid'];
 			$value['lou']     = $total-($i+$ln*$maxperpage);
 			$value['content'] = nl2br($value['content']);
-			$value['user']    = user::info($value['userid'],$value['name'],$vars['facesize']);
+			$value['user']    = user::info($value['userid'],$value['username'],$vars['facesize']);
 			$value['reply_uid'] && $value['reply'] = user::info($value['reply_uid'],$value['reply_name'],$vars['facesize']);
 
 			$value['total'] = $total;
@@ -167,5 +167,5 @@ function comment_form($vars){
 	unset($vars['method'],$vars['_display']);
 	$vars['query'] = http_build_query($vars);
 	iPHP::assign('comment_vars',$vars);
-	return iPHP::view('iCMS://comment/'.$tpl.'.htm');
+	echo iPHP::view('iCMS://comment/'.$tpl.'.htm');
 }

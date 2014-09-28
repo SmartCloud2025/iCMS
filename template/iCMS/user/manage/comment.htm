@@ -18,7 +18,7 @@
 						</a>
 					</td>
 						<td><a href="<!--{$comment_list.user.url}-->" target="_blank"><span class="label label-info"><!--{$comment_list.user.name}--></span></a>
-						在文章：<a href="<!--{$comment_list.url}-->" target="_blank"><!--{$comment_list.title}--></a>
+						在<!--{$iAPP[$comment_list.appid].title}-->：<a href="<!--{$comment_list.url}-->" target="_blank"><!--{$comment_list.title}--></a>
 						<!--{if $comment_list.reply_uid}-->
 						对<span class="label label-success"><!--{$comment_list.reply_name}--></span>的回帖发表评论
 						<!--{else}-->
@@ -31,7 +31,7 @@
 							<!--{iCMS:comment:array id=$comment_list.reply_id}-->
 							<!--{if $comment_array}-->
 								<p class="alert alert-success cmt-reply">
-									<a href="<!--{$comment_array.user.url}-->" target="_blank">@<!--{$comment_array.user.name}-->：</a>
+									<a href="<!--{$comment_array.user.url}-->" target="_blank" data-tip="iCMS:ucard:<!--{$comment_list.userid}-->">@<!--{$comment_array.user.name}-->：</a>
 									<!--{$comment_array.content}-->
 									<span class="label"><!--{$comment_list.addtime|format_date}--></span>
 									<span class="label label-info"><i class="fa fa-thumbs-o-up"></i> <!--{$comment_array.up}--></span>

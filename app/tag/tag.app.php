@@ -53,7 +53,7 @@ class tagApp {
                 return iPHP::view($tpl, 'tag');
             }
             $html = iPHP::view($tag['tpl'] ? $tag['tpl'] : '{iTPL}/tag.index.htm', 'tag');
-            if(iPHP::$iTPL_mode=="html") return array($html,$tag);
+            if(iPHP::$iTPL_MODE=="html") return array($html,$tag);
         }else{
             return $tag;
         }

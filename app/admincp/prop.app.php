@@ -31,12 +31,12 @@ class propApp{
         $name     = iS::escapeStr($_POST['name']);
         $type     = iS::escapeStr($_POST['type']);
         $val      = iS::escapeStr($_POST['val']);
-		
+
 		($field=='pid'&& !is_numeric($val)) && iPHP::alert('pid字段的值能用数字');
         $field OR iPHP::alert('属性字段不能为空!');
         $name OR iPHP::alert('属性名称不能为空!');
         $type OR iPHP::alert('类型不能为空!');
-        
+
 		$field=='pid' && $val=(int)$val;
 
         $fields = array('rootid','cid','field','type','ordernum', 'name', 'val');
@@ -46,7 +46,7 @@ class propApp{
             iDB::update('prop', $data, array('pid'=>$pid));
 			$msg="属性更新完成!";
 		}else{
-	        iDB::value("SELECT `pid` FROM `#iCMS@__prop` where `type` ='$type' AND `val` ='$val' AND `field` ='$field' AND `cid` ='$cid'") && iPHP::alert('该类型属性值已经存在!请另选一个');	        
+	        iDB::value("SELECT `pid` FROM `#iCMS@__prop` where `type` ='$type' AND `val` ='$val' AND `field` ='$field' AND `cid` ='$cid'") && iPHP::alert('该类型属性值已经存在!请另选一个');
             iDB::insert('prop',$data);
 	        $msg="新属性添加完成!";
 		}
@@ -63,7 +63,7 @@ class propApp{
     function do_del($id = null,$dialog=true){
     	$id===null && $id=$this->pid;
     	$id OR iPHP::alert('请选择要删除的属性!');
-		iDB::query("DELETE FROM `#iCMS@__prop` WHERE `pid` = '$this->pid';");
+		iDB::query("DELETE FROM `#iCMS@__prop` WHERE `pid` = '$id';");
     	$this->cache();
     	$dialog && iPHP::success("已经删除!",'url:'.APP_URI);
     }
@@ -100,10 +100,10 @@ class propApp{
 
         $_GET['field']&& $sql.=" AND `field`='".$_GET['field']."'";
         $_GET['field']&& $uri.='&field='.$_GET['field'];
-        
+
         $_GET['type'] && $sql.=" AND `type`='".$_GET['type']."'";
         $_GET['type'] && $uri.='&type='.$_GET['type'];
-        
+
         $_GET['cid']  && $sql.=" AND `cid`='".$_GET['cid']."'";
         $_GET['cid']  && $uri.='&cid='.$_GET['cid'];
 

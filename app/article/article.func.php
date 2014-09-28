@@ -245,5 +245,5 @@ function __article_array($vars,$resource){
     return $resource;
 }
 function article_up_down($vars){
-    return iPHP::view('iCMS://article.up_down.htm');
+    echo iPHP::view('iCMS://article.up_down.htm');
 }

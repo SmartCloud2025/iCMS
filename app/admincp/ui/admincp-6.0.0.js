@@ -13,6 +13,18 @@ $(function() {
         checked: function(el){
             $(el).prop("checked",true).closest('.checker > span').addClass('checked');
         },
+        // popover:function(el){
+        //     $(el).popover({
+        //         html:true,
+        //         content:function(){
+        //           $.get('<?php echo APP_URI; ?>&do=get_reply',{'id': $(this).attr('data-id')},
+        //             function(html) {
+        //               $('.popover-content','.popover').html(html);
+        //           });
+        //           return '<p><img src="<?php echo ACP_UI;?>/loading.gif" /></p>';
+        //       }
+        //     });
+        // },
     }
     iCMS = $.extend(iCMS,_iCMS);//扩展 or 替换 iCMS属性
     iCMS.modal();
@@ -58,6 +70,9 @@ $(function() {
         target = a.attr('data-target'),
         mode   = a.attr('data-mode'),
         val    = a.text();
+        if(href=='<%var%>'){
+            href='<%var_'+iCMS.random(2)+'%>';
+        }
         if(mode=="replace"){
             $(target).val(href);
         }else{
@@ -185,8 +200,8 @@ function modal_icms(el,a){
                 });
             }
             $('[data-toggle="batch"]').click(function(){
-                if($("tbody input:checkbox:checked",im).length==0){
-                    alert("请选择要操作项目!");
+                if($("input[name]:checkbox:checked",im).length==0){
+                    iCMS.alert("请选择要操作项目!");
                     return true;
                 }
                 var a = $(this),b = this,

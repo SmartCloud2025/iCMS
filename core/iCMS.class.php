@@ -225,7 +225,7 @@ class iCMS {
     }
     //------------------------------------
     public static function gotohtml($fp,$url='',$fmode='0') {
-    	if(iPHP::$iTPL_mode=='html') return;
+    	if(iPHP::$iTPL_MODE=='html') return;
 
         ($fmode==1 && @is_file($fp) && stristr($fp, '.php?') === FALSE) && iPHP::gotourl($url);
     }

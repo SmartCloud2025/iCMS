@@ -20,17 +20,15 @@ $(function(){
       $(this).parent().parent().remove();
   });
   $(".add_template_device").click(function(){
-    var href  = $(this).attr("href");
-    var tb    = $(href),tbody=$("tbody",tb);
-    var count = $('tr',tbody).size();
-    var ntr   = $(".template_clone",tb).clone(true).removeClass("hide template_clone");
-    $('input',ntr).removeAttr("disabled").each(function(){
+    var TD  = $("#template_device"),count = $('.device',TD).length;
+    var tdc = $(".template_device_clone").clone(true).removeClass("hide template_device_clone").addClass('device');
+    $('input',tdc).removeAttr("disabled").each(function(){
       this.id   = this.id.replace("{key}",count);
       this.name = this.name.replace("{key}",count);
     });
-    var fmhref  = $('.files_modal',ntr).attr("href").replace("{key}",count);
-    $('.files_modal',ntr).attr("href",fmhref);
-    ntr.appendTo(tbody);
+    var fmhref  = $('.files_modal',tdc).attr("href").replace("{key}",count);
+    $('.files_modal',tdc).attr("href",fmhref);
+    tdc.appendTo(TD);
     return false;
   });
 
@@ -149,9 +147,9 @@ function modal_tplfile(el,a){
                   <th style="text-align:left"><span class="label label-important">模板优先级为:设备模板 &gt; 移动端模板 &gt; PC端模板</span> <span class="label label-inverse"><i class="icon-warning-sign icon-white"></i> 设备模板和移动端模板 暂时不支持生成静态模式</span></th>
                 </tr>
               </thead>
-              <tbody>
+              <tbody id="template_device">
                 <?php foreach ((array)$config['template']['device'] as $key => $device) {?>
-                <tr>
+                <tr class="device">
                   <td>
                     <div class="input-prepend input-append"> <span class="add-on">设备名称</span>
                       <input type="text" name="config[template][device][<?php echo $key;?>][name]" class="span3" id="device_name_<?php echo $key;?>" value="<?php echo $device['name'];?>"/>
@@ -179,7 +177,7 @@ function modal_tplfile(el,a){
                 <?php }?>
               </tbody>
               <tfoot>
-              <tr class="hide template_clone">
+              <tr class="hide template_device_clone">
                 <td>
                   <div class="input-prepend input-append"> <span class="add-on">设备名称</span>
                     <input type="text" name="config[template][device][{key}][name]" class="span3" id="device_name_{key}" value="" disabled="disabled"/>
@@ -205,7 +203,7 @@ function modal_tplfile(el,a){
                 </td>
               </tr>
               <tr>
-                <td colspan="2"><a href="#setting-tpl" class="btn add_template_device btn-success"/>增加设备模板</a></td>
+                <td colspan="2"><a href="#template_device" class="btn add_template_device btn-success"/>增加设备模板</a></td>
               </tr>
               </tfoot>
             </table>

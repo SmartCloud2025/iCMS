@@ -13,10 +13,8 @@ defined('iPHP') OR exit('What are you doing?');
 
 
 //require_once iPHP_APP_DIR.'/user/msg.class.php';
-define("USER_CALLBACK_URL", iCMS_API_URL);
 define("USER_LOGIN_URL",    iCMS_API_URL.'&do=login');
-define("USER_AUTHASH",      '#=(iCMS@'.iPHP_KEY.'@iCMS)=#');
-
+define("iUSER_AUTHASH",      '#=(iCMS@'.iPHP_KEY.'@iCMS)=#');
 class user {
 	public static $userid     = 0;
 	public static $nickname   = '';
@@ -101,14 +99,14 @@ class user {
 	}
 	public static function set_cache($uid){
 		$user	= iDB::row("SELECT * FROM `#iCMS@__user` where `uid`='{$uid}'",ARRAY_A);
-		iCache::set('user:'.$user['uid'],$user,0);
+		iCache::set('iCMS:user:'.$user['uid'],$user,0);
 	}
 	public static function get_cookie($unpw=false) {
 		$auth     = authcode(iPHP::get_cookie(self::$AUTH));
 		$userid   = authcode(iPHP::get_cookie('userid'));
 		$nickname = authcode(iPHP::get_cookie('nickname'));
 
-		list($_userid,$_username,$_password,$_nickname) = explode(USER_AUTHASH,$auth);
+		list($_userid,$_username,$_password,$_nickname) = explode(iUSER_AUTHASH,$auth);
 
 		if((int)$userid===(int)$_userid && $nickname===$_nickname){
 			self::$userid   = (int)$_userid;
@@ -123,7 +121,7 @@ class user {
 		return false;
 	}
 	public static function set_cookie($username,$password,$user){
-		iPHP::set_cookie(self::$AUTH, authcode((int)$user['uid'].USER_AUTHASH.$username.USER_AUTHASH.$password.USER_AUTHASH.$user['nickname'],'ENCODE'),self::$cookietime);
+		iPHP::set_cookie(self::$AUTH, authcode((int)$user['uid'].iUSER_AUTHASH.$username.iUSER_AUTHASH.$password.iUSER_AUTHASH.$user['nickname'],'ENCODE'),self::$cookietime);
 		iPHP::set_cookie('userid',    authcode($user['uid'],'ENCODE'),self::$cookietime);
 		iPHP::set_cookie('nickname',  authcode($user['nickname'],'ENCODE'),self::$cookietime);
 	}
@@ -147,8 +145,11 @@ class user {
 	   	if($unpass) unset($user->password);
 	   	return $user;
 	}
-    public static function data(){
-        $data = iDB::row("SELECT * FROM `#iCMS@__user_data` where `uid`='".user::$userid."' limit 1;");
+    public static function data($uid=0){
+    	if(empty($uid)){
+    		return false;
+    	}
+        $data = iDB::row("SELECT * FROM `#iCMS@__user_data` where `uid`='{$uid}' limit 1;");
         //iDB::debug(1);
         if($data){
             if($data->coverpic){
@@ -156,7 +157,7 @@ class user {
             }else{
                 $data->coverpic = iCMS_PUBLIC_URL.iCMS::$config['user']['coverpic'];
             }
-            $data->enterprise&& $data->enterprise = unserialize($data->enterprise);
+            $data->enterprise && $data->enterprise = unserialize($data->enterprise);
         }
         return $data;
     }

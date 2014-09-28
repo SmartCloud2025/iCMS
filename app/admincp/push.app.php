@@ -21,11 +21,11 @@ class pushApp{
         $_GET['title'] 	&& $rs['title']	= $_GET['title'];
         $_GET['pic'] 	&& $rs['pic']	= $_GET['pic'];
         $_GET['url'] 	&& $rs['url']	= $_GET['url'];
-        
+
         $_GET['title2']	&& $rs['title2']= $_GET['title2'];
         $_GET['pic2'] 	&& $rs['pic2']	= $_GET['pic2'];
         $_GET['url2'] 	&& $rs['url2']	= $_GET['url2'];
-        
+
         $_GET['title3']	&& $rs['title3']= $_GET['title3'];
         $_GET['pic3'] 	&& $rs['pic3']	= $_GET['pic3'];
         $_GET['url3'] 	&& $rs['url3']	= $_GET['url3'];
@@ -48,9 +48,6 @@ class pushApp{
     	$this->do_manage();
     }
     function do_manage($doType=null) {
-        $mtime      = microtime();
-        $mtime      = explode(' ', $mtime);
-        $time_start = $mtime[1] + $mtime[0];
         $cid        = (int)$_GET['cid'];
         $sql        = " where ";
         switch($doType){ //status:[0:草稿][1:正常][2:回收][3:审核][4:不合格]
@@ -77,13 +74,13 @@ class pushApp{
 	       		$sql.=" `status` ='1'";
 		       	$cid && $position=$this->category[$cid]['name'];
 		}
-		
+
         if($_GET['keywords']) {
 			$sql.=" AND CONCAT(title,title2,title3) REGEXP '{$_GET['keywords']}'";
         }
 
         $sql.=$this->categoryApp->search_sql($cid);
- 
+
         isset($_GET['nopic'])&& $sql.=" AND `haspic` ='0'";
         $_GET['starttime']   && $sql.=" and `addtime`>=UNIX_TIMESTAMP('".$_GET['starttime']." 00:00:00')";
         $_GET['endtime']     && $sql.=" and `addtime`<=UNIX_TIMESTAMP('".$_GET['endtime']." 23:59:59')";
@@ -112,24 +109,24 @@ class pushApp{
         $editor   = iS::escapeStr($_POST['editor']);
         $orderNum = _int($_POST['orderNum']);
         $addtime  = iPHP::str2time($_POST['addtime']);
-        
-        
-        
+
+
+
         $title		= iS::escapeStr($_POST['title']);
         $pic		= $this->getpic($_POST['pic']);
         $description= iS::escapeStr($_POST['description']);
         $url		= iS::escapeStr($_POST['url']);
-        
+
         $title2		= iS::escapeStr($_POST['title2']);
         $pic2		= $this->getpic($_POST['pic2']);
         $description2= iS::escapeStr($_POST['description2']);
         $url2		= iS::escapeStr($_POST['url2']);
-        
+
         $title3		= iS::escapeStr($_POST['title3']);
         $pic3		= $this->getpic($_POST['pic3']);
         $description3= iS::escapeStr($_POST['description3']);
         $url3		= iS::escapeStr($_POST['url3']);
-        
+
         $metadata	= iS::escapeStr($_POST['metadata']);
         $metadata	= $metadata?addslashes(serialize($metadata)):'';
 
@@ -138,7 +135,7 @@ class pushApp{
         empty($cid) && iPHP::alert('请选择所属栏目');
 
         $haspic	= empty($pic)?0:1;
-        
+
         $status	= 1;
         $fields = array('cid', 'rootid', 'pid', 'haspic', 'editor', 'userid', 'title', 'pic', 'url', 'description', 'title2', 'pic2', 'url2', 'description2', 'title3', 'pic3', 'url3', 'description3', 'orderNum', 'metadata', 'addtime','hits', 'status');
         $data   = compact ($fields);
@@ -159,7 +156,7 @@ class pushApp{
 	function getpic($path){
 		$uri 	= parse_url(iCMS_FS_URL);
         $pic	= iS::escapeStr($path);
-        
+
 	    if(strstr(strtolower($pic),$uri['host'])){
 	    	$pic = iFS::fp($pic,"-http");
 	    }else{

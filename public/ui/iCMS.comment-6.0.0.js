@@ -39,12 +39,12 @@
                 return false;
             }
             $('.commentApp-form', '.commentApp-list').remove();
-
             form.addClass('expanded').removeClass('commentApp-list-wrap-ft');
             $(a).parent().after(form);
 
             var textarea = $('.commentApp-textarea', form);
             textarea.data('param', param).focus();
+            iCMS.api_iframe_height(false,'.commentApp-list-iframe');
             $('a[name="closeform"]', form).click(function(event) {
                 event.preventDefault();
                 textarea.val("");
@@ -87,6 +87,7 @@
                     if (typeof(f) === "function") {
                         f(c);
                     }
+                    iCMS.api_iframe_height(false,'.commentApp-list-iframe');
                     textarea.val("");
                 } else {
                     iCMS.alert(c.msg);

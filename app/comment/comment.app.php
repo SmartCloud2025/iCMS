@@ -76,17 +76,17 @@ class commentApp {
         $content OR iPHP::code(0,'iCMS:comment:empty',0,'json');
 
         $appid OR $appid = iCMS_APP_ARTICLE;
-        $addtime = time();
-        $ip      = iPHP::getIp();
-        $userid  = user::$userid;
-        $name    = user::$nickname;
-        $status  = '1';
-        $up      = '0';
-        $down    = '0';
-        $quote   = '0';
-        $floor   = '0';
+        $addtime  = time();
+        $ip       = iPHP::getIp();
+        $userid   = user::$userid;
+        $username = user::$nickname;
+        $status   = '1';
+        $up       = '0';
+        $down     = '0';
+        $quote    = '0';
+        $floor    = '0';
 
-        $fields = array('appid', 'cid', 'iid','suid', 'title','userid', 'name',  'content', 'reply_id','reply_uid','reply_name', 'addtime', 'status', 'up', 'down', 'ip', 'quote', 'floor');
+        $fields = array('appid', 'cid', 'iid','suid', 'title','userid', 'username',  'content', 'reply_id','reply_uid','reply_name', 'addtime', 'status', 'up', 'down', 'ip', 'quote', 'floor');
         $data   = compact ($fields);
         $id     = iDB::insert('comment',$data);
         iDB::query("UPDATE `#iCMS@__article` SET comments=comments+1 WHERE `id` ='{$iid}' limit 1");

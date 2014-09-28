@@ -258,11 +258,10 @@ class articleApp{
     function do_manage() {
         $cid = (int)$_GET['cid'];
         $pid = $_GET['pid'];
-        $pt  = (int)$_GET['pt'];
-        $pt OR $pt = 1;
-        $ptsql = " AND `postype`='{$pt}'";
+        $pt  = isset($_GET['pt'])?(int)$_GET['pt']:1;
+        $ptsql = " AND `postype`='{$pt}'";//postype: [0:用户][1:管理员][5:用户淘宝类文章]
         $sql = " where ";
-        switch(iACP::$app_do){ //postype: [0:用户][1:管理员][5:用户淘宝类文章] status:[0:草稿][1:正常][2:回收][3:审核][4:不合格]
+        switch(iACP::$app_do){//status:[0:草稿][1:正常][2:回收][3:审核][4:不合格]
         	case 'inbox'://草稿
                 $status   = '0';
                 $position = "草稿";
@@ -435,7 +434,8 @@ class articleApp{
 
         if(empty($aid)) {
             $postime = $pubdate;
-            $hits    = $good = $bad = $comments = 0;
+            $hits    = $hits_toady = $hits_toady = $hits_yday = $hits_week = $hits_month = $hits_year = 0;
+            $good = $bad = $comments = 0;
             $ischapter && $chapter = 1;
 
             if($tags){

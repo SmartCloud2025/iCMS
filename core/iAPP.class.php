@@ -56,6 +56,13 @@ class app {
 		$rs	= self::get_app($appid);
        	return $rs['table'];
 	}
+	public static function get_label($appid=0,$key='title'){
+		$array	= iCache::get('iCMS/app/cache_id');
+		if($appid){
+			return $array[$appid][$key];
+		}
+       	return $array;
+	}
 
 
 }

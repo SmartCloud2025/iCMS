@@ -11,17 +11,15 @@
 */
 class htmlApp{
     function __construct() {
-		iPHP::$iTPL_mode	= "html";
-		$this->page	= $GLOBALS['page'];
-		$this->PG	= $_POST?$_POST:$_GET;
-		$this->CP	= iCMS::$config['router']['speed'];
-        $mtime 		= microtime();
-        $mtime 		= explode(' ', $mtime);
-        $this->time_start = $mtime[1] + $mtime[0];
-        $this->alltime = $_GET['alltime']?$_GET['alltime']:0;
+		iPHP::$iTPL_MODE = "html";
+		$this->page      = $GLOBALS['page'];
+		$this->PG        = $_POST?$_POST:$_GET;
+		$this->CP        = iCMS::$config['router']['speed'];
+		$this->alltime   = $_GET['alltime']?$_GET['alltime']:0;
     }
     function do_index(){
     	include iACP::view("html.index");
+    	print_r(iCMS::$config['template']);
     }
     function do_createIndex(){
 		$indexTPL  = iCMS::$config['template']['index']	= $this->PG['indexTPL'];
@@ -55,7 +53,7 @@ class htmlApp{
 			$this->CreateIndex($indexTPL,$indexName,$p,$loop);
 		}
 		$looptimes	= ($total-$GLOBALS['page'])/$this->CP;
-		$use_time	= $this->use_time();
+		$use_time	= iPHP::timer_stop();
 		$msg.="用时<span class='label label-info'>{$use_time}</span>秒";
 		$query["alltime"] = $this->alltime+$use_time;
 		$loopurl	= $this->loopurl($total,$query);
@@ -78,7 +76,7 @@ class htmlApp{
 		iPHP::dialog($msg,$loopurl?"src:".$loopurl:'',$dtime,$moreBtn,$updateMsg);
     }
     function do_category(){
-    	$this->category		= iPHP::app('category.class',iCMS_APP_ARTICLE);
+        $this->categoryApp = iACP::app('category',iCMS_APP_ARTICLE);
     	include iACP::view("html.category");
     }
     function do_createCategory($cid=0,$p=1,$loop=1){
@@ -125,7 +123,7 @@ class htmlApp{
 			$this->do_createCategory($cid,$p,$loop);
 		}
 		$looptimes	= ($total-$GLOBALS['page'])/$this->CP;
-		$use_time	= $this->use_time();
+		$use_time	= iPHP::timer_stop();
 		$msg.="用时<span class='label label-info'>{$use_time}</span>秒";
 		$query["alltime"] = $this->alltime+$use_time;
 		$loopurl	= $this->loopurl($total,$query);
@@ -169,7 +167,7 @@ class htmlApp{
 
     }
     function do_article(){
-    	$this->category		= iPHP::app('category.class',iCMS_APP_ARTICLE);
+        $this->categoryApp = iACP::app('category',iCMS_APP_ARTICLE);
     	include iACP::view("html.article");
     }
     function do_createArticle($aid=null){
@@ -216,7 +214,7 @@ class htmlApp{
 			$msg.= $rs[$i]['id'].' <i class="fa fa-check"></i> ';
         }
         $GLOBALS['page']++;
-		$use_time	= $this->use_time();
+		$use_time	= iPHP::timer_stop();
 		$msg.="<hr />用时<span class='label label-info'>{$use_time}</span>秒";
 		$query["total_num"]	= $total;
 		$query["alltime"]	= $this->alltime+$use_time;
@@ -270,11 +268,5 @@ class htmlApp{
 		    return $url;
 			//iPHP::gotourl($url);
     	}
-    }
-    function use_time(){
-		$mtime 		= microtime();
-		$mtime 		= explode(' ', $mtime);
-		$time_end 	= $mtime[1] + $mtime[0];
-		return round($time_end - $this->time_start,3);
     }
 }

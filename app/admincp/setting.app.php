@@ -31,7 +31,7 @@ class settingApp{
     function do_save(){
         $config = iS::escapeStr($_POST['config']);
 		iFS::filterExt($config['router']['html_ext'],true) OR iPHP::alert('网站URL设置 > 文件后缀 设置不合法!');
-        
+
         $config['router']['URL']        = trim($config['router']['URL'],'/');
         $config['router']['DIR']        = trim($config['router']['DIR'],'/').'/';
         $config['router']['public_url'] = trim($config['router']['public_url'],'/');

@@ -1,18 +1,10 @@
 (function($) {
     iCMS.user = {
-            uid: function() {
-                return iCMS.getcookie('userid');
-            },
-            nickname: function() {
-                var nickname = iCMS.getcookie('nickname');
-                return unescape(nickname.replace(/\\u/gi, '%u'));
-            },
-            auth: function() {
-                return iCMS.getcookie(iCMS.config.AUTH);
-            },
+            data:{},
             data: function(param) {
                 $.get(iCMS.api('user', '&do=data'), param, function(c) {
                     //if(!c.code) return false;
+                    iCMS.user.data = c;
                     var user_home = $(".iCMS_user_home")
                     user_home.attr("href", c.url);
                     $(".avatar", user_home).attr("src", c.avatar);
