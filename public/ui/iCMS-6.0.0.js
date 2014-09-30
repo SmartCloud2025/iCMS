@@ -180,12 +180,13 @@
                 }
                 window.top.iCMS.report(this);
             });
-            $("#iCMS-seccode-img,#iCMS-seccode-text").click(function() {
-                $("#iCMS-seccode-img").attr('src', iCMS.api('public', '&do=seccode&') + Math.random());
+            $(".iCMS_seccode_img,.iCMS_seccode_text").click(function() {
+                $(".iCMS_seccode_img").attr('src', iCMS.api('public', '&do=seccode&') + Math.random());
             });
             $(".iCMS_API_iframe").load(function() {
                 iCMS.api_iframe_height($(this));
             });
+            $('.tip').tooltip();
         },
         api_iframe_height:function(a,b){
             var a = a||window.top.$(b);
@@ -195,15 +196,15 @@
             //window.top.$('.iCMS_API_iframe-loading').hide();
         },
         LoginBox: function() {
-            var loginBox = window.top.document.getElementById("iCMS-login-box");
-            //console.log(typeof(loginBox));
+            var dialog = window.top.document.getElementById("iCMS-login-dialog");
             iCMS_Login_MODAL = window.top.$(this).modal({
                 width: "560px",
-                html: loginBox,
+                html: dialog,
                 scroll: true
             });
-        },
 
+            this.user.login("#iCMS-login-dialog");
+        },
         hover: function(p,a, b, t, l) {
             var timeOutID = null,pp=$(p),
             t = t || 0, l = l || 0;

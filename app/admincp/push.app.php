@@ -107,7 +107,7 @@ class pushApp{
         $userid   = (int)$_POST['userid'];
         $pid      = (int)$_POST['pid'];
         $editor   = iS::escapeStr($_POST['editor']);
-        $orderNum = _int($_POST['orderNum']);
+        $ordernum = _int($_POST['ordernum']);
         $addtime  = iPHP::str2time($_POST['addtime']);
 
 
@@ -137,7 +137,7 @@ class pushApp{
         $haspic	= empty($pic)?0:1;
 
         $status	= 1;
-        $fields = array('cid', 'rootid', 'pid', 'haspic', 'editor', 'userid', 'title', 'pic', 'url', 'description', 'title2', 'pic2', 'url2', 'description2', 'title3', 'pic3', 'url3', 'description3', 'orderNum', 'metadata', 'addtime','hits', 'status');
+        $fields = array('cid', 'rootid', 'pid', 'haspic', 'editor', 'userid', 'title', 'pic', 'url', 'description', 'title2', 'pic2', 'url2', 'description2', 'title3', 'pic3', 'url3', 'description3', 'ordernum', 'metadata', 'addtime','hits', 'status');
         $data   = compact ($fields);
 
         if(empty($id)) {

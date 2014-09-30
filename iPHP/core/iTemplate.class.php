@@ -277,7 +277,7 @@ class iTemplate {
 		$arguments = func_get_args();
 		list($variable, $modifier, $php_function, $_map_array) = array_splice($arguments, 0, 4);
 		array_unshift($arguments, $variable);
-		if(in_array($modifier,array("eval","include","system","exec","shell_exec","passthru","set_time_limit","ini_alter","dl","openlog","syslog","readlink","symlink","link","leak","popen","escapeshellcmd","apache_child_terminate","apache_get_modules","apache_get_version","apache_getenv","apache_note","apache_setenv","virtual"))){
+		if(in_array($modifier,array("eval","assert","include","system","exec","shell_exec","passthru","set_time_limit","ini_alter","dl","openlog","syslog","readlink","symlink","link","leak","popen","escapeshellcmd","apache_child_terminate","apache_get_modules","apache_get_version","apache_getenv","apache_note","apache_setenv","virtual"))){
 			return false;
 		}
 		if ($_map_array){

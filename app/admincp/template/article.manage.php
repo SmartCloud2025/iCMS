@@ -167,7 +167,8 @@ $(function(){
     <div class="widget-title"> <span class="icon">
       <input type="checkbox" class="checkAll" data-target="#<?php echo APP_BOXID;?>" title="点击全选/反选"/>
       </span>
-      <h5>文章列表</h5>
+      <h5><?php if($cid){echo ' <span class="label label-info">'.$this->category[$cid]['name'].'</span>';}?>文章列表</h5>
+      <span title="总共<?php echo $total;?>篇文章" class="badge badge-info tip-left"><?php echo $total;?></span>
     </div>
     <div class="widget-content nopadding">
       <form action="<?php echo APP_FURI; ?>&do=batch" method="post" class="form-inline" id="<?php echo APP_FORMID;?>" target="iPHP_FRAME">
@@ -185,61 +186,78 @@ $(function(){
             </tr>
           </thead>
           <tbody>
-            <?php for($i=0;$i<$_count;$i++){
-                  $ourl = $rs[$i]['url'];
-                  $C    = $this->category[$rs[$i]['cid']];
-                  $iurl = iURL::get('article',array($rs[$i],$C));
+            <?php if($rs)foreach ($rs as $key => $value) {
+                  $ourl = $value['url'];
+                  $C    = $this->category[$value['cid']];
+                  $iurl = iURL::get('article',array($value,$C));
                   empty($ourl) && $htmlurl = $iurl->path;
-                  $rs[$i]['url']           = $iurl->href;
+                  $value['url']           = $iurl->href;
             ?>
-            <tr id="id<?php echo $rs[$i]['id'] ; ?>">
-              <td><input type="checkbox" name="id[]" value="<?php echo $rs[$i]['id'] ; ?>" /></td>
-              <td class="ordernum"><input type="text" name="orderNum[<?php echo $rs[$i]['id'] ; ?>]" value="<?php echo $rs[$i]['orderNum'] ; ?>" aid="<?php echo $rs[$i]['id'] ; ?>"/></td>
-              <td><div class="edit" aid="<?php echo $rs[$i]['id'] ; ?>">
-                  <?php if($rs[$i]['haspic'])echo '<img src="'.ACP_UI.'/image.gif" align="absmiddle">'?>
-                  <a href="<?php echo APP_URI; ?>&do=preview&id=<?php echo $rs[$i]['id'] ; ?>" data-toggle="modal" title="预览"><?php echo $rs[$i]['title'] ; ?></a> </div>
-                <div class="row-actions"> <a href="<?php echo __ADMINCP__; ?>=files&indexid=<?php echo $rs[$i]['id'] ; ?>&method=database" class="tip-bottom" title="查看文章使用的图片" target="_blank"><i class="fa fa-picture-o"></i></a>
-                  <?php if($rs[$i]['status']!="2"){ ?>
-                  <a href="<?php echo __ADMINCP__; ?>=comment&aid=<?php echo $rs[$i]['id'] ; ?>" class="tip-bottom" title="文章评论管理" target="_blank"><i class="fa fa-comment"></i></a>
+            <tr id="id<?php echo $value['id'] ; ?>">
+              <td><input type="checkbox" name="id[]" value="<?php echo $value['id'] ; ?>" /></td>
+              <td class="ordernum"><input type="text" name="ordernum[<?php echo $value['id'] ; ?>]" value="<?php echo $value['ordernum'] ; ?>" aid="<?php echo $value['id'] ; ?>"/></td>
+              <td><div class="edit" aid="<?php echo $value['id'] ; ?>">
+                  <?php if($value['status']=="3"){ ?>
+                  <span class="label label-important">待审核</span>
                   <?php } ?>
-
-                  <!-- <a href="<?php echo __ADMINCP__; ?>=chapter&aid=<?php echo $rs[$i]['id'] ; ?>" class="tip-bottom" title="章节管理" target="_blank"><i class="fa fa-sitemap"></i></a> -->
-
-                  <?php if($rs[$i]['status']=="1"){ ?>
-                  <a href="<?php echo __ADMINCP__; ?>=push&do=add&title=<?php echo $rs[$i]['title'] ; ?>&pic=<?php echo $rs[$i]['pic'] ; ?>&url=<?php echo $rs[$i]['url'] ; ?>" class="tip-bottom" title="推送此文章"><i class="fa fa-thumb-tack"></i></a> <a href="<?php echo APP_URI; ?>&do=update&id=<?php echo $rs[$i]['id'] ; ?>&iDT=status:0" class="tip-bottom" target="iPHP_FRAME" title="转为草稿"><i class="fa fa-inbox"></i></a> <a href="<?php echo APP_URI; ?>&do=update&id=<?php echo $rs[$i]['id'] ; ?>&iDT=pubdate:now" class="tip-bottom" target="iPHP_FRAME" title="更新文章时间"><i class="fa fa-clock-o"></i></a>
+                  <?php if($value['postype']=="0"){ ?>
+                  <span class="label label-info">用户</span>
                   <?php } ?>
-                  <?php if($rs[$i]['status']=="0"){ ?>
-                  <a href="<?php echo APP_FURI; ?>&do=update&id=<?php echo $rs[$i]['id'] ; ?>&iDT=status:1" class="tip-bottom" target="iPHP_FRAME" title="发布文章"><i class="fa fa-share"></i></a> <a href="<?php echo APP_URI; ?>&do=update&id=<?php echo $rs[$i]['id'] ; ?>&iDT=status:1,pubdate:now" class="tip-bottom" target="iPHP_FRAME" title="更新文章时间,并发布"><i class="fa fa-clock-o"></i></a>
+                  <?php if($value['haspic']) echo '<img src="'.ACP_UI.'/image.gif" align="absmiddle">'?>
+                  <a href="<?php echo APP_URI; ?>&do=preview&id=<?php echo $value['id'] ; ?>" data-toggle="modal" title="预览"><?php echo $value['title'] ; ?></a>
+                 </div>
+                <div class="row-actions">
+                  <a href="<?php echo __ADMINCP__; ?>=files&indexid=<?php echo $value['id'] ; ?>&method=database" class="tip-bottom" title="查看文章使用的图片" target="_blank"><i class="fa fa-picture-o"></i></a>
+                  <?php if($value['postype']=="0"){ ?>
+                  <a href="<?php echo APP_URI; ?>&do=update&id=<?php echo $value['id'] ; ?>&iDT=status:1" class="tip-bottom" target="iPHP_FRAME" title="通过审核"><i class="fa fa-check-circle"></i></a>
+                    <?php if($value['status']!="3"){ ?>
+                    <a href="<?php echo APP_URI; ?>&do=update&id=<?php echo $value['id'] ; ?>&iDT=status:3" class="tip-bottom" target="iPHP_FRAME" title="等待审核"><i class="fa fa-minus-circle"></i></a>
+                    <?php } ?>
+                  <a href="<?php echo APP_URI; ?>&do=update&id=<?php echo $value['id'] ; ?>&iDT=status:4" class="tip-bottom" target="iPHP_FRAME" title="拒绝通过"><i class="fa fa-times-circle"></i></a>
                   <?php } ?>
-                  <?php if($rs[$i]['status']=="2"){ ?>
-                  <a href="<?php echo APP_FURI; ?>&do=update&id=<?php echo $rs[$i]['id'] ; ?>&iDT=status:1" target="iPHP_FRAME" class="tip-bottom" title="从回收站恢复"/><i class="fa fa-reply-all"></i></a>
+                  <?php if($value['status']!="2"){ ?>
+                  <a href="<?php echo __ADMINCP__; ?>=comment&appid=<?php echo iCMS_APP_ARTICLE ; ?>&iid=<?php echo $value['id'] ; ?>" class="tip-bottom" title="<?php echo $value['comments'] ; ?>条评论" target="_blank"><i class="fa fa-comment"></i></a>
                   <?php } ?>
-                  <a href="<?php echo APP_URI; ?>&do=purge&id=<?php echo $rs[$i]['id'] ; ?>&url=<?php echo $rs[$i]['url'] ; ?>" class="tip-bottom" data-toggle="modal" title="清除WEB缓存"><i class="fa fa-refresh"></i></a>
-                  <?php if ($C['mode'] && strstr($C['contentRule'],'{PHP}')===false && $rs[$i]['status']=="1" && empty($ourl) && iMember::$data->gid==1){  ?>
-                  <a href="<?php echo __ADMINCP__; ?>=html&do=createArticle&aid=<?php echo $rs[$i]['id'] ; ?>&frame=iPHP" class="tip-bottom" target="iPHP_FRAME" title="生成静态文件"><i class="fa fa-file"></i></a>
+                  <!-- <a href="<?php echo __ADMINCP__; ?>=chapter&aid=<?php echo $value['id'] ; ?>" class="tip-bottom" title="章节管理" target="_blank"><i class="fa fa-sitemap"></i></a> -->
+                  <?php if($value['status']=="1"){ ?>
+                  <a href="<?php echo __ADMINCP__; ?>=push&do=add&title=<?php echo $value['title'] ; ?>&pic=<?php echo $value['pic'] ; ?>&url=<?php echo $value['url'] ; ?>" class="tip-bottom" title="推送此文章"><i class="fa fa-thumb-tack"></i></a>
+                  <a href="<?php echo APP_URI; ?>&do=update&id=<?php echo $value['id'] ; ?>&iDT=status:0" class="tip-bottom" target="iPHP_FRAME" title="转为草稿"><i class="fa fa-inbox"></i></a>
+                  <a href="<?php echo APP_URI; ?>&do=update&id=<?php echo $value['id'] ; ?>&iDT=pubdate:now" class="tip-bottom" target="iPHP_FRAME" title="更新文章时间"><i class="fa fa-clock-o"></i></a>
+                  <?php } ?>
+                  <?php if($value['status']=="0"){ ?>
+                  <a href="<?php echo APP_FURI; ?>&do=update&id=<?php echo $value['id'] ; ?>&iDT=status:1" class="tip-bottom" target="iPHP_FRAME" title="发布文章"><i class="fa fa-share"></i></a>
+                  <a href="<?php echo APP_URI; ?>&do=update&id=<?php echo $value['id'] ; ?>&iDT=status:1,pubdate:now" class="tip-bottom" target="iPHP_FRAME" title="更新文章时间,并发布"><i class="fa fa-clock-o"></i></a>
+                  <?php } ?>
+                  <?php if($value['status']=="2"){ ?>
+                  <a href="<?php echo APP_FURI; ?>&do=update&id=<?php echo $value['id'] ; ?>&iDT=status:1" target="iPHP_FRAME" class="tip-bottom" title="从回收站恢复"/><i class="fa fa-reply-all"></i></a>
+                  <?php } ?>
+                  <a href="<?php echo APP_URI; ?>&do=purge&id=<?php echo $value['id'] ; ?>&url=<?php echo $value['url'] ; ?>" class="tip-bottom" data-toggle="modal" title="清除nginx缓存"><i class="fa fa-recycle"></i></a>
+                  <?php if ($C['mode'] && strstr($C['contentRule'],'{PHP}')===false && $value['status']=="1" && empty($ourl) && iMember::$data->gid==1){  ?>
+                  <a href="<?php echo __ADMINCP__; ?>=html&do=createArticle&aid=<?php echo $value['id'] ; ?>&frame=iPHP" class="tip-bottom" target="iPHP_FRAME" title="生成静态文件"><i class="fa fa-file"></i></a>
                   <?php } ?>
                 </div>
-                <?php if($rs[$i]['pic'] && iCMS::$config['publish']['showpic']){ ?>
-                <a href="<?php echo APP_URI; ?>&do=preview&id=<?php echo $rs[$i]['id'] ; ?>" data-toggle="modal" title="预览"><img src="<?php echo iFS::fp($rs[$i]['pic']); ?>" style="height:120px;"/></a>
-                <?php } ?></td>
-              <td><?php if($rs[$i]['pubdate']) echo get_date($rs[$i]['pubdate'],'Y-m-d H:i');?><br />
-                <?php if($rs[$i]['postime']) echo get_date($rs[$i]['postime'],'Y-m-d H:i');?></td>
-              <td><a href="<?php echo APP_DOURI; ?>&cid=<?php echo $rs[$i]['cid'] ; ?>&<?php echo $uri ; ?>"><?php echo $C['name'] ; ?></a><br />
-                <?php echo iACP::getProp("pid",$rs[$i]['pid'],'text',APP_DOURI.'&pid={PID}&'.$uri) ; ?></td>
-              <td><a href="<?php echo APP_DOURI; ?>&userid=<?php echo $rs[$i]['userid'] ; ?>&<?php echo $uri ; ?>"><?php echo $rs[$i]['editor'] ; ?></a><br /><?php echo $rs[$i]['author'] ; ?></td>
-              <td><?php echo $rs[$i]['hits']; ?>/<?php echo _int($rs[$i]['top']); ?></td>
-              <td><?php if($rs[$i]['status']=="1"){ ?>
-                <a href="<?php echo $rs[$i]['url']; ?>" class="btn btn-success btn-mini" target="_blank">查看</a>
+                <?php if($value['pic'] && iCMS::$config['publish']['showpic']){ ?>
+                <a href="<?php echo APP_URI; ?>&do=preview&id=<?php echo $value['id'] ; ?>" data-toggle="modal" title="预览"><img src="<?php echo iFS::fp($value['pic']); ?>" style="height:120px;"/></a>
                 <?php } ?>
-                <!-- <a href="<?php echo APP_URI; ?>&do=add&id=<?php echo $rs[$i]['id'] ; ?>" class="btn btn-primary btn-mini">+章节</a> -->
-                <?php if(iACP::CP($rs[$i]['cid'],'ce')){ ?>
-                <a href="<?php echo APP_URI; ?>&do=add&id=<?php echo $rs[$i]['id'] ; ?>" class="btn btn-primary btn-mini">编辑</a>
+              </td>
+              <td><?php if($value['pubdate']) echo get_date($value['pubdate'],'Y-m-d H:i');?><br />
+                <?php if($value['postime']) echo get_date($value['postime'],'Y-m-d H:i');?></td>
+              <td><a href="<?php echo APP_DOURI; ?>&cid=<?php echo $value['cid'] ; ?>&<?php echo $uri ; ?>"><?php echo $C['name'] ; ?></a><br />
+                <?php echo iACP::getProp("pid",$value['pid'],'text',APP_DOURI.'&pid={PID}&'.$uri) ; ?></td>
+              <td><a href="<?php echo APP_DOURI; ?>&userid=<?php echo $value['userid'] ; ?>&<?php echo $uri ; ?>"><?php echo $value['editor'] ; ?></a><br /><?php echo $value['author'] ; ?></td>
+              <td><?php echo $value['hits']; ?>/<?php echo _int($value['top']); ?></td>
+              <td><?php if($value['status']=="1"){ ?>
+                <a href="<?php echo $value['url']; ?>" class="btn btn-success btn-mini" target="_blank">查看</a>
                 <?php } ?>
-                <?php if(in_array($rs[$i]['status'],array("1","0")) && iACP::CP($rs[$i]['cid'],'cd')){ ?>
-                <a href="<?php echo APP_FURI; ?>&do=update&id=<?php echo $rs[$i]['id'] ; ?>&iDT=status:2" target="iPHP_FRAME" class="del btn btn-danger btn-mini" title="移动此文章到回收站" />删除</a>
+                <!-- <a href="<?php echo APP_URI; ?>&do=add&id=<?php echo $value['id'] ; ?>" class="btn btn-primary btn-mini">+章节</a> -->
+                <?php if(iACP::CP($value['cid'],'ce')){ ?>
+                <a href="<?php echo APP_URI; ?>&do=add&id=<?php echo $value['id'] ; ?>" class="btn btn-primary btn-mini">编辑</a>
                 <?php } ?>
-                <?php if($rs[$i]['status']=="2"){ ?>
-                <a href="<?php echo APP_FURI; ?>&do=del&id=<?php echo $rs[$i]['id'] ; ?>" target="iPHP_FRAME" class="del btn btn-danger btn-mini" onclick="return confirm('确定要删除?');"/>永久删除</a>
+                <?php if(in_array($value['status'],array("1","0")) && iACP::CP($value['cid'],'cd')){ ?>
+                <a href="<?php echo APP_FURI; ?>&do=update&id=<?php echo $value['id'] ; ?>&iDT=status:2" target="iPHP_FRAME" class="del btn btn-danger btn-mini" title="移动此文章到回收站" />删除</a>
+                <?php } ?>
+                <?php if($value['status']=="2"){ ?>
+                <a href="<?php echo APP_FURI; ?>&do=del&id=<?php echo $value['id'] ; ?>" target="iPHP_FRAME" class="del btn btn-danger btn-mini" onclick="return confirm('确定要删除?');"/>永久删除</a>
                 <?php } ?>
               </td>
             </tr>

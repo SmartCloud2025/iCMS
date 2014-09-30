@@ -35,6 +35,10 @@ define('iPHP_DATE_FORMAT','Y-m-d H:i:s');
 //define('iPHP_TIME_CORRECT',"0"); //网站动态配置
 //---------------模板------------------------
 define('iPHP_TPL_VAR',	'iCMS');//模板标签定义
+//---------------文章主体存储方式------------------------
+//注：此项设置后，请勿改动 以方式存储请想清楚在决定
+//define('iCMS_ARTICLE_DATA',	'DB');//以数据库形式存储
+//define('iCMS_ARTICLE_DATA',	'FILE');//以文件形式存储
 
 //---------------DEBUG------------------------
 //define('iPHP_DEBUG',false);
@@ -43,7 +47,3 @@ define('iPHP_TPL_VAR',	'iCMS');//模板标签定义
 //---------------多站点模式------------------------
 //define('iPHP_MULTI_SITE',true);
 //define('iPHP_MULTI_DOMAIN',true);
-//---------------网站配置文件------------------------
-//---------------配置无定义时 可去掉注释-----------------------
-//define('iPHP_APP_CONF',iPHP_APP_CACHE."/core/conf/iCMS");
-//define('iPHP_URL_404','');

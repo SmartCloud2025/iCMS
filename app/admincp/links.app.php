@@ -30,11 +30,11 @@ class linksApp{
 		$logo		= iS::escapeStr($_POST['logo']);
 		$url		= iS::escapeStr($_POST['url']);
 		$desc		= iS::escapeStr($_POST['desc']);
-		$orderNum	= (int)$_POST['orderNum'];
+		$ordernum	= (int)$_POST['ordernum'];
 
         $name 	OR iPHP::alert('网站不能为空!');
         $url 	OR iPHP::alert('链接不能为空!');
-        $fields = array('sortid', 'name', 'logo', 'url', 'desc', 'orderNum');
+        $fields = array('sortid', 'name', 'logo', 'url', 'desc', 'ordernum');
         $data   = compact ($fields);
         if(empty($id)) {
             iDB::value("SELECT `id` FROM `#iCMS@__links` where `name` ='$name'") && iPHP::alert('该网站已经存在!');
@@ -56,7 +56,7 @@ class linksApp{
         if($_GET['sortid']) {
 			$sql=" WHERE `sortid` = '{$_GET['sortid']}'";
         }
-        
+
         $orderby	=$_GET['orderby']?$_GET['orderby']:"id DESC";
         $maxperpage = $_GET['perpage']>0?(int)$_GET['perpage']:20;
 		$total		= iPHP::total(false,"SELECT count(*) FROM `#iCMS@__links` {$sql}","G");

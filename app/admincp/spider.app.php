@@ -48,7 +48,7 @@ class spiderApp {
         iDB::query("delete from `#iCMS@__spider_url` where `id` = '$this->sid';");
         iPHP::success('删除完成','js:1');
     }
-    
+
     function do_manage($doType = null) {
         $categoryApp = iACP::app('category',iCMS_APP_ARTICLE);
         $category    = $categoryApp->category;
@@ -58,7 +58,7 @@ class spiderApp {
         $doType == "inbox" && $sql.=" AND `publish` ='0'";
         $_GET['pid'] && $sql.=" AND `pid` ='" . (int) $_GET['pid'] . "'";
         $_GET['rid'] && $sql.=" AND `rid` ='" . (int) $_GET['rid'] . "'";
-        
+
         $sql.=$categoryApp->search_sql($this->cid);
 
         $ruleArray = $this->rule_opt(0, 'array');
@@ -166,7 +166,7 @@ class spiderApp {
                 	iDB::query("UPDATE `#iCMS@__spider_url` SET `publish` = '1' WHERE `id` = '$sid';");
                 }else{
                     $data = array(
-                        'cid'=>$this->cid,'rid'=>$this->rid,'pid'=>$this->pid, 'title'=>$this->title, 'url'=>$this->url, 
+                        'cid'=>$this->cid,'rid'=>$this->rid,'pid'=>$this->pid, 'title'=>$this->title, 'url'=>$this->url,
                         'hash'=>$hash, 'status'=>'1', 'publish'=>'1', 'addtime'=>time(), 'pubdate'=>time()
                     );
                     iDB::insert('spider_url',$data);
@@ -181,11 +181,11 @@ class spiderApp {
     }
 
     function post($work = null) {
-        $_POST        = $this->spider_content();      
+        $_POST        = $this->spider_content();
         $pid          = $this->pid;
         $project      = $this->project($pid);
         $sleep        = $project['sleep'];
-        $poid         = $project['poid'];       
+        $poid         = $project['poid'];
         $_POST['cid'] = $project['cid'];
         $postRs       = iDB::row("SELECT * FROM `#iCMS@__spider_post` WHERE `id`='$poid' LIMIT 1;");
         if ($postRs->post) {
@@ -208,9 +208,9 @@ class spiderApp {
                 $hash    = md5($this->url);
                 $title   = iS::escapeStr($_POST['title']);
                 $url     = iS::escapeStr($_POST['reurl']);
-                $indexId = $callback['indexId'];
+                $indexid = $callback['indexid'];
                 $data = array(
-                    'cid'=>$this->cid,'rid'=>$this->rid,'pid'=>$pid,'indexId'=>$indexId,'title'=>$title, 'url'=>$url, 
+                    'cid'=>$this->cid,'rid'=>$this->rid,'pid'=>$pid,'indexid'=>$indexid,'title'=>$title, 'url'=>$url,
                     'hash'=>$hash, 'status'=>'1', 'publish'=>'1', 'addtime'=>time(), 'pubdate'=>time()
                 );
                 iDB::insert('spider_url',$data);
@@ -269,7 +269,7 @@ class spiderApp {
             }
 			$html = null;
             unset($html);
-            
+
             if ($this->ruleTest) {
                 echo iS::escapeStr($this->pregTag($rule['list_area_rule']));
 //    			echo iS::escapeStr($list_area);
@@ -283,7 +283,7 @@ class spiderApp {
 //              echo iS::escapeStr($list_area);
                 echo "<hr />";
             }
-            
+
             preg_match_all('|' . $this->pregTag($rule['list_url_rule']) . '|is', $list_area, $lists, PREG_SET_ORDER);
 
 			$list_area = null;
@@ -347,7 +347,7 @@ class spiderApp {
 							//$urlArray[]= $url;
                             $this->rid = $rid;
                             $this->url = $url;
-                            $callback  = $this->post("cmd");                            
+                            $callback  = $this->post("cmd");
 							if ($callback['code'] == "1001") {
 								echo "url:".$url."\n";
 								if($project['sleep']){
@@ -371,7 +371,7 @@ class spiderApp {
     }
 
     function spider_content() {
-		ini_get('safe_mode') OR set_time_limit(0); 
+		ini_get('safe_mode') OR set_time_limit(0);
         $sid = $this->sid;
         if ($sid) {
             $sRs   = iDB::row("SELECT * FROM `#iCMS@__spider_url` WHERE `id`='$sid' LIMIT 1;");
@@ -396,7 +396,7 @@ class spiderApp {
         $dataArray       = $rule['data'];
         $this->useragent = $rule['user_agent'];
         $this->charset   = $rule['charset'];
-        
+
 		if($prule_list_url){
 			$rule['list_url']	= $prule_list_url;
 		}
@@ -412,7 +412,7 @@ class spiderApp {
         $html = $this->remote($url);
         empty($html) && iPHP::alert('错误:001..采集 ' . $url . ' 文件内容为空!请检查采集规则');
 //    	$http	= $this->check_content_code($html);
-//    	
+//
 //    	if($http['match']==false){
 //    		return false;
 //    	}
@@ -534,7 +534,7 @@ class spiderApp {
         }
 		$html = null;
         unset($html);
-        
+
         if ($data['cleanbefor']) {
             $content = $this->dataClean($data['cleanbefor'], $content);
         }
@@ -686,7 +686,7 @@ class spiderApp {
         } else {
             iDB::insert('spider_rule',$data);
         }
-        iPHP::success('保存成功','js:1');
+        iPHP::success('保存成功');
     }
 
     function rule_opt($id = 0, $output = null) {
@@ -865,7 +865,7 @@ class spiderApp {
 		    	preg_match ('|Location: (.*)|i',$header,$matches);
 		    	$newurl 	= ltrim($matches[1],'/');
 			    if(empty($newurl)) return false;
-			    
+
 		    	if(!strstr($newurl,'http://')){
 			    	$host	= $uri['scheme'].'://'.$uri['host'];
 		    		$newurl = $host.'/'.$newurl;
@@ -893,7 +893,7 @@ class spiderApp {
             return $this->remote($url, $_referer, $_count);
         }
         if ($this->charset == "auto") {
-            $encode = mb_detect_encoding($responses, array("ASCII","UTF-8","GB2312","GBK","BIG5")); 
+            $encode = mb_detect_encoding($responses, array("ASCII","UTF-8","GB2312","GBK","BIG5"));
             $encode!='UTF-8' && $responses = mb_convert_encoding($responses,"UTF-8",$encode);
         } elseif ($this->charset == "gbk") {
             $responses = mb_convert_encoding($responses, "UTF-8", "gbk");
@@ -904,7 +904,7 @@ class spiderApp {
     }
 
     function check_content_code($content, $delay = 0) {
-        $encode = mb_detect_encoding($content, array("ASCII","UTF-8","GB2312","GBK","BIG5")); 
+        $encode = mb_detect_encoding($content, array("ASCII","UTF-8","GB2312","GBK","BIG5"));
         $encode!='UTF-8' && $content = mb_convert_encoding($content,"UTF-8",$encode);
 //	    $page_right_rule	= $this->pregTag($this->page_right_code);
 //	    preg_match('|'.$page_right_rule.'|is', $data, $matches);

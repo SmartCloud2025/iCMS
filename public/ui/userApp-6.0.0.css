@@ -157,3 +157,4 @@ body { background-color: #fff; background-image: url(img/bg-v6.png); _background
 .pg_follow .avatar_list li .label-info { padding: 8px 5px; font-size: 14px; width: 80px; text-align: center; display: block; border-top-left-radius: 0; border-top-right-radius: 0; }
 .pg_follow .avatar_list li .avatar_90 { border-bottom-left-radius: 0; border-bottom-right-radius: 0; }
 .pg_follow .avatar_list li .btn_follow { display: none; width: 64px; border-top-left-radius: 0; border-top-right-radius: 0; }
+

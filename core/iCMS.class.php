@@ -27,7 +27,7 @@ class iCMS {
     public static $hooks       = array();
 
 	public static function Init(){
-        self::$config = iPHP::config();
+        self::config();
         iFS::init(self::$config['FS'],'filedata');
         iCache::init(self::$config['cache']);
         iURL::init(self::$config['router']);
@@ -48,6 +48,76 @@ class iCMS {
         self::$apps = self::$config['apps'];
         self::assign_site();
 	}
+    public static function config(){
+        $site   = iPHP_MULTI_SITE ? $_SERVER['HTTP_HOST']:iPHP_APP;
+        if(iPHP_MULTI_DOMAIN){ //只绑定主域
+            preg_match("/[^\.\/]+\.[^\.\/]+$/", $site, $matches);
+            $site = $matches[0];
+        }
+        strpos($site, '..') === false OR exit('<h1>What are you doing?(code:0001)</h1>');
+
+        //config.php 中开启iPHP_APP_CONF后 此处设置无效,
+        define('iPHP_APP_CONF', iPHP_CONF_DIR.'/'.$site);//网站配置目录
+        $app_config_file = iPHP_APP_CONF.'/config.php'; //网站配置文件
+        @is_file($app_config_file) OR exit('<h1>'.iPHP_APP.' 运行出错.找不到"'.$site.'"网站的配置文件!(code:0002)</h1>');
+        $config = require $app_config_file;
+
+        //config.php 中开启后 此处设置无效
+        defined('iPHP_DEBUG')        OR define('iPHP_DEBUG', $config['debug']['php']);       //程序调试模式
+        defined('iPHP_TPL_DEBUG')    OR define('iPHP_TPL_DEBUG',$config['debug']['tpl']);    //模板调试
+        defined('iPHP_TIME_CORRECT') OR define('iPHP_TIME_CORRECT',$config['time']['cvtime']);
+        //config.php --END--
+
+        define('iPHP_URL_404',$config['router']['404']);//404定义
+
+        if(iPHP_DEBUG||iPHP_TPL_DEBUG){
+            ini_set('display_errors','ON');
+            error_reporting(E_ALL & ~E_NOTICE);
+            set_error_handler('iPHP_ERROR_HANDLER');
+        }
+
+        $timezone = $config['time']['zone'];
+        $timezone OR $timezone = 'Asia/Shanghai';//设置中国时区
+        @ini_set('date.timezone',$timezone);
+        function_exists('date_default_timezone_set') && @date_default_timezone_set($timezone);
+
+        self::multiple_device($config);
+        self::$config = $config;
+    }
+    //多终端适配
+    private static function multiple_device(&$config){
+        $template = $config['template'];
+        foreach ((array)$template['device'] as $key => $device) {
+            $has_tpl = self::device_agent($device['ua']);
+            if($device['tpl'] && $has_tpl){
+                $device_name = $device['name'];
+                $def_tpl     = $device['tpl'];
+                $def_domain  = $device['domain'];
+                break;
+            }
+        }
+        if(empty($def_tpl)){
+            if(self::device_agent($template['mobile']['agent'])){
+                $device_name = 'mobile';
+                $def_tpl     = $template['mobile']['tpl'];
+                $def_domain  = $template['mobile']['domain'];
+            }
+        }
+        if(empty($def_tpl)){
+            $device_name = 'pc';
+            $def_tpl     = $template['pc']['tpl'];
+            $def_domain  = false;
+        }
+        define('iPHP_TPL_DEFAULT',$def_tpl);
+        if($def_domain){
+            $_router_url      = $config['router']['URL'];
+            $config['router'] = str_replace($_router_url, $def_domain, $config['router']);
+        }
+    }
+    private static function device_agent($user_agent){
+        $user_agent = str_replace(',','|',preg_quote($user_agent));
+        return ($user_agent && preg_match('/'.$user_agent.'/i',$_SERVER["HTTP_USER_AGENT"]));
+    }
     public static function assign_site(){
         iPHP::assign('site',array(
             "title"       => self::$config['site']['name'],

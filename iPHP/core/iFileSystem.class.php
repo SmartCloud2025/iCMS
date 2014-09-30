@@ -112,12 +112,9 @@ class iFS {
         $check && self::check($fn);
         touch($fn);
         $handle = fopen($fn, $method);
-        if ($iflock) {
-            flock($handle, LOCK_EX);
-        }
+        $iflock && flock($handle, LOCK_EX);
         fwrite($handle, $data);
-        if ($method == "rb+")
-            ftruncate($handle, strlen($data));
+        $method == "rb+" && ftruncate($handle, strlen($data));
         fclose($handle);
         $chmod && @chmod($fn, 0777);
     }

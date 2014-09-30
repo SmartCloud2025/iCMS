@@ -35,7 +35,7 @@ function push_list($vars){
     switch ($vars['orderby']) {
         case "id":		$orderSQL=" ORDER BY `id` $by";			break;
         case "addtime":	$orderSQL=" ORDER BY `addtime` $by";    break;
-        case "disorder":$orderSQL=" ORDER BY `orderNum` $by";    break;
+        case "disorder":$orderSQL=" ORDER BY `ordernum` $by";    break;
         default:        $orderSQL=" ORDER BY `id` DESC";
     }
 	if($vars['cache']){

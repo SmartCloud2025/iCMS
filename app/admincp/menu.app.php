@@ -31,8 +31,8 @@ class menuApp{
     	iPHP::success('添加完成');
     }
     function do_updateorder(){
-    	foreach((array)$_POST['ordernum'] as $orderNum=>$id){
-            iDB::query("UPDATE `#iCMS@__menu` SET `orderNum` = '".intval($orderNum)."' WHERE `id` ='".intval($id)."' LIMIT 1");
+    	foreach((array)$_POST['ordernum'] as $ordernum=>$id){
+            iDB::query("UPDATE `#iCMS@__menu` SET `ordernum` = '".intval($ordernum)."' WHERE `id` ='".intval($id)."' LIMIT 1");
     	}
 		iACP::$menu->cache();
     }
@@ -96,16 +96,27 @@ class menuApp{
     }
     function li($M) {
     	if($M['app']=='separator'){
-    		return '<span class="operation"><a href="'.APP_FURI.'&do=del&id='.$M['id'].'" class="btn btn-danger btn-small" onClick="return confirm(\'确定要删除此菜单?\');" target="iPHP_FRAME"><i class="fa fa-trash-o"></i> 删除</a></span><div class="separator"><span class="ordernum" style="display:none;"><input type="text" data-id="'.$M['id'].'" name="orderNum['.$M['id'].']" value="'.$M['orderNum'].'"/></span> </div>';
+    		return '<span class="operation"><a href="'.APP_FURI.'&do=del&id='.$M['id'].'" class="btn btn-danger btn-small" onClick="return confirm(\'确定要删除此菜单?\');" target="iPHP_FRAME"><i class="fa fa-trash-o"></i> 删除</a></span><div class="separator"><span class="ordernum" style="display:none;"><input type="text" data-id="'.$M['id'].'" name="ordernum['.$M['id'].']" value="'.$M['ordernum'].'"/></span> </div>';
     	}
         $M['rootid']==0 && $bold =' style="font-weight:bold"';
-        $tr='<div class="row-fluid"><span class="ordernum" style="display:none;"><input type="text" data-id="'.$M['id'].'" name="orderNum['.$M['id'].']" value="'.$M['orderNum'].'" style="width:32px;"/></span>
+        $tr='<div class="row-fluid">
+        <span class="ordernum" style="display:none;"><input type="text" data-id="'.$M['id'].'" name="ordernum['.$M['id'].']" value="'.$M['ordernum'].'" style="width:32px;"/></span>
         <span class="name"'.$bold.'>'.$M['name'].'</span><span class="operation">';
-        $tr.='<a href="'.APP_URI.'&do=add&rootid='.$M['id'].'" class="btn btn-info btn-small"><i class="fa fa-plus-square"></i> 子菜单</a>
-        <a href="'.APP_FURI.'&do=addseparator&rootid='.$M['id'].'" class="btn btn-success btn-small" target="iPHP_FRAME"><i class="fa fa-minus-square"></i> 分隔符</a> <a href="'.APP_URI.'&do=add&id='.$M['id'].'" title="编辑菜单设置"  class="btn btn-primary btn-small"><i class="fa fa-edit"></i> 编辑</a> <a href="'.APP_FURI.'&do=del&id='.$M['id'].'" class="btn btn-danger btn-small" onClick="return confirm(\'确定要删除此菜单?\');" target="iPHP_FRAME"><i class="fa fa-trash-o"></i> 删除</a></span></div>';
+        $tr.='
+        <a href="'.APP_URI.'&do=copy&id='.$M['id'].'" title="复制本菜单设置"  class="btn btn-small" target="iPHP_FRAME"><i class="fa fa-copy"></i> 复制</a>
+        <a href="'.APP_URI.'&do=add&rootid='.$M['id'].'" class="btn btn-info btn-small"><i class="fa fa-plus-square"></i> 子菜单</a>
+        <a href="'.APP_FURI.'&do=addseparator&rootid='.$M['id'].'" class="btn btn-success btn-small" target="iPHP_FRAME"><i class="fa fa-minus-square"></i> 分隔符</a>
+        <a href="'.APP_URI.'&do=add&id='.$M['id'].'" title="编辑菜单设置"  class="btn btn-primary btn-small"><i class="fa fa-edit"></i> 编辑</a>
+        <a href="'.APP_FURI.'&do=del&id='.$M['id'].'" class="btn btn-danger btn-small" onClick="return confirm(\'确定要删除此菜单?\');" target="iPHP_FRAME"><i class="fa fa-trash-o"></i> 删除</a></span></div>';
         return $tr;
     }
-
+    function do_copy() {
+        $id = $_GET['id'];
+        $field = '`rootid`, `ordernum`, `app`, `name`, `title`, `href`, `icon`, `class`, `a_class`, `target`, `caret`, `data-toggle`, `data-meta`, `data-target`';
+        iDB::query("insert into `#iCMS@__menu` ({$field}) select {$field} from `#iCMS@__menu` where id = '$id'");
+        $nid = iDB::$insert_id;
+        iPHP::success('复制完成,编辑此菜单', 'url:' . APP_URI . '&do=add&id=' . $nid);
+    }
     function do_save(){
         $id          = $_POST['id'];
         $rootid      = $_POST['rootid'];
@@ -113,12 +124,12 @@ class menuApp{
         $name        = $_POST['name'];
         $title       = $_POST['title'];
         $href        = $_POST['href'];
+        $a_class     = $_POST['a_class'];
         $icon        = $_POST['icon'];
         $target      = $_POST['target'];
         $data_toggle = $_POST['data-toggle'];
-        $orderNum    = $_POST['orderNum'];
+        $ordernum    = $_POST['ordernum'];
         $class       = '';
-        $a_class     = '';
         $caret       = '';
         $data_meta   = $_POST['data-meta'];
         $data_target = '';
@@ -129,9 +140,9 @@ class menuApp{
     		$caret		= '<b class="caret"></b>';
     	}else if($data_toggle=="modal"){
     		$data_meta	OR	$data_meta	= '{"width":"800px","height":"600px"}';
-    		$data_target	= '#iCMS-MODAL';
+    		$data_target = '#iCMS-MODAL';
     	}
-        $fields = array('rootid', 'orderNum', 'app', 'name', 'title', 'href', 'icon', 'class', 'a_class', 'target', 'caret', 'data-toggle', 'data-meta', 'data-target');
+        $fields = array('rootid', 'ordernum', 'app', 'name', 'title', 'href', 'icon', 'class', 'a_class', 'target', 'caret', 'data-toggle', 'data-meta', 'data-target');
         $data   = compact ($fields);
 
 		if($id){

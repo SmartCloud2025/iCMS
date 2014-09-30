@@ -31,6 +31,7 @@ $(function() {
     $(':checkbox[data-type!=switch],:radio[data-type!=switch]').uniform();
     $('.ui-datepicker').datepicker({format: 'yyyy-mm-dd'});
     $('.tip').tooltip({html:true});
+    $('[data-toggle="popover"]').popover({html:true});
     $('.tip-left').tooltip({placement:'left',html:true});
     $('.tip-right').tooltip({placement:'right',html:true});
     $('.tip-top').tooltip({placement:'top',html:true});

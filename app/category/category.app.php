@@ -8,7 +8,7 @@
  */
 class categoryApp{
 	public $methods	= array('iCMS');
-    function __construct($appid = iCMS_APP_ARTICLE) {
+    public function __construct($appid = iCMS_APP_ARTICLE) {
     	$this->appid = iCMS_APP_ARTICLE;
     	$appid && $this->appid = $appid;
     	$_GET['appid'] && $this->appid	= (int)$_GET['appid'];

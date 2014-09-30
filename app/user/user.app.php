@@ -10,7 +10,7 @@ defined('iPHP') OR exit('What are you doing?');
 
 iPHP::app('user.class','static');
 class userApp {
-    public $methods = array('iCMS','home','article','publish','manage','profile','data','check','follow','login','logout','register','agreement','add_category','upload','imageUp','delete','report','ucard');
+    public $methods = array('iCMS','home','article','publish','manage','profile','data','check','follow','login','logout','register','add_category','upload','imageUp','delete','report','ucard');
     public $openid  = null;
     public $user    = array();
     public $me      = array();
@@ -139,6 +139,7 @@ class userApp {
 
         iPHP::success('user:category:update','js:1');
     }
+
     private function __action_manage_publish(){
         $aid         = (int)$_POST['id'];
         $cid         = (int)$_POST['cid'];
@@ -190,7 +191,10 @@ class userApp {
             map::add($cid,$aid);
             iDB::query("UPDATE `#iCMS@__user_category` SET `count` = count+1 WHERE `cid` = '$ucid' AND `uid`='".user::$userid."';");
             user::update_count(user::$userid,1,'article');
-            $lang = $status ? 'user:article:add_success':'user:article:add_examine';
+            $lang = array(
+                '1'=>'user:article:add_success',
+                '3'=>'user:article:add_examine',
+            );
         }else{
             articleTable::update(compact($fields),array('id'=>$aid));
             articleTable::data_update(compact ($data_fields),array('aid'=>$aid));
@@ -200,10 +204,13 @@ class userApp {
                 iDB::query("UPDATE `#iCMS@__user_category` SET `count` = count+1 WHERE `cid` = '$ucid' AND `uid`='".user::$userid."';");
                 iDB::query("UPDATE `#iCMS@__user_category` SET `count` = count-1 WHERE `cid` = '$_ucid' AND `uid`='".user::$userid." AND `count`>0';");
             }
-            $lang = $status ? 'user:article:update_success':'user:article:update_examine';
+            $lang = array(
+                '1'=>'user:article:update_success',
+                '3'=>'user:article:update_examine',
+            );
         }
         $url = str_replace(iCMS_URL,'',iPHP::router('/user/article'));
-        iPHP::success($lang,'url:'.$url);
+        iPHP::success($lang[$status],'url:'.$url);
     }
     public function ACTION_manage(){
         $this->me = user::status(USER_LOGIN_URL,"nologin");
@@ -342,16 +349,19 @@ class userApp {
         $pass     = md5(trim($_POST['pass']));
         $remember = (bool)$_POST['remember']?ture:false;
         $seccode  = iS::escapeStr($_POST['seccode']);
-        $a        = iPHP::code(0,'user:login:error','uname');
 
         if(iCMS::$config['user']['loginseccode']){
             iPHP::seccode($seccode) OR iPHP::code(0,'iCMS:seccode:error','seccode','json');
         }
         $remember && user::$cookietime = 14*86400;
-        $user = user::login($uname,$pass,(strpos ($uname,'@')===false?'nk':''));
-
-        $user && $a = iPHP::code(1,0,$this->forward);
-        iPHP::json($a);
+        $user = user::login($uname,$pass,(strpos($uname,'@')===false?'nk':'un'));
+        if($user===true){
+            iPHP::code(1,0,$this->forward,'json');
+        }else{
+            // $lang = 'user:login:error';
+            // $user && $lang.='_status_'.$user;
+            iPHP::code(0,'user:login:error','uname','json');
+        }
     }
 
     public function ACTION_register(){
@@ -359,7 +369,7 @@ class userApp {
 
         $username    = iS::escapeStr($_POST['username']);
         $nickname    = iS::escapeStr($_POST['nickname']);
-        $gender      = ($_POST['sex']=='girl'?0:1);
+        $gender      = ($_POST['gender']=='girl'?0:1);
         $password    = md5(trim($_POST['password']));
         $rstpassword = md5(trim($_POST['rstpassword']));
         $refer       = iS::escapeStr($_POST['refer']);
@@ -394,7 +404,7 @@ class userApp {
         $fields = array('gid', 'username', 'nickname', 'password', 'gender', 'fans', 'follow', 'article', 'comments','share', 'credit', 'regip', 'regdate', 'lastloginip', 'lastlogintime', 'type', 'status');
         $data   = compact ($fields);
         $uid    = iDB::insert('user',$data);
-        user::set_cookie($username,$password,array('uid'=>$uid,'username'=>$username,'nickname'=>$nickname));
+        user::set_cookie($username,$password,array('uid'=>$uid,'username'=>$username,'nickname'=>$nickname,'status'=>$status));
         //user::set_cache($uid);
         iPHP::set_cookie('forward', '',-31536000);
         iPHP::json(array('code'=>1,'forward'=>$this->forward));
@@ -451,10 +461,16 @@ class userApp {
         user::update_count(user::$userid,1,'comments','-');
         iPHP::code(1,0,0,'json');
     }
+    private function __action_delete_article(){
+        $id = (int)$_POST['id'];
+        $id OR iPHP::code(0,'iCMS:error',0,'json');
+        iDB::query("UPDATE `#iCMS@__article` SET `status` ='2' WHERE `userid` = '".user::$userid."' AND `id`='$id' LIMIT 1;");
+        iPHP::code(1,0,0,'json');
+    }
     public function ACTION_delete(){
         $this->me = user::status(USER_LOGIN_URL,"nologin");
 
-        $pgArray = array('comment');
+        $pgArray = array('comment','article');
         $pg      = iS::escapeStr($_POST['pg']);
         $funname ='__action_delete_'.$pg;
         $methods = get_class_methods(__CLASS__);
@@ -465,27 +481,27 @@ class userApp {
     public function API_check(){
         $name  = iS::escapeStr($_GET['name']);
         $value = iS::escapeStr($_GET['value']);
-        $a     = iPHP::code(1);
+        $a     = iPHP::code(1,'',$name);
         switch ($name) {
             case 'username':
                 if(!preg_match("/^[\w\-\.]+@[\w\-]+(\.\w+)+$/i", $value)){
-                    $a = iPHP::code(0,'user:register:username:error');
+                    $a = iPHP::code(0,'user:register:username:error','username');
                 }else{
-                    user::check($value,'username') OR $a = iPHP::code(0,'user:register:username:exist');
+                    user::check($value,'username') OR $a = iPHP::code(0,'user:register:username:exist','username');
                 }
                 break;
             case 'nickname':
                 if(preg_match("/\d/", $value{0})||cstrlen($value)>20||cstrlen($value)<4){
-                    $a = iPHP::code(0,'user:register:nickname:error');
+                    $a = iPHP::code(0,'user:register:nickname:error','username');
                 }else{
-                    user::check($value,'nickname') OR $a = iPHP::code(0,'user:register:nickname:exist');
+                    user::check($value,'nickname') OR $a = iPHP::code(0,'user:register:nickname:exist','username');
                 }
                 break;
             case 'password':
-                strlen($value)<6 && $a=iPHP::code(0,'user:password:error');
+                strlen($value)<6 && $a=iPHP::code(0,'user:password:error','username');
             break;
             case 'seccode':
-                iPHP::seccode($value) OR $a = iPHP::code(0,'iCMS:seccode:error');
+                iPHP::seccode($value) OR $a = iPHP::code(0,'iCMS:seccode:error','username');
             break;
         }
         iPHP::json($a);
@@ -526,8 +542,9 @@ class userApp {
             iPHP::set_cookie('forward',$this->forward);
             user::status($this->forward,"login");
             iPHP::view('iCMS://user/register.htm');
+        }else{
+            iPHP::view('iCMS://user/register.close.htm');
         }
-        iPHP::view('iCMS://user/register.close.htm');
     }
     public function API_data($uid=0){
         $user   = user::status();
@@ -549,12 +566,11 @@ class userApp {
             iPHP::set_cookie('forward',$this->forward);
             user::status($this->forward,"login");
             iPHP::view('iCMS://user/login.htm');
+        }else{
+            iPHP::view('iCMS://user/login.close.htm');
         }
-        iPHP::view('iCMS://user/login.close.htm');
     }
-    public function API_agreement(){
-    	iPHP::view('iCMS://user/agreement.htm');
-    }
+
     public function API_imageUp(){
         $stateInfo ='SUCCESS';
         $F         = iFS::upload('upfile');

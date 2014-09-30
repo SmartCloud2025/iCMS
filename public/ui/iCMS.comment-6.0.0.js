@@ -153,6 +153,7 @@
                             '</div>';
                         list.append(item);
                     });
+                    iCMS.user.ucard();
                     if(!id){
                         $(".load-more",container).remove();
                         if (iCMS.comment.page_no[iid] < iCMS.comment.page_total[iid]) {

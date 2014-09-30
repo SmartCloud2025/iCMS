@@ -41,14 +41,18 @@ class iMenu {
 	}
 
 	function get_array($cache=false){
-		$rs	= iDB::all("SELECT * FROM `#iCMS@__menu` ORDER BY `orderNum` , `id` ASC",ARRAY_A);
+		$rs	= iDB::all("SELECT * FROM `#iCMS@__menu` ORDER BY `ordernum` , `id` ASC",ARRAY_A);
 		foreach((array)$rs AS $M) {
 			$this->menu_array[$M['id']]               = $M;
 			$this->root_array[$M['rootid']][$M['id']] = $M;
 			$this->parent[$M['id']]                   = $M['rootid'];
-	        $M['app']!='separator' && $this->child_array[$M['rootid']][$M['id']]	= $M['id'];
+	        $M['app']!='separator' && $this->child_array[$M['rootid']][$M['id']] = $M['id'];
 			$this->menu_uri[$M['app']][$M['href']] = $M['id'];
 			$this->menu_uri[$M['app']]['#']        = $M['rootid'];
+		}
+		foreach ((array)$this->root_array as $rid => $array) {
+			uasort($array, "order_num");
+			$this->root_array[$rid] = $array;
 		}
 		if($cache){
 			iCache::set('iCMS/iMenu/menu_array',	$this->menu_array,0);
@@ -91,8 +95,11 @@ class iMenu {
 		if(strstr($a['href'], 'http://')||strstr($a['href'], '#')) $href = $a['href'];
 		$a['href']=='__SELF__' && $href = __SELF__;
 		$a['icon'] && $icon='<i class="'.$a['icon'].'"></i> ';
-
-		echo '<a href="'.$href.'">'.$icon.' '.$a['name'].'</a>';
+		$link = '<a href="'.$href.'"';
+		$a['title']  && $link.= ' title="'.$a['title'].'"';
+		$a['a_class']&& $link.= ' class="'.$a['a_class'].'"';
+		$link.='>';
+		echo $link.$icon.' '.$a['name'].'</a>';
 	}
 	function sidebar(){
 		return $this->show('sidebar',$this->rootid,1);
@@ -143,20 +150,20 @@ class iMenu {
 
 		$li = '<li class="'.$a['class'].'" title="'.$a['name'].'" data-level="'.$level.'" data-menu="m'.$id.'">';
 
-		$aa = '<a href="'.$href.'"';
-		$a['title']  && $aa.= ' title="'.$a['title'].'"';
-		$a['a_class']&& $aa.= ' class="'.$a['a_class'].'"';
-		$a['target'] && $aa.= ' target="'.$a['target'].'"';
+		$link = '<a href="'.$href.'"';
+		$a['title']  && $link.= ' title="'.$a['title'].'"';
+		$a['a_class']&& $link.= ' class="'.$a['a_class'].'"';
+		$a['target'] && $link.= ' target="'.$a['target'].'"';
 
 		if($mType=='sidebar' && $a['data-toggle']=='modal'){
-			$aa.= ' data-toggle="'.$a['data-toggle'].'"';
+			$link.= ' data-toggle="'.$a['data-toggle'].'"';
 		}elseif($mType=='nav'){
-			$a['data-toggle'] 	&& $aa.= ' data-toggle="'.$a['data-toggle'].'"';
+			$a['data-toggle'] 	&& $link.= ' data-toggle="'.$a['data-toggle'].'"';
 		}
-		$a['data-target']&& $aa.= ' data-target="'.$a['data-target'].'"';
-		$a['data-meta']  && $aa.= " data-meta='".$a['data-meta']."'";
-		$aa.=">";
-		$li.=$aa;
+		$a['data-target']&& $link.= ' data-target="'.$a['data-target'].'"';
+		$a['data-meta']  && $link.= " data-meta='".$a['data-meta']."'";
+		$link.=">";
+		$li.=$link;
 		$a['icon'] && $li.='<i class="'.$a['icon'].'"></i> ';
 		$li.='<span>'.$a['name'].'</span>'.$label;
 		$a['caret'] && $li.=$a['caret'];

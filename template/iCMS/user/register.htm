@@ -7,70 +7,70 @@
     <meta name="description" content="<!--{$site.description}-->"/>
     <meta name="mobile-agent" content="format=html5;url=<!--{$site.url}-->"/>
     <!--{iCMS:public:ui}-->
-    <link rel="stylesheet" href="<!--{$site.urls.ui}-->/loginreg.css" type="text/css" />
-    <script type="text/javascript">
-    <!--{include file="/iCMS/user/register.js"}-->
+    <script src="<!--{$site.urls.ui}-->/iCMS.register-6.0.0.js"></script>
+    <link href="<!--{$site.urls.ui}-->/iCMS.loginreg-6.0.0.css" rel="stylesheet" type="text/css" />
+    <script>
+    $(function(){
+      iCMS.user.register();
+    })
     </script>
   </head>
   <body>
-    <div id="body" class="register_wrap">
-      <div class="logo"> <a href="<!--{$site.url}-->" class="icms fl" title="<!--{$site.title}-->"><!--{$site.title}--></a> </div>
+    <div class="iCMS_register_wrap">
+      <div class="logo"> <a href="<!--{$site.url}-->" class="iCMS fl" title="<!--{$site.title}-->"><!--{$site.title}--></a> </div>
       <div class="content">
-        <div id="lg_box">
-          <div id="lg_left">
-            <h1>新用户注册</h1>
-            <div id="lg_center">
-              <div id="iCMS-register-box" class="lg_form">
-                <div class="ipt_mail"> <span>电子邮箱：</span>
-                  <input id="iCMS-username" type="text" maxlength="36" name="username" class="text r3" value="">
+        <div class="main-col">
+          <h1>新用户注册</h1>
+          <div class="rl_center">
+            <div id="iCMS-register-box" class="rl_form">
+              <div class="reg_mail"> <span>电子邮箱：</span>
+                <input id="iCMS-reg-username" type="text" maxlength="36" name="username" class="text" value="">
+              </div>
+              <div class="reg_nickname"> <span>昵称：</span>
+                <input id="iCMS-reg-nickname" style="*margin-left:-1px;" maxlength="36" type="text" name="nickname" class="text" value="">
+              </div>
+              <div class="reg_sex"> <span>性别：</span>
+                <div class="rdo">
+                  <input type="radio" name="gender" value="girl" checked="checked" class="ck">
+                  女
+                  <input style="margin-left:10px" type="radio" name="gender" value="boy" class="ck">
+                男 </div>
+              </div>
+              <div class="reg_password"> <span>密码：</span>
+                <input id="iCMS-reg-password" style="*margin-left:-1px;" maxlength="36" type="password" name="password" class="text">
+              </div>
+              <div class="reg_respassword"> <span>确认密码：</span>
+                <input id="iCMS-reg-rstpassword" type="password" maxlength="36" name="rstpassword" class="text">
+              </div>
+              <!--{if $iCMS.config.user.regseccode }-->
+              <div class="reg_check"> <span>验证码：</span>
+                <input id="iCMS-reg-seccode" type="text" maxlength="4" name="seccode" class="iCMS_seccode">
+                <img src="<!--{iCMS:router url='/api/seccode'}-->" alt="验证码" class="iCMS_seccode_img r3"/>
+                <a href="javascript:;" class="iCMS_seccode_text" style="float: none">换一张</a>
+              </div>
+              <!--{/if}-->
+              <div class="reg_box">
+                <input class="agreement fl" name="agreement" type="checkbox" checked="checked">
+                <span class="fl">我已看过并同意《<a href="<!--{iCMS:router url='/api/agreement'}-->" target="_blank"><!--{$site.title}-->网络服务使用协议</a>》</span> </div>
+                <div class="reg_submit">
+                  <button class="submit iCMS_register_btn"></button>
                 </div>
-                <div class="ipt_nickname"> <span>昵称：</span>
-                  <input id="iCMS-nickname" style="*margin-left:-1px;" maxlength="36" type="text" name="nickname" class="text r3" value="">
-                </div>
-                <div class="ipt_sex"> <span>性别：</span>
-                  <div class="rdo">
-                    <input type="radio" name="sex" value="girl" checked="checked" class="ck">
-                    女
-                    <input style="margin-left:10px" type="radio" name="sex" value="boy" class="ck">
-                  男 </div>
-                </div>
-                <div class="ipt_password"> <span>密码：</span>
-                  <input id="iCMS-password" style="*margin-left:-1px;" maxlength="36" type="password" name="password" class="text r3">
-                </div>
-                <div class="ipt_respassword"> <span>确认密码：</span>
-                  <input id="iCMS-rstpassword" type="password" maxlength="36" name="rstpassword" class="text r3">
-                </div>
-                <!--{if $iCMS.config.user.regseccode }-->
-                <div class="ipt_check"> <span>验证码：</span>
-                  <input id="iCMS-seccode" type="text" maxlength="4" name="seccode" class="r3">
-                  <img class="r3" id="iCMS-seccode-img" src="<!--{iCMS:router url='/api/seccode'}-->"  alt="验证码"/> <a href="javascript:;" id="iCMS-seccode-text" style="float: none">换一张</a>
-                </div>
-                <!--{/if}-->
-                <div class="ipt_box">
-                  <input class="box fl" name="agreement" type="checkbox" checked="checked">
-                  <span class="fl">我已看过并同意《<a href="<!--{iCMS:router url='/api/user/agreement'}-->" target="_blank"><!--{$site.title}-->网络服务使用协议</a>》</span> </div>
-                  <div class="ipt_sub">
-                    <input type="button" class="sub iCMS-registerBtn" value=" ">
-                  </div>
-                  <input name="openid" value="<!--{$openid}-->" type="hidden">
-                  <input type="hidden" name="action" value="register">
-                </div>
-                <div id="lg_error">
-                  <div class="err_username"> 请填写正确的常用邮箱，以便找回密码。<br />
-                  比如：example@example.com </div>
-                  <div class="err_nickname"> 支持中文，不能以数字开头，最多20个字符，中文算两个字符。 </div>
-                  <div class="err_password"> 6-20个字母、数字或者符号 </div>
-                  <div class="err_rstpassword"> 这里要重复输入一下你的密码 </div>
-                  <div class="err_seccode"> 请输入图片中的字符! </div>
-                </div>
+                <input id="iCMS-openid" value="<!--{$openid}-->" type="hidden">
               </div>
             </div>
-            <div id="lg_right">
-              <div class="rst_login"> <span>已经有帐号？请直接登录</span> <a href="<!--{iCMS:router url='/api/user/login'}-->"></a> </div>
-              <div class="other_login"> <span>您也可以用以下方式登录：</span> <a class="o_icon icon_qq" href="<!--{iCMS:router url='/api/user/login/qq'}-->">QQ 帐号</a> <a class="o_icon icon_sina" href="<!--{iCMS:router url='/api/user/login/wb'}-->">新浪微博</a> </div>
+          </div>
+          <div class="right-col">
+            <div class="rst_login">
+              <span>已经有帐号？请直接登录</span>
+              <a href="<!--{iCMS:router url='/api/user/login'}-->"></a>
+            </div>
+            <div class="other_login">
+              <span>您也可以用以下方式登录：</span>
+              <a class="reg_icon icon_qq" href="<!--{iCMS:router url='/api/user/login/qq'}-->">QQ 帐号</a>
+              <a class="reg_icon icon_sina" href="<!--{iCMS:router url='/api/user/login/wb'}-->">新浪微博</a>
             </div>
           </div>
-          <div class="clear"></div>
+          <div class="clearfix"></div>
         </div>
       </div>
       <!--{include file="{iTPL}/footer.htm"}-->

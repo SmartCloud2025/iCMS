@@ -16,7 +16,7 @@ class iFC {
 	protected $_compress_enable;
 	protected $_dirs;
 	protected $_file;
-	
+
 	function __construct($args=array('dirs'=> '','level'=>'0','compress'=>'9')){
 		$this->_dirs            = iPATH.$args['dirs'];
 		$this->_dir_level       = empty($args['level']) ? -1 : floor(32/$args['level']);
@@ -29,8 +29,8 @@ class iFC {
 		$this->__construct($args);
 	}
 	function add ($key, $val, $exp = 0){
-		$this->_file=$this->get_file($key,'add');
-		$value=array(
+		$this->_file = $this->get_file($key,'add');
+		$value       = array(
 			"Time"    =>time(),
 			"Expires" =>$exp,
 			"Data"    =>$val,
@@ -45,15 +45,15 @@ class iFC {
 		return $this->write($this->_file,$this->_cache_sock);
 	}
 	function get ($key){
-		$this->_file=$this->get_file($key,'get');
+		$this->_file = $this->get_file($key,'get');
 		if(!file_exists($this->_file)) return NULL;
-		$D=file_get_contents($this->_file);
-		$D=str_replace('<?php exit;?>','',$D);
-		$value=unserialize(($this->_have_zlib && $this->_compress_enable)?gzuncompress($D):$D);
+		$D     = file_get_contents($this->_file);
+		$D     = str_replace('<?php exit;?>','',$D);
+		$value = unserialize(($this->_have_zlib && $this->_compress_enable)?gzuncompress($D):$D);
 		if($value['Expires']==0){
 			return $value['Data'];
 		}else{
-			$_time=time();
+			$_time = time();
 			return ($_time-$value['Time']<$value['Expires'])?$value['Data']:false;
 		}
 	}
@@ -65,12 +65,12 @@ class iFC {
 	}
 	function replace ($key, $value, $exp=0){}
 	function delete ($key='', $time = 0){
-		$this->_file=$this->get_file($key,'get');
+		$this->_file = $this->get_file($key,'get');
 		return $this->del($this->_file);
 	}
    	function get_file($key,$method){
-   		$key	= str_replace(':','/',$key);
-		$dirPath= $this->_dirs.'/'.(strpos($key,'/')!==false?dirname($key):'');
+		$key     = str_replace(':','/',$key);
+		$dirPath = $this->_dirs.'/'.(strpos($key,'/')!==false?dirname($key):'');
    		if($this->_dir_level!=-1){
 	   		$a=$this->str_split(md5($key),$this->_dir_level);
 	   		$dirPath.='/'.implode('/',$a).'/';
@@ -94,11 +94,9 @@ class iFC {
         $check && $this->check($fn);
         touch($fn);
         $handle=fopen($fn,$method);
-        if($iflock) {
-            flock($handle,LOCK_EX);
-        }
+        $iflock && flock($handle,LOCK_EX);
         fwrite($handle,$data);
-        if($method=="rb+") ftruncate($handle,strlen($data));
+        $method=="rb+" && ftruncate($handle,strlen($data));
         fclose($handle);
         $chmod && @chmod($fn,0777);
     }
@@ -125,7 +123,7 @@ class iFC {
     }
 	function str_split($str,$length = 1) {
 		if ($length < 1) return false;
-		
+
 		$strlen = strlen($str);
 		$ret = array();
 		for ($i = 0; $i < $strlen; $i += $length) {

@@ -14,7 +14,7 @@ defined('iPHP') OR exit('What are you doing?');
 
 //require_once iPHP_APP_DIR.'/user/msg.class.php';
 define("USER_LOGIN_URL",    iCMS_API_URL.'&do=login');
-define("iUSER_AUTHASH",      '#=(iCMS@'.iPHP_KEY.'@iCMS)=#');
+define("USER_AUTHASH",      '#=(iCMS@'.iPHP_KEY.'@iCMS)=#');
 class user {
 	public static $userid     = 0;
 	public static $nickname   = '';
@@ -78,52 +78,9 @@ class user {
 		}
 		return $pf;
 	}
-	public static function login($v,$pass='',$t='nk'){
-
-		$f = 'username';
-		$t =='nk'	&& $f	= 'nickname';
-		// $t=='qqoi' 	&& $f	= 'qqopenid';
-		// $t=='wboi' 	&& $f	= 'wbopenid';
-		// $t=='tboi' 	&& $f	= 'tbopenid';
-
-		$user = iDB::row("SELECT `uid`,`nickname`,`password`,`username` FROM `#iCMS@__user` where `{$f}`='{$v}' and `password`='$pass' AND `status`='1' limit 1");
-		if(empty($user)){
-			return false;
-		}
-		self::set_cookie($user->username,$user->password,(array)$user);
-		unset($user->password);
-		$user->avatar = self::router($user->uid,'avatar');
-		$user->url    = self::router($user->uid,'url');
-		$user->urls   = self::router($user->uid,'urls');
-		return $user;
-	}
 	public static function set_cache($uid){
 		$user	= iDB::row("SELECT * FROM `#iCMS@__user` where `uid`='{$uid}'",ARRAY_A);
 		iCache::set('iCMS:user:'.$user['uid'],$user,0);
-	}
-	public static function get_cookie($unpw=false) {
-		$auth     = authcode(iPHP::get_cookie(self::$AUTH));
-		$userid   = authcode(iPHP::get_cookie('userid'));
-		$nickname = authcode(iPHP::get_cookie('nickname'));
-
-		list($_userid,$_username,$_password,$_nickname) = explode(iUSER_AUTHASH,$auth);
-
-		if((int)$userid===(int)$_userid && $nickname===$_nickname){
-			self::$userid   = (int)$_userid;
-			self::$nickname = $_nickname;
-			$U = array('userid'=>self::$userid,'nickname'=>self::$nickname);
-			if($unpw){
-				$U['username'] = $_username;
-				$U['password'] = $_password;
-			}
-			return $U;
-		}
-		return false;
-	}
-	public static function set_cookie($username,$password,$user){
-		iPHP::set_cookie(self::$AUTH, authcode((int)$user['uid'].iUSER_AUTHASH.$username.iUSER_AUTHASH.$password.iUSER_AUTHASH.$user['nickname'],'ENCODE'),self::$cookietime);
-		iPHP::set_cookie('userid',    authcode($user['uid'],'ENCODE'),self::$cookietime);
-		iPHP::set_cookie('nickname',  authcode($user['nickname'],'ENCODE'),self::$cookietime);
 	}
 	public static function category($cid=0){
 		if(empty($cid)) return false;
@@ -161,9 +118,56 @@ class user {
         }
         return $data;
     }
+	public static function login($val,$pass='',$fm='un'){
+		$field_map = array(
+			'id' =>'uid',
+			'nk' =>'nickname',
+			'un' =>'username',
+			'qq' =>'qqopenid',
+			'wb' =>'wbopenid',
+			'tb' =>'tbopenid',
+		);
+		$field = $field_map[$fm];
+		$field OR $field = 'username';
+
+		$user = iDB::row("SELECT `uid`,`nickname`,`password`,`username`,`status` FROM `#iCMS@__user` where `{$field}`='{$val}' and `password`='$pass' limit 1");
+		if(empty($user)){
+			return false;
+		}
+		if((int)$user->status!=1){
+			return $user->status;
+		}
+		self::set_cookie($user->username,$user->password,(array)$user);
+		return true;
+	}
+	public static function get_cookie($unpw=false) {
+		$auth     = authcode(iPHP::get_cookie(self::$AUTH));
+		$userid   = authcode(iPHP::get_cookie('userid'));
+		$nickname = authcode(iPHP::get_cookie('nickname'));
+
+		list($_userid,$_username,$_password,$_nickname) = explode(USER_AUTHASH,$auth);
+
+		if((int)$userid===(int)$_userid && $nickname===$_nickname){
+			self::$userid   = (int)$_userid;
+			self::$nickname = $_nickname;
+			$u = array('userid'=>self::$userid,'nickname'=>self::$nickname);
+			if($unpw){
+				$u['username'] = $_username;
+				$u['password'] = $_password;
+			}
+			return $u;
+		}
+		self::logout();
+		return false;
+	}
+	public static function set_cookie($username,$password,$user){
+		iPHP::set_cookie(self::$AUTH, authcode((int)$user['uid'].USER_AUTHASH.$username.USER_AUTHASH.$password.USER_AUTHASH.$user['nickname'].USER_AUTHASH.$user['status'],'ENCODE'),self::$cookietime);
+		iPHP::set_cookie('userid',    authcode($user['uid'],'ENCODE'),self::$cookietime);
+		iPHP::set_cookie('nickname',  authcode($user['nickname'],'ENCODE'),self::$cookietime);
+	}
 	public static function status($url=null,$st=null) {
 		$status = false;
-		$auth   = user::get_cookie(true);
+		$auth   = self::get_cookie(true);
 
 		if($auth){
 			$user = self::get($auth['userid'],false);

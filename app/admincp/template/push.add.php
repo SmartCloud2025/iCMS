@@ -66,7 +66,7 @@ $(function(){
           </div>
           <div class="clearfloat mb10"></div>
           <div class="input-prepend"> <span class="add-on">排序</span>
-            <input id="orderNum" class="span3" value="<?php echo _int($rs['orderNum']) ; ?>" name="orderNum" type="text"/>
+            <input id="ordernum" class="span3" value="<?php echo _int($rs['ordernum']) ; ?>" name="ordernum" type="text"/>
           </div>
           <fieldset>
             <legend>1</legend>

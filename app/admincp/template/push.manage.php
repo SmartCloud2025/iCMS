@@ -95,7 +95,7 @@ hr { border-bottom:none; margin:4px 0px; }
             ?>
             <tr id="tr<?php echo $rs[$i]['id'] ; ?>">
               <td><input type="checkbox" name="id[]" value="<?php echo $rs[$i]['id'] ; ?>" /></td>
-              <td class="ordernum"><input type="text" name="orderNum[<?php echo $rs[$i]['id'] ; ?>]" value="<?php echo $rs[$i]['orderNum'] ; ?>"/></td>
+              <td class="ordernum"><input type="text" name="ordernum[<?php echo $rs[$i]['id'] ; ?>]" value="<?php echo $rs[$i]['ordernum'] ; ?>"/></td>
               <td>1.
                 <?php if($rs[$i]['haspic'])echo '<img src="'.ACP_UI.'/image.gif" align="absmiddle">'?>
                 <a href="<?php echo $rs[$i]['url']; ?>" class="noneline" target="_blank"><?php echo $rs[$i]['title'] ; ?></a>

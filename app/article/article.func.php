@@ -77,9 +77,9 @@ function article_list($vars){
         case "hot":         $order_sql =" ORDER BY `hits` $by";          break;
         case "comment":     $order_sql =" ORDER BY `comments` $by";      break;
         case "pubdate":     $order_sql =" ORDER BY `pubdate` $by";       break;
-        case "disorder":    $order_sql =" ORDER BY `orderNum` $by";      break;
+        case "disorder":    $order_sql =" ORDER BY `ordernum` $by";      break;
         case "rand":        $order_sql =" ORDER BY rand() $by";          break;
-        case "top":         $order_sql =" ORDER BY `top`,`orderNum` ASC";break;
+        case "top":         $order_sql =" ORDER BY `top`,`ordernum` ASC";break;
         default:            $order_sql =" ORDER BY `id` DESC";
     }
     isset($vars['startdate'])&& $where_sql .= " AND `pubdate`>='".strtotime($vars['startdate'])."'";

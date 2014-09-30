@@ -18,6 +18,15 @@
                 return false;
             });
         },
+        tip: function(el, title,placement) {
+            placement = placement||el.attr('data-placement');
+            el.tooltip({
+              html: true,container:el.attr('data-container')||false,
+              placement: placement||'right',
+              trigger: 'manual',
+              title:title,
+            }).tooltip('show');
+        },
         alert: function(msg, ok) {
             var opts = ok ? {
                 label: 'success',

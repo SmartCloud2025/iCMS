@@ -29,16 +29,16 @@ class pushcategoryApp extends categoryApp {
         if(empty($rs)) {
             $rs=array();
             $rs['status']		= '1';
-            $rs['orderNum']		= '0';
+            $rs['ordernum']		= '0';
         }
         include iACP::view("pushcategory.add");
     }
     function merge($tocid,$cid){
-        iDB::query("UPDATE `#iCMS@__push` SET `cid` ='$tocid' WHERE `cid` ='$cid'"); 
+        iDB::query("UPDATE `#iCMS@__push` SET `cid` ='$tocid' WHERE `cid` ='$cid'");
     }
     function update_count($cid){
         $cc = iDB::value("SELECT count(*) FROM `#iCMS@__push` where `cid`='$cid'");
-        iDB::query("UPDATE `#iCMS@__category` SET `count` ='$cc' WHERE `cid` ='$cid'");       
+        iDB::query("UPDATE `#iCMS@__category` SET `count` ='$cc' WHERE `cid` ='$cid'");
     }
     function listbtn($rs){}
     function treebtn($C){

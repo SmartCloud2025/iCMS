@@ -19,6 +19,8 @@ class articleApp{
         $this->dataid      = (int)$_GET['dataid'];
         $this->categoryApp = iACP::app('category',iCMS_APP_ARTICLE);
         $this->category    = $this->categoryApp->category;
+        $this->_postype    = '1';
+        $this->_status     = '1';
     }
     function detag($tags){
         if($tags{0}.$tags{1}=='[['){
@@ -66,8 +68,8 @@ class articleApp{
     	iPHP::success('操作成功!','js:1');
     }
     function do_updateorder(){
-        foreach((array)$_POST['ordernum'] as $orderNum=>$id){
-            articleTable::update(compact('orderNum'),compact('id'));
+        foreach((array)$_POST['ordernum'] as $ordernum=>$id){
+            articleTable::update(compact('ordernum'),compact('id'));
         }
     }
     function do_batch(){
@@ -76,8 +78,8 @@ class articleApp{
     	$batch	= $_POST['batch'];
     	switch($batch){
     		case 'order':
-		        foreach((array)$_POST['orderNum'] AS $id=>$orderNum) {
-                    articleTable::update(compact('orderNum'),compact('id'));
+		        foreach((array)$_POST['ordernum'] AS $id=>$ordernum) {
+                    articleTable::update(compact('ordernum'),compact('id'));
 		        }
 		        iPHP::success('排序已更新!','js:1');
     		break;
@@ -245,45 +247,41 @@ class articleApp{
     function do_inbox(){
     	$this->do_manage("inbox");
     }
-    function do_examine(){
-    	$this->do_manage("examine");
-    }
-    function do_off(){
-    	$this->do_manage("off");
-    }
     function do_trash(){
+        $this->_postype = 'all';
     	$this->do_manage("trash");
     }
+    function do_user(){
+        $this->_postype = 0;
+        $this->do_manage();
+    }
+    function do_examine(){
+        $this->_postype = 0;
+        $this->do_manage("examine");
+    }
+    function do_off(){
+        $this->_postype = 0;
+        $this->do_manage("off");
+    }
 
-    function do_manage() {
+    function do_manage($stype='normal') {
         $cid = (int)$_GET['cid'];
         $pid = $_GET['pid'];
-        $pt  = isset($_GET['pt'])?(int)$_GET['pt']:1;
-        $ptsql = " AND `postype`='{$pt}'";//postype: [0:用户][1:管理员][5:用户淘宝类文章]
-        $sql = " where ";
-        switch(iACP::$app_do){//status:[0:草稿][1:正常][2:回收][3:审核][4:不合格]
-        	case 'inbox'://草稿
-                $status   = '0';
-                $position = "草稿";
-        	break;
-         	case 'trash'://回收站
-                $status   = '2';
-                $position = "回收站";
-        	break;
-         	case 'examine'://审核
-                $status   = '3';
-                $position = "已审核";
-        	break;
-         	case 'off'://未通过
-                $status   = '4';
-                $position = "未通过";
-        	break;
-       		default:
-	       		$status = '1';
-		       	$cid && $position = $this->category[$cid]['name'];
-		}
-        $_GET['pt'] OR $ptsql = '';
-        $sql.="`status` ='$status'".$ptsql;
+        //$stype OR $stype = iACP::$app_do;
+        $stype_map = array(
+            'inbox'   =>'0',//草稿
+            'normal'  =>'1',//正常
+            'trash'   =>'2',//回收站
+            'examine' =>'3',//待审核
+            'off'     =>'4',//未通过
+        );
+        //status:[0:草稿][1:正常][2:回收][3:待审核][4:不合格]
+        //postype: [0:用户][1:管理员]
+        $stype && $this->_status = $stype_map[$stype];
+        isset($_GET['pt']) && $this->_postype = (int)$_GET['pt'];
+
+        $sql = "WHERE `status`='{$this->_status}'";
+        $this->_postype==='all' OR $sql.= " AND `postype`='{$this->_postype}'";
 
         if(iACP::MP("ARTICLE.VIEW")){
             $_GET['userid'] && $sql.= iPHP::where($_GET['userid'],'userid');
@@ -359,7 +357,7 @@ class articleApp{
         $pid         = implode(',', (array)$_POST['pid']);
         $status      = (int)$_POST['status'];
         $chapter     = (int)$_POST['chapter'];
-        $orderNum    = _int($_POST['orderNum']);
+        $ordernum    = _int($_POST['ordernum']);
         $_cid        = iS::escapeStr($_POST['_cid']);
         $_pid        = iS::escapeStr($_POST['_pid']);
         $_scid       = iS::escapeStr($_POST['_scid']);
@@ -434,7 +432,7 @@ class articleApp{
 
         if(empty($aid)) {
             $postime = $pubdate;
-            $hits    = $hits_toady = $hits_toady = $hits_yday = $hits_week = $hits_month = $hits_year = 0;
+            $hits    = 0;
             $good = $bad = $comments = 0;
             $ischapter && $chapter = 1;
 
@@ -488,7 +486,7 @@ class articleApp{
 
             $url OR $this->article_data($body,$aid);
 
-            //$ischapter && $this->chapterCount($aid);
+            //$ischapter && $this->chapter_count($aid);
             if($_cid!=$cid) {
                 $this->categoryApp->update_count_one($_cid,'-');
                 $this->categoryApp->update_count_one($cid);
@@ -554,6 +552,9 @@ class articleApp{
         $msg.= $this->del_msg('删除完成');
         return $msg;
     }
+    function chapter_count($aid){
+        articleTable::chapter_count($aid);
+    }
 
     function article_data($bodyArray,$aid=0){
         $id       = (int)$_POST['adid'];
@@ -580,9 +581,6 @@ class articleApp{
             articleTable::data_insert($data);
         }
         $this->insert_db_pic($body,$aid,$autopic);
-    }
-    function chapterCount($aid){
-        articleTable::chapterCount($aid);
     }
     function insert_db_pic($content,$id,$autopic) {
         $content = stripslashes($content);
@@ -623,18 +621,18 @@ class articleApp{
     }
 
     function do_purge(){
-		$id	= sprintf("%08s",$_GET['id']);
-		$url= str_replace('/article/','/~cc/article/',$_GET['url']);
+        //$id  = sprintf("%08s",$_GET['id']);
+        $url = str_replace('/article/','/~cc/article/',$_GET['url']);
 		echo $this->fopen_url($url);
 
 		for($i=2;$i<50;$i++){
-			$url	="http://www.ladyband.com/~cc/article/".$id."_".$i.".shtml";
-			$str	=$this->fopen_url($url);
-			if(!strstr($str,"Successful purge")){
-				break;
-			}else{
-				echo $str;
-			}
+            // $url = "http://www.OOXX.com/~cc/article/".$id."_".$i.".shtml";
+            // $str = $this->fopen_url($url);
+			// if(!strstr($str,"Successful purge")){
+			// 	break;
+			// }else{
+			// 	echo $str;
+			// }
     	}
     }
 	function fopen_url($url) {

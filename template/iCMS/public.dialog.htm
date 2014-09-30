@@ -8,34 +8,36 @@
     <p class="modal-loading"><img src="<!--{$site.urls.ui}-->/img/loading.gif" /> 加载中,请稍侯......</p>
   </div>
 </div>
-<div id="iCMS-login-box">
+<div id="iCMS-login-dialog">
   <div class="iCMS_login_wrap">
     <div class="login_box">
-      <p class="login_fail err_uname err_seccode"></p>
+      <p class="login_fail"></p>
       <div class="login_form">
         <dl>
           <dd>用户名：</dd>
           <dt>
-          <input type="text" name="uname" id="iCMS-uname" value="<!--{iCMS:lang key='user:login:def_uname'}-->">
+          <input type="text" name="uname" data-container=".login_fail" class="iCMS_login_uname" placeholder="邮箱 或 昵称">
           </dt>
           <dd>密 码：</dd>
           <dt>
-          <input type="password" name="pass" id="iCMS-pass">
+          <input type="password" name="pass" data-container=".login_fail" class="iCMS_login_pass">
           </dt>
           <!--{if $iCMS.config.user.loginseccode}-->
           <dd>验证码：</dd>
           <dt>
-          <input id="iCMS-seccode" type="text" maxlength="4" name="seccode" class="r3">
-          <img class="r3" id="iCMS-seccode-img" src="<!--{iCMS:router url='/api/seccode'}-->" alt="验证码"/> <a href="javascript:;" id="iCMS-seccode-text" style="float: none">换一张</a>
+              <input type="text" maxlength="4" name="seccode" data-container=".login_fail" class="iCMS_login_seccode iCMS_seccode">
+              <img src="<!--{iCMS:router url='/api/seccode'}-->" alt="验证码" class="iCMS_seccode_img r3"/>
+              <a href="javascript:;" class="iCMS_seccode_text" style="float: none">换一张</a>
           </dt>
           <!--{/if}-->
-          <dd>&nbsp;</dd>
-          <dt class="rem">
-          <input type="checkbox" name="remember" id="iCMS-remember" class="checkbox" value="1">
-          两周内免登录</dt>
-          <dd>&nbsp;</dd>
+          <dd class="clearfix mb5"></dd>
+          <dt class="mb5">
+            <input type="checkbox" name="remember" class="iCMS_login_remember checkbox" value="1">
+            两周内免登录
+          </dt>
+          <dd class="clearfix mb5"></dd>
           <dt>
-          <input type="button" class="iCMS-loginBtn btn btn-primary" value="登 陆">
+          <button class="iCMS_login_btn btn btn-primary">登 陆</button>
           <a href="<!--{iCMS:router url='/api/user/findpwd'}-->">忘记密码？</a></dt>
         </dl>
       </div>
@@ -43,17 +45,14 @@
         <div class="register_box">还没有<!--{$site.title}-->账号？
         <a href="<!--{iCMS:router url='/api/user/login/qq'}-->" style="display:block; margin:10px 0 20px"><img src="<!--{$site.urls.ui}-->/img/login_for_qq_v3.png"></a></div>
         <div class="l_o">
-          <a href="<!--{iCMS:router url='/api/user/login/wb'}-->">用微博帐号登录</a><br>
           <a style="background-position: 0 -137px;" href="<!--{iCMS:router url='/api/user/login/wx'}-->">用微信帐号登录</a>
+          <a href="<!--{iCMS:router url='/api/user/login/wb'}-->">用微博帐号登录</a><br>
         </div>
         <a href="<!--{iCMS:router url='/api/user/register'}-->" style="font-size:14px; text-decoration:underline;">直接注册<!--{$site.title}-->帐号</a>
       </div>
     </div>
   </div>
 </div>
-<script type="text/javascript">
-<!--{include file="/iCMS/user/login.js"}-->
-</script>
 <div id="iCMS-report-box">
   <div class="iCMS_report_dialog">
     <div class="header">请选择理由</div>
@@ -63,14 +62,14 @@
       <li><label><input value="3" name="reason" type="radio">违法违规内容</label></li>
       <li><label><input value="4" name="reason" type="radio">不宜公开讨论的政治内容</label></li>
       <li><label><input value="0" name="reason" type="radio">其他（可自行填写）</label>
-        <p class="input-container visible-if-checked">
-          <input placeholder="请填写原因" type="text" name="content" class="reason-text zg-form-text-input">
-        </p>
-      </li>
-    </ul>
-    <div class="buttons clearfix">
-      <input type="button" name="cancel" class="btn" value="取消">
-      <input type="button" name="ok" class="btn btn-primary" value="确定">
-    </div>
+      <p class="input-container visible-if-checked">
+      <input placeholder="请填写原因" type="text" name="content" class="reason-text zg-form-text-input">
+      </p>
+    </li>
+  </ul>
+  <div class="buttons clearfix">
+    <input type="button" name="cancel" class="btn" value="取消">
+    <input type="button" name="ok" class="btn btn-primary" value="确定">
   </div>
+</div>
 </div>

@@ -42,7 +42,7 @@ iACP::head();
           </div>
           <div class="clearfloat mb10"></div>
           <div class="input-prepend"> <span class="add-on">排序</span>
-            <input type="text" name="orderNum" class="span1" id="orderNum" value="<?php echo $rs['orderNum'] ; ?>"/>
+            <input type="text" name="ordernum" class="span1" id="ordernum" value="<?php echo $rs['ordernum'] ; ?>"/>
           </div>
         </div>
         <div class="form-actions">

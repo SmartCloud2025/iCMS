@@ -243,7 +243,8 @@ $(function(){
                   <td><a class="btn btn-small delprop"><i class="fa fa-trash-o"></i> 删除</a></td>
                 </tr>
                 <tr>
-                  <td colspan="10"><p> <span class="label label-info">摘要:description</span> <span class="label label-info">标签:tags</span> <span class="label label-info">出处:source</span> <span class="label label-info">作者:author</span> <span class="label label-info">关键字:keywords</span></p>
+                  <td colspan="10">
+                    <p class="mb10"> <span class="label label-info">摘要:description</span> <span class="label label-info">标签:tags</span> <span class="label label-info">出处:source</span> <span class="label label-info">作者:author</span> <span class="label label-info">关键字:keywords</span></p>
                     <a href="#spider-data" class="btn btn-primary addprop"/>增加加附加属性</a></td>
                 </tr>
               </tfoot>

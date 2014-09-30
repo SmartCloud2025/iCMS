@@ -18,7 +18,15 @@ if (!function_exists('gc_collect_cycles')) {
 		return false;
 	}
 }
-
+function count_days($formdate,$todate){
+    return round(abs(strtotime($formdate)-strtotime($todate))/3600/24);
+}
+function order_num($a, $b){
+    if ($a["ordernum"] == $b["ordernum"]) {
+        return 0;
+    }
+    return ($a["ordernum"] < $b["ordernum"]) ? -1 : 1;
+}
 function buildurl($url=false,$qs='') {
 	$url	OR $url	= $_SERVER["REQUEST_URI"];
 	$urlA	= parse_url($url);

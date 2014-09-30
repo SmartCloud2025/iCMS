@@ -40,12 +40,16 @@ $(function(){
             <input type="text" name="name" class="span3" id="name" value="<?php echo $rs['name'] ; ?>"/>
           </div>
           <div class="clearfloat mb10"></div>
-          <div class="input-prepend"> <span class="add-on">标题</span>
+          <div class="input-prepend"> <span class="add-on">菜单提示</span>
             <input type="text" name="title" class="span3" id="title" value="<?php echo $rs['title'] ; ?>"/>
           </div>
           <div class="clearfloat mb10"></div>
           <div class="input-prepend"> <span class="add-on">菜单链接</span>
             <input type="text" name="href" class="span3" id="href" value="<?php echo $rs['href'] ; ?>"/>
+          </div>
+          <div class="clearfloat mb10"></div>
+          <div class="input-prepend"> <span class="add-on">链接 CSS</span>
+            <input type="text" name="a_class" class="span3" id="a_class" value="<?php echo $rs['a_class'] ; ?>"/>
           </div>
           <div class="clearfloat mb10"></div>
           <div class="input-prepend"> <span class="add-on">菜单图标</span>
@@ -74,7 +78,7 @@ $(function(){
           <span class="help-inline">菜单模式:对话框 才填写相关配置</span>
           <div class="clearfloat mb10"></div>
           <div class="input-prepend"> <span class="add-on">菜单排序</span>
-            <input id="orderNum" class="span1" value="<?php echo $rs['orderNum'] ; ?>" name="orderNum" type="text"/>
+            <input id="ordernum" class="span1" value="<?php echo $rs['ordernum'] ; ?>" name="ordernum" type="text"/>
           </div>
         </div>
         <div class="form-actions">

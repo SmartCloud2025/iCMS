@@ -146,7 +146,8 @@ $(function(){
   			        	a.focus();
   			        	return false;
   			        }else{
-  			        	$.post('<!--{iCMS:router url='/user'}-->',{'action': 'add_category',name:n},function(j){
+  			        	$.post('<!--{iCMS:router url='/user'}-->',{'action': 'add_category',name:n},
+  			        	function(j){
   			        		if(j.code){
   				        		d.content(j.msg)
   			        			.button({id: 'add_category-btn',value: '完成',

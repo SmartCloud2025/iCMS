@@ -82,7 +82,10 @@ $(function(){
               <td><?php echo $rs[$i]['id'] ; ?></td>
               <td><?php echo $rs[$i]['indexid'] ; ?></td>
               <td><?php echo $rs[$i]['userid'] ; ?></td>
-              <td><a href="<?php echo $href; ?>" title="点击查看" target="_blank"><?php echo iFS::icon($filepath,ACP_UI);?></a> <a class="tip" title="<?php echo $filepath ; ?><hr />源文件名:<?php echo $rs[$i]['ofilename'] ; ?>"><?php echo $rs[$i]['filename'].'.'.$rs[$i]['ext']; ?></a></td>
+              <td>
+                <a href="<?php echo $href; ?>" title="点击查看" target="_blank"><?php echo iFS::icon($filepath,ACP_UI);?></a>
+                <a class="tip" title="<?php echo $filepath ; ?><hr />源文件名:<?php echo $rs[$i]['ofilename'] ; ?>"><?php echo $rs[$i]['filename'].'.'.$rs[$i]['ext']; ?></a>
+              </td>
               <td><?php echo iFS::sizeUnit($rs[$i]['size']);?><br/><?php echo get_date($rs[$i]['time'],'Y-m-d');?></td>
               <td>
                 <a class="btn btn-small" href="<?php echo $href; ?>" data-toggle="modal" title="查看"><i class="fa fa-eye"></i> 查看</a>

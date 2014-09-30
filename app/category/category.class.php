@@ -10,11 +10,11 @@ class category {
     public $_array     = array();
     public $rootid     = array();
 
-    function __construct($appid=iCMS_APP_ARTICLE) {
+    public function __construct($appid=iCMS_APP_ARTICLE) {
         $this->appid = $appid;
         $sql         = "WHERE `appid`='$this->appid'";
         $this->appid === 'all' && $sql='';
-        $rs          = iDB::all("SELECT * FROM `#iCMS@__category` {$sql} ORDER BY `orderNum` , `cid` ASC",ARRAY_A);
+        $rs          = iDB::all("SELECT * FROM `#iCMS@__category` {$sql} ORDER BY `ordernum` , `cid` ASC",ARRAY_A);
         foreach((array)$rs AS $C) {
 			$C['iurl']	= iURL::get('category',$C);
             $this->_array[$C['rootid']][$C['cid']] = $C;
@@ -22,9 +22,13 @@ class category {
             $this->category[$C['cid']] = $C;
             $this->parent[$C['cid']]   = $C['rootid'];
         }
+        foreach ((array)$this->_array as $rootid => $_array) {
+            uasort($_array, "order_num");
+            $this->_array[$rootid] = $_array;
+        }
     }
-    function cache($one=false,$appid=null) {
-    	$rs	= iDB::all("SELECT * FROM `#iCMS@__category` ORDER BY `orderNum` , `cid` ASC",ARRAY_A);
+    public function cache($one=false,$appid=null) {
+    	$rs	= iDB::all("SELECT * FROM `#iCMS@__category` ORDER BY `ordernum` , `cid` ASC",ARRAY_A);
     	foreach((array)$rs AS $C) {
 	        $C = $this->C($C);
 			$one && $this->cahce_one($C);
@@ -37,6 +41,7 @@ class category {
             $cache[$C['appid']][$C['cid']]   = $C;
             $array[$C['appid']][$C['rootid']][$C['cid']] = $C;
     	}
+
     	if($appid===null){
 	    	foreach($appidArray AS $_appid) {
 		        iCache::set('iCMS/category.'.$_appid.'/cache',$cache[$_appid],0);
@@ -51,7 +56,7 @@ class category {
         iCache::set('iCMS/category/dir2cid',$dir2cid,0);
         iCache::set('iCMS/category/hidden',	$hidden,0);
     }
-    function cahce_one($C=null){
+    public function cahce_one($C=null){
     	if(!is_array($C)){
     		$C = iDB::row("SELECT * FROM `#iCMS@__category` where `cid`='$C' LIMIT 1;",ARRAY_A);
 			$C = $this->C($C);
@@ -59,7 +64,7 @@ class category {
 		iCache::delete('iCMS/category/'.$C['cid']);
 		iCache::set('iCMS/category/'.$C['cid'],$C,0);
     }
-    function C($C){
+    public function C($C){
 	    if($C['metadata']){
 	    	$mdArray	= array();
 	    	$_metadata	= unserialize($C['metadata']);
@@ -78,15 +83,15 @@ class category {
         $C['nav']    = $this->nav($C);
 		return $C;
     }
-    function rootid($cid="0"){
+    public function rootid($cid="0"){
     	$rootid = $this->parent[$cid];
     	return $rootid?$this->rootid($rootid):$cid;
     }
-    function update_count_one($cid,$math='+'){
+    public function update_count_one($cid,$math='+'){
         $math=='-' && $sql = " AND `count`>0";
         iDB::query("UPDATE `#iCMS@__category` SET `count` = count".$math."1 WHERE `cid` ='$cid' {$sql}");
     }
-    function nav($C) {
+    public function nav($C) {
         if($C) {
             $iurl = (array)$C['iurl'];
             $_nav = "<a href='{$iurl['href']}'>{$C['name']}</a>";

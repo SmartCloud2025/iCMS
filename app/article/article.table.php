@@ -21,13 +21,13 @@ class articleTable {
             'author', 'editor', 'userid',
             'haspic','pic','mpic','spic', 'picdata',
             'related', 'metadata', 'pubdate', 'chapter', 'url','clink',
-            'orderNum','top', 'postype', 'creative', 'tpl','status');
+            'ordernum','top', 'postype', 'creative', 'tpl','status');
 
-        $update OR $fields = array_merge ($fields,array('postime', 'hits','hits_toady','hits_toady','hits_yday','hits_week','hits_month','hits_year','comments', 'good', 'bad'));
+        $update OR $fields = array_merge ($fields,array('postime','hits','comments', 'good', 'bad'));
 
         return $fields;
     }
-    public static function chapterCount($aid){
+    public static function chapter_count($aid){
         $count = iDB::value("SELECT count(id) FROM `#iCMS@__article_data` where `aid` = '$aid'");
         iDB::query("UPDATE `#iCMS@__article` SET `chapter`='$count'  WHERE `id` = '$aid'");
     }
@@ -108,7 +108,37 @@ class articleTable {
     public static function del_comment($iid){
         iDB::query("DELETE FROM `#iCMS@__comment` WHERE iid='$iid' and appid='".iCMS_APP_ARTICLE."'");
     }
-
+// ================ iCMS_ARTICLE_DATA(FILE) =============
+    public static function get_fdata_dir($id){
+        $nid  = abs(intval($id));
+        $nid  = sprintf("%010d", $nid);
+        $dir1 = substr($nid, 0, 3);
+        $dir2 = substr($nid, 3, 2);
+        $dir3 = substr($nid, 5, 2);
+        $kdir = substr(md5(iPHP_KEY),8,16);
+        $path = 'article_'.$kdir.'/'.$dir1.'/'.$dir2.'/'.$dir3.'/'.$id;
+        return $path;
+    }
+    public static function get_fdata_file($id,$page=1) {
+        return self::get_fdata_dir($id).'/'.$page.".php";
+    }
+    public static function put_fdata($id,$body,$page=1) {
+        iFS::mkdir(self::get_fdata_dir($id));
+        $file_path = self::get_fdata_file($id,$page);
+        if($body){
+            iFS::write($file_path,'<?php exit;?>'.$body);
+        }else{
+            return false;
+        }
+    }
+    public static function get_fdata($id,$page=1) {
+        $file_path = self::get_fdata_file($id,$page);
+        if(!is_file($file_path)){
+            return false;
+        }
+        $body = file_get_contents($file_path);
+        return substr($body,13);
+    }
 
 }
 

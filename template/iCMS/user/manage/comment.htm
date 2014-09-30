@@ -11,7 +11,7 @@
 		<table class="table table-striped">
 			<tbody>
 			<!--{iCMS:comment:list loop="true" page="true" row="10" total_cache="G" userid=$user.uid}-->
-				<tr id="id_<!--{$comment_list.id}-->">
+				<tr id="id-<!--{$comment_list.id}-->">
 					<td class="cmt-avatar">
 						<a title="<!--{$comment_list.user.name}-->" href="<!--{$comment_list.user.url}-->">
 							<img src="<!--{$comment_list.user.avatar}-->">
@@ -46,7 +46,7 @@
 							<span class="label label-info"><i class="fa fa-thumbs-o-up"></i> <!--{$comment_list.up}--></span>
 						</div>
 					</td>
-					<td><a href="javascript:;" class="del_comment" data-id="<!--{$comment_list.id}-->" title="删除" style="margin-left: 10px;"><i class="fa fa-times"></i></a></td>
+					<td><a href="javascript:;" class="del_comment ml10 tip" data-id="<!--{$comment_list.id}-->" title="删除评论"><i class="fa fa-times"></i></a></td>
 				</tr>
 			<!--{/iCMS}-->
 			</tbody>
@@ -63,15 +63,15 @@ $(function(){
 	$(".del_comment").on('click',function(event) {
 		event.preventDefault();
 		var id = $(this).attr("data-id");
-		$.post('<!--{iCMS:router url='/user'}-->',{action:'delete',pg:'comment',id:id},
-			function(c) {
-				if (c.code) {
-					$("#id_"+id).hide('500',function() {
-						$(this).remove();
-					});
-				}else{
-					iCMS.alert(c.msg);
-				}
+		$.post("<!--{iCMS:router url='/user'}-->",{action:'delete',pg:'comment',id:id},
+		function(c) {
+			if (c.code) {
+				$("#id-"+id).hide('500',function() {
+					$(this).remove();
+				});
+			}else{
+				iCMS.alert(c.msg);
+			}
 		},'json');
 	});
 });

@@ -38,7 +38,7 @@ class categoryApp extends category{
                 'status'       => '1',
                 'isexamine'    => '1',
                 'issend'       => '1',
-                'orderNum'     => '0',
+                'ordernum'     => '0',
                 'mode'         => '0',
                 'htmlext'      => '.html',
                 'categoryURI'  => 'category',
@@ -70,7 +70,7 @@ class categoryApp extends category{
         $isucshow     = (int)$_POST['isucshow'];
         $issend       = (int)$_POST['issend'];
         $isexamine    = (int)$_POST['isexamine'];
-        $orderNum     = (int)$_POST['orderNum'];
+        $ordernum     = (int)$_POST['ordernum'];
         $mode         = (int)$_POST['mode'];
         $pid          = implode(',', (array)$_POST['pid']);
         $_pid         = iS::escapeStr($_POST['_pid']);
@@ -106,7 +106,7 @@ class categoryApp extends category{
                 iPHP::alert('非法数据提交!');
             }else{
                 iACP::CP($_rootid,'a','alert');
-                var_dump($_rootid);exit;
+                exit;
             }
         }
         ($cid && $cid==$rootid) && iPHP::alert('不能以自身做为上级'.$this->name_text);
@@ -144,7 +144,7 @@ class categoryApp extends category{
         iPHP::import(iPHP_APP_CORE .'/iMAP.class.php');
         map::init('prop',iCMS_APP_CATEGORY);
 
-        $fields = array('rootid','appid','orderNum','name','subname','password','title','keywords','description','dir','mode','domain','url','pic','mpic','spic','htmlext','categoryURI','categoryRule','contentRule','urlRule','indexTPL','listTPL','contentTPL','metadata','contentprop','hasbody','pid','isexamine','issend','isucshow','status');
+        $fields = array('rootid','appid','ordernum','name','subname','password','title','keywords','description','dir','mode','domain','url','pic','mpic','spic','htmlext','categoryURI','categoryRule','contentRule','urlRule','indexTPL','listTPL','contentTPL','metadata','contentprop','hasbody','pid','isexamine','issend','isucshow','status');
         $data   = compact ($fields);
 
         if(empty($cid)) {
@@ -185,7 +185,7 @@ class categoryApp extends category{
     function do_update(){
     	foreach((array)$_POST['name'] as $cid=>$name){
     		$name	= iS::escapeStr($name);
-			iDB::query("UPDATE `#iCMS@__category` SET `name` = '$name',`orderNum` = '".(int)$_POST['orderNum'][$cid]."' WHERE `cid` ='".(int)$cid."' LIMIT 1");
+			iDB::query("UPDATE `#iCMS@__category` SET `name` = '$name',`ordernum` = '".(int)$_POST['ordernum'][$cid]."' WHERE `cid` ='".(int)$cid."' LIMIT 1");
 	    	$this->cahce_one($cid);
     	}
     	iPHP::success('更新完成');
@@ -279,8 +279,8 @@ class categoryApp extends category{
         iPHP::success('操作成功!','js:1');
     }
     function do_updateorder(){
-    	foreach((array)$_POST['ordernum'] as $orderNum=>$cid){
-            iDB::query("UPDATE `#iCMS@__category` SET `orderNum` = '".intval($orderNum)."' WHERE `cid` ='".intval($cid)."' LIMIT 1");
+    	foreach((array)$_POST['ordernum'] as $ordernum=>$cid){
+            iDB::query("UPDATE `#iCMS@__category` SET `ordernum` = '".intval($ordernum)."' WHERE `cid` ='".intval($cid)."' LIMIT 1");
 	    	$this->cahce_one($cid);
     	}
     }
@@ -417,7 +417,7 @@ class categoryApp extends category{
     }
 
     function li($C) {
-        $html='<div class="row-fluid status'.$C['status'].'"><span class="ordernum"><input'.$readonly.' type="text" cid="'.$C['cid'].'" name="orderNum['.$C['cid'].']" value="'.$C['orderNum'].'" style="width:32px;"/></span>';
+        $html='<div class="row-fluid status'.$C['status'].'"><span class="ordernum"><input'.$readonly.' type="text" cid="'.$C['cid'].'" name="ordernum['.$C['cid'].']" value="'.$C['ordernum'].'" style="width:32px;"/></span>';
         $html.='<span class="name">';
         $html.='<input'.$readonly.($C['rootid']==0?' style="font-weight:bold"':'').' type="text" name="name['.$C['cid'].']" value="'.$C['name'].'"/> ';
         $C['status'] OR $html.=' <i class="fa fa-eye-slash" title="隐藏'.$this->name_text.'"></i> ';

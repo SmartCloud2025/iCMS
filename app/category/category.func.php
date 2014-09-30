@@ -57,7 +57,7 @@ function category_list($vars){
 	}
 	if(empty($resource)){
 		$rootid_array = iCache::get('iCMS/category/rootid');
-		$resource     = iDB::all("SELECT * FROM `#iCMS@__category` {$where_sql} ORDER BY `orderNum`,`cid` ASC LIMIT $row");
+		$resource     = iDB::all("SELECT * FROM `#iCMS@__category` {$where_sql} ORDER BY `ordernum`,`cid` ASC LIMIT $row");
 		//iDB::debug(1);
 		if($resource)foreach ($resource as $key => $value) {
 			$value['child'] = $rootid_array[$value['cid']]?true:false;

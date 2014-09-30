@@ -107,6 +107,7 @@ a:hover { text-decoration: none }
 i { text-align: center }
 a, a:hover, a:focus { color: #057AFD }
 /* ==modal== */
+.modal {border: 1px solid #FFFFFF;}
 .modal .modal-header { background-color: #1575d5; background-image: -moz-linear-gradient(top, #1d7fe2, #0865c2); background-image: -ms-linear-gradient(top, #1d7fe2, #0865c2); background-image: -webkit-gradient(linear, 0 0, 0 100%, from(#1d7fe2), to(#0865c2)); background-image: -webkit-linear-gradient(top, #1d7fe2, #0865c2); background-image: -o-linear-gradient(top, #1d7fe2, #0865c2); background-image: linear-gradient(top, #1d7fe2, #0865c2); background-repeat: repeat-x; filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#1d7fe2', endColorstr='#0865c2', GradientType=0); padding: 3px 15px; border-radius: 6px 6px 0 0; border: 1px solid #0D6EB8; box-shadow: 0 1px 0 rgba(255, 255, 255, .1) inset, 0 1px 1px rgba(0, 0, 0, .2); margin: -1px -1px 0; line-height: 14px }
 .modal .modal-header h3 { color: #fff; text-shadow: 0 1px 1px rgba(0, 0, 0, .4); font-size: 15px; font-weight: 700 }
 /* ==piece== */
@@ -164,10 +165,9 @@ a:hover>.iCMS_icon_report { background-position: -71px -170px }
 .iCMS_profile_wrap .iCMS_user_home .dropdown-menu>li>a { font-size: 14px }
 .iCMS_hover_wrap { display: none; z-index: 999; position: absolute; top: 0; left: 0; min-width: 120px; border-radius: 0 0 3px 3px; background: #FFF }
 /**/
-#iCMS-seccode { width: 60px }
-#iCMS-seccode-img { vertical-align: top }
-#iCMS-uname { font-size: 12px }
-#iCMS-login-box { display: none }
+.iCMS_seccode {width: 60px;}
+.iCMS_seccode_img { vertical-align: top;margin-left: 5px;}
+#iCMS-login-dialog { display: none }
 .iCMS_login_wrap .login_box { padding: 0 12px 24px; background-color: #fff }
 .iCMS_login_wrap .login_form { float: left; padding: 10px 25px 5px 10px; width: 280px; *padding-top: 10px }
 .iCMS_login_wrap .login_form dd { float: left; width: 58px; vertical-align: middle; text-align: right; line-height: 26px }
@@ -179,6 +179,10 @@ a:hover>.iCMS_icon_report { background-position: -71px -170px }
 .iCMS_login_wrap .lb_bd { width: 560px }
 .iCMS_login_wrap .l_o a { display: inline-block; margin: 2px 5px 10px; padding: 0 0 0 19px; background: url(img/login_method_v3.png) no-repeat 0 0; color: #666; line-height: 16px }
 .iCMS_login_wrap .login_fail { font-size: 12px; visibility: hidden; padding-top: 10px; padding-left: 65px; width: 360px; color: #FE2617 }
+.iCMS_login_wrap .login_fail .tooltip {position: static !important; margin: 0px !important;padding: 0px !important;}
+.iCMS_login_wrap .login_fail .tooltip .tooltip-arrow {display: none;}
+.iCMS_login_wrap .login_fail .tooltip .tooltip-inner {background-color: #fff;color: #FE2617;font-size: 12px;margin: 0px !important;padding: 0px !important;}
+.iCMS_login_wrap .login_fail .tooltip .tooltip-inner i{font-size: 16px;}
 .iCMS_login_wrap .reg_or_weibo { display: inline-block; padding-left: 30px; width: 160px; border-left: 1px solid #c8c8c8 }
 .iCMS_login_wrap .lb_bd .lb_s { margin: 0 auto; padding: 55px; width: 180px; height: 45px }
 .iCMS_login_wrap .lb_bd .lb_s .lb_s_img { display: block; float: left; width: 43px; height: 43px }
@@ -217,7 +221,7 @@ a:hover>.iCMS_icon_report { background-position: -71px -170px }
 /* ================================ */
 .iCMS_agreement_wrap { padding-right: 40px; padding-left: 40px; width: 880px; _width: 880px }
 .iCMS_agreement_wrap .agr_h { margin-bottom: 50px; text-align: center; font-weight: bold; font-size: 26px }
-.iCMS_agreement_wrap pre { font-size: 12px; width: 99%; color: #666; padding: 10px; white-space: pre-wrap; white-space: -moz-pre-wrap !important; white-space: -pre-wrap; white-space: -o-pre-wrap; word-wrap: break-word }
+.iCMS_agreement_wrap pre { font-size: 14px;line-height: 160%; width: 100%; color: #666; padding: 10px; white-space: pre-wrap; white-space: -moz-pre-wrap !important; white-space: -pre-wrap; white-space: -o-pre-wrap; word-wrap: break-word }
 /* ===========commentApp=========== */
 .spinner-gray, .spinner-lightgray { display: inline-block; margin: 0 5px; width: 14px; height: 15px; vertical-align: -3px; background-size: 14px 15px; background-repeat: no-repeat; background-image: url(/img/grey-loading.gif); }
 .spinner-lightgray { background-image: url(img/lightgray-loading.gif); }
