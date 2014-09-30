@@ -1,0 +1,80 @@
+body { color: #2a2a2a; font-size: 14px; background-color: #f2f2f2; background-image: url(img/bg-v6.png); _background-attachment: fixed; }
+#header, #footer { margin: 0 auto; width: 984px; }
+.iCMS_register_wrap, .iCMS_login_wrap { margin: 0 auto; width: 984px; }
+.logo { height: 106px; background: url(img/iCMS.logo-6.0.png) no-repeat 0 30px; _background-image: none; _filter: progid:DXImageTransform.Microsoft.AlphaImageLoader(src='img/login-reg-logo.png', sizingMethod="crop"); }
+.logo .iCMS { overflow: hidden; margin-right: 10px; width: 220px; height: 75px; text-indent: -999em; }
+.iCMS_login_wrap .content, .iCMS_register_wrap .content { height: 564px; background-color: #fff; border: 1px solid #CECECE; box-shadow: 0 0 3px #fff inset, 0 1px 1px rgba(0, 0, 0, .1); }
+.content { padding-left: 55px; }
+.content .tooltip.right .tooltip-arrow {border-right-color: #fff;}
+.content .tooltip .tooltip-inner {background-color: #fff;color: #08c;font-size: 12px;width: 240px;}
+.content .tooltip .tooltip-inner i{font-size: 16px;}
+.content .main-col { float: left; width: 645px; height: 574px; }
+.content .main-col h1 { margin-top: 30px; color: #768263; font-weight: normal; font-size: 26px; font-family: '\5FAE\8F6F\96C5\9ED1'; }
+.content .main-col h1 span { margin-left: 10px; color: #FF5783; font-weight: normal; font-size: 12px; line-height: 48px; }
+.content .right-col { float: left; margin-top: 40px; width: 250px; height: 480px; border-left: 1px solid #e5e5e5; }
+.content .rl_center { position: relative; width: 644px; zoom: 1; }
+.content .rl_form { position: absolute; z-index: 1; float: left; width: 544px; }
+.content .rl_form span { float: left; color: #333; vertical-align: middle; text-align: center; font-size: 14px; }
+.content .rl_form .text { float: left; margin-left: 5px; padding: 0 8px; width: 238px; height: 30px; line-height: 30px; }
+.submit { display: block; width: 131px; height: 35px; border: 0;  cursor: pointer; }
+.lg_login .submit, .lg_reg .reg, .reg_submit .submit, .rst_login a { background: url(img/login_reg_icon.png) no-repeat 0 0; }
+
+/*======register======*/
+.right-col .rst_login { margin-top: 38px; margin-left: 32px; }
+.right-col .rst_login span { color: #999; }
+.right-col .rst_login a { display: block; margin-top: 12px; width: 81px; height: 29px; background-position: right -150px; }
+.right-col .other_login { margin-top: 65px; margin-left: 32px; }
+.right-col .other_login span { margin-bottom: 2px; color: #999; }
+.content .reg_icon { display: block; margin-top: 12px; padding-top: 2px; padding-top: 5px\9; padding-left: 20px; width: 100px; height: 16px; line-height: 16px; *padding-top: 5px; _padding-top: 7px; }
+.reg_icon.icon_qq { background: url(img/icon_qq.png) no-repeat left center; }
+.reg_icon.icon_sina { background: url(img/icon_sina.png) no-repeat left center; }
+.reg_mail { overflow: hidden; margin-top: 15px; margin-left: 20px; line-height: 30px; room: 1; _width: 334px; }
+.reg_nickname { overflow: hidden; margin-top: 18px; margin-left: 48px; line-height: 30px; room: 1; _width: 334px; }
+.reg_sex { overflow: hidden; margin-top: 16px; margin-left: 48px; height: 30px; line-height: 30px; room: 1; _width: 300px; }
+.reg_sex .rdo { display: inline-block; }
+.reg_sex .rdo .ck { margin-top: -3px; vertical-align: middle; text-align: center; }
+.reg_password { overflow: hidden; margin-top: 18px; margin-left: 48px; line-height: 30px; room: 1; _width: 334px; }
+.reg_respassword { overflow: hidden; margin-top: 18px; margin-left: 20px; line-height: 30px; room: 1; _width: 334px; }
+.reg_box { overflow: hidden; margin-top: 20px; margin-left: 91px; room: 1; _width: 290px; }
+.reg_box a:hover { text-decoration: underline; }
+.reg_box .agreement { margin: 6px 2px 0px 0px !important; }
+.reg_submit { overflow: hidden; margin-top: 20px; margin-left: 92px; room: 1; *margin-left: 48px; _width: 330px; }
+.reg_submit .submit{background-position: right -100px;}
+.reg_check, .lg_check { overflow: hidden; margin-top: 18px; margin-left: 39px; line-height: 30px; room: 1; _width: 100%; }
+.reg_check a { float: left; margin-left: 6px; color: #87b32e; }
+/*======login======*/
+.iCMS_login_wrap .content { height: 420px; }
+.iCMS_login_wrap .main-col { height: 408px; }
+.iCMS_login_wrap .right-col { height: 336px; }
+
+.lg_reg  h2 { margin-bottom: 36px; margin-left: 40px; color: #768263; font-weight: normal; font-size: 22px; font-family: '\5FAE\8F6F\96C5\9ED1'; }
+.lg_reg span, .lg_reg p { margin-top: 36px; margin-left: 60px; color: #333; font-size: 14px; }
+.lg_reg .reg { display: block; margin-top: 10px; margin-left: 40px; width: 111px; height: 29px; background-position: right -50px; }
+.lg_name { float: left; margin-top: 15px; margin-left: 34px; line-height: 30px; }
+.lg_pass { margin-top: 18px; margin-left: 48px; line-height: 30px; float: left; margin-left: 14px\9; _margin-left: 7px; }
+.lg_pass .text { margin-left: 7px; }
+.lg_check { float: left; }
+.lg_remember { margin-top: 10px; margin-left: 60px; }
+.lg_remember .check { float: left; vertical-align: middle; text-align: center; margin: 4px 2px 0px 0px !important; }
+.lg_remember span { font-size: 12px !important; color: #999; cursor: pointer; }
+.lg_login { margin-top: 10px; margin-left: 60px; font-size: 12px !important; }
+.lg_login .submit {display: inline; background-position: right 0;}
+.lg_login a { margin-left: 12px; color: #666; text-decoration: underline; }
+.ot_login { margin-top: 32px; margin-left: 60px; }
+.ot_login span { font-size: 12px !important; color: #999; }
+.ot_btn { clear: both; margin-top: 10px; }
+.ot_btn a { float: left; margin-left: 3px; *margin-left: 1px; }
+.login_qq { background: url(img/login_qq.png) no-repeat left center; width: 49px; height: 21px; }
+.login_wb { background: url(img/login_wb.png) no-repeat left center; width: 76px; height: 21px; }
+.login_wx { background: url(img/login_wx.png) no-repeat left center; width: 53px; height: 21px; }
+.err_uname { visibility: hidden; float: left; margin-top: 19px; margin-left: 12px; *margin-top: 0; _margin-top: 0; }
+.err_uname span { color: #08c !important; font-size: 12px !important; display: block; margin-left: 4px; padding-left: 21px; color: #ff89a7; *padding: 5px 0 2px 21px; *line-height: 30px; _padding: 5px 0 2px 21px; _line-height: 30px; }
+.err_pass, .login_wrap .err_seccode { visibility: hidden; float: left; margin-top: 25px; margin-left: 12px; *margin-top: 21px; _margin-top: 21px; }
+.err_pass span, .login_wrap .err_seccode span { color: #08c !important; font-size: 12px !important; margin-left: 4px; padding-top: 1px; padding-left: 21px; color: #ff89a7; *padding: 5px 0 2px 21px; *line-height: 30px; _padding: 5px 0 2px 21px; _line-height: 30px; }
+/* Footer
+-------------------------------------------------- */
+#footer { margin-top: 20px; padding: 10px 0; width: 100%; border-top: 1px solid #e5e5e5; background-color: #f5f5f5; text-align: center; }
+#footer p { margin-bottom: 4px; color: #777; }
+#footer .links { margin: 10px 0; }
+#footer .links li { display: inline; padding: 0 2px; }
+#footer .links li:first-child { padding-left: 0; }

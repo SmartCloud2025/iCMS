@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+    <title><!--{$tag.name}-->_<!--{$site.title}-->_<!--{$site.seotitle}--></title>
+    <meta name="keywords" content="<!--{$tag.keywords}-->" />
+    <meta name="description" content="<!--{$tag.description}-->"/>
+    <meta name="mobile-agent" content="format=html5;url=<!--{$tag.url}-->"/>
+    <!--{iCMS:public:ui}-->
+    <link rel="stylesheet" href="<!--{$site.urls.public}-->/theme/default.css" type="text/css" />
+  </head>
+  <body>
+    <!--{include file="./header.htm"}-->
+    <div class="l-header-ad"><!--文章顶部横幅通栏 960x60--></div>
+    <div id="body" class="clearfix">
+      <div class="main-col">
+        <div id="guide">
+          <div id="bdshare" class="bdshare_t bds_tools get-codes-bdshare" style="float:right"> <span class="bds_more" style="background:#fff!important;padding:0;">分享到：</span> <a class="bds_qzone"></a> <a class="bds_tsina"></a> <a class="bds_tqq"></a> <a class="bds_renren"></a> <a class="bds_t163"></a> <a class="shareCount" style="display:none"></a> </div>
+          <strong>当前位置：</strong><a href="<!--{$site.url}-->">网站首页</a>&nbsp;&raquo;&nbsp;<!--{$tag.category.link}-->&nbsp;&raquo;&nbsp;<!--{$tag.link}-->&nbsp;&raquo;&nbsp;专题
+        </div>
+        <!-- Baidu Button BEGIN -->
+        <script type="text/javascript" id="bdshare_js" data="type=tools&amp;uid=0" ></script>
+        <script type="text/javascript" id="bdshell_js"></script>
+        <script type="text/javascript">
+        var bds_config = {
+        'bdText':'一篇好文,推荐之-【'+$('#page h1').text()+'】（来自:<!--{$site.title}-->）',
+        <!--{if $tag.pic.url}-->
+        'bdPic' : '<!--{$tag.pic.url}-->'
+        <!--{/if}-->
+        }
+        document.getElementById("bdshell_js").src = "http://bdimg.share.baidu.com/static/js/shell_v2.js?cdnversion=" + Math.ceil(new Date()/3600000)
+        </script>
+        <!-- Baidu Button END -->
+        <div id="page">
+          <div class="title">
+            <h1><!--{$tag.name}--></h1>
+          </div>
+          <div class="list-item">
+            <ul>
+              <!--{iCMS:article:list loop="true" page="true" row="10" tid="$tag.id"}-->
+              <li class="item-detail clearfix">
+                <!--{if $article_list.pic.url}-->
+                <p class="pic"><a href="<!--{$article_list.url}-->" target="_blank"><img src="<!--{$article_list.pic.url}-->"></a></p>
+                <!--{/if}-->
+                <p class="title"><a href="<!--{$article_list.url}-->" target="_blank"><!--{$article_list.title}--></a></p>
+                <p class="info"><!--{$article_list.description}--></p>
+              </li>
+              <!--{/iCMS}-->
+            </ul>
+          </div>
+          <div class="iCMS_pagination"><!--{$iCMS.page.nav}--></div>
+        </div>
+        <div class="comments_list clearfix">
+        </div>
+      </div>
+      <div class="right-col">
+        <div class="mod" id="tags">
+          <div class="hd">
+            <h3>相关标签<span>RELATED</span></h3>
+          </div>
+          <div class="bd">
+            <!--{iCMS:tag:list loop="true" row="10" cid="$tag.cid"}-->
+            <a href="<!--{$tag_list.url}-->" target="_blank"><!--{$tag_list.name}--></a>
+            <!--{/iCMS}-->
+          </div>
+        </div>
+        <div class="mod" id="artical">
+          <div class="hd">
+            <h3>热门文章排行榜<span>HOT</span></h3>
+          </div>
+          <div class="bd">
+            <ul class="artical-top artical-top-num">
+              <!--{iCMS:article:list loop="true" row="10" orderby="hot" tid="$tag.id"}-->
+              <!--{if $article_list.rownum<4}-->
+              <li class="top-1"><span><!--{$article_list.rownum}--></span><p><a href="<!--{$article_list.url}-->" target="_blank"><!--{$article_list.title}--></a></p><p><!--{$article_list.description}--></p></li>
+              <!--{else}-->
+              <li><span><!--{$article_list.rownum}--></span><a href="<!--{$article_list.url}-->" target="_blank"><!--{$article_list.title}--></a></li>
+              <!--{/if}-->
+              <!--{/iCMS}-->
+            </ul>
+          </div>
+        </div>
+        <div class="mod" id="tags">
+          <div class="hd">
+            <h3>热门标签<span>TAG</span></h3>
+          </div>
+          <div class="bd">
+            <!--{iCMS:tag:list loop="true" row="10" orderby="hot"}-->
+            <a href="<!--{$tag_list.url}-->" target="_blank"><!--{$tag_list.name}--></a>
+            <!--{/iCMS}-->
+          </div>
+        </div>
+      </div>
+    </div>
+    <!--{include file="./footer.htm"}-->
+  </body>
+</html>
