@@ -1,0 +1,36 @@
+<meta charset="utf-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">    <!-- <meta name="viewport" content="width=device-width,user-scalable=yes, minimum-scale=0.4, initial-scale=0.8,target-densitydpi=low-dpi" /> -->
+
+<meta content="iDreamSoft Inc." name="Copyright" />
+
+<link href="<!--{$iCMS.UI}-->/bootstrap/3.2.0/css/bootstrap.min.css" type="text/css" rel="stylesheet"/>
+<link href="<!--{$iCMS.UI}-->/font-awesome-4.1.0/css/font-awesome.min.css" type="text/css" rel="stylesheet"/>
+<link href="<!--{$iCMS.UI}-->/artDialog-5.0.4/skins/default.css" type="text/css" rel="stylesheet"/>
+<link href="<!--{$iCMS.UI}-->/iCMS-6.0.0.css" type="text/css" rel="stylesheet"/>
+<link href="<!--{$site.urls.ui}-->/iCMS.mobile-6.0.0.css" type="text/css" rel="stylesheet"/>
+
+<!--[if lt IE 9]>
+<script src="<!--{$iCMS.UI}-->/ie/html5shiv.min.js"></script>
+<script src="<!--{$iCMS.UI}-->/ie/respond.min.js"></script>
+<![endif]-->
+
+<script src="<!--{$iCMS.UI}-->/jquery-1.11.0.min.js"></script>
+<!--{if $ui.script}-->
+<script src="<!--{$iCMS.UI}-->/bootstrap/3.2.0/js/bootstrap.min.js"></script>
+<script src="<!--{$iCMS.UI}-->/artDialog-5.0.4/artDialog.min.js"></script>
+<script src="<!--{$iCMS.UI}-->/artDialog-5.0.4/artDialog.plugins.min.js"></script>
+<script src="<!--{$iCMS.UI}-->/jquery.poshytip.min.js"></script>
+<script src="<!--{$iCMS.UI}-->/iCMS-6.0.0.js"></script>
+<script src="<!--{$site.urls.ui}-->/iCMS.mobile-6.0.0.js"></script>
+<script>
+window.iCMS.init({
+	API:"<!--{iCMS:router url='/api'}-->",
+	PUBLIC:"<!--{$site.urls.public}-->",
+	COOKIE:'<!--{$iCMS.COOKIE_PRE}-->',
+});
+$(function(){
+	iCMS.run();
+})
+</script>
+<!--{/if}-->

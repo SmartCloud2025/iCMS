@@ -1,0 +1,117 @@
+<script>
+  $(function () {
+    if (iCMS.user.status()) {
+        $("#iCMS-navbar-login").hide();
+    }
+    $(".iCMS_search_btn").click(function(event) {
+      //console.log(!$(this).data('toggle'));
+      if(!$(this).data('toggle')){
+        $(this).data('toggle',true);
+        $("#iCMS-search").show();
+      }else{
+        $(this).data('toggle',false);
+        $("#iCMS-search").hide();
+        $('[name="q"]',"#iCMS-search").val('');
+      }
+    });
+    $(".close","#iCMS-navbar-login").click(function(event) {
+      $("#iCMS-navbar-login").hide();
+      iCMS.tip($(".navbar-toggle"),"登录请点击此处","left");
+      window.setTimeout(function(){
+        $(".navbar-toggle").tooltip('destroy');
+      },2000);
+    });
+
+    $(".menu","#iCMS-navbar-box").click(function(event) {
+      $("#iCMS-navbar-box").removeClass('in');
+    });
+
+  })
+</script>
+<nav id="header" class="navbar navbar-default" role="navigation">
+  <div class="container-fluid">
+    <!-- Brand and toggle get grouped for better mobile display -->
+    <div class="navbar-header">
+      <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#iCMS-navbar-box">
+      <span class="sr-only">Toggle navigation</span>
+      <span class="icon-bar"></span>
+      <span class="icon-bar"></span>
+      <span class="icon-bar"></span>
+      </button>
+      <button type="button" class="iCMS_search_btn"><i class="fa fa-search"></i></a></button>
+      <a class="navbar-brand" href="<!--{$site.url}-->"><img src="<!--{$site.urls.ui}-->/img/iCMS.logo-6.0.png" width="180"/></a>
+    </div>
+
+    <div class="collapse navbar-collapse" id="iCMS-search">
+      <form class="navbar-form form-inline" action="<!--{iCMS:router url='/api/search'}-->" role="search">
+        <div class="form-group">
+          <input type="text" name="q" class="form-control" placeholder="请输入关键词">
+        </div>
+        <button type="submit" class="btn btn-primary"><i class="fa fa-search"></i> 搜索</button>
+      </form>
+    </div>
+
+    <div class="navbar-collapse" id="iCMS-navbar-login">
+      <p class="clearfloat info">如果不登录，将不能进行顶踩、收藏、评论等为您准备的实用功能</p>
+      <a class="btn btn-primary login-btn" href="<!--{iCMS:router url='/api/user/login'}-->"><i class="fa fa-user"></i> 登 录</a>
+      <div class="clearfloat">
+          <a href="<!--{iCMS:router url='/api/user/register'}-->"><i class="fa fa-heart"></i> 注册</a>
+          <button type="button" class="close">
+            <span aria-hidden="true">&times;</span>
+            <span class="sr-only">Close</span>
+          </button>
+      </div>
+    </div>
+
+  </div><!-- /.container-fluid -->
+</nav>
+
+<nav class="collapse" role="navigation" id="iCMS-navbar-box">
+    <div class="navbar-collapse">
+      <div class="top">
+        <div id="iCMS-nav-login">
+          <a class="btn btn-primary btn-sm" href="<!--{iCMS:router url='/api/user/login'}-->"><i class="fa fa-user"></i> 登 录</a>
+          <a class="btn btn-success btn-sm" href="<!--{iCMS:router url='/api/user/register'}-->"><i class="fa fa-heart"></i> 注册</a>
+          <a class="navbar-brand mlogo" href="<!--{$site.url}-->"><img src="<!--{$site.urls.ui}-->/img/iCMS.mlogo-6.0.png" width="90"/></a>
+        </div>
+        <div id="iCMS-nav-profile">
+          <a class="btn btn-default btn-sm publish" href="<!--{iCMS:router url='/user/publish'}-->" target="_blank"><i class="fa fa-edit"></i> 发表文章</a>
+          <div class="iCMS_profile_wrap btn-group">
+            <a class="iCMS_user_home dropdown-toggle" data-toggle="dropdown" href="<!--{iCMS:router url='/user/home'}-->">
+              <img class="avatar r3" src="<!--{$site.urls.ui}-->/avatar.gif">
+              <span class="name label label-success">iCMS</span>
+              <i class="caret"></i>
+            </a>
+            <ul class="dropdown-menu" role="menu">
+              <li> <a href="<!--{iCMS:router url='/user/home'}-->" target="_blank"> <i class="fa fa-user"></i> 我的主页</a> </li>
+              <li> <a href="<!--{iCMS:router url='/user/article'}-->" target="_blank"> <i class="fa fa-cog"></i> 我的文章</a> </li>
+              <li> <a href="<!--{iCMS:router url='/user/comment'}-->" target="_blank"> <i class="fa fa-cog"></i> 我的评论</a> </li>
+              <li> <a href="<!--{iCMS:router url='/user/profile'}-->" target="_blank"> <i class="fa fa-cog"></i> 设置</a> </li>
+              <li> <a href="javascript:;" class="iCMS_user_logout" target="_blank"> <i class="fa fa-power-off"></i> 退出</a> </li>
+            </ul>
+          </div>
+        </div>
+      </div>
+      <div class="clearfloat"></div>
+      <ul class="nav navbar-nav">
+        <li class="active"><a href="<!--{$site.url}-->"><i class="fa fa-home"></i> 首 页</a></li>
+        <!--{iCMS:category:list loop="true" stype='top' row="10"}-->
+        <!--{if $category_list.child}-->
+        <li class="dropdown"  id="c<!--{$category_list.cid}-->">
+        <a class="dropdown-toggle" data-toggle="dropdown" href="<!--{$category_list.url}-->" target="_blank"><span><!--{$category_list.name}--></span><b class="caret"></b></a>
+          <ul class="dropdown-menu" role="menu">
+            <!--{iCMS:category:list as="sub_category" loop="true" stype='sub' row="10" cid=$category_list.cid}-->
+            <li><a href="<!--{$sub_category.url}-->" target="_blank"> <i class="fa fa-star-o"></i> <!--{$sub_category.name}--></a></li>
+            <!--{/iCMS}-->
+          </ul>
+        </li>
+        <!--{else}-->
+        <li id="c<!--{$category_list.cid}-->"><a href="<!--{$category_list.url}-->" target="_blank"><span><!--{$category_list.name}--></span></a></li>
+        <!--{/if}-->
+      <!--{/iCMS}-->
+      </ul>
+    </div>
+    <div class="menu">
+        <span class="menu-close">关闭</span>
+    </div>
+</nav>

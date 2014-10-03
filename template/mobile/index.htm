@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="zh-cn">
+  <head>
+    <title><!--{$site.title}-->_<!--{$site.seotitle}--></title>
+    <meta name="keywords" content="<!--{$site.keywords}-->" />
+    <meta name="description" content="<!--{$site.description}-->"/>
+    <!--{iCMS:public:ui}-->
+    <script src="<!--{$site.urls.ui}-->/jquery.infinitescroll.min.js"></script>
+    <script src="<!--{$site.urls.ui}-->/swipe-1.0.js"></script>
+
+    <script>
+    // lazy load
+    (function(a){a.fn.scrollLoading=function(b){var c={attr:"data-original",container:a(window),callback:a.noop};var d=a.extend({},c,b||{});d.cache=[];a(this).each(function(){var h=this.nodeName.toLowerCase(),g=a(this).attr(d.attr);var i={obj:a(this),tag:h,url:g};d.cache.push(i)});var f=function(g){if(a.isFunction(d.callback)){d.callback.call(g.get(0))}};var e=function(){var g=d.container.height();if(a(window).get(0)===window){contop=a(window).scrollTop()}else{contop=d.container.offset().top}a.each(d.cache,function(m,n){var p=n.obj,j=n.tag,k=n.url,l,h;if(p){l=p.offset().top-contop,l+p.height();if((l>=0&&l<g)||(h>0&&h<=g)){if(k){if(j==="img"){f(p.attr("src",k))}else{p.load(k,{},function(){f(p)})}}else{f(p)}n.obj=null}}})};e();d.container.bind("scroll",e)}})(jQuery);
+
+function scrollLoad(contents,one,next,maxPage){
+  if ( !( $(contents).length && $(next).length) ){
+    return false;
+  };
+  var $container = $(contents);
+  $container.infinitescroll({
+    //showPageNum:5,
+    maxPage: maxPage||3,
+    clickMoreBtn:'.click_more',
+    navSelector: next, // selector for the paged navigation
+    nextSelector: next + ' a', // selector for the NEXT link (to page 2)
+    itemSelector: contents + ' ' + one, // selector for all items you'll retrieve
+    loading: {
+      finishedMsg: '<a href="javascript:void(0);" class="click_more">恭喜您！居然到底了！</a>',
+      msgText: '<p class="loading_wrap"><i class="loading spr_0"></i>正在加载...</p>',
+      clickMoreMsg:'<a href="javascript:void(0);" class="click_more">点击加载更多</a>',
+      img: ''
+    }
+  },
+  // trigger Masonry as a callback
+  function(newElements) {
+    var $newElems = $(newElements).css({
+      opacity: 0
+    });
+    $container.append($newElems);
+    $newElems.animate({
+      opacity: 1
+    }, "fast", function() {
+      $("#infscr-loading").fadeOut('normal');
+    });
+    // lazylaod
+    $("img").scrollLoading();
+
+  });
+}
+
+$(function(){
+  $("img").scrollLoading();
+    var slider = new Swipe(document.getElementById('slider'),{
+      callback:function(e,pos){
+        var i = slideNav.length;
+        while (i--){
+          slideNav[i].className = "";
+        }
+        slideNav[pos].className = "on";
+      }
+    });
+    var slideNav = document.getElementById('position').getElementsByTagName('li');
+})
+    </script>
+  </head>
+  <body class="iCMS-mobile">
+    <!--{include file="./navbar.htm"}-->
+    <div class="container">
+
+      <section class="rotator">
+        <section id="slider" class="slide_show">
+          <ul>
+            <!--{iCMS:article:list pic="true" row="5"}-->
+            <!--{foreach value=alist from=$article_list}-->
+            <li><a href="<!--{$alist.url}-->"><img src="<!--{$alist.pic.url}-->" alt="<!--{$alist.title}-->"></a></li>
+            <!--{/foreach}-->
+          </ul>
+        </section>
+        <nav>
+          <ul id="position" class="slide_nav">
+            <!--{foreach key=key value=alist from=$article_list}-->
+            <li <!--{if $key=="0"}-->class="on"<!--{/if}-->><span class="show_n"><i>0<!--{"$key+1"}--></i><small>5</small></span> <a href="<!--{$alist.url}-->"><!--{$alist.title}--></a> </li>
+            <!--{/foreach}-->
+          </ul>
+        </nav>
+      </section>
+
+      <ul id="iCMS-article-list" class="list-wrap">
+        <!--{iCMS:article:list loop="true" pic="true" page="true" row="2"}-->
+        <li>
+          <a href="<!--{$article_list.url}-->" class="title"><!--{$article_list.title}--></a>
+          <p class="thumb"><img data-original="<!--{$article_list.pic.url}-->" src="<!--{$site.urls.ui}-->/img/img-default.png"></p>
+          <p class="desc"><!--{$article_list.description}--></p>
+          <p class="btm">
+            <u><a href="http://www.huxiu.com/huxiu"><!--{$article_list.user.name}--></a> </u>
+            <time title="<!--{$article_list.pubdate|date:"Y-m-d h:i"}-->"><!--{$article_list.pubdate|format_date}--></time>
+            <i><a href="comment/43770/1.html">评论(0)</a></i>
+          </p>
+          <p class="clearfix mb5"></p>
+        </li>
+        <!--{/iCMS}-->
+      </ul>
+      <div id="pages_next" class="hide">
+        <!--{if $iCMS.page.current<$iCMS.page.total}-->
+        <!--{$iCMS.page.next}-->
+        <!--{/if}-->
+      </div>
+    </div>
+    <script>
+    scrollLoad("#iCMS-article-list","li","#pages_next",<!--{$iCMS.page.total}-->);
+    </script>
+    <!--{include file="./footer.htm"}-->
+  </body>
+</html>
