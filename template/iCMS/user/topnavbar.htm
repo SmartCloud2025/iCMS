@@ -1,14 +1,20 @@
 <div class="iCMS_profile_wrap">
-  <a class="iCMS_user_home iCMS-hover-toggle" href="<!--{iCMS:router url='/user/home'}-->">
+  <a class="iCMS_user_home" href="<!--{iCMS:router url='/user/home'}-->">
     <img class="avatar r3" src="<!--{$site.urls.ui}-->/avatar.gif">
     <span class="name label label-info">iCMS</span>
     <b class="caret"></b>
   </a>
-  <ul class="dropdown-menu iCMS_hover_wrap" id="iCMS-user-menu">
-    <li> <a href="<!--{iCMS:router url='/user/home'}-->" target="_blank"> <i class="fa fa-user"></i> 我的主页</a> </li>
-    <li> <a href="<!--{iCMS:router url='/user/article'}-->" target="_blank"> <i class="fa fa-cog"></i> 我的文章</a> </li>
-    <li> <a href="<!--{iCMS:router url='/user/comment'}-->" target="_blank"> <i class="fa fa-cog"></i> 我的评论</a> </li>
-    <li> <a href="<!--{iCMS:router url='/user/profile'}-->" target="_blank"> <i class="fa fa-cog"></i> 设置</a> </li>
-    <li> <a href="javascript:;" class="iCMS-user-logout" target="_blank"> <i class="fa fa-power-off"></i> 退出</a> </li>
-  </ul>
+  <div class="popover bottom">
+    <div class="arrow"></div>
+    <div class="popover-content">
+      <ul class="dropdown-menu">
+        <li> <a href="<!--{iCMS:router url='/user/home'}-->" target="_blank"> <i class="fa fa-user"></i> 我的主页</a> </li>
+        <li> <a href="<!--{iCMS:router url='/user/article'}-->" target="_blank"> <i class="fa fa-cog"></i> 我的文章</a> </li>
+        <li> <a href="<!--{iCMS:router url='/user/comment'}-->" target="_blank"> <i class="fa fa-cog"></i> 我的评论</a> </li>
+        <li> <a href="<!--{iCMS:router url='/user/profile'}-->" target="_blank"> <i class="fa fa-cog"></i> 设置</a> </li>
+        <li> <a href="javascript:;" class="iCMS_user_logout" target="_blank"> <i class="fa fa-power-off"></i> 退出</a> </li>
+      </ul>
+    </div>
+  </div>
 </div>
+

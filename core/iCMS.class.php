@@ -83,6 +83,7 @@ class iCMS {
 
         self::multiple_device($config);
         self::$config = $config;
+        //var_dump(self::$config['template']);
     }
     //多终端适配
     private static function multiple_device(&$config){
@@ -307,7 +308,7 @@ class iCMS {
         if($iPages->totalpage>1) {
             $pagenav = $a['pagenav']?$a['pagenav']:'nav';
             $pnstyle = $a['pnstyle']?$a['pnstyle']:0;
-            iPHP::$iTPL->_iTPL_VARS['page']  = array('count'=>$a['total'],'total'=>$iPages->totalpage,'current'=>$iPages->nowindex,$pagenav=>$iPages->show($pnstyle));
+            iPHP::$iTPL->_iTPL_VARS['page']  = array('count'=>$a['total'],'total'=>$iPages->totalpage,'current'=>$iPages->nowindex,$pagenav=>$iPages->show($pnstyle),'next'=>$iPages->next_page());
             iPHP::$iTPL->_iTPL_VARS['PAGES'] = $iPages;
         }
         return $iPages;

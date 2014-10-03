@@ -137,9 +137,9 @@
                 this.user.data();
                 $("#iCMS-nav-login").hide();
                 $("#iCMS-nav-profile").show();
-                this.hover("#iCMS-nav-profile",".iCMS_user_home", "#iCMS-user-menu", 21);
+                this.hover(".iCMS_user_home",20,-10);
             }
-            doc.on("click", '.iCMS-user-follow', function(event) {
+            doc.on("click", '.iCMS_user_follow', function(event) {
                 event.preventDefault();
                 if (!iCMS.user_status) {
                     iCMS.LoginBox();
@@ -148,7 +148,7 @@
                 iCMS.user.follow(this);
                 return false;
             });
-            doc.on("click", '.iCMS-article-do', function(event) {
+            doc.on("click", '.iCMS_article_do', function(event) {
                 event.preventDefault();
                 if (!iCMS.user_status) {
                     iCMS.LoginBox();
@@ -162,12 +162,12 @@
                 }
                 return false;
             });
-            doc.on("click", '.iCMS-user-logout', function(event) {
+            doc.on("click", '.iCMS_user_logout', function(event) {
                 event.preventDefault();
                 iCMS.user.logout();
                 return false;
             });
-            doc.on("click", '.iCMS-user-login', function(event) {
+            doc.on("click", '.iCMS_user_login', function(event) {
                 event.preventDefault();
                 iCMS.LoginBox();
                 return false;
@@ -205,22 +205,21 @@
 
             this.user.login("#iCMS-login-dialog");
         },
-        hover: function(p,a, b, t, l) {
-            var timeOutID = null,pp=$(p),
-            t = t || 0, l = l || 0;
-
-            $(a,pp).hover(function() {
+        hover: function(a, t, l) {
+            var timeOutID = null,t = t || 0, l = l || 0,
+            b = $(a).parent().find('.popover');
+            $(a).hover(function() {
                 var position = $(this).position();
-                $(b,pp).show().css({
+                $(b).show().css({
                     top: position.top + t,
                     left: position.left + l
                 });
             }, function() {
                 timeOutID = setTimeout(function() {
-                    $(b,pp).hide();
+                    $(b).hide();
                 }, 2500);
             });
-            $(b,pp).hover(function() {
+            $(b).hover(function() {
                 window.clearTimeout(timeOutID);
                 $(this).show();
             }, function() {

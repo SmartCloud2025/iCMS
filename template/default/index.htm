@@ -99,15 +99,18 @@
         </div>
         <div class="bd"><!--{iCMS:article:list row="10" orderby="hot"}-->
         <ul class="artical-top">
-          <!--{if $article_list[0].pic.url}-->
-          <li class="first-item clearfix"><span><a href="<!--{$article_list[0].url}-->" target="_blank"><img src="<!--{$article_list[0].pic.url}-->" style="height: 72px;"></a></span>
+        <!--{if $article_list[0].pic.url}-->
+        <li class="first-item clearfix">
+          <span><a href="<!--{$article_list[0].url}-->" target="_blank"><img src="<!--{$article_list[0].pic.url}-->" style="height: 72px;"></a></span>
           <p class="title"><a href="<!--{$article_list[0].url}-->" target="_blank"><!--{$article_list[0].title}--></a></p>
           <p class="text"><!--{$article_list[0].description|html2txt}--></p>
         </li>
         <!--{/if}-->
-        <!--{for start=1 stop=10 value=i}-->
-        <li><a href="<!--{$article_list[$i].url}-->" target="_blank"><!--{$article_list[$i].title}--></a></li>
-        <!--{/for}-->
+        <!--{foreach key=akey value=alist from=$article_list}-->
+          <!--{if $akey>0}-->
+          <li><a href="<!--{$alist.url}-->" target="_blank"><!--{$alist.title}--></a></li>
+          <!--{/if}-->
+        <!--{/foreach}-->
       </ul>
     </div>
   </div>

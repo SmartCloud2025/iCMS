@@ -27,7 +27,7 @@
           <div class="card_info">
             <a class="card_title_name" data-tip="iCMS:ucard:<!--{$user.uid}-->" thref="<!--{$user.urls.home}-->"><!--{$user.nickname}--></a>
             <i class="icon_<!--{$user.gender}-->"></i>
-            <a data-param='{"uid":"<!--{$user.uid}-->","name":"<!--{$user.nickname}-->","follow":"<!--{$status.followed}-->"}' class="iCMS-user-follow follow_btn <!--{if $status.followed}-->unfollow<!--{else}-->follow<!--{/if}-->"></a>
+            <a data-param='{"uid":"<!--{$user.uid}-->","name":"<!--{$user.nickname}-->","follow":"<!--{$status.followed}-->"}' class="iCMS_user_follow follow_btn <!--{if $status.followed}-->unfollow<!--{else}-->follow<!--{/if}-->"></a>
             <p class="card_slogan">
             <!--{$userdata.slogan|default:'这家伙太懒了,什么都没有留下!'}-->
             </p>
@@ -94,9 +94,9 @@
                 <!--{/if}-->
               </div>
               <div class="list_fun clearfix" data-param='{"iid":"<!--{$article_list.id}-->","cid":"<!--{$article_list.cid}-->","suid":"<!--{$article_list.userid}-->","title":"<!--{$article_list.title|unicode}-->"}'>
-                <a href="javascript:;" data-param='{"do":"good"}' class="iCMS-article-do" title="32个赞"><i class="icon-thumbs-up"></i> (<span><!--{$article_list.good}--></span>)</a>
-                <a href="javascript:;" data-param='{"do":"comment"}' class="iCMS-article-do" title="评论"><i class="icon-comment"></i> (<span><!--{$article_list.comments}--></span>)</a>
-                <a href="javascript:;" data-param='{"do":"favorite"}' class="iCMS-article-do" title="收藏"><i class="icon-heart"></i></a>
+                <a href="javascript:;" data-param='{"do":"good"}' class="iCMS_article_do" title="32个赞"><i class="icon-thumbs-up"></i> (<span><!--{$article_list.good}--></span>)</a>
+                <a href="javascript:;" data-param='{"do":"comment"}' class="iCMS_article_do" title="评论"><i class="icon-comment"></i> (<span><!--{$article_list.comments}--></span>)</a>
+                <a href="javascript:;" data-param='{"do":"favorite"}' class="iCMS_article_do" title="收藏"><i class="icon-heart"></i></a>
               </div>
             </li>
             <!--{iCMSelse}-->

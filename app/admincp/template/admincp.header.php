@@ -13,12 +13,13 @@ defined('iPHP') OR exit('What are you doing?');
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
 <title>iCMS Administrator's Control Panel</title>
 <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+<!-- <meta name="viewport" content="width=device-width,user-scalable=yes, minimum-scale=0.4, initial-scale=0.8,target-densitydpi=low-dpi" /> -->
 <meta content="iDreamSoft Inc." name="Copyright" />
-<link rel="stylesheet" href="<?php echo iCMS_UI;?>/bootstrap-2.3.1/css/bootstrap.min.css" type="text/css" />
-<link rel="stylesheet" href="<?php echo iCMS_UI;?>/bootstrap-2.3.1/css/bootstrap-responsive.min.css" type="text/css" />
-<link rel="stylesheet" href="<?php echo iCMS_UI;?>/bootstrap-2.3.1/css/datepicker.css" type="text/css" />
-<link rel="stylesheet" href="<?php echo iCMS_UI;?>/bootstrap-2.3.1/css/bootstrap-switch.css" type="text/css" />
+<link rel="stylesheet" href="<?php echo iCMS_UI;?>/bootstrap/2.3.1/css/bootstrap.min.css" type="text/css" />
+<link rel="stylesheet" href="<?php echo iCMS_UI;?>/bootstrap/2.3.1/css/bootstrap-responsive.min.css" type="text/css" />
+<link rel="stylesheet" href="<?php echo iCMS_UI;?>/bootstrap/2.3.1/css/datepicker.css" type="text/css" />
+<link rel="stylesheet" href="<?php echo iCMS_UI;?>/bootstrap/2.3.1/css/bootstrap-switch.css" type="text/css" />
 <link rel="stylesheet" href="<?php echo iCMS_UI;?>/font-awesome-4.1.0/css/font-awesome.min.css" type="text/css" />
 <link rel="stylesheet" href="<?php echo iCMS_UI;?>/artDialog-5.0.4/skins/default.css" type="text/css" />
 <link rel="stylesheet" href="<?php echo iCMS_UI;?>/iCMS-6.0.0.css" type="text/css" />
@@ -29,9 +30,9 @@ defined('iPHP') OR exit('What are you doing?');
 <script src="<?php echo iCMS_UI;?>/jquery-1.11.0.min.js" type="text/javascript"></script>
 <script src="<?php echo iCMS_UI;?>/artDialog-5.0.4/artDialog.min.js" type="text/javascript"></script>
 <script src="<?php echo iCMS_UI;?>/artDialog-5.0.4/artDialog.plugins.min.js" type="text/javascript"></script>
-<script src="<?php echo iCMS_UI;?>/bootstrap-2.3.1/js/bootstrap.min.js" type="text/javascript"></script>
-<script src="<?php echo iCMS_UI;?>/bootstrap-2.3.1/js/bootstrap-datepicker.js" type="text/javascript"></script>
-<script src="<?php echo iCMS_UI;?>/bootstrap-2.3.1/js/bootstrap-switch.min.js" type="text/javascript"></script>
+<script src="<?php echo iCMS_UI;?>/bootstrap/2.3.1/js/bootstrap.min.js" type="text/javascript"></script>
+<script src="<?php echo iCMS_UI;?>/bootstrap/2.3.1/js/bootstrap-datepicker.js" type="text/javascript"></script>
+<script src="<?php echo iCMS_UI;?>/bootstrap/2.3.1/js/bootstrap-switch.min.js" type="text/javascript"></script>
 <script src="<?php echo iCMS_UI;?>/iCMS-6.0.0.js" type="text/javascript"></script>
 
 <!-- admincp ui -->
@@ -69,10 +70,10 @@ $(function(){
 <body class="<?php echo $body_class; ?>">
 <iframe width="0" height="0" style="display:none" id="iPHP_FRAME" name="iPHP_FRAME"></iframe>
 <div id="iPHP-DIALOG" title="iPHP提示" class="hide"><img src="<?php echo ACP_UI;?>/loading.gif" /></div>
-<div id="iCMS-MODAL" class="modal hide">
+<div id="iCMS-MODAL" class="modal">
   <div class="modal-header">
     <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
-    <h3>iCMS 提示</h3>
+    <h3 class="modal-title">iCMS 提示</h3>
   </div>
   <div class="modal-body">
     <p><img src="<?php echo ACP_UI;?>/loading.gif" /></p>

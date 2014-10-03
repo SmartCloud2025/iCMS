@@ -14,7 +14,7 @@
 				<!--{include file="iCMS://user/topnavbar.htm"}-->
 			</div>
 			<div id="iCMS-cmt-login">
-				<a href="<!--{iCMS:router url='/api/user/login'}-->" class="iCMS-user-login" title="登录"><i class="fa fa-user"></i> 登录</a>
+				<a href="<!--{iCMS:router url='/api/user/login'}-->" class="iCMS_user_login" title="登录"><i class="fa fa-user"></i> 登录</a>
 				<a href="<!--{iCMS:router url='/api/user/register'}-->" target="_blank"><i class="fa fa-heart"></i> 注册</a>
 			</div>
 			<div class="alert">
@@ -32,9 +32,9 @@
         var param =<!--{$comment_vars.param|json_encode}-->;
 		$(function(){
             if (iCMS.user_status) {
-                iCMS.hover("#iCMS-cmt-profile",".iCMS_user_home", "#iCMS-user-menu", 21);
                 $("#iCMS-cmt-login").hide();
                 $("#iCMS-cmt-profile").show();
+                iCMS.hover(".iCMS_user_home",20,-10);
             }
 
 			// 取消

@@ -79,13 +79,13 @@ class iPHP{
         $tpl OR iPHP::throwException('运行出错！ 请设置模板文件', 001,'TPL');
         if(strpos($tpl,'APP:/')!==false){
             $tpl = 'file::'.self::$app_tpl."||".str_replace('APP:/','',$tpl);
-            return iPHP::pl($tpl);
         }elseif(strpos($tpl,iPHP_APP.':/') !==false){
-			$tpl = str_replace(iPHP_APP.':/',iPHP_APP,$tpl);
-			if(@is_file(iPHP_TPL_DIR."/".$tpl)) {
-				return iPHP::pl($tpl);
+			$_tpl = str_replace(iPHP_APP.':/',iPHP_APP.'/'.iPHP_TPL_DEFAULT,$tpl); // iCMS/default/
+			if(@is_file(iPHP_TPL_DIR."/".$_tpl)){
+				$tpl = $_tpl;
+			}else{// iCMS/
+				$tpl = str_replace(iPHP_APP.':/',iPHP_APP,$tpl);
 			}
-			$tpl = str_replace(iPHP_APP.':/',iPHP_TPL_DEFAULT,$tpl);
 		}elseif(strpos($tpl,'{iTPL}') !==false){
 			$tpl = str_replace('{iTPL}',iPHP_TPL_DEFAULT,$tpl);
 		}

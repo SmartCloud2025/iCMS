@@ -44,7 +44,7 @@ class articleApp{
 
         $bodyCount OR $bodyCount = 1;
         $cid                 = empty($rs['cid'])?(int)$_GET['cid']:$rs['cid'];
-        $cata_option         = $this->categoryApp->select('ca');
+        $cata_option         = $this->categoryApp->select('ca',$cid);
         $cid && $contentprop =  unserialize($this->category[$cid]['contentprop']);
 
         //$metadata          = array_merge((array)$contentprop,(array)$rs['metadata']);

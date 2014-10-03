@@ -141,7 +141,8 @@ iACP::head();
   </div>
 </div>
 <div class="iCMS-container">
-  <div class="span" style="margin-left:0px;width:40%;">
+  <div class="row">
+  <div class="span5">
     <div class="widget-box">
       <div class="widget-title"> <span class="icon"> <i class="fa fa-info-circle"></i> </span>
         <h5>iCMS 开发信息</h5>
@@ -172,7 +173,7 @@ iACP::head();
       </div>
     </div>
   </div>
-  <div class="span" style="margin-left:20px;width:58%;">
+  <div class="span6">
     <div class="widget-box">
       <div class="widget-title"> <span class="icon"> <i class="fa fa-bug"></i> </span>
         <h5>BUG提交</h5>
@@ -184,12 +185,13 @@ iCMS 版本号:iCMS <?php echo iCMS_VER ; ?>[<?php echo iCMS_RELEASE ; ?>]
 WEB服务器版本:<?php echo $_SERVER['SERVER_SOFTWARE'] ; ?>;
 浏览器版本:<?php echo $_SERVER['HTTP_USER_AGENT'] ; ?>;
 问题:</textarea>
-        <input id="bug_url" type="text" style="width:420px;margin:8px 0px 0px 10px;" value="" placeholder="出问题的URL">
-        <a id="bug_submit" class="btn btn-primary" style="margin:8px 50px 8px 8px;float:right;"><i class="fa fa-check"></i> 提交</a>
+        <a id="bug_submit" class="btn btn-primary fr mr20"><i class="fa fa-check"></i> 提交</a>
+        <input id="bug_url" type="text" class="span4 ml10" placeholder="出问题的URL">
         <div class="clearfloat"></div>
       </div>
     </div>
   </div>
+</div>
 </div>
 <script type="text/javascript">
 $(function(){

@@ -279,7 +279,7 @@
             //------------
         },
         Init: function() {
-            $(document).on("click", '.iCMS-article-do', function(event) {
+            $(document).on("click", '.iCMS_article_do', function(event) {
                 event.preventDefault();
                 if (!iCMS.user_status) {
                     iCMS.LoginBox();

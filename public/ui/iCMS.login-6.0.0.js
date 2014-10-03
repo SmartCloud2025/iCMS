@@ -35,7 +35,7 @@
     function login_check(el, val, def) {
       def = def || '';
       var info = {
-        'uname':'请输入登录名',
+        'uname':'请输入用户名',
         'pass':'请输入密码',
         'seccode':'请输入验证码',
       }

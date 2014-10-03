@@ -129,7 +129,7 @@
 
             var m = $(opts.target),
                 mBody = m.find(".modal-body"),
-                mTitle = m.find(".modal-header h3");
+                mTitle = m.find(".modal-title");
             opts.title && mTitle.html(opts.title);
             mBody.empty();
 
@@ -184,9 +184,9 @@
             };
             im.destroy = function() {
                 window.stop ? window.stop() : document.execCommand("Stop");
-                m.hide();
+                m.hide().removeClass('in');
                 mOverlay.remove();
-                m.find(".modal-header h3").html("iCMS 提示");
+                m.find(".modal-title").html("iCMS 提示");
                 if (opts.overflow) {
                     $("body").css({
                         "overflow-y": "auto"
@@ -194,7 +194,7 @@
                 }
             };
             im.size(opts);
-            m.show();
+            m.show().addClass('in');
             return im;
         });
     }

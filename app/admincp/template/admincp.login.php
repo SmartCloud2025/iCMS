@@ -14,8 +14,8 @@ defined('iPHP') OR exit('What are you doing?');
 <title>iCMS Administrator's Control Panel</title>
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <meta content="iDreamSoft Inc." name="Copyright" />
-<link rel="stylesheet" href="<?php echo iCMS_UI;?>/bootstrap-2.3.1/css/bootstrap.min.css" type="text/css" />
-<link rel="stylesheet" href="<?php echo iCMS_UI;?>/bootstrap-2.3.1/css/bootstrap-responsive.min.css" type="text/css" />
+<link rel="stylesheet" href="<?php echo iCMS_UI;?>/bootstrap/2.3.1/css/bootstrap.min.css" type="text/css" />
+<link rel="stylesheet" href="<?php echo iCMS_UI;?>/bootstrap/2.3.1/css/bootstrap-responsive.min.css" type="text/css" />
 <link rel="stylesheet" href="<?php echo iCMS_UI;?>/font-awesome-4.1.0/css/font-awesome.min.css" type="text/css" />
 <link rel="stylesheet" href="<?php echo iCMS_UI;?>/artDialog-5.0.4/skins/default.css" type="text/css" />
 <link rel="stylesheet" href="<?php echo iCMS_UI;?>/iCMS-6.0.0.css" type="text/css" />
@@ -42,6 +42,18 @@ body { background-color:#f8f8f8;}
 .ipt_pass { margin-bottom:20px !important; }
 .ipt_pass i { background-image: url('<?php echo ACP_UI;?>/img/icons/16/lock.png'); }
 .login .controls { margin-left: 120px; }
+
+@media (max-width:600px) {
+  .container{padding: 20px;}
+  .iCMS-login{width:100%; height:auto;position:static;text-align: center;}
+  .iCMS-logo{text-align: center;}
+  .iCMS-login p{text-align: left;padding: 10px;}
+  .info{display: block;clear: both;margin: 0px auto;width: auto;float: none;}
+  .login {display: block;clear: both;margin: 10px auto;}
+  .login label{display: inline;float: none;}
+  .login .controls { margin-left:0px; }
+}
+
 </style>
 <script type="text/javascript">
 $(function(){
