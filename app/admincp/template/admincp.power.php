@@ -75,7 +75,7 @@ function set_select(vars,el){
   <div class="clearfloat"></div>
   <span class="label label-important">注:工具中的上传文件/文件管理为操作链接权限,是否有文件(上传/管理)权限以文件权限的设置为主</span>
   <div class="clearfloat mb10 solid"></div>
-  <div id="power_treecontrol"> <a style="display:none;"></a> <a style="display:none;"></a> <a class="btn btn-mini btn-info" href="#">展开/收缩</a></div>
+  <div id="power_treecontrol"> <a style="display:none;"></a> <a style="display:none;"></a> <a class="btn btn-mini btn-info" href="javascript:;">展开/收缩</a></div>
   <ul id="power_tree">
   <?php echo iACP::app('menu')->power_tree();?>
   </ul>
@@ -94,7 +94,7 @@ function set_select(vars,el){
   </div>
   <div class="clearfloat mb10"></div>
   <span class="label label-important">注:只有文章类型的栏目才有内容权限</span>
-  <div id="cpower_treecontrol"> <a style="display:none;"></a> <a style="display:none;"></a> <a class="btn btn-mini btn-info" href="#">展开/收缩</a></div>
+  <div id="cpower_treecontrol"> <a style="display:none;"></a> <a style="display:none;"></a> <a class="btn btn-mini btn-info" href="javascript:;">展开/收缩</a></div>
   <ul id="cpower_tree">
     <?php echo iACP::app('category','all')->power_tree();?>
   </ul>

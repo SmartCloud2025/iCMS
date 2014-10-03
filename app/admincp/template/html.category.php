@@ -15,7 +15,7 @@ iACP::head();
       <h5 class="brs">生成静态</h5>
       <ul class="nav nav-tabs" id="html-tab">
         <li><a href="<?php echo APP_URI; ?>&do=index"><i class="fa fa-floppy-o"></i> <b>首页</b></a></li>
-        <li class="active"><a href="#"><i class="fa fa-floppy-o"></i> <b>栏目</b></a></li>
+        <li class="active"><a href="javascript:;"><i class="fa fa-floppy-o"></i> <b>栏目</b></a></li>
         <li><a href="<?php echo APP_URI; ?>&do=article"><i class="fa fa-floppy-o"></i> <b>文章</b></a></li>
       </ul>
     </div>

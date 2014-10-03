@@ -35,10 +35,12 @@ $(function(){
           <div class="input-prepend"> <span class="add-on">应用名称</span>
             <input type="text" name="app" class="span3" id="app" value="<?php echo $rs['app'] ; ?>"/>
           </div>
+          <span class="help-inline">例:category,article</span>
           <div class="clearfloat mb10"></div>
           <div class="input-prepend"> <span class="add-on">菜单名称</span>
             <input type="text" name="name" class="span3" id="name" value="<?php echo $rs['name'] ; ?>"/>
           </div>
+          <span class="help-inline">例:文章管理</span>
           <div class="clearfloat mb10"></div>
           <div class="input-prepend"> <span class="add-on">菜单提示</span>
             <input type="text" name="title" class="span3" id="title" value="<?php echo $rs['title'] ; ?>"/>
@@ -47,6 +49,7 @@ $(function(){
           <div class="input-prepend"> <span class="add-on">菜单链接</span>
             <input type="text" name="href" class="span3" id="href" value="<?php echo $rs['href'] ; ?>"/>
           </div>
+          <span class="help-inline">admincp.php?app=<span class="label label-important">article&do=add</span> 红色这部分</span>
           <div class="clearfloat mb10"></div>
           <div class="input-prepend"> <span class="add-on">链接 CSS</span>
             <input type="text" name="a_class" class="span3" id="a_class" value="<?php echo $rs['a_class'] ; ?>"/>
@@ -55,6 +58,7 @@ $(function(){
           <div class="input-prepend"> <span class="add-on">菜单图标</span>
             <input type="text" name="icon" class="span3" id="icon" value="<?php echo $rs['icon'] ; ?>"/>
           </div>
+          <span class="help-inline">参见 http://fontawesome.io/icons/</span>
           <div class="clearfloat mb10"></div>
           <div class="input-prepend"> <span class="add-on">打开方式</span>
             <select name="target" id="target" class="chosen-select" data-placeholder="正常">

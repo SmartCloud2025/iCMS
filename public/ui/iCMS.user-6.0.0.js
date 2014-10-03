@@ -37,8 +37,8 @@
                 '<input class="commentApp-textarea" type="text" value="' + def + '">' +
                 '</div>' +
                 '<div class="app-command clearfix">' +
-                '<a href="#" name="addnew" class="btn btn-primary">评论</a>' +
-                '<a href="###" name="closeform" class="app-command-cancel">取消</a>' +
+                '<a href="javascript:;" name="addnew" class="btn btn-primary">评论</a>' +
+                '<a href="javascript:;" name="closeform" class="app-command-cancel">取消</a>' +
                 '</div>'
             );
             var loging = $('<div class="commentApp-spinner">正在加载，请稍等 <i class="spinner-lightgray"></i></div>');

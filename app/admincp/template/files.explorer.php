@@ -93,7 +93,7 @@ $(function(){
       <h5 class="brs">文件管理</h5>
       <span class="label label-info pwd"><a href="<?php echo $URI.$parent; ?>" class="tip-bottom" title="当前路径 ">iCMS://<?php echo $pwd;?></a></span>
       <div class="buttons">
-        <a href="#" class="btn btn-mini btn-success" id="mkdir"><i class="fa fa-folder"></i> 创建新目录</a> <a href="<?php echo __ADMINCP__; ?>=files&do=multi&from=modal&dir=<?php echo $pwd;?>" title="上传文件" data-toggle="modal" data-meta='{"width":"98%","height":"580px"}' class="btn btn-mini btn-primary" id="upload"> <i class="fa fa-upload"></i> 上传文件</a> </div>
+        <a href="javascript:;" class="btn btn-mini btn-success" id="mkdir"><i class="fa fa-folder"></i> 创建新目录</a> <a href="<?php echo __ADMINCP__; ?>=files&do=multi&from=modal&dir=<?php echo $pwd;?>" title="上传文件" data-toggle="modal" data-meta='{"width":"98%","height":"580px"}' class="btn btn-mini btn-primary" id="upload"> <i class="fa fa-upload"></i> 上传文件</a> </div>
     </div>
     <div class="widget-content nopadding">
       <form action="<?php echo APP_FURI; ?>&do=batch" method="post" class="form-inline" id="<?php echo APP_FORMID;?>" target="iPHP_FRAME">

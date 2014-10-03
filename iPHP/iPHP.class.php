@@ -475,19 +475,19 @@ class iPHP{
 	    self::$offset	= ($page-1)*$displaypg;
 	    self::$offset<0 && self::$offset=0;
 	    self::$pagenav="<ul><li><a href='{$url}1' target='_self'>首页</a></li>";
-	    self::$pagenav.=$prepg?"<li><a href='{$url}$prepg' target='_self'>上一页</a></li>":'<li class="disabled"><a href="#">上一页</a></li>';
+	    self::$pagenav.=$prepg?"<li><a href='{$url}$prepg' target='_self'>上一页</a></li>":'<li class="disabled"><a href="javascript:;">上一页</a></li>';
 	    $flag=0;
 	    for($i=$page-2;$i<=$page-1;$i++) {
 	        if($i<1) continue;
 	        self::$pagenav.="<li><a href='{$url}$i' target='_self'>$i</a></li>";
 	    }
-	    self::$pagenav.='<li class="active"><a href="#">'.$page.'</a></li>';
+	    self::$pagenav.='<li class="active"><a href="javascript:;">'.$page.'</a></li>';
 	    for($i=$page+1;$i<=$lastpg;$i++) {
 	        self::$pagenav.="<li><a href='{$url}$i' target='_self'>$i</a></li>";
 	        $flag++;
 	        if($flag==4) break;
 	    }
-	    self::$pagenav.=$nextpg?"<li><a href='{$url}$nextpg' target='_self'>下一页</a></li>":'<li class="disabled"><a href="#">下一页</a></li>';
+	    self::$pagenav.=$nextpg?"<li><a href='{$url}$nextpg' target='_self'>下一页</a></li>":'<li class="disabled"><a href="javascript:;">下一页</a></li>';
 	    self::$pagenav.="<li><a href='{$url}$lastpg' target='_self'>末页</a></li>";
 	    self::$pagenav.="<li> <span class=\"muted\">共{$total}{$unit}，{$displaypg}{$unit}/页 共{$lastpg}页</span></li>";
 	    for($i=1;$i<=$lastpg;$i=$i+5) {

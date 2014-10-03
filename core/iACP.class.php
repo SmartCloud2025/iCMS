@@ -224,7 +224,7 @@ class iACP {
         if ($propArray) {
             echo '<ul class="dropdown-menu">';
             foreach ($propArray as $prop) {
-                echo '<li><a href="#" data-toggle="insert" data-target="#' . $field . '">' . $prop['val'] . '</a></li>';
+                echo '<li><a href="javascript:;" data-toggle="insert" data-target="#' . $field . '">' . $prop['val'] . '</a></li>';
             }
             echo '</ul>';
         }

@@ -75,6 +75,7 @@ function update_popover(html,a){
           $C    = $this->category[$value['cid']];
           $url  = iCMS_API.'?app=comment&do=goto&iid='.$value['iid'].'&appid='.$value['appid'].'&cid='.$value['cid'];
           $user = user::info($value['userid'],$value['username']);
+          $app_label =app::get_label($value['appid'],'title');
           ?>
           <li id="id-<?php echo $value['id'] ; ?>">
             <div class="user-thumb">
@@ -82,20 +83,20 @@ function update_popover(html,a){
               <img width="50" height="50" alt="<?php echo $user['name'] ; ?>" src="<?php echo $user['avatar'] ; ?>">
               </a>
               <div class="claerfix mb10"></div>
-              <a href="#" class="btn btn-inverse btn-mini tip-bottom" title="加入黑名单">黑名单</a>
+              <a href="javascript:;" class="btn btn-inverse btn-mini tip-bottom" title="加入黑名单">黑名单</a>
             </div>
             <div class="comments">
               <input type="checkbox" name="id[]" value="<?php echo $value['id'] ; ?>" />
               <span class="user-info">
-                <a href="<?php echo APP_URI; ?>&userid=<?php echo $value['userid'] ; ?>"><span class="label label-info"><?php echo $user['name'] ; ?></span></a>
-                在<?php echo app::get_label($value['appid'],'title');?>
-                <a href="<?php echo APP_URI; ?>&iid=<?php echo $value['iid'] ; ?>"><?php echo $value['title'] ; ?></a>
+                <a href="<?php echo APP_URI; ?>&userid=<?php echo $value['userid'] ; ?>" class="tip" title="查看该用户所有评论"><span class="label label-info"><?php echo $user['name'] ; ?></span></a>
+                在<?php echo $app_label; ?>
+                <a href="<?php echo APP_URI; ?>&iid=<?php echo $value['iid'] ; ?>" class="tip" title="查看该<?php echo $app_label;?>所有评论"><?php echo $value['title'] ; ?></a>
                 <?php if($value['reply_id']){?>
-                  对<a href="<?php echo APP_URI; ?>&userid=<?php echo $value['reply_uid'] ; ?>"><span class="label label-success"><?php echo $value['reply_name'] ; ?></span></a>的回帖发表评论
+                  对<a href="<?php echo APP_URI; ?>&userid=<?php echo $value['reply_uid'] ; ?>" class="tip" title="查看该用户所有评论"><span class="label label-success"><?php echo $value['reply_name'] ; ?></span></a>的回帖发表评论
                 <?php }else{?>
                   发表评论
                 <?php } ?>
-                <a href="<?php echo APP_URI; ?>&ip=<?php echo $value['ip'] ; ?>"><span class="label label-inverse">IP：<?php echo $value['ip'] ; ?></span></a>
+                <a href="<?php echo APP_URI; ?>&ip=<?php echo $value['ip'] ; ?>" class="tip" title="查看该IP所有评论"><span class="label label-inverse">IP：<?php echo $value['ip'] ; ?></span></a>
               </span>
               <p>
               <?php echo nl2br($value['content']); ?>
