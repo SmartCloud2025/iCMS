@@ -79,7 +79,7 @@
             <!--{iCMS:article:list loop="true" page="true" row="10" userid=$user.uid}-->
             <li class="clearfix">
               <div class="list_top">
-                <div class="rep_num" title="回复"><!--{$article_list.hits}--></div>
+                <div class="rep_num" title="回复"><!--{$article_list.hits.count}--></div>
                 <div class="title">
                   <a href="<!--{$article_list.url}-->" target="_blank" class="i_th_tit"><!--{$article_list.title}--></a>
                 </div>
@@ -93,8 +93,8 @@
                 <div class="pic"><img src="<!--{$article_list.pic.url}-->" onload="iCMS.imgFix(this,550,150);"></div>
                 <!--{/if}-->
               </div>
-              <div class="list_fun clearfix" data-param='{"iid":"<!--{$article_list.id}-->","cid":"<!--{$article_list.cid}-->","suid":"<!--{$article_list.userid}-->","title":"<!--{$article_list.title|unicode}-->"}'>
-                <a href="javascript:;" data-param='{"do":"good"}' class="iCMS_article_do" title="32个赞"><i class="icon-thumbs-up"></i> (<span><!--{$article_list.good}--></span>)</a>
+              <div class="list_fun clearfix" data-param='<!--{$article_list.param|json_encode}-->'>
+                <a href="javascript:;" data-param='{"do":"good"}' class="iCMS_article_do" title="给你32个赞"><i class="icon-thumbs-up"></i> (<span><!--{$article_list.good}--></span>)</a>
                 <a href="javascript:;" data-param='{"do":"comment"}' class="iCMS_article_do" title="评论"><i class="icon-comment"></i> (<span><!--{$article_list.comments}--></span>)</a>
                 <a href="javascript:;" data-param='{"do":"favorite"}' class="iCMS_article_do" title="收藏"><i class="icon-heart"></i></a>
               </div>
@@ -157,17 +157,18 @@
         <div class="mod">
           <div class="hd">
             <h3>统计<span>STATISTICS</span></h3>
-            </div><!--{iCMS:user:stat userid=$user.uid}-->
+            </div>
             <ul>
-              <li><span class="label label-success">今日访问：<!--{$user_stat.today}--></span></li>
-              <li><span class="label label-success">昨日访问：<!--{$user_stat.yesterday}--></span></li>
-              <li><span class="label label-info">本周访问：<!--{$user_stat.week}--></span></li>
-              <li><span class="label label-info">本月访问：<!--{$user_stat.month}--></span></li>
-              <li><span class="label label-inverse">所有访问：<!--{$user_stat.all}--></span></li>
+              <li><span class="label label-success">今日访问：<!--{$userdata.hits_today}--></span></li>
+              <li><span class="label label-success">昨日访问：<!--{$userdata.hits_yday}--></span></li>
+              <li><span class="label label-info">本周访问：<!--{$userdata.hits_week}--></span></li>
+              <li><span class="label label-info">本月访问：<!--{$userdata.hits_month}--></span></li>
+              <li><span class="label label-inverse">所有访问：<!--{$userdata.hits}--></span></li>
             </ul>
           </div>
         </div>
       </div>
       <!--{include file="{iTPL}/footer.htm"}-->
+    <script src="<!--{$user.hits_script}-->"></script>
     </body>
   </html>

@@ -127,6 +127,12 @@ function comment_list($vars){
 			if($vars['page']){
 				$value['page']  = array('total'=>$multi->totalpage,'perpage'=>$multi->perpage);
 			}
+	        $value['param'] = array(
+				"appid"  => iCMS_APP_COMMENT,
+				"id"     => $value['id'],
+				"userid" => $value['userid'],
+				"name"   => $value['username'],
+	        );
 			$resource[$key] = $value;
 		}
 		$vars['cache'] && iCache::set($cache_name,$resource,$cache_time);

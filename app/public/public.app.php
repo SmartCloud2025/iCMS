@@ -18,22 +18,28 @@ class publicApp {
     public function API_agreement(){
     	iPHP::view('iCMS://agreement.htm');
     }
-    public function API_time(){
-		$time      = $_SERVER['REQUEST_TIME'];
-		$toady     = get_date($time,"Ymd H:i:s");
-		$week      = get_date($time,"YW");
-		$month     = get_date($time,"Ym");
-		$year      = get_date($time,"Y");
 
-		$yesterday  = get_date($time-86400+1,"Ymd H:i:s");
-		$last_week  = get_date(mktime(1,0,0,date("m"),date("d")-date("w")+1-7,date("Y")),"YW");
-		$last_month = get_date(mktime(1,0,0,date("m")-1,1,date("Y")),"Ym");
-		$last_year  = $year-1;
-    	echo $time,'<hr />';
-    	echo $toady,'<br />',$week,'<br />',$month,'<br />',$year,'<hr />';
-    	echo $yesterday,'<br />',$last_week,'<br />',$last_month,'<br />',$last_year,'<br />';
-    }
     public function API_crontab(){
-
-    }
+        $timeline = iCMS::timeline();
+        //var_dump($timeline);
+        $pieces = array();
+        foreach ($timeline as $key => $bool) {
+            $field = "hits_{$key}";
+            if($key=='yday'){
+                if($bool==1){
+                    $pieces[]="`hits_yday` = hits_today";
+                }elseif ($bool>1) {
+                    $pieces[]="`hits_yday` = 0";
+                }
+                continue;
+            }
+            $bool OR $pieces[]="`{$field}` = 0";
+        }
+        $sql = implode(',', $pieces);
+        if($sql){
+        	//点击初始化
+        	iDB::query("UPDATE `#iCMS@__article` SET {$sql}");
+        	iDB::query("UPDATE `#iCMS@__user_data` SET {$sql}");
+        }
+   }
 }

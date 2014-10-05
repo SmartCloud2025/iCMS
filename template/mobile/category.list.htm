@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="zh-cn">
+  <head>
+    <title><!--{$category.name}-->_<!--{$site.title}-->_<!--{$site.seotitle}--></title>
+    <meta name="keywords" content="<!--{$category.keywords}-->" />
+    <meta name="description" content="<!--{$category.description}-->"/>
+    <!--{iCMS:public:ui}-->
+    <script src="<!--{$site.urls.ui}-->/jquery.infinitescroll.min.js"></script>
+
+    <script>
+    // lazy load
+    (function(a){a.fn.scrollLoading=function(b){var c={attr:"data-original",container:a(window),callback:a.noop};var d=a.extend({},c,b||{});d.cache=[];a(this).each(function(){var h=this.nodeName.toLowerCase(),g=a(this).attr(d.attr);var i={obj:a(this),tag:h,url:g};d.cache.push(i)});var f=function(g){if(a.isFunction(d.callback)){d.callback.call(g.get(0))}};var e=function(){var g=d.container.height();if(a(window).get(0)===window){contop=a(window).scrollTop()}else{contop=d.container.offset().top}a.each(d.cache,function(m,n){var p=n.obj,j=n.tag,k=n.url,l,h;if(p){l=p.offset().top-contop,l+p.height();if((l>=0&&l<g)||(h>0&&h<=g)){if(k){if(j==="img"){f(p.attr("src",k))}else{p.load(k,{},function(){f(p)})}}else{f(p)}n.obj=null}}})};e();d.container.bind("scroll",e)}})(jQuery);
+
+function scrollLoad(contents,one,next,maxPage){
+  if ( !( $(contents).length && $(next).length) ){
+    return false;
+  };
+  var $container = $(contents);
+  $container.infinitescroll({
+    //showPageNum:5,
+    maxPage: maxPage||3,
+    clickMoreBtn:'.click_more',
+    navSelector: next, // selector for the paged navigation
+    nextSelector: next + ' a', // selector for the NEXT link (to page 2)
+    itemSelector: contents + ' ' + one, // selector for all items you'll retrieve
+    loading: {
+      finishedMsg: '<a href="javascript:void(0);" class="click_more">恭喜您！居然到底了！</a>',
+      msgText: '<p class="loading_wrap"><i class="loading spr_0"></i>正在加载...</p>',
+      clickMoreMsg:'<a href="javascript:void(0);" class="click_more">点击加载更多</a>',
+      img: ''
+    }
+  },
+  // trigger Masonry as a callback
+  function(newElements) {
+    var $newElems = $(newElements).css({
+      opacity: 0
+    });
+    $container.append($newElems);
+    $newElems.animate({
+      opacity: 1
+    }, "fast", function() {
+      $("#infscr-loading").fadeOut('normal');
+    });
+    // lazylaod
+    $("img").scrollLoading();
+
+  });
+}
+
+$(function(){
+  $("img").scrollLoading();
+})
+    </script>
+  </head>
+  <body class="iCMS-mobile">
+    <!--{include file="./navbar.htm"}-->
+    <div class="container">
+      <div class="cat_header" data-spy="affix" data-offset-top="60" data-offset-bottom="200">
+        <h3 class="title"><i class="fa fa-heart"></i> <!--{$category.name}--></h3>
+      </div>
+      <ul id="iCMS-article-list" class="article_list">
+        <!--{iCMS:article:list loop="true" page="true" row="10" cid="$category.cid"}-->
+        <li class="item">
+          <!--{if $article_list.pic.url}-->
+          <div class="img">
+            <a target="_blank" href="<!--{$article_list.url}-->">
+              <img src="<!--{$article_list.pic.url}-->">
+            </a>
+          </div>
+          <div class="info pic">
+          <!--{else}-->
+          <div class="info">
+          <!--{/if}-->
+            <a target="_blank" href="<!--{$article_list.url}-->" class="title"><!--{$article_list.title}--></a>
+            <div class="clearfix rank_info">
+              <p class="fl rank">关注：<span class="rank_num"><!--{$article_list.hits.count}--></span></p>
+              <p class="fr category">栏目：<a target="_blank" href="<!--{$article_list.category.url}-->" class="group_master"><!--{$article_list.category.name}--></a> </p>
+            </div>
+            <p class="group_desc"><!--{$article_list.description|html2txt|cut:70:"..."}--></p>
+          </div>
+          <div class="clearfloat"></div>
+        </li>
+        <!--{/iCMS}-->
+      </ul>
+      <div id="pages_next" class="hide">
+        <!--{$iCMS.page.next}-->
+      </div>
+    </div>
+    <script>
+    scrollLoad("#iCMS-article-list","li","#pages_next",<!--{$iCMS.page.total}-->);
+    </script>
+    <!--{include file="./footer.htm"}-->
+  </body>
+</html>

@@ -13,7 +13,7 @@
             },
             logout: function() {
                 $.get(iCMS.api('user', "&do=logout"), function(c) {
-                    window.location.href = c.forward
+                    window.top.location.href = c.forward
                 }, 'json');
             },
             status: function() {

@@ -18,7 +18,6 @@ function scrollLoad(contents,one,next,maxPage){
   };
   var $container = $(contents);
   $container.infinitescroll({
-    //showPageNum:5,
     maxPage: maxPage||3,
     clickMoreBtn:'.click_more',
     navSelector: next, // selector for the paged navigation
@@ -26,9 +25,9 @@ function scrollLoad(contents,one,next,maxPage){
     itemSelector: contents + ' ' + one, // selector for all items you'll retrieve
     loading: {
       finishedMsg: '<a href="javascript:void(0);" class="click_more">恭喜您！居然到底了！</a>',
-      msgText: '<p class="loading_wrap"><i class="loading spr_0"></i>正在加载...</p>',
+      msgText: '<p class="loading_wrap"><i class="loading"></i> 正在加载...</p>',
       clickMoreMsg:'<a href="javascript:void(0);" class="click_more">点击加载更多</a>',
-      img: ''
+      img: '<!--{$site.urls.ui}-->/img/ajax-loader.gif'
     }
   },
   // trigger Masonry as a callback
@@ -86,24 +85,30 @@ $(function(){
       </section>
 
       <ul id="iCMS-article-list" class="list-wrap">
-        <!--{iCMS:article:list loop="true" pic="true" page="true" row="2"}-->
+        <!--{iCMS:article:list loop="true" page="true" user="true" row="2"}-->
         <li>
-          <a href="<!--{$article_list.url}-->" class="title"><!--{$article_list.title}--></a>
-          <p class="thumb"><img data-original="<!--{$article_list.pic.url}-->" src="<!--{$site.urls.ui}-->/img/img-default.png"></p>
+          <p class="title">
+            <a href="<!--{$article_list.category.url}-->" target="_blank" class="cat"><span class="label label-primary"><!--{$article_list.category.name}--></span></a>
+            <a href="<!--{$article_list.url}-->" target="_blank" class="art"><!--{$article_list.title}--></a></p>
+          <!--{if $article_list.pic.url}-->
+          <p class="thumb">
+            <a href="<!--{$article_list.url}-->" target="_blank">
+              <img data-original="<!--{$article_list.pic.url}-->" src="<!--{$site.urls.ui}-->/img/img-default.png">
+            </a>
+          </p>
+          <!--{/if}-->
           <p class="desc"><!--{$article_list.description}--></p>
           <p class="btm">
-            <u><a href="http://www.huxiu.com/huxiu"><!--{$article_list.user.name}--></a> </u>
+            <u><a href="<!--{$article_list.user.url}-->"><!--{$article_list.user.name}--></a> </u>
             <time title="<!--{$article_list.pubdate|date:"Y-m-d h:i"}-->"><!--{$article_list.pubdate|format_date}--></time>
-            <i><a href="comment/43770/1.html">评论(0)</a></i>
+            <i><a href="<!--{$article_list.comment.url}-->">评论(<!--{$article_list.comment.count}-->)</a></i>
+            <p class="clearfloat mb5"></p>
           </p>
-          <p class="clearfix mb5"></p>
         </li>
         <!--{/iCMS}-->
       </ul>
       <div id="pages_next" class="hide">
-        <!--{if $iCMS.page.current<$iCMS.page.total}-->
         <!--{$iCMS.page.next}-->
-        <!--{/if}-->
       </div>
     </div>
     <script>

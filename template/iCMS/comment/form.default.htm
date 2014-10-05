@@ -11,17 +11,17 @@
 		<script src="<!--{$site.urls.ui}-->/iCMS.comment-6.0.0.js"></script>
 		<div class="iCMS_comment_form_wrap">
 			<div id="iCMS-cmt-profile">
-				<!--{include file="iCMS://user/topnavbar.htm"}-->
+				<!--{include file="iCMS://user/menu.htm"}-->
 			</div>
 			<div id="iCMS-cmt-login">
 				<a href="<!--{iCMS:router url='/api/user/login'}-->" class="iCMS_user_login" title="登录"><i class="fa fa-user"></i> 登录</a>
 				<a href="<!--{iCMS:router url='/api/user/register'}-->" target="_blank"><i class="fa fa-heart"></i> 注册</a>
 			</div>
-			<div class="alert">
+			<div class="alert alert-warning" role="alert">
 				<i class="fa fa-warning "></i> 请自觉遵守互联网相关的政策法规，严禁发布色情、暴力、反动的言论！
 			</div>
 			<div class="iCMS_cmt_editor">
-				<textarea class="iCMS_editor_text commentApp-textarea" placeholder="写下你的评论…"></textarea>
+				<textarea class="iCMS_editor_text commentApp-textarea form-control" placeholder="写下你的评论…"></textarea>
 			</div>
 			<div class="iCMS_cmt_command clearfix">
 				<button class="btn btn-primary cmt-add" type="submit"><i class="fa fa-check"></i> 评 论</button>

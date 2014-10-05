@@ -121,3 +121,5 @@ a.noneline { text-decoration: none !important; }
 .modal .buttons { padding: 0 15px; margin-bottom: 15px; text-align: right; background: #fff }
 /* pagination */
 .pagination .muted { height: 20px; line-height: 20px; }
+/**/
+#iCMS_public_crontab{display: none;}

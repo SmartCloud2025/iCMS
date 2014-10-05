@@ -205,6 +205,43 @@ class iCMS {
     	self::run($app,null,'API_');
     }
     //------------------------------------
+    public static function hits_sql($all=true){
+        $timeline = self::timeline();
+        //var_dump($timeline);
+        $pieces = array();
+        $all && $pieces[] = '`hits` = hits+1';
+        foreach ($timeline as $key => $bool) {
+            $field = "hits_{$key}";
+            if($key=='yday'){
+                if($bool==1){
+                    $pieces[]="`hits_yday` = hits_today";
+                }elseif ($bool>1) {
+                    $pieces[]="`hits_yday` = 0";
+                }
+                continue;
+            }
+            $pieces[]="`{$field}` = ".($bool?"{$field}+1":'1');
+        }
+        return implode(',', $pieces);
+    }
+    public static function timeline(){
+        $_timeline = iCache::get('iCMS/timeline');
+        //list($_today,$_week,$_month) = $_timeline ;
+        $time     = $_SERVER['REQUEST_TIME'];
+        $today    = get_date($time,"Ymd");
+        $yday     = get_date($time-86400+1,"Ymd");
+        $week     = get_date($time,"YW");
+        $month    = get_date($time,"Ym");
+        $timeline = array($today,$week,$month);
+        $_timeline[1]==$today OR iCache::set('iCMS/timeline',$timeline,86400);
+        //var_dump($_timeline,$timeline);
+        return array(
+            'yday'  => ($today-$_timeline[0]),
+            'today' => ($_timeline[0]==$today),
+            'week'  => ($_timeline[1]==$week),
+            'month' => ($_timeline[2]==$month),
+        );
+    }
     public static function app_ref($app_name=true,$out=false) {
         $app_name===true && $app_name = self::$app_name;
         $rs    = iPHP::get_vars($app_name);
@@ -366,7 +403,7 @@ class iCMS {
         }
         return $a;
     }
-    function str_replace_limit($search, $replace, $subject, $limit=-1) {
+    private static function str_replace_limit($search, $replace, $subject, $limit=-1) {
         preg_match_all ("/<a[^>]*?>(.*?)<\/a>/si", $subject, $matches);//链接不替换
         $linkArray	= array_unique($matches[0]);
         $linkArray & $linkflip	= array_flip($linkArray);

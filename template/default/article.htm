@@ -14,12 +14,12 @@
     <div class="l-header-ad"><!--文章顶部横幅通栏 960x60--></div>
     <div id="body" class="clearfix">
       <div class="main-col">
-        <div id="guide"><strong>当前位置：</strong><a href="<!--{$site.url}-->">网站首页</a>&nbsp;&raquo;&nbsp;<!--{$category.nav}-->&nbsp;&raquo;&nbsp;正文</div>
+        <div id="guide"><strong>当前位置：</strong><a href="<!--{$site.url}-->">网站首页</a>&nbsp;&raquo;&nbsp;<!--{$category.nav}-->&nbsp;&raquo;&nbsp;<!--{$article.link}-->&nbsp;&raquo;&nbsp;正文</div>
         <div id="page">
           <h1><!--{$article.title}--></h1>
           <div class="article-info">
             <div class="article-author-time">
-              <a href="<!--{$article.user.url}-->" target="_blank"><!--{$article.author}--></a>
+              <a href="<!--{$article.user.url}-->" target="_blank"><!--{$article.user.name}--></a>
               <span class="time"><!--{$article.pubdate|date:"Y-m-d H:s"}--></span>
             </div>
             <div class="share-area">
@@ -48,11 +48,13 @@
             <p class="image"><img src="<!--{$article.pic.url}-->"/></p>
             <!--{/if}-->
             <div class="l-main-inner-ad"><!--正文内嵌图片广告 250x250--></div>
-            <!--{if $article.author}-->
-            <p class="text"><strong>文 /&nbsp; <!--{$article.author}--></strong></p>
-            <!--{/if}-->
+
             <div class="article-body">
               <!--{$article.body}-->
+              <!--{if $article.page.end}-->
+
+
+              <!--{/if}-->
             </div>
           </div>
           <script type="text/javascript">(function(){$("img",".article-detail").each(function(i){iCMS.imgFix(this,550,600);});})($);</script>
@@ -106,5 +108,6 @@
     </div>
   </div>
   <!--{include file="./footer.htm"}-->
+<script src="<!--{$article.hits.script}-->"></script>
 </body>
 </html>

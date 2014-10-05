@@ -7,9 +7,6 @@
  * @$Id: article.table.php 2408 2014-04-30 18:58:23Z coolmoo $
  */
 class articleTable {
-    public static function count_sql($sql=''){
-        return "SELECT count(*) FROM `#iCMS@__article` {$sql}";
-    }
     public static function select($sql='',$orderby='',$offset=0,$maxperpage=10){
         $rs = iDB::all("SELECT * FROM `#iCMS@__article` {$sql} order by {$orderby} LIMIT {$offset},{$maxperpage}");
         //iDB::debug(1);
@@ -23,9 +20,19 @@ class articleTable {
             'related', 'metadata', 'pubdate', 'chapter', 'url','clink',
             'ordernum','top', 'postype', 'creative', 'tpl','status');
 
-        $update OR $fields = array_merge ($fields,array('postime','hits','comments', 'good', 'bad'));
+        if(!$update){
+            $_fields = array('postime','hits','hits_today','hits_yday','hits_week','hits_month','comments', 'good', 'bad');
+            $fields  = array_merge ($fields,$_fields);
+        }
 
         return $fields;
+    }
+    public static function update_hits(){
+
+        iDB::query("UPDATE `#iCMS@__article` SET `hits_today` = '0', `hits_yday` = '0', `hits_week` = '0', `hits_month` = '0'");
+    }
+    public static function count_sql($sql=''){
+        return "SELECT count(*) FROM `#iCMS@__article` {$sql}";
     }
     public static function chapter_count($aid){
         $count = iDB::value("SELECT count(id) FROM `#iCMS@__article_data` where `aid` = '$aid'");

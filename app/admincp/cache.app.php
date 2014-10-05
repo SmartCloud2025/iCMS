@@ -49,4 +49,8 @@ class cacheApp{
     	$app->recount();
     	iPHP::success('更新完成');
     }
+    function do_app(){
+        iPHP::import(iPHP_APP_CORE .'/iAPP.class.php');
+        app::cache();
+    }
 }

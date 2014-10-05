@@ -14,3 +14,6 @@ function public_ui($vars=null){
 function public_dialog($vars=null){
 	echo iPHP::view('iCMS://public.dialog.htm');
 }
+function public_crontab(){
+	echo '<img src="'.iCMS_API.'?app=public&do=crontab&'.$_SERVER['REQUEST_TIME'].'" id="iCMS_public_crontab"/>';
+}

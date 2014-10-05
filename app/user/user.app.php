@@ -10,7 +10,7 @@ defined('iPHP') OR exit('What are you doing?');
 
 iPHP::app('user.class','static');
 class userApp {
-    public $methods = array('iCMS','home','article','publish','manage','profile','data','check','follow','login','logout','register','add_category','upload','imageUp','delete','report','ucard');
+    public $methods = array('iCMS','home','article','publish','manage','profile','data','hits','check','follow','login','logout','register','add_category','upload','imageUp','delete','report','ucard');
     public $openid  = null;
     public $user    = array();
     public $me      = array();
@@ -87,7 +87,7 @@ class userApp {
             }
             iPHP::assign('me',(array)$this->me);
         }
-
+        $this->user->hits_script = iCMS_API.'?app=user&do=hits&uid='.$this->user->uid;
         iPHP::assign('status', $status);
         iPHP::assign('user',   (array)$this->user);
         $ud && iPHP::assign('userdata',(array)user::data($this->user->uid));
@@ -476,6 +476,13 @@ class userApp {
         $methods = get_class_methods(__CLASS__);
         if (in_array ($pg,$pgArray) && in_array ($funname,$methods)) {
             $this->$funname();
+        }
+    }
+    public function API_hits($uid = null){
+        $uid===null && $uid = (int)$_GET['uid'];
+        if($uid){
+            $sql = iCMS::hits_sql();
+            iDB::query("UPDATE `#iCMS@__user_data` SET {$sql} WHERE `uid` ='$uid'");
         }
     }
     public function API_check(){

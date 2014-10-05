@@ -56,30 +56,16 @@ body, button, input, select, textarea { color: #111; font: 14px/1.75 "Helvetica 
 .piece .piece_ft .fl { position: absolute\9; top: 0\9; left: -10px\9; background: url(img/piece_ft_left.png) no-repeat 0 0\9; _background-image: none; _filter: progid:DXImageTransform.Microsoft.AlphaImageLoader(src='img/piece_ft_left.png', sizingMethod='scale') }
 .piece .piece_ft .fr { position: absolute\9; top: 0\9; right: -10px\9; background: url(img/piece_ft_right.png) no-repeat 0 0\9; _background-image: none; _filter: progid:DXImageTransform.Microsoft.AlphaImageLoader(src='img/piece_ft_right.png', sizingMethod='scale') }
 /* ==mod== */
-.mod { border: 1px solid #dadada }
-.mod .hd { overflow: hidden; padding: 0 10px; height: 28px; text-align: right; line-height: 29px }
-.mod .hd h3 { float: left; font-size: 14px }
-.mod .hd .more { overflow: hidden; color: #333 }
+.mod { margin-bottom: 30px;}
+.mod .hd { overflow: hidden; padding: 0; height: 28px; text-align: right; line-height: 29px;border-bottom: 1px solid #ccc;}
+.mod .hd .more { overflow: hidden;display: inline-block; height: 20px; color: #999; vertical-align: top; font-size: 12px; font-family: tahoma; line-height: 20px }
 .mod .hd .more a { padding: 0 3px; color: #666 }
-.mod .bd { zoom: 1 }
-.mod .bd:after { display: block; visibility: hidden; clear: both; height: 0; content: "." }
-.mod { margin-bottom: 30px; border: 0 }
-.mod .hd { padding: 0; border-bottom: 1px solid #ccc }
-.mod .hd .more { display: inline-block; height: 20px; color: #999; vertical-align: top; font-size: 12px; font-family: tahoma; line-height: 20px }
-.mod .hd h3 { padding-left: 10px; height: 20px; border-left: 3px solid #369; color: #333; font: 18px/19px "\5b8b\4f53" }
+.mod .hd h3 { float: left;padding-left: 10px; height: 20px; border-left: 3px solid #369; color: #333; font: 18px/19px "\5b8b\4f53" }
 .mod .hd h3 span { padding-left: 10px; color: #ccc; letter-spacing: 1px; font: italic 16px/18px Palatino Linotype, simsun }
 .mod .hd h3 a:link, .mod .hd h3 a:visited, .mod .hd h3 a:hover { color: #369; font-weight: bold; line-height: 18px }
-.mod .bd { overflow: hidden }
+.mod .bd { overflow: hidden;zoom: 1 }
+.mod .bd:after { display: block; visibility: hidden; clear: both; height: 0; content: "." }
 /* ==iCMS== */
-/* icon */
-.iCMS_icon { width: 16px; height: 16px; background-image: url(img/sprites-1.9.1.png); background-repeat: no-repeat; display: inline-block; vertical-align: middle }
-.iCMS_icon_comment_like { background-position: -222px -92px }
-.iCMS_icon_comment_reply { background-position: -250px -92px }
-.iCMS_icon_report { background-position: -71px -183px }
-.iCMS_icon_spike { position: absolute; top: -8px; left: 23px; width: 13px; height: 8px; background-position: -200px -165px }
-a:hover>.iCMS_icon_comment_reply { background-position: -250px -79px }
-a:hover>.iCMS_icon_comment_like { background-position: -222px -79px }
-a:hover>.iCMS_icon_report { background-position: -71px -170px }
 /* pagination */
 .iCMS_pagination { margin: 10px; clear: both; max-height: 30px; position: relative; text-align: center }
 .iCMS_pagination a, .iCMS_pagination span { display: inline-block; padding: 4px 12px; line-height: 20px; text-decoration: none; background-color: #fff; border: 1px solid #ddd; border-left-width: 0 }
@@ -95,13 +81,10 @@ a:hover>.iCMS_icon_report { background-position: -71px -170px }
 .iCMS_profile_wrap .iCMS_user_home .avatar { width: 25px; height: 25px; border: 1px solid rgba(0, 0, 0, .1); box-shadow: 0 1px 0 rgba(255, 255, 255, .1) }
 .iCMS_profile_wrap .iCMS_user_home .name { margin-left: 4px; }
 .iCMS_profile_wrap .popover .popover-content{padding: 0px;}
-.iCMS_profile_wrap .popover .dropdown-menu{
-	min-width: inherit;
-	display: block;position: static;
-	border: none;box-shadow:none;-webkit-box-shadow:none;-moz-box-shadow:none;
-}
+.iCMS_profile_wrap .popover .dropdown-menu { min-width: inherit; display: block; position: static; border: none; box-shadow: none; -webkit-box-shadow: none; -moz-box-shadow: none; }
 .iCMS_profile_wrap .popover .dropdown-menu>li>a { font-size: 14px }
-/*.iCMS_hover_wrap { display: none; z-index: 999; position: absolute; top: 0; left: 0; min-width: 120px; border-radius: 0 0 3px 3px; background: #FFF }*/
+/* .iCMS_hover_wrap { display: none; z-index: 999; position: absolute; top: 0; left: 0; min-width: 120px; border-radius: 0 0 3px 3px; background: #FFF }
+*/
 /**/
 .iCMS_seccode {width: 60px;}
 .iCMS_seccode_img { vertical-align: top;margin-left: 5px;}
@@ -126,16 +109,6 @@ a:hover>.iCMS_icon_report { background-position: -71px -170px }
 .iCMS_login_wrap .lb_bd .lb_s .lb_s_img { display: block; float: left; width: 43px; height: 43px }
 .iCMS_login_wrap .lb_bd .lb_s .lb_s_t { display: block; float: left; margin: 12px 0 0 12px; width: 120px; color: #333; font-size: 22px }
 .iCMS_API_iframe { width: 100% }
-/* ===========comment=========== */
-.iCMS_comment_form_wrap { margin: 8px auto 20px auto; width: 600px; font-size: 14px }
-.iCMS_comment_form_wrap .alert { margin: 10px 0px; padding: 4px 10px; font-size: 12px }
-#iCMS-cmt-profile { display: none }
-#iCMS-cmt-login { margin: 10px 0px }
-.iCMS_cmt_editor { }
-.iCMS_editor_text { padding: 5px 10px; width: 580px; height: 90px; background: url(img/iCMS.logo.bg-6.0.png) no-repeat center center; font-size: 14px; line-height: 1.7 }
-.iCMS_cmt_command { text-align: right }
-.iCMS_cmt_command .cmt-add { float: right; margin: 8px 0px 8px 8px; padding: 5px 10px }
-.iCMS_cmt_command .cmt-cancel { float: right; margin: 15px 15px 0 0; cursor: pointer }
 /* ==========report============= */
 #iCMS-report-box { display: none; padding: 10px; }
 .iCMS_report_dialog { }
@@ -161,6 +134,26 @@ a:hover>.iCMS_icon_report { background-position: -71px -170px }
 .iCMS_agreement_wrap .agr_h { margin-bottom: 50px; text-align: center; font-weight: bold; font-size: 26px }
 .iCMS_agreement_wrap pre { font-size: 14px;line-height: 160%; width: 100%; color: #666; padding: 10px; white-space: pre-wrap; white-space: -moz-pre-wrap !important; white-space: -pre-wrap; white-space: -o-pre-wrap; word-wrap: break-word }
 /* ===========commentApp=========== */
+/* icon */
+.iCMS_icon { width: 16px; height: 16px; background-image: url(img/sprites-1.9.1.png); background-repeat: no-repeat; display: inline-block; vertical-align: middle }
+.iCMS_icon_comment_like { background-position: -222px -92px }
+.iCMS_icon_comment_reply { background-position: -250px -92px }
+.iCMS_icon_report { background-position: -71px -183px }
+.iCMS_icon_spike { position: absolute; top: -8px; left: 23px; width: 13px; height: 8px; background-position: -200px -165px }
+a:hover>.iCMS_icon_comment_reply { background-position: -250px -79px }
+a:hover>.iCMS_icon_comment_like { background-position: -222px -79px }
+a:hover>.iCMS_icon_report { background-position: -71px -170px }
+/* ===========comment form=========== */
+.iCMS_comment_form_wrap { margin: 8px auto 20px auto; width: 600px; font-size: 14px }
+.iCMS_comment_form_wrap .alert { margin: 10px 0px; padding: 4px 10px; font-size: 12px }
+#iCMS-cmt-profile { display: none }
+#iCMS-cmt-login { margin: 10px 0px }
+.iCMS_cmt_editor { }
+.iCMS_editor_text { padding: 5px 10px; width: 580px; height: 90px; background: url(img/iCMS.logo.bg-6.0.png) no-repeat center center; font-size: 14px; line-height: 1.7 }
+.iCMS_cmt_command { text-align: right }
+.iCMS_cmt_command .cmt-add { float: right; margin: 8px 0px 8px 8px; padding: 5px 10px }
+.iCMS_cmt_command .cmt-cancel { float: right; margin: 15px 15px 0 0; cursor: pointer }
+/* ===========comment list=========== */
 .spinner-gray, .spinner-lightgray { display: inline-block; margin: 0 5px; width: 14px; height: 15px; vertical-align: -3px; background-size: 14px 15px; background-repeat: no-repeat; background-image: url(/img/grey-loading.gif); }
 .spinner-lightgray { background-image: url(img/lightgray-loading.gif); }
 .commentApp-list-wrap { margin: 10px 0 0 35px; background: #fff; max-width: 540px; position: relative; border: 1px solid #ddd; border-radius: 4px; box-shadow: 0 1px 1px rgba(0, 0, 0, .05) }
@@ -217,16 +210,11 @@ html.no-touch .commentApp-list-wrap .load-more:hover { background: #fefefe; text
 /* =============== */
 .iCMS_up_down { margin-left: 10px; }
 .iCMS_up_down .up_down_btn { position: relative; display: block; text-decoration: none; text-align: left; color: #fff; background: #fff; font-size: 16px; line-height: 25px; font-family: "微软雅黑"; border: 1px solid #ddd; border-radius: 5px; padding: 5px; float: left; margin-right: 10px; }
-.iCMS_up_down .up_down_icon { position: absolute; top: 8px; left: 15px; width: 19px; height: 18px; display: block; }
-.iCMS_up_down .up_down_btn_num {margin-left: 35px; color: #369; }
-.iCMS_up_down .up_down_btn_num_gray { color: #666; }
+.iCMS_up_down .up_down_icon { position: absolute; top: 2px; left: 10px; width: 27px; height: 27px; display: block; }
+.iCMS_up_down .up_down_btn_num { margin-left: 35px; color: #369; }
 .iCMS_up_down .up_down_txt { color: #666; }
-.iCMS_up_down .up_down_txt_hover { color: #369; }
-.iCMS_up_down .up_down_btn_gray { background: #fbfbfb; }
 .iCMS_up_down .up { background: url(img/up.png) no-repeat; _filter: progid:DXImageTransform.Microsoft.AlphaImageLoader(enabled='true', sizingMethod='scale', src='img/up.png'); _background: none; }
-.iCMS_up_down .down { background: url(img/down.png) no-repeat; top: 10px; _filter: progid:DXImageTransform.Microsoft.AlphaImageLoader(enabled='true', sizingMethod='scale', src='img/down.png'); _background: none; }
-.iCMS_up_down .up_gray { background: url(img/up_gray.png) no-repeat; _filter: progid:DXImageTransform.Microsoft.AlphaImageLoader(enabled='true', sizingMethod='scale', src='img/up_gray.png'); _background: none; }
-.iCMS_up_down .down_gray { background: url(img/down_gray.png) no-repeat; top: 10px; _filter: progid:DXImageTransform.Microsoft.AlphaImageLoader(enabled='true', sizingMethod='scale', src='img/down_gray.png'); _background: none; }
+.iCMS_up_down .down { background: url(img/down.png) no-repeat; top: 6px; _filter: progid:DXImageTransform.Microsoft.AlphaImageLoader(enabled='true', sizingMethod='scale', src='img/down.png'); _background: none; }
 /* iCMS.tip */
 
 .iCMS_tooltip {z-index: 1000; position: absolute; z-index: 1050; display: block; padding: 0px }
@@ -235,33 +223,6 @@ html.no-touch .commentApp-list-wrap .load-more:hover { background: #fefefe; text
 .iCMS_tooltip.popover .popover-content{padding: 4px !important;}
 .iCMS_tooltip.popover .popover-content p, .iCMS_tooltip .popover-content ul, .iCMS_tooltip .popover-content ol { margin-bottom: 0 }
 
-/*.iCMS_tooltip .tip-inner { font: bold 11px/14px 'Lucida Grande', sans-serif }*/
-/*.iCMS_tooltip .tip-arrow-top {}
-.iCMS_tooltip .tip-arrow-right {}
-.iCMS_tooltip .tip-arrow-bottom {}
-.iCMS_tooltip .tip-arrow-left {background: url(img/tip-arrows.gif)}
-*/
-/*
-.iCMS_tooltip {z-index: 1000; position: absolute; top: 0; left: 0; z-index: 1050; display: block; padding: 12px }
-.iCMS_tooltip.top { margin-top: -6px }
-.iCMS_tooltip.right { margin-left: 6px }
-.iCMS_tooltip.bottom { margin-top: 6px }
-.iCMS_tooltip.left { margin-left: -6px }
-.iCMS_tooltip.top .arrow { bottom: 0; left: 50%; margin-left: -13px; border-left: 13px solid transparent; border-right: 13px solid transparent; border-top: 13px solid #ccc }
-.iCMS_tooltip.top .arrow2 { bottom: 1px; left: 50%; margin-left: -13px; border-left: 13px solid transparent; border-right: 13px solid transparent; border-top: 13px solid #fafafa }
-.iCMS_tooltip.top .arrow2.loading { bottom: 1px; left: 50%; margin-left: -13px; border-left: 13px solid transparent; border-right: 13px solid transparent; border-top: 13px solid #fff }
-.iCMS_tooltip.right .arrow { top: 50%; left: 0; margin-top: -13px; border-top: 13px solid transparent; border-bottom: 13px solid transparent; border-right: 13px solid #ccc }
-.iCMS_tooltip.right .arrow2 { top: 50%; left: 1px; margin-top: -13px; border-top: 13px solid transparent; border-bottom: 13px solid transparent; border-right: 13px solid #fff }
-.iCMS_tooltip.bottom .arrow { top: 0; left: 50%; margin-left: -13px; border-left: 13px solid transparent; border-right: 13px solid transparent; border-bottom: 13px solid #ccc }
-.iCMS_tooltip.bottom .arrow2 { top: 1px; left: 50%; margin-left: -13px; border-left: 13px solid transparent; border-right: 13px solid transparent; border-bottom: 13px solid #fff }
-.iCMS_tooltip.left .arrow { top: 50%; right: 0; margin-top: -13px; border-top: 13px solid transparent; border-bottom: 13px solid transparent; border-left: 13px solid #ccc }
-.iCMS_tooltip.left .arrow2 { top: 50%; right: 1px; margin-top: -13px; border-top: 13px solid transparent; border-bottom: 13px solid transparent; border-left: 13px solid #fff }
-.iCMS_tooltip .arrow, .iCMS_tooltip .arrow2 { position: absolute; width: 0; height: 0 }
-.iCMS_tooltip .popover-title { padding: 9px 15px; line-height: 1; background-color: #f5f5f5; border-bottom: 1px solid #eee; -webkit-border-radius: 3px 3px 0 0; -moz-border-radius: 3px 3px 0 0; border-radius: 3px 3px 0 0 }
-
-.iCMS_tooltip .tip-inner { overflow: hidden; background: #FFF; border: solid 1px #CCC; -webkit-border-radius: 5px; -moz-border-radius: 5px; border-radius: 5px; -webkit-background-clip: padding-box; -moz-background-clip: padding-box; background-clip: padding-box }
-.iCMS_tooltip .tip-inner p, .iCMS_tooltip .tip-inner ul, .iCMS_tooltip .tip-inner ol { margin-bottom: 0 }
-*/
 .zh-profile-card { width: 380px }
 .zh-profile-card .upper, .zh-profile-card .lower { border: 14px solid transparent }
 .zh-profile-card .upper { background: #fff; padding-left: 66px; min-height: 50px }

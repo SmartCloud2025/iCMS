@@ -203,44 +203,17 @@ function article_search($vars){
 }
 
 function __article_array($vars,$resource){
-    if($resource)foreach ($resource as $key => $value) {
-        if($vars['page']){
-            $value['page']  = $GLOBALS['page']?$GLOBALS['page']:1;
-            $value['total'] = $total;
-        }
-        $value['picdata']&& $picdata = unserialize($value['picdata']);
-        $value['pic']  = get_pic($value['pic'],$picdata["b"]);
-        $value['mpic'] = get_pic($value['mpic'],$picdata["m"]);
-        $value['spic'] = get_pic($value['spic'],$picdata["s"]);
-
-        $category = iCache::get('iCMS/category/'.$value['cid']);
-        $value['category'] = iCMS::get_category_lite($category);
-        $value['url']      = iURL::get('article',array($value,$category))->href;
-        $value['link']     = "<a href='{$value['url']}'>{$value['title']}</a>";
-
-        $value['comment'] = array(
-            'url'   => iCMS_API."?app=comment&iid={$value['id']}&cid={$value['cid']}",
-            'count' => $value['comments']
-        );
-        if($vars['user']){
-            iPHP::app('user.class','static');
-            $value['user'] = user::info($value['userid'],$value['author']);
-        }
-		if($vars['meta']){
-            $value['metadata'] && $value['meta'] = unserialize($value['metadata']);
-        }
-        if($vars['tags']){
-            $tagApp   = iPHP::app("tag");
-            $tagArray = $tagApp->decode($value['tags']);
-            $value['tags'] = array();
-            foreach((array)$tagArray AS $tk=>$tag) {
-                $value['tags'][$tk]['name'] = $tag['name'];
-                $value['tags'][$tk]['url']  = $tag['url'];
-                $value['tags_link'] .= $tag['link'];
+    if($resource){
+        $articleApp = iPHP::app("article");
+        foreach ($resource as $key => $value) {
+            $vars['category_lite'] = true;
+            $value = $articleApp->value($value,false,$vars);
+            if($vars['page']){
+                $value['page']  = $GLOBALS['page']?$GLOBALS['page']:1;
+                $value['total'] = $total;
             }
+            $resource[$key] = $value;
         }
-        unset($value['picdata'],$value['metadata'],$value['tags']);
-        $resource[$key] = $value;
     }
     return $resource;
 }

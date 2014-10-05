@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="zh-cn">
+  <head>
+    <title><!--{$article.title}-->_<!--{$category.name}-->_<!--{$site.title}-->_<!--{$site.seotitle}--></title>
+    <meta name="keywords" content="<!--{$article.keywords}-->" />
+    <meta name="description" content="<!--{$article.description}-->"/>
+    <!--{iCMS:public:ui}-->
+    <script src="<!--{$site.urls.ui}-->/jquery.infinitescroll.min.js"></script>
+    <script>
+    // lazy load
+    (function(a){a.fn.scrollLoading=function(b){var c={attr:"data-original",container:a(window),callback:a.noop};var d=a.extend({},c,b||{});d.cache=[];a(this).each(function(){var h=this.nodeName.toLowerCase(),g=a(this).attr(d.attr);var i={obj:a(this),tag:h,url:g};d.cache.push(i)});var f=function(g){if(a.isFunction(d.callback)){d.callback.call(g.get(0))}};var e=function(){var g=d.container.height();if(a(window).get(0)===window){contop=a(window).scrollTop()}else{contop=d.container.offset().top}a.each(d.cache,function(m,n){var p=n.obj,j=n.tag,k=n.url,l,h;if(p){l=p.offset().top-contop,l+p.height();if((l>=0&&l<g)||(h>0&&h<=g)){if(k){if(j==="img"){f(p.attr("src",k))}else{p.load(k,{},function(){f(p)})}}else{f(p)}n.obj=null}}})};e();d.container.bind("scroll",e)}})(jQuery);
+
+function scrollLoad(contents,one,next,maxPage){
+  if ( !( $(contents).length && $(next).length) ){
+    return false;
+  };
+  var $container = $(contents);
+  $container.infinitescroll({
+    //showPageNum:5,
+    maxPage: maxPage||3,
+    clickMoreBtn:'.click_more',
+    navSelector: next, // selector for the paged navigation
+    nextSelector: next + ' a', // selector for the NEXT link (to page 2)
+    itemSelector: contents + ' ' + one, // selector for all items you'll retrieve
+    loading: {
+      finishedMsg: '<a href="javascript:void(0);" class="click_more">恭喜您！居然到底了！</a>',
+      msgText: '<p class="loading_wrap"><i class="loading spr_0"></i>正在加载...</p>',
+      clickMoreMsg:'<a href="javascript:void(0);" class="click_more">点击加载更多</a>',
+      img: ''
+    }
+  },
+  // trigger Masonry as a callback
+  function(newElements) {
+    var $newElems = $(newElements).css({
+      opacity: 0
+    });
+    var pages_nav = $("#pages_nav",$newElems).html();
+    $("#pages_nav",$newElems).remove();
+    $container.append($newElems);
+    $newElems.animate({
+      opacity: 1
+    }, "fast", function() {
+      $("#infscr-loading").fadeOut('normal');
+      $(".article-pagenav").html(pages_nav);
+    });
+    // lazylaod
+    $("img").scrollLoading();
+
+  });
+}
+
+$(function(){
+  $("img").scrollLoading();
+  $(".fs_btn").click(function(){
+    var i = $(".font_big").length;
+    if (!i) {
+      $(".article_body").addClass("font_big");
+      $(this).find("sup").html("-");
+    }else{
+      $(".article_body").removeClass("font_big");
+      $(this).find("sup").html("+");
+    }
+  })
+})
+    </script>
+  </head>
+  <body class="iCMS-mobile">
+    <!--{include file="./navbar.htm"}-->
+    <div class="container">
+      <article>
+        <h1><!--{$article.title}--></h1>
+        <div class="info">
+          <!--{$site.title}-->　时间:<!--{$article.pubdate|date:"Y-m-d H:s"}-->　<span class="fs_btn btn btn-default">A<sup>+</sup></span>
+        </div>
+        <div class="article_body">
+          <!--{$article.body}-->
+          <div id="pages_nav" class="hide">
+            <!--{$article.page.text}-->
+          </div>
+        </div>
+        <div class="article_pagenav iCMS_pagination clearfix">
+          <!--{$article.page.text}-->
+        </div>
+        <div id="pages_next" class="hide">
+          <a href="<!--{$article.page.next}-->"/>下一页</a>
+        </div>
+      </article>
+      <section class="mod related">
+        <div class="hd">
+          <h3>热门文章<span>HOT</span></h3>
+        </div>
+        <div class="bd">
+          <div class="list-group">
+          <!--{iCMS:article:list loop="true" row="10" orderby="hot"}-->
+          <a class="list-group-item" href="<!--{$article_list.url}-->" target="_blank"><!--{$article_list.title}--></a>
+          <!--{/iCMS}-->
+          </div>
+        </div>
+      </section>
+      <section class="mod comment">
+        <div class="hd">
+          <h3>精彩评论<span>COMMENT</span></h3>
+        </div>
+        <div class="bd">
+          <!--{iCMS:comment:list display="default" page="true" row="5" appid="$article.appid" iid="$article.id"}-->
+          <!--{iCMS:comment:form display="default" ref="true"}-->
+        </div>
+      </section>
+
+    </div>
+    <script>
+      //scrollLoad("article",".article_body","#pages_next",<!--{$article.page.total}-->);
+    </script>
+    <script src="<!--{$article.hits.script}-->"></script>
+    <!--{include file="./footer.htm"}-->
+  </body>
+</html>

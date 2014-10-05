@@ -7,11 +7,18 @@
  * @$Id: article.app.php 2408 2014-04-30 18:58:23Z coolmoo $
  */
 class articleApp {
-	public $methods	= array('iCMS','good','like_comment','comment');
+	public $methods	= array('iCMS','hits','good','like_comment','comment');
     function __construct() {}
 
     public function do_iCMS($a = null) {
     	return $this->article((int)$_GET['id'],isset($_GET['p'])?(int)$_GET['p']:1);
+    }
+    public function API_hits($id = null){
+        $id===null && $id = (int)$_GET['id'];
+        if($id){
+            $sql = iCMS::hits_sql();
+            iDB::query("UPDATE `#iCMS@__article` SET {$sql} WHERE `id` ='$id'");
+        }
     }
     public function API_good(){
         iPHP::app('user.class','static');
@@ -33,15 +40,21 @@ class articleApp {
             if(iPHP::$iTPL_MODE=="html") {
                 return false;
             }else {
-            	iDB::query("UPDATE `#iCMS@__article` SET hits=hits+1 WHERE `id` ='$id'");
+            	$this->API_hits($id);
                 iPHP::gotourl($article['url']);
             }
         }
         $article && $article_data = iDB::row("SELECT body,subtitle FROM `#iCMS@__article_data` WHERE aid='".(int)$id."' LIMIT 1;",ARRAY_A);
 
         empty($article) && iPHP::throwException('运行出错！找不到文章: <b>ID:'. $id.'</b>', 10001);
-
-        $article = $this->value($article, $article_data,true,$page,$tpl);
+        $vars = array(
+            'tags'=>true,
+            'user'=>true,
+            'meta'=>true,
+            'prev_next'=>true,
+            'category_lite'=>false,
+        );
+        $article = $this->value($article,$article_data,$vars,$page,$tpl);
 
         if($article===false) return false;
 
@@ -59,7 +72,8 @@ class articleApp {
             return $article;
         }
     }
-    public function value($article,$art_data="",$prev_next=false,$page=1,$tpl=false){
+    public function value($article,$art_data="",$vars=array(),$page=1,$tpl=false){
+        $article['appid'] = iCMS_APP_ARTICLE;
 
         // $categoryApp = iPHP::app("category");
         // $category    = $categoryApp->category($article['cid'],false);
@@ -74,7 +88,13 @@ class articleApp {
         $article['url']  = $article['iurl']->href;
         $article['link'] = "<a href='{$article['url']}'>{$article['title']}</a>";
         $tpl && iCMS::gotohtml($article['iurl']->path,$article['iurl']->href,$category['mode']);
-        $article['category'] = $category;
+
+        if($vars['category_lite']){
+            $article['category'] = iCMS::get_category_lite($category);
+        }else{
+            $article['category'] = $category;
+        }
+
         if($art_data){
             $pageurl = $article['iurl']->pageurl;
             preg_match_all("/<img.*?src\s*=[\"|'|\s]*(http:\/\/.*?\.(gif|jpg|jpeg|bmp|png)).*?>/is",$art_data['body'],$pic_array);
@@ -90,33 +110,41 @@ class articleApp {
             unset($art_data);
 
             if($total>1) {
-                $article['pagenav'] = '<a href="'.$article['url'].'" class="first" target="_self">'.iPHP::lang('iCMS:page:index').'</a>';
-                $article['pagenav'].= '<a href="'.iPHP::p2num($pageurl,($page-1>1)?$page-1:1).'" class="prev" target="_self">'.iPHP::lang('iCMS:page:prev').'</a>';
-                $flag=0;
+                $flag    = 0;
+                $num_nav = '';
                 for($i=$page-3;$i<=$page-1;$i++) {
                     if($i<1) continue;
-                    $article['pagenav'].="<a href='".iPHP::p2num($pageurl,$i)."' target='_self'>$i</a>";
+                    $num_nav.="<a href='".iPHP::p2num($pageurl,$i)."' target='_self'>$i</a>";
                     $flag++;
                 }
-                $article['pagenav'].='<span class="current">'.$page.'</span>';
+                $num_nav.='<span class="current">'.$page.'</span>';
                 for($i=$page+1;$i<=$total;$i++) {
-                    $article['pagenav'].="<a href='".iPHP::p2num($pageurl,$i)."' target='_self'>$i</a>";
+                    $num_nav.="<a href='".iPHP::p2num($pageurl,$i)."' target='_self'>$i</a>";
                     $flag++;
                     if($flag==6)break;
                 }
-                $next_url    = iPHP::p2num($pageurl,(($total-$page>0)?$page+1:$page));
-                $article['pagenav'].='<a href="'.$next_url.'" class="next" target="_self">'.iPHP::lang('iCMS:page:next').'</a>';
-                $article['pagenav'].='<a href="'.iPHP::p2num($pageurl,$total).'" class="end" target="_self">共'.$total.'页</a>';
+
+                $index_nav = '<a href="'.$article['url'].'" class="first" target="_self">'.iPHP::lang('iCMS:page:index').'</a>';
+                $prev_url  = iPHP::p2num($pageurl,($page-1>1)?$page-1:1);
+                $prev_nav  = '<a href="'.$prev_url.'" class="prev" target="_self">'.iPHP::lang('iCMS:page:prev').'</a>';
+                $next_url  = iPHP::p2num($pageurl,(($total-$page>0)?$page+1:$page));
+                $next_nav  ='<a href="'.$next_url.'" class="next" target="_self">'.iPHP::lang('iCMS:page:next').'</a>';
+                $end_nav   ='<a href="'.iPHP::p2num($pageurl,$total).'" class="end" target="_self">共'.$total.'页</a>';
+                $text_nav  = $index_nav.$prev_nav.$next_nav.$end_nav;
+                $pagenav   = $index_nav.$prev_nav.$num_nav.$next_nav.$end_nav;
             }
             $article['page'] = array(
                 'total'   => $total,
                 'count'   => $count,
                 'current' => $page,
-                'nav'     => $article['pagenav'],
-                'prev'    => $ppHref,
-                'next'    => $npHref,
+                'num'     => $num_nav,
+                'text'    => $text_nav,
+                'nav'     => $pagenav,
+                'prev'    => $prev_url,
+                'next'    => $next_url,
                 'end'     => ($total==$page?true:false)
             );
+            unset($index_nav,$prev_nav,$num_nav,$next_nav,$end_nav,$pagenav);
             if($page<$total){
                 $img_array = array_unique($pic_array[0]);
                 foreach($img_array as $key =>$img){
@@ -125,38 +153,8 @@ class articleApp {
                 }
             }
         }
-        if($article['tags']) {
-            $tagApp   = iPHP::app("tag");
-            $tagArray = $tagApp->decode($article['tags']);
-            $article['tags'] = array();
-            foreach((array)$tagArray AS $tk=>$tag) {
-                $article['tags'][$tk]['name'] = $tag['name'];
-                $article['tags'][$tk]['url']  = $tag['url'];
-                $article['tags'][$tk]['link'] = $tag['link'];
-                $article['tags_link'].= $tag['link'];
-            }
-            $_tc = count($tagArray);
-            if($_tc>3){
-                $relTags = array_slice($article['tags'],0,3);
-            }else{
-                $relTags = $article['tags'];
-            }
-            $relTags = implode(',',$relTags);
-            unset($tagApp,$tagArray);
-        }
-        $article['relTags'] = $relTags?$relTags:$category['name'];
-        $article['rel']     = $article['related'];
 
-        if(strstr($article['source'], '|')){
-            list($s_name,$s_url) = explode('|',$article['source']);
-            $article['source']   = '<a href="'.$s_url.'" target="_blank">'.$s_name.'</a>';
-        }
-
-        if($article['metadata']){
-            $article['meta'] = unserialize($article['metadata']);
-            unset($article['metadata']);
-        }
-        if($prev_next){
+        if($vars['prev_next']){
             $article['prev'] = iPHP::lang('iCMS:article:first');
             $article['next'] = iPHP::lang('iCMS:article:last');
             $prers = iDB::row("SELECT * FROM `#iCMS@__article` WHERE `id` < '{$article['id']}' AND `cid`='{$article['cid']}' AND `status`='1' order by id DESC LIMIT 1;");
@@ -165,23 +163,77 @@ class articleApp {
             $nextrs && $article['next'] = '<a href="'.iURL::get('article',array((array)$nextrs,$category))->href.'" class="next" target="_self">'.$nextrs->title.'</a>';
         }
 
+        if($vars['tags']){
+            if($article['tags']) {
+                $tagApp   = iPHP::app("tag");
+                $tagArray = $tagApp->decode($article['tags']);
+                $article['tags'] = array();
+                foreach((array)$tagArray AS $tk=>$tag) {
+                    $article['tags'][$tk]['name'] = $tag['name'];
+                    $article['tags'][$tk]['url']  = $tag['url'];
+                    $article['tags'][$tk]['link'] = $tag['link'];
+                    $article['tags_link'].= $tag['link'];
+                }
+                $_tc = count($tagArray);
+                if($_tc>3){
+                    $relTags = array_slice($article['tags'],0,3);
+                }else{
+                    $relTags = $article['tags'];
+                }
+                $relTags = implode(',',$relTags);
+                unset($tagApp,$tagArray);
+            }
+
+            $article['relTags'] = $relTags?$relTags:$category['name'];
+            $article['rel']     = $article['related'];
+        }
+
+        if($vars['meta']){
+            if($article['metadata']){
+                $article['meta'] = unserialize($article['metadata']);
+                unset($article['metadata']);
+            }
+        }
+        if($vars['user']){
+            if($article['postype']){
+                $article['user'] = array(
+                    'uid'    => $article['userid'],
+                    'name'   => $article['editor'],
+                    'url'    => 'javascript:;',
+                    'avatar' => 'about:blank',
+                );
+            }else{
+                iPHP::app('user.class','static');
+                $article['user'] = user::info($article['userid'],$article['author']);
+            }
+        }
+
+
+        if(strstr($article['source'], '|')){
+            list($s_name,$s_url) = explode('|',$article['source']);
+            $article['source']   = '<a href="'.$s_url.'" target="_blank">'.$s_name.'</a>';
+        }
+
+        $article['hits'] = array(
+            'script' => iCMS_API.'?app=article&do=hits&cid='.$article['cid'].'&id='.$article['id'],
+            'count'  => $article['hits']
+        );
         $article['comment'] = array(
-            'url'   => iCMS_API."?app=comment&iid={$article['id']}&cid={$article['cid']}",
+            'url'   => iCMS_API."?app=commentt&do=article&appid={$article['appid']}&iid={$article['id']}&cid={$article['cid']}",
             'count' => $article['comments']
         );
-        if($category['mode']) {
-            $article['script'] = array(
-                'hits'    => '<script type="text/javascript" src="'.iCMS_API.'?app=article&do=hits&cid='.$article['cid'].'&id='.$article['id'].'"></script>',
-                'digg'    => '<script type="text/javascript" src="'.iCMS_API.'?app=article&do=digg&id='.$article['id'].'"></script>',
-                'comment' => '<script type="text/javascript" src="'.iCMS_API.'?app=article&do=comment&id='.$article['id'].'"></script>',
-            );
-        }else {
-            iPHP::$iTPL_MODE!='html' && iDB::query("UPDATE `#iCMS@__article` SET hits=hits+1 WHERE `id` ='{$article['id']}'");
-        }
+
+        $article['picdata'] && $article['picdata'] = unserialize($article['picdata']);
         $article['pic']   = get_pic($article['pic']);
         $article['mpic']  = get_pic($article['mpic']);
         $article['spic']  = get_pic($article['spic']);
-        $article['appid'] = iCMS_APP_ARTICLE;
+        $article['param'] = array(
+            "appid" => $article['appid'],
+            "iid"   => $article['id'],
+            "cid"   => $article['cid'],
+            "suid"  => $article['userid'],
+            "title" => $article['title']
+        );
         return $article;
     }
 

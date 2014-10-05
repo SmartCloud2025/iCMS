@@ -6,7 +6,7 @@
         page_total:{},
         form:$('<div class="commentApp-form">'+
                 '<div class="commentApp-ipt">' +
-                '<input class="commentApp-textarea" type="text" placeholder="写下你的评论…">' +
+                '<input class="commentApp-textarea form-control" type="text" placeholder="写下你的评论…">' +
                 '</div>' +
                 '<div class="cmt-command clearfix">' +
                 '<a href="javascript:;" name="addnew" class="btn btn-primary">评论</a>' +
