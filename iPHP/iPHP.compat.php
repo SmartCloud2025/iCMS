@@ -90,6 +90,7 @@ function format_date($date,$isShowDate=true){
         return '';
     }
 }
+
 // 格式化时间
 function get_date($timestamp=0,$format='') {
 	$correct = 0;

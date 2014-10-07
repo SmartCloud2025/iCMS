@@ -114,12 +114,13 @@ a.noneline { text-decoration: none !important; }
 .modal .modal-footer { padding: 10px 15px; }
 .modal .modal-body { overflow: hidden; padding: 0px; max-height: 100%; height: 100%; }
 .modal .modal-loading { margin: 10px }
-.modal-iframe { top: 0px; left: 0px; width: 100%; height: 100%; }
-.modal-iframeFix { top: 0px; left: 0px; width: 100%; height: 100%; background: #fff; position: absolute; opacity: 0.001; zIndex: 1000; display: none; }
-#modal-overlay { position: fixed; top: 0px; left: 0px; z-index: 100; width: 100%; height: 100%; }
-.modal-overlayBG { background-color: #000; opacity: 0.75; -ms-filter: "progid:DXImageTransform.Microsoft.Alpha(Opacity=75)"; filter: alpha(opacity=75); -moz-opacity: 0.75; }
 .modal .buttons { padding: 0 15px; margin-bottom: 15px; text-align: right; background: #fff }
+#modal-iframe { top: 0px; left: 0px; width: 100%; height: 100%; }
+#modal-iframeFix { top: 0px; left: 0px; width: 100%; height: 100%; background: #fff; position: absolute; opacity: 0.001; zIndex: 1000; display: none; }
+#modal-overlay { position: fixed; top: 0px; left: 0px; z-index: 100; width: 100%; height: 100%; background-color: #000; opacity: 0.75; -ms-filter: "progid:DXImageTransform.Microsoft.Alpha(Opacity=75)"; filter: alpha(opacity=75); -moz-opacity: 0.75; }
 /* pagination */
 .pagination .muted { height: 20px; line-height: 20px; }
 /**/
 #iCMS_public_crontab{display: none;}
+.iCMS_seccode {width: 60px;}
+.iCMS_seccode_img { vertical-align: top;margin-left: 5px;}

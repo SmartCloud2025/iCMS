@@ -20,16 +20,16 @@ defined('iPHP') OR exit('What are you doing?');
 <link rel="stylesheet" href="<?php echo iCMS_UI;?>/bootstrap/2.3.1/css/bootstrap-responsive.min.css" type="text/css" />
 <link rel="stylesheet" href="<?php echo iCMS_UI;?>/bootstrap/2.3.1/css/datepicker.css" type="text/css" />
 <link rel="stylesheet" href="<?php echo iCMS_UI;?>/bootstrap/2.3.1/css/bootstrap-switch.css" type="text/css" />
-<link rel="stylesheet" href="<?php echo iCMS_UI;?>/font-awesome-4.1.0/css/font-awesome.min.css" type="text/css" />
-<link rel="stylesheet" href="<?php echo iCMS_UI;?>/artDialog-5.0.4/skins/default.css" type="text/css" />
+<link rel="stylesheet" href="<?php echo iCMS_UI;?>/font-awesome/4.2.0/css/font-awesome.min.css" type="text/css" />
+<link rel="stylesheet" href="<?php echo iCMS_UI;?>/artDialog/5.0.4/skins/default.css" type="text/css" />
 <link rel="stylesheet" href="<?php echo iCMS_UI;?>/iCMS-6.0.0.css" type="text/css" />
 <!--[if lt IE 9]>
   <script src="<?php echo iCMS_UI;?>/ie/html5shiv.min.js"></script>
   <script src="<?php echo iCMS_UI;?>/ie/respond.min.js"></script>
 <![endif]-->
 <script src="<?php echo iCMS_UI;?>/jquery-1.11.0.min.js" type="text/javascript"></script>
-<script src="<?php echo iCMS_UI;?>/artDialog-5.0.4/artDialog.min.js" type="text/javascript"></script>
-<script src="<?php echo iCMS_UI;?>/artDialog-5.0.4/artDialog.plugins.min.js" type="text/javascript"></script>
+<script src="<?php echo iCMS_UI;?>/artDialog/5.0.4/artDialog.min.js" type="text/javascript"></script>
+<script src="<?php echo iCMS_UI;?>/artDialog/5.0.4/artDialog.plugins.min.js" type="text/javascript"></script>
 <script src="<?php echo iCMS_UI;?>/bootstrap/2.3.1/js/bootstrap.min.js" type="text/javascript"></script>
 <script src="<?php echo iCMS_UI;?>/bootstrap/2.3.1/js/bootstrap-datepicker.js" type="text/javascript"></script>
 <script src="<?php echo iCMS_UI;?>/bootstrap/2.3.1/js/bootstrap-switch.min.js" type="text/javascript"></script>

@@ -23,7 +23,6 @@ class iSeccode {
     public static function run(){
         self::$code OR self::$code = self::__mkcode();
         //设定cookie
-        //iPHP::set_cookie('seccode', '',-31536000);
         iPHP::set_cookie('seccode', authcode(self::$code, 'ENCODE'));
         self::__image();
     }

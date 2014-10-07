@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 <html lang="zh-CN">
-    <head>
+  <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
     <title><!--{$site.title}-->_<!--{$site.seotitle}--></title>
     <meta name="keywords" content="<!--{$site.keywords}-->" />
@@ -14,144 +14,144 @@
     $(".content_player").slider();
     })
     </script>
-    </head>
-    <body>
-<!--{include file="./header.htm"}-->
-<div id="body" class="clearfix">
+  </head>
+  <body>
+    <!--{include file="./header.htm"}-->
+    <div id="body" class="clearfix">
       <div class="main-col">
-    <div class="row-fluid index_model">
+        <div class="row-fluid index_model">
           <div class="content_player" class="clearfix">
-          <ul>
-        <!--{iCMS:article:list loop="true" pic="true" user="true" row="4"}-->
-        <li class="player clearfix">
-              <div class="content_player_wrapper">
-            <div class="player-imgview"><a href="<!--{$article_list.url}-->" target="_blank"><img src="<!--{$article_list.pic.url}-->"></a></div>
+            <ul>
+              <!--{iCMS:article:list loop="true" pic="true" user="true" row="4"}-->
+              <li class="player clearfix">
+                <div class="content_player_wrapper">
+                  <div class="player-imgview"><a href="<!--{$article_list.url}-->" target="_blank"><img src="<!--{$article_list.pic.url}-->"></a></div>
+                </div>
+                <div class="player-imgtit">
+                  <p class="data-title"><a href="<!--{$article_list.url}-->" target="_blank"><!--{$article_list.title}--></a></p>
+                  <p class="data-abs"><!--{$article_list.description|html2txt}--></p>
+                  <p class="data-info"><a href="<!--{$article_list.user.url}-->" target="_blank"><!--{$article_list.user.name}-->编辑编辑编辑</a><!--{$article_list.pubdate|date:"m月d日 h:i"}--></p>
+                </div>
+              </li>
+              <!--{/iCMS}-->
+            </ul>
+            <div id="player_nav"></div>
           </div>
-              <div class="player-imgtit">
-            <p class="data-title"><a href="<!--{$article_list.url}-->" target="_blank"><!--{$article_list.title}--></a></p>
-            <p class="data-abs"><!--{$article_list.description|html2txt}--></p>
-            <p class="data-info"><a href="<!--{$article_list.user.url}-->" target="_blank"><!--{$article_list.user.name}-->编辑编辑编辑</a><!--{$article_list.pubdate|date:"m月d日 h:i"}--></p>
+        </div>
+        <div class="clearfix mb10"></div>
+        <div class="mod tbox" id="today_news">
+          <div class="hd">
+            <h3>今日推荐</h3>
           </div>
-            </li>
-        <!--{/iCMS}-->
-      </ul>
-          <div id="player_nav"></div>
+          <div class="bd">
+            <ul class="w-ul ulist">
+              <!--{iCMS:article:list loop="true" user="true" pid="1" row="10"}-->
+              <li><a href="<!--{$article_list.url}-->" target="_blank" class="art-title"><!--{$article_list.title}--></a><a href="<!--{$article_list.user.url}-->" target="_blank" class="art-author"><!--{$article_list.user.name}--></a></li>
+              <!--{/iCMS}-->
+            </ul>
+          </div>
         </div>
-  </div>
-      <div class="clearfix mb10"></div>
-      <div class="mod tbox" id="today_news">
-    <div class="hd">
-          <h3>今日推荐</h3>
-        </div>
-    <div class="bd">
-          <ul class="w-ul ulist">
-        <!--{iCMS:article:list loop="true" user="true" pid="1" row="10"}-->
-        <li><a href="<!--{$article_list.url}-->" target="_blank" class="art-title"><!--{$article_list.title}--></a><a href="<!--{$article_list.user.url}-->" target="_blank" class="art-author"><!--{$article_list.user.name}--></a></li>
-        <!--{/iCMS}-->
-      </ul>
-        </div>
-  </div>
-      <!--{iCMS:category:list loop="true" stype='top' row="10" pid='0'}-->
-      <div class="mod lbox <!--{cycle values="fl,fr"}-->">
-    <div class="hd">
+        <!--{iCMS:category:list loop="true" stype='top' row="10" pid='0'}-->
+        <div class="mod lbox <!--{cycle values="fl,fr"}-->">
+        <div class="hd">
           <h3><!--{$category_list.name}--></h3>
           <span class="ext"></span><a href="<!--{$category_list.url}-->" target="_blank" class="more">更多&gt;&gt;</a></div>
-    <div class="bd"><!--{iCMS:article:list row="10" cids="$category_list.cid"}--> 
+          <div class="bd"><!--{iCMS:article:list row="10" cids="$category_list.cid"}-->
           <!--{if $article_list}-->
           <ul class="w-ul ulist">
-        <!--{if $article_list[0].pic.url}-->
-        <li class="fb"><a href="<!--{$article_list[0].url}-->" target="_blank"><img src="<!--{$article_list[0].pic.url}-->"></a><a href="<!--{$article_list[0].url}-->" target="_blank"><!--{$article_list[0].title}--></a>
-              <p><!--{$article_list[0].description|html2txt}--></p>
-            </li>
-        <!--{/if}--> 
-        <!--{for start=1 stop=10 value=i}-->
-        <li><a href="<!--{$article_list[$i].url}-->" target="_blank"><!--{$article_list[$i].title}--></a></li>
-        <!--{/for}-->
-      </ul>
-          <!--{/if}--> 
-        </div>
-  </div>
-      <!--{/iCMS}--> 
-    </div>
-<div class="right-col">
-      <div class="index_login_show_wrap dot_bottom_mod ">
-    <form action="https://www.mogujie.com/login" method="post" id="index_login_form">
-          <div class="login_content">
-        <div class="clearfix posr">
-              <input type="text" name="uname" def-v="用户名" value="用户名" class="name i_text" style="color: rgb(204, 204, 204);">
-              <div class="uname_wrap mx_placehold_pass">
-            <input type="hidden" name="ws" value="1">
-            <input type="password" name="pass" class="password i_text mx_tagv" def-v="密码">
-            <span class="def_v mx_defv" style="display: block;">密码</span> </div>
-              <input type="submit" class="submit r3" value="登录">
-            </div>
+            <!--{if $article_list[0].pic.url}-->
+            <li class="fb"><a href="<!--{$article_list[0].url}-->" target="_blank"><img src="<!--{$article_list[0].pic.url}-->"></a><a href="<!--{$article_list[0].url}-->" target="_blank"><!--{$article_list[0].title}--></a>
+            <p><!--{$article_list[0].description|html2txt}--></p>
+          </li>
+          <!--{/if}-->
+          <!--{for start=1 stop=10 value=i}-->
+          <li><a href="<!--{$article_list[$i].url}-->" target="_blank"><!--{$article_list[$i].title}--></a></li>
+          <!--{/for}-->
+        </ul>
+        <!--{/if}-->
       </div>
-          <div class="reg_wrap mt5">
-        <input type="checkbox" value="1" checked="checked" id="rem_me" class="">
-        <label for="rem_me" class="ft6">记住我</label>
-        <a href="/register/" class="reg ft6">立即注册</a> <a href="/usersecurity/findpwd/" class="get_password ft6">忘记密码</a> </div>
-        </form>
+    </div>
+    <!--{/iCMS}-->
   </div>
+  <div class="right-col">
+    <div class="index_login_show_wrap dot_bottom_mod ">
+      <form action="https://www.mogujie.com/login" method="post" id="index_login_form">
+        <div class="login_content">
+          <div class="clearfix posr">
+            <input type="text" name="uname" def-v="用户名" value="用户名" class="name i_text" style="color: rgb(204, 204, 204);">
+            <div class="uname_wrap mx_placehold_pass">
+              <input type="hidden" name="ws" value="1">
+              <input type="password" name="pass" class="password i_text mx_tagv" def-v="密码">
+            <span class="def_v mx_defv" style="display: block;">密码</span> </div>
+            <input type="submit" class="submit r3" value="登录">
+          </div>
+        </div>
+        <div class="reg_wrap mt5">
+          <input type="checkbox" value="1" checked="checked" id="rem_me" class="">
+          <label for="rem_me" class="ft6">记住我</label>
+          <a href="/register/" class="reg ft6">立即注册</a> <a href="/usersecurity/findpwd/" class="get_password ft6">忘记密码</a> </div>
+        </form>
+      </div>
       <div class="clearfix mb10"></div>
       <div class="mod" id="hot_artical">
-    <div class="hd">
+        <div class="hd">
           <h3>热门文章<span>HOT</span></h3>
         </div>
-    <div class="bd"><!--{iCMS:article:list row="10" orderby="hot"}-->
-          <ul class="artical-top">
-        <!--{if $article_list[0].pic.url}-->
-        <li class="first-item clearfix"> <span><a href="<!--{$article_list[0].url}-->" target="_blank"><img src="<!--{$article_list[0].pic.url}-->" style="height: 72px;"></a></span>
-              <p class="title"><a href="<!--{$article_list[0].url}-->" target="_blank"><!--{$article_list[0].title}--></a></p>
-              <p class="text"><!--{$article_list[0].description|html2txt}--></p>
-            </li>
-        <!--{/if}--> 
-        <!--{foreach key=akey value=alist from=$article_list}--> 
+        <div class="bd"><!--{iCMS:article:list row="10" orderby="hot"}-->
+        <ul class="artical-top">
+          <!--{if $article_list[0].pic.url}-->
+          <li class="first-item clearfix"> <span><a href="<!--{$article_list[0].url}-->" target="_blank"><img src="<!--{$article_list[0].pic.url}-->" style="height: 72px;"></a></span>
+          <p class="title"><a href="<!--{$article_list[0].url}-->" target="_blank"><!--{$article_list[0].title}--></a></p>
+          <p class="text"><!--{$article_list[0].description|html2txt}--></p>
+        </li>
+        <!--{/if}-->
+        <!--{foreach key=akey value=alist from=$article_list}-->
         <!--{if $akey>0}-->
         <li><a href="<!--{$alist.url}-->" target="_blank"><!--{$alist.title}--></a></li>
-        <!--{/if}--> 
+        <!--{/if}-->
         <!--{/foreach}-->
       </ul>
-        </div>
+    </div>
   </div>
-      <div class="mod" id="author_list">
+  <div class="mod" id="author_list">
     <div class="hd">
-          <h3>作家推荐<span>AUTHORS</span></h3>
-          <a href="/?tn=listauthor" target="_blank" class="more">更多&gt;&gt;</a></div>
-    <div class="bd"> 
-          <!--{iCMS:user:list loop="true" row="10" pid="1"}-->
-          <div class="author-m clearfix">
-        <div class="author-pic"><a href="http://wuli.baijia.baidu.com/" mon="name=recommend&amp;pos=pic&amp;pn=1" target="_blank"><img src="/news/pic/item/960a304e251f95cafa342cddcb177f3e66095293.jpg"></a></div>
-        <div class="author-name"><a href="http://wuli.baijia.baidu.com/" mon="name=recommend&amp;pos=name&amp;pn=1" target="_blank">吴澧</a></div>
-        <div class="author-text">旅美学者，《南方周末》专栏作者</div>
-        <div class="author-artical"><a href="http://wuli.baijia.baidu.com/article/2748" mon="name=recommend&amp;pos=title&amp;pn=1" target="_blank">从英语四六级考试看语文程度</a></div>
+      <h3>作家推荐<span>AUTHORS</span></h3>
+      <a href="/?tn=listauthor" target="_blank" class="more">更多&gt;&gt;</a></div>
+      <div class="bd">
+        <!--{iCMS:user:list loop="true" row="10" pid="1"}-->
+        <div class="author-m clearfix">
+          <div class="author-pic"><a href="http://wuli.baijia.baidu.com/" mon="name=recommend&amp;pos=pic&amp;pn=1" target="_blank"><img src="/news/pic/item/960a304e251f95cafa342cddcb177f3e66095293.jpg"></a></div>
+          <div class="author-name"><a href="http://wuli.baijia.baidu.com/" mon="name=recommend&amp;pos=name&amp;pn=1" target="_blank">吴澧</a></div>
+          <div class="author-text">旅美学者，《南方周末》专栏作者</div>
+          <div class="author-artical"><a href="http://wuli.baijia.baidu.com/article/2748" mon="name=recommend&amp;pos=title&amp;pn=1" target="_blank">从英语四六级考试看语文程度</a></div>
+        </div>
+        <!--{/iCMS}-->
       </div>
-          <!--{/iCMS}--> 
-        </div>
-  </div>
-      <div class="mod" id="tags">
-    <div class="hd">
-          <h3>热门标签<span>TAG</span></h3>
-        </div>
-    <div class="bd"> 
-          <!--{iCMS:tag:list loop="true" row="10" orderby="hot"}--> 
-          <a href="<!--{$tag_list.url}-->" target="_blank"><!--{$tag_list.name}--></a> 
-          <!--{/iCMS}--> 
-        </div>
-  </div>
     </div>
-<div class="clearfix mb10"></div>
-<div id="links">
-      <div class="mod">
-    <div class="hd">
-          <h3>友情链接<span>LINK</span></h3>
-        </div>
-    <div class="bd"> 
-          <!--{iCMS:link loop='true'}--> 
-          <a target="_blank" href="<!--{$link.url}-->"><!--{$link.name}--></a> 
-          <!--{/iCMS}--> 
-        </div>
-  </div>
+    <div class="mod" id="tags">
+      <div class="hd">
+        <h3>热门标签<span>TAG</span></h3>
+      </div>
+      <div class="bd">
+        <!--{iCMS:tag:list loop="true" row="10" orderby="hot"}-->
+        <a href="<!--{$tag_list.url}-->" target="_blank"><!--{$tag_list.name}--></a>
+        <!--{/iCMS}-->
+      </div>
     </div>
+  </div>
+  <div class="clearfix mb10"></div>
+  <div id="links">
+    <div class="mod">
+      <div class="hd">
+        <h3>友情链接<span>LINK</span></h3>
+      </div>
+      <div class="bd">
+        <!--{iCMS:link loop='true'}-->
+        <a target="_blank" href="<!--{$link.url}-->"><!--{$link.name}--></a>
+        <!--{/iCMS}-->
+      </div>
+    </div>
+  </div>
 </div>
 <!--{include file="./footer.htm"}-->
 </body>

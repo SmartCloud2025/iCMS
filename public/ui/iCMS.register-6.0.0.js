@@ -77,7 +77,7 @@
         return msg(a, "ok");
         break;
       case 'rstpassword':
-        var pwd = $("#iCMS-password").val();
+        var pwd = $("#iCMS-reg-password").val();
         if (pwd.length < 6) {
           return msg(a, "perr");
         }
@@ -121,7 +121,7 @@
       $(e).data('check', true);
     } else if (c && c != "ok") {
       var info = info[c + '_' + n] || c;
-      iCMS.tip(b, '<i class="fa fa-minus-circle"></i> '+info);
+      iCMS.tip(b, '<i class="fa fa-times-circle"></i> '+info);
       $(e).data('check', false);
     }
     if (n == 'seccode') {

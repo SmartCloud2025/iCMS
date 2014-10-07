@@ -179,20 +179,28 @@ class iTemplate {
 			$this->template_dir = $_dir;
 		}else{
 			strpos($file,'./') !==false && $file = str_replace('./',dirname($this->_file).'/',$file);
-	        if(strpos($file,iPHP_APP.':/') !==false){
-				$file = str_replace(iPHP_APP.':/',iPHP_APP,$file);
-				if(!is_file(iPHP_TPL_DIR."/".$file)) {
-					$file = str_replace(iPHP_APP.':/',iPHP_TPL_DEFAULT,$file);
-				}
-			}elseif(strpos($file,'{iTPL}') !==false){
-				$file = str_replace('{iTPL}',iPHP_TPL_DEFAULT,$file);
-			}
+			$file = $this->get_tpl($file);
 		}
 
 		$this->template_dir = $this->_get_dir($this->template_dir);
 		$RootPath           = $this->template_dir.$file;
 		@is_file($RootPath) OR $this->trigger_error("file '$RootPath' does not exist", E_USER_ERROR);
 		return $RootPath;
+	}
+	function get_tpl($tpl){
+        if(strpos($tpl,iPHP_APP.':/') !==false){
+			$_tpl = str_replace(iPHP_APP.':/',iPHP_APP.'/'.iPHP_TPL_DEFAULT,$tpl); // iCMS/default/
+			if(@is_file(iPHP_TPL_DIR."/".$_tpl)){
+				$tpl = $_tpl;
+			}else{// iCMS/
+				$tpl = str_replace(iPHP_APP.':/',iPHP_APP,$tpl);
+			}
+		}elseif(strpos($tpl,'{iTPL}') !==false){
+			$tpl = str_replace('{iTPL}',iPHP_TPL_DEFAULT,$tpl);
+		}
+		$path = iPHP_TPL_DIR."/".$tpl;
+		@is_file($path) OR $this->trigger_error("file '$path' does not exist", E_USER_ERROR);
+		return $tpl;
 	}
 	function _get_compile_file($file){
 		$this->compile_dir = $this->_get_dir($this->compile_dir);
@@ -636,16 +644,21 @@ class iTemplate_Compiler extends iTemplate {
 					$_args['value'] = $this->_dequote($_args['item']);
 				}
 //				isset($_args['key']) ? $_args['key'] = "\$this->_vars['".$this->_dequote($_args['key'])."'] => " : $_args['key'] = '';
-				isset($_args['key']) OR $_args['key'] ='f'.rand(100,999);
-				$keystr = "\$this->_vars['".$this->_dequote($_args['key'])."'] => ";
-				$_result = '<?php $_count=count((array)' . $_args['from'] . ');
-				$this->_vars[\'' . $_args['value'] . '\'][\'last\']=false;
-				$this->_vars[\'' . $_args['value'] . '\'][\'first\']=false;
-				$fec=1;
-				if ($_count){ foreach ((array)' . $_args['from'] . ' as ' . $keystr . '$this->_vars[\'' . $_args['value'] . '\']){
-					$fec==1 && $this->_vars[\'' . $_args['value'] . '\'][\'first\']=true;
-					$fec==$_count && $this->_vars[\'' . $_args['value'] . '\'][\'last\']=true;
-					$fec++;
+				isset($_args['key']) OR $_args['key'] ='key_'.rand(1,999);
+				$hash    = rand(1,999);
+				$keystr  = "\$this->_vars['".$this->_dequote($_args['key'])."'] => ";
+				$_result = '<?php
+				unset(' . $_args['from'] . '[\'first\'],' . $_args['from'] . '[\'last\']);
+				$_count_'.$hash.' = count((array)' . $_args['from'] . ');
+				$fec_'.$hash.' = 1;
+				if ($_count_'.$hash.'){
+					$this->_vars[\'' . $_args['value'] . '\'] = array();
+					$this->_vars[\'' . $_args['value'] . '\'][\'last\']=false;
+					$this->_vars[\'' . $_args['value'] . '\'][\'first\']=false;
+					foreach ((array)' . $_args['from'] . ' as ' . $keystr . '$this->_vars[\'' . $_args['value'] . '\']){
+					$fec_'.$hash.'==1 && $this->_vars[\'' . $_args['value'] . '\'][\'first\']=true;
+					$fec_'.$hash.'==$_count_'.$hash.' && $this->_vars[\'' . $_args['value'] . '\'][\'last\']=true;
+					$fec_'.$hash.'++;
 				?>';
 				return $_result;
 				break;
@@ -964,6 +977,7 @@ class iTemplate_Compiler extends iTemplate {
 					case 'REQUEST_URI':	$_result = "\$_SERVER['REQUEST_URI']";break;
 					case 'SERVER_NAME':	$_result = "\$_SERVER['SERVER_NAME']";break;
 					case 'SERVER_PORT':	$_result = "\$_SERVER['SERVER_PORT']";break;
+					case 'TIME':		$_result = "time()";break;
 					case 'NOW':			$_result = "time()";break;
 					case 'SECTION':		$_result = "\$this->_sections";break;
 					case 'LDELIM':		$_result = "\$this->left_delimiter";break;

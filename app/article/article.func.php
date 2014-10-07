@@ -106,6 +106,10 @@ function article_list($vars){
         $cache_name = 'article/'.$md5."/".(int)$GLOBALS['page'];
         $resource   = iCache::get($cache_name);
     }
+    // $func = '__article_array';
+    // if($vars['func']=="user_home"){ //暂时只有一个选项
+    //     $func = '__article_user_home_array';
+    // }
     if(empty($resource)){
         $resource = iDB::all("SELECT * FROM `#iCMS@__article` WHERE {$where_sql} {$order_sql} {$limit}");
         //iDB::debug(1);
@@ -212,11 +216,31 @@ function __article_array($vars,$resource){
                 $value['page']  = $GLOBALS['page']?$GLOBALS['page']:1;
                 $value['total'] = $total;
             }
-            $resource[$key] = $value;
+            if($vars['archive']=="date"){
+                $_date = _archive_date($value['postime']);
+                //var_dump($_date);
+                //$_date = get_date($value['postime'],'Ymd');
+                unset($resource[$key]);
+                $resource[$_date][$key] = $value;
+            }else{
+                $resource[$key] = $value;
+            }
+
         }
     }
     return $resource;
 }
 function article_up_down($vars){
     echo iPHP::view('iCMS://article.up_down.htm');
+}
+function _archive_date($date){
+    $limit = time() - $date;
+    if($limit <= 86400){
+        return '今天';
+    }else if($limit > 86400 && $limit<=172800){
+        return '昨天';
+    }else{
+        //return get_date($date,'dm');
+        return '<span class="day">'.get_date($date,'d').'</span><span class="mon">'.get_date($date,'m').'月</span>';
+    }
 }

@@ -34,7 +34,7 @@ $(function(){
     $(".modal_photo_<?php echo $unid;?>").on("click",function(){
         var  pic = $("#<?php echo $callback;?>").val(),href = $(this).attr("href");
         if(pic){
-            $(".modal-iframe").attr("src",href+"&pic="+pic);
+            $("#modal-iframe").attr("src",href+"&pic="+pic);
         }else{
             var check = $(this).attr("data-check"),title=$(this).attr("title");
             if(check){

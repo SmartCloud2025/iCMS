@@ -20,8 +20,12 @@
         },
         tip: function(el, title,placement) {
             placement = placement||el.attr('data-placement');
+            var container = el.attr('data-container');
+            if(container){
+                $(container).empty();
+            }
             el.tooltip({
-              html: true,container:el.attr('data-container')||false,
+              html: true,container:container||false,
               placement: placement||'right',
               trigger: 'manual',
               title:title,
@@ -123,7 +127,7 @@
 
         var meta = im.attr('data-meta') ? $.parseJSON(im.attr('data-meta')) : {};
         var opts = $.extend(defaults, options, meta);
-        var mOverlay = $('<div id="modal-overlay" class="modal-overlayBG"></div>');
+        var mOverlay = $('<div id="modal-overlay"></div>');
 
         return im.each(function() {
 
@@ -151,8 +155,8 @@
                     "overflow-y": "auto"
                 });
             } else if (opts.href) {
-                var mFrame = $('<iframe class="modal-iframe" frameborder="no" allowtransparency="true" scrolling="auto" hidefocus="" src="' + opts.href + '"></iframe>');
-                mFrameFix = $('<div id="modal-iframeFix" class="modal-iframeFix"></div>');
+                var mFrame = $('<iframe id="modal-iframe" frameborder="no" allowtransparency="true" scrolling="auto" hidefocus="" src="' + opts.href + '"></iframe>');
+                mFrameFix = $('<div id="modal-iframeFix"></div>');
                 mFrame.appendTo(mBody);
                 mFrameFix.appendTo(mBody);
             }
@@ -199,6 +203,10 @@
         });
     }
 })(jQuery);
+// lazy load
+(function(a){
+    a.fn.lazyload=function(b){var c={attr:"data-original",container:a(window),callback:a.noop};var d=a.extend({},c,b||{});d.cache=[];a(this).each(function(){var h=this.nodeName.toLowerCase(),g=a(this).attr(d.attr);var i={obj:a(this),tag:h,url:g};d.cache.push(i)});var f=function(g){if(a.isFunction(d.callback)){d.callback.call(g.get(0))}};var e=function(){var g=d.container.height();if(a(window).get(0)===window){contop=a(window).scrollTop()}else{contop=d.container.offset().top}a.each(d.cache,function(m,n){var p=n.obj,j=n.tag,k=n.url,l,h;if(p){l=p.offset().top-contop,l+p.height();if((l>=0&&l<g)||(h>0&&h<=g)){if(k){if(j==="img"){f(p.attr("src",k))}else{p.load(k,{},function(){f(p)})}}else{f(p)}n.obj=null}}})};e();d.container.bind("scroll",e)}}
+)(jQuery);
 
 function pad(num, n) {
     num = num.toString();

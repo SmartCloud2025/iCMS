@@ -79,16 +79,9 @@ class iPHP{
         $tpl OR iPHP::throwException('运行出错！ 请设置模板文件', 001,'TPL');
         if(strpos($tpl,'APP:/')!==false){
             $tpl = 'file::'.self::$app_tpl."||".str_replace('APP:/','',$tpl);
-        }elseif(strpos($tpl,iPHP_APP.':/') !==false){
-			$_tpl = str_replace(iPHP_APP.':/',iPHP_APP.'/'.iPHP_TPL_DEFAULT,$tpl); // iCMS/default/
-			if(@is_file(iPHP_TPL_DIR."/".$_tpl)){
-				$tpl = $_tpl;
-			}else{// iCMS/
-				$tpl = str_replace(iPHP_APP.':/',iPHP_APP,$tpl);
-			}
-		}elseif(strpos($tpl,'{iTPL}') !==false){
-			$tpl = str_replace('{iTPL}',iPHP_TPL_DEFAULT,$tpl);
-		}
+        }else{
+        	$tpl = self::$iTPL->get_tpl($tpl);
+        }
         if(@is_file(iPHP_TPL_DIR."/".$tpl)) {
             return iPHP::pl($tpl);
         }else{
@@ -261,8 +254,8 @@ class iPHP{
     }
 	//检查验证码
 	public static function seccode($seccode,$type='F') {
-	    $_seccode		= self::get_cookie('seccode');
-	    $cookie_seccode = empty($_seccode)?'':authcode($_seccode, 'DECODE');
+	    $_seccode = self::get_cookie('seccode');
+	    $_seccode && $cookie_seccode = authcode($_seccode, 'DECODE');
 	    if(empty($cookie_seccode) || strtolower($cookie_seccode) != strtolower($seccode)) {
 	        return false;
 	    }else {

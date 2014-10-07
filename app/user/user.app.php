@@ -261,8 +261,10 @@ class userApp {
             if($userdata->unickEdit>1){
                 iPHP::alert('user:profile:unickEdit');
             }
-            iDB::query("UPDATE `#iCMS@__user` SET `nickname` = '$nickname' WHERE `uid` = '".user::$userid."';");
-            $unickEdit = 1;
+            if($nickname){
+                iDB::query("UPDATE `#iCMS@__user` SET `nickname` = '$nickname' WHERE `uid` = '".user::$userid."';");
+                $unickEdit = 1;
+            }
         }
         if($gender!=$this->me->gender){
             iDB::query("UPDATE `#iCMS@__user` SET `gender` = '$gender' WHERE `uid` = '".user::$userid."';");
@@ -499,16 +501,16 @@ class userApp {
                 break;
             case 'nickname':
                 if(preg_match("/\d/", $value{0})||cstrlen($value)>20||cstrlen($value)<4){
-                    $a = iPHP::code(0,'user:register:nickname:error','username');
+                    $a = iPHP::code(0,'user:register:nickname:error','nickname');
                 }else{
-                    user::check($value,'nickname') OR $a = iPHP::code(0,'user:register:nickname:exist','username');
+                    user::check($value,'nickname') OR $a = iPHP::code(0,'user:register:nickname:exist','nickname');
                 }
                 break;
             case 'password':
-                strlen($value)<6 && $a=iPHP::code(0,'user:password:error','username');
+                strlen($value)<6 && $a=iPHP::code(0,'user:password:error','password');
             break;
             case 'seccode':
-                iPHP::seccode($value) OR $a = iPHP::code(0,'iCMS:seccode:error','username');
+                iPHP::seccode($value) OR $a = iPHP::code(0,'iCMS:seccode:error','seccode');
             break;
         }
         iPHP::json($a);

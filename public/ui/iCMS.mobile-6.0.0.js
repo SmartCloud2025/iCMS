@@ -37,6 +37,7 @@
                 }, 'json');
             }
     };
+
     iCMS.article = {
             good: function(a) {
                 var $this = $(a),
@@ -55,51 +56,44 @@
             }
     };
     var _iCMS = {
-        report:function(a) {
-            var $this = $(a),
-                report_box = document.getElementById("iCMS-report-box"),
-                report_modal = $this.modal({
-                    title: '为什么举报这个评论?',
-                    width: "460px",
-                    html: report_box,
-                    scroll: true
-                });
-            $("li", report_box).click(function(event) {
-                $("li", report_box).removeClass('checked');
-                $(this).addClass('checked');
+        scrollLoad:function (contents,one,next,maxPage,callback){
+          if ( !( $(contents).length && $(next).length) ){
+            return false;
+          };
+          var $container = $(contents);
+          $container.infinitescroll({
+            maxPage: maxPage||3,
+            clickMoreBtn:'.click_more',
+            navSelector: next, // selector for the paged navigation
+            nextSelector: next + ' a', // selector for the NEXT link (to page 2)
+            itemSelector: contents + ' ' + one, // selector for all items you'll retrieve
+            loading: {
+              finishedMsg: '<a href="javascript:void(0);" class="click_more">恭喜您！居然到底了！</a>',
+              msgText: '<p class="loading_wrap"><i class="loading"></i> 正在加载...</p>',
+              clickMoreMsg:'<a href="javascript:void(0);" class="click_more">点击加载更多</a>',
+              img: ''
+            }
+          },
+          // trigger Masonry as a callback
+          function(newElements) {
+            var $newElems = $(newElements).css({
+              opacity: 0
             });
-            $('[name="cancel"]', report_box).click(function(event) {
-                report_modal.destroy();
+            if (typeof(callback) === "function") {
+                    callback($newElems);
+            }
+            $container.append($newElems);
+            $newElems.animate({
+              opacity: 1
+            }, "fast", function() {
+              $("#infscr-loading").fadeOut('normal');
             });
-            $('[name="ok"]', report_box).click(function(event) {
-                event.preventDefault();
-                var report_param = iCMS.param($this),
-                content = $("[name='content']", report_box);
-                report_param['reason'] = $("[name='reason']:checked", report_box).val();
-                if (!report_param['reason']) {
-                    iCMS.alert("请选择举报的原因");
-                    return false;
-                }
-                if (report_param['reason'] == "0") {
-                    report_param['content'] = content.val();
-                    if (!report_param['content']) {
-                        iCMS.alert("请填写举报的原因");
-                        return false;
-                    }
-                }
-                report_param.action = 'report';
-                $.post(iCMS.api('user'), report_param, function(c) {
-                    content.val('');
-                    iCMS.alert(c.msg,c.code);
-                    $("li", report_box).removeClass('checked');
-                    $("[name='reason']", report_box).removeAttr('checked');
-                    if(c.code){
-                        report_modal.destroy();
-                    }
-                }, 'json');
-            });
-        },
+            // lazylaod
+            $("img").lazyload();
 
+          });
+            return $container;
+        },
         param: function(a,_param) {
             if(_param){
                 a.attr('data-param',iCMS.json2str(_param));
@@ -149,17 +143,27 @@
                 iCMS.user.logout();
                 return false;
             });
-            doc.on("click", '.iCMS_user_login', function(event) {
-                event.preventDefault();
-                iCMS.LoginBox();
-                return false;
-            });
 
             $(".iCMS_seccode_img,.iCMS_seccode_text").click(function() {
                 $(".iCMS_seccode_img").attr('src', iCMS.api('public', '&do=seccode&') + Math.random());
             });
 
             $('.tip').tooltip();
+            $("img").lazyload();
+            $(window).scroll(function () {
+                if ($(this).scrollTop() > 100) {
+                    $('#iCMS-scrollUp').fadeIn();
+                } else {
+                    $('#iCMS-scrollUp').fadeOut();
+                }
+            });
+            $('#iCMS-scrollUp').click(function () {
+                $('body,html').animate({
+                    scrollTop: 0
+                }, 800);
+                return false;
+            });
+
         },
         api_iframe_height:function(a,b){
             var a = a||window.top.$(b);
@@ -168,6 +172,7 @@
             a.height(height);
             //window.top.$('.iCMS_API_iframe-loading').hide();
         },
+        hover: function() {},
         LoginBox: function() {
             var dialog = window.top.document.getElementById("iCMS-login-dialog");
             iCMS_Login_MODAL = window.top.$(this).modal({
@@ -177,28 +182,6 @@
             });
 
             this.user.login("#iCMS-login-dialog");
-        },
-        hover: function(p,a, b, t, l) {
-            var timeOutID = null,pp=$(p),
-            t = t || 0, l = l || 0;
-
-            $(a,pp).hover(function() {
-                var position = $(this).position();
-                $(b,pp).show().css({
-                    top: position.top + t,
-                    left: position.left + l
-                });
-            }, function() {
-                timeOutID = setTimeout(function() {
-                    $(b,pp).hide();
-                }, 2500);
-            });
-            $(b,pp).hover(function() {
-                window.clearTimeout(timeOutID);
-                $(this).show();
-            }, function() {
-                $(this).hide();
-            });
         },
         modal: function() {
             $('[data-toggle="modal"]').on("click", function(event) {

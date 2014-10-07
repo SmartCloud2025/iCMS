@@ -278,7 +278,9 @@ class articleApp{
         //status:[0:草稿][1:正常][2:回收][3:待审核][4:不合格]
         //postype: [0:用户][1:管理员]
         $stype && $this->_status = $stype_map[$stype];
-        isset($_GET['pt']) && $this->_postype = (int)$_GET['pt'];
+        if(isset($_GET['pt']) && $_GET['pt']!=''){
+            $this->_postype = (int)$_GET['pt'];
+        }
 
         $sql = "WHERE `status`='{$this->_status}'";
         $this->_postype==='all' OR $sql.= " AND `postype`='{$this->_postype}'";

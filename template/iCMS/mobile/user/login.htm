@@ -14,40 +14,37 @@
     })
     </script>
     <style>
-    #iCMS-nav-login { display: none; }
-    .navbar { margin-bottom: 0px; }
-    .container { padding: 0px; }
-    .wrapper { background-color: #fff; padding: 10px; }
-    .wrapper h1 { margin: 20px 0px; color: #768263; font-weight: normal; font-size: 26px; }
-    .checkbox label { padding-left: 5px; }
-    .checkbox span { margin-left: 20px; }
-    .iCMS_login_remember { top: 5px; left: 5px; }
-    .findpwd { margin-left: 10px; }
+    #iCMS-navbar-login { display: none; }
     </style>
   </head>
   <body class="iCMS-mobile">
     <!--{include file="{iTPL}/navbar.htm"}-->
     <div class="container">
-      <div class="wrapper" id="iCMS-login-box">
+      <div class="wrapper login_reg_wrapper" id="iCMS-login-box">
         <h1>用户登录</h1>
           <div class="form-group">
-            <label for="login_uname">用户名</label><p id="uname_tip"></p>
-            <input type="text" placeholder="邮箱 或 昵称" data-container="#uname_tip" name="uname" id="login_uname" class="iCMS_login_uname form-control">
+            <label for="login_uname">用户名</label>
+            <input type="text" placeholder="邮箱 或 昵称" data-container=".uname_tip" name="uname" id="login_uname" class="iCMS_login_uname form-control">
+            <span class="help-block uname_tip"></span>
           </div>
           <div class="form-group">
-            <label for="login_pass">密码</label><p id="pass_tip"></p>
-            <input type="password" data-container="#pass_tip" name="pass" id="login_pass" class="iCMS_login_pass form-control">
+            <label for="login_pass">密码</label>
+            <input type="password" placeholder="请输入您的密码" data-container=".pass_tip" name="pass" id="login_pass" class="iCMS_login_pass form-control">
+            <span class="help-block pass_tip"></span>
           </div>
           <div class="checkbox">
             <label for="login_remember">
               <input type="checkbox" value="1" name="remember" id="login_remember" class="iCMS_login_remember" checked="checked"><span>记住我（两周免登录）</span>
             </label>
           </div>
-          <button type="submit" class="btn btn-primary submit iCMS_login_btn">登录</button>
-          <a href="<!--{$iCMS.SAPI}-->&do=findpwd" class="findpwd">忘记密码？</a>
+          <div class="fr">
+            <a class="btn btn-success btn-sm" href="<!--{iCMS:router url='/api/user/register'}-->">我没有账号 »</a>
+            <div class="clearfix"></div>
+            <a class="btn btn-link" href="<!--{$iCMS.SAPI}-->&do=findpwd" class="findpwd">忘记密码？</a>
+          </div>
+          <button type="submit" class="btn btn-primary iCMS_login_btn"><i class="fa fa-check"></i> 登 录</button>
       </div>
     </div>
-
     <!--{include file="{iTPL}/footer.htm"}-->
   </body>
 </html>

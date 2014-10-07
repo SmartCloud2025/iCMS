@@ -219,7 +219,7 @@ class articleApp {
             'count'  => $article['hits']
         );
         $article['comment'] = array(
-            'url'   => iCMS_API."?app=commentt&do=article&appid={$article['appid']}&iid={$article['id']}&cid={$article['cid']}",
+            'url'   => iCMS_API."?app=comment&do=article&appid={$article['appid']}&iid={$article['id']}&cid={$article['cid']}",
             'count' => $article['comments']
         );
 

@@ -40,14 +40,10 @@
         'seccode':'请输入验证码',
       }
       var b = $(".iCMS_login_" + el,login);
-      var container = b.attr("data-container");
-      if(container){
-        $(container).empty();
-      }
       b.tooltip('destroy');
       if (val == def) {
         b.focus();
-        iCMS.tip(b, '<i class="fa fa-minus-circle"></i> '+info[el]);
+        iCMS.tip(b, '<i class="fa fa-times-circle"></i> '+info[el]);
         return true;
       } else {
         if (typeof(success) === "function") {

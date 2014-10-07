@@ -157,7 +157,7 @@ class user {
 			}
 			return $u;
 		}
-		self::logout();
+		//self::logout();
 		return false;
 	}
 	public static function set_cookie($username,$password,$user){
