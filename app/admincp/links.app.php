@@ -15,11 +15,10 @@ class linksApp{
     }
     function do_add(){
         if($this->id) {
-            iMember::CP($this->cid,'Permission_Denied',APP_URI);
-            $rs			= iDB::row("SELECT * FROM `#iCMS@__links` WHERE `id`='$this->id' LIMIT 1;",ARRAY_A);
+            $rs = iDB::row("SELECT * FROM `#iCMS@__links` WHERE `id`='$this->id' LIMIT 1;",ARRAY_A);
         }else{
-        	$rs['keyword']	= $_GET['keyword'];
-        	$rs['url']		= $_GET['url'];
+            $rs['keyword'] = $_GET['keyword'];
+            $rs['url']     = $_GET['url'];
         }
         include iACP::view("links.add");
     }
@@ -69,7 +68,7 @@ class linksApp{
     	$id===null && $id=$this->id;
 		$id OR iPHP::alert('请选择要删除的网站!');
 		iDB::query("DELETE FROM `#iCMS@__links` WHERE `id` = '$id'");
-		$dialog && iPHP::success('网站已经删除','js:parent.$("#tr'.$id.'").parent().remove();');
+		$dialog && iPHP::success('网站已经删除','js:parent.$("#tr'.$id.'").remove();');
     }
     function do_batch(){
         $idArray = (array)$_POST['id'];

@@ -54,10 +54,9 @@
               <h3><!--{$article_list.title}--></h3>
               <p>
                 <!--{$article_list.description|cut:30:'...'}-->
-                <div class="count">
-                  <span class="label label-success"><!--{$article_list.user.link}--></span>
-                  <i><a href="<!--{$article_list.comment.url}-->">评论(<!--{$article_list.comment.count}-->)</a></i>
-                </div>
+                <span class="count">
+                  <span class="label label-default"><i class="fa fa-comments"></i> <!--{$article_list.comment.count}--> </span>
+                </span>
               </p>
             </a>
           </li>

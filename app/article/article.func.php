@@ -65,6 +65,19 @@ function article_list($vars){
         map::init('tags',iCMS_APP_ARTICLE);
         $where_sql.= map::exists($vars['tid'],'`#iCMS@__article`.id'); //map 表大的用exists
     }
+    if($vars['keywords']){ //最好使用 iCMS:article:search
+        if(strpos($vars['keywords'],',')===false){
+            $vars['keywords'] = str_replace(array('%','_'),array('\%','\_'),$vars['keywords']);
+            $where_sql.= " AND CONCAT(title,keywords,description) like '%".addslashes($vars['keywords'])."%'";
+           }else{
+            $kws = explode(',',$vars['keywords']);
+            foreach($kws AS $kwv){
+                $keywords.= addslashes($kwv)."|";
+            }
+            $keywords = substr($keywords,0,-1);
+            $where_sql.= " AND CONCAT(title,keywords,description) REGEXP '$keywords' ";
+        }
+    }
 
     $vars['id'] && $where_sql.= iPHP::where($vars['id'],'id');
     $vars['id!']&& $where_sql.= iPHP::where($vars['id!'],'id','not');

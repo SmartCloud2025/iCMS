@@ -32,9 +32,9 @@ return array(
 
 	'/api'                      => iCMS_API,
 	'/api/comment'              => iCMS_API.'?app=comment',
-	'/api/search'               => iCMS_API.'?app=search',
 	'/api/seccode'              => iCMS_API.'?app=public&do=seccode',
 	'/api/agreement'       		=> iCMS_API.'?app=public&do=agreement',
+	'/api/search'               => iCMS_API.'?app=search',
 
 	'/api/user'                 => iCMS_API.'?app=user',
 	'/api/user/ucard'           => iCMS_API.'?app=user&do=ucard',

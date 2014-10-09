@@ -6,16 +6,17 @@
           };
           var $container = $(contents);
           $container.infinitescroll({
-            maxPage: maxPage||3,
+            showPageNum:5,
+            maxPage: maxPage||100,
             clickMoreBtn:'.click_more',
             navSelector: next, // selector for the paged navigation
             nextSelector: next + ' a', // selector for the NEXT link (to page 2)
             itemSelector: contents + ' ' + one, // selector for all items you'll retrieve
             loading: {
-              finishedMsg: '<a href="javascript:void(0);" class="click_more">恭喜您！居然到底了！</a>',
-              msgText: '<p class="loading_wrap"><i class="loading"></i> 正在加载...</p>',
-              clickMoreMsg:'<a href="javascript:void(0);" class="click_more">点击加载更多</a>',
-              img: ''
+              finishedMsg: '<a href="javascript:;" class="click_more btn btn-success btn-lg btn-block"><i class="fa fa-gift"></i> 恭喜您！居然到底了！</a>',
+              msgText: '<p class="loading_wrap"><i class="fa fa-spinner"></i> 正在加载...</p>',
+              clickMoreMsg:'<a href="javascript:;" class="click_more btn btn-primary btn-lg btn-block"><i class="fa fa-cloud-download"></i> 点击加载更多</a>',
+              img: '',
             }
           },
           // trigger Masonry as a callback
@@ -66,6 +67,7 @@
                 }
                 return false;
             });
+
             this.navbar_box();
             $("img").lazyload();
             $(window).scroll(function () {
@@ -106,5 +108,6 @@
         },
         hover: function() {},
     };
+    iCMS.config.DIALOG = {width:300,height:120,time:300000000};
     iCMS = $.extend(iCMS,_iCMS);//扩展 or 替换 iCMS方法
 })(jQuery);

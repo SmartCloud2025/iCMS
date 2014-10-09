@@ -45,7 +45,7 @@ class app {
 	}
 	public static function get_app($appid=1){
 		$rs	= iCache::get('iCMS/app/'.$appid);
-       	$rs OR iPHP::throwException('app no exist', 0005);
+       	$rs OR iPHP::throwException('app no exist', '0005');
        	return $rs;
 	}
 	public static function get_url($appid=1,$primary=''){

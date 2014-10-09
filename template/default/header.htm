@@ -11,10 +11,11 @@
         <span><a href="<!--{iCMS:router url='/user/publish'}-->" target="_blank"><i class="fa fa-edit"></i> 发表文章</a></span>
       </div>
       <div class="clearfix mb5"></div>
-      <form class="form-inline" action="<!--{iCMS:router url='/api/search'}-->">
+      <form id="iCMS-search-box" class="form-inline" action="<!--{iCMS:router url='/api'}-->" method="get" target="_blank">
         <div class="input-append">
-          <input type="text" name="q" class="span4">
-          <button type="submit" class="btn" ><i class="fa fa-search"></i> 搜索</button>
+          <input name="app" type="hidden" value="search" />
+          <input type="text" name="q" class="span4" placeholder="请输入关键词" value="<!--{$search.title}-->">
+          <button type="submit" class="btn iCMS_search_btn" ><i class="fa fa-search"></i> 搜索</button>
         </div>
       </form>
     </div>

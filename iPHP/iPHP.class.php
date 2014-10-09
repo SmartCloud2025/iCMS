@@ -76,7 +76,7 @@ class iPHP{
         }
     }
     public static function view($tpl,$p='index') {
-        $tpl OR iPHP::throwException('运行出错！ 请设置模板文件', 001,'TPL');
+        $tpl OR iPHP::throwException('运行出错！ 请设置模板文件', '001','TPL');
         if(strpos($tpl,'APP:/')!==false){
             $tpl = 'file::'.self::$app_tpl."||".str_replace('APP:/','',$tpl);
         }else{
@@ -85,7 +85,7 @@ class iPHP{
         if(@is_file(iPHP_TPL_DIR."/".$tpl)) {
             return iPHP::pl($tpl);
         }else{
-        	iPHP::throwException('运行出错！ 找不到模板文件 <b>' .$tpl. '</b>', 002,'TPL');
+        	iPHP::throwException('运行出错！ 找不到模板文件 <b>' .$tpl. '</b>', '002','TPL');
         }
     }
 

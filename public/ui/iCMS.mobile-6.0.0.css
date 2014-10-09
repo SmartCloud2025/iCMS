@@ -21,17 +21,16 @@ h3.title span { color: #70A700; font-size: 14px; font-weight: bold; height: 30px
 #infscr-loading { display: block; }
 #infscr-loading img { display: none }
 .loading_wrap { padding: 10px 0; margin-bottom: 10px; text-align: center; color: #888; font-size: 16px }
-.loading { display: inline-block; width: 25px; height: 25px; margin-right: 5px; overflow: hidden; background-position: -150px center; vertical-align: middle; animation-name: "round"; animation-duration: 2s; animation-timing-function: ease; animation-iteration-count: infinite; -webkit-animation-name: "round"; -webkit-animation-duration: 2s; -webkit-animation-timing-function: ease; -webkit-animation-iteration-count: infinite }
-.click_more { display: block; clear: both; height: 36px; margin: 10px; line-height: 36px; border-radius: 3px; border: 1px solid #d9d9d9; box-shadow: 0 1px 1px #ededed; font-size: 16px; text-align: center; color: #666; background-color: #fff }
-.click_more:hover { border-color: #b8b8b8; box-shadow: inset 0 2px 1px #e8e7e7; background-color: #f6f5f5; color: #666 }
+
 #header { margin-bottom: 0px; border-bottom: 1px solid #ddd; background-color: #EEEEEE; }
 #header .header-title { line-height: 44px; font-size: 20px; text-align: center; width: 100%; display: block; }
 #header .header-back { background-color: transparent; float: left; border-color: #ddd; margin-top: 8px; margin-left: 10px; margin-bottom: 8px; }
 #header .header-back i { color: #888; font-size: 18px; }
 #header.affix { width: 100%; box-shadow: 0 3px 3px rgba(0, 0, 0, 0.3); z-index: 999; }
+.search-toggle { border: none; color: #333; background-color: #eee; position: relative; float: right; margin: 10px 10px 0px 0px; width: 40px; line-height: 32px; height: 32px; font-size: 18px; }
+
 /* navbar.htm */
-.iCMS_search_btn { border: none; color: #333; background-color: #eee; position: relative; float: right; margin: 10px 10px 0px 0px; width: 40px; line-height: 32px; height: 32px; font-size: 18px; }
-#iCMS-search .navbar-form { border: none; }
+#iCMS-search-box .navbar-form { border: none; }
 #iCMS-navbar-login { /* box-shadow: 0 4px 3px rgba(0, 0, 0, 0.3);  */ background-color: #F8F8F8; }
 #iCMS-navbar-login .info { font-size: 12px; text-align: left; color: #666; padding: 0 5px; line-height: 16px; margin: 10px 0px; }
 #iCMS-navbar-login .login-btn { width: 100%; margin: 0px auto 10px auto; height: 35px; font-size: 16px; }
@@ -149,11 +148,11 @@ h3.title span { color: #70A700; font-size: 14px; font-weight: bold; height: 30px
 /* full-图文列表 */
 .article_list .full { padding: 10px 0; border-bottom: 1px solid #eceef0; }
 .article_list .full h3 { height: 30px; line-height: 30px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; padding-left: 5px; margin-bottom: 4px; }
-.article_list .full .thumb { overflow: hidden; width: 75px; height: 55px; line-height: 51px; padding: 1px; background: #e9f1f4; border: 1px solid #e0e0e0; float: left; text-align: center; }
-.article_list .full .thumb img { display: inline-block; max-width: 100%; margin: 0 auto; vertical-align: middle; }
+.article_list .full .thumb { overflow: hidden; width: 75px; height: 80px; line-height: 51px; padding: 1px; background: #e9f1f4; border: 1px solid #e0e0e0; float: left; text-align: center; }
+.article_list .full .thumb img { display: inline-block; width: 100%; margin: 0 auto; vertical-align: middle; }
 .article_list .full p { padding: 0 0 0 5px; line-height: 17px; font-size: 0.8125em; word-wrap: break-word; overflow: hidden; max-height: 34px; color: #878c92; }
 .article_list .full .count { height: 17px; line-height: 17px; display: inline-block; text-align: right; float: right; }
-.article_list .full .count i { font-size: 0.6875em; font-family: Helvetica; color: #878c92; font-style: normal; }
+/*.article_list .full .count i { display: inline-block; font-size: 0.6875em; font-family: Helvetica; color: #878c92; font-style: normal; }*/
 /* 漂浮在上面 */
 /* .article_list .panel-heading { position: relative; }
 .article_list .category { position: absolute; top: -20px; left: 0px; display: block; }
@@ -175,7 +174,7 @@ h3.title span { color: #70A700; font-size: 14px; font-weight: bold; height: 30px
 /* #article_load { display: none; bottom: 50px; right: 20px; height: 38px; width: 38px; position: fixed; }
 */
 
-article { margin: 13px 10px 20px; border-bottom: 1px solid #c7c9ca; }
+article { margin: 13px 5px 20px; border-bottom: 1px solid #ddd; }
 article h1 { font: 20px/26px SimHei; }
 article .info { margin: 5px 0 10px; padding: 5px 0; border-bottom: 1px solid #d4d5d6; color: #b1b1b1; }
 article .info span a { color: #fff; }

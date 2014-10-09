@@ -5,6 +5,7 @@
             PUBLIC: '/',
             COOKIE: 'iCMS_',
             AUTH:'USER_AUTH',
+            DIALOG:'',
         },
         init: function(options) {
             this.config = $.extend(this.config,options);
@@ -29,6 +30,13 @@
             });
             $(".iCMS_seccode_img,.iCMS_seccode_text").click(function() {
                 $(".iCMS_seccode_img").attr('src', iCMS.api('public', '&do=seccode&') + Math.random());
+            });
+            $(".iCMS_search_btn").click(function(event) {
+                var q = $('[name="q"]',"#iCMS-search-box").val();
+                if(q==""){
+                    iCMS.alert("请输入关键词");
+                    return false;
+                }
             });
             $(".iCMS_API_iframe").load(function() {
                 iCMS.api_iframe_height($(this));
@@ -91,7 +99,7 @@
                     label: 'success',
                     icon: 'check'
                 },
-                opts = $.extend(defaults, options);
+                opts = $.extend(defaults, options,iCMS.config.DIALOG);
             //console.log(opts);
             if (msg.jquery) opts.content = msg.html();
             if (typeof msg == "string" && !opts.content) {
