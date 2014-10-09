@@ -15,8 +15,8 @@ class searchApp{
     }
 
     function do_iCMS(){
-        if($_GET['keyword']) {
-			$sql =" WHERE `search` like '%{$_GET['keyword']}%'";
+        if($_GET['keywords']) {
+			$sql =" WHERE `search` like '%{$_GET['keywords']}%'";
         }
 
         $orderby    = $_GET['orderby']?$_GET['orderby']:"id DESC";

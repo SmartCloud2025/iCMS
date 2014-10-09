@@ -24,10 +24,21 @@ class commentApp{
 			$sql.= " AND `appid`='$appid'";
 		}
 		$_GET['iid']   && $sql.= " AND `iid`='".(int)$_GET['iid']."'";
-		$_GET['cid']   && $sql.= " AND `cid`='".(int)$_GET['cid']."'";
+		if($_GET['cid']){
+            $cid = (int)$_GET['cid'];
+            if(isset($_GET['sub'])){
+                $cids  = $this->categoryApp->get_ids($cid,true);
+                array_push ($cids,$cid);
+                $sql.=" AND cid IN(".implode(',', $cids).")";
+            }else{
+                $sql.=" AND cid ='$cid'";
+            }
+        }
 		$_GET['userid']&& $sql.= " AND `userid`='".(int)$_GET['userid']."'";
 		$_GET['ip']    && $sql.= " AND `ip`='".$_GET['ip']."'";
-
+        if($_GET['keywords']) {
+            $sql.="  AND CONCAT(username,title) REGEXP '{$_GET['keywords']}'";
+        }
 
         $maxperpage = $_GET['perpage']>0?(int)$_GET['perpage']:20;
         $total		= iPHP::total(false,"SELECT count(*) FROM `#iCMS@__comment` {$sql}","G");

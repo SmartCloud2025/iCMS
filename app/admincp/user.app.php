@@ -14,6 +14,11 @@ class userApp{
         $this->uid      = (int)$_GET['id'];
         $this->groupApp = iACP::app('groups',0);
     }
+    function do_update(){
+        $data = iACP::fields($_GET['iDT']);
+        $data && iDB::update('user',$data,array('uid'=>$this->uid));
+        iPHP::success('操作成功!','js:1');
+    }
     function do_add(){
         if($this->uid) {
             $rs = iDB::row("SELECT * FROM `#iCMS@__user` WHERE `uid`='$this->uid' LIMIT 1;");
@@ -34,7 +39,17 @@ class userApp{
     }
     function do_iCMS(){
         $sql   = "WHERE 1=1";
+        if($_GET['keywords']) {
+            $sql.=" AND CONCAT(username,nickname) REGEXP '{$_GET['keywords']}'";
+        }
+
         $_GET['gid'] && $sql.=" AND `gid`='{$_GET['gid']}'";
+        if(isset($_GET['status']) && $_GET['status']!==''){
+            $sql.=" AND `status`='{$_GET['status']}'";
+        }
+        $_GET['regip'] && $sql.=" AND `regip`='{$_GET['regip']}'";
+        $_GET['loginip'] && $sql.=" AND `lastloginip`='{$_GET['loginip']}'";
+
         $orderby    = $_GET['orderby']?$_GET['orderby']:"uid DESC";
         $maxperpage = $_GET['perpage']>0?(int)$_GET['perpage']:20;
         $total      = iPHP::total(false,"SELECT count(*) FROM `#iCMS@__user` {$sql}","G");

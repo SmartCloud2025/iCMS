@@ -26,7 +26,7 @@ $(function(){
           <input type="text" name="perpage" id="perpage" value="<?php echo $maxperpage ; ?>" style="width:36px;"/>
           <span class="add-on">条记录</span> </div>
         <div class="input-prepend input-append"> <span class="add-on">关键词</span>
-          <input type="text" name="keyword" class="span2" id="keyword" value="<?php echo $_GET['keyword'] ; ?>" />
+          <input type="text" name="keywords" class="span2" id="keywords" value="<?php echo $_GET['keywords'] ; ?>" />
           <button class="btn btn-primary" type="submit"><i class="fa fa-search"></i> 搜 索</button>
         </div>
       </form>

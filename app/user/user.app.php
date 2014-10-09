@@ -559,15 +559,19 @@ class userApp {
         }
     }
     public function API_data($uid=0){
-        $user   = user::status();
-        $user OR $user = iPHP::code(0,0,$this->forward);
-        $array = array(
-            'uid'      => $user->uid,
-            'url'      => $user->url,
-            'avatar'   => $user->avatar,
-            'nickname' => $user->nickname
-        );
-        iPHP::json($array);
+        $user = user::status();
+        if($user){
+            $array = array(
+                'uid'      => $user->uid,
+                'url'      => $user->url,
+                'avatar'   => $user->avatar,
+                'nickname' => $user->nickname
+            );
+            iPHP::json($array);
+        }else{
+            user::logout();
+            iPHP::code(0,0,$this->forward,'json');
+        }
     }
     public function API_logout(){
         user::logout();

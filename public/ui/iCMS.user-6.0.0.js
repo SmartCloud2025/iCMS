@@ -3,7 +3,10 @@
             data:{},
             data: function(param) {
                 $.get(iCMS.api('user', '&do=data'), param, function(c) {
-                    //if(!c.code) return false;
+                    if(!c.code) {
+                        window.top.location.href = c.forward
+                        return false
+                    };
                     iCMS.user.data = c;
                     var user_home = $(".iCMS_user_home")
                     user_home.attr("href", c.url);

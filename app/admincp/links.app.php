@@ -40,7 +40,6 @@ class linksApp{
             iDB::insert('links',$data);
             $msg="网站添加完成!";
         }else {
-            iMember::CP($id,'Permission_Denied',APP_URI);
             iDB::value("SELECT `id` FROM `#iCMS@__links` where `name` ='$name' AND `id` !='$id'") && iPHP::alert('该网站已经存在!');
             iDB::update('links', $data, array('id'=>$id));
             $msg="网站编辑完成!";
@@ -49,8 +48,8 @@ class linksApp{
     }
 
     function do_iCMS(){
-        if($_GET['keyword']) {
-			$sql=" WHERE CONCAT(name,url) REGEXP '{$_GET['keyword']}'";
+        if($_GET['keywords']) {
+			$sql=" WHERE CONCAT(name,url) REGEXP '{$_GET['keywords']}'";
         }
         if($_GET['sortid']) {
 			$sql=" WHERE `sortid` = '{$_GET['sortid']}'";

@@ -17,6 +17,9 @@ iACP::head();
 </style>
 <script type="text/javascript">
 $(function(){
+  <?php if(isset($_GET['status'])){  ?>
+  iCMS.select('status',"<?php echo $_GET['status'] ; ?>");
+  <?php } ?>
 	$("#<?php echo APP_FORMID;?>").batch();
 });
 </script>
@@ -28,11 +31,26 @@ $(function(){
     <div class="widget-content">
       <form action="<?php echo __SELF__ ; ?>" method="get" class="form-inline">
         <input type="hidden" name="app" value="<?php echo iACP::$app_name;?>" />
+        <div class="input-prepend"> <span class="add-on">账号状态</span>
+          <select name="status" id="status" class="span2 chosen-select">
+            <option value="">无</option>
+            <option value="0">禁用</option>
+            <option value="1">正常</option>
+            <option value="2">黑名单</option>
+          </select>
+        </div>
+        <div class="input-prepend"> <span class="add-on">注册IP</span>
+          <input type="text" name="regip" id="regip" class="span2" value="<?php echo $_GET['regip'] ; ?>"/>
+        </div>
+        <div class="input-prepend"> <span class="add-on">最后登陆IP</span>
+          <input type="text" name="loginip" id="loginip" class="span2" value="<?php echo $_GET['loginip'] ; ?>"/>
+        </div>
+        <div class="clearfix mt10"></div>
         <div class="input-prepend input-append"> <span class="add-on">每页</span>
           <input type="text" name="perpage" id="perpage" value="<?php echo $maxperpage ; ?>" style="width:36px;"/>
           <span class="add-on">条记录</span> </div>
         <div class="input-prepend input-append"> <span class="add-on">关键字</span>
-          <input type="text" name="keyword" class="span2" id="keyword" value="<?php echo $_GET['keyword'] ; ?>" />
+          <input type="text" name="keywords" class="span2" id="keywords" value="<?php echo $_GET['keywords'] ; ?>" />
           <button class="btn btn-primary" type="submit"><i class="fa fa-search"></i> 搜 索</button>
         </div>
       </form>

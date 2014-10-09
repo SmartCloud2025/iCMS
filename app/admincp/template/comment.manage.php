@@ -10,6 +10,13 @@ iACP::head();
 ?>
 <script type="text/javascript">
 $(function(){
+  <?php if($_GET['cid']){  ?>
+  iCMS.select('cid',"<?php echo $_GET['cid'] ; ?>");
+  <?php } ?>
+  <?php if($_GET['sub']=="on"){ ?>
+  iCMS.checked('#sub');
+  <?php } ?>
+
 	$("#<?php echo APP_FORMID;?>").batch();
   $(".view_reply").popover({
     html:true,
@@ -83,7 +90,7 @@ function update_popover(html,a){
               <img width="50" height="50" alt="<?php echo $user['name'] ; ?>" src="<?php echo $user['avatar'] ; ?>">
               </a>
               <div class="claerfix mb10"></div>
-              <a href="javascript:;" class="btn btn-inverse btn-mini tip-bottom" title="加入黑名单">黑名单</a>
+              <a href="<?php echo __ADMINCP__; ?>=user&do=update&id=<?php echo $value['userid'] ; ?>&iDT=status:2" class="btn btn-inverse btn-mini tip-bottom" title="加入黑名单,禁止用户登陆" target="iPHP_FRAME">黑名单</a>
             </div>
             <div class="comments">
               <input type="checkbox" name="id[]" value="<?php echo $value['id'] ; ?>" />

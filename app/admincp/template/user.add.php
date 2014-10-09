@@ -14,7 +14,9 @@ $(function(){
 	iCMS.select('gender',"<?php echo $userdata->gender ; ?>");
 	iCMS.select('year',"<?php echo $userdata->year ; ?>");
 	iCMS.select('month',"<?php echo $userdata->month ; ?>");
-	iCMS.select('day',"<?php echo $userdata->day ; ?>");
+  iCMS.select('day',"<?php echo $userdata->day ; ?>");
+  iCMS.select('status',"<?php echo $rs->status ; ?>");
+
 });
 </script>
 
@@ -93,7 +95,11 @@ $(function(){
             </div>
             <div class="clearfloat mb10"></div>
             <div class="input-prepend"> <span class="add-on">账号状态</span>
-              <input type="text" name="status" class="span3" id="status" value="<?php echo $rs->status ; ?>"/>
+              <select name="status" id="status" class="chosen-select">
+                <option value="0">禁用</option>
+                <option value="1">正常</option>
+                <option value="2">黑名单</option>
+              </select>
             </div>
           </div>
           <div id="user-data" class="tab-pane hide">
