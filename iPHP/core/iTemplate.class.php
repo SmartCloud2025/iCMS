@@ -856,7 +856,13 @@ class iTemplate_Compiler extends iTemplate {
 						}elseif ($value == 'null'){
 							$value = null;
 						}
-						if(preg_match_all('/(?:(' . $this->_var_regexp . '|' . $this->_svar_regexp . ')(' . $this->_mod_regexp . '*))(?:\s+(.*))?/xs', $value, $_variables)){
+						if(strpos($value,'{$') !==false){ //对 {$xxx} 进行简单的替换
+							$_key   = substr(strrchr($value,'{$'),2);
+							$pos    = strpos ($_key,'}');
+							$_key   = substr($_key,0,$pos);
+							$_value = $this->_vars[$_key];
+							$_result[$a_name] = preg_replace ("/\{\\$(.*?)\}/",$_value,$value);
+						}else if(preg_match_all('/(?:(' . $this->_var_regexp . '|' . $this->_svar_regexp . ')(' . $this->_mod_regexp . '*))(?:\s+(.*))?/xs', $value, $_variables)){
 							$_result[$a_name] = $this->_parse_variables($_variables[1], $_variables[2]);
 						}else{
 							$_result[$a_name] = '"'.$value.'"';

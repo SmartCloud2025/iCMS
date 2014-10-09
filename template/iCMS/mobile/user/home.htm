@@ -5,11 +5,6 @@
     <meta name="keywords" content="<!--{$site.keywords}-->" />
     <meta name="description" content="<!--{$user.nickname}-->的<!--{$site.title}-->"/>
     <!--{iCMS:public:ui}-->
-    <script>
-    $(function(){
-
-    })
-    </script>
     <style>
     </style>
   </head>
@@ -17,14 +12,14 @@
     <div class="container">
       <div class="wrapper" id="iCMS-userApp">
         <div class="userApp_header">
-          <p class="userApp_cover" style="background-image:url(<!--{$userdata.coverpic}-->);">
-
+          <p class="userApp_cover">
+            <img class="userApp_cover_img" src="<!--{$userdata.coverpic}-->"  onerror="iCMS.user.nocover();"></a>
           </p>
           <p class="userApp_name">
             <a href="<!--{$user.urls.home}-->"><!--{$user.nickname}--></a>
           </p>
           <p class="userApp_avatar"><a href="<!--{$user.urls.home}-->">
-            <img class="userApp_avatar_img" src="<!--{$user.avatar}-->"></a>
+            <img class="userApp_avatar_img" src="<!--{$user.avatar}-->" onerror="iCMS.user.noavatar();"></a>
           </p>
           <p class="userApp_slogan">
             <!--{$userdata.slogan|default:'这家伙太懒了,什么都没有留下!'}-->

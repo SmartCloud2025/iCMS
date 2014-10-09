@@ -97,15 +97,17 @@ class articleApp {
 
         if($art_data){
             $pageurl = $article['iurl']->pageurl;
+            $art_data['body'] = $this->ubb($art_data['body']);
+
             preg_match_all("/<img.*?src\s*=[\"|'|\s]*(http:\/\/.*?\.(gif|jpg|jpeg|bmp|png)).*?>/is",$art_data['body'],$pic_array);
-            $photo_array = array_unique($pic_array[1]);
-            if($photo_array)foreach($photo_array as $key =>$pVal) {
-                $article['photo'][$key] = trim($pVal);
+            $p_array = array_unique($pic_array[1]);
+            if($p_array)foreach($p_array as $key =>$_pic) {
+                $article['pics'][$key] = trim($_pic);
             }
             $body     = explode('#--iCMS.PageBreak--#',$art_data['body']);
             $count    = count($body);
             $total    = $count+1;
-            $article['body']     = iCMS::keywords($body[intval($page-1)]);
+            $article['body']     = $this->keywords($body[intval($page-1)]);
             $article['subtitle'] = $art_data['subtitle'];
             unset($art_data);
 
@@ -130,7 +132,7 @@ class articleApp {
                 $next_url  = iPHP::p2num($pageurl,(($total-$page>0)?$page+1:$page));
                 $next_nav  ='<a href="'.$next_url.'" class="next" target="_self">'.iPHP::lang('iCMS:page:next').'</a>';
                 $end_nav   ='<a href="'.iPHP::p2num($pageurl,$total).'" class="end" target="_self">共'.$total.'页</a>';
-                $text_nav  = $index_nav.$prev_nav.$next_nav.$end_nav;
+                $text_nav  = $index_nav.$prev_nav.'<span class="current">第'.$page.'页</span>'.$next_nav.$end_nav;
                 $pagenav   = $index_nav.$prev_nav.$num_nav.$next_nav.$end_nav;
             }
             $article['page'] = array(
@@ -201,6 +203,7 @@ class articleApp {
                     'name'   => $article['editor'],
                     'url'    => 'javascript:;',
                     'avatar' => 'about:blank',
+                    'link'   => '<a href="javascript:;">#'.$article['editor'].'</a>',
                 );
             }else{
                 iPHP::app('user.class','static');
@@ -236,5 +239,33 @@ class articleApp {
         );
         return $article;
     }
+    private function ubb($content){
+        if(strpos($content, '[img]')!==false){
+            $content = stripslashes($content);
+            preg_match_all("/\[img\][\"|'|\s]*(http:\/\/.*?\.(gif|jpg|jpeg|bmp|png))\[\/img\]/is",$content,$img_array);
+            if($img_array[1]){
+                foreach ($img_array[1] as $key => $src) {
+                    $imgs[$key] = '<p><img src="'.$src.'" /></p>';
+                }
+                $content = str_replace($img_array[0],$imgs, $content);
+            }
+        }
+        return $content;
+    }
+    //内链
+    private static function keywords($content) {
+        if(iCMS::$config['other']['kwCount']==0) return $content;
 
+        $keywords   = iCache::get('iCMS/keywords');
+        if($keywords){
+            foreach($keywords AS $i=>$val) {
+                if($val['times']>0) {
+                    $search[]  = $val['keyword'];
+                    $replace[] = '<a class="keyword" target="_blank" href="'.$val['url'].'">'.$val['keyword'].'</a>';
+                }
+           }
+           return iCMS::str_replace_limit($search, $replace,stripslashes($content),iCMS::$config['other']['kwCount']);
+        }
+        return $content;
+    }
 }

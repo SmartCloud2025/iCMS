@@ -66,7 +66,7 @@ $(function() {
         return false;
     });
     $(document).on("click",'[data-toggle="insertContent"]',function() {
-        var a = $(this), data = a.data('insertContent'),
+        var a = $(this),
         href   = a.attr('href'),
         target = a.attr('data-target'),
         mode   = a.attr('data-mode'),
@@ -135,11 +135,21 @@ $(function() {
         	iCMS.setcookie('ACP_sidebar_mini',0);
             b.removeClass('sidebar-mini');
         } else {
+            //$("ul li","#sidebar").addClass("tip-right");
+            //$('.tip-right',"#sidebar").tooltip({placement:'right',container:'body'});
+            // $("ul li","#sidebar").on('shown.bs.tooltip', function () {
+            //     $(".tooltip").css('left','40px');
+            // });
         	iCMS.setcookie('ACP_sidebar_mini',1);
             b.addClass('sidebar-mini');
         }
         return false;
     });
+    // $(".sidebar-mini > #sidebar ul li")
+    // .tooltip({placement:'right',container:'body'})
+    // .on('shown.bs.tooltip', function () {
+    //     $(".tooltip").css('left','40px');
+    // });
 })
 function log(a) {
     try {
@@ -225,42 +235,42 @@ function modal_icms(el,a){
         }
     })
 })(jQuery);
+
 //插入内容
 (function($) {
     $.fn.extend({
-        insertContent: function(myValue, t) {
+        insertContent: function(val, t) {
             event.preventDefault();
             var $t = $(this)[0];
 
             if (document.selection) { //ie
                 this.focus();
                 var sel = document.selection.createRange();
-                sel.text = myValue;
+                sel.text = val;
                 this.focus();
                 sel.moveStart('character', -l);
                 var wee = sel.text.length;
                 if (arguments.length == 2) {
                     var l = $t.value.length;
                     sel.moveEnd("character", wee + t);
-                    t <= 0 ? sel.moveStart("character", wee - 2 * t - myValue.length) : sel.moveStart("character", wee - t - myValue.length);
+                    t <= 0 ? sel.moveStart("character", wee - 2 * t - val.length) : sel.moveStart("character", wee - t - val.length);
                     sel.select();
                 }
             } else if ($t.selectionStart || $t.selectionStart == '0') {
                 var startPos = $t.selectionStart;
                 var endPos = $t.selectionEnd;
                 var scrollTop = $t.scrollTop;
-                $t.value = $t.value.substring(0, startPos) + myValue + $t.value.substring(endPos, $t.value.length);
+                $t.value = $t.value.substring(0, startPos) + val + $t.value.substring(endPos, $t.value.length);
                 this.focus();
-                $t.selectionStart = startPos + myValue.length;
-                $t.selectionEnd = startPos + myValue.length;
+                $t.selectionStart = startPos + val.length;
+                $t.selectionEnd = startPos + val.length;
                 $t.scrollTop = scrollTop;
                 if (arguments.length == 2) {
                     $t.setSelectionRange(startPos - t, $t.selectionEnd + t);
                     this.focus();
                 }
-            }
-            else {
-                this.value += myValue;
+            }else {
+                this.value += val;
                 this.focus();
             }
         }

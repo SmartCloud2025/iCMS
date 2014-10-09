@@ -68,7 +68,7 @@ $(function(){
 </script>
 </head>
 <body class="<?php echo $body_class; ?>">
-<iframe width="0" height="0" style="display:none" id="iPHP_FRAME" name="iPHP_FRAME"></iframe>
+<iframe class="hide" id="iPHP_FRAME" name="iPHP_FRAME"></iframe>
 <div id="iPHP-DIALOG" title="iPHP提示" class="hide"><img src="<?php echo ACP_UI;?>/loading.gif" /></div>
 <div id="iCMS-MODAL" class="modal">
   <div class="modal-header">

@@ -19,13 +19,41 @@ class editorApp{
 		$res['public_url'] = iCMS_PUBLIC_URL;
 		iPHP::json($res);
     }
+    function do_getremote(){
+    	$urls = $_POST['urls'];
+    	$url_array = explode('ue_separate_ue', $urls);
+		/* 抓取远程图片 */
+		$list = array();
+		$uri = parse_url(iCMS::$config['FS']['url']);
+		foreach ($url_array as $_k => $imgurl) {
+			if (strstr(strtolower($imgurl), $uri['host'])){
+				unset($_array[$_k]);
+			}
+
+			$F = iFS::http($imgurl,'array');
+	    	$F['code'] OR $this->stateInfo = $F['state'];
+	    	$F['path'] && $url = iFS::fp($F['path'],'+http');
+		    array_push($list, array(
+				"state"    => $this->stateInfo,
+				"url"      => $url,
+				"size"     => $F["size"],
+				"title"    => iS::escapeStr($info["title"]),
+				"original" => iS::escapeStr($F["oname"]),
+				"source"   => iS::escapeStr($imgurl)
+		    ));
+		}
+		/* 返回抓取数据 */
+		iPHP::json(array(
+		    'state'=> count($list) ? 'SUCCESS':'ERROR',
+		    'list'=> $list
+		));
+    }
     function do_imageUp(){
 		$F = iFS::upload('upfile');
     	$F['code'] OR $this->stateInfo = $F['state'];
-
     	$F['path'] && $url = iFS::fp($F['path'],'+http');
 		iPHP::json(array(
-			'title'    => htmlspecialchars($_POST['pictitle'], ENT_QUOTES),
+			'title'    => iS::escapeStr($_POST['pictitle']),
 			'original' => $F['oname'],
 			'url'      => $url,
 			'state'    => $this->stateInfo

@@ -367,6 +367,27 @@ class iFS {
             return self::a(array('code'=>0,'state'=>'UNKNOWN'));
         }
     }
+    public static function _array($code,$frs,$RP){
+        return array('code' =>$code,
+            'fid'         => $frs->id,
+            'md5'         => $frs->filename,
+            'size'        => $frs->size,
+            'oname'       => $frs->ofilename,
+            'name'        => $frs->filename,
+            'fname'       => $frs->filename . "." . $frs->ext,
+            'dir'         => $frs->path,
+            'ext'         => $frs->ext,
+            'RootPath'    => $RP . '/' . $frs->path.$frs->filename . "." . $frs->ext,
+            'path'        => $frs->path . $frs->filename . "." . $frs->ext,
+            'dirRootPath' => $RP . '/' . $frs->path
+        );
+    }
+    public static function watermark($ext,$frp){
+        if (in_array($ext, array('gif', 'jpg', 'jpeg', 'png')) && self::$watermark) {
+            iPHP::LoadClass('Pic');
+            iPic::watermark($frp);
+        }
+    }
     public static function IO($FileName='',$udir='',$FileExt='jpg'){
         list($RootPath,$FileDir) = self::mk_udir($udir); // 文件保存目录方式
         $filedata = file_get_contents('php://input');
@@ -380,12 +401,29 @@ class iFS {
         $FilePath     = $FileDir . $FileName . "." . $FileExt;
         $FileRootPath = $RootPath . $FileName . "." . $FileExt;
         self::write($FileRootPath,$filedata);
-        if (in_array($FileExt, array('gif', 'jpg', 'jpeg', 'png')) && self::$watermark) {
-            iPHP::LoadClass('Pic');
-            iPic::watermark($FileRootPath);
-        }
-        $fid = self::insFileData(array('filename' => $FileName, 'ofilename' => '', 'path' => $FileDir, 'ext' => $FileExt, 'size' => $FileSize), 3);
-        return array('code' =>1,'fid' => $fid, 'md5' => $file_md5, 'size' => $FileSize, 'oname' => '', 'name' => $FileName, 'fname' => $FileName . "." . $FileExt, 'dir' => $FileDir, 'ext' => $FileExt, 'RootPath' => $FileRootPath, 'path' => $FilePath, 'dirRootPath' => $RootPath);
+        self::watermark($FileExt,$FileRootPath);
+
+        $fid = self::insFileData(array(
+            'filename'  => $FileName,
+            'ofilename' => '',
+            'path'      => $FileDir,
+            'ext'       => $FileExt,
+            'size'      => $FileSize
+        ), 3);
+        return array(
+            'code'        => 1,
+            'fid'         => $fid,
+            'md5'         => $file_md5,
+            'size'        => $FileSize,
+            'oname'       => '',
+            'name'        => $FileName,
+            'fname'       => $FileName . "." . $FileExt,
+            'dir'         => $FileDir,
+            'ext'         => $FileExt,
+            'RootPath'    => $FileRootPath,
+            'path'        => $FilePath,
+            'dirRootPath' => $RootPath
+        );
     }
     public static function base64ToFile($base64Data,$udir='',$FileExt='png'){
         list($RootPath,$FileDir) = self::mk_udir($udir); // 文件保存目录方式
@@ -399,9 +437,30 @@ class iFS {
         $FilePath     = $FileDir . $FileName . "." . $FileExt;
         $FileRootPath = $RootPath . $FileName . "." . $FileExt;
 		self::write($FileRootPath,$filedata);
-        $fid = self::insFileData(array('filename' => $file_md5, 'ofilename' => '', 'path' => $FileDir, 'ext' => $FileExt, 'size' => $FileSize), 2);
-        return array('code' =>1,'fid' => $fid, 'md5' => $file_md5, 'size' => $FileSize, 'oname' => '', 'name' => $FileName, 'fname' => $FileName . "." . $FileExt, 'dir' => $FileDir, 'ext' => $FileExt, 'RootPath' => $FileRootPath, 'path' => $FilePath, 'dirRootPath' => $RootPath);
+        self::watermark($FileExt,$FileRootPath);
+        $fid = self::insFileData(array(
+            'filename'  => $file_md5,
+            'ofilename' => '',
+            'path'      => $FileDir,
+            'ext'       => $FileExt,
+            'size'      => $FileSize
+        ), 2);
+        return array(
+            'code'        => 1,
+            'fid'         => $fid,
+            'md5'         => $file_md5,
+            'size'        => $FileSize,
+            'oname'       => '',
+            'name'        => $FileName,
+            'fname'       => $FileName . "." . $FileExt,
+            'dir'         => $FileDir,
+            'ext'         => $FileExt,
+            'RootPath'    => $FileRootPath,
+            'path'        => $FilePath,
+            'dirRootPath' => $RootPath
+        );
 	}
+
     public static function upload($field, $udir = '', $FileName = '',$ext='') {
         list($RootPath,$FileDir) = self::mk_udir($udir); // 文件保存目录方式
 
@@ -440,7 +499,7 @@ class iFS {
                 $file_md5 = md5_file($tmp_file);
                 $frs      = self::getFileData('filename', $file_md5);
 	            if ($frs) {
-	                return array('code' =>1,'fid' => $frs->id, 'md5' => $frs->filename, 'size' => $frs->size, 'oname' => $frs->ofilename, 'name' => $frs->filename, 'fname' => $frs->filename . "." . $frs->ext, 'dir' => $frs->path, 'ext' => $frs->ext, 'RootPath' => $RootPath . '/' . $frs->path .$frs->filename . "." . $frs->ext, 'path' => $frs->path . $frs->filename . "." . $frs->ext, 'dirRootPath' => $RootPath . '/' . $frs->path);
+	                return self::_array(1,$frs,$RootPath);
 	            }
                 $FileName OR $FileName = $file_md5;
                 $ext && $FileExt       = $ext;
@@ -452,12 +511,27 @@ class iFS {
             if(self::$callback && is_array($ret) && $ret['code']=="0") return $ret;
 
             @unlink($tmp_file);
-            if (in_array($FileExt, array('gif', 'jpg', 'jpeg', 'png')) && self::$watermark) {
-                iPHP::LoadClass('Pic');
-                iPic::watermark($FileRootPath);
-            }
-            $fid OR $fid = self::insFileData(array('filename' => $file_md5, 'ofilename' => $oFileName, 'path' => $FileDir, 'ext' => $FileExt, 'size' => $FileSize), 0);
-            return array('code' =>1,'fid' => $fid, 'md5' => $file_md5, 'size' => $FileSize, 'oname' => $oFileName, 'name' => $FileName, 'fname' => $FileName . "." . $FileExt, 'dir' => $FileDir, 'ext' => $FileExt, 'RootPath' => $FileRootPath, 'path' => $FilePath, 'dirRootPath' => $RootPath);
+            self::watermark($FileExt,$FileRootPath);
+
+            $fid OR $fid = self::insFileData(array(
+                'filename'  => $file_md5,
+                'ofilename' => $oFileName,
+                'path'      => $FileDir,
+                'ext'       => $FileExt,
+                'size'      => $FileSize
+            ), 0);
+            return array('code' =>1,
+                'fid'         => $fid,
+                'md5'         => $file_md5,
+                'size'        => $FileSize,
+                'oname'       => $oFileName,
+                'name'        => $FileName,
+                'fname'       => $FileName . "." . $FileExt,
+                'dir'         => $FileDir,
+                'ext'         => $FileExt,
+                'RootPath'    => $FileRootPath,
+                'path'        => $FilePath,
+                'dirRootPath' => $RootPath);
         } else {
             return false;
         }
@@ -542,11 +616,14 @@ class iFS {
         return $rs;
     }
 
-    public static function http($http, $times = 0) {
+    public static function http($http, $ret='',$times = 0) {
         list($RootPath,$FileDir) = self::mk_udir($udir); // 文件保存目录方式
         $frs = self::getFileData('ofilename', $http);
 
         if ($frs) {
+            if($ret=='array'){
+                return self::_array(1,$frs,$RootPath);
+            }
             return $frs->path . "/" . $frs->filename . "." . $frs->ext;
         }
 
@@ -556,28 +633,51 @@ class iFS {
 //        $fileresults	= self::mremote($http);
 
         if ($fileresults) {
-            $FileMd5 = md5($fileresults);
-            $rs = self::getFileData('filename', $FileMd5);
-            if (empty($rs)) {
-                $FileName = $FileMd5 . "." . $FileExt;
+            $file_md5 = md5($fileresults);
+            $frs = self::getFileData('filename', $file_md5);
+            if (empty($frs)) {
+                $FileName = $file_md5 . "." . $FileExt;
                 $FilePath = $FileDir .$FileName;
                 $FileRootPath = $RootPath .$FileName;
                 self::write($FileRootPath, $fileresults);
-                if (in_array($FileExt, array('gif', 'jpg', 'jpeg', 'png')) && self::$watermark) {
-                    iPHP::LoadClass('Pic');
-                    iPic::watermark($FileRootPath);
-                }
+                self::watermark($FileExt,$FileRootPath);
                 $FileSize = @filesize($FileRootPath);
                 empty($FileSize) && $FileSize = 0;
-                self::insFileData(array('filename' => $FileMd5, 'ofilename' => $http, 'path' => $FileDir, 'intro' => $intro, 'ext' => $FileExt, 'size' => $FileSize), 1);
+                $fid = self::insFileData(array(
+                    'filename'  => $file_md5,
+                    'ofilename' => $http,
+                    'path'      => $FileDir,
+                    'intro'     => $intro,
+                    'ext'       => $FileExt,
+                    'size'      => $FileSize
+                ), 1);
+                if($ret=='array'){
+                    return array(
+                        'code'        => 1,
+                        'fid'         => $fid,
+                        'md5'         => $file_md5,
+                        'size'        => $FileSize,
+                        'oname'       => $http,
+                        'name'        => $FileName,
+                        'fname'       => $FileName . "." . $FileExt,
+                        'dir'         => $FileDir,
+                        'ext'         => $FileExt,
+                        'RootPath'    => $FileRootPath,
+                        'path'        => $FilePath,
+                        'dirRootPath' => $RootPath
+                    );
+                }
             } else {
-                $FilePath = $rs->path . "/" . $rs->filename . "." . $rs->ext;
+                if($ret=='array'){
+                    return self::_array(1,$frs,$RootPath);
+                }
+                $FilePath = $frs->path . "/" . $frs->filename . "." . $frs->ext;
             }
             return $FilePath;
         } else {
             if ($times < 3) {
                 $times++;
-                return self::http($http, $times);
+                return self::http($http,$ret,$times);
             } else {
                 return false;
             }
@@ -678,7 +778,7 @@ class iFS {
     		$a['state']	= $msg;
     		return $a;
     	}else{
-        	exit('<script type="text/javascript">alert("' . $msg . '");</script>');
+        	exit('<script type="text/javascript">window.top.alert("' . $msg . '");</script>');
         }
     }
 

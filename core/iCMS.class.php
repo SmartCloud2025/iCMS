@@ -387,23 +387,8 @@ class iCMS {
             $val[0] && $content = preg_replace("/".preg_quote($val[0], '/')."/i",$val[1],$content);
         }
     }
-	//内链
-    public static function keywords($a) {
-        if(self::$config['other']['kwCount']==0) return $a;
 
-        $keywords	= iCache::get('iCMS/keywords');
-        if($keywords){
-        	foreach($keywords AS $i=>$val) {
-	            if($val['times']>0) {
-	                $search[]	= $val['keyword'];
-	                $replace[]	= '<a class="keyword" target="_blank" href="'.$val['url'].'">'.$val['keyword'].'</a>';
-	            }
-           }
-           return self::str_replace_limit($search, $replace, stripslashes($a),self::$config['other']['kwCount']);
-        }
-        return $a;
-    }
-    private static function str_replace_limit($search, $replace, $subject, $limit=-1) {
+    public static function str_replace_limit($search, $replace, $subject, $limit=-1) {
         preg_match_all ("/<a[^>]*?>(.*?)<\/a>/si", $subject, $matches);//链接不替换
         $linkArray	= array_unique($matches[0]);
         $linkArray & $linkflip	= array_flip($linkArray);

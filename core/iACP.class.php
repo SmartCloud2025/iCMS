@@ -88,7 +88,7 @@ class iACP {
 
     public static function app($app = NULL, $arg = NULL) {
         iPHP::import(ACP_PATH . '/' . $app . '.app.php');
-        if ($arg === 'import') {
+        if ($arg === 'import'||$arg === 'static') {
             return;
         }
         $appName = $app . 'App';

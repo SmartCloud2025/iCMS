@@ -10,7 +10,7 @@ defined('iPHP') OR exit('What are you doing?');
 
 iPHP::app('user.class','static');
 class userApp {
-    public $methods = array('iCMS','home','article','publish','manage','profile','data','hits','check','follow','login','logout','register','add_category','upload','imageUp','delete','report','ucard');
+    public $methods = array('iCMS','home','article','publish','manage','profile','data','hits','check','follow','login','logout','register','add_category','upload','imageUp','mobileUp','getremote','delete','report','ucard');
     public $openid  = null;
     public $user    = array();
     public $me      = array();
@@ -18,11 +18,13 @@ class userApp {
         user::get_cookie();
         $this->uid      = (int)$_GET['uid'];
         $this->openid   = iS::escapeStr($_GET['openid']);
-        $this->forward  = iPHP::get_cookie('forward');
+        $this->forward  = iS::escapeStr($_GET['forward']);
+        $this->forward OR iPHP::get_cookie('forward');
         $this->forward OR $this->forward = iCMS_URL;
-        // iFS::config($GLOBALS['iCONFIG']['user_fs_conf']);
+        // iFS::config($GLOBALS['iCONFIG']['user_fs_conf'])
         iFS::$userid = user::$userid;
         iPHP::assign('openid',$this->openid);
+        iPHP::assign('forward',$this->forward);
     }
     public function do_iCMS($a = null) {}
     public function do_home(){
@@ -45,6 +47,7 @@ class userApp {
             $class_methods  =  get_class_methods(__CLASS__);
             in_array($funname,$class_methods) && $this->$funname();
             iPHP::assign('pg',$pg);
+            iPHP::assign('pg_file',"./manage/$pg.htm");
             iPHP::view("iCMS://user/manage.htm");
         }
     }
@@ -117,6 +120,7 @@ class userApp {
         $name_array = (array)$_POST['name'];
         $cid_array  = (array)$_POST['_cid'];
         foreach ($name_array as $cid => $name) {
+            $name = iS::escapeStr($name);
             iDB::query("
                 UPDATE `#iCMS@__user_category`
                 SET `name` = '$name'
@@ -139,7 +143,6 @@ class userApp {
 
         iPHP::success('user:category:update','js:1');
     }
-
     private function __action_manage_publish(){
         $aid         = (int)$_POST['id'];
         $cid         = (int)$_POST['cid'];
@@ -150,7 +153,7 @@ class userApp {
         $source      = iS::escapeStr($_POST['source']);
         $keywords    = iS::escapeStr($_POST['keywords']);
         $description = iS::escapeStr($_POST['description']);
-        $body        = $_POST['body'];
+        $body        = iPHP::cleanHtml($_POST['body']);
         $creative    = (int)$_POST['creative'];
         $userid      = user::$userid;
         $author      = user::$nickname;
@@ -579,18 +582,21 @@ class userApp {
             iPHP::view('iCMS://user/login.close.htm');
         }
     }
-
+    public function API_getremote(){
+        $editorApp = iPHP::app("admincp.editor.app");
+        $editorApp->do_getremote();
+    }
     public function API_imageUp(){
-        $stateInfo ='SUCCESS';
-        $F         = iFS::upload('upfile');
-        $F['code']  OR  $stateInfo = $F['state'];
-
-        $F['path'] && $url  = iFS::fp($F['path'],'+http');
-        iPHP::json(array(
-            'title'        => htmlspecialchars($_POST['pictitle'], ENT_QUOTES),
-            'originalName' => $F['oname'],
-            'url'          => $url,
-            'state'        => $stateInfo
+        $editorApp = iPHP::app("admincp.editor.app");
+        $editorApp->do_imageUp();
+    }
+    //手机上传
+    public function API_mobileUp(){
+        $F = iFS::upload('upfile');
+        $F['path'] && $url = iFS::fp($F['path'],'+http');
+        iPHP::js_callback(array(
+            'url'      => $url,
+            'code'    => $F['code']
         ));
     }
     public function API_ucard(){
@@ -603,7 +609,7 @@ class userApp {
             if($C['status'] && $C['isucshow'] && $C['issend'] && empty($C['outurl'])) {
                 $tag      = ($level=='1'?"":"├ ");
                 $selected = ($_cid==$C['cid'])?"selected":"";
-                $text     = str_repeat("│　", $level-1).$tag.$C['name']."[cid:{$C['cid']}][pid:{$C['pid']}]".($C['outurl']?"[∞]":"");
+                $text     = str_repeat("│　", $level-1).$tag.$C['name']."[cid:{$C['cid']}]".($C['outurl']?"[∞]":"");
                 $C['isexamine'] && $text.= '[审核]';
                 $option.="<option value='{$C['cid']}' $selected>{$text}</option>";
             }

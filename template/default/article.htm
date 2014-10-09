@@ -57,10 +57,21 @@
               <!--{/if}-->
             </div>
           </div>
-          <script type="text/javascript">(function(){$("img",".article-detail").each(function(i){iCMS.imgFix(this,550,600);});})($);</script>
-          <script type="text/javascript">(function(){$(window).keydown(function(event){switch(event.keyCode) {case 37: window.location.href='<!--{$article.page.prev}-->';break;case 39: window.location.href='<!--{$article.page.next}-->';break;}});})($);</script>
+          <script type="text/javascript">
+          $(function(){
+            $("img",".article-body").each(function(i){
+              iCMS.imgFix(this,500,600);
+            });
+            $(window).keydown(function(event){
+              switch(event.keyCode) {
+                case 37: window.location.href='<!--{$article.page.prev}-->';break;
+                case 39: window.location.href='<!--{$article.page.next}-->';break;
+              }
+            });
+          })
+          </script>
           <div class="article-pagenav iCMS_pagination clearfix">
-            <!--{$article.pagenav}-->
+            <!--{$article.page.nav}-->
           </div>
           <div class="tip clr">提示：键盘也能翻页，试试"← →"键</div>
         </div>

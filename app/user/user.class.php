@@ -39,11 +39,13 @@ class user {
 	    }
 	}
 	public static function info($uid,$name,$size=0){
+		$url = self::router($uid,"url");
 		return array(
 			'uid'    => $uid,
 			'name'   => $name,
-			'url'    => self::router($uid,"url"),
+			'url'    => $url,
 			'avatar' => self::router($uid,"avatar",$size?$size:0),
+			'link'   => '<a href="'.$url.'" target="_blank">@'.$name.'</a>'
 		);
 	}
 	public static function check($val,$field='username'){

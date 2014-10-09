@@ -9,6 +9,44 @@
         init: function(options) {
             this.config = $.extend(this.config,options);
         },
+        start:function(){
+            var doc = $(document);
+            this.user_status = this.user.status();
+            if (this.user_status) {
+                this.user.data();
+                $("#iCMS-nav-login").hide();
+                $("#iCMS-nav-profile").show();
+            }
+            doc.on("click", '.iCMS_user_login', function(event) {
+                event.preventDefault();
+                iCMS.LoginBox(true);
+                return false;
+            });
+            doc.on("click", '.iCMS_user_logout', function(event) {
+                event.preventDefault();
+                iCMS.user.logout();
+                return false;
+            });
+            $(".iCMS_seccode_img,.iCMS_seccode_text").click(function() {
+                $(".iCMS_seccode_img").attr('src', iCMS.api('public', '&do=seccode&') + Math.random());
+            });
+            $(".iCMS_API_iframe").load(function() {
+                iCMS.api_iframe_height($(this));
+            });
+            $('.tip').tooltip();
+        },
+        api: function(app, _do) {
+            return iCMS.config.API + '?app=' + app + (_do || '');
+        },
+        param: function(a,_param) {
+            if(_param){
+                a.attr('data-param',iCMS.json2str(_param));
+                return;
+            }
+            var param = a.attr('data-param') || false;
+            if (!param) return {};
+            return $.parseJSON(param);
+        },
         modal: function() {
             //console.log($(window).width(),$(window).height());
             $('[data-toggle="modal"]').on("click",function() {
@@ -108,6 +146,30 @@
             for (var i in o)
                  arr.push('"' + i + '":'+ fmt(o[i]));
             return '{' + arr.join(',') + '}';
+        },
+        api_iframe_height:function(a,b){
+            var a = a||window.top.$(b);
+            a.height(0); //用于每次刷新时控制IFRAME高度初始化
+            var height = a.contents().height();
+            a.height(height);
+            //window.top.$('.iCMS_API_iframe-loading').hide();
+        },
+    };
+    iCMS.article = {
+        good: function(a) {
+            var $this = $(a),
+                p = $this.parent(),
+                param = iCMS.param(p);
+            param['do'] = 'good';
+            $.get(iCMS.api('article'), param, function(c) {
+                iCMS.alert(c.msg, c.code);
+                if (c.code) {
+                    var count = parseInt($('span', $this).text());
+                    $('span', $this).text(count + 1);
+                } else {
+                    return false;
+                }
+            }, 'json');
         }
     };
 })(jQuery);

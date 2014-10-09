@@ -43,6 +43,7 @@ defined('iPHP_MULTI_DOMAIN') OR define('iPHP_MULTI_DOMAIN',false);
 //defined('iPHP_URL_404') OR define('iPHP_URL_404','');
 //-----------------框架相关路径-----------------------
 define('iPHP_CORE', iPATH."iPHP/core");
+define('iPHP_LIB',  iPATH."iPHP/library");
 //-----------------应用相关路径-----------------------
 define('iPHP_APP_DIR',	iPATH."app");
 define('iPHP_APP_CORE',	iPATH."core");

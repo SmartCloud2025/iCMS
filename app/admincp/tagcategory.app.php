@@ -18,11 +18,11 @@ class tagcategoryApp extends categoryApp {
         $this->name_text    = "分类";
     }
     function merge($tocid,$cid){
-        iDB::query("UPDATE `#iCMS@__tags` SET `tcid` ='$tocid' WHERE `tcid` ='$cid'"); 
+        iDB::query("UPDATE `#iCMS@__tags` SET `tcid` ='$tocid' WHERE `tcid` ='$cid'");
     }
     function update_count($cid){
         $cc = iDB::value("SELECT count(*) FROM `#iCMS@__tags` where `tcid`='$cid'");
-        iDB::query("UPDATE `#iCMS@__category` SET `count` ='$cc' WHERE `cid` ='$cid'");       
+        iDB::query("UPDATE `#iCMS@__category` SET `count` ='$cc' WHERE `cid` ='$cid'");
     }
     function listbtn($rs){}
     function treebtn($C){

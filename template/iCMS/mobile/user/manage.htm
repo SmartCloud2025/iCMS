@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="zh-cn">
+  <head>
+    <title><!--{$site.title}-->_<!--{$site.seotitle}--></title>
+    <meta name="keywords" content="<!--{$site.keywords}-->" />
+    <meta name="description" content="<!--{$site.description}-->"/>
+    <!--{iCMS:public:ui}-->
+    <style>
+    #header.affix{position: static;}
+    #iCMS-navbar-login { display: none; }
+    #iCMS-scrollUp{display: none !important;}
+    </style>
+  </head>
+
+  <body class="iCMS-mobile">
+    <!--{include file="./navbar.htm"}-->
+    <div class="container">
+      <div class="wrapper">
+        <div class="manage_wrapper">
+        <!--{switch from=$pg}-->
+          <!--{case value="publish"}-->
+          <!--{include file="./manage/publish.htm" import="true"}-->
+          <!--{case value="category"}-->
+          <!--{include file="./manage/category.htm" import="true"}-->
+          <!--{case value="article"}-->
+          <!--{include file="./manage/article.htm" import="true"}-->
+          <!--{case value="comment"}-->
+          <!--{include file="./manage/comment.htm" import="true"}-->
+          <!--{case value="favorite"}-->
+          <!--{include file="./manage/favorite.htm" import="true"}-->
+          <!--{case value="share"}-->
+          <!--{include file="./manage/share.htm" import="true"}-->
+          <!--{case value="follow"}-->
+          <!--{include file="./manage/follow.htm" import="true"}-->
+          <!--{case value="fans"}-->
+          <!--{include file="./manage/fans.htm" import="true"}-->
+        <!--{/switch}-->
+        </div>
+      </div>
+    </div>
+    <iframe class="hide" id="iCMS_FRAME" name="iCMS_FRAME"></iframe>
+    <!--{include file="{iTPL}/footer.htm"}-->
+  </body>
+</html>

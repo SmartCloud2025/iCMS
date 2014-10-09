@@ -13,15 +13,25 @@
       });
     })
     </script>
-    <style>
-    #iCMS-navbar-login { display: none; }
-    </style>
   </head>
   <body class="iCMS-mobile">
-    <!--{include file="{iTPL}/navbar.htm"}-->
+    <nav id="header" class="navbar navbar-default" role="navigation">
+      <div class="container-fluid">
+        <div class="navbar-header">
+          <a class="btn btn-default header-back" href="<!--{$forward}-->"><i class="fa fa-arrow-left"></i></a>
+          <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#iCMS-menu-box">
+          <span class="sr-only">Toggle navigation</span>
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+          </button>
+          <h3 class="header-title">用户登录</h1>
+        </div>
+      </div>
+    </nav>
     <div class="container">
       <div class="wrapper login_reg_wrapper" id="iCMS-login-box">
-        <h1>用户登录</h1>
+          <div class="logo"><a href="<!--{$site.url}-->"><img src="<!--{$site.urls.ui}-->/img/iCMS.logo-6.0.png" width="180"/></a></div>
           <div class="form-group">
             <label for="login_uname">用户名</label>
             <input type="text" placeholder="邮箱 或 昵称" data-container=".uname_tip" name="uname" id="login_uname" class="iCMS_login_uname form-control">
@@ -37,12 +47,13 @@
               <input type="checkbox" value="1" name="remember" id="login_remember" class="iCMS_login_remember" checked="checked"><span>记住我（两周免登录）</span>
             </label>
           </div>
-          <div class="fr">
-            <a class="btn btn-success btn-sm" href="<!--{iCMS:router url='/api/user/register'}-->">我没有账号 »</a>
-            <div class="clearfix"></div>
-            <a class="btn btn-link" href="<!--{$iCMS.SAPI}-->&do=findpwd" class="findpwd">忘记密码？</a>
+          <div class="clearfix mt10">
+            <button type="submit" class="btn btn-primary btn-lg btn-block iCMS_login_btn">登 录</button>
           </div>
-          <button type="submit" class="btn btn-primary iCMS_login_btn"><i class="fa fa-check"></i> 登 录</button>
+          <div class="clearfix mt10">
+            <a class="btn btn-link findpwd" href="<!--{$iCMS.SAPI}-->&do=findpwd">忘记密码？</a>
+            <a class="btn btn-success lr-btn" href="<!--{iCMS:router url='/api/user/register'}-->"><i class="fa fa-user"></i> 注册 »</a>
+          </div>
       </div>
     </div>
     <!--{include file="{iTPL}/footer.htm"}-->

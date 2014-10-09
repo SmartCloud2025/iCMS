@@ -166,12 +166,13 @@ class iPHP{
     public static function app($app = NULL,$args = NULL){
 		$app_dir   = $app_name = $app;
 		$file_type = 'app';
-    	if(is_array($app)){
-    		$app_dir	= $app[0];
-    		$app_name	= $app[1];
-    	}elseif(strpos($app,'.')!==false){
-    		list($app_name,$file_type) = explode('.', $app);
-    		$app_dir = $app_name;
+    	if(strpos($app,'.')!==false){
+    		$app = explode('.', $app);
+    		list($app_dir,$app_name,$file_type) = $app;
+    		if(empty($file_type)){
+    			$file_type= $app_name;
+    			$app_name = $app_dir;
+    		}
     	}
     	switch ($file_type) {
     		case 'class': $obj_name = $app_name;break;
@@ -193,6 +194,47 @@ class iPHP{
 			return new $obj_name($args);
 		}
 		return new $obj_name();
+    }
+    public static function cleanHtml($content){
+    	$content = stripslashes($content);
+
+    	echo $content,"\n\n\n\n\n\n\n\n";
+    	self::import(iPHP_LIB.'/htmlpurifier-4.6.0/HTMLPurifier.auto.php');
+		$config = HTMLPurifier_Config::createDefault();
+		//$config->set('Cache.SerializerPath',iPHP_APP_CACHE);
+		$config->set('Core.Encoding', 'UTF-8'); //字符编码
+
+		//允许属性 div table tr td br元素
+		$config->set('HTML.AllowedElements',array(
+		    'ul'=>true,'ol'=>true,'li'=>true,
+		    'br'=>true,'hr'=>true,'div'=>true,'p'=>true,
+		    'strong'=>true,'em'=>true,'span'=>true,
+		    'blockquote'=>true,'sub'=>true,'sup'=>true,
+		    'img'=>true,'a'=>true,'embed'=>true,
+		));
+		// $config->set('HTML.AllowedAttributes', array(
+		//     'img.src',
+		//     'a.href','a.target',
+		//     'embed.play','embed.loop', 'embed.menu',
+		// ));
+		$config->set('AutoFormat.AutoParagraph',true);
+		$config->set('HTML.TidyLevel','medium');
+		$config->set('Cache.DefinitionImpl',null);
+		$config->set('AutoFormat.RemoveEmpty', true);
+		//配置 允许flash
+        $config->set('HTML.SafeEmbed',true);
+        $config->set('HTML.SafeObject',true);
+        $config->set('Output.FlashCompat',true);
+		//允许<a>的target属性
+		$def = $config->getHTMLDefinition(true);
+        $def->addAttribute('a', 'target', 'Enum#_blank,_self,_target,_top');
+        $def->addAttribute('embed', 'play,', 'Enum#true,false');
+        $def->addAttribute('embed', 'loop', 'Enum#true,false');
+        $def->addAttribute('embed', 'menu', 'Enum#true,false');
+        $def->addAttribute('embed', 'allowfullscreen', 'Enum#true,false');
+
+		$htmlPurifier = new HTMLPurifier($config);
+		return addslashes($htmlPurifier->purify($content));
     }
 
 	public static function throwException($msg,$code,$name='',$h404=true) {
@@ -345,16 +387,17 @@ class iPHP{
     	$callback	= $_GET['callback'];
     	header("Access-Control-Allow-Origin: ".__HOST__);
     	$json	= json_encode($a);
-    	$callback && $json	=$callback.'('.$json.')';
+    	$callback && $json = $callback.'('.$json.')';
     	if($ret){
     		return $json;
     	}
     	echo $json;
     	$break && exit();
     }
-    public static function js_callback($a){
+    public static function js_callback($a,$callback=null){
+    	$callback===null && $callback = $_GET['callback'];
     	$json = json_encode($a);
-    	echo "<script type=\"text/javascript\">window.top.callback($json);</script>";
+    	echo "<script>window.top.$callback($json);</script>";
     	exit;
     }
     public static function code($code=0,$msg='',$forward='',$format=''){
