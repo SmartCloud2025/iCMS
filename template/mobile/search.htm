@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="zh-cn">
+  <head>
+    <title><!--{$search.title}-->_<!--{$site.title}-->_<!--{$site.seotitle}--></title>
+    <meta name="keywords" content="<!--{$site.keywords}-->" />
+    <meta name="description" content="<!--{$site.description}-->"/>
+    <!--{iCMS:public:ui}-->
+  </head>
+  <body class="iCMS-mobile">
+    <!--{include file="./navbar.htm"}-->
+    <div class="container">
+      <div class="clearfix mb10"></div>
+      <div id="iCMS-article-list" class="article_list">
+        <h3 class="title"><span>以下是查找到与"<!--{$search.title}-->"有关的结果</span></h3>
+        <ul class="list">
+          <!-- 最好使用 iCMS:article:search -->
+          <!--{iCMS:article:list loop="true" page="true" user="true" row="10" keywords="$search.keyword"}-->
+          <li class="full">
+            <a href="<!--{$article_list.url}-->">
+              <!--{if $article_list.pic.url}-->
+              <div class="thumb">
+                <img data-original="<!--{$article_list.pic.url}-->" src="<!--{$site.urls.ui}-->/img/img-default.png">
+              </div>
+              <!--{/if}-->
+              <h3><!--{$article_list.title}--></h3>
+              <p>
+                <!--{$article_list.description|cut:30:'...'}-->
+                <span class="count">
+                  <span class="label label-default"><i class="fa fa-comments"></i> <!--{$article_list.comment.count}--> </span>
+                </span>
+              </p>
+            </a>
+          </li>
+          <!--{/iCMS}-->
+        </ul>
+      </div>
+      <div id="pages_next" class="hide">
+        <!--{$iCMS.page.next}-->
+      </div>
+    </div>
+    <script>
+    iCMS.scrollLoad("#iCMS-article-list .list","li","#pages_next",<!--{$iCMS.page.total}-->);
+    </script>
+    <!--{include file="./footer.htm"}-->
+  </body>
+</html>
