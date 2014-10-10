@@ -437,7 +437,7 @@ class articleApp{
             $hits    = 0;
             $good = $bad = $comments = 0;
             $ischapter && $chapter = 1;
-
+            $mobile = 0;
             if($tags){
                 iPHP::app('tag.class','static');
                 $tagArray = tag::add($tags,$userid,$aid,$this->categoryApp->rootid($cid));

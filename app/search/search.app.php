@@ -34,7 +34,7 @@ class searchApp {
         iPHP::assign("search",$search);
         return iPHP::view($tpl,'search');
     }
-    public function slog($search){
+    private function slog($search){
         $sid    = iDB::value("SELECT `id` FROM `#iCMS@__search_log` WHERE `search` = '$search' LIMIT 1");
         if($sid){
             iDB::query("UPDATE `#iCMS@__search_log` SET `times` = times+1 WHERE `id` = '$sid';");

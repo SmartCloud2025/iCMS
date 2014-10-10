@@ -14,7 +14,7 @@ class userApp {
     public $openid  = null;
     public $user    = array();
     public $me      = array();
-    function __construct() {
+    public function __construct() {
         user::get_cookie();
         $this->uid      = (int)$_GET['uid'];
         $this->openid   = iS::escapeStr($_GET['openid']);
@@ -158,6 +158,7 @@ class userApp {
         $userid      = user::$userid;
         $author      = user::$nickname;
         $editor      = user::$nickname;
+        $mobile      = (int)$_POST['mobile'];
 
         empty($title)&& iPHP::alert('标题不能为空！');
         empty($cid)  && iPHP::alert('请选择所属栏目！');
@@ -562,6 +563,7 @@ class userApp {
         $user = user::status();
         if($user){
             $array = array(
+                'code'     => 1,
                 'uid'      => $user->uid,
                 'url'      => $user->url,
                 'avatar'   => $user->avatar,
@@ -607,7 +609,7 @@ class userApp {
         $this->user(true);
         iPHP::view('iCMS://user/card.htm');
     }
-    function select($permission='',$_cid="0",$cid="0",$level = 1) {
+    public function select($permission='',$_cid="0",$cid="0",$level = 1) {
         $array = iCache::get('iCMS/category.'.iCMS_APP_ARTICLE.'/array');
         foreach((array)$array[$cid] AS $root=>$C) {
             if($C['status'] && $C['isucshow'] && $C['issend'] && empty($C['outurl'])) {

@@ -8,12 +8,12 @@
 defined('TAG_APPID') OR define('TAG_APPID',0);
 
 class tag {
-	function data($fv=0,$field='name',$limit=0){
+	public function data($fv=0,$field='name',$limit=0){
 		$sql      = $fv ? "where `$field`='$fv'":'';
 		$limitSQL = $limit ? "LIMIT $limit ":'';
 	    return iDB::all("SELECT * FROM `#iCMS@__tags` {$sql} order by id DESC {$limitSQL}");
 	}
-	function cache($value=0,$field='id'){
+	public function cache($value=0,$field='id'){
 		$rs     = self::data($value,$field);
 		$_count = count($rs);
 	    for($i=0;$i<$_count;$i++) {
@@ -25,7 +25,7 @@ class tag {
 	        iCache::set($tkey,$rs[$i],0);
 	    }
 	}
-    function tkey($cid){
+    public function tkey($cid){
 		$ncid = abs(intval($cid));
 		$ncid = sprintf("%08d", $ncid);
 		$dir1 = substr($ncid, 0, 2);
@@ -33,7 +33,7 @@ class tag {
 		$tkey = $dir1.'/'.$dir2.'/'.$cid;
         return 'iCMS/tags/'.$tkey;
     }
-    function getag($key='tags',&$array,$C,$TC){
+    public function getag($key='tags',&$array,$C,$TC){
     	if(empty($array[$key])) return;
 
 		$strLink	= '';
@@ -64,17 +64,17 @@ class tag {
         );
     }
 
-//	function geturl($name,$cid){
+//	public function geturl($name,$cid){
 //		$category	= iCache::get('iCMS/category/'.$cid);
 //		$rs			= self::data($value,'name');
 //		return iURL::get('tag',array($rs[$i],$C));
 //	}
-	function getCache($tid){
+	public function getCache($tid){
 		$tkey	= self::tkey($tid);
 		return iCache::get($tkey);
 	}
 
-    function delCache($tid) {
+    public function delCache($tid) {
 		$ids = implode(',',(array)$tid);
 		iDB::query("DELETE FROM `#iCMS@__tags` WHERE `id` in ($ids) ");
 		$c   = count($tid);
@@ -125,7 +125,7 @@ VALUES ('$uid', '$cid', '$tcid', '0', '$tkey', '$tag', '', '', '', '', '', '', '
 //	    return array($tag,$tid,$cid,$tcid,$tmid);
 	    return array($tag,$tid);
 	}
-	function diff($Ntags,$Otags,$uid="0",$iid="0",$cid='0',$tcid='0') {
+	public function diff($Ntags,$Otags,$uid="0",$iid="0",$cid='0',$tcid='0') {
 		$N        = explode(',', $Ntags);
 		$O        = explode(',', $Otags);
 		$diff     = array_diff_values($N,$O);
@@ -146,7 +146,7 @@ VALUES ('$uid', '$cid', '$tcid', '0', '$tkey', '$tag', '', '', '', '', '', '', '
 	   }
 	   return json_encode($tagArray);
 	}
-	function del($tags,$field='name',$iid=0){
+	public function del($tags,$field='name',$iid=0){
 	    $tagArray	= explode(",",$tags);
 	    $iid && $sql="AND `iid`='$iid'";
 	    foreach($tagArray AS $k=>$v) {

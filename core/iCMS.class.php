@@ -26,7 +26,7 @@ class iCMS {
     public static $app_vars    = null;
     public static $hooks       = array();
 
-	public static function Init(){
+	public static function init(){
         self::config();
         iFS::init(self::$config['FS'],'filedata');
         iCache::init(self::$config['cache']);
@@ -48,7 +48,7 @@ class iCMS {
         self::$apps = self::$config['apps'];
         self::assign_site();
 	}
-    public static function config(){
+    private static function config(){
         $site   = iPHP_MULTI_SITE ? $_SERVER['HTTP_HOST']:iPHP_APP;
         if(iPHP_MULTI_DOMAIN){ //只绑定主域
             preg_match("/[^\.\/]+\.[^\.\/]+$/", $site, $matches);
@@ -145,7 +145,7 @@ class iCMS {
      * @param string $do 动作名称
      * @return iCMS
      */
-    public static function run($app = NULL,$do = NULL,$prefix="do_") {
+    public static function run($app = NULL,$do = NULL,$args = NULL,$prefix="do_") {
     	//empty($app) && $app	= $_GET['app']; //单一入口
     	if(empty($app)){
             $fi  = iFS::name(__SELF__);
@@ -157,7 +157,10 @@ class iCMS {
         self::$app_path   = iPHP_APP_DIR.'/'.$app;
         self::$app_file   = self::$app_path.'/'.$app.'.app.php';
         is_file(self::$app_file) OR iPHP::throwException('运行出错！找不到文件: <b>' . $app.'.app.php</b>', '0002');
-        $do OR $do        = $_GET['do']?(string)$_GET['do']:iPHP_APP;
+        if($do===NULL){
+            $do = iPHP_APP;
+            $_GET['do'] && $do = iS::escapeStr($_GET['do']);
+        }
         if($_POST['action']){
             $do     = $_POST['action'];
             $prefix = 'ACTION_';
@@ -175,7 +178,7 @@ class iCMS {
             'SAPI'       => iCMS_API.'?app='.self::$app_name,
             'COOKIE_PRE' => iPHP_COOKIE_PRE,
             'refer'      => __REF__,
-            'config'     => self::$config,
+            //'config'     => self::$config,
             "APP"        => array(
                 'name'   => self::$app_name,
                 'do'     => self::$app_do,
@@ -183,14 +186,16 @@ class iCMS {
             ),
         );
         define('iCMS_API_URL', iCMS_API.'?app='.self::$app_name);
-
         iPHP::$iTPL->_iTPL_VARS = self::$app_vars;
         self::$app = iPHP::app($app);
 		if(self::$app_do && self::$app->methods){
 			in_array(self::$app_do, self::$app->methods) OR iPHP::throwException('运行出错！ <b>' .self::$app_name. '</b> 类中找不到方法定义: <b>'.self::$app_method.'</b>', '0003');
 			$method = self::$app_method;
-			$args 	= self::$app_args;
-			if ($args){
+            $args===null && $args = self::$app_args;
+			if($args){
+                if($args==='object'){
+                    return self::$app;
+                }
 				return self::$app->$method($args);
 			}else{
 				return self::$app->$method();
@@ -202,7 +207,7 @@ class iCMS {
     }
     public static function API($app = NULL,$do = NULL) {
         $app OR $app = iS::escapeStr($_GET['app']);
-    	self::run($app,null,'API_');
+    	self::run($app,null,null,'API_');
     }
     //------------------------------------
     public static function hits_sql($all=true){
@@ -332,10 +337,10 @@ class iCMS {
         self::$hooks[$key]  = $array;
     }
     //------------------------------------
-    public static function gotohtml($fp,$url='',$fmode='0') {
-    	if(iPHP::$iTPL_MODE=='html') return;
+    public static function gotohtml($fp,$url='') {
+        if(iPHP::$iTPL_MODE=='html') return;
 
-        ($fmode==1 && @is_file($fp) && stristr($fp, '.php?') === FALSE) && iPHP::gotourl($url);
+        (@is_file($fp) && stristr($fp, '.php?') === FALSE) && iPHP::gotourl($url);
     }
     //翻页函数
     public static function page($a) {
@@ -350,7 +355,7 @@ class iCMS {
         }
         return $iPages;
     }
-    public static function setpage($iurl){
+    public static function set_html_url($iurl){
         if(isset($GLOBALS['iPage'])) return;
 
         $GLOBALS['iPage']['url']  = $iurl->pageurl;

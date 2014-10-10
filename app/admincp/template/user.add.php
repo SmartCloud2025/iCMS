@@ -15,7 +15,8 @@ $(function(){
 	iCMS.select('year',"<?php echo $userdata->year ; ?>");
 	iCMS.select('month',"<?php echo $userdata->month ; ?>");
   iCMS.select('day',"<?php echo $userdata->day ; ?>");
-  iCMS.select('status',"<?php echo $rs->status ; ?>");
+  iCMS.select('status',"<?php echo $this->uid?$rs->status:'1' ; ?>");
+  iCMS.select('isSeeFigure',"<?php echo $userdata->isSeeFigure ; ?>");
 
 });
 </script>
@@ -26,76 +27,92 @@ $(function(){
       <h5 class="brs"><?php echo empty($this->uid)?'添加':'修改' ; ?>用户</h5>
       <ul class="nav nav-tabs" id="user-tab">
         <li class="active"><a href="#user-info" data-toggle="tab"><b>基本信息</b></a></li>
+        <?php if($this->uid){;?>
         <li><a href="#user-data" data-toggle="tab"><b>用户资料</b></a></li>
+        <?php };?>
       </ul>
     </div>
     <div class="widget-content nopadding">
       <form action="<?php echo APP_FURI; ?>&do=save" method="post" class="form-inline" id="iCMS-user" target="iPHP_FRAME">
         <input name="uid" type="hidden" value="<?php echo $this->uid; ?>" />
-        <input name="type" type="hidden" value="<?php echo $this->type; ?>" />
+        <input  name="user[type]" type="hidden"value="<?php echo $rs->type ; ?>"/>
+
         <div id="user-add" class="tab-content">
           <div id="user-info" class="tab-pane active">
             <?php if(iACP::is_superadmin()){ ?>
             <div class="input-prepend"> <span class="add-on">角色</span>
-              <select name="gid" id="gid" class="chosen-select" data-placeholder="请选择用户组">
+              <select name="user[gid]" id="gid" class="chosen-select" data-placeholder="请选择用户组">
                 <option value='0'>路人甲[GID:0] </option>
                 <?php echo $this->groupApp->select(); ?>
               </select>
             </div>
             <?php }?>
-            <div class="clearfloat mb10"></div>
+            <?php if($this->uid){;?>
+            <div class="clearfix mb10"></div>
+            <div class="input-prepend">
+              <span class="add-on"> 头像</span>
+              <img src="<?php echo iCMS_FS_URL.get_user_file($this->uid);?>" class="img-polaroid">
+            </div>
+            <?php };?>
+            <div class="clearfix mb10"></div>
             <div class="input-prepend"> <span class="add-on"> 账号</span>
-              <input type="text" name="uname" class="span3" id="uname" value="<?php echo $rs->username ; ?>"/>
+              <input type="text" name="user[username]" class="span3" id="username" value="<?php echo $rs->username ; ?>"/>
             </div>
-            <div class="clearfloat mb10"></div>
+            <div class="clearfix mb10"></div>
             <div class="input-prepend input-append"> <span class="add-on"> 密码</span>
-              <input type="text" name="pwd" class="span3" id="pwd" value=""/>
-              <a class="btn" data-toggle="createpass" data-target="#pwd">生成</a>
+              <input type="text" name="user[password]" class="span3" id="password" value=""/>
+              <a class="btn" data-toggle="createpass" data-target="#password">生成</a>
             </div>
-            <div class="clearfloat mb10"></div>
+            <div class="clearfix mb10"></div>
             <div class="input-prepend"> <span class="add-on">昵称</span>
-              <input type="text" name="nickname" class="span3" id="nickname" value="<?php echo $rs->nickname ; ?>"/>
+              <input type="text" name="user[nickname]" class="span3" id="nickname" value="<?php echo $rs->nickname ; ?>"/>
             </div>
-            <div class="clearfloat mb10"></div>
+            <div class="clearfix mb10"></div>
             <div class="input-prepend"> <span class="add-on">性别</span>
-              <select name="gender" id="gender" class="chosen-select">
+              <select name="user[gender]" id="gender" class="chosen-select">
                 <option value="2">保密</option>
                 <option value="1">男</option>
                 <option value="0">女</option>
               </select>
             </div>
-            <div class="clearfloat mb10"></div>
-            <div class="input-prepend input-append"> <span class="add-on">粉丝数</span>
-              <input type="text" name="fans" class="span1" id="fans" value="<?php echo $rs->fans ; ?>"/>
+            <div class="clearfix mb10"></div>
+            <div class="input-prepend input-append">
+              <span class="add-on">粉丝数</span>
+              <input type="text" name="user[fans]" class="span1" id="fans" value="<?php echo $rs->fans ; ?>"/>
               <span class="add-on">关注数</span>
-              <input type="text" name="follow" class="span1" id="follow" value="<?php echo $rs->follow ; ?>"/>
+              <input type="text" name="user[follow]" class="span1" id="follow" value="<?php echo $rs->follow ; ?>"/>
               <span class="add-on">积分</span>
-              <input type="text" name="credit" class="span1" id="credit" value="<?php echo $rs->credit ; ?>"/>
+              <input type="text" name="user[credit]" class="span1" id="credit" value="<?php echo $rs->credit ; ?>"/>
             </div>
-            <div class="clearfloat mb10"></div>
+            <div class="clearfix mb10"></div>
+            <div class="input-prepend input-append">
+              <span class="add-on">评论数</span>
+              <input type="text" name="user[comments]" class="span1" id="comments" value="<?php echo $rs->comments ; ?>"/>
+              <span class="add-on">文章数</span>
+              <input type="text" name="user[article]" class="span1" id="article" value="<?php echo $rs->article ; ?>"/>
+              <span class="add-on">分享数</span>
+              <input type="text" name="user[share]" class="span1" id="share" value="<?php echo $rs->share ; ?>"/>
+            </div>
+            <div class="clearfix mb10"></div>
             <div class="input-prepend"> <span class="add-on">注册IP</span>
-              <input type="text" name="regip" class="span3" id="regip" value="<?php echo $rs->regip ; ?>"/>
+              <input type="text" name="user[regip]" class="span3" id="regip" value="<?php echo $rs->regip ; ?>"/>
             </div>
-            <div class="clearfloat mb10"></div>
+            <div class="clearfix mb10"></div>
             <div class="input-prepend">
               <span class="add-on">注册时间</span>
-              <input type="text" name="regdate" class="span3" id="regdate" value="<?php echo get_date($rs->regdate) ; ?>"/>
+              <input type="text" name="user[regdate]" class="span3" id="regdate" value="<?php echo get_date($rs->regdate) ; ?>"/>
             </div>
-            <div class="clearfloat mb10"></div>
+            <div class="clearfix mb10"></div>
             <div class="input-prepend"> <span class="add-on">最后登陆IP</span>
-              <input type="text" name="lastloginip" class="span3" id="lastloginip" value="<?php echo $rs->lastloginip ; ?>"/>
+              <input type="text" name="user[lastloginip]" class="span3" id="lastloginip" value="<?php echo $rs->lastloginip ; ?>"/>
             </div>
-            <div class="clearfloat mb10"></div>
+            <div class="clearfix mb10"></div>
             <div class="input-prepend"><span class="add-on">最后登陆时间</span>
-              <input type="text" name="lastlogintime" class="span3" id="lastlogintime" value="<?php echo get_date($rs->lastlogintime) ; ?>"/>
+              <input type="text" name="user[lastlogintime]" class="span3" id="lastlogintime" value="<?php echo get_date($rs->lastlogintime) ; ?>"/>
             </div>
-            <div class="clearfloat mb10"></div>
-            <div class="input-prepend"> <span class="add-on">用户类型</span>
-              <input type="text" name="type" class="span3" id="type" value="<?php echo $rs->type ; ?>"/>
-            </div>
-            <div class="clearfloat mb10"></div>
+            <div class="clearfix mb10"></div>
             <div class="input-prepend"> <span class="add-on">账号状态</span>
-              <select name="status" id="status" class="chosen-select">
+              <select name="user[status]" id="status" class="chosen-select">
                 <option value="0">禁用</option>
                 <option value="1">正常</option>
                 <option value="2">黑名单</option>
@@ -104,39 +121,38 @@ $(function(){
           </div>
           <div id="user-data" class="tab-pane hide">
             <div class="input-prepend"> <span class="add-on">姓名</span>
-              <input type="text" name="realname" class="span3" id="realname" value="<?php echo $userdata->realname ; ?>"/>
+              <input type="text" name="userdata[realname]" class="span3" id="realname" value="<?php echo $userdata->realname ; ?>"/>
             </div>
-            <div class="clearfloat mb10"></div>
+            <div class="clearfix mb10"></div>
             <div class="input-prepend"> <span class="add-on">电话</span>
-              <input type="text" name="mobile" class="span3" id="mobile" value="<?php echo $userdata->mobile ; ?>"/>
+              <input type="text" name="userdata[mobile]" class="span3" id="mobile" value="<?php echo $userdata->mobile ; ?>"/>
             </div>
-            <div class="clearfloat mb10"></div>
-            <div class="input-prepend input-append"> <span class="add-on">地址</span>
-              <input type="text" name="enterprise" class="span3" id="enterprise" value="<?php echo $userdata->enterprise ; ?>"/>
-              <input type="text" name="address" class="span3" id="address" value="<?php echo $userdata->address ; ?>"/>
+            <div class="clearfix mb10"></div>
+            <div class="input-prepend input-append"> <span class="add-on">现有的地址</span>
+              <input type="text" name="userdata[enterprise]" class="span3" id="enterprise" value="<?php echo $userdata->enterprise ; ?>"/>
+              <span class="add-on">街道地址</span>
+              <input type="text" name="userdata[address]" class="span3" id="address" value="<?php echo $userdata->address ; ?>"/>
             </div>
-            <div class="clearfloat mb10"></div>
+            <div class="clearfix mb10"></div>
             <div class="input-prepend"> <span class="add-on">微博</span>
-              <input type="text" name="weibo" id="weibo" class="span3" value="<?php echo $userdata->weibo ; ?>" />
+              <input type="text" name="userdata[weibo]" id="weibo" class="span3" value="<?php echo $userdata->weibo ; ?>" />
             </div>
-            <div class="clearfloat mb10"></div>
-            <div class="input-prepend"> <span class="add-on">省份</span>
-              <input type="text" name="province" class="span3" id="province" value="<?php echo $userdata->province ; ?>"/>
+            <div class="clearfix mb10"></div>
+            <div class="input-prepend input-append"> <span class="add-on">省份</span>
+              <input type="text" name="userdata[province]" class="span3" id="province" value="<?php echo $userdata->province ; ?>"/>
+              <span class="add-on">城市</span>
+              <input type="text" name="userdata[city]" class="span3" id="city" value="<?php echo $userdata->city ; ?>"/>
             </div>
-            <div class="clearfloat mb10"></div>
-            <div class="input-prepend"> <span class="add-on">城市</span>
-              <input type="text" name="city" class="span3" id="city" value="<?php echo $userdata->city ; ?>"/>
-            </div>
-            <div class="clearfloat mb10"></div>
+            <div class="clearfix mb10"></div>
             <div class="input-prepend input-append"> <span class="add-on">生日</span>
-              <select name="year" id="year" class="chosen-select"  style="width:90px;" data-placeholder="年">
+              <select name="userdata[year]" id="year" class="chosen-select"  style="width:90px;" data-placeholder="年">
                 <?php
                 $year = (int)date('Y');$syear =$year-35;$eyear =$year-14;
                 for ($i=$syear; $i < $eyear; $i++) {?>
                 <option value="<?php echo $i ?>"><?php echo $i ?></option>
                 <?php } ?>
-              </select>
-              <select name="month" id="month" class="span1 chosen-select" data-placeholder="月">
+              </select><span class="add-on">年</span>
+              <select name="userdata[month]" id="month" class="span1 chosen-select" data-placeholder="月">
                 <option value="1">1</option>
                 <option value="2">2</option>
                 <option value="3">3</option>
@@ -150,7 +166,8 @@ $(function(){
                 <option value="11">11</option>
                 <option value="12">12</option>
               </select>
-              <select name="day" id="day" class="span1 chosen-select" data-placeholder="日">
+              <span class="add-on">月</span>
+              <select name="userdata[day]" id="day" class="span1 chosen-select" data-placeholder="日">
                 <option value="1">1</option>
                 <option value="2">2</option>
                 <option value="3">3</option>
@@ -182,87 +199,106 @@ $(function(){
                 <option value="29">29</option>
                 <option value="30">30</option>
                 <option value="31">31</option>
+              </select><span class="add-on">日</span>
+            </div>
+            <div class="clearfix mb10"></div>
+            <div class="input-prepend"> <span class="add-on">星座</span>
+              <input type="text" name="userdata[constellation]" class="span3" id="constellation" value="<?php echo $userdata->constellation ; ?>"/>
+            </div>
+            <div class="clearfix mb10"></div>
+            <div class="input-prepend"> <span class="add-on">职业</span>
+              <input type="text" name="userdata[profession]" class="span3" id="profession" value="<?php echo $userdata->profession ; ?>"/>
+            </div>
+            <div class="clearfix mb10"></div>
+            <div class="input-prepend"> <span class="add-on">身材信息是否可见</span>
+              <select name="userdata[isSeeFigure]" id="isSeeFigure" class="chosen-select">
+                <option value="0">自己</option>
+                <option value="1">所有人</option>
               </select>
             </div>
-            <div class="clearfloat mb10"></div>
-            <div class="input-prepend"> <span class="add-on">星座</span>
-              <input type="text" name="constellation" class="span3" id="constellation" value="<?php echo $userdata->constellation ; ?>"/>
-            </div>
-            <div class="clearfloat mb10"></div>
-            <div class="input-prepend"> <span class="add-on">职业</span>
-              <input type="text" name="profession" class="span3" id="profession" value="<?php echo $userdata->profession ; ?>"/>
-            </div>
-            <div class="clearfloat mb10"></div>
-
+            <div class="clearfix mb10"></div>
             <div class="input-prepend"> <span class="add-on">身高</span>
-              <input type="text" name="height" id="height" class="span3" value="<?php echo $userdata->height ; ?>"  maxlength="12"/>
+              <input type="text" name="userdata[height]" id="height" class="span3" value="<?php echo $userdata->height ; ?>"  maxlength="12"/>
             </div>
-            <div class="clearfloat mb10"></div>
+            <div class="clearfix mb10"></div>
             <div class="input-prepend"> <span class="add-on">体重</span>
-              <input type="text" name="weight" id="weight" class="span3" value="<?php echo $userdata->weight ; ?>" />
+              <input type="text" name="userdata[weight]" id="weight" class="span3" value="<?php echo $userdata->weight ; ?>" />
             </div>
-            <div class="clearfloat mb10"></div>
+            <div class="clearfix mb10"></div>
             <div class="input-prepend"> <span class="add-on">胸围</span>
-              <input type="text" name="bwhB" id="bwhB" class="span3" value="<?php echo $userdata->bwhB ; ?>" />
+              <input type="text" name="userdata[bwhB]" id="bwhB" class="span3" value="<?php echo $userdata->bwhB ; ?>" />
             </div>
-            <div class="clearfloat mb10"></div>
+            <div class="clearfix mb10"></div>
             <div class="input-prepend"> <span class="add-on">腰围</span>
-              <input type="text" name="bwhW" id="bwhW" class="span3" value="<?php echo $userdata->bwhW ; ?>" />
+              <input type="text" name="userdata[bwhW]" id="bwhW" class="span3" value="<?php echo $userdata->bwhW ; ?>" />
             </div>
-            <div class="clearfloat mb10"></div>
+            <div class="clearfix mb10"></div>
             <div class="input-prepend"> <span class="add-on">臀围</span>
-              <input type="text" name="bwhH" id="bwhH" class="span3" value="<?php echo $userdata->bwhH ; ?>" />
+              <input type="text" name="userdata[bwhH]" id="bwhH" class="span3" value="<?php echo $userdata->bwhH ; ?>" />
             </div>
-            <div class="clearfloat mb10"></div>
+            <div class="clearfix mb10"></div>
             <div class="input-prepend"> <span class="add-on">肤质</span>
-              <input type="text" name="pskin" id="pskin" class="span3" value="<?php echo $userdata->pskin ; ?>" />
+              <input type="text" name="userdata[pskin]" id="pskin" class="span3" value="<?php echo $userdata->pskin ; ?>" />
             </div>
-            <div class="clearfloat mb10"></div>
+            <div class="clearfix mb10"></div>
             <div class="input-prepend"> <span class="add-on">发质</span>
-              <input type="text" name="phair" id="phair" class="span3" value="<?php echo $userdata->phair ; ?>" />
+              <input type="text" name="userdata[phair]" id="phair" class="span3" value="<?php echo $userdata->phair ; ?>" />
             </div>
-            <div class="clearfloat mb10"></div>
+            <div class="clearfix mb10"></div>
             <div class="input-prepend"> <span class="add-on">鞋码尺寸</span>
-              <input type="text" name="shoesize" id="shoesize" class="span3" value="<?php echo $userdata->shoesize ; ?>" />
+              <input type="text" name="userdata[shoesize]" id="shoesize" class="span3" value="<?php echo $userdata->shoesize ; ?>" />
             </div>
-            <div class="clearfloat mb10"></div>
+            <div class="clearfix mb10"></div>
             <div class="input-prepend"> <span class="add-on">个人标签</span>
-              <input type="text" name="personstyle" id="personstyle" class="span3" value="<?php echo $userdata->personstyle ; ?>" />
+              <input type="text" name="userdata[personstyle]" id="personstyle" class="span3" value="<?php echo $userdata->personstyle ; ?>" />
             </div>
-            <div class="clearfloat mb10"></div>
+            <div class="clearfix mb10"></div>
             <div class="input-prepend"> <span class="add-on">自我介绍</span>
-              <textarea name="slogan" id="slogan" cols="45" rows="5" class="span3"><?php echo $userdata->slogan ; ?></textarea>
+              <textarea name="userdata[slogan]" id="slogan" rows="5" class="span6"><?php echo $userdata->slogan ; ?></textarea>
             </div>
-            <div class="clearfloat mb10"></div>
+            <div class="clearfix mb10"></div>
             <div class="input-prepend"> <span class="add-on">昵称修改次数</span>
-              <input type="text" name="unickEdit" id="unickEdit" class="span3" value="<?php echo $userdata->unickEdit ; ?>" />
+              <input type="text" name="userdata[unickEdit]" id="unickEdit" class="span3" value="<?php echo $userdata->unickEdit ; ?>" />
             </div>
-            <div class="clearfloat mb10"></div>
+            <div class="clearfix mb10"></div>
             <div class="input-prepend"> <span class="add-on">自定义封面</span>
-              <input type="text" name="coverpic" id="coverpic" class="span3" value="<?php echo $userdata->coverpic ; ?>" />
+              <input type="text" name="userdata[coverpic]" id="coverpic" class="span3" value="<?php echo $userdata->coverpic ; ?>" />
             </div>
-            <div class="clearfloat mb10"></div>
+            <div class="clearfix mb10"></div>
 
             <div class="input-prepend"> <span class="add-on">淘宝用户名</span>
-              <input type="text" name="tb_nick" id="tb_nick" class="span3" value="<?php echo $userdata->tb_nick ; ?>" />
+              <input type="text" name="userdata[tb_nick]" id="tb_nick" class="span3" value="<?php echo $userdata->tb_nick ; ?>" />
             </div>
-            <div class="clearfloat mb10"></div>
+            <div class="clearfix mb10"></div>
             <div class="input-prepend"> <span class="add-on">买家信用</span>
-              <input type="text" name="tb_buyer_credit" id="tb_buyer_credit" class="span3" value="<?php echo $userdata->tb_buyer_credit ; ?>" />
+              <input type="text" name="userdata[tb_buyer_credit]" id="tb_buyer_credit" class="span3" value="<?php echo $userdata->tb_buyer_credit ; ?>" />
             </div>
-            <div class="clearfloat mb10"></div>
+            <div class="clearfix mb10"></div>
             <div class="input-prepend"> <span class="add-on">卖家信用</span>
-              <input type="text" name="tb_seller_credit" id="tb_seller_credit" class="span3" value="<?php echo $userdata->tb_seller_credit ; ?>" />
+              <input type="text" name="userdata[tb_seller_credit]" id="tb_seller_credit" class="span3" value="<?php echo $userdata->tb_seller_credit ; ?>" />
             </div>
-            <div class="clearfloat mb10"></div>
+            <div class="clearfix mb10"></div>
             <div class="input-prepend"> <span class="add-on">淘宝用户类型</span>
-              <input type="text" name="tb_type" id="tb_type" class="span3" value="<?php echo $userdata->tb_type ; ?>" />
+              <input type="text" name="userdata[tb_type]" id="tb_type" class="span3" value="<?php echo $userdata->tb_type ; ?>" />
             </div>
-            <div class="clearfloat mb10"></div>
+            <div class="clearfix mb10"></div>
             <div class="input-prepend"> <span class="add-on">是否金牌卖家</span>
-              <input type="text" name="is_golden_seller" id="is_golden_seller" class="span3" value="<?php echo $userdata->is_golden_seller ; ?>" />
+              <input type="text" name="userdata[is_golden_seller]" id="is_golden_seller" class="span3" value="<?php echo $userdata->is_golden_seller ; ?>" />
             </div>
-            <div class="clearfloat mb10"></div>
+            <div class="clearfix mb10"></div>
+            <div class="input-prepend input-append">
+              <span class="add-on">总点击数</span>
+              <input type="text" name="userdata[hits]" class="span2" id="hits" value="<?php echo $userdata->hits ; ?>"/>
+              <span class="add-on">当天点击数</span>
+              <input type="text" name="userdata[hits_today]" class="span2" id="hits_today" value="<?php echo $userdata->hits_today ; ?>"/>
+              <span class="add-on">昨天点击数</span>
+              <input type="text" name="userdata[hits_yday]" class="span2" id="hits_yday" value="<?php echo $userdata->hits_yday ; ?>"/>
+              <span class="add-on">周点击</span>
+              <input type="text" name="userdata[hits_week]" class="span2" id="hits_week" value="<?php echo $userdata->hits_week ; ?>"/>
+              <span class="add-on">月点击</span>
+              <input type="text" name="userdata[hits_month]" class="span2" id="hits_month" value="<?php echo $userdata->hits_month ; ?>"/>
+            </div>
+            <div class="clearfix mb10"></div>
           </div>
         </div>
         <div class="form-actions">

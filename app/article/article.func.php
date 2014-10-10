@@ -219,12 +219,16 @@ function article_search($vars){
     return $resource;
 }
 
-function __article_array($vars,$resource){
-    if($resource){
+function __article_array($vars,$variable){
+    $resource = array();
+    if($variable){
         $articleApp = iPHP::app("article");
-        foreach ($resource as $key => $value) {
+        foreach ($variable as $key => $value) {
             $vars['category_lite'] = true;
             $value = $articleApp->value($value,false,$vars);
+            if($value===false){
+                continue;
+            }
             if($vars['page']){
                 $value['page']  = $GLOBALS['page']?$GLOBALS['page']:1;
                 $value['total'] = $total;

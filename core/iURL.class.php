@@ -14,7 +14,7 @@ class iURL {
     public static $config   = null;
     public static $uriArray = null;
 	public static function init($config){
-		self::$config	= $config;
+        self::$config = $config;
 	}
     private static function CPDIR($cid="0") {
         $C    = iCache::get('iCMS/category/'.$cid);
@@ -115,10 +115,10 @@ class iURL {
 
         if(strstr($url,'{PHP}')===false) {
         	self::$uriArray	= $a;
+
         	strstr($url,'{') && $url = preg_replace_callback ("/\{(.*?)\}/",'__iurl_rule__',$url);
-//var_dump($url);
             $i->path    = iFS::path(iPATH.$html_dir.$url);
-            $i->href    = iFS::path($sURL.'/'.$url);
+            $i->href    = $sURL.iFS::path('/'.$html_dir.$url);
 //var_dump($i);
 			$pathA 		= pathinfo($i->path);
 //var_dump($pathA);
@@ -127,66 +127,65 @@ class iURL {
 //                $i->path    = FS::path($Curl->dmdir.'/'.$url);
 //                $i->href    = FS::path($Curl->domain.'/'.$url);
 //            }
-            $i->hdir    = pathinfo($i->href,PATHINFO_DIRNAME);
-            $i->dir		= $pathA['dirname'];
-            $i->file    = $pathA['basename'];
-            $i->name    = $pathA['filename'];
-            $i->name OR $i->name=$i->file;
-            $i->ext		= '.'.$pathA['extension'];
+            $i->hdir = pathinfo($i->href,PATHINFO_DIRNAME);
+            $i->dir  = $pathA['dirname'];
+            $i->file = $pathA['basename'];
+            $i->name = $pathA['filename'];
+            $i->ext  = '.'.$pathA['extension'];
+            $i->name OR $i->name = $i->file;
 //var_dump($GLOBALS['page']);
 //print_r($i);
 //var_dump($pathA);
 
             if(empty($i->file)||substr($url,-1)=='/'||empty($pathA['extension'])) {
-                $i->name    = 'index';
-                $i->ext     = self::$config['html_ext'];
-				$a['html.ext'] && $i->ext 	= $a['html.ext'];
-                $i->file    = $i->name.$i->ext;
-                $i->path    = $i->path.'/'.$i->file;
-                $i->dir		= dirname($i->path);
-                $i->hdir    = dirname($i->href.'/'.$i->file);
+                $i->name = 'index';
+                $i->ext  = self::$config['html_ext'];
+				$a['html.ext'] && $i->ext = $a['html.ext'];
+                $i->file = $i->name.$i->ext;
+                $i->path = $i->path.'/'.$i->file;
+                $i->dir  = dirname($i->path);
+                $i->hdir = dirname($i->href.'/'.$i->file);
             }
             if(strstr($i->file,'{P}')===false) {
-				$i->pfile	= $i->name."_{P}".$i->ext;
+                $i->pfile = $i->name."_{P}".$i->ext;
 			}
 	        if($uri=="http"||strstr($url,'http://')){
-	        	$hi->href    = $url;
+                $hi->href    = $url;
                 $hi->ext     = $i->ext;
-	            $hi->pageurl = $hi->href.'/'.$i->pfile ;
+                $hi->pageurl = $hi->href.'/'.$i->pfile ;
 	        	return $hi;
 	        }
-//print_r($i);
+//var_dump($i);
 //exit;
 			if($uri=='category') {
                 $m    = self::domain($a['cid'][1]);
                 if($m->domain) {
-                    $i->href 	= str_replace($i->hdir,$m->dmpath,$i->href);
-                    $i->hdir 	= $m->dmpath;
-                    $__dir__ 	= $i->dir.'/'.$m->pdir;
-                    $i->path 	= str_replace($i->dir,$__dir__,$i->path);
-                    $i->dir  	= $__dir__;
-                    $i->dmdir	= iFS::path_join(iPATH,$html_dir.'/'.$m->pd);
-                    $bits       = parse_url($i->href);
-                    $i->domain  = $bits['scheme'].'://'.$bits['host'];
+                    $i->href   = str_replace($i->hdir,$m->dmpath,$i->href);
+                    $i->hdir   = $m->dmpath;
+                    $__dir__   = $i->dir.'/'.$m->pdir;
+                    $i->path   = str_replace($i->dir,$__dir__,$i->path);
+                    $i->dir    = $__dir__;
+                    $i->dmdir  = iFS::path_join(iPATH,$html_dir.'/'.$m->pd);
+                    $bits      = parse_url($i->href);
+                    $i->domain = $bits['scheme'].'://'.$bits['host'];
                 }else {
-                    $i->dmdir   = iFS::path_join(iPATH,$html_dir);
-                    $i->domain  = $sURL;
+                    $i->dmdir  = iFS::path_join(iPATH,$html_dir);
+                    $i->domain = $sURL;
                 }
 		        if(strstr($a['domain'][1],'http://')){
-		        	$i->href    = $a['domain'][1];
+                    $i->href = $a['domain'][1];
 		        }
             }
-            $i->pageurl = $i->hdir.'/'.$i->pfile ;
-            $i->pagepath= $i->dir.'/'.$i->pfile;
+            $i->pageurl  = $i->hdir.'/'.$i->pfile ;
+            $i->pagepath = $i->dir.'/'.$i->pfile;
 //            $i->href	= str_replace('{P}',$p,$i->href);
 //            $i->path	= str_replace('{P}',$p,$i->path);
 //            $i->file	= str_replace('{P}',$p,$i->file);
 //            $i->name	= str_replace('{P}',$p,$i->name);
-//print_r($i);
+//var_dump($i);
 //exit;
-//            var_dump($i);
         }else {
-        	$url	= $uri.'.php?';
+            $url = $uri.'.php?';
 	        switch($uri){
 	            case 'category':
 		            $a['categoryURI'][1] && $url = $a['categoryURI'][1].'.php?';
@@ -201,7 +200,7 @@ class iURL {
 	            case 'tag':$url.='id='.$a['id'];break;
 	        }
 			strstr($url,'http://') OR $url	= rtrim($sURL,'/').'/'.$url;
-            $i->href	= $url;
+            $i->href = $url;
         }
         return $i;
     }

@@ -227,9 +227,7 @@ class iTemplate {
 		}
 
 		if ($display){
-
 			$this->_fetch_compile($file);
-
 			$this->debugging && $this->_templatelite_debug_info[$included_tpls_idx]['exec_time'] = array_sum(explode(' ', microtime())) - $this->_templatelite_debug_info[$included_tpls_idx]['exec_time'];
 			if($this->debugging && !$this->_templatelite_debug_loop){
 				$this->debugging = false;
@@ -313,6 +311,7 @@ class iTemplate {
 			unset($a['vars']);
 		 	$a = array_merge($a,$_a);
 		}
+		//var_dump(function_exists($callback),$callback,$a,$callback($a));
 		$this->assign($keys,$callback($a));
 	}
 

@@ -21,4 +21,4 @@ require iPHP_APP_CORE.'/iCMS.class.php';
 require iPHP_APP_CORE.'/iCMS.func.php';
 require iPHP_APP_CORE.'/iURL.class.php';
 
-iCMS::Init();
+iCMS::init();

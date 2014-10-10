@@ -60,44 +60,41 @@ class userApp{
     }
     function do_save(){
         $uid      = (int)$_POST['uid'];
-        $gid      = (int)$_POST['gid'];
-        $gender   = (int)$_POST['sex'];
-        $type     = $_POST['type'];
-        $username = iS::escapeStr($_POST['uname']);
-        $nickname = iS::escapeStr($_POST['nickname']);
-        $realname = iS::escapeStr($_POST['realname']);
-        $power    = $_POST['power']?json_encode($_POST['power']):'';
-        $cpower   = $_POST['cpower']?json_encode($_POST['cpower']):'';
-        $info     = array();
-        $info['icq']       = intval($_POST['icq']);
-        $info['home']      = iS::escapeStr(stripslashes($_POST['home']));
-        $info['year']      = intval($_POST['year']);
-        $info['month']     = intval($_POST['month']);
-        $info['day']       = intval($_POST['day']);
-        $info['from']      = iS::escapeStr(stripslashes($_POST['from']));
-        $info['signature'] = iS::escapeStr(stripslashes($_POST['signature']));
-        $info              = addslashes(serialize($info));
-        $_POST['pwd'] && $password = md5($_POST['pwd']);
+        $user     = $_POST['user'];
+        $userdata = $_POST['userdata'];
+        $username = $user['username'];
+        $nickname = $user['nickname'];
+        $password = $user['password'];
+        unset($user['password']);
 
         $username OR iPHP::alert('账号不能为空');
+        preg_match("/^[\w\-\.]+@[\w\-]+(\.\w+)+$/i",$username) OR iPHP::alert('该账号格式不对');
+        $nickname OR iPHP::alert('昵称不能为空');
+
+        $user['regdate']       = iPHP::str2time($user['regdate']);
+        $user['lastlogintime'] = iPHP::str2time($user['lastlogintime']);
+
 
         if(empty($uid)) {
-            // iDB::value("SELECT `uid` FROM `#iCMS@__members` where `username` ='$username' LIMIT 1") && iPHP::alert('该账号已经存在');
-            // $fields = array('gid', 'username', 'password', 'nickname', 'realname', 'gender', 'info', 'power', 'cpower', 'regtime', 'lastip', 'lastlogintime', 'logintimes', 'post', 'type', 'status');
-            // $data   = compact ($fields);
-            // $data['regtime']       = time();
-            // $data['lastip']        = iPHP::getIp();
-            // $data['lastlogintime'] = time();
-            // $data['status']        = '1';
-            // iDB::insert('members',$data);
-            // $msg="账号添加完成!";
+            $password OR iPHP::alert('密码不能为空');
+            $user['password'] = md5($password);
+
+            iDB::value("SELECT `uid` FROM `#iCMS@__user` where `username` ='$username' LIMIT 1") && iPHP::alert('该账号已经存在');
+            iDB::value("SELECT `uid` FROM `#iCMS@__user` where `nickname` ='$nickname' LIMIT 1") && iPHP::alert('该昵称已经存在');
+            iDB::insert('user',$user);
+            $msg = "账号添加完成!";
         }else {
-            // iDB::value("SELECT `uid` FROM `#iCMS@__members` where `username` ='$username' AND `uid` !='$uid' LIMIT 1") && iPHP::alert('该账号已经存在');
-            // $fields = array('gid','gender','username','nickname','realname','power', 'cpower','info');
-            // $data   = compact ($fields);
-            // iDB::update('members', $data, array('uid'=>$uid));
-            // $password && iDB::query("UPDATE `#iCMS@__members` SET `password`='$password' WHERE `uid` ='".$uid."'");
-            // $msg="账号修改完成!";
+            iDB::value("SELECT `uid` FROM `#iCMS@__user` where `username` ='$username' AND `uid` !='$uid' LIMIT 1") && iPHP::alert('该账号已经存在');
+            iDB::value("SELECT `uid` FROM `#iCMS@__user` where `nickname` ='$nickname' AND `uid` !='$uid' LIMIT 1") && iPHP::alert('该昵称已经存在');
+            $password && $user['password'] = md5($password);
+            iDB::update('user', $user, array('uid'=>$uid));
+            if(iDB::value("SELECT `uid` FROM `#iCMS@__user_data` where `uid`='$uid' LIMIT 1")){
+                iDB::update('user_data', $userdata, array('uid'=>$uid));
+            }else{
+                $userdata['uid'] = $uid;
+                iDB::insert('user_data',$userdata);
+            }
+            $msg = "账号修改完成!";
         }
         iPHP::success($msg,'url:'.APP_URI);
     }

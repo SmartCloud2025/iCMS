@@ -8,11 +8,8 @@
  * @$Id: tag.app.php 141 2013-03-13 14:01:43Z coolmoo $
  */
 class tagApp {
-
     public $methods = array('iCMS');
-
     public function __construct() {}
-
     public function do_iCMS($a = null) {
         if ($_GET['name']) {
             $name  = $_GET['name'];
@@ -70,7 +67,7 @@ class tagApp {
         $tag['iurl'] = iURL::get('tag', array($tag, $category, $tag_category));
         $tag['url'] OR $tag['url'] = $tag['iurl']->href;
         $tag['link']  = '<a href="'.$tag['url'].'" class="tag" target="_blank">'.$tag['name'].'</a>';
-        $category['mode']&& iCMS::setpage($tag['iurl']);
+        $category['mode']&& iCMS::set_html_url($tag['iurl']);
         $tag['related']  && $tag['relArray'] = explode(',', $tag['related']);
         $tag['appid'] = iCMS_APP_TAG;
         $tag['pic']   = get_pic($tag['pic']);

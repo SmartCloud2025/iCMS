@@ -20,8 +20,8 @@ class articleTable {
             'related', 'metadata', 'pubdate', 'chapter', 'url','clink',
             'ordernum','top', 'postype', 'creative', 'tpl','status');
 
-        if(!$update){
-            $_fields = array('postime','hits','hits_today','hits_yday','hits_week','hits_month','comments', 'good', 'bad');
+        if(!$update){ //更新
+            $_fields = array('mobile','postime','hits','hits_today','hits_yday','hits_week','hits_month','comments', 'good', 'bad');
             $fields  = array_merge ($fields,$_fields);
         }
 

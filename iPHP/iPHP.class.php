@@ -26,23 +26,21 @@ class iPHP{
 
 
 	public static function iTemplate(){
-        $iTPL                    = new iTemplate();
-        $iTPL->template_dir      = iPHP_TPL_DIR;
-        $iTPL->compile_dir       = iPHP_TPL_CACHE;
-        $iTPL->left_delimiter    = '<!--{';
-        $iTPL->right_delimiter   = '}-->';
-        $iTPL->register_modifier("date", "get_date");
-        $iTPL->register_modifier("cut", "csubstr");
-        $iTPL->register_modifier("htmlcut","htmlcut");
-        $iTPL->register_modifier("count","cstrlen");
-        $iTPL->register_modifier("html2txt","html2text");
-        //$iTPL->register_modifier("pinyin","GetPinyin");
-        $iTPL->register_modifier("unicode","get_unicode");
-        $iTPL->register_modifier("small","gethumb");
-        $iTPL->register_modifier("thumb","small");
-        $iTPL->register_modifier("random","random");
-        self::$iTPL = $iTPL;
-        return $iTPL;
+        self::$iTPL = new iTemplate();
+        self::$iTPL->template_dir      = iPHP_TPL_DIR;
+        self::$iTPL->compile_dir       = iPHP_TPL_CACHE;
+        self::$iTPL->left_delimiter    = '<!--{';
+        self::$iTPL->right_delimiter   = '}-->';
+        self::$iTPL->register_modifier("date", "get_date");
+        self::$iTPL->register_modifier("cut", "csubstr");
+        self::$iTPL->register_modifier("htmlcut","htmlcut");
+        self::$iTPL->register_modifier("count","cstrlen");
+        self::$iTPL->register_modifier("html2txt","html2text");
+        //self::$iTPL->register_modifier("pinyin","GetPinyin");
+        self::$iTPL->register_modifier("unicode","get_unicode");
+        self::$iTPL->register_modifier("small","gethumb");
+        self::$iTPL->register_modifier("thumb","small");
+        self::$iTPL->register_modifier("random","random");
 	}
     public static function get_vars($key=null){
         return self::$iTPL->get_template_vars($key);

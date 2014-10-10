@@ -34,6 +34,7 @@ class settingApp{
 
         $config['router']['URL']        = trim($config['router']['URL'],'/');
         $config['router']['DIR']        = trim($config['router']['DIR'],'/').'/';
+        $config['router']['html_dir']   = trim($config['router']['html_dir'],'/').'/';
         $config['router']['public_url'] = trim($config['router']['public_url'],'/');
         $config['router']['user_url']   = trim($config['router']['user_url'],'/');
         $config['router']['tag_url']    = trim($config['router']['tag_url'],'/');

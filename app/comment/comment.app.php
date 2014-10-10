@@ -10,7 +10,7 @@ defined('iPHP') OR exit('What are you doing?');
 
 class commentApp {
 	public $methods	= array('like','json','add','form','list','goto');
-    function __construct() {
+    public function __construct() {
         $this->id = (int)$_GET['id'];
     }
     public function API_goto(){

@@ -7,8 +7,8 @@
  * @$Id: article.app.php 2408 2014-04-30 18:58:23Z coolmoo $
  */
 class articleApp {
-	public $methods	= array('iCMS','hits','good','like_comment','comment');
-    function __construct() {}
+	public $methods	= array('iCMS','article','hits','good','like_comment','comment');
+    public function __construct() {}
 
     public function do_iCMS($a = null) {
     	return $this->article((int)$_GET['id'],isset($_GET['p'])?(int)$_GET['p']:1);
@@ -48,11 +48,11 @@ class articleApp {
 
         empty($article) && iPHP::throwException('运行出错！找不到文章: <b>ID:'. $id.'</b>', 10001);
         $vars = array(
-            'tags'=>true,
-            'user'=>true,
-            'meta'=>true,
-            'prev_next'=>true,
-            'category_lite'=>false,
+            'tags'          =>true,
+            'user'          =>true,
+            'meta'          =>true,
+            'prev_next'     =>true,
+            'category_lite' =>false,
         );
         $article = $this->value($article,$article_data,$vars,$page,$tpl);
 
@@ -73,6 +73,7 @@ class articleApp {
         }
     }
     public function value($article,$art_data="",$vars=array(),$page=1,$tpl=false){
+
         $article['appid'] = iCMS_APP_ARTICLE;
 
         // $categoryApp = iPHP::app("category");
@@ -81,13 +82,14 @@ class articleApp {
 
         if($category['status']==0) return false;
 
-        if(iPHP::$iTPL_MODE=="html" && (strstr($category['contentRule'],'{PHP}')||$category['outurl']||$category['mode']==0)) return false;
+        if(iPHP::$iTPL_MODE=="html" && $tpl && (strstr($category['contentRule'],'{PHP}')||$category['outurl'])) return false;
 
         $_iurlArray      = array($article,$category);
         $article['iurl'] = iURL::get('article',$_iurlArray,$page);
         $article['url']  = $article['iurl']->href;
         $article['link'] = "<a href='{$article['url']}'>{$article['title']}</a>";
-        $tpl && iCMS::gotohtml($article['iurl']->path,$article['iurl']->href,$category['mode']);
+
+        ($tpl && $category['mode']=='1') && iCMS::gotohtml($article['iurl']->path,$article['iurl']->href);
 
         if($vars['category_lite']){
             $article['category'] = iCMS::get_category_lite($category);
@@ -237,6 +239,7 @@ class articleApp {
             "suid"  => $article['userid'],
             "title" => $article['title']
         );
+
         return $article;
     }
     private function ubb($content){

@@ -7,7 +7,7 @@
  * @$Id: category.app.php 2412 2014-05-04 09:52:07Z coolmoo $
  */
 class categoryApp{
-	public $methods	= array('iCMS');
+	public $methods	= array('iCMS','category');
     public function __construct($appid = iCMS_APP_ARTICLE) {
     	$this->appid = iCMS_APP_ARTICLE;
     	$appid && $this->appid = $appid;
@@ -24,12 +24,14 @@ class categoryApp{
     }
     public function category($id,$tpl='index') {
         $category = iCache::get('iCMS/category/'.$id);
-
        	$category OR iPHP::throwException('运行出错！找不到该栏目<b>cid:'. $id.'</b> 请更新栏目缓存或者确认栏目是否存在', 20001);
+        if($category['status']==0) return false;
+        if(iPHP::$iTPL_MODE=="html" && (strstr($category['contentRule'],'{PHP}')||$category['outurl']||empty($category['mode']))) return false;
         if($tpl && $category['outurl']) return iPHP::gotourl($category['outurl']);
 
         $iurl = $category['iurl'];
-        $tpl && iCMS::gotohtml($iurl->path,$iurl->href,$category['mode']);
+
+        ($tpl && $category['mode']=='1') && iCMS::gotohtml($iurl->path,$iurl->href);
 
         $category['iurl']   = (array)$iurl;
         $category['subid']  = iCache::get('iCMS/category/rootid',$id);
@@ -52,13 +54,12 @@ class categoryApp{
         }
 
         $category['hasbody'] && $category['body'] = iCache::get('iCMS/category/'.$category['cid'].'.body');
-        ($category['mode'] && $tpl) && iCMS::setpage($iurl);
         $category['appid']  = iCMS_APP_CATEGORY;
+        $category['mode'] && iCMS::set_html_url($iurl);
 
         if($tpl) {
             iCMS::hooks('enable_comment',true);
             iPHP::assign('category',$category);
-
             if(strstr($tpl,'.htm')){
             	return iPHP::view($tpl,'category');
             }

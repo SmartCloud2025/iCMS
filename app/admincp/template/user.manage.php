@@ -83,7 +83,13 @@ $(function(){
               <td><?php if($rs[$i]['uid']!="1"){ ; ?><input type="checkbox" name="id[]" value="<?php echo $rs[$i]['uid'] ; ?>" /><?php } ; ?></td>
               <td><?php echo $rs[$i]['uid'] ; ?></td>
               <td><a class="tip-top" title="注册时间:<?php if($rs[$i]['regtime']) echo get_date($rs[$i]['regtime'],"Y-m-d") ; ?><hr />累计登陆次数:<?php echo $rs[$i]['logintimes'] ; ?>"><?php echo $rs[$i]['username'] ; ?></a></td>
-              <td><?php echo $rs[$i]['nickname'] ; ?></td>
+              <td><?php echo $rs[$i]['nickname'] ; ?>
+                <?php if($rs[$i]['status']=="2"){
+                  echo '<span class="label label-inverse">黑名单</span>';
+                }else if($rs[$i]['status']=="0"){
+                  echo '<span class="label">禁止</span>';
+                } ?>
+              </td>
               <td><a href="<?php echo APP_URI; ?>&gid=<?php echo $rs[$i]['gid'] ; ?>"><?php echo $group->all[$rs[$i]['gid']]['name'] ; ?></a></td>
               <td><?php echo $rs[$i]['lastloginip'] ; ?></td>
               <td><?php if($rs[$i]['lastlogintime']) echo get_date($rs[$i]['lastlogintime'],"Y-m-d") ; ?></td>

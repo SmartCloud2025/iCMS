@@ -109,7 +109,14 @@ function modal_tplfile(el,a){
               </div>
             </div>
             <span class="help-inline">模板错误提示!如果网站显示空白或者不完整,可开启此项,方便排除错误!模板调整时也可开启,开启此项也要开"程序提示"</span> </div>
-          <div id="setting-tpl" class="tab-pane hide">
+            <div id="setting-tpl" class="tab-pane hide">
+            <div class="input-prepend"> <span class="add-on">首页静态</span>
+              <div class="switch">
+                <input type="checkbox" data-type="switch" name="config[template][index_mode]" id="index_mode" <?php echo $config['template']['index_mode']?'checked':''; ?>/>
+              </div>
+            </div>
+            <span class="help-inline">只对PC端有效.首页生成静态后自动开启</span>
+            <div class="clearfloat mb10"></div>
             <div class="input-prepend input-append"> <span class="add-on">首页模板</span>
               <input type="text" name="config[template][index]" class="span3" id="template_index" value="<?php echo $config['template']['index'] ; ?>"/>
               <input type="hidden" name="config[template][index_name]" class="span3" id="index_name" value="<?php echo $config['template']['index_name'] ; ?>"/>
