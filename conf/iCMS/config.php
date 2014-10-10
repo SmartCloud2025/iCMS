@@ -12,7 +12,7 @@ return array (
   'debug' => 
   array (
     'php' => '1',
-    'tpl' => '0',
+    'tpl' => '1',
   ),
   'template' => 
   array (

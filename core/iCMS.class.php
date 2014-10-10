@@ -41,7 +41,7 @@ class iCMS {
         define('iCMS_PUBLIC_URL',self::$config['router']['public_url']);
         define('iCMS_USER_URL',  self::$config['router']['user_url']);
         define('iCMS_FS_URL',    self::$config['FS']['url']);
-        define('iCMS_REWRITE',   self::$config['app']['rewrite']);
+        define('iCMS_REWRITE',   self::$config['router']['rewrite']);
         define('iCMS_API',       iCMS_PUBLIC_URL.'/api.php');
         define('iCMS_UI',        iCMS_DIR.'app/ui/common');
         define('iCMS_UI_URL',    iCMS_URL.'/app/ui/common');

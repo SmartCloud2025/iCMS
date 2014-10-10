@@ -254,7 +254,15 @@ function modal_tplfile(el,a){
             <div class="input-prepend"> <span class="add-on">生成速度</span>
               <input type="text" name="config[router][speed]" class="span4" id="router_speed" value="<?php echo $config['router']['speed'] ; ?>"/>
             </div>
-            <span class="help-inline">一次性生成多少静态页，可根据服务器IO性能调整</span> </div>
+            <span class="help-inline">一次性生成多少静态页，可根据服务器IO性能调整</span>
+            <div class="clearfloat mb10"></div>
+            <div class="input-prepend"> <span class="add-on">REWRITE</span>
+              <div class="switch">
+                <input type="checkbox" data-type="switch" name="config[router][rewrite]" id="router_rewrite" <?php echo $config['router']['rewrite']?'checked':''; ?>/>
+              </div>
+            </div>
+            <span class="help-inline">此选项只对 conf 目录下 router.config.php 里的配置有效</span>
+          </div>
           <div id="setting-tag" class="tab-pane hide">
             <div class="input-prepend"> <span class="add-on">标签URL</span>
               <input type="text" name="config[router][tag_url]" class="span4" id="router_tag_url" value="<?php echo $config['router']['tag_url'] ; ?>"/>

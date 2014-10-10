@@ -252,7 +252,7 @@ class iPHP{
 	public static function router($key,$static=false){
 		if($static) return $key;
 
-		$path   = iPHP_CONF_DIR.'/iRouter.config.php';
+		$path   = iPHP_CONF_DIR.'/router.config.php';
 		@is_file($path) OR self::throwException($path.' not exist',0013);
 
 		$router = self::import($path,true);
