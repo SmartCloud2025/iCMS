@@ -47,12 +47,13 @@ return array (
     404 => 'http://v6.icms.com/404.html',
     'public_url' => 'http://v6.icms.com/public',
     'user_url' => 'http://v6.icms.com/u',
-    'html_dir' => 'html/',
+    'html_dir' => '/html/',
     'html_ext' => '.html',
     'speed' => '50',
+    'rewrite' => '0',
     'tag_url' => 'http://v6.icms.com',
     'tag_rule' => '{PHP}',
-    'tag_dir' => '',
+    'tag_dir' => '/',
   ),
   'cache' => 
   array (

@@ -23,6 +23,9 @@
 #body { margin-top: 20px; margin-bottom: 35px; width: 982px; border: 1px solid #d5d5d5; background: #fefefe; }
 #body .main-col { float: left; overflow: hidden; width: 678px; border-right: 1px solid #d5d5d5; background: #fff; }
 #body .right-col { float: right; overflow: hidden; margin-left: -1px; padding: 15px 20px 0px 20px; width: 263px; border-left: 1px solid #d5d5d5; background: #fefefe; }
+
+#body  #index_carousel .carousel-inner img { width: 100%; height: 300px; }
+#body  #index_carousel .carousel-caption{font-size: 16px;color: #fff;}
 #body .content_player { position: relative; overflow: hidden; padding: 12px 20px 20px 12px; width: 638px; height: 220px; border: 0; border-bottom: 1px solid #ececec; background: #fff; }
 #body .content_player .player { position: relative; }
 #body .content_player_wrapper { width: 390px; }

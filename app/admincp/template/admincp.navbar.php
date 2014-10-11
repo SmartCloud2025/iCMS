@@ -24,7 +24,12 @@ $(function(){
 </script>
 <div id="header" class="navbar navbar-static-top">
   <div class="navbar-inner">
-    <a class="btn btn-navbar" data-toggle="collapse" data-target=".nav-collapse"> <span class="fa fa-bars"></span> </a> <a class="brand iCMS-logo" href="http://www.idreamsoft.com" target="_blank"><img src="<?php echo ACP_UI;?>/iCMS.logo-6.0.png" /></a>
+    <a class="btn btn-navbar" data-toggle="collapse" data-target=".nav-collapse">
+    <span class="fa fa-bars"></span>
+    </a>
+    <a class="brand iCMS-logo" href="http://www.idreamsoft.com" target="_blank">
+      <img src="./app/admincp/ui/iCMS.logo-6.0.png" />
+    </a>
       <div class="nav-collapse collapse">
         <ul class="nav" id="iCMS-menu">
           <?php echo iACP::$menu->show(); ?>
@@ -49,7 +54,11 @@ $(function(){
 </div>
 <?php if(iCMS::$config['other']['sidebar_enable']){?>
 <div id="sidebar" class="navbar">
-	<div id="sidebartop" class="navbar-inner"><a class="brand iCMS-logo" href="http://www.idreamsoft.com" target="_blank"><img src="<?php echo ACP_UI;?>/iCMS.logo-6.0.png" /></a></div>
+	<div id="sidebartop" class="navbar-inner">
+    <a class="brand iCMS-logo" href="http://www.idreamsoft.com" target="_blank">
+    <img src="./app/admincp/ui/iCMS.logo-6.0.png" />
+    </a>
+  </div>
   <ul>
     <?php echo iACP::$menu->sidebar(); ?>
     <li class="last"></li>

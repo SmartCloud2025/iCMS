@@ -1,0 +1,92 @@
+<style>
+#article-tab .first{ margin-left:5px; }
+#article-tab li>a{padding: 5px 10px;background-color: #EEE;border-color: #DBDBDB;}
+.label-category{background-color: #8EBD48;}
+.article hr{margin:5px;}
+.article .action{}
+.article .action a{color: #333;margin-left: 10px;}
+</style>
+<form class="form-inline" role="form" action="<!--{iCMS:router url='/user'}-->" method="post" target="iCMS_FRAME">
+	<input name="action" type="hidden" value="manage" />
+	<input name="pg" type="hidden" value="article" />
+	<div class="article">
+		<ul id="article-tab" class="nav nav-tabs">
+			<li class="first active" name="s1"><a href="<!--{$article.manage}-->"><i class="fa fa-dashboard"></i> 文章</a></li>
+			<li name="s3"><a href="<!--{$article.manage}-->&status=3"><i class="fa fa-minus-circle"></i> 审核中</a></li>
+			<li name="s4"><a href="<!--{$article.manage}-->&status=4"><i class="fa fa-times-circle"></i> 未通过</a></li>
+			<li name="s2"><a href="<!--{$article.manage}-->&status=2"><i class="fa fa-trash-o"></i> 回收站</a></li>
+		</ul>
+		<table class="table table-striped">
+			<thead>
+				<tr>
+					<th><span class="label label-info">分类</span> 标题</th>
+				</tr>
+			</thead>
+			<tbody>
+			<!--{iCMS:article:list loop="true" page="true" row="12" call="user" total_cache="G" status=$status cid=$cid userid=$user.uid}-->
+				<tr id="id-<!--{$article_list.id}-->">
+					<td><span class="badge badge-success">#<!--{$article_list.id}--></span>
+						<!--{if $article_list.status=="3"}-->
+						<span class="label label-danger">审核中</span>
+						<!--{/if}-->
+						<!--{if $article_list.status=="2"}-->
+						<span class="label label-default">回收站</span>
+						<!--{/if}-->
+						<!--{if $article_list.status=="4"}-->
+						<span class="label">未通过审核</span>
+						<!--{/if}-->
+						<span class="label label-info"><!--{$category[$article_list.ucid].name}--></span>
+						<a href="<!--{if $article_list.status=="1"}--><!--{$article_list.url}--><!--{else}-->javascript:;<!--{/if}-->" target="_blank">
+							<!--{$article_list.title}-->
+						</a>
+						<hr />
+						<a href="<!--{$article.manage}-->&cid=<!--{$article_list.cid}-->"><span class="label label-primary"><!--{$article_list.category.name}--></span></a>
+						<span class="label label-default">点/评:<!--{$article_list.hits.count}-->/<!--{$article_list.comments}--></span>
+						<span class="action">
+							<a class="btn btn-default btn-xs" href="<!--{$article.edit}-->&id=<!--{$article_list.id}-->" title="编辑文章"><i class="fa fa-edit"></i> 编辑</a>
+							<!--{if $article_list.status=="2"}-->
+							<a href="javascript:;" class="btn btn-default btn-xs" data-id="<!--{$article_list.id}-->" data-action="delete" title="彻底删除"><i class="fa fa-trash-o"></i> 删除</a>
+							<a href="javascript:;" class="btn btn-default btn-xs" data-id="<!--{$article_list.id}-->" data-action="renew" title="还原"><i class="fa fa-reply-all"></i> 还原</a>
+							<!--{else}-->
+							<a href="javascript:;" class="btn btn-default btn-xs" data-id="<!--{$article_list.id}-->" data-action="trash" title="删除到回收站"><i class="fa fa-times"></i> 回收站</a>
+							<!--{/if}-->
+						</span>
+					</td>
+				</tr>
+			<!--{/iCMS}-->
+			</tbody>
+			<tfoot>
+	            <tr>
+	              <td colspan="5"><div class="iCMS_pagination"><!--{$iCMS.page.nav}--></div></td>
+	            </tr>
+          </tfoot>
+		</table>
+	</div>
+</form>
+<script type="text/javascript">
+$(function(){
+	var tab = $("#article-tab");
+	$("li",tab).removeClass("active");
+	$("[name=s<!--{$status}-->]",tab).addClass("active");
+
+	$("[data-action]").on('click',function(event) {
+		event.preventDefault();
+		var param = {
+			'id':$(this).attr("data-id"),
+			'da':$(this).attr("data-action"),
+			'action':'article'
+		}
+		$.post("<!--{iCMS:router url='/user'}-->",param,function(c) {
+			if (c.code) {
+				$("#id-"+param.id).hide('500',function() {
+					$(this).remove();
+				});
+			}else{
+				iCMS.alert(c.msg);
+			}
+		},'json');
+	});
+});
+</script>
+
+

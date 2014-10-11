@@ -26,7 +26,7 @@ $(function(){
         function(html) {
           update_popover(html,a);
       });
-      return '<p><img src="<?php echo ACP_UI;?>/loading.gif" /></p>';
+      return '<p><img src="./app/admincp/ui/loading.gif" /></p>';
   }});
 });
 function update_popover(html,a){

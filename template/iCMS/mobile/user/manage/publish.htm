@@ -1,7 +1,6 @@
 <link href="<!--{$iCMS.UI}-->/bootstrap/2.3.1/css/bootstrap-switch.css" type="text/css" rel="stylesheet"/>
 <script src="<!--{$iCMS.UI}-->/bootstrap/2.3.1/js/bootstrap-switch.min.js"></script>
-<script src="<!--{$site.urls.ui}-->/jquery.infinitescroll.min.js"></script>
-<script src="<!--{$site.urls.ui}-->/jquery.insertContent.js"></script>
+<script src="<!--{$site.urls.ui}-->/jquery.insertcontent.js"></script>
 
 <form class="form-inline" role="form" action="<!--{iCMS:router url='/user'}-->" method="post" target="iCMS_FRAME">
 	<input name="action" type="hidden" value="manage" />
@@ -51,14 +50,15 @@
 		<div class="switch" id="article-type" data-on-label="原创" data-off-label="转贴">
 			<input type="checkbox" data-type="switch" name="creative" <!--{if $article.creative}-->checked<!--{/if}-->/>
 		</div>
-
 	</div>
-
 	<div class="clearfix mt10">
-	  <textarea name="body" id="abody" class="form-control" rows="15" placeholder="请输入文章的内容"><!--{$article.body}--></textarea>
+		<!--{if !$article.mobile}-->
+		<p class="alert alert-warning alert-dismissable"><i class="fa fa-warning"></i> 本文章由PC端发布 在手机上编辑可能造成相关格式丢失</p>
+		<!--{/if}-->
+	  	<textarea name="body" id="abody" class="form-control" rows="15" placeholder="请输入文章的内容"><!--{$article_data.body}--></textarea>
 	</div>
 	<div class="form-actions mt10">
-		<button class="btn btn-primary btn-lg btn-block" type="submit" id="iCMS-article"><i class="fa fa-check"></i> 提交</button>
+		<button class="btn btn-primary btn-lg btn-block" type="submit" id="iCMS-article" data-loading-text='<i class="fa fa-spinner"></i> 提交中...'><i class="fa fa-check"></i> 提交</button>
 	</div>
 </form>
 <div id="add_category-box" style="display: none;">
@@ -69,13 +69,19 @@
 </form>
 <script type="text/javascript">
 function upload_pic(info){
-	console.log(info);
+	//console.log(info);
 	if(info.code){
 		$('#abody').insertContent('[img]'+info.url+'[/img]');
 		$("#upload").button('reset');
 	}
 }
+function simple_ubb(){
+	var body = $("#abody").text();
+	body = iCMS.format(body,true);
+	$("#abody").text(body);
+}
 $(function(){
+	simple_ubb();
     $("#upload").click(function() {
         $("input[name=upfile]").click();
     })
@@ -94,19 +100,23 @@ $(function(){
 	<!--{/if}-->
 
 	$("#iCMS-article").click(function(){
+		$(this).button('loading');
 		if($("#cid option:selected").val()=="0"){
 			$("#cid").focus();
 			iCMS.alert("请选择所属栏目");
+			$(this).button('reset');
 			return false;
 		}
 		if($("#title").val()==''){
 			$("#title").focus();
 			iCMS.alert("标题不能为空!");
+			$(this).button('reset');
 			return false;
 		}
 		if($("#abody").val()==''){
 			$("#abody").focus();
 			iCMS.alert("内容不能为空!");
+			$(this).button('reset');
 			return false;
 		}
 	});

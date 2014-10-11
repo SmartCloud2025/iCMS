@@ -51,7 +51,7 @@ function callback(obj) {
           </tr>
           <tr>
             <td>文件类型</td>
-            <td><?php echo iFS::icon($rs->filename . '.' . $rs->ext,ACP_UI); ?> .<?php echo $rs->ext; ?></td>
+            <td><?php echo iFS::icon($rs->filename . '.' . $rs->ext,'./app/admincp/ui'); ?> .<?php echo $rs->ext; ?></td>
           </tr>
           <tr>
             <td>保存方式</td>

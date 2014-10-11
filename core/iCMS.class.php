@@ -338,9 +338,9 @@ class iCMS {
     }
     //------------------------------------
     public static function gotohtml($fp,$url='') {
-        if(iPHP::$iTPL_MODE=='html') return;
+        if(iPHP::$iTPL_MODE=='html'||empty($url)||stristr($url, '.php?')) return;
 
-        (@is_file($fp) && stristr($fp, '.php?') === FALSE) && iPHP::gotourl($url);
+        @is_file($fp) && iPHP::gotourl($url);
     }
     //翻页函数
     public static function page($a) {

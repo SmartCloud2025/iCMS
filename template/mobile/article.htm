@@ -93,7 +93,7 @@
       //滚动加载
       iCMS.scrollLoad(".article_body",".content","#pages_next",<!--{$article.page.total}-->,
       function(e){
-        $("#scrollLoad-switcher").show();
+        //$("#scrollLoad-switcher").show();
         var pages_nav = $("#pages_nav",e).html();
         $("#pages_nav",e).remove();
         $(".article_pagenav").html(pages_nav);

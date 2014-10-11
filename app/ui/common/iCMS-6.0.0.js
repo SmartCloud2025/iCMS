@@ -162,6 +162,53 @@
             a.height(height);
             //window.top.$('.iCMS_API_iframe-loading').hide();
         },
+        format:function(content,ubb) {
+            content = content.replace(/\/"/g, '"')
+                .replace(/\\\&quot;/g, "")
+                .replace(/\r/g, "")
+                .replace(/on(\w+)="[^"]+"/ig, "")
+                .replace(/<script[^>]*?>(.*?)<\/script>/ig, "")
+                .replace(/<style[^>]*?>(.*?)<\/style>/ig, "")
+                .replace(/style=[" ]?([^"]+)[" ]/ig, "")
+                .replace(/<a[^>]+href=[" ]?([^"]+)[" ]?[^>]*>(.*?)<\/a>/ig, "[url=$1]$2[/url]")
+                .replace(/<img[^>]+src=[" ]?([^"]+)[" ]?[^>]*>/ig, "[img]$1[/img]")
+                .replace(/<embed[^>]+src=[" ]?([^"]+)[" ]\s+width=[" ]?([^"]\d+)[" ]\s+height=[" ]?([^"]\d+)[" ]?[^>]*>.*?<\/embed>/ig, "[media=$2,$3]$1[/media]")
+                .replace(/<embed[^>]+src=[" ]?([^"]+)[" ]?[^>]*>.*?<\/embed>/ig, "[media]$1[/media]")
+                .replace(/<b[^>]*>(.*?)<\/b>/ig, "[b]$1[/b]")
+                .replace(/<strong[^>]*>(.*?)<\/strong>/ig, "[b]$1[/b]")
+                .replace(/<p[^>]*?>/g, "\n\n")
+                .replace(/<br[^>]*?>/g, "\n")
+                .replace(/<[^>]*?>/g, "");
+            if(ubb){
+                return content;
+            }
+            content = content.replace(/\[url=([^\]]+)\]\n(\[img\]\1\[\/img\])\n\[\/url\]/g, "$2")
+                .replace(/\[img\](.*?)\[\/img\]/ig, '<p><img src="$1" /></p>')
+                .replace(/\[b\](.*?)\[\/b\]/ig, '<b>$1</b>')
+                .replace(/\[url=([^\]|#]+)\](.*?)\[\/url\]/g, '$2')
+                .replace(/\[url=([^\]]+)\](.*?)\[\/url\]/g, '<a target="_blank" href="$1">$2</a>')
+                .replace(/\n+/g, "[iCMS.N]");
+
+            content = this.n2p(content);
+            content = content.replace(/#--iCMS.PageBreak--#/g, "<!---->#--iCMS.PageBreak--#")
+                .replace(/<p>\s*<p>/g, '<p>')
+                .replace(/<\/p>\s*<\/p>/g, '</p>')
+                .replace(/<p>\s*<\/p>/g, '')
+                .replace(/<p><br\/><\/p>/g, '');
+            return content;
+        },
+        n2p:function(cc) {
+            var c = '',s = cc.split("[iCMS.N]");
+            for (var i = 0; i < s.length; i++) {
+                while (s[i].substr(0, 1) == " " || s[i].substr(0, 1) == "　") {
+                    s[i] = s[i].substr(1, s[i].length);
+                }
+                if (s[i].length > 0){
+                    c += "<p>" + s[i] + "</p>";
+                }
+            }
+            return c;
+        },
     };
     iCMS.article = {
         good: function(a) {
@@ -170,11 +217,11 @@
                 param = iCMS.param(p);
             param['do'] = 'good';
             $.get(iCMS.api('article'), param, function(c) {
-                iCMS.alert(c.msg, c.code);
                 if (c.code) {
                     var count = parseInt($('span', $this).text());
                     $('span', $this).text(count + 1);
                 } else {
+                    iCMS.alert(c.msg, c.code);
                     return false;
                 }
             }, 'json');

@@ -64,11 +64,6 @@ class tag {
         );
     }
 
-//	public function geturl($name,$cid){
-//		$category	= iCache::get('iCMS/category/'.$cid);
-//		$rs			= self::data($value,'name');
-//		return iURL::get('tag',array($rs[$i],$C));
-//	}
 	public function getCache($tid){
 		$tkey	= self::tkey($tid);
 		return iCache::get($tkey);

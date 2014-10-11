@@ -80,7 +80,7 @@ iACP::head();
           <td>当前程序版本</td>
           <td>iCMS <?php echo iCMS_VER ; ?>[<?php echo iCMS_RELEASE ; ?>]</td>
           <td><a href="<?php echo __ADMINCP__;?>=patch&do=check&frame=iPHP" target="iPHP_FRAME" id="home_patch">最新版本</a></td>
-          <td><span id="newversion"><img src="<?php echo ACP_UI;?>/ajax_loader.gif" width="16" height="16" align="absmiddle"></span></td>
+          <td><span id="newversion"><img src="./app/admincp/ui/ajax_loader.gif" width="16" height="16" align="absmiddle"></span></td>
         </tr>
         <tr>
           <td>服务器操作系统</td>
@@ -92,7 +92,7 @@ iACP::head();
           <td>服务器剩余空间</td>
           <td><?php echo intval(diskfreespace(".") / (1024 * 1024))."M" ; ?></td>
           <td>服务器时间</td>
-          <td><?php echo date("Y-n-j H:i:s") ; ?></td>
+          <td><?php echo get_date(0,"Y-n-j H:i:s"); ?></td>
         </tr>
         <tr>
           <td>WEB服务器版本</td>

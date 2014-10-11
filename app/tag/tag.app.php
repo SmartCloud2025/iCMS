@@ -22,23 +22,14 @@ class tagApp {
         } elseif ($_GET['id']) {
             $field = 'id';
             $val   = (int)$_GET['id'];
+        }else{
+            iPHP::throwException('标签请求出错', 30001);
         }
         return $this->tag($val, $field);
     }
 
-    public function decode($tags) {
-        if(empty($tags)){
-            return;
-        }
-        $array  = json_decode($tags);
-        foreach ($array as $key => $value) {
-            $tag_array[$key] = $this->tag($value[1],'id',false);
-        }
-        return $tag_array;
-    }
-
     public function tag($val, $field = 'name', $tpl = 'tag') {
-        $val OR iPHP::throwException('运行出错！TAG不能为空', 30001);
+        $val OR iPHP::throwException('运行出错！TAG不能为空', 30002);
         $tag = iDB::row("SELECT * FROM `#iCMS@__tags` where `$field`='$val' LIMIT 1;", ARRAY_A);
 
         iPHP::http404($tag, 'TAG:empty');
@@ -64,6 +55,7 @@ class tagApp {
             $tag_category        = iCache::get('iCMS/category/' . $tag['tcid']);
             $tag['tag_category'] = iCMS::get_category_lite($tag_category);
         }
+
         $tag['iurl'] = iURL::get('tag', array($tag, $category, $tag_category));
         $tag['url'] OR $tag['url'] = $tag['iurl']->href;
         $tag['link']  = '<a href="'.$tag['url'].'" class="tag" target="_blank">'.$tag['name'].'</a>';
@@ -73,4 +65,15 @@ class tagApp {
         $tag['pic']   = get_pic($tag['pic']);
         return $tag;
     }
+    public function decode($tags) {
+        if(empty($tags)){
+            return;
+        }
+        $array  = json_decode($tags);
+        foreach ($array as $key => $value) {
+            $tag_array[$key] = $this->tag($value[1],'id',false);
+        }
+        return $tag_array;
+    }
+
 }

@@ -542,6 +542,7 @@ class spiderApp {
             $content = preg_replace('/<[\/\!]*?[^<>]*?>/is', '', $content);
         }
         if ($data['format'] && $content) {
+            $content = iPHP::cleanHtml($content);
             $content = autoformat($content);
             $content = stripslashes($content);
         }

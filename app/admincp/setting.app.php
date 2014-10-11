@@ -33,20 +33,20 @@ class settingApp{
 		iFS::filterExt($config['router']['html_ext'],true) OR iPHP::alert('网站URL设置 > 文件后缀 设置不合法!');
 
         $config['router']['URL']        = trim($config['router']['URL'],'/');
-        $config['router']['DIR']        = trim($config['router']['DIR'],'/').'/';
-        $config['router']['html_dir']   = trim($config['router']['html_dir'],'/').'/';
         $config['router']['public_url'] = trim($config['router']['public_url'],'/');
         $config['router']['user_url']   = trim($config['router']['user_url'],'/');
         $config['router']['tag_url']    = trim($config['router']['tag_url'],'/');
-        $config['router']['tag_dir']    = trim($config['router']['tag_dir'],'/');
         $config['FS']['url']            = trim($config['FS']['url'],'/').'/';
+        $config['router']['DIR']        = rtrim($config['router']['DIR'],'/').'/';
+        $config['router']['html_dir']   = rtrim($config['router']['html_dir'],'/').'/';
+        $config['router']['tag_dir']    = rtrim($config['router']['tag_dir'],'/').'/';
 
         $config['apps']	= $this->apps;
     	foreach($config AS $n=>$v){
     		iACP::setConfig($v,$n,0);
     	}
     	iACP::cacheConfig($config);
-    	iPHP::success('更新完成');
+    	iPHP::success('更新完成','js:1');
     }
     public function cache(){
         $config         = iACP::getConfig(0);

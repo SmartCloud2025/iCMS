@@ -146,6 +146,8 @@ body, button, input, select, textarea { color: #111; font: 14px/1.75 "Helvetica 
 .iCMS_tooltip.popover { max-width: none; }
 .iCMS_tooltip.popover .popover-content { padding: 4px !important; }
 .iCMS_tooltip.popover .popover-content p, .iCMS_tooltip .popover-content ul, .iCMS_tooltip .popover-content ol { margin-bottom: 0 }
+
+/*ucard*/
 .zh-profile-card { width: 380px }
 .zh-profile-card .upper, .zh-profile-card .lower { border: 14px solid transparent }
 .zh-profile-card .upper { background: #fff; padding-left: 66px; min-height: 50px }

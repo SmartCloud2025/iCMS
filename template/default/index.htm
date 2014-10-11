@@ -20,22 +20,35 @@
     <div id="body" class="clearfix">
       <div class="main-col">
         <div class="row-fluid index_model">
-          <div class="content_player" class="clearfix">
-            <ul>
-              <!--{iCMS:article:list loop="true" pic="true" user="true" row="4"}-->
-              <li class="player clearfix">
-                <div class="content_player_wrapper">
-                  <div class="player-imgview"><a href="<!--{$article_list.url}-->" target="_blank"><img src="<!--{$article_list.pic.url}-->"></a></div>
+          <div id="index_carousel" class="carousel slide" data-ride="carousel">
+             <!-- 轮播（Carousel）指标 -->
+             <ol class="carousel-indicators">
+                <li data-target="#index_carousel" data-slide-to="0" class="active"></li>
+                <li data-target="#index_carousel" data-slide-to="1"></li>
+                <li data-target="#index_carousel" data-slide-to="2"></li>
+                <li data-target="#index_carousel" data-slide-to="3"></li>
+                <li data-target="#index_carousel" data-slide-to="4"></li>
+                <li data-target="#index_carousel" data-slide-to="5"></li>
+                <li data-target="#index_carousel" data-slide-to="6"></li>
+                <li data-target="#index_carousel" data-slide-to="7"></li>
+             </ol>
+             <!--{iCMS:article:list pic="true" row="8" cid="$category.cid"}-->
+             <!-- 轮播（Carousel）项目 -->
+             <div class="carousel-inner">
+                <!--{foreach key=key value=alist from="$article_list"}-->
+                <div class="item<!--{if $key=="0"}--> active<!--{/if}-->">
+                   <a href="<!--{$alist.url}-->">
+                     <img src="<!--{$alist.pic.url}-->" alt="<!--{$alist.title}-->">
+                     <div class="carousel-caption">
+                      <h3><!--{$alist.title}--></h3>
+                     </div>
+                  </a>
                 </div>
-                <div class="player-imgtit">
-                  <p class="data-title"><a href="<!--{$article_list.url}-->" target="_blank"><!--{$article_list.title}--></a></p>
-                  <p class="data-abs"><!--{$article_list.description|html2txt}--></p>
-                  <p class="data-info"><a href="<!--{$article_list.user.url}-->" target="_blank"><!--{$article_list.user.name}-->编辑编辑编辑</a><!--{$article_list.pubdate|date:"m月d日 h:i"}--></p>
-                </div>
-              </li>
-              <!--{/iCMS}-->
-            </ul>
-            <div id="player_nav"></div>
+                <!--{/foreach}-->
+             </div>
+             <!-- 轮播（Carousel）导航 -->
+             <a class="carousel-control left" href="#index_carousel" data-slide="prev">&lsaquo;</a>
+             <a class="carousel-control right" href="#index_carousel" data-slide="next">&rsaquo;</a>
           </div>
         </div>
         <div class="clearfix mb10"></div>

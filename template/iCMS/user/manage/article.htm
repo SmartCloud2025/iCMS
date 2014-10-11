@@ -41,10 +41,10 @@
 					<td class="action">
 						<a class="tip" href="<!--{$article.edit}-->&id=<!--{$article_list.id}-->" title="编辑文章"><i class="fa fa-edit"></i></a>
 						<!--{if $article_list.status=="2"}-->
-						<a href="javascript:;" class="del_article tip ml10" data-id="<!--{$article_list.id}-->" data-type="delete" title="彻底删除"><i class="fa fa-trash-o"></i></a>
-						<a href="javascript:;" class="del_article tip ml10" data-id="<!--{$article_list.id}-->" title="还原"><i class="fa fa-reply-all"></i></a>
+						<a href="javascript:;" class="tip ml10" data-id="<!--{$article_list.id}-->" data-action="delete" title="彻底删除"><i class="fa fa-trash-o"></i></a>
+						<a href="javascript:;" class="tip ml10" data-id="<!--{$article_list.id}-->" data-action="renew" title="还原"><i class="fa fa-reply-all"></i></a>
 						<!--{else}-->
-						<a href="javascript:;" class="del_article tip ml10" data-id="<!--{$article_list.id}-->" data-type="trash" title="删除到回收站"><i class="fa fa-times"></i></a>
+						<a href="javascript:;" class="tip ml10" data-id="<!--{$article_list.id}-->" data-action="trash" title="删除到回收站"><i class="fa fa-times"></i></a>
 						<!--{/if}-->
 					</td>
 				</tr>
@@ -64,14 +64,16 @@ $(function(){
 	$("li",tab).removeClass("active");
 	$("[name=s<!--{$status}-->]",tab).addClass("active");
 
-	$(".del_article").on('click',function(event) {
+	$("[data-action]").on('click',function(event) {
 		event.preventDefault();
-		var id = $(this).attr("data-id"),
-		type = $(this).attr("data-type");
-		$.post("<!--{iCMS:router url='/user'}-->",{action:'delete',pg:'article',type:type,id:id},
-		function(c) {
+		var param = {
+			'id':$(this).attr("data-id"),
+			'da':$(this).attr("data-action"),
+			'action':'article'
+		}
+		$.post("<!--{iCMS:router url='/user'}-->",param,function(c) {
 			if (c.code) {
-				$("#id-"+id).hide('500',function() {
+				$("#id-"+param.id).hide('500',function() {
 					$(this).remove();
 				});
 			}else{

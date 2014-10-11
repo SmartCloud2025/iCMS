@@ -196,7 +196,7 @@ class iPHP{
     public static function cleanHtml($content){
     	$content = stripslashes($content);
 
-    	echo $content,"\n\n\n\n\n\n\n\n";
+    	//echo $content,"\n\n\n\n\n\n\n\n";
     	self::import(iPHP_LIB.'/htmlpurifier-4.6.0/HTMLPurifier.auto.php');
 		$config = HTMLPurifier_Config::createDefault();
 		//$config->set('Cache.SerializerPath',iPHP_APP_CACHE);
@@ -232,7 +232,8 @@ class iPHP{
         $def->addAttribute('embed', 'allowfullscreen', 'Enum#true,false');
 
 		$htmlPurifier = new HTMLPurifier($config);
-		return addslashes($htmlPurifier->purify($content));
+		$content = $htmlPurifier->purify($content);
+		return addslashes($content);
     }
 
 	public static function throwException($msg,$code,$name='',$h404=true) {

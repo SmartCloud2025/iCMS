@@ -182,7 +182,7 @@ function modal_xxfile(el,a){
 }
 
 function loading(){
-  sel_dialog.content('<div class="iPHP-msg"><img src="<?php echo ACP_UI;?>/ajax_loader.gif" /> <span class="label label-inverse">图片正在努力加载中...请稍候!</span></div>');
+  sel_dialog.content('<div class="iPHP-msg"><img src="./app/admincp/ui/ajax_loader.gif" /> <span class="label label-inverse">图片正在努力加载中...请稍候!</span></div>');
 }
 function loadPhoto(data,base64){
 //console.log('sel_channel:',sel_channel);

@@ -14,10 +14,8 @@ defined('iPHP') OR exit('What are you doing?');
 
 define('__ADMINCP__',	__SELF__ . '?app');
 define('ACP_PATH',		iPHP_APP_DIR . '/admincp');
-define('ACP_DIR',		iCMS_DIR.'app/admincp');
-define('ACP_UI',        iCMS_DIR.'app/admincp/ui');
-define('iCMS_SUPERADMIN_UID', '1');
 
+define('iCMS_SUPERADMIN_UID', '1');
 require iPHP_APP_CORE.'/iMember.class.php';
 require iPHP_APP_CORE.'/iMenu.class.php';
 

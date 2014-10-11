@@ -10,7 +10,7 @@ defined('iPHP') OR exit('What are you doing?');
 
 iPHP::app('user.class','static');
 class userApp {
-    public $methods = array('iCMS','home','article','publish','manage','profile','data','hits','check','follow','login','logout','register','add_category','upload','imageUp','mobileUp','getremote','delete','report','ucard');
+    public $methods = array('iCMS','home','article','publish','manage','profile','data','hits','check','follow','login','logout','register','add_category','upload','imageUp','mobileUp','getremote','article','report','ucard');
     public $openid  = null;
     public $user    = array();
     public $me      = array();
@@ -149,17 +149,18 @@ class userApp {
         $_cid        = (int)$_POST['_cid'];
         $ucid        = (int)$_POST['ucid'];
         $_ucid       = (int)$_POST['_ucid'];
+        $mobile      = (int)$_POST['mobile'];
         $title       = iS::escapeStr($_POST['title']);
         $source      = iS::escapeStr($_POST['source']);
         $keywords    = iS::escapeStr($_POST['keywords']);
         $description = iS::escapeStr($_POST['description']);
-        $body        = iPHP::cleanHtml($_POST['body']);
         $creative    = (int)$_POST['creative'];
         $userid      = user::$userid;
         $author      = user::$nickname;
         $editor      = user::$nickname;
-        $mobile      = (int)$_POST['mobile'];
 
+        $mobile && $_POST['body'] = ubb2html($_POST['body']);
+        $body = iPHP::cleanHtml($_POST['body']);
         empty($title)&& iPHP::alert('标题不能为空！');
         empty($cid)  && iPHP::alert('请选择所属栏目！');
         empty($body) && iPHP::alert('文章内容不能为空！');
@@ -467,21 +468,25 @@ class userApp {
         user::update_count(user::$userid,1,'comments','-');
         iPHP::code(1,0,0,'json');
     }
-    private function __action_delete_article(){
+    private function __action_article_delete(){
         $id = (int)$_POST['id'];
         $id OR iPHP::code(0,'iCMS:error',0,'json');
         iDB::query("UPDATE `#iCMS@__article` SET `status` ='2' WHERE `userid` = '".user::$userid."' AND `id`='$id' LIMIT 1;");
         iPHP::code(1,0,0,'json');
     }
-    public function ACTION_delete(){
+    public function ACTION_article(){
         $this->me = user::status(USER_LOGIN_URL,"nologin");
 
-        $pgArray = array('comment','article');
-        $pg      = iS::escapeStr($_POST['pg']);
-        $funname ='__action_delete_'.$pg;
-        $methods = get_class_methods(__CLASS__);
-        if (in_array ($pg,$pgArray) && in_array ($funname,$methods)) {
-            $this->$funname();
+        $daArray = array('delete','renew','trash');
+        $da      = iS::escapeStr($_POST['da']);
+        if (in_array ($da,$daArray)){
+            $id = (int)$_POST['id'];
+            $id OR iPHP::code(0,'iCMS:error',0,'json');
+            $status = '0';
+            $da =="renew" && $status = '1';
+            $da =="trash" && $status = '2';
+            iDB::query("UPDATE `#iCMS@__article` SET `status` ='$status' WHERE `userid` = '".user::$userid."' AND `id`='$id' LIMIT 1;");
+            iPHP::code(1,0,0,'json');
         }
     }
     public function API_hits($uid = null){

@@ -26,6 +26,9 @@ function article_list($vars){
     isset($vars['userid'])&& $where_sql.= " AND `userid`='{$vars['userid']}'";
     isset($vars['top'])   && $where_sql.= " AND `top`='"._int($vars['top'])."'";
 
+    if(isset($vars['ucid']) && $vars['ucid']!=''){
+        $where_sql.= " AND `ucid`='{$vars['ucid']}'";
+    }
 
     if(isset($vars['cid!'])){
     	$ncids    = $vars['cid!'];

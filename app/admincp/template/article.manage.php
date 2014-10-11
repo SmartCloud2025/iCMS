@@ -203,7 +203,7 @@ $(function(){
                   <?php if($value['postype']=="0"){ ?>
                   <span class="label label-info">用户</span>
                   <?php } ?>
-                  <?php if($value['haspic']) echo '<img src="'.ACP_UI.'/image.gif" align="absmiddle">'?>
+                  <?php if($value['haspic']) echo '<img src="./app/admincp/ui/image.gif" align="absmiddle">'?>
                   <a href="<?php echo APP_URI; ?>&do=preview&id=<?php echo $value['id'] ; ?>" data-toggle="modal" title="预览"><?php echo $value['title'] ; ?></a>
                  </div>
                 <div class="row-actions">
@@ -216,7 +216,7 @@ $(function(){
                   <a href="<?php echo APP_URI; ?>&do=update&id=<?php echo $value['id'] ; ?>&iDT=status:4" class="tip-bottom" target="iPHP_FRAME" title="拒绝通过"><i class="fa fa-times-circle"></i></a>
                   <?php } ?>
                   <?php if($value['status']!="2"){ ?>
-                  <a href="<?php echo __ADMINCP__; ?>=comment&appid=<?php echo iCMS_APP_ARTICLE ; ?>&iid=<?php echo $value['id'] ; ?>" class="tip-bottom" title="<?php echo $value['comments'] ; ?>条评论" target="_blank"><i class="fa fa-comment"></i></a>
+                  <a href="<?php echo __ADMINCP__; ?>=comment&do=article&iid=<?php echo $value['id'] ; ?>" class="tip-bottom" title="<?php echo $value['comments'] ; ?>条评论" target="_blank"><i class="fa fa-comment"></i></a>
                   <?php } ?>
                   <!-- <a href="<?php echo __ADMINCP__; ?>=chapter&aid=<?php echo $value['id'] ; ?>" class="tip-bottom" title="章节管理" target="_blank"><i class="fa fa-sitemap"></i></a> -->
                   <?php if($value['status']=="1"){ ?>

@@ -96,12 +96,19 @@ function autoformat($html){
     ),"[b]$1[/b]",$html);
 
     $html = preg_replace('/<[\/\!]*?[^<>]*?>/is','',$html);
-    $html = preg_replace (array(
+    $html = ubb2html($html);
+    $html = nl2p($html);
+    return addslashes($html);
+}
+function ubb2html($content){
+    return preg_replace(array(
     '/\[img\](.*?)\[\/img\]/is',
     '/\[b\](.*?)\[\/b\]/is',
-    '/\[url=([^\]|#]+)\](.*?)\[\/url\]/is',
     '/\[url=([^\]]+)\](.*?)\[\/url\]/is',
-    ),array('<img src="$1" />','<strong>$1</strong>','$2','<a target="_blank" href="$1">$2</a>'),$html);
+    '/\[url=([^\]|#]+)\](.*?)\[\/url\]/is',
+    ),array('<img src="$1" />','<strong>$1</strong>','<a target="_blank" href="$1">$2</a>','$2'),$content);
+}
+function nl2p($html){
     $_htmlArray = explode("\n",$html);
     $_htmlArray = array_map("trim", $_htmlArray);
     $_htmlArray = array_filter($_htmlArray);
@@ -132,11 +139,13 @@ function autoformat($html){
     }
     reset ($htmlArray);
     if(current($htmlArray)=="<p><br /></p>"){
-        $fkey = key($htmlArray);
-        unset($htmlArray[$fkey]);
+        array_shift($htmlArray);
+        //$fkey = key($htmlArray);
+        //unset($htmlArray[$fkey]);
     }
-    $html   = implode("",$htmlArray);
-    return addslashes($html);
+    $html = implode('',$htmlArray);
+    $html = preg_replace('/<p[^>]*>\s+<\/p>/i','',$html);
+    return $html;
 }
 function cnum($subject){
     $searchList = array(
