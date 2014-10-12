@@ -9,8 +9,9 @@
 defined('iPHP') OR exit('What are you doing?');
 
 iPHP::app('user.class','static');
+iPHP::app('user.msg.class','static');
 class userApp {
-    public $methods = array('iCMS','home','article','publish','manage','profile','data','hits','check','follow','login','logout','register','add_category','upload','imageUp','mobileUp','getremote','article','report','ucard');
+    public $methods = array('iCMS','home','article','publish','manage','profile','data','hits','check','follow','login','logout','register','add_category','upload','imageUp','mobileUp','getremote','article','report','pm','ucard');
     public $openid  = null;
     public $user    = array();
     public $me      = array();
@@ -442,6 +443,7 @@ class userApp {
         $content = iS::escapeStr($_POST['content']);
 
         $iid OR iPHP::code(0,'iCMS:error',0,'json');
+        $uid OR iPHP::code(0,'iCMS:error',0,'json');
         $reason OR $content OR iPHP::code(0,'iCMS:report:reason_empty',0,'json');
 
         $addtime = time();
@@ -453,6 +455,25 @@ class userApp {
         $data   = compact ($fields);
         $id     = iDB::insert('user_report',$data);
         iPHP::code(1,'iCMS:report:reason_success',$id,'json');
+    }
+    public function ACTION_pm(){
+        iPHP::app('user.class','static');
+        user::get_cookie() OR iPHP::code(0,'iCMS:!login',0,'json');
+
+        $tuid    = (int)$_POST['uid'];
+        $content = iS::escapeStr($_POST['content']);
+
+        $tuid OR iPHP::code(0,'iCMS:error',0,'json');
+        $content OR iPHP::code(0,'iCMS:pm:empty',0,'json');
+
+        $tuname = $_POST['name'];
+        $fuid   = user::$userid;
+        $funame = user::$nickname;
+
+        $fields = array('fuid', 'funame', 'tuid', 'tuname', 'content');
+        $data   = compact ($fields);
+        msg::send($data,1);
+        iPHP::code(1,'iCMS:pm:success',$id,'json');
     }
     private function __action_delete_comment(){
         $id = (int)$_POST['id'];

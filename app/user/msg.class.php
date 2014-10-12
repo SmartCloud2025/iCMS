@@ -11,38 +11,41 @@
 */
 class msg{
 	//type: 0 系统 1 用户对话 2 @ 3留言
-	public function send($a = array("fuid"=>0,"funame"=>NULL,"tuid"=>0,"tuname"=>NULL,"content"=>NULL),$type=1){
-		$fuid    = (int)$a['fuid'];
-		$funame  = $a['funame'];
-		$tuid    = (int)$a['tuid'];
-		$tuname  = $a['tuname'];
-		$content = $a['content'];
-		$_time   = time();
+	public static function send($a = array("fuid"=>0,"funame"=>NULL,"tuid"=>0,"tuname"=>NULL,"content"=>NULL),$type=1){
+		$fuid     = (int)$a['fuid'];
+		$funame   = iS::escapeStr($a['funame']);
+		$tuid     = (int)$a['tuid'];
+		$tuname   = iS::escapeStr($a['tuname']);
+		$content  = iS::escapeStr($a['content']);
+		$sendtime = time();
 		if($fuid && $fuid==$tuid && !$a['self']){
 			return;
 		}
-		iDB::query("insert into `#iCMS@__msgs`
-            (`fuid`, `funame`, `tuid`, `tuname`, `content`, `type`, `sendtime`, `readtime`, `status`)
-values ('$fuid', '$funame', '$tuid', '$tuname', '$content', '$type', '$_time', '0', '1');");
-		
+        $fields = array('fuid', 'funame', 'tuid', 'tuname', 'content', 'type', 'sendtime', 'readtime', 'status');
+        $data   = compact ($fields);
+		$data['readtime'] = "0";
+		$data['status']   = "1";
+		iDB::insert('msgs',$data);
 		if($type=="1"){
-			iDB::query("insert into `#iCMS@__msgs`
-			            (`fuid`, `funame`, `tuid`, `tuname`, `content`, `type`, `sendtime`, `readtime`, `status`)
-			values ('$tuid', '$tuname', '$fuid', '$funame', '$content', '$type', '$_time', '0', '1');");
+			$data['fuid']   = $tuid;
+			$data['funame'] = $tuname;
+			$data['tuid']   = $fuid;
+			$data['tuname'] = $funame;
+			iDB::insert('msgs',$data);
 		}
 	}
 	//2 @/评论
-	public function at($a){
+	public static function at($a){
 		self::send($a,2);
 	}
-	//0系统
-	public function sysmsg($a){
-		$a['fuid']   = "1000";
+	//0 系统
+	public static function sysmsg($a){
+		$a['fuid']   = "10000";
 		$a['funame'] = "系统信息";
 		self::send($a,0);
 	}
 }
-////系统test
+////系统
 //msg::send(
 //	array(
 //		"tuid"=>20018,

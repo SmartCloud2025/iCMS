@@ -16,6 +16,8 @@ return array(
 	'/user/article'        		=> iCMS_URL.'/user.php?do=manage&pg=article',
 	'/user/category'            => iCMS_URL.'/user.php?do=manage&pg=category',
 	'/user/comment'             => iCMS_URL.'/user.php?do=manage&pg=comment',
+	'/user/inbox'             	=> iCMS_URL.'/user.php?do=manage&pg=inbox',
+	'/user/inbox/{uid}'         => iCMS_URL.'/user.php?do=manage&pg=inbox&uid={uid}',
 
 	'/user/manage'              => iCMS_URL.'/user.php?do=manage',
 	'/user/manage/favorite'     => iCMS_URL.'/user.php?do=manage&pg=favorite',

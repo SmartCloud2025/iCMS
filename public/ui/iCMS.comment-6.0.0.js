@@ -163,6 +163,11 @@
                 }, 'json');
         },
         box: function(a) {
+            if (!iCMS.user_status) {
+                iCMS.LoginBox();
+                return false;
+            }
+
             var $this = $(a),
                 p = $this.parent(),
                 pp = p.parent(),
@@ -207,8 +212,8 @@
             box.on('click', 'a[name="addnew"]', function(event) {
                 event.preventDefault();
                 iCMS.comment.addnew(this,param,function(c){
-                    var count = parseInt($('span', $this).text());
-                    $('span', $this).text(count + 1);
+                    var count = parseInt($('.iCMS_comment_num', $this).text());
+                    $('.iCMS_comment_num', $this).text(count + 1);
                     iCMS.comment.list(box,iid,c.forward);
                 })
             });

@@ -22,11 +22,13 @@
         </div>
         <div class="card_top">
           <div class="card_info">
-            <a class="card_title_name" data-tip="iCMS:ucard:<!--{$user.uid}-->" thref="<!--{$user.urls.home}-->"><!--{$user.nickname}--></a>
+            <a class="card_title_name" data-tip="iCMS:ucard:<!--{$user.uid}-->" href="<!--{$user.urls.home}-->">
+              <!--{$user.nickname}-->
+            </a>
             <i class="icon_<!--{$user.gender}-->"></i>
             <a data-param='{"uid":"<!--{$user.uid}-->","name":"<!--{$user.nickname}-->","follow":"<!--{$status.followed}-->"}' class="iCMS_user_follow follow_btn <!--{if $status.followed}-->unfollow<!--{else}-->follow<!--{/if}-->"></a>
             <p class="card_slogan">
-            <!--{$userdata.slogan|default:'这家伙太懒了,什么都没有留下!'}-->
+              <!--{$userdata.slogan|default:'这家伙太懒了,什么都没有留下!'}-->
             </p>
           </div>
           <div class="card_data">
@@ -91,8 +93,8 @@
                 <!--{/if}-->
               </div>
               <div class="list_fun clearfix" data-param='<!--{$article_list.param|json_encode}-->'>
-                <a href="javascript:;" data-param='{"do":"good"}' class="iCMS_article_do" title="给你32个赞"><i class="icon-thumbs-up"></i> (<span><!--{$article_list.good}--></span>)</a>
-                <a href="javascript:;" data-param='{"do":"comment"}' class="iCMS_article_do" title="评论"><i class="icon-comment"></i> (<span><!--{$article_list.comments}--></span>)</a>
+                <a href="javascript:;" data-param='{"do":"good"}' class="iCMS_article_do" title="给你32个赞"><i class="icon-thumbs-up"></i> (<span class="iCMS_good_num"><!--{$article_list.good}--></span>)</a>
+                <a href="javascript:;" data-param='{"do":"comment"}' class="iCMS_article_do" title="评论"><i class="icon-comment"></i> (<span class="iCMS_comment_num"><!--{$article_list.comments}--></span>)</a>
                 <a href="javascript:;" data-param='{"do":"favorite"}' class="iCMS_article_do" title="收藏"><i class="icon-heart"></i></a>
               </div>
             </li>

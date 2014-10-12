@@ -1,45 +1,81 @@
 (function($) {
     var _iCMS = {
+        pm:function(a){
+            var $this = $(a),$parent = $this.parent(),
+                box   = document.getElementById("iCMS-pm-box"),
+                modal = $this.modal({
+                    title: '发送私信',
+                    width: "400px",
+                    html: box,
+                    scroll: true
+                }),
+                inbox  = $this.attr('href'),
+                param  = iCMS.param($this),
+                _param = iCMS.param($parent),
+                data   = $.extend(param,_param);
+            $('.pm_uname', box).text(data.name);
+            $('.pm_inbox', box).attr("href",inbox);
+            $('.cancel', box).click(function(event) {
+                modal.destroy();
+            });
+            $('[name="send"]', box).click(function(event) {
+                var content = $("[name='content']", box);
+                data.content = content.val();
+                if (!data.content) {
+                    content.focus();
+                    iCMS.alert("请填写私信内容。");
+                    return false;
+                }
+                data.action = 'pm';
+                $.post(iCMS.api('user'), data, function(c) {
+                    content.val('');
+                    iCMS.alert(c.msg,c.code);
+                    if(c.code){
+                        modal.destroy();
+                    }
+                }, 'json');
+            });
+        },
         report:function(a) {
             var $this = $(a),
-                report_box = document.getElementById("iCMS-report-box"),
-                report_modal = $this.modal({
+                box   = document.getElementById("iCMS-report-box"),
+                modal = $this.modal({
                     title: '为什么举报这个评论?',
                     width: "460px",
-                    html: report_box,
+                    html: box,
                     scroll: true
                 });
-            $("li", report_box).click(function(event) {
-                $("li", report_box).removeClass('checked');
+            $("li", box).click(function(event) {
+                $("li", box).removeClass('checked');
                 $(this).addClass('checked');
             });
-            $('[name="cancel"]', report_box).click(function(event) {
-                report_modal.destroy();
+            $('.cancel', box).click(function(event) {
+                modal.destroy();
             });
-            $('[name="ok"]', report_box).click(function(event) {
+            $('[name="ok"]', box).click(function(event) {
                 event.preventDefault();
-                var report_param = iCMS.param($this),
-                content = $("[name='content']", report_box);
-                report_param['reason'] = $("[name='reason']:checked", report_box).val();
-                if (!report_param['reason']) {
+                var data = iCMS.param($this),
+                content = $("[name='content']", box);
+                data.reason = $("[name='reason']:checked", box).val();
+                if (!data.reason) {
                     iCMS.alert("请选择举报的原因");
                     return false;
                 }
-                if (report_param['reason'] == "0") {
-                    report_param['content'] = content.val();
-                    if (!report_param['content']) {
+                if (data.reason == "0") {
+                    data.content = content.val();
+                    if (!data.content) {
                         iCMS.alert("请填写举报的原因");
                         return false;
                     }
                 }
-                report_param.action = 'report';
-                $.post(iCMS.api('user'), report_param, function(c) {
+                data.action = 'report';
+                $.post(iCMS.api('user'), data, function(c) {
                     content.val('');
                     iCMS.alert(c.msg,c.code);
-                    $("li", report_box).removeClass('checked');
-                    $("[name='reason']", report_box).removeAttr('checked');
+                    $("li", box).removeClass('checked');
+                    $("[name='reason']", box).removeAttr('checked');
                     if(c.code){
-                        report_modal.destroy();
+                        modal.destroy();
                     }
                 }, 'json');
             });
@@ -59,22 +95,21 @@
                     iCMS.LoginBox();
                     return false;
                 }
-                iCMS.user.follow(this);
-                return false;
+                iCMS.user.follow(this,function(c,$this,param){
+                    param.follow = (param.follow=='1'?'0':'1');
+                    iCMS.param($this,param);
+                    $this.removeClass((param.follow=='1'? 'follow' : 'unfollow'));
+                    $this.addClass((param.follow=='1' ? 'unfollow' : 'follow'));
+                });
             });
             doc.on("click", '.iCMS_article_do', function(event) {
                 event.preventDefault();
-                if (!iCMS.user_status) {
-                    iCMS.LoginBox();
-                    return false;
-                }
                 var param = iCMS.param($(this));
                 if (param.do =='comment') {
                     iCMS.comment.box(this);
-                } else if (param.do =='good') {
-                    iCMS.article.good(this);
+                } else if (param.do =='good'||param.do =='bad') {
+                    iCMS.article.vote(this);
                 }
-                return false;
             });
 
             doc.on('click', 'a[name="iCMS-report"]', function(event) {
@@ -84,6 +119,14 @@
                     return false;
                 }
                 window.top.iCMS.report(this);
+            });
+            doc.on('click', 'a[name="iCMS-pm"]', function(event) {
+                event.preventDefault();
+                if (!iCMS.user_status) {
+                    iCMS.LoginBox();
+                    return false;
+                }
+                window.top.iCMS.pm(this);
             });
         },
         LoginBox: function(a) {

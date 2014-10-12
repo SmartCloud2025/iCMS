@@ -250,9 +250,7 @@ function __article_array($vars,$variable){
     }
     return $resource;
 }
-function article_up_down($vars){
-    echo iPHP::view('iCMS://article.up_down.htm');
-}
+
 function _archive_date($date){
     $limit = time() - $date;
     if($limit <= 86400){

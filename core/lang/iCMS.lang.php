@@ -12,7 +12,7 @@
 defined('iPHP') OR exit('What are you doing?');
 
 return array(
-	'!login'=>'请登陆!',
+	'!login'=>'请先登陆！',
 	'error'=>'哎呀呀呀！非常抱歉,居然出错了！<br />请稍候再试试,我们的程序猿正在努力修复中...',
 	'page'=>array(
 		'index'   =>'首页',
@@ -33,24 +33,29 @@ return array(
 		'first'     =>'已经是第一篇',
 		'last'      =>'已经是最后一篇',
 		'clicknext' =>'点击图片进入下一页',
-		'empty_id'  =>'亲!不好意思,居然出错了！',
-		'!good'     =>'亲!您已经点过赞了啦 ！',
-		'good'      =>'亲!谢谢你的赞',
+		'empty_id'  =>'文章ID不能为空',
+		'!good'     =>'您已经点过赞了啦 ！',
+		'good'      =>'谢谢您的赞,我会更加努力的',
+		'!bad'      =>'这垃圾的文章,多踩一下都会脏了咱的手！',
+		'bad'       =>'您已经过踩了啦 ！',
 	),
 	'report'=>array(
-		'reason_empty'=>'请填写举报的原因!',
-		'reason_success'=>'谢谢您的反馈!我们会尽快处理的!',
+		'reason_empty'=>'请填写举报的原因！',
+		'reason_success'=>'谢谢您的反馈!我们会尽快处理的！',
+	),
+	'pm'=>array(
+		'empty'=>'请填写私信内容。',
+		'success'=>'发送成功',
 	),
 	'comment'=> array(
 		'empty'   =>'请输入内容！',
-		//'error' =>'验证码不对哦!认真看清楚!要不换一张试试。',
-		'success' =>'评论成功!',
-		'!like'   =>'亲!您已经点过赞了啦 ！',
-		'like'    =>'亲!谢谢你的赞',
+		'success' =>'感谢您的评论 ！',
+		'!like'   =>'您已经点过赞了啦 ！',
+		'like'    =>'谢谢您的赞',
 	),
 	'seccode'=> array(
 		'empty'=>'请输入验证码！',
-		'error'=>'验证码不对哦!认真看清楚!要不换一张试试。',
+		'error'=>'验证码不正确！请更换一张再试试。',
 	),
 	//导航
 	'navTag'=>' »  ',

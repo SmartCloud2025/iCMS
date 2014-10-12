@@ -60,6 +60,7 @@ h3.title span { color: #70A700; font-size: 14px; font-weight: bold; height: 30px
 .iCMS_profile_wrap .iCMS_user_home .label { font-size: 14px; margin-left: 4px; padding: 0px 5px; max-width: 100px !important; overflow: hidden; display: block; margin-top: 6px; float: left; height: 30px; line-height: 30px; }
 .iCMS_profile_wrap .iCMS_user_home .caret { color: #fff; }
 .iCMS_profile_wrap .dropdown-menu { margin-top: 2px; }
+.iCMS_profile_wrap .dropdown-menu i{font-size: 16px;margin-right: 5px;}
 .iCMS_profile_wrap .dropdown-menu:before { position: absolute; top: -7px; left: 9px; display: inline-block; border-right: 7px solid transparent; border-bottom: 7px solid #ccc; border-left: 7px solid transparent; border-bottom-color: rgba(0, 0, 0, 0.2); content: ''; }
 .iCMS_profile_wrap .dropdown-menu:after { position: absolute; top: -6px; left: 10px; display: inline-block; border-right: 6px solid transparent; border-bottom: 6px solid #fff; border-left: 6px solid transparent; content: ''; }
 .iCMS_profile_wrap .dropdown-menu>li>a { padding: 8px 20px; font-size: 18px; }

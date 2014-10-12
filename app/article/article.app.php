@@ -7,7 +7,7 @@
  * @$Id: article.app.php 2408 2014-04-30 18:58:23Z coolmoo $
  */
 class articleApp {
-	public $methods	= array('iCMS','article','hits','good','like_comment','comment');
+	public $methods	= array('iCMS','article','hits','good','bad','like_comment','comment');
     public function __construct() {}
 
     public function do_iCMS($a = null) {
@@ -20,18 +20,34 @@ class articleApp {
             iDB::query("UPDATE `#iCMS@__article` SET {$sql} WHERE `id` ='$id'");
         }
     }
-    public function API_good(){
+    private function vote($_do){
         iPHP::app('user.class','static');
         user::get_cookie() OR iPHP::code(0,'iCMS:!login',0,'json');
 
         $aid = (int)$_GET['iid'];
         $aid OR iPHP::code(0,'iCMS:article:empty_id',0,'json');
-        $ackey = 'article_good_'.$aid;
-        $good  = (int)iPHP::get_cookie($ackey);
-        $good && iPHP::code(0,'iCMS:article:!good',0,'json');
-        iDB::query("UPDATE `#iCMS@__article` SET `good`=good+1 WHERE `id` ='{$aid}' limit 1");
+
+        $ackey = 'article_'.$_do.'_'.$aid;
+        $vote  = (int)iPHP::get_cookie($ackey);
+        $vote && iPHP::code(0,'iCMS:article:!'.$_do,0,'json');
+
+        if($_do=='good'){
+            $sql = '`good`=good+1';
+        }else{
+            $sql = '`bad`=bad+1';
+        }
+        //empty($sql) && iPHP::code(0,'iCMS:error',0,'json');
+
+        iDB::query("UPDATE `#iCMS@__article` SET {$sql} WHERE `id` ='{$aid}' limit 1");
         iPHP::set_cookie($ackey,user::$userid,86400);
-        iPHP::code(1,'iCMS:article:good',0,'json');
+        iPHP::code(1,'iCMS:article:'.$_do,0,'json');
+
+    }
+    public function API_good(){
+        $this->vote('good');
+    }
+    public function API_bad(){
+        $this->vote('bad');
     }
 
     public function article($id,$page=1,$tpl=true){

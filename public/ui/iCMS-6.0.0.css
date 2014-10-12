@@ -20,6 +20,7 @@ body, button, input, select, textarea { color: #111; font: 14px/1.75 "Helvetica 
 .ofh { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; word-wrap: normal; word-break: normal; -o-text-overflow: ellipsis }
 .ft6 { color: #666 }
 .fta { color: #aaa }
+a,a:hover,a:focus { color: #259 }
 /* bootstrap */
 .btn, .add-on, .navbar-inner, .label, .navbar a, .switch-left, .switch-right { background-image: none !important; -webkit-box-shadow: none !important; -moz-box-shadow: none !important; box-shadow: none !important; }
 .form-inline input, .form-inline textarea, .form-inline select { color: #1A1A1A !important; }
@@ -82,6 +83,7 @@ body, button, input, select, textarea { color: #111; font: 14px/1.75 "Helvetica 
 .iCMS_profile_wrap .iCMS_user_home .avatar { width: 25px; height: 25px; border: 1px solid rgba(0, 0, 0, .1); box-shadow: 0 1px 0 rgba(255, 255, 255, .1) }
 .iCMS_profile_wrap .iCMS_user_home .name { margin-left: 4px; }
 .iCMS_profile_wrap .popover .popover-content { padding: 0px; }
+.iCMS_profile_wrap .popover .popover-content i{font-size: 16px;margin-right: 5px;}
 .iCMS_profile_wrap .popover .dropdown-menu { min-width: inherit; display: block; position: static; border: none; box-shadow: none; -webkit-box-shadow: none; -moz-box-shadow: none; }
 .iCMS_profile_wrap .popover .dropdown-menu>li>a { font-size: 14px }
 /* .iCMS_hover_wrap { display: none; z-index: 999; position: absolute; top: 0; left: 0; min-width: 120px; border-radius: 0 0 3px 3px; background: #FFF }
@@ -148,36 +150,43 @@ body, button, input, select, textarea { color: #111; font: 14px/1.75 "Helvetica 
 .iCMS_tooltip.popover .popover-content p, .iCMS_tooltip .popover-content ul, .iCMS_tooltip .popover-content ol { margin-bottom: 0 }
 
 /*ucard*/
-.zh-profile-card { width: 380px }
-.zh-profile-card .upper, .zh-profile-card .lower { border: 14px solid transparent }
-.zh-profile-card .upper { background: #fff; padding-left: 66px; min-height: 50px }
-.zh-profile-card .upper a.avatar-link { position: relative }
-.zh-profile-card .upper img.avatar { position: absolute; max-width: none; width: 50px; height: 50px; left: -66px; border-radius: 3px }
-.zh-profile-card .upper .male { background-position: -145px -111px; width: 12px; height: 12px; vertical-align: -1px; margin-left: 3px }
-.zh-profile-card .upper .female { background-position: -130px -110px; width: 10px; height: 14px; vertical-align: -1px; margin-left: 3px }
-.zh-profile-card .upper span.name { font-size: 14px; font-weight: 700 }
-.zh-profile-card .upper div.tagline { font-size: 13px; color: #222; padding-top: 4px }
-.zh-profile-card .upper .personal { padding-top: 8px }
-.zh-profile-card .upper .personal .zg-icon { vertical-align: -1px }
-.zh-profile-card .upper .personal .zg-icon.employment { background-position: -94px -111px; width: 12px; height: 11px; margin-right: 6px; margin-left: 2px }
-.zh-profile-card .upper .personal .zg-icon.education { width: 16px; height: 12px; margin-right: 4px; background-position: -111px -112px }
-.zh-profile-card .upper .personal .info-wrap { color: #999 }
-.zh-profile-card .upper .personal .info-wrap .item+.item { border-left: 1px solid #EEE; padding-left: 10px; margin-left: 10px }
-.zh-profile-card .upper .secondary { padding-top: 8px; color: #999; border-top: 1px solid #EEE; margin-top: 8px }
-.zh-profile-card .upper .secondary div span { display: inline-block }
-.zh-profile-card .upper .secondary a, .zh-profile-card .upper .secondary a:visited { color: #222 }
-.zh-profile-card .upper .other span { color: #999 }
-.zh-profile-card .upper .hr { border-top: 1px solid #eee; width: 225px; padding-top: 6px; margin-top: 6px }
-.zh-profile-card .lower { background: #fafafa }
-.zh-profile-card .lower .operation .self { line-height: 48px; float: right; color: #999 }
-.zh-profile-card .lower .operation .zg-btn, .zh-profile-card .lower .operation .zg-btn-white, .zh-profile-card .lower .operation button { float: right; margin-top: 8px; vertical-align: middle }
-.zh-profile-card .lower .operation .zg-btn { margin-left: 15px; font-size: 13px }
-.zh-profile-card .lower .operation .zg-icon.pm { background-position: 0 -148px; width: 17px; height: 14px; text-indent: -999em }
-.zh-profile-card .lower .meta .item { float: left; padding: 0 16px; border-right: 1px solid #eee; color: inherit; text-decoration: none }
-.zh-profile-card .lower .meta .item:hover { color: #698ebf }
-.zh-profile-card .lower .meta .item:hover .key { color: inherit }
-.zh-profile-card .lower .meta .item .value, .zh-profile-card .lower .meta .item .key { display: block; text-align: center }
-.zh-profile-card .lower .meta .item .value { font-size: 15px; font-weight: 700 }
-.zh-profile-card .lower .meta .item .key { font-size: 14px; color: #999 }
-.zh-profile-card .lower .meta .item:first-child { padding-left: 0 }
-.zh-profile-card .lower .meta .item:last-child { border-right: 0 none }
+.iCMS_ucard { width: 380px }
+.iCMS_ucard .upper, .iCMS_ucard .lower { border: 14px solid transparent }
+.iCMS_ucard .upper { background: #fff; padding-left: 66px; min-height: 50px }
+.iCMS_ucard .upper a.avatar-link { position: relative }
+.iCMS_ucard .upper img.avatar { position: absolute; max-width: none; width: 50px; height: 50px; left: -66px; border-radius: 3px }
+.iCMS_ucard .upper .male { background-position: -145px -111px; width: 12px; height: 12px; vertical-align: -1px; margin-left: 3px }
+.iCMS_ucard .upper .female { background-position: -130px -110px; width: 10px; height: 14px; vertical-align: -1px; margin-left: 3px }
+.iCMS_ucard .upper span.name { font-size: 14px; font-weight: 700 }
+.iCMS_ucard .upper div.tagline { font-size: 13px; color: #222; padding-top: 4px }
+.iCMS_ucard .upper .personal { padding-top: 8px }
+.iCMS_ucard .upper .personal .zg-icon { vertical-align: -1px }
+.iCMS_ucard .upper .personal .zg-icon.employment { background-position: -94px -111px; width: 12px; height: 11px; margin-right: 6px; margin-left: 2px }
+.iCMS_ucard .upper .personal .zg-icon.education { width: 16px; height: 12px; margin-right: 4px; background-position: -111px -112px }
+.iCMS_ucard .upper .personal .info-wrap { color: #999 }
+.iCMS_ucard .upper .personal .info-wrap .item+.item { border-left: 1px solid #EEE; padding-left: 10px; margin-left: 10px }
+.iCMS_ucard .upper .secondary { padding-top: 8px; color: #999; border-top: 1px solid #EEE; margin-top: 8px }
+.iCMS_ucard .upper .secondary div span { display: inline-block }
+.iCMS_ucard .upper .secondary a, .iCMS_ucard .upper .secondary a:visited { color: #222 }
+.iCMS_ucard .upper .other span { color: #999 }
+.iCMS_ucard .upper .hr { border-top: 1px solid #eee; width: 225px; padding-top: 6px; margin-top: 6px }
+.iCMS_ucard .lower { background: #fafafa }
+.iCMS_ucard .lower .operation .self { line-height: 48px; float: right; color: #999 }
+.iCMS_ucard .lower .operation .zg-btn, .iCMS_ucard .lower .operation .zg-btn-white, .iCMS_ucard .lower .operation button { float: right; margin-top: 8px; vertical-align: middle }
+.iCMS_ucard .lower .operation .zg-btn { margin-left: 15px; font-size: 13px }
+.iCMS_ucard .lower .operation .zg-icon.pm { background-position: 0 -148px; width: 17px; height: 14px; text-indent: -999em }
+.iCMS_ucard .lower .meta .item { float: left; padding: 0 16px; border-right: 1px solid #eee; color: inherit; text-decoration: none }
+.iCMS_ucard .lower .meta .item:hover { color: #698ebf }
+.iCMS_ucard .lower .meta .item:hover .key { color: inherit }
+.iCMS_ucard .lower .meta .item .value, .iCMS_ucard .lower .meta .item .key { display: block; text-align: center }
+.iCMS_ucard .lower .meta .item .value { font-size: 15px; font-weight: 700 }
+.iCMS_ucard .lower .meta .item .key { font-size: 14px; color: #999 }
+.iCMS_ucard .lower .meta .item:first-child { padding-left: 0 }
+.iCMS_ucard .lower .meta .item:last-child { border-right: 0 none }
+/* pm */
+#iCMS-pm-box { display: none;}
+.iCMS_pm_dialog{width: 360px;margin: 15px auto;}
+.iCMS_pm_dialog dt label { color: #999; text-align: right; font-size: 13px; float: left; width: 60px; }
+.iCMS_pm_dialog .pm_inbox { float: right; }
+.iCMS_pm_dialog .pm_content { width: 280px; padding: 5px; height: 60px; }
+

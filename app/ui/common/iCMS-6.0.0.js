@@ -210,16 +210,25 @@
             return c;
         },
     };
+    // article
     iCMS.article = {
-        good: function(a) {
+        vote: function(a) {
+            if (!iCMS.user_status) {
+                iCMS.LoginBox();
+                return false;
+            }
+
             var $this = $(a),
-                p = $this.parent(),
-                param = iCMS.param(p);
-            param['do'] = 'good';
-            $.get(iCMS.api('article'), param, function(c) {
+            $parent   = $this.parent(),
+            param     = iCMS.param($this),
+            _param    = iCMS.param($parent),
+            data      = $.extend(param,_param);
+
+            $.get(iCMS.api('article'), data, function(c) {
                 if (c.code) {
-                    var count = parseInt($('span', $this).text());
-                    $('span', $this).text(count + 1);
+                   var numObj = '.iCMS_'+data.do+'_num',
+                       count = parseInt($(numObj, $this).text());
+                    $(numObj, $this).text(count + 1);
                 } else {
                     iCMS.alert(c.msg, c.code);
                     return false;

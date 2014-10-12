@@ -48,7 +48,6 @@
             <p class="image"><img src="<!--{$article.pic.url}-->"/></p>
             <!--{/if}-->
             <div class="l-main-inner-ad"><!--正文内嵌图片广告 250x250--></div>
-
             <div class="article-body">
               <!--{$article.body}-->
               <!--{if $article.page.end}-->
@@ -75,7 +74,7 @@
           </div>
           <div class="tip clr">提示：键盘也能翻页，试试"← →"键</div>
         </div>
-        <!--{iCMS:article:up_down}-->
+        <!--{include file="./article.up_down.htm"}-->
         <div class="prev-next">
           <p>上一篇 : <!--{$article.prev}--></p>
           <p>下一篇 : <!--{$article.next}--></p>

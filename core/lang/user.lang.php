@@ -12,6 +12,7 @@
 defined('iPHP') OR exit('What are you doing?');
 
 return array(
+	'empty_id'=>'用户ID不能为空！',
 	'profile'=>array(
 		'success'     =>'修改完成！',
 		'avatar'      =>'头像上传成功！',

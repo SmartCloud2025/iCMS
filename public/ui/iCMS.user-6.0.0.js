@@ -38,16 +38,18 @@
                 }
               });
             },
-            follow: function(a) {
+            follow: function(a,callback) {
                 var $this = $(a),
-                    param = iCMS.param($this);
-                    //console.log(param);
-                $.post(iCMS.api('user', "&do=follow"), param, function(c) {
+                $parent   = $this.parent(),
+                param     = iCMS.param($this),
+                _param    = iCMS.param($parent),
+                data      = $.extend(param,_param);
+
+                $.post(iCMS.api('user','&do=follow'), data, function(c) {
                     if (c.code) {
-                        param['follow'] = (param['follow']=='1'?'0':'1');
-                        iCMS.param($this,param);
-                        $this.removeClass((param['follow']=='1'? 'follow' : 'unfollow'));
-                        $this.addClass((param['follow']=='1' ? 'unfollow' : 'follow'));
+                        if (typeof(callback) === "function") {
+                                callback(c,$this,data);
+                        }
                     } else {
                         iCMS.alert(c.msg);
                         return false;

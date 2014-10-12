@@ -1,4 +1,4 @@
-<div class="zh-profile-card member">
+<div class="iCMS_ucard member">
   <div class="upper">
     <a class="avatar-link" href="<!--{$user.urls.home}-->">
     <img class="avatar" src="<!--{$user.avatar}-->">
@@ -7,46 +7,43 @@
     <i class="iCMS_icon <!--{$user.gender}-->"></i>
     <div class="tagline"><!--{$userdata.slogan|default:'这家伙太懒了,什么都没有留下!'}--></div>
     <div class="secondary">
-      <a data-tip="p$t$namiheike" href="http://www.zhihu.com/people/namiheike" class="zg-link" title="納米黑客">納米黑客</a>、<a data-tip="p$t$emptymalei" href="http://www.zhihu.com/people/emptymalei" class="zg-link" title="章鱼喵">章鱼喵</a>、<a data-tip="p$t$linjunjie1103" href="http://www.zhihu.com/people/linjunjie1103" class="zg-link" title="Jaskey Lam">Jaskey Lam</a> 等 12 人也关注他
+      <a data-tip="p$t$namiheike" href="http://www.zhihu.com/people/namiheike" class="zg-link" title="納米黑客">納米黑客</a>、
+      <a data-tip="p$t$emptymalei" href="http://www.zhihu.com/people/emptymalei" class="zg-link" title="章鱼喵">章鱼喵</a>、
+      <a data-tip="p$t$linjunjie1103" href="http://www.zhihu.com/people/linjunjie1103" class="zg-link" title="Jaskey Lam">Jaskey Lam</a> 等 12 人也关注他
     </div>
   </div>
   <div class="lower clearfix">
     <div class="meta">
       <a class="item" target="_blank" href="<!--{$user.urls.home}-->">
-      <span class="value"><!--{$user.article|num10K}--></span>
-      <span class="key">文章</span>
+        <span class="value"><!--{$user.article|num10K}--></span>
+        <span class="key">文章</span>
       </a>
       <a class="item" target="_blank" href="<!--{$user.urls.comment}-->">
-      <span class="value"><!--{$user.comments|num10K}--></span>
-      <span class="key">评论</span>
+        <span class="value"><!--{$user.comments|num10K}--></span>
+        <span class="key">评论</span>
       </a>
       <a class="item" target="_blank" href="<!--{$user.urls.fans}-->">
-      <span class="value"><!--{$user.fans|num10K}--></span>
-      <span class="key">关注者</span>
+        <span class="value"><!--{$user.fans|num10K}--></span>
+        <span class="key">关注者</span>
       </a>
     </div>
-    <div class="operation">
-      <a data-param='{"uid":"<!--{$user.uid}-->","name":"<!--{$user.nickname}-->","follow":"1"}' class="btn btn_follow zg-btn zg-btn-unfollow<!--{if !$status.followed}--> hide<!--{/if}-->">取消关注</a>
-      <a data-param='{"uid":"<!--{$user.uid}-->","name":"<!--{$user.nickname}-->","follow":"0"}' class="btn btn_follow btn-success zg-btn zg-btn-follow <!--{if $status.followed}--> hide<!--{/if}-->"><i class="fa fa-plus"></i> 关注</a>
-      <a href="/inbox/7561034000" class="btn zg-btn-white member-profile-card-pm"><i class="iCMS_icon zg-icon pm">私信</i></a>
+    <div class="operation" data-param='{"uid":"<!--{$user.uid}-->","name":"<!--{$user.nickname}-->"}'>
+      <a data-param='{"follow":"1"}' class="btn_follow btn zg-btn <!--{if !$status.followed}--> hide<!--{/if}-->">取消关注</a>
+      <a data-param='{"follow":"0"}' class="btn_follow btn btn-success zg-btn <!--{if $status.followed}--> hide<!--{/if}-->"><i class="fa fa-plus"></i> 关注</a>
+      <a class="btn zg-btn-white iCMS_pm" name="iCMS-pm" href="<!--{$user.inbox}-->"><i class="iCMS_icon zg-icon pm">私信</i></a>
     </div>
   </div>
 </div>
 <script>
   $(".btn_follow").click(function(event) {
-    event.preventDefault();
-    var $this = $(this),param = iCMS.param($this);
-    console.log(param);
-    //param['follow'] = 0;
-    // $.post(iCMS.api('user', "&do=follow"),param,
-    //   function(c) {
-    //     if (c.code) {
-    //       $("#id_"+param['uid']).hide('500',function() {
-    //         $(this).remove();
-    //       });
-    //     }else{
-    //       iCMS.alert(c.msg);
-    //     }
-    // },'json');
+      event.preventDefault();
+      if (!iCMS.user_status) {
+          iCMS.LoginBox();
+          return false;
+      }
+      iCMS.user.follow(this,function(c,a){
+          $(".btn_follow").removeClass('hide');
+          a.addClass('hide');
+      });
   });
 </script>

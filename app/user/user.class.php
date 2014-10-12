@@ -28,6 +28,7 @@ class user {
 	        case 'url':   return iPHP::router(array('/{uid}/',$uid),iCMS_REWRITE);break;
 	        case 'urls':
 	            return array(
+					'inbox'    => iPHP::router(array('/user/inbox/{uid}',$uid),iCMS_REWRITE),
 					'home'     => iPHP::router(array('/{uid}/',$uid),iCMS_REWRITE),
 					'comment'  => iPHP::router(array('/{uid}/comment/',$uid),iCMS_REWRITE),
 					'favorite' => iPHP::router(array('/{uid}/favorite/',$uid),iCMS_REWRITE),
@@ -99,8 +100,9 @@ class user {
 		}
 		$user->gender = $user->gender?'male':'female';
 		$user->avatar = self::router($user->uid,'avatar');
-		$user->url    = self::router($user->uid,'url');
 		$user->urls   = self::router($user->uid,'urls');
+		$user->url    = $user->urls['home'];
+		$user->inbox  = $user->urls['inbox'];
 	   	if($unpass) unset($user->password);
 	   	return $user;
 	}
