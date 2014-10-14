@@ -19,7 +19,7 @@
             <a href="<!--{$article_list.url}-->">
               <!--{if $article_list.pic.url}-->
               <div class="thumb">
-                <img data-original="<!--{$article_list.pic.url}-->" src="<!--{$site.urls.ui}-->/img/img-default.png">
+                <img class="lazy" data-src="<!--{$article_list.pic.url}-->" src="<!--{$site.urls.ui}-->/img/img-default.png">
               </div>
               <!--{/if}-->
               <h3><!--{$article_list.title}--></h3>

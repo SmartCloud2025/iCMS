@@ -31,7 +31,7 @@ class user {
 					'inbox'    => iPHP::router(array('/user/inbox/{uid}',$uid),iCMS_REWRITE),
 					'home'     => iPHP::router(array('/{uid}/',$uid),iCMS_REWRITE),
 					'comment'  => iPHP::router(array('/{uid}/comment/',$uid),iCMS_REWRITE),
-					//'favorite' => iPHP::router(array('/{uid}/favorite/',$uid),iCMS_REWRITE),
+					'favorite' => iPHP::router(array('/{uid}/favorite/',$uid),iCMS_REWRITE),
 					//'share'    => iPHP::router(array('/{uid}/share/',$uid),iCMS_REWRITE),
 					'fans'     => iPHP::router(array('/{uid}/fans/',$uid),iCMS_REWRITE),
 					'follow'   => iPHP::router(array('/{uid}/follow/',$uid),iCMS_REWRITE),
@@ -61,8 +61,8 @@ class user {
 			//'inbox'  => $urls['inbox'],
 			'url'    => $url,
 			'avatar' => self::router($uid,"avatar",$size?$size:0),
-			'at'     => '<a href="'.$url.'" target="_blank" data-tip="iCMS:ucard:'.$uid.'">@'.$name.'</a>',
-			'link'   => '<a href="'.$url.'" target="_blank" data-tip="iCMS:ucard:'.$uid.'">'.$name.'</a>',
+			'at'     => '<a href="'.$url.'" class="iCMS_user_link" target="_blank" data-tip="iCMS:ucard:'.$uid.'">@'.$name.'</a>',
+			'link'   => '<a href="'.$url.'" class="iCMS_user_link" target="_blank" data-tip="iCMS:ucard:'.$uid.'">'.$name.'</a>',
 		);
 	}
 	public static function check($val,$field='username'){
@@ -71,14 +71,14 @@ class user {
 	}
 	public static function follow($uid=0,$fuid=0){
 		if($uid==='all'){ //all fans
-			$rs = iDB::all("SELECT `uid` AS `F`,`name` AS `N` FROM `#iCMS@__user_follow` where `fuid`='{$fuid}'");
+			$rs = iDB::all("SELECT `uid`,`name` FROM `#iCMS@__user_follow` where `fuid`='{$fuid}'");
 		}
 		if($fuid==='all'){ // all follow
-			$rs = iDB::all("SELECT `fuid` AS `F`,`fname` AS `N` FROM `#iCMS@__user_follow` where `uid`='{$uid}'");
+			$rs = iDB::all("SELECT `fuid` AS `uid`,`fname` AS `name` FROM `#iCMS@__user_follow` where `uid`='{$uid}'");
 		}
 		if(isset($rs)){
 			foreach ((array)$rs as $key => $value) {
-				$follow[$value['F']] = $value['N'];
+				$follow[$value['uid']] = $value['name'];
 			}
 			return $follow;
 		}

@@ -179,7 +179,7 @@ class iCMS {
             'SAPI'       => iCMS_API.'?app='.self::$app_name,
             'COOKIE_PRE' => iPHP_COOKIE_PRE,
             'refer'      => __REF__,
-            //'config'     => self::$config,
+            'config'     => self::$config,
             "APP"        => array(
                 'name'   => self::$app_name,
                 'do'     => self::$app_do,

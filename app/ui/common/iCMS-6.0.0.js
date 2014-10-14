@@ -28,6 +28,20 @@
                 iCMS.user.logout();
                 return false;
             });
+            doc.on("click", '.iCMS_article_do', function(event) {
+                event.preventDefault();
+                if (!iCMS.user_status) {
+                    iCMS.LoginBox();
+                    return false;
+                }
+                var param = iCMS.param($(this));
+                if (param.do =='comment') {
+                    iCMS.comment.box(this);
+                } else if (param.do =='good'||param.do =='bad') {
+                    iCMS.article.vote(this);
+                }
+            });
+
             $(".iCMS_seccode_img,.iCMS_seccode_text").click(function() {
                 $(".iCMS_seccode_img").attr('src', iCMS.api('public', '&do=seccode&') + Math.random());
             });
@@ -41,10 +55,18 @@
             $(".iCMS_API_iframe").load(function() {
                 iCMS.api_iframe_height($(this));
             });
-            $('.tip').tooltip();
+            $(".tip").tooltip();
+            $("img.lazy").lazyload();
         },
         api: function(app, _do) {
             return iCMS.config.API + '?app=' + app + (_do || '');
+        },
+        multiple: function(a) {
+            var $this = $(a),
+            $parent   = $this.parent(),
+            param     = iCMS.param($this),
+            _param    = iCMS.param($parent);
+            return $.extend(param,_param);
         },
         param: function(a,_param) {
             if(_param){
@@ -213,17 +235,24 @@
     // article
     iCMS.article = {
         vote: function(a) {
+            var $this = $(a),data = iCMS.multiple(a);
+            $.get(iCMS.api('article'), data, function(c) {
+                if (c.code) {
+                   var numObj = '.iCMS_'+data.do+'_num',
+                       count = parseInt($(numObj, $this).text());
+                    $(numObj, $this).text(count + 1);
+                } else {
+                    iCMS.alert(c.msg, c.code);
+                    return false;
+                }
+            }, 'json');
+        },
+        vote: function(a) {
             if (!iCMS.user_status) {
                 iCMS.LoginBox();
                 return false;
             }
-
-            var $this = $(a),
-            $parent   = $this.parent(),
-            param     = iCMS.param($this),
-            _param    = iCMS.param($parent),
-            data      = $.extend(param,_param);
-
+            var $this = $(a),data = iCMS.multiple(a);
             $.get(iCMS.api('article'), data, function(c) {
                 if (c.code) {
                    var numObj = '.iCMS_'+data.do+'_num',
@@ -331,7 +360,7 @@
 })(jQuery);
 // lazy load
 (function(a){
-    a.fn.lazyload=function(b){var c={attr:"data-original",container:a(window),callback:a.noop};var d=a.extend({},c,b||{});d.cache=[];a(this).each(function(){var h=this.nodeName.toLowerCase(),g=a(this).attr(d.attr);var i={obj:a(this),tag:h,url:g};d.cache.push(i)});var f=function(g){if(a.isFunction(d.callback)){d.callback.call(g.get(0))}};var e=function(){var g=d.container.height();if(a(window).get(0)===window){contop=a(window).scrollTop()}else{contop=d.container.offset().top}a.each(d.cache,function(m,n){var p=n.obj,j=n.tag,k=n.url,l,h;if(p){l=p.offset().top-contop,l+p.height();if((l>=0&&l<g)||(h>0&&h<=g)){if(k){if(j==="img"){f(p.attr("src",k))}else{p.load(k,{},function(){f(p)})}}else{f(p)}n.obj=null}}})};e();d.container.bind("scroll",e)}}
+    a.fn.lazyload=function(b){var c={attr:"data-src",container:a(window),callback:a.noop};var d=a.extend({},c,b||{});d.cache=[];a(this).each(function(){var h=this.nodeName.toLowerCase(),g=a(this).attr(d.attr);var i={obj:a(this),tag:h,url:g};d.cache.push(i)});var f=function(g){if(a.isFunction(d.callback)){d.callback.call(g.get(0))}};var e=function(){var g=d.container.height();if(a(window).get(0)===window){contop=a(window).scrollTop()}else{contop=d.container.offset().top}a.each(d.cache,function(m,n){var p=n.obj,j=n.tag,k=n.url,l,h;if(p){l=p.offset().top-contop,l+p.height();if((l>=0&&l<g)||(h>0&&h<=g)){if(k){if(j==="img"){f(p.attr("src",k))}else{p.load(k,{},function(){f(p)})}}else{f(p)}n.obj=null}}})};e();d.container.bind("scroll",e)}}
 )(jQuery);
 
 function pad(num, n) {

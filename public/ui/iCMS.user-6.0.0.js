@@ -30,7 +30,7 @@
                 fade: false,slide: false,
                 content: function(updateCallback) {
                     $.get(iCMS.api('user', "&do=ucard"),
-                        {'uid': $(this).attr('data-tip').replace('iCMS:ucard:','')},
+                      {'uid': $(this).attr('data-tip').replace('iCMS:ucard:','')},
                       function(html) {
                         updateCallback(html);
                     });
@@ -39,12 +39,11 @@
               });
             },
             follow: function(a,callback) {
-                var $this = $(a),
-                $parent   = $this.parent(),
-                param     = iCMS.param($this),
-                _param    = iCMS.param($parent),
-                data      = $.extend(param,_param);
-
+                if (!iCMS.user_status) {
+                  iCMS.LoginBox();
+                  return false;
+                }
+                var $this = $(a),data = iCMS.multiple(a);
                 $.post(iCMS.api('user','&do=follow'), data, function(c) {
                     if (c.code) {
                         if (typeof(callback) === "function") {
@@ -63,7 +62,7 @@
             },
             nocover: function() {
                 var img = event.srcElement;
-                img.src = iCMS.config.PUBLIC+'/ui/empty.gif';
+                img.src = iCMS.config.PUBLIC+'/ui/coverpic.jpg';
             },
     };
 })(jQuery);

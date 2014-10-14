@@ -78,10 +78,12 @@ $(function(){
             </tr>
           </thead>
           <tbody>
-            <?php for($i=0;$i<$_count;$i++){?>
+            <?php for($i=0;$i<$_count;$i++){
+               $url = iPHP::router(array('/{uid}/',$rs[$i]['uid']));
+            ?>
             <tr id="tr<?php echo $rs[$i]['uid'] ; ?>">
               <td><?php if($rs[$i]['uid']!="1"){ ; ?><input type="checkbox" name="id[]" value="<?php echo $rs[$i]['uid'] ; ?>" /><?php } ; ?></td>
-              <td><?php echo $rs[$i]['uid'] ; ?></td>
+              <td><a href="<?php echo $url; ?>" target="_blank"><?php echo $rs[$i]['uid'] ; ?></a></td>
               <td><a class="tip-top" title="注册时间:<?php if($rs[$i]['regtime']) echo get_date($rs[$i]['regtime'],"Y-m-d") ; ?><hr />累计登陆次数:<?php echo $rs[$i]['logintimes'] ; ?>"><?php echo $rs[$i]['username'] ; ?></a></td>
               <td><?php echo $rs[$i]['nickname'] ; ?>
                 <?php if($rs[$i]['status']=="2"){

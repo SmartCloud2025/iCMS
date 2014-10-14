@@ -21,7 +21,7 @@ class articleTable {
             'ordernum','top', 'postype', 'creative', 'tpl','status');
 
         if(!$update){ //更新
-            $_fields = array('mobile','postime','hits','hits_today','hits_yday','hits_week','hits_month','comments', 'good', 'bad');
+            $_fields = array('mobile','postime','hits','hits_today','hits_yday','hits_week','hits_month','favorite','comments', 'good', 'bad');
             $fields  = array_merge ($fields,$_fields);
         }
 

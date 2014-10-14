@@ -18,7 +18,7 @@
     <div class="userApp_home clearfix">
       <div class="userApp_header">
         <div class="card_banner">
-          <img src="<!--{$userdata.coverpic}-->" alt="<!--{$user.nickname}-->的封面">
+          <img src="<!--{$userdata.coverpic}-->" alt="<!--{$user.nickname}-->的封面" onerror="iCMS.user.nocover();">
         </div>
         <div class="card_top">
           <div class="card_info">
@@ -53,13 +53,17 @@
               </li>
             </ul>
           </div>
-          <div class="card_avatar"><a href="<!--{$user.urls.home}-->"><img class="card_avatar_img" src="<!--{$user.avatar}-->"></a></div>
+          <div class="card_avatar">
+            <a href="<!--{$user.urls.home}-->">
+              <img class="iCMS_user_avatar card_avatar_img" src="<!--{$user.avatar}-->" onerror="iCMS.user.noavatar();">
+            </a>
+          </div>
         </div>
       </div>
       <div class="user_nav_wrap">
         <ul class="nav_list">
-          <li class="c"><a href="<!--{$user.urls.home}-->" title="文章"><i class="fa fa-file-text-o"></i> 文章</a></li>
-          <li> <a href="<!--{$user.urls.favorite}-->" title="收藏" class="nav_icon icon_fav">收藏</a></li>
+          <li<!--{if $iCMS.APP.do=="home"}--> class="c"<!--{/if}-->><a href="<!--{$user.urls.home}-->" title="文章"><i class="fa fa-file-text-o"></i> 文章</a></li>
+          <li<!--{if $iCMS.APP.do=="favorite"}--> class="c"<!--{/if}-->> <a href="<!--{$user.urls.favorite}-->" title="收藏"><i class="fa fa-star"></i> 收藏</a></li>
           <li> <a href="<!--{$user.urls.share}-->" title="分享" class="nav_icon icon_sha">分享</a></li>
         </ul>
       </div>
@@ -67,36 +71,12 @@
         <!--{if $user.category.name}-->
         <h3 class="category_name"><span class="label label-info"><!--{$user.category.name}--></span></h3>
         <!--{/if}-->
-        <div id="artList">
-          <ul>
-            <!--{iCMS:article:list loop="true" page="true" row="10" userid="$user.uid" ucid="$user.category.cid"}-->
-            <li class="clearfix">
-              <div class="list_top">
-                <div class="rep_num" title="回复"><!--{$article_list.hits.count}--></div>
-                <div class="title">
-                  <a href="<!--{$article_list.url}-->" target="_blank" class="i_th_tit"><!--{$article_list.title}--></a>
-                </div>
-                <div class="info">
-                  <span class="date"><!--{$article_list.pubdate|date:'Y-m-d'}--></span>
-                </div>
-              </div>
-              <div class="list_detail clearfix">
-                <div class="text"><!--{$article_list.description}--></div>
-                <!--{if $article_list.pic.url}-->
-                <div class="pic"><img src="<!--{$article_list.pic.url}-->" onload="iCMS.imgFix(this,550,150);"></div>
-                <!--{/if}-->
-              </div>
-              <div class="list_fun clearfix" data-param='<!--{$article_list.param|json_encode}-->'>
-                <a href="javascript:;" data-param='{"do":"good"}' class="iCMS_article_do" title="给你32个赞"><i class="icon-thumbs-up"></i> (<span class="iCMS_good_num"><!--{$article_list.good}--></span>)</a>
-                <a href="javascript:;" data-param='{"do":"comment"}' class="iCMS_article_do" title="评论"><i class="icon-comment"></i> (<span class="iCMS_comment_num"><!--{$article_list.comments}--></span>)</a>
-                <a href="javascript:;" data-param='{"do":"favorite"}' class="iCMS_article_do" title="收藏"><i class="icon-heart"></i></a>
-              </div>
-            </li>
-            <!--{iCMSelse}-->
-            <li class="clearfix">暂无内容</li>
-            <!--{/iCMS}-->
-          </ul>
-        </div>
+        <!--{if $iCMS.APP.do=="home"}-->
+          <!--{include file="./home.article.htm" import="true"}-->
+        <!--{/if}-->
+        <!--{if $iCMS.APP.do=="favorite"}-->
+          <!--{include file="./home.favorite.htm" import="true"}-->
+        <!--{/if}-->
         <div id="artpagenav" class="iCMS_pagination">
           <!--{$iCMS.page.nav}-->
         </div>
@@ -128,7 +108,9 @@
           </div>
           <ul class="avatar_list">
             <!--{iCMS:user:follow loop="true" row="30" fuid=$user.uid}-->
-            <li><a href="<!--{$user_follow.url}-->" title="<!--{$user_follow.name}-->"><img class="avatar_30" data-tip="iCMS:ucard:<!--{$user_follow.uid}-->" src="<!--{$user_follow.avatar}-->"></a></li>
+            <li><a href="<!--{$user_follow.url}-->" title="<!--{$user_follow.name}-->">
+              <img class="iCMS_user_avatar avatar_30" data-tip="iCMS:ucard:<!--{$user_follow.uid}-->" src="<!--{$user_follow.avatar}-->" onerror="iCMS.user.noavatar();">
+            </a></li>
             <!--{iCMSelse}-->
             <li><span class="label label-inverse">居然没人关注，太low了吧</span></li>
             <!--{/iCMS}-->
@@ -141,7 +123,8 @@
           </div>
           <ul class="avatar_list">
             <!--{iCMS:user:follow loop="true" row="30" userid=$user.uid}-->
-            <li><a href="<!--{$user_follow.url}-->" title="<!--{$user_follow.name}-->"><img class="avatar_30" data-tip="iCMS:ucard:<!--{$user_follow.uid}-->" src="<!--{$user_follow.avatar}-->"></a></li>
+            <li><a href="<!--{$user_follow.url}-->" title="<!--{$user_follow.name}-->">
+              <img class="iCMS_user_avatar avatar_30" data-tip="iCMS:ucard:<!--{$user_follow.uid}-->" src="<!--{$user_follow.avatar}-->" onerror="iCMS.user.noavatar();"></a></li>
             <!--{iCMSelse}-->
             <li><span class="label label-inverse">没有关注</span></li>
             <!--{/iCMS}-->

@@ -46,30 +46,11 @@
             var doc = $(document);
             doc.on("click", '.iCMS_user_follow', function(event) {
                 event.preventDefault();
-                if (!iCMS.user_status) {
-                    iCMS.LoginBox();
-                    return false;
-                }
                 iCMS.user.follow(this);
-                return false;
-            });
-            doc.on("click", '.iCMS_article_do', function(event) {
-                event.preventDefault();
-                if (!iCMS.user_status) {
-                    iCMS.LoginBox();
-                    return false;
-                }
-                var param = iCMS.param($(this));
-                if (param.do =='comment') {
-                    iCMS.comment.box(this);
-                } else if (param.do =='good') {
-                    iCMS.article.good(this);
-                }
                 return false;
             });
 
             this.navbar_box();
-            $("img").lazyload();
             $(window).scroll(function () {
                 if ($(this).scrollTop() > 100) {
                     $('#iCMS-scrollUp').fadeIn();

@@ -19,7 +19,7 @@
             <a href="<!--{$user.urls.home}-->"><!--{$user.nickname}--></a>
           </p>
           <p class="userApp_avatar"><a href="<!--{$user.urls.home}-->">
-            <img class="userApp_avatar_img" src="<!--{$user.avatar}-->" onerror="iCMS.user.noavatar();"></a>
+            <img class="iCMS_user_avatar userApp_avatar_img" src="<!--{$user.avatar}-->" onerror="iCMS.user.noavatar();"></a>
           </p>
           <p class="userApp_slogan">
             <!--{$userdata.slogan|default:'这家伙太懒了,什么都没有留下!'}-->
@@ -38,7 +38,7 @@
                     <!--{if $art.pic.url}-->
                     <p class="thumb">
                       <a href="<!--{$art.url}-->" target="_blank">
-                        <img data-original="<!--{$art.pic.url}-->" src="<!--{$site.urls.ui}-->/img/img-default.png">
+                        <img class="lazy" data-src="<!--{$art.pic.url}-->" src="<!--{$site.urls.ui}-->/img/img-default.png">
                       </a>
                     </p>
                     <p class="title">

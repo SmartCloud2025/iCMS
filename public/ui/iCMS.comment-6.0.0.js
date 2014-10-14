@@ -163,11 +163,6 @@
                 }, 'json');
         },
         box: function(a) {
-            if (!iCMS.user_status) {
-                iCMS.LoginBox();
-                return false;
-            }
-
             var $this = $(a),
                 p = $this.parent(),
                 pp = p.parent(),

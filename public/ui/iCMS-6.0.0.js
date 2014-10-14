@@ -5,9 +5,7 @@
                 box    = document.getElementById("iCMS-pm-box"),
                 dialog = $.dialog({content: box,id:'iPHP-DIALOG',title: '发送私信',lock:true}),
                 inbox  = $this.attr('href'),
-                param  = iCMS.param($this),
-                _param = iCMS.param($parent),
-                data   = $.extend(param,_param),
+                data   = iCMS.multiple(a),
                 content = $("[name='content']", box);
             $(".pm_warnmsg", box).hide();
             content.val('');
@@ -91,25 +89,12 @@
             }
             doc.on("click", '.iCMS_user_follow', function(event) {
                 event.preventDefault();
-                if (!iCMS.user_status) {
-                    iCMS.LoginBox();
-                    return false;
-                }
                 iCMS.user.follow(this,function(c,$this,param){
                     param.follow = (param.follow=='1'?'0':'1');
                     iCMS.param($this,param);
                     $this.removeClass((param.follow=='1'? 'follow' : 'unfollow'));
                     $this.addClass((param.follow=='1' ? 'unfollow' : 'follow'));
                 });
-            });
-            doc.on("click", '.iCMS_article_do', function(event) {
-                event.preventDefault();
-                var param = iCMS.param($(this));
-                if (param.do =='comment') {
-                    iCMS.comment.box(this);
-                } else if (param.do =='good'||param.do =='bad') {
-                    iCMS.article.vote(this);
-                }
             });
 
             doc.on('click', 'a[name="iCMS-report"]', function(event) {

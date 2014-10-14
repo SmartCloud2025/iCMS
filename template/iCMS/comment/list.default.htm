@@ -17,7 +17,7 @@
 				<!--{iCMS:comment:list loop="true" page="true" row="5" by="ASC" vars="$comment_vars"}-->
 				<div class="commentApp-item" data-id="<!--{$comment_list.id}-->">
 					<a title="<!--{$comment_list.user.name}-->" data-tip="<!--{$tip_selector}--><!--{$comment_list.userid}-->" class="cmt-item-link-avatar" href="<!--{$comment_list.user.url}-->">
-						<img src="<!--{$comment_list.user.avatar}-->" class="cmt-item-img-avatar">
+						<img src="<!--{$comment_list.user.avatar}-->" class="iCMS_user_avatar cmt-item-img-avatar" onerror="iCMS.user.noavatar();">
 					</a>
 					<div class="commentApp-content-wrap">
 						<div class="commentApp-content-hd">

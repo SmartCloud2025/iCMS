@@ -3,7 +3,9 @@
 	<ul class="avatar_list">
 		<!--{iCMS:user:follow loop="true" row="30" userid=$user.uid}-->
 		<li id="id-<!--{$user_follow.uid}-->">
-		<a href="<!--{$user_follow.url}-->" target="_blank" ttitle="<!--{$user_follow.name}-->"><img class="avatar_90" data-tip="iCMS:ucard:<!--{$user_follow.uid}-->" src="<!--{$user_follow.avatar}-->"></a>
+		<a href="<!--{$user_follow.url}-->" target="_blank" title="<!--{$user_follow.name}-->">
+			<img class="iCMS_user_avatar avatar_90" data-tip="iCMS:ucard:<!--{$user_follow.uid}-->" src="<!--{$user_follow.avatar}-->" onerror="iCMS.user.noavatar();">
+		</a>
 		<span class="label label-info"><!--{$user_follow.name}--></span>
 		<a href="javascript:;" data-param='{"uid":"<!--{$user_follow.uid}-->","name":"<!--{$user_follow.name}-->"}' class="btn btn_follow">取消关注</a>
 	</li>

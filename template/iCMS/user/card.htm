@@ -33,27 +33,6 @@
   </div>
 </div>
 <script>
-  <!--{if !$status.followed}-->
-  // if (iCMS.user_status) {
-  //     $.get(iCMS.api('user', '&do=secondary'),{"uid":"<!--{$user.uid}-->"},
-  //       function(json){
-  //         if(json.code && json.count>1){
-  //           var a =[];
-  //           $.each(json.links, function(uid, item){
-  //             a.push('<a href="'+item[1]+'" class="zg-link" title="'+item[0]+'">'+item[0]+'</a>');
-  //           });
-  //           var html = a.join("、");
-  //           if(json.count>3){
-  //             html+=' 等 '+json.count+' 人也关注Ta';
-  //           }else{
-  //             html+= ' 也关注Ta';
-  //           }
-  //           $(".secondary").show().html(html);
-  //         }
-  //     },'json');
-  // }
-  <!--{/if}-->
-
   $(".btn_follow").click(function(event) {
       event.preventDefault();
       iCMS.user.follow(this,function(c,a){

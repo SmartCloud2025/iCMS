@@ -11,15 +11,17 @@ defined('iPHP') OR exit('What are you doing?');
 iPHP::app('user.class','static');
 iPHP::app('user.msg.class','static');
 class userApp {
-    public $methods = array('iCMS','home','article','publish','manage','profile','data','hits','check','follow','login','logout','register','add_category','upload','imageUp','mobileUp','getremote','report','ucard');
+    public $methods = array('iCMS','home','favorite','article','publish','manage','profile','data','hits','check','follow','login','logout','register','add_category','upload','imageUp','mobileUp','getremote','report','ucard');
     public $openid  = null;
     public $user    = array();
     public $me      = array();
+    private $auth   = false;
+
     public function __construct() {
-        user::get_cookie();
-        $this->uid      = (int)$_GET['uid'];
-        $this->openid   = iS::escapeStr($_GET['openid']);
-        $this->forward  = iS::escapeStr($_GET['forward']);
+        $this->auth    = user::get_cookie();
+        $this->uid     = (int)$_GET['uid'];
+        $this->openid  = iS::escapeStr($_GET['openid']);
+        $this->forward = iS::escapeStr($_GET['forward']);
         $this->forward OR iPHP::get_cookie('forward');
         $this->forward OR $this->forward = iCMS_URL;
         // iFS::config($GLOBALS['iCONFIG']['user_fs_conf'])
@@ -27,15 +29,13 @@ class userApp {
         iPHP::assign('openid',$this->openid);
         iPHP::assign('forward',$this->forward);
     }
-    private function user($ud=false){
+    private function user($userdata=false){
         $status = array('logined'=>false,'followed'=>false,'isme'=>false);
         if($this->uid){ // &uid=
             $this->user = user::get($this->uid);
             iPHP::http404($this->user,"user:".$this->uid);
         }
-
         $this->me = user::status(); //判断是否登陆
-
         if(empty($this->me) && empty($this->user)){
             iPHP::set_cookie('forward', '',-31536000);
             iPHP::gotourl(USER_LOGIN_URL);
@@ -54,7 +54,7 @@ class userApp {
         $this->user->hits_script = iCMS_API.'?app=user&do=hits&uid='.$this->user->uid;
         iPHP::assign('status', $status);
         iPHP::assign('user',   (array)$this->user);
-        $ud && iPHP::assign('userdata',(array)user::data($this->user->uid));
+        $userdata && iPHP::assign('userdata',(array)user::data($this->user->uid));
     }
 
     public function do_iCMS($a = null) {}
@@ -63,6 +63,9 @@ class userApp {
         $u['category'] = user::category((int)$_GET['cid']);
         iPHP::append('user',$u,true);
         iPHP::view('iCMS://user/home.htm');
+    }
+    public function do_favorite(){
+        $this->do_home();
     }
     public function do_manage(){
         $pgArray   = array('publish','category','article','comment','inbox','favorite','share','follow','fans');
@@ -137,7 +140,6 @@ class userApp {
     }
 
     private function __action_manage_category(){
-        $uid        = user::$userid;
         $name_array = (array)$_POST['name'];
         $cid_array  = (array)$_POST['_cid'];
         foreach ($name_array as $cid => $name) {
@@ -336,12 +338,12 @@ class userApp {
                 iPHP::alert('user:profile:unickEdit');
             }
             if($nickname){
-                iDB::query("UPDATE `#iCMS@__user` SET `nickname` = '$nickname' WHERE `uid` = '".user::$userid."';");
+                iDB::update('user',array('nickname'=>$nickname),array('uid'=>user::$userid));
                 $unickEdit = 1;
             }
         }
         if($gender!=$this->me->gender){
-            iDB::query("UPDATE `#iCMS@__user` SET `gender` = '$gender' WHERE `uid` = '".user::$userid."';");
+            iDB::update('user',array('gender'=>$gender),array('uid'=>user::$userid));
         }
 
         $uid    = iDB::value("SELECT `uid` FROM `#iCMS@__user_data` where `uid`='".user::$userid."' limit 1");
@@ -489,8 +491,7 @@ class userApp {
         iPHP::code(0,'user:category:failure',0,'json');
     }
     public function ACTION_report(){
-        iPHP::app('user.class','static');
-        user::get_cookie() OR iPHP::code(0,'iCMS:!login',0,'json');
+        $this->auth OR iPHP::code(0,'iCMS:!login',0,'json');
 
         $iid     = (int)$_POST['iid'];
         $uid     = (int)$_POST['userid'];
@@ -513,8 +514,7 @@ class userApp {
         iPHP::code(1,'iCMS:report:reason_success',$id,'json');
     }
     public function ACTION_pm(){
-        iPHP::app('user.class','static');
-        user::get_cookie() OR iPHP::code(0,'iCMS:!login',0,'json');
+        $this->auth OR iPHP::code(0,'iCMS:!login',0,'json');
 
         $receiv_uid = (int)$_POST['uid'];
         $content    = iS::escapeStr($_POST['content']);
@@ -522,7 +522,7 @@ class userApp {
         $receiv_uid OR iPHP::code(0,'iCMS:error',0,'json');
         $content OR iPHP::code(0,'iCMS:pm:empty',0,'json');
 
-        $receiv_name = $_POST['name'];
+        $receiv_name = iS::escapeStr($_POST['name']);
         $send_uid  = user::$userid;
         $send_name = user::$nickname;
 
@@ -568,14 +568,16 @@ class userApp {
         iPHP::json($a);
     }
     public function API_follow(){
-        $user   = user::status();
-        $user OR iPHP::code(0,0,$this->forward,'json');
+        $this->auth OR iPHP::code(0,0,$this->forward,'json');
 
-        $uid    = (int)$user->uid;
-        $name   = $user->nickname;
+        $uid    = (int)user::$userid;
+        $name   = user::$nickname;
         $fuid   = (int)$_POST['uid'];
         $fname  = iS::escapeStr($_POST['name']);
         $follow = (bool)$_POST['follow'];
+
+        $uid OR iPHP::code(0,'iCMS:error',0,'json');
+        $fuid OR iPHP::code(0,'iCMS:error',0,'json');
 
         if($follow){ //1 取消关注
             iDB::query("DELETE FROM `#iCMS@__user_follow` WHERE `uid` = '$uid' AND `fuid`='$fuid' LIMIT 1;");
@@ -583,9 +585,8 @@ class userApp {
             user::update_count($fuid,1,'fans','-');
             iPHP::code(1,0,0,'json');
         }else{
-            $check = user::follow($uid,$fuid);
-            $uid==$fuid && iPHP::code(0,'user:follow:self',0,'json');
-
+           $uid==$fuid && iPHP::code(0,'user:follow:self',0,'json');
+           $check = user::follow($uid,$fuid);
             if($check){
                 iPHP::code(1,'user:follow:success',0,'json');
             }else{
@@ -637,26 +638,60 @@ class userApp {
         }
     }
     public function API_getremote(){
+        $this->auth OR iPHP::code(0,0,$this->forward);
         $editorApp = iPHP::app("admincp.editor.app");
         $editorApp->do_getremote();
     }
     public function API_imageUp(){
+        $this->auth OR iPHP::code(0,0,$this->forward);
         $editorApp = iPHP::app("admincp.editor.app");
         $editorApp->do_imageUp();
     }
     //手机上传
     public function API_mobileUp(){
+        $this->auth OR iPHP::code(0,0,$this->forward);
         $F = iFS::upload('upfile');
         $F['path'] && $url = iFS::fp($F['path'],'+http');
         iPHP::js_callback(array(
-            'url'      => $url,
-            'code'    => $F['code']
+            'url'  => $url,
+            'code' => $F['code']
         ));
     }
     public function API_ucard(){
         $this->user(true);
+        if($this->auth){
+            $secondary = $this->__secondary();
+            iPHP::assign('secondary',$secondary);
+        }
         iPHP::view('iCMS://user/card.htm');
     }
+
+    private function __secondary(){
+        if($this->uid == user::$userid){
+            return;
+        }
+
+        $follow = user::follow(user::$userid,'all');  //你的所有关注者
+        $fans   = user::follow('all',$this->uid);     //他的所有粉丝
+        $links  = array();
+        foreach ((array)$fans as $uid => $name) {
+            if($follow[$uid]){
+                $url = user::router($uid,"url");
+                $links[$uid] ='<a href="'.$url.'" class="user-link" title="'.$name.'">'.$name.'</a>';
+            }
+        }
+        if(empty($links)){
+            return;
+        }
+        $_count = count($links);
+        $text   = ' 也关注Ta';
+        if($_count>3){
+            $links = array_slice($links,0,3);
+            $text   = ' 等 '.$_count.' 人也关注Ta';
+        }
+        return implode('、', $links).$text;
+    }
+
     public function select($permission='',$_cid="0",$cid="0",$level = 1) {
         $array = iCache::get('iCMS/category.'.iCMS_APP_ARTICLE.'/array');
         foreach((array)$array[$cid] AS $root=>$C) {

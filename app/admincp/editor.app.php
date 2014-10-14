@@ -44,8 +44,9 @@ class editorApp{
 		}
 		/* 返回抓取数据 */
 		iPHP::json(array(
-		    'state'=> count($list) ? 'SUCCESS':'ERROR',
-		    'list'=> $list
+			'code'  => count($list) ? '1':'0',
+			'state' => count($list) ? 'SUCCESS':'ERROR',
+			'list'  => $list
 		));
     }
     function do_imageUp(){
@@ -56,6 +57,7 @@ class editorApp{
 			'title'    => iS::escapeStr($_POST['pictitle']),
 			'original' => $F['oname'],
 			'url'      => $url,
+			'code'     => $F['code'],
 			'state'    => $this->stateInfo
 		));
     }

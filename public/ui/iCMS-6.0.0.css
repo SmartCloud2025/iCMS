@@ -167,7 +167,7 @@ a,a:hover,a:focus { color: #259 }
 .iCMS_ucard .upper .personal .zg-icon.education { width: 16px; height: 12px; margin-right: 4px; background-position: -111px -112px }
 .iCMS_ucard .upper .personal .info-wrap { color: #999 }
 .iCMS_ucard .upper .personal .info-wrap .item+.item { border-left: 1px solid #EEE; padding-left: 10px; margin-left: 10px }
-.iCMS_ucard .upper .secondary { padding-top: 8px; color: #999; border-top: 1px solid #EEE; margin-top: 8px }
+.iCMS_ucard .upper .secondary {padding-top: 8px; color: #999; border-top: 1px solid #EEE; margin-top: 8px }
 .iCMS_ucard .upper .secondary div span { display: inline-block }
 .iCMS_ucard .upper .secondary a, .iCMS_ucard .upper .secondary a:visited { color: #222 }
 .iCMS_ucard .upper .other span { color: #999 }

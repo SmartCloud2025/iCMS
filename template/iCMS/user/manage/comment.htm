@@ -12,7 +12,7 @@
 				<tr id="id-<!--{$comment_list.id}-->">
 					<td class="iCMS_avatar_s ">
 						<a title="<!--{$comment_list.user.name}-->" href="<!--{$comment_list.user.url}-->">
-							<img src="<!--{$comment_list.user.avatar}-->">
+							<img class="iCMS_user_avatar" src="<!--{$comment_list.user.avatar}-->" onerror="iCMS.user.noavatar();">
 						</a>
 					</td>
 						<td><a href="<!--{$comment_list.user.url}-->" target="_blank"><span class="label label-info"><!--{$comment_list.user.name}--></span></a>

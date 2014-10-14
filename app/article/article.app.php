@@ -247,7 +247,8 @@ class articleApp {
             "iid"   => $article['id'],
             "cid"   => $article['cid'],
             "suid"  => $article['userid'],
-            "title" => $article['title']
+            "title" => $article['title'],
+            "url"   => $article['url']
         );
 
         return $article;
