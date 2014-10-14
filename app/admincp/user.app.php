@@ -38,6 +38,7 @@ class userApp{
         }
     }
     function do_iCMS(){
+        //iPHP::app('user.class','static');
         $sql   = "WHERE 1=1";
         if($_GET['keywords']) {
             $sql.=" AND CONCAT(username,nickname) REGEXP '{$_GET['keywords']}'";

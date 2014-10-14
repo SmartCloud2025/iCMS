@@ -1,16 +1,14 @@
 <div class="iCMS_ucard member">
   <div class="upper">
     <a class="avatar-link" href="<!--{$user.urls.home}-->">
-    <img class="avatar" src="<!--{$user.avatar}-->">
+    <img class="iCMS_user_avatar avatar" src="<!--{$user.avatar}-->" onerror="iCMS.user.noavatar();">
     <span class="name"><!--{$user.nickname}--></span>
     </a>
     <i class="iCMS_icon <!--{$user.gender}-->"></i>
     <div class="tagline"><!--{$userdata.slogan|default:'这家伙太懒了,什么都没有留下!'}--></div>
-    <div class="secondary">
-      <a data-tip="p$t$namiheike" href="http://www.zhihu.com/people/namiheike" class="zg-link" title="納米黑客">納米黑客</a>、
-      <a data-tip="p$t$emptymalei" href="http://www.zhihu.com/people/emptymalei" class="zg-link" title="章鱼喵">章鱼喵</a>、
-      <a data-tip="p$t$linjunjie1103" href="http://www.zhihu.com/people/linjunjie1103" class="zg-link" title="Jaskey Lam">Jaskey Lam</a> 等 12 人也关注他
-    </div>
+    <!--{if $secondary}-->
+    <div class="secondary"><!--{$secondary}--></div>
+    <!--{/if}-->
   </div>
   <div class="lower clearfix">
     <div class="meta">
@@ -35,12 +33,29 @@
   </div>
 </div>
 <script>
+  <!--{if !$status.followed}-->
+  // if (iCMS.user_status) {
+  //     $.get(iCMS.api('user', '&do=secondary'),{"uid":"<!--{$user.uid}-->"},
+  //       function(json){
+  //         if(json.code && json.count>1){
+  //           var a =[];
+  //           $.each(json.links, function(uid, item){
+  //             a.push('<a href="'+item[1]+'" class="zg-link" title="'+item[0]+'">'+item[0]+'</a>');
+  //           });
+  //           var html = a.join("、");
+  //           if(json.count>3){
+  //             html+=' 等 '+json.count+' 人也关注Ta';
+  //           }else{
+  //             html+= ' 也关注Ta';
+  //           }
+  //           $(".secondary").show().html(html);
+  //         }
+  //     },'json');
+  // }
+  <!--{/if}-->
+
   $(".btn_follow").click(function(event) {
       event.preventDefault();
-      if (!iCMS.user_status) {
-          iCMS.LoginBox();
-          return false;
-      }
       iCMS.user.follow(this,function(c,a){
           $(".btn_follow").removeClass('hide');
           a.addClass('hide');
