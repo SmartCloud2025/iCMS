@@ -1,56 +1,54 @@
-<a class="circle" id="iCMS-scrollUp"><i class="fa fa-angle-double-up"></i></a>
-<div id="iPHP-DIALOG" class="hide"><img src="<!--{$site.urls.ui}-->/img/loading.gif" /> 加载中,请稍侯......</div>
-<div id="iCMS-MODAL" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="iCMS-MODALLabel" aria-hidden="true">
-  <div class="modal-dialog">
-    <div class="modal-content">
-      <div class="modal-header">
-        <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
-        <h4 class="modal-title" id="iCMS-MODALLabel">iCMS 提示</h4>
-      </div>
-      <div class="modal-body">
-        <p class="modal-loading"><img src="<!--{$site.urls.ui}-->/img/loading.gif" /> 加载中,请稍侯......</p>
+ <a class="circle" id="iCMS-scrollUp"><i class="fa fa-angle-double-up"></i></a>
+  <div id="iPHP-DIALOG" class="hide">
+    <img src="<!--{$site.urls.ui}-->/img/loading.gif" />
+    加载中,请稍侯......</div>
+  <div id="iCMS-MODAL" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="iCMS-MODALLabel" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+          <h4 class="modal-title" id="iCMS-MODALLabel">iCMS 提示</h4>
+        </div>
+        <div class="modal-body">
+          <p class="modal-loading">
+            <img src="<!--{$site.urls.ui}-->/img/loading.gif" />
+            加载中,请稍侯......</p>
+        </div>
       </div>
     </div>
   </div>
-</div>
-<nav class="collapse" role="navigation" id="iCMS-menu-box">
-  <div class="navbar-collapse">
-    <div class="menu_head">
-      <div id="iCMS-nav-login">
-        <a class="btn btn-primary btn-sm" href="<!--{iCMS:router url='/api/user/login'}-->"><i class="fa fa-user"></i> 登 录</a>
-        <a class="btn btn-success btn-sm" href="<!--{iCMS:router url='/api/user/register'}-->"><i class="fa fa-heart"></i> 注册</a>
-        <a class="navbar-brand mlogo" href="<!--{$site.url}-->"><img src="<!--{$site.urls.ui}-->/img/iCMS.mlogo-6.0.png" width="90"/></a>
+  <nav class="collapse" role="navigation" id="iCMS-menu-box">
+    <div class="navbar-collapse">
+      <div class="menu_head">
+        <div id="iCMS-nav-login"> <a class="btn btn-primary btn-sm" href="<!--{iCMS:router url='/api/user/login'}-->"><i class="fa fa-user"></i> 登 录</a> <a class="btn btn-success btn-sm" href="<!--{iCMS:router url='/api/user/register'}-->"><i class="fa fa-heart"></i> 注册</a> <a class="navbar-brand mlogo" href="<!--{$site.url}-->">
+            <img src="<!--{$site.urls.ui}-->/img/iCMS.mlogo-6.0.png" width="90"/>
+          </a> </div>
+        <div id="iCMS-nav-profile"> <a class="btn btn-default btn-sm publish" href="<!--{iCMS:router url='/user/publish'}-->" target="_blank"><i class="fa fa-edit"></i> 发表文章</a> 
+          <!--{include file="iCMS://user/menu.htm"}--> 
+        </div>
       </div>
-      <div id="iCMS-nav-profile">
-        <a class="btn btn-default btn-sm publish" href="<!--{iCMS:router url='/user/publish'}-->" target="_blank"><i class="fa fa-edit"></i> 发表文章</a>
-        <!--{include file="iCMS://user/menu.htm"}-->
-      </div>
-    </div>
-    <div class="clearfix"></div>
-    <ul class="nav navbar-nav">
-      <li class="active" id="c0"><a href="<!--{$site.url}-->"><i class="fa fa-home"></i> 网站首页</a></li>
-      <li class="divider"></li>
-      <!--{iCMS:category:list loop="true" stype='top' row="10"}-->
-      <!--{if $category_list.child}-->
-      <li class="dropdown" id="c<!--{$category_list.cid}-->">
-      <a class="dropdown-toggle" data-toggle="dropdown" href="<!--{$category_list.url}-->" target="_blank"><span><!--{$category_list.name}--></span><b class="caret"></b></a>
-      <ul class="dropdown-menu" role="menu">
-        <!--{iCMS:category:list as="sub_category" loop="true" stype='sub' row="10" cid=$category_list.cid}-->
-        <li id="c<!--{$sub_category.cid}-->"><a href="<!--{$sub_category.url}-->" target="_blank"> <i class="fa fa-star-o"></i> <!--{$sub_category.name}--></a></li>
-        <!--{/iCMS}-->
-      </ul>
-    </li>
-    <!--{else}-->
-    <li id="c<!--{$category_list.cid}-->"><a href="<!--{$category_list.url}-->" target="_blank"><span><!--{$category_list.name}--></span></a></li>
-    <!--{/if}-->
-    <!--{/iCMS}-->
-    <script type="text/javascript">
+      <div class="clearfix"></div>
+      <ul class="nav navbar-nav">
+        <li class="active" id="c0"><a href="<!--{$site.url}-->"><i class="fa fa-home"></i> 网站首页</a></li>
+        <li class="divider"></li>
+        <!--{iCMS:category:list loop="true" stype='top' row="10"}--> 
+        <!--{if $category_list.child}-->
+        <li class="dropdown" id="c<!--{$category_list.cid}-->"> <a class="dropdown-toggle" data-toggle="dropdown" href="<!--{$category_list.url}-->" target="_blank"><span><!--{$category_list.name}--></span><b class="caret"></b></a>
+          <ul class="dropdown-menu" role="menu">
+            <!--{iCMS:category:list as="sub_category" loop="true" stype='sub' row="10" cid=$category_list.cid}-->
+            <li id="c<!--{$sub_category.cid}-->"><a href="<!--{$sub_category.url}-->" target="_blank"> <i class="fa fa-star-o"></i> <!--{$sub_category.name}--></a></li>
+            <!--{/iCMS}-->
+          </ul>
+        </li>
+        <!--{else}-->
+        <li id="c<!--{$category_list.cid}-->"><a href="<!--{$category_list.url}-->" target="_blank"><span><!--{$category_list.name}--></span></a></li>
+        <!--{/if}--> 
+        <!--{/iCMS}--> 
+        <script type="text/javascript">
     $("#c0").removeClass("active");
     $("#c<!--{$category.cid|default:0}-->").addClass("active");
     </script>
-  </ul>
-</div>
-<div class="menu_right">
-  <span class="circle menu_close"><i class="fa fa-times"></i></span>
-</div>
-</nav>
+      </ul>
+    </div>
+    <div class="menu_right"> <span class="circle menu_close"><i class="fa fa-times"></i></span> </div>
+  </nav>

@@ -44,7 +44,8 @@
                   return false;
                 }
                 var $this = $(a),data = iCMS.multiple(a);
-                $.post(iCMS.api('user','&do=follow'), data, function(c) {
+                data.action = "follow";
+                $.post(iCMS.api('user'), data, function(c) {
                     if (c.code) {
                         if (typeof(callback) === "function") {
                                 callback(c,$this,data);

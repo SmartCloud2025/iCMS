@@ -14,16 +14,18 @@ function user_list($vars=null){
 }
 function user_category($vars=null){
 	$row       = isset($vars['row'])?(int)$vars['row']:"10";
-	$where_sql = "WHERE `uid`='".$vars['userid']."'";
-	$resource  = iDB::all("SELECT * FROM `#iCMS@__user_category` {$where_sql} ORDER BY `cid` ASC LIMIT $row");
+	$where_sql = "WHERE `uid`='".(int)$vars['userid']."' ";
+	$where_sql.= " AND `appid`='".(int)$vars['appid']."'";
+	$rs  = iDB::all("SELECT * FROM `#iCMS@__user_category` {$where_sql} ORDER BY `cid` ASC LIMIT $row");
 	//iDB::debug(1);
-	if($resource)foreach ($resource as $key => $value) {
+	$resource = array();
+	if($rs)foreach ($rs as $key => $value) {
 		$value['url']	= iPHP::router(array('/{uid}/{cid}/',array($value['uid'],$value['cid'])),iCMS_REWRITE);
-		isset($vars['array']) && $array[$value['cid']]=$value;
-		$resource[$key] = $value;
-	}
-	if(isset($vars['array'])){
-		return $array;
+		if(isset($vars['loop'])){
+			$resource[$key] = $value;
+		}else{
+			$resource[$value['cid']]=$value;
+		}
 	}
 	return $resource;
 }
@@ -50,7 +52,7 @@ function user_follow($vars=null){
 			$value['name']   = $value['fname'];
 		}
 		if(isset($vars['check'])){
-			$value['followed'] = $follow[$value['uid']];
+			$value['followed'] = $follow[$value['uid']]?1:0;
 		}
 		$resource[$key] = $value;
 	}

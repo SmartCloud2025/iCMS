@@ -1,38 +1,18 @@
 <div class="iCMS_ucard member">
-  <div class="upper">
-    <a class="avatar-link" href="<!--{$user.urls.home}-->">
-    <img class="iCMS_user_avatar avatar" src="<!--{$user.avatar}-->" onerror="iCMS.user.noavatar();">
-    <span class="name"><!--{$user.nickname}--></span>
-    </a>
-    <i class="iCMS_icon <!--{$user.gender}-->"></i>
-    <div class="tagline"><!--{$userdata.slogan|default:'这家伙太懒了,什么都没有留下!'}--></div>
-    <!--{if $secondary}-->
-    <div class="secondary"><!--{$secondary}--></div>
-    <!--{/if}-->
-  </div>
-  <div class="lower clearfix">
-    <div class="meta">
-      <a class="item" target="_blank" href="<!--{$user.urls.home}-->">
-        <span class="value"><!--{$user.article|num10K}--></span>
-        <span class="key">文章</span>
-      </a>
-      <a class="item" target="_blank" href="<!--{$user.urls.comment}-->">
-        <span class="value"><!--{$user.comments|num10K}--></span>
-        <span class="key">评论</span>
-      </a>
-      <a class="item" target="_blank" href="<!--{$user.urls.fans}-->">
-        <span class="value"><!--{$user.fans|num10K}--></span>
-        <span class="key">关注者</span>
-      </a>
+    <div class="upper"> <a class="avatar-link" href="<!--{$user.urls.home}-->">
+        <img class="iCMS_user_avatar avatar" src="<!--{$user.avatar}-->" onerror="iCMS.user.noavatar();">
+        <span class="name"><!--{$user.nickname}--></span> </a> <i class="iCMS_icon <!--{$user.gender}-->"></i>
+      <div class="tagline"><!--{$userdata.slogan|default:'这家伙太懒了,什么都没有留下!'}--></div>
+      <!--{if $secondary}-->
+      <div class="secondary"><!--{$secondary}--></div>
+      <!--{/if}--> 
     </div>
-    <div class="operation" data-param='{"uid":"<!--{$user.uid}-->","name":"<!--{$user.nickname}-->"}'>
-      <a data-param='{"follow":"1"}' class="btn_follow btn zg-btn <!--{if !$status.followed}--> hide<!--{/if}-->">取消关注</a>
-      <a data-param='{"follow":"0"}' class="btn_follow btn btn-success zg-btn <!--{if $status.followed}--> hide<!--{/if}-->"><i class="fa fa-plus"></i> 关注</a>
-      <a class="btn zg-btn-white iCMS_pm" name="iCMS-pm" href="<!--{$user.inbox}-->"><i class="iCMS_icon zg-icon pm">私信</i></a>
+    <div class="lower clearfix">
+      <div class="meta"> <a class="item" target="_blank" href="<!--{$user.urls.home}-->"> <span class="value"><!--{$user.article|num10K}--></span> <span class="key">文章</span> </a> <a class="item" target="_blank" href="<!--{$user.urls.comment}-->"> <span class="value"><!--{$user.comments|num10K}--></span> <span class="key">评论</span> </a> <a class="item" target="_blank" href="<!--{$user.urls.fans}-->"> <span class="value"><!--{$user.fans|num10K}--></span> <span class="key">关注者</span> </a> </div>
+      <div class="operation" data-param='{"uid":"<!--{$user.uid}-->","name":"<!--{$user.nickname}-->"}'> <a data-param='{"follow":"1"}' class="btn_follow btn zg-btn <!--{if !$status.followed}--> hide<!--{/if}-->">取消关注</a> <a data-param='{"follow":"0"}' class="btn_follow btn btn-success zg-btn <!--{if $status.followed}--> hide<!--{/if}-->"><i class="fa fa-plus"></i> 关注</a> <a class="btn zg-btn-white iCMS_pm" name="iCMS-pm" href="<!--{$user.inbox}-->"><i class="iCMS_icon zg-icon pm">私信</i></a> </div>
     </div>
   </div>
-</div>
-<script>
+  <script>
   $(".btn_follow").click(function(event) {
       event.preventDefault();
       iCMS.user.follow(this,function(c,a){
@@ -40,4 +20,5 @@
           a.addClass('hide');
       });
   });
-</script>
+</script> 
+  

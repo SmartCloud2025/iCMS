@@ -11,9 +11,6 @@ body { background-color: #fff; background-image: url(img/bg-v6.png); _background
 .userApp_home .txtList li a span { margin-left: 10px; }
 .avatar_list { }
 .avatar_list li { display: inline-block; margin-bottom: 4px; }
-.avatar_30 { width: 30px; height: 30px; border-radius: 3px; }
-.avatar_90 { width: 90px; height: 90px; border-radius: 4px; }
-.avatar_120 { width: 120px; height: 120px; border-radius: 4px; }
 /* --icon--- */
 .icon_manage { display: inline-block; width: 16px; height: 16px; background: url(img/manage.png) no-repeat top left; }
 .icon_user { display: inline-block; width: 16px; height: 16px; background: url(img/user.png) no-repeat top left; }

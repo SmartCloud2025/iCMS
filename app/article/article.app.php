@@ -20,6 +20,12 @@ class articleApp {
             iDB::query("UPDATE `#iCMS@__article` SET {$sql} WHERE `id` ='$id'");
         }
     }
+    public function API_good(){
+        $this->vote('good');
+    }
+    public function API_bad(){
+        $this->vote('bad');
+    }
     private function vote($_do){
         iPHP::app('user.class','static');
         user::get_cookie() OR iPHP::code(0,'iCMS:!login',0,'json');
@@ -43,13 +49,6 @@ class articleApp {
         iPHP::code(1,'iCMS:article:'.$_do,0,'json');
 
     }
-    public function API_good(){
-        $this->vote('good');
-    }
-    public function API_bad(){
-        $this->vote('bad');
-    }
-
     public function article($id,$page=1,$tpl=true){
         $article = iDB::row("SELECT * FROM `#iCMS@__article` WHERE id='".(int)$id."' AND `status` ='1' LIMIT 1;",ARRAY_A);
         if($article['url']) {

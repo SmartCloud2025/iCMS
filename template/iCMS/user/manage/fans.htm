@@ -1,45 +1,50 @@
 <div class="title"><span>我的粉丝</span></div>
-<div class="pg_follow w670">
-  <ul class="avatar_list">
-    <!--{iCMS:user:follow loop="true" check="true" row="30" fuid=$user.uid}-->
-    <li id="id-<!--{$user_follow.uid}-->">
-    <a href="<!--{$user_follow.url}-->" target="_blank" title="<!--{$user_follow.name}-->">
-      <img class="iCMS_user_avatar avatar_90" data-tip="iCMS:ucard:<!--{$user_follow.uid}-->" src="<!--{$user_follow.avatar}-->" onerror="iCMS.user.noavatar();">
-    </a>
-    <span class="label label-info"><!--{$user_follow.name}--></span>
-    <a href="javascript:;" data-param='{"uid":"<!--{$user_follow.uid}-->","name":"<!--{$user_follow.name}-->","follow":"<!--{$user_follow.followed}-->"}' class="btn btn-success btn_follow">关注</a>
-  </li>
-  <!--{iCMSelse}-->
-  <div class="alert alert-info"><i class="fa fa-ban"></i> 暂无粉丝</div>
-  <!--{/iCMS}-->
-  </ul>
-</div>
-<script>
-  var al = $(".avatar_list");
-  $("li", al).each(function() {
-    var a = $(this);
-    a.hover(function() {
-      $(".label",a).hide();
-      $(".btn_follow",a).css('display','block');
-    }, function() {
-        setTimeout(function() {
-          $(".label",a).show();
-            $(".btn_follow",a).hide();
-        }, 3000);
-    });
-  });
+  <div class="pg_follow w670">
+    <table class="table table-striped">
+      <tbody>
+        <!--{iCMS:user:follow loop="true" check="true" row="30" fuid=$user.uid}-->
+        <tr>
+          <td class="avatar_35"><a title="<!--{$user_follow.name}-->" href="<!--{$user_follow.url}-->">
+              <img class="iCMS_user_avatar avatar_35" data-tip="iCMS:ucard:<!--{$user_follow.uid}-->" src="<!--{$user_follow.avatar}-->" onerror="iCMS.user.noavatar();">
+            </a></td>
+          <td><div class="info"> <span class="label"><!--{$user_follow.name}--></span> </div></td>
+          <td class="span2"><div data-param='{"uid":"<!--{$user_follow.uid}-->","name":"<!--{$user_follow.name}-->"}'>
+              <!--{if $user_follow.followed}-->
+              <a href="javascript:;" data-param='{"follow":"1"}' class="btn_follow"><i class="fa fa-check"></i> 已关注，取消</a>
+              <!--{else}-->
+              <a href="javascript:;" data-param='{"follow":"0"}' class="btn btn-success btn_follow"><i class="fa fa-plus"></i> 关注</a>
+              <!--{/if}-->
+            </div></td>
+        </tr>
+        <!--{iCMSelse}-->
+        <tr>
+          <td><i class="fa fa-ban"></i> 暂无粉丝</td>
+        </tr>
+        <!--{/iCMS}-->
+      </tbody>
+      <tfoot>
+        <tr>
+          <td colspan="3"><div class="iCMS_pagination"><!--{$iCMS.page.nav}--></div></td>
+        </tr>
+      </tfoot>
+    </table>
+  </div>
+  <script>
   $(".btn_follow").click(function(event) {
     event.preventDefault();
-    var $this = $(this),param = iCMS.param($this);
-    $.post(iCMS.api('user', "&do=follow"),param,
-      function(c) {
+    iCMS.user.follow(this,function(c,$this,param){
         if (c.code) {
-          param['follow'] = (param['follow']=='1'?'0':'1');
+          param.follow = (param.follow=='1'?'0':'1');
           iCMS.param($this,param);
-          iCMS.alert('已添加关注');
+          if(param.follow=='1'){
+            $this.removeClass('btn btn-success').html('<i class="fa fa-check"></i> 已关注，取消');
+          }else{
+            $this.addClass('btn btn-success').html('<i class="fa fa-plus"></i> 关注');
+          }
         }else{
           iCMS.alert(c.msg);
         }
-    },'json');
+    });
   });
 </script>
+

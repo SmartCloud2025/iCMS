@@ -35,8 +35,11 @@
                     return false;
                 }
                 var param = iCMS.param($(this));
+
                 if (param.do =='comment') {
                     iCMS.comment.box(this);
+                } else if (param.do =='favorite') {
+                    iCMS.article.favorite(this);
                 } else if (param.do =='good'||param.do =='bad') {
                     iCMS.article.vote(this);
                 }
@@ -234,9 +237,30 @@
     };
     // article
     iCMS.article = {
-        vote: function(a) {
+        favorite: function(a) {
             var $this = $(a),data = iCMS.multiple(a);
-            $.get(iCMS.api('article'), data, function(c) {
+            data.action = 'favorite';
+            var box = $("#iCMS-favorite-box").clone();
+            $(".iCMS_tooltip").remove();
+            $this.poshytip({
+                className: 'iCMS_tooltip iCMS_favorite',showOn : 'none',
+                alignTo: 'target',alignX: 'center',
+                offsetX: 0,offsetY: 5,
+                fade: false,slide: false,
+                content:box
+            }).poshytip('show');
+
+            $('.cancel', box).click(function(event) {
+                event.preventDefault();
+                $this.poshytip('destroy');
+            });
+            $('[name="favorite"]', box).click(function(event){
+                $this.poshytip('destroy');
+            });
+
+
+            return;
+            $.post(iCMS.api('user'), data, function(c) {
                 if (c.code) {
                    var numObj = '.iCMS_'+data.do+'_num',
                        count = parseInt($(numObj, $this).text());
@@ -248,10 +272,6 @@
             }, 'json');
         },
         vote: function(a) {
-            if (!iCMS.user_status) {
-                iCMS.LoginBox();
-                return false;
-            }
             var $this = $(a),data = iCMS.multiple(a);
             $.get(iCMS.api('article'), data, function(c) {
                 if (c.code) {

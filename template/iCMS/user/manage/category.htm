@@ -1,30 +1,35 @@
 <form action="<!--{iCMS:router url='/user'}-->" method="post" target="iCMS_FRAME">
-	<input name="action" type="hidden" value="manage" />
-	<input name="pg" type="hidden" value="category" />
-	<div class="title"><span>我的分类</span></div>
-	<div class="category ml30">
-		<!--{iCMS:user:category loop="true" userid=$user.uid}-->
-		<input name="_cid[]" type="hidden" value="<!--{$user_category.cid}-->" />
-		<div class="input-prepend input-append">
-			<span class="add-on"><!--{$user_category.rownum}--></span>
-			<input class="span3" name="name[<!--{$user_category.cid}-->]" type="text" value="<!--{$user_category.name}-->">
-			<span class="add-on" style="width:85px;text-align:left;">文章数:<!--{$user_category.count}--></span>
-			<a href="javascript:;" class="btn del_uc tip" title="删除后,记得更新哦">删除</a>
-		</div>
-		<div class="clearfix"></div>
-		<!--{/iCMS}-->
-		<div class="input-prepend">
-			<span class="add-on">新分类</span>
-			<input class="span4" name="newname" type="text" value="">
-		</div>
-		<div class="clearfix"></div>
-		<button class="btn btn-primary" type="submit"><i class="fa fa-check"></i> 更新</button>
-	</div>
-</form>
-<script type="text/javascript">
+    <input name="action" type="hidden" value="manage" />
+    <input name="pg" type="hidden" value="category" />
+    <div class="title"><span>我的分类</span></div>
+    <div class="category ml30"> 
+      <!--{iCMS:user:category loop="true" userid="$user.uid" appid="$iCMS.CONST[iCMS_APP_ARTICLE]"}-->
+      <input name="_cid[]" type="hidden" value="<!--{$user_category.cid}-->" />
+      <div class="input-prepend input-append"> <span class="add-on"><!--{$user_category.rownum}--></span>
+        <input class="span3" name="name[<!--{$user_category.cid}-->]" type="text" value="<!--{$user_category.name}-->">
+        <span class="add-on" style="width:85px;text-align:left;">文章数:<!--{$user_category.count}--></span> <a href="javascript:;" class="btn del_uc tip" title="删除后,记得更新哦">删除</a> </div>
+      <div class="clearfix"></div>
+      <!--{/iCMS}-->
+      <div class="input-prepend"> <span class="add-on">新分类</span>
+        <input class="span4" name="newname" type="text" value="">
+      </div>
+      <div class="clearfix"></div>
+      <button class="btn btn-primary" type="submit"><i class="fa fa-check"></i> 更新</button>
+    </div>
+  </form>
+  <script type="text/javascript">
+function callback(a){
+	console.log(a);
+	if(a.code){
+		 window.location.reload();
+	}else{
+		iCMS.alert(a.msg);
+	}
+}
 $(function(){
 	$(document).on('click', '.del_uc', function() {
 		$(this).parent().remove();
 	});
 });
-</script>
+</script> 
+  

@@ -130,3 +130,10 @@ a.noneline { text-decoration: none !important; }
 #iCMS_public_crontab{display: none;}
 .iCMS_seccode {width: 60px;}
 .iCMS_seccode_img { vertical-align: top;margin-left: 5px;}
+/*avatar*/
+.iCMS_user_avatar {}
+.avatar_30 { width: 30px; height: 30px; border-radius: 3px; }
+.avatar_35 { width: 35px; height: 35px; border-radius: 3px; }
+.avatar_60 { width: 60px; height: 60px; border-radius: 3px; }
+.avatar_90 { width: 90px; height: 90px; border-radius: 4px; }
+.avatar_120 { width: 120px; height: 120px; border-radius: 4px; }

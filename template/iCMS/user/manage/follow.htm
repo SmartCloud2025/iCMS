@@ -1,20 +1,29 @@
 <div class="title"><span>我的关注</span></div>
-<div class="pg_follow w670">
-	<ul class="avatar_list">
-		<!--{iCMS:user:follow loop="true" row="30" userid=$user.uid}-->
-		<li id="id-<!--{$user_follow.uid}-->">
-		<a href="<!--{$user_follow.url}-->" target="_blank" title="<!--{$user_follow.name}-->">
-			<img class="iCMS_user_avatar avatar_90" data-tip="iCMS:ucard:<!--{$user_follow.uid}-->" src="<!--{$user_follow.avatar}-->" onerror="iCMS.user.noavatar();">
-		</a>
-		<span class="label label-info"><!--{$user_follow.name}--></span>
-		<a href="javascript:;" data-param='{"uid":"<!--{$user_follow.uid}-->","name":"<!--{$user_follow.name}-->"}' class="btn btn_follow">取消关注</a>
-	</li>
-	<!--{iCMSelse}-->
-	<div class="alert alert-info"><i class="fa fa-ban"></i> 暂无关注</div>
-	<!--{/iCMS}-->
-	</ul>
-</div>
-<script>
+  <div class="pg_follow w670">
+    <table class="table table-striped">
+      <tbody>
+        <!--{iCMS:user:follow loop="true" row="30" userid=$user.uid}-->
+        <tr>
+          <td class="avatar_35"><a title="<!--{$user_follow.name}-->" href="<!--{$user_follow.url}-->">
+              <img class="iCMS_user_avatar avatar_35" data-tip="iCMS:ucard:<!--{$user_follow.uid}-->" src="<!--{$user_follow.avatar}-->" onerror="iCMS.user.noavatar();">
+            </a></td>
+          <td><div class="info"> <span class="label"><!--{$user_follow.name}--></span> </div></td>
+          <td class="span2"><div data-param='{"uid":"<!--{$user_follow.uid}-->","name":"<!--{$user_follow.name}-->"}'> <a href="javascript:;" data-param='{"follow":"1"}' class="btn_follow"><i class="fa fa-check"></i> 已关注，取消</a> </div></td>
+        </tr>
+        <!--{iCMSelse}-->
+        <tr>
+          <td><i class="fa fa-ban"></i> 暂无关注</td>
+        </tr>
+        <!--{/iCMS}-->
+      </tbody>
+      <tfoot>
+        <tr>
+          <td colspan="3"><div class="iCMS_pagination"><!--{$iCMS.page.nav}--></div></td>
+        </tr>
+      </tfoot>
+    </table>
+  </div>
+  <script>
 	var al = $(".avatar_list");
 	$("li", al).each(function() {
 		var a = $(this);
@@ -30,17 +39,15 @@
 	});
 	$(".btn_follow").click(function(event) {
 		event.preventDefault();
-		var $this = $(this),param = iCMS.param($this);
-		param['follow'] = '1';
-		$.post(iCMS.api('user', "&do=follow"),param,
-			function(c) {
-				if (c.code) {
-					$("#id-"+param['uid']).hide('500',function() {
-						$(this).remove();
-					});
-				}else{
-					iCMS.alert(c.msg);
-				}
-		},'json');
+	    iCMS.user.follow(this,function(c,$this,param){
+			if (c.code) {
+				$("#id-"+param.uid).hide('500',function() {
+					$this.remove();
+				});
+			}else{
+				iCMS.alert(c.msg);
+			}
+	    });
 	});
 </script>
+

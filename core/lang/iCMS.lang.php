@@ -37,15 +37,20 @@ return array(
 		'!good'     =>'您已经点过赞了啦 ！',
 		'good'      =>'谢谢您的赞,我会更加努力的',
 		'!bad'      =>'这垃圾的文章,多踩一下都会脏了咱的手！',
-		'bad'       =>'您已经过踩了啦 ！',
+		'bad'       =>'您已经过踩了啦！',
 	),
 	'report'=>array(
-		'reason_empty'=>'请填写举报的原因！',
-		'reason_success'=>'谢谢您的反馈!我们会尽快处理的！',
+		'empty'   =>'请填写举报的原因！',
+		'success' =>'谢谢您的反馈!我们会尽快处理的！',
 	),
 	'pm'=>array(
-		'empty'=>'请填写私信内容。',
-		'success'=>'发送成功',
+		'empty'   =>'请填写私信内容。',
+		'success' =>'发送成功',
+	),
+	'favorite'=>array(
+		'failure' =>'您已经收藏过了',
+		'url'     =>'URL不能为空',
+		'success' =>'收藏成功！',
 	),
 	'comment'=> array(
 		'empty'   =>'请输入内容！',

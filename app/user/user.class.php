@@ -101,10 +101,10 @@ class user {
 		$user	= iDB::row("SELECT * FROM `#iCMS@__user` where `uid`='{$uid}'",ARRAY_A);
 		iCache::set('iCMS:user:'.$user['uid'],$user,0);
 	}
-	public static function category($cid=0){
+	public static function category($cid=0,$appid=1){
 		if(empty($cid)) return false;
 
-		$category	= iDB::row("SELECT * FROM `#iCMS@__user_category` where `cid`='".(int)$cid."' limit 1");
+		$category = iDB::row("SELECT * FROM `#iCMS@__user_category` where `cid`='".(int)$cid."' AND `appid`='".$appid."' limit 1");
 		return (array)$category;
 	}
 	public static function get($uid=0,$unpass=true){

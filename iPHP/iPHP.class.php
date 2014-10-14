@@ -383,10 +383,10 @@ class iPHP{
         return round($time_total,4);
     }
     public static function json($a,$break=true,$ret=false){
-    	$callback	= $_GET['callback'];
     	header("Access-Control-Allow-Origin: ".__HOST__);
     	$json	= json_encode($a);
-    	$callback && $json = $callback.'('.$json.')';
+    	$_GET['callback'] && $json = $_GET['callback'].'('.$json.')';
+    	$_GET['script'] && exit("<script>{$json};</script>");
     	if($ret){
     		return $json;
     	}

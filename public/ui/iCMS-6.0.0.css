@@ -192,10 +192,9 @@ a,a:hover,a:focus { color: #259 }
 .iCMS_pm_dialog .pm_inbox { float: right; }
 .iCMS_pm_dialog .pm_content { width: 280px; padding: 5px; height: 60px; }
 .iCMS_pm_dialog .pm_warnmsg{text-align: right;color: #C3412F;display: none;font-size: 13px;}
-/*avatar*/
-.iCMS_avatar_s{width: 35px;height:35px;}
-.iCMS_avatar_s img{width: 35px;height:35px;}
-.iCMS_avatar_m{width: 90px;height:90px;}
-.iCMS_avatar_m img{width: 90px;height:90px;}
-.iCMS_avatar_l{width: 120px;height:120px;}
-.iCMS_avatar_l img{width: 120px;height:120px;}
+/* favorite */
+.iCMS_favorite.popover .popover-content{padding: 1px !important;}
+.iCMS_favorite.popover .popover-title{font-weight: bold;color: #888;}
+.iCMS_favorite .buttons { padding: 0 15px; margin-bottom: 15px; text-align: right; background: #fff }
+.iCMS_favorite .buttons a.cancel { color: #259; margin-right: 15px; cursor: pointer; }
+.iCMS_favorite .buttons a.cancel:hover { text-decoration: underline; }
