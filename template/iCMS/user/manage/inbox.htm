@@ -1,0 +1,86 @@
+<style>
+.label-0{background-color: #333;}
+.label-1{background-color: #468847;}
+.label-2{background-color: #FFD600;}
+.label-3{background-color: #3A87AD;}
+.info{text-align: right;}
+.info span{float: left;}
+</style>
+<div class="title"><span>我的私信</span></div>
+<form action="<!--{iCMS:router url='/user'}-->" method="post" target="iCMS_FRAME">
+	<input name="action" type="hidden" value="manage" />
+	<input name="pg" type="hidden" value="pm" />
+	<div class="pm w670">
+		<table class="table table-striped">
+			<tbody>
+			<!--{iCMS:user:inbox loop="true"}-->
+				<tr id="id-<!--{$user_inbox.id}-->">
+					<td class="iCMS_avatar_s">
+						<a data-tip="iCMS:ucard:<!--{$user_inbox.user.uid}-->" href="<!--{$user_inbox.user.url}-->">
+							<img src="<!--{$user_inbox.user.avatar}-->" onerror="iCMS.user.noavatar();">
+						</a>
+					</td>
+						<td>
+							<!--{if $user_inbox.type=="0"}-->
+								<!--{$user_inbox.sender.link}-->
+							<!--{/if}-->
+							<!--{if $user_inbox.type=="1"}-->
+								<span class="label label-success">私信</span>
+								<!--{if $user_inbox.is_sender}-->
+									我发送给
+								<!--{/if}-->
+								<!--{$user_inbox.user.link}-->
+							<!--{/if}-->
+							：<!--{$user_inbox.content}-->
+						<div class="clearfix mt10"></div>
+						<div class="info" data-param='{"id":"<!--{$user_inbox.id}-->"}'>
+							<span class="label"><!--{$user_inbox.sendtime|format_date}--></span>
+							<!--{if $msg_count}-->
+							<a href="<!--{$user_inbox.url}-->" > 共 <!--{$user_inbox.msg_count}--> 条对话 </a> |
+							<!--{/if}-->
+							<!--{if $user_inbox.type}-->
+							<a href="javascript:;" name="iCMS-pm" data-param='{"uid":"<!--{$user_inbox.user.uid}-->","name":"<!--{$user_inbox.user.name}-->"}'> 回复</a> |
+							<!--{/if}-->
+							<!--{if $user_inbox.type && $msg_count}-->
+							<a href="javascript:;" name="iCMS-report" data-param='{"appid":"6","iid":"<!--{$user_inbox.id}-->","userid":"<!--{$user_inbox.send_uid}-->"}'> 举报</a> |
+							<!--{/if}-->
+							<!--{if $msg_count}-->
+							<a href="javascript:;" data-id="<!--{$user_inbox.id}-->" data-user="<!--{$user_inbox.user.uid}-->" data-action="del"> 删除</a>
+							<!--{else}-->
+							<a href="javascript:;" data-id="<!--{$user_inbox.id}-->" data-action="del"> 删除</a>
+							<!--{/if}-->
+						</div>
+					</td>
+				</tr>
+			<!--{/iCMS}-->
+			</tbody>
+			<tfoot>
+	            <tr>
+	              <td colspan="3"><div class="iCMS_pagination"><!--{$iCMS.page.nav}--></div></td>
+	            </tr>
+          </tfoot>
+		</table>
+	</div>
+</form>
+<script type="text/javascript">
+$(function(){
+	$("[data-action]").on('click',function(event) {
+		event.preventDefault();
+		var param = {
+			'user':$(this).attr("data-user"),
+			'id':$(this).attr("data-id"),
+			'act':$(this).attr("data-action"),
+			'pg':'message','action':'manage'
+		}
+		$.post("<!--{iCMS:router url='/user'}-->",param,function(c) {
+			if (c.code) {
+				$("#id-"+param.id).hide('500',function() {
+					$(this).remove();
+				});
+			}else{
+				iCMS.alert(c.msg);
+			}
+		},'json');
+	});
+});
+</script>
