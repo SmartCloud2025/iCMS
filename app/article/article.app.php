@@ -215,16 +215,10 @@ class articleApp {
             }
         }
         if($vars['user']){
+            iPHP::app('user.class','static');
             if($article['postype']){
-                $article['user'] = array(
-                    'uid'    => $article['userid'],
-                    'name'   => $article['editor'],
-                    'url'    => 'javascript:;',
-                    'avatar' => 'about:blank',
-                    'link'   => '<a href="javascript:;">#'.$article['editor'].'</a>',
-                );
+                $article['user'] = user::empty_info($article['userid'],'#'.$article['editor']);
             }else{
-                iPHP::app('user.class','static');
                 $article['user'] = user::info($article['userid'],$article['author']);
             }
         }

@@ -15,3 +15,4 @@ define('iCMS_APP_CATEGORY',	2);		//分类应用
 define('iCMS_APP_TAG',		3);		//标签应用
 define('iCMS_APP_PUSH',		4);		//推送应用
 define('iCMS_APP_COMMENT',	5);		//评论应用
+define('iCMS_APP_PM',	    6);		//私信应用

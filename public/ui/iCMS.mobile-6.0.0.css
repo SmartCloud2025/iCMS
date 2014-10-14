@@ -1,4 +1,11 @@
 @import "normalize-3.0.1.css";
+/*Windows Phone 8*/
+@-webkit-viewport   { width: device-width; }
+@-moz-viewport      { width: device-width; }
+@-ms-viewport       { width: device-width; }
+@-o-viewport        { width: device-width; }
+@viewport           { width: device-width; }
+
 /* bootstrap3 fix */
 .input-group .has-switch, .input-group .has-switch span.switch-left { -webkit-border-top-left-radius: 0; -webkit-border-bottom-left-radius: 0; -moz-border-radius-topleft: 0; -moz-border-radius-bottomleft: 0; border-top-left-radius: 0; border-bottom-left-radius: 0; }
 /* ********* */

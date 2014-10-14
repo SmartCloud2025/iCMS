@@ -30,29 +30,34 @@
 			</ul>
 		</div>
 	</div>
-	<div class="input-group mt10">
+	<div class="clearfix mt10"></div>
+	<div class="input-group clearfix mt10">
 	  <span class="input-group-addon">标 题</span>
 	  <input class="form-control" name="title" id="title" type="text" value="<!--{$article.title}-->" placeholder="请输入标题">
 	</div>
-	<div class="input-group mt10">
+	<div class="clearfix mt10"></div>
+	<div class="input-group">
 	  <span class="input-group-addon">简 介</span>
 	  <textarea name="description" id="description" class="form-control" rows="3"><!--{$article.description}--></textarea>
 	</div>
-	<div class="input-group mt10 <!--{if $article.creative}-->hide<!--{/if}-->" id="source-box">
+	<div class="clearfix mt10"></div>
+	<div class="input-group <!--{if $article.creative}-->hide<!--{/if}-->" id="source-box">
 		<span class="input-group-addon">出 处</span>
 		<input class="form-control" name="source" id="source" type="text" value="<!--{$article.source}-->">
 	</div>
-	<div class="btn-group pull-right mt10">
+	<div class="clearfix mt10"></div>
+	<div class="btn-group pull-right">
 		<button type="button" class="btn btn-success" id="upload" data-loading-text='<i class="fa fa-spinner"></i> 上传中...'><i class="fa fa-picture-o"></i> 插入图片</button>
 	</div>
-	<div class="input-group mt10">
+	<div class="input-group">
 		<span class="input-group-addon">文章类型？</span>
 		<div class="switch" id="article-type" data-on-label="原创" data-off-label="转贴">
 			<input type="checkbox" data-type="switch" name="creative" <!--{if $article.creative}-->checked<!--{/if}-->/>
 		</div>
 	</div>
-	<div class="clearfix mt10">
-		<!--{if !$article.mobile}-->
+	<div class="clearfix mt10"></div>
+	<div class="editor">
+		<!--{if $article.mobile}-->
 		<p class="alert alert-warning alert-dismissable"><i class="fa fa-warning"></i> 本文章由PC端发布 在手机上编辑可能造成相关格式丢失</p>
 		<!--{/if}-->
 	  	<textarea name="body" id="abody" class="form-control" rows="15" placeholder="请输入文章的内容"><!--{$article_data.body}--></textarea>

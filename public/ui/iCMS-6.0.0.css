@@ -1,3 +1,5 @@
+/*ie fix*/
+@-ms-viewport { width: device-width; }
 * { word-wrap: break-word; word-break: break-all }
 body, button, input, select, textarea { color: #111; font: 14px/1.75 "Helvetica Neue", Helvetica, Tahoma, Arial, "\5b8b\4f53", sans-serif }
 .r3 { border-radius: 3px }
@@ -185,8 +187,15 @@ a,a:hover,a:focus { color: #259 }
 .iCMS_ucard .lower .meta .item:last-child { border-right: 0 none }
 /* pm */
 #iCMS-pm-box { display: none;}
-.iCMS_pm_dialog{width: 360px;margin: 15px auto;}
+.iCMS_pm_dialog{width: 360px;}
 .iCMS_pm_dialog dt label { color: #999; text-align: right; font-size: 13px; float: left; width: 60px; }
 .iCMS_pm_dialog .pm_inbox { float: right; }
 .iCMS_pm_dialog .pm_content { width: 280px; padding: 5px; height: 60px; }
-
+.iCMS_pm_dialog .pm_warnmsg{text-align: right;color: #C3412F;display: none;font-size: 13px;}
+/*avatar*/
+.iCMS_avatar_s{width: 35px;height:35px;}
+.iCMS_avatar_s img{width: 35px;height:35px;}
+.iCMS_avatar_m{width: 90px;height:90px;}
+.iCMS_avatar_m img{width: 90px;height:90px;}
+.iCMS_avatar_l{width: 120px;height:120px;}
+.iCMS_avatar_l img{width: 120px;height:120px;}

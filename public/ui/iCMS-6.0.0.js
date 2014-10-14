@@ -1,38 +1,34 @@
 (function($) {
     var _iCMS = {
         pm:function(a){
-            var $this = $(a),$parent = $this.parent(),
-                box   = document.getElementById("iCMS-pm-box"),
-                modal = $this.modal({
-                    title: '发送私信',
-                    width: "400px",
-                    html: box,
-                    scroll: true
-                }),
+            var $this  = $(a),$parent = $this.parent(),
+                box    = document.getElementById("iCMS-pm-box"),
+                dialog = $.dialog({content: box,id:'iPHP-DIALOG',title: '发送私信',lock:true}),
                 inbox  = $this.attr('href'),
                 param  = iCMS.param($this),
                 _param = iCMS.param($parent),
-                data   = $.extend(param,_param);
+                data   = $.extend(param,_param),
+                content = $("[name='content']", box);
+            $(".pm_warnmsg", box).hide();
+            content.val('');
             $('.pm_uname', box).text(data.name);
             $('.pm_inbox', box).attr("href",inbox);
             $('.cancel', box).click(function(event) {
-                modal.destroy();
+                event.preventDefault();
+                dialog.close();
             });
             $('[name="send"]', box).click(function(event) {
-                var content = $("[name='content']", box);
+                event.preventDefault();
                 data.content = content.val();
                 if (!data.content) {
                     content.focus();
-                    iCMS.alert("请填写私信内容。");
+                    $(".pm_warnmsg", box).show();
                     return false;
                 }
                 data.action = 'pm';
                 $.post(iCMS.api('user'), data, function(c) {
-                    content.val('');
+                    dialog.close();
                     iCMS.alert(c.msg,c.code);
-                    if(c.code){
-                        modal.destroy();
-                    }
                 }, 'json');
             });
         },
@@ -46,10 +42,14 @@
                     scroll: true
                 });
             $("li", box).click(function(event) {
+                event.preventDefault();
                 $("li", box).removeClass('checked');
                 $(this).addClass('checked');
+                //$("[name='reason']",box).prop("checked",false);
+                $("[name='reason']",this).prop("checked",true);
             });
             $('.cancel', box).click(function(event) {
+                event.preventDefault();
                 modal.destroy();
             });
             $('[name="ok"]', box).click(function(event) {

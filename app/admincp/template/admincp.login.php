@@ -12,6 +12,7 @@ defined('iPHP') OR exit('What are you doing?');
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
 <title>iCMS Administrator's Control Panel</title>
+<meta name="renderer" content="webkit">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <meta content="iDreamSoft Inc." name="Copyright" />
 <link rel="stylesheet" href="./app/ui/common/bootstrap/2.3.1/css/bootstrap.min.css" type="text/css" />

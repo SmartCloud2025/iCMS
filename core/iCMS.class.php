@@ -110,6 +110,7 @@ class iCMS {
             $def_domain  = false;
         }
         define('iPHP_TPL_DEFAULT',$def_tpl);
+        define('iPHP_DEVICE',$device_name);
         if($def_domain){
             $_router_url      = $config['router']['URL'];
             $config['router'] = str_replace($_router_url, $def_domain, $config['router']);

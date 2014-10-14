@@ -103,6 +103,10 @@ a.noneline { text-decoration: none !important; }
 .iPHP-msg i { font-size: 18px; }
 .iPHP-msg .d-content .btn-group { position: absolute; }
 .iPHP-msg .d-content { color: #222 }
+.d-content .buttons { padding: 0 15px; margin-bottom: 15px; text-align: right; background: #fff }
+.d-content .buttons a.cancel { color: #259; margin-right: 15px; cursor: pointer; }
+.d-content .buttons a.cancel:hover { text-decoration: underline; }
+
 /* tooltip */
 .tooltip { max-width:inherit;font-size: 14px;}
 .tooltip-inner {max-width:inherit !important;text-align: left !important; font-size: 14px; }

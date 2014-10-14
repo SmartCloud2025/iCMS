@@ -543,7 +543,7 @@ class iPHP{
     	if(empty($total) && $type===null &&!isset($_GET['total_cahce'])){
     		$total = (int)iCache::get('total/'.$tnkey);
 		}
-    	if(empty($total) ||$type==='no'||isset($_GET['total_cahce'])){
+    	if(empty($total) ||$type==='nocache'||isset($_GET['total_cahce'])){
         	$total = iDB::value($sql);
         	if($type===null){
         		iCache::set('total/'.$tnkey,$total);

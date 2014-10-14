@@ -11,7 +11,7 @@ defined('iPHP') OR exit('What are you doing?');
 iPHP::app('user.class','static');
 iPHP::app('user.msg.class','static');
 class userApp {
-    public $methods = array('iCMS','home','article','publish','manage','profile','data','hits','check','follow','login','logout','register','add_category','upload','imageUp','mobileUp','getremote','article','report','pm','ucard');
+    public $methods = array('iCMS','home','article','publish','manage','profile','data','hits','check','follow','login','logout','register','add_category','upload','imageUp','mobileUp','getremote','report','ucard');
     public $openid  = null;
     public $user    = array();
     public $me      = array();
@@ -27,6 +27,36 @@ class userApp {
         iPHP::assign('openid',$this->openid);
         iPHP::assign('forward',$this->forward);
     }
+    private function user($ud=false){
+        $status = array('logined'=>false,'followed'=>false,'isme'=>false);
+        if($this->uid){ // &uid=
+            $this->user = user::get($this->uid);
+            iPHP::http404($this->user,"user:".$this->uid);
+        }
+
+        $this->me = user::status(); //判断是否登陆
+
+        if(empty($this->me) && empty($this->user)){
+            iPHP::set_cookie('forward', '',-31536000);
+            iPHP::gotourl(USER_LOGIN_URL);
+        }
+
+        if($this->me){
+            $status['logined']    = true;
+            $status['followed']   = (int)user::follow($this->me->uid,$this->user->uid);
+            empty($this->user) && $this->user = $this->me;
+            if($this->user->uid == $this->me->uid){
+                $status['isme'] = true;
+                $this->user     = $this->me;
+            }
+            iPHP::assign('me',(array)$this->me);
+        }
+        $this->user->hits_script = iCMS_API.'?app=user&do=hits&uid='.$this->user->uid;
+        iPHP::assign('status', $status);
+        iPHP::assign('user',   (array)$this->user);
+        $ud && iPHP::assign('userdata',(array)user::data($this->user->uid));
+    }
+
     public function do_iCMS($a = null) {}
     public function do_home(){
         $this->user(true);
@@ -35,7 +65,7 @@ class userApp {
         iPHP::view('iCMS://user/home.htm');
     }
     public function do_manage(){
-        $pgArray   = array('publish','category','article','comment','favorite','share','follow','fans');
+        $pgArray   = array('publish','category','article','comment','inbox','favorite','share','follow','fans');
         $pg        = iS::escapeStr($_GET['pg']);
         $pg OR $pg ='article';
         if (in_array ($pg,$pgArray)) {
@@ -67,36 +97,6 @@ class userApp {
         }
     }
 
-    private function user($ud=false){
-        $status = array('logined'=>false,'followed'=>false,'isme'=>false);
-        if($this->uid){ // &uid=
-            $this->user = user::get($this->uid);
-            iPHP::http404($this->user,"user:".$this->uid);
-        }
-
-        $this->me = user::status(); //判断是否登陆
-
-        if(empty($this->me) && empty($this->user)){
-            iPHP::set_cookie('forward', '',-31536000);
-            iPHP::gotourl(USER_LOGIN_URL);
-        }
-
-        if($this->me){
-            $status['logined']    = true;
-            $status['followed']   = (int)user::follow($this->me->uid,$this->user->uid);
-            empty($this->user) && $this->user = $this->me;
-            if($this->user->uid == $this->me->uid){
-                $status['isme'] = true;
-                $this->user     = $this->me;
-            }
-            iPHP::assign('me',(array)$this->me);
-        }
-        $this->user->hits_script = iCMS_API.'?app=user&do=hits&uid='.$this->user->uid;
-        iPHP::assign('status', $status);
-        iPHP::assign('user',   (array)$this->user);
-        $ud && iPHP::assign('userdata',(array)user::data($this->user->uid));
-    }
-
     private function __do_manage_article(){
         iPHP::assign('status',isset($_GET['status'])?(int)$_GET['status']:'1');
         iPHP::assign('cid',(int)$_GET['cid']);
@@ -112,10 +112,30 @@ class userApp {
         iPHP::app('article.table');
         list($article,$article_data) = articleTable::data($id,0,user::$userid);
         $cid = empty($article['cid'])?(int)$_GET['cid']:$article['cid'];
+
+        if(iPHP_DEVICE!=="pc" && empty($article)){
+            $article['mobile'] = "1";
+        }
         iPHP::assign('article',$article);
         iPHP::assign('article_data',$article_data);
         iPHP::assign('option',$this->select('',$cid));
     }
+    /**
+     * [ACTION_manage description]
+     */
+    public function ACTION_manage(){
+        $this->me = user::status(USER_LOGIN_URL,"nologin");
+
+        $pgArray = array('publish','category','article','comment','message','favorite','share','follow','fans');
+        $pg      = iS::escapeStr($_POST['pg']);
+        $funname ='__action_manage_'.$pg;
+        //print_r($funname);
+        $methods = get_class_methods(__CLASS__);
+        if (in_array ($pg,$pgArray) && in_array ($funname,$methods)) {
+            $this->$funname();
+        }
+    }
+
     private function __action_manage_category(){
         $uid        = user::$userid;
         $name_array = (array)$_POST['name'];
@@ -218,18 +238,66 @@ class userApp {
         $url = str_replace(iCMS_URL,'',iPHP::router('/user/article'));
         iPHP::success($lang[$status],'url:'.$url);
     }
-    public function ACTION_manage(){
+    private function __action_manage_article(){
+        $actArray = array('delete','renew','trash');
+        $act = iS::escapeStr($_POST['act']);
+        if (in_array ($act,$actArray)){
+            $id = (int)$_POST['id'];
+            $id OR iPHP::code(0,'iCMS:error',0,'json');
+            $status = '0';
+            $act =="renew" && $status = '1';
+            $act =="trash" && $status = '2';
+            iDB::query("UPDATE `#iCMS@__article` SET `status` ='$status' WHERE `userid` = '".user::$userid."' AND `id`='$id' LIMIT 1;");
+            iPHP::code(1,0,0,'json');
+        }
+    }
+    private function __action_manage_comment(){
+        $act = iS::escapeStr($_POST['act']);
+        if($act=="del"){
+            $id = (int)$_POST['id'];
+            $id OR iPHP::code(0,'iCMS:error',0,'json');
+
+            $comment = iDB::row("SELECT `appid`,`iid` FROM `#iCMS@__comment` WHERE `userid` = '".user::$userid."' AND `id`='$id' LIMIT 1;");
+
+            iPHP::import(iPHP_APP_CORE .'/iAPP.class.php');
+            $table = app::get_table($comment->appid);
+
+            iDB::query("UPDATE {$table['name']} SET comments = comments-1 WHERE `comments`>0 AND `{$table['primary']}`='{$comment->iid}' LIMIT 1;");
+
+            iDB::query("DELETE FROM `#iCMS@__comment` WHERE `userid` = '".user::$userid."' AND `id`='$id' LIMIT 1;");
+            user::update_count(user::$userid,1,'comments','-');
+            iPHP::code(1,0,0,'json');
+        }
+    }
+    private function __action_manage_message(){
+        $act = iS::escapeStr($_POST['act']);
+        if($act=="del"){
+            $id = (int)$_POST['id'];
+            $id OR iPHP::code(0,'iCMS:error',0,'json');
+
+            $user = (int)$_POST['user'];
+            if($user){
+                iDB::query("UPDATE `#iCMS@__message` SET `status` ='0' WHERE `userid` = '".user::$userid."' AND `friend`='".$user."';");
+            }elseif($id){
+                iDB::query("UPDATE `#iCMS@__message` SET `status` ='0' WHERE `userid` = '".user::$userid."' AND `id`='$id';");
+            }
+            iPHP::code(1,0,0,'json');
+        }
+    }
+    /**
+     * [ACTION_profile description]
+     */
+    public function ACTION_profile(){
         $this->me = user::status(USER_LOGIN_URL,"nologin");
 
-        $pgArray = array('publish','category','article','comment','favorite','share','follow','fans');
+        $pgArray = array('base','avatar','setpassword','bind','custom');
         $pg      = iS::escapeStr($_POST['pg']);
-        $funname ='__action_manage_'.$pg;
+        $funname ='__action_profile_'.$pg;
         $methods = get_class_methods(__CLASS__);
         if (in_array ($pg,$pgArray) && in_array ($funname,$methods)) {
             $this->$funname();
         }
     }
-
     private function __action_profile_base(){
         $nickname      = iS::escapeStr($_POST['nickname']);
         $gender        = iS::escapeStr($_POST['gender']);
@@ -338,18 +406,6 @@ class userApp {
         iPHP::alert("user:password:modified",'js:parent.location.reload();');
     }
 
-    public function ACTION_profile(){
-        $this->me = user::status(USER_LOGIN_URL,"nologin");
-
-        $pgArray = array('base','avatar','setpassword','bind','custom');
-        $pg      = iS::escapeStr($_POST['pg']);
-        $funname ='__action_profile_'.$pg;
-        $methods = get_class_methods(__CLASS__);
-        if (in_array ($pg,$pgArray) && in_array ($funname,$methods)) {
-            $this->$funname();
-        }
-    }
-
     public function ACTION_login(){
         iCMS::$config['user']['login'] OR iPHP::code(0,'user:login:forbidden','uname','json');
 
@@ -437,7 +493,7 @@ class userApp {
         user::get_cookie() OR iPHP::code(0,'iCMS:!login',0,'json');
 
         $iid     = (int)$_POST['iid'];
-        $uid     = (int)$_POST['uid'];
+        $uid     = (int)$_POST['userid'];
         $appid   = (int)$_POST['appid'];
         $reason  = (int)$_POST['reason'];
         $content = iS::escapeStr($_POST['content']);
@@ -460,56 +516,22 @@ class userApp {
         iPHP::app('user.class','static');
         user::get_cookie() OR iPHP::code(0,'iCMS:!login',0,'json');
 
-        $tuid    = (int)$_POST['uid'];
-        $content = iS::escapeStr($_POST['content']);
+        $receiv_uid = (int)$_POST['uid'];
+        $content    = iS::escapeStr($_POST['content']);
 
-        $tuid OR iPHP::code(0,'iCMS:error',0,'json');
+        $receiv_uid OR iPHP::code(0,'iCMS:error',0,'json');
         $content OR iPHP::code(0,'iCMS:pm:empty',0,'json');
 
-        $tuname = $_POST['name'];
-        $fuid   = user::$userid;
-        $funame = user::$nickname;
+        $receiv_name = $_POST['name'];
+        $send_uid  = user::$userid;
+        $send_name = user::$nickname;
 
-        $fields = array('fuid', 'funame', 'tuid', 'tuname', 'content');
+        $fields = array('send_uid','send_name','receiv_uid','receiv_name','content');
         $data   = compact ($fields);
         msg::send($data,1);
         iPHP::code(1,'iCMS:pm:success',$id,'json');
     }
-    private function __action_delete_comment(){
-        $id = (int)$_POST['id'];
-        $id OR iPHP::code(0,'iCMS:error',0,'json');
-        $comment = iDB::row("SELECT `appid`,`iid` FROM `#iCMS@__comment` WHERE `userid` = '".user::$userid."' AND `id`='$id' LIMIT 1;");
 
-        iPHP::import(iPHP_APP_CORE .'/iAPP.class.php');
-        $table = app::get_table($comment->appid);
-
-        iDB::query("UPDATE {$table['name']} SET comments = comments-1 WHERE `comments`>0 AND `{$table['primary']}`='{$comment->iid}' LIMIT 1;");
-
-        iDB::query("DELETE FROM `#iCMS@__comment` WHERE `userid` = '".user::$userid."' AND `id`='$id' LIMIT 1;");
-        user::update_count(user::$userid,1,'comments','-');
-        iPHP::code(1,0,0,'json');
-    }
-    private function __action_article_delete(){
-        $id = (int)$_POST['id'];
-        $id OR iPHP::code(0,'iCMS:error',0,'json');
-        iDB::query("UPDATE `#iCMS@__article` SET `status` ='2' WHERE `userid` = '".user::$userid."' AND `id`='$id' LIMIT 1;");
-        iPHP::code(1,0,0,'json');
-    }
-    public function ACTION_article(){
-        $this->me = user::status(USER_LOGIN_URL,"nologin");
-
-        $daArray = array('delete','renew','trash');
-        $da      = iS::escapeStr($_POST['da']);
-        if (in_array ($da,$daArray)){
-            $id = (int)$_POST['id'];
-            $id OR iPHP::code(0,'iCMS:error',0,'json');
-            $status = '0';
-            $da =="renew" && $status = '1';
-            $da =="trash" && $status = '2';
-            iDB::query("UPDATE `#iCMS@__article` SET `status` ='$status' WHERE `userid` = '".user::$userid."' AND `id`='$id' LIMIT 1;");
-            iPHP::code(1,0,0,'json');
-        }
-    }
     public function API_hits($uid = null){
         $uid===null && $uid = (int)$_GET['uid'];
         if($uid){

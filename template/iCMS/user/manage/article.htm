@@ -68,8 +68,8 @@ $(function(){
 		event.preventDefault();
 		var param = {
 			'id':$(this).attr("data-id"),
-			'da':$(this).attr("data-action"),
-			'action':'article'
+			'act':$(this).attr("data-action"),
+			'pg':'article','action':'manage'
 		}
 		$.post("<!--{iCMS:router url='/user'}-->",param,function(c) {
 			if (c.code) {

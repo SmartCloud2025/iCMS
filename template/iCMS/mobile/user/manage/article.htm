@@ -1,9 +1,11 @@
 <style>
-#article-tab .first{ margin-left:5px; }
-#article-tab li>a{padding: 5px 10px;background-color: #EEE;border-color: #DBDBDB;}
+#article-tab .first{ margin-left:10px; }
+#article-tab li.active a{background-color: #f8f8f8;}
+#article-tab li>a{padding: 5px 10px;}
 .label-category{background-color: #8EBD48;}
 .article hr{margin:5px;}
-.article .action{}
+/*.article .buttons{text-align: right;}*/
+.article .action{float: right;}
 .article .action a{color: #333;margin-left: 10px;}
 </style>
 <form class="form-inline" role="form" action="<!--{iCMS:router url='/user'}-->" method="post" target="iCMS_FRAME">
@@ -39,18 +41,19 @@
 						<a href="<!--{if $article_list.status=="1"}--><!--{$article_list.url}--><!--{else}-->javascript:;<!--{/if}-->" target="_blank">
 							<!--{$article_list.title}-->
 						</a>
-						<hr />
-						<a href="<!--{$article.manage}-->&cid=<!--{$article_list.cid}-->"><span class="label label-primary"><!--{$article_list.category.name}--></span></a>
-						<span class="label label-default">点/评:<!--{$article_list.hits.count}-->/<!--{$article_list.comments}--></span>
-						<span class="action">
-							<a class="btn btn-default btn-xs" href="<!--{$article.edit}-->&id=<!--{$article_list.id}-->" title="编辑文章"><i class="fa fa-edit"></i> 编辑</a>
-							<!--{if $article_list.status=="2"}-->
-							<a href="javascript:;" class="btn btn-default btn-xs" data-id="<!--{$article_list.id}-->" data-action="delete" title="彻底删除"><i class="fa fa-trash-o"></i> 删除</a>
-							<a href="javascript:;" class="btn btn-default btn-xs" data-id="<!--{$article_list.id}-->" data-action="renew" title="还原"><i class="fa fa-reply-all"></i> 还原</a>
-							<!--{else}-->
-							<a href="javascript:;" class="btn btn-default btn-xs" data-id="<!--{$article_list.id}-->" data-action="trash" title="删除到回收站"><i class="fa fa-times"></i> 回收站</a>
-							<!--{/if}-->
-						</span>
+						<div class="clearfix mt10">
+							<a href="<!--{$article.manage}-->&cid=<!--{$article_list.cid}-->"><span class="label label-primary"><!--{$article_list.category.name}--></span></a>
+							<span class="label label-default">点/评:<!--{$article_list.hits.count}-->/<!--{$article_list.comments}--></span>
+							<span class="action">
+								<a class="btn btn-default btn-xs" href="<!--{$article.edit}-->&id=<!--{$article_list.id}-->" title="编辑文章"><i class="fa fa-edit"></i> 编辑</a>
+								<!--{if $article_list.status=="2"}-->
+								<a href="javascript:;" class="btn btn-default btn-xs" data-id="<!--{$article_list.id}-->" data-action="delete" title="彻底删除"><i class="fa fa-trash-o"></i> 删除</a>
+								<a href="javascript:;" class="btn btn-default btn-xs" data-id="<!--{$article_list.id}-->" data-action="renew" title="还原"><i class="fa fa-reply-all"></i> 还原</a>
+								<!--{else}-->
+								<a href="javascript:;" class="btn btn-default btn-xs" data-id="<!--{$article_list.id}-->" data-action="trash" title="删除到回收站"><i class="fa fa-times"></i> 回收站</a>
+								<!--{/if}-->
+							</span>
+						</div>
 					</td>
 				</tr>
 			<!--{/iCMS}-->
@@ -74,7 +77,7 @@ $(function(){
 		var param = {
 			'id':$(this).attr("data-id"),
 			'da':$(this).attr("data-action"),
-			'action':'article'
+			'action':'article_manage'
 		}
 		$.post("<!--{iCMS:router url='/user'}-->",param,function(c) {
 			if (c.code) {

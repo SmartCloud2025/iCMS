@@ -31,22 +31,38 @@ class user {
 					'inbox'    => iPHP::router(array('/user/inbox/{uid}',$uid),iCMS_REWRITE),
 					'home'     => iPHP::router(array('/{uid}/',$uid),iCMS_REWRITE),
 					'comment'  => iPHP::router(array('/{uid}/comment/',$uid),iCMS_REWRITE),
-					'favorite' => iPHP::router(array('/{uid}/favorite/',$uid),iCMS_REWRITE),
-					'share'    => iPHP::router(array('/{uid}/share/',$uid),iCMS_REWRITE),
+					//'favorite' => iPHP::router(array('/{uid}/favorite/',$uid),iCMS_REWRITE),
+					//'share'    => iPHP::router(array('/{uid}/share/',$uid),iCMS_REWRITE),
 					'fans'     => iPHP::router(array('/{uid}/fans/',$uid),iCMS_REWRITE),
 					'follow'   => iPHP::router(array('/{uid}/follow/',$uid),iCMS_REWRITE),
 	            );
 	        break;
 	    }
 	}
+	public static function empty_info($uid,$name){
+        return array(
+			'uid'    => $uid,
+			'name'   => $name,
+			//'inbox'   => 'javascript:;',
+			'url'    => 'javascript:;',
+			'avatar' => 'about:blank',
+			'link'   => '<a href="javascript:;">'.$name.'</a>',
+			'at'     => '<a href="javascript:;">'.$name.'</a>',
+        );
+	}
 	public static function info($uid,$name,$size=0){
+		if(empty($uid)){
+			return self::empty_info($uid, $name);
+		}
 		$url = self::router($uid,"url");
 		return array(
 			'uid'    => $uid,
 			'name'   => $name,
+			//'inbox'  => $urls['inbox'],
 			'url'    => $url,
 			'avatar' => self::router($uid,"avatar",$size?$size:0),
-			'link'   => '<a href="'.$url.'" target="_blank">@'.$name.'</a>'
+			'at'     => '<a href="'.$url.'" target="_blank" data-tip="iCMS:ucard:'.$uid.'">@'.$name.'</a>',
+			'link'   => '<a href="'.$url.'" target="_blank" data-tip="iCMS:ucard:'.$uid.'">'.$name.'</a>',
 		);
 	}
 	public static function check($val,$field='username'){

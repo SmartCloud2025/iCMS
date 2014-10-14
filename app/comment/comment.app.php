@@ -59,9 +59,17 @@ class commentApp {
         iPHP::assign('vars',$vars);
         iPHP::view('iCMS://comment/api.json.htm');
     }
+    function pm($a){
+        $fields = array('send_uid','send_name','receiv_uid','receiv_name','content');
+        $data   = compact ($fields);
+        msg::send($data,1);
+
+    }
     public function ACTION_add(){
         iPHP::app('user.class','static');
         user::get_cookie() OR iPHP::code(0,'iCMS:!login',0,'json');
+
+        iPHP::app('user.msg.class','static');
 
         $appid      = (int)$_POST['appid'];
         $iid        = (int)$_POST['iid'];
@@ -85,6 +93,7 @@ class commentApp {
         $down     = '0';
         $quote    = '0';
         $floor    = '0';
+
 
         $fields = array('appid', 'cid', 'iid','suid', 'title','userid', 'username',  'content', 'reply_id','reply_uid','reply_name', 'addtime', 'status', 'up', 'down', 'ip', 'quote', 'floor');
         $data   = compact ($fields);
