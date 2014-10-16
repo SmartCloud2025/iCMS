@@ -8,7 +8,7 @@
 defined('iPHP') OR exit('What are you doing?');
 iACP::head();
 ?>
-
+<script>iCMS.alert("asdasd");</script>
 <div class="iCMS-container">
   <div class="row-fluid">
     <div class="span12 center" style="text-align: center;">
@@ -209,9 +209,7 @@ $(function(){
 					if(json.code=="0"){
 						return;
 					}
-					$.dialog({
-					    title: 'iCMS - 提示信息',
-					    time: 30000,
+					iCMS.dialog({
 					    content: json.msg,
 					    okValue: '马上更新',
 					    ok: function () { window.location.href=json.url;},

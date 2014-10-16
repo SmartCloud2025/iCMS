@@ -5,7 +5,7 @@
             PUBLIC: '/',
             COOKIE: 'iCMS_',
             AUTH:'USER_AUTH',
-            DIALOG:'',
+            DIALOG:[],
         },
         init: function(options) {
             this.config = $.extend(this.config,options);
@@ -110,29 +110,79 @@
                 label: 'warning',
                 icon: 'warning'
             }
-            window.top.iCMS.dialog(msg, opts);
+            opts.content = msg;
+            iCMS.dialog(opts);
         },
-        dialog: function(msg, options) {
-            var defaults = {
-                    id: 'iPHP-DIALOG',
-                    title: 'iCMS - 提示信息',
-                    width: 360,
-                    height: 150,
-                    fixed: true,
-                    lock: true,
-                    time: 3000,
-                    label: 'success',
-                    icon: 'check'
-                },
-                opts = $.extend(defaults, options,iCMS.config.DIALOG);
-            //console.log(opts);
-            if (msg.jquery) opts.content = msg.html();
-            if (typeof msg == "string" && !opts.content) {
-                opts.content = '<div class=\"iPHP-msg\"><span class=\"label label-' + opts.label + '\"><i class=\"fa fa-' + opts.icon + '\"></i> ' + msg + '</span></div>';
-            }else{
-                opts.content = msg;
+        dialog: function(options) {
+            var defaults = {id: 'iPHP-DIALOG',title: 'iCMS - 提示信息',
+                width: 360,height: 150,
+                fixed: true,lock: true,autofocus:false,
+                time: 30000000,
+                label: 'success',icon: 'check'
+            },
+            opts = $.extend(defaults,options,iCMS.config.DIALOG);
+            var content = opts.content;
+            if (content instanceof jQuery){
+                opts.content = content.html();
+            }else if (typeof content == "string") {
+                opts.content = '<table class=\"ui-dialog-table\" align=\"center\"><tr><td valign=\"middle\">'
+                +'<div class=\"iPHP-msg\"><span class=\"label label-' + opts.label + '\"><i class=\"fa fa-' + opts.icon + '\"></i> ' + content + '</span></div>'
+                +'</td></tr></table>';
+            }else if(content.nodeType === 1){
+                if (_elemBack) {
+                    _elemBack();
+                    delete _elemBack;
+                };
+                // artDialog 5.0.4
+                // 让传入的元素在对话框关闭后可以返回到原来的地方
+                var display = content.style.display;
+                var prev    = content.previousSibling;
+                var next    = content.nextSibling;
+                var parent  = content.parentNode;
+                var _elemBack = function () {
+                    if (prev && prev.parentNode) {
+                        prev.parentNode.insertBefore(content, prev.nextSibling);
+                    } else if (next && next.parentNode) {
+                        next.parentNode.insertBefore(content, next);
+                    } else if (parent) {
+                        parent.appendChild(content);
+                    };
+                    content.style.display = display;
+                    _elemBack = null;
+                };
+                opts.content = content;
+                $(content).show();
+                opts.onbeforeremove = function(){
+                    if (_elemBack) {
+                        _elemBack();
+                    }
+                }
             }
-            return $.dialog(opts);
+
+            var d = dialog(opts);
+            if(opts.lock){
+                d.showModal();
+                $(d.backdrop).click(function(){
+                    d.close();
+                })
+            }else{
+                d.show(opts.follow);
+            }
+            if(opts.time){
+                window.setTimeout(function(){
+                    d.close();
+                },opts.time);
+            }
+            return d;
+        },
+        update_dialog: function (url,p){
+            $(".iPHP_FRAME_CLONE").remove();
+            var frame = $('#iPHP_FRAME').clone();
+            frame.attr('src',url)
+            .addClass("iPHP_FRAME_CLONE")
+            .attr('id','iPHP_FRAME_'+p)
+            .attr('name','iPHP_FRAME_'+p);
+            $('#iPHP_FRAME').after(frame);
         },
         setcookie: function(cookieName, cookieValue, seconds, path, domain, secure) {
             var expires = new Date();
@@ -205,6 +255,8 @@
                 .replace(/<br[^>]*?>/g, "\n")
                 .replace(/<[^>]*?>/g, "");
             if(ubb){
+                content = content.replace(/\n+/g, "[iCMS.N]");
+                content = this.n2p(content,ubb);
                 return content;
             }
             content = content.replace(/\[url=([^\]]+)\]\n(\[img\]\1\[\/img\])\n\[\/url\]/g, "$2")
@@ -222,14 +274,18 @@
                 .replace(/<p><br\/><\/p>/g, '');
             return content;
         },
-        n2p:function(cc) {
+        n2p:function(cc,ubb) {
             var c = '',s = cc.split("[iCMS.N]");
             for (var i = 0; i < s.length; i++) {
                 while (s[i].substr(0, 1) == " " || s[i].substr(0, 1) == "　") {
                     s[i] = s[i].substr(1, s[i].length);
                 }
                 if (s[i].length > 0){
-                    c += "<p>" + s[i] + "</p>";
+                    if(ubb){
+                        c += s[i] + "\n";
+                    }else{
+                        c += "<p>" + s[i] + "</p>";
+                    }
                 }
             }
             return c;

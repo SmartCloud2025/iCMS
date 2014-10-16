@@ -6,7 +6,7 @@ iCMS.config.UI        = '<!--{$iCMS.UI}-->';
   <script src="<!--{$iCMS.UI}-->/bootstrap/2.3.1/js/bootstrap-switch.min.js"></script>
   <script src="<!--{$iCMS.UI}-->/iCMS.user.editor-6.0.0.js" type="text/javascript" charset="utf-8"></script>
   <script src="<!--{$iCMS.UI}-->/ueditor/ueditor.all.min.js" type="text/javascript" charset="utf-8"></script>
-  
+
 <form action="<!--{iCMS:router url='/user'}-->" method="post" target="iCMS_FRAME">
     <input name="action" type="hidden" value="manage" />
     <input name="pg" type="hidden" value="publish" />
@@ -56,8 +56,8 @@ iCMS.config.UI        = '<!--{$iCMS.UI}-->';
         <input class="span5" name="source" id="source" type="text" value="<!--{$article.source}-->">
       </div>
       <div class="clearfix mb10"></div>
-      <div class="clearfix "> 
-        <script type="text/plain" id="editor" style="width:100%;height:360px;"><!--{$article_data.body}--></script> 
+      <div class="clearfix ">
+        <script type="text/plain" id="editor" style="width:100%;height:360px;"><!--{$article_data.body}--></script>
       </div>
       <div class="form-actions">
         <button class="btn btn-primary" type="submit" id="iCMS-article"><i class="fa fa-check"></i> 提交</button>
@@ -122,7 +122,7 @@ $(function(){
         return false;
     });
     $('#add_category').click(function() {
-  		$.dialog({
+  		iCMS.dialog({
   		    follow: document.getElementById('btn-group'),
   		    title: '添加新分类',
   		    content: document.getElementById('add_category-box'),
@@ -158,4 +158,4 @@ $(function(){
     });
 
 });
-</script> 
+</script>

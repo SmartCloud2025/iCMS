@@ -29,7 +29,7 @@ $unid = uniqid();
 $(function(){
     window.modal_<?php echo $callback;?> = function(el,a){
         $("#<?php echo $callback;?>").val(a.value);
-        window.top.iCMS_MODAL.destroy();
+        window.iCMS_MODAL.destroy();
     }
     $(".modal_photo_<?php echo $unid;?>").on("click",function(){
         var  pic = $("#<?php echo $callback;?>").val(),href = $(this).attr("href");

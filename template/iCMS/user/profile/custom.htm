@@ -10,7 +10,7 @@
     <input type="file" name="upfile" class="hide">
     <a id="upload" href="javascript:;" class="btn btn-primary"><i class="fa fa-upload"></i> 更换封面</a> <a class="btn" href="javascript:meituxx();"><i class="fa fa-edit"></i> 使用美图秀秀编辑封面</a>
   </form>
-  <div class="coverpic_editor hide mt10"> 
+  <div class="coverpic_editor hide mt10">
     <script src="<!--{$iCMS.UI}-->/meitu/xiuxiu.js" type="text/javascript"></script>
     <div id="coverpic_editor"></div>
   </div>
@@ -58,15 +58,13 @@ function meituxx(){
   }
   xiuxiu.onUploadResponse = function (data){
     var a = $.parseJSON(data);
+    iCMS.alert(a.msg,a.code);
     if(a.code){
-      iCMS.dialog(a.msg);
       window.setTimeout(function(){
         window.location.reload();
       },2000);
-    }else{
-      iCMS.dialog(a.msg,{label:'warning',icon:'warning'});
     }
   }
 }
-</script> 
-  
+</script>
+

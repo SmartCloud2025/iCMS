@@ -11,8 +11,9 @@ iACP::head(false);
 ?>
 <style type="text/css">
 .iCMS-container {margin: 0px;background-color: #ECEEEF;}
-#onBrowse{width:200px;text-align: center;}
+#onBrowse{width:200px;text-align: center;margin: 0px auto;}
 #onBeforeUpload{width: 320px;}
+.savetodir{margin-bottom: 0px;}
 </style>
 <script src="<?php echo iCMS_UI;?>/meitu/xiuxiu.js" type="text/javascript"></script>
 <div id="onBrowse" class="well" style="display:none;">
@@ -23,6 +24,7 @@ iACP::head(false);
 </div>
 <div id="onBeforeUpload" class="well" style="display:none;">
   <a class="btn btn-success" href="<?php echo __ADMINCP__; ?>=files&do=picture&from=modal&click=dir&callback=xxdir" data-toggle="modal" data-meta='{"width":"75%","height":"480px"}' data-zIndex="9999999" title="保存到新目录"><i class="fa fa-save"></i> 保存到..</a>
+  <span class="span2 uneditable-input savetodir hide"></span>
   <hr />
     <div class="input-prepend input-append">
     <span class="add-on">添加水印</span>
@@ -53,7 +55,6 @@ iACP::head(false);
     <img src="<?php echo $src;?>" alt="预览">
   </div>
 </div>
-
 <script type="text/javascript">
 var sel_dialog,sel_channel='main';
 var program = {'name':'<?php echo $file_name;?>', 'udir':"<?php echo $file_path;?>",'ext':'<?php echo $file_ext;?>'}
@@ -110,16 +111,20 @@ $(function() {
 // xiuxiu.upload();
     xiuxiu.onBrowse = function(channel, multipleSelection, canClose, id){
       var browse           = document.getElementById("onBrowse");
-      browse.style.display = 'black';
+      //browse.style.display = 'black';
       sel_channel          = channel;
 // console.log(sel_channel);
 // console.log(channel, multipleSelection, canClose, id);
-//
-      sel_dialog  = $.dialog({
-        id: 'iPHP-DIALOG',width: 360,height: 150,fixed: true,lock:true,
+      //iCMS.dialog("asdasd");
+      sel_dialog  = iCMS.dialog({
         title: 'iCMS - 打开图片',
-        content: browse,
+        content:browse
       });
+      // sel_dialog  = dialog({
+      //   id: 'iPHP-DIALOG',width: 360,height: 150,fixed: true,
+      //   title: 'iCMS - 打开图片',
+      //   content: browse,
+      // }).show();
     }
     xiuxiu.onBeforeUpload = function (data, id){
       var size = data.size;
@@ -130,19 +135,17 @@ $(function() {
       return true;
     }
     xiuxiu.onUpload = function(id) {
-      var BeforeUpload = document.getElementById("onBeforeUpload");
-      $.dialog({id: 'iPHP-DIALOG',width: 360,height: 150,fixed: true,lock:true,
+      var save_box = document.getElementById("onBeforeUpload")
+      iCMS.dialog({id:'iPHP-Upload-DIALOG',
         title: 'iCMS - 保存图片',
-        content: BeforeUpload,
+        content: save_box,
         okValue: '保存',
         ok: function () {
-//console.log('upload');
           var fna           = $("input[name=fna]:checked").val();
           program.name      = (fna=='mv'?$('#fname').val():'<?php echo $file_name;?>');
           program.watermark = ($('#watermark').prop("checked")?0:1);
           xiuxiu.setUploadArgs(program);
           xiuxiu.upload();
-          return false;
         },
         cancelValue: '取消',
         cancel: function(){
@@ -154,6 +157,7 @@ $(function() {
       var info = $.parseJSON(data);
       if(info.state=="SUCCESS"){
         var state = window.parent.modal_<?php echo $this->callback;?>('<?php echo $this->target; ?>',info);
+        //iCMS.alert("保存完成!");
         // if(state=='off'){
         //   window.parent.iCMS_MODAL.destroy();
         // }
@@ -169,6 +173,7 @@ function modal_xxdir(el,a){
 //console.log(a);
   if(!a.checked) return;
   program.udir = a.value;
+  $(".savetodir").text(a.value).removeClass('hide');
   return 'off';
 }
 function modal_xxfile(el,a){

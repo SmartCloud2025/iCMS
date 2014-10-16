@@ -393,10 +393,11 @@ class iPHP{
     	echo $json;
     	$break && exit();
     }
-    public static function js_callback($a,$callback=null){
+    public static function js_callback($a,$callback=null,$node='parent'){
     	$callback===null && $callback = $_GET['callback'];
+    	empty($callback) && $callback = 'callback';
     	$json = json_encode($a);
-    	echo "<script>window.top.$callback($json);</script>";
+    	echo "<script>window.{$node}.{$callback}($json);</script>";
     	exit;
     }
     public static function code($code=0,$msg='',$forward='',$format=''){
@@ -456,45 +457,52 @@ class iPHP{
 		$title   = $info[1]?$info[1]:'提示信息';
 		$content = $info[0];
         strstr($content,':#:') && $content=self::msg($content,true);
-		$content = addslashes($content);
-		$dialog  = "var iTOP = window.top,dialog = iTOP.$.dialog({
-		    id: 'iPHP-DIALOG',width: 360,height: 150,fixed: true,
-		    title: '".self::$dialog_title." - {$title}',
-		    content: '{$content}',";
-		$auto_func = 'dialog.close();';
+		$content = addslashes('<table class="ui-dialog-table" align="center"><tr><td valign="middle">'.$content.'</td></tr></table>');
+
+		$dialog = "var options = {id:'iPHP-DIALOG',width:320,height:110,autofocus:false,";
+		$dialog.= "title:'".self::$dialog_title." - {$title}',";
+		//$content && $dialog.= "content: '{$content}',";
+		$auto_func = 'd.close();';
 		$func      = self::js($js,true);
 		if($func){
-      		$dialog.='cancelValue: "确定",cancel: function(){'.$func.'return true;},';
-      		$auto_func = $func.'dialog.close();';
+      		$dialog.='okValue: "确定",ok: function(){'.$func.'return true;},';
+      		$auto_func = $func.'d.close();';
 		}
         if(is_array($buttons)) {
             foreach($buttons as $key=>$val) {
-            	$val['url'] && $func 	= "iTOP.location.href='{$val['url']}';";
-            	$val['src'] && $func 	= "iTOP.$('#iPHP_FRAME').attr('src','".$val['src']."');return false;";
-                $val['top'] && $func 	= "iTOP.window.open('{$val['url']}','_blank');";
-                $val['id']	&& $id		= "id: '".$val['id']."',";
-                $buttonA[]="{{$id}value: '".$val['text']."',callback: function () {".$func."}}";
+            	$val['url'] && $func = "iTOP.location.href='{$val['url']}';";
+            	$val['src'] && $func = "iTOP.iCMS.update_dialog('".$val['src']."','".$GLOBALS['page']."');return false;";
+                $val['top'] && $func = "iTOP.window.open('{$val['url']}','_blank');";
+                $val['id']	&& $id   = "id:'".$val['id']."',";
+                $buttonA[]="{".$id."value:'".$val['text']."',callback:function(){".$func."}}";
                 $val['next'] && $auto_func = $func;
             }
             $button	= implode(',',$buttonA);
       	}
-		$dialog.="});";
-        if($update){
-        	$dialog	= "var dialog = iTOP.$.dialog.get('PHP_DIALOG');";
-			$dialog.= "dialog.content('{$content}');";
+		$dialog.='};';
+		if($update){
+        	$dialog = " var iTOP = window.top,d = iTOP.dialog.get('iPHP-DIALOG');";
 			$auto_func = $func;
-        }
-		$button	&& $dialog.="dialog.button(".$button.");";
-        self::$dialog_lock && $dialog.='dialog.lock();';
-        $s<=30	&& $timeount	= $s*1000;
-        $s>30	&& $timeount	= $s;
-        $s===false && $timeount	= false;
-        if($timeount){
-        	$dialog.='window.setTimeout(function(){'.$auto_func.'},'.$timeount.');';
+		}else{
+			$dialog.= 'var iTOP = window.top,d = iTOP.dialog(options);';
+	        if(self::$dialog_lock){
+	        	$dialog.='d.showModal();';
+	        }else{
+	        	$dialog.='d.show();';
+	        }
+    	}
+		$button && $dialog.= "d.button([$button]);";
+		$content&& $dialog.= "d.content('$content');";
+
+        $s<=30	&& $timeout		= $s*1000;
+        $s>30	&& $timeout		= $s;
+        $s===false && $timeout	= false;
+        if($timeout){
+        	$dialog.='window.setTimeout(function(){'.$auto_func.'},'.$timeout.');';
         }else{
         	$update && $dialog.=$auto_func;
         }
-		echo self::$dialog_code?$dialog:'<script type="text/javascript">'.$dialog.'</script>';
+		echo self::$dialog_code?$dialog:'<script>'.$dialog.'</script>';
         self::$break && exit();
     }
 

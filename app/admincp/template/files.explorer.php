@@ -40,14 +40,13 @@ $(function(){
     });
     <?php }?>
     $('#mkdir').click(function() {
-  		$.dialog({
-  		    follow: document.getElementById('mkdir'),
+  		iCMS.dialog({
+          lock:false,
   		    title: '创建新目录',
-  		    content: document.getElementById('mkdir-box'),
   		    button: [{
   		    	id: 'mkdir-btn',
   		    	value: '创建',
-  				callback: function () {
+  				  callback: function () {
   			        var a = $("#newdirname"),n = a.val(),d=this;
   			        if(n==""){
   			        	iCMS.alert("请输入目录名称!");
@@ -71,7 +70,7 @@ $(function(){
   			        }
   			        return false;
   				}}]
-  		});
+  		},document.getElementById('mkdir-box')).show(document.getElementById('mkdir'));
     });
 });
 </script>

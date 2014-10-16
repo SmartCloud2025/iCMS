@@ -186,12 +186,14 @@ a,a:hover,a:focus { color: #259 }
 .iCMS_ucard .lower .meta .item:first-child { padding-left: 0 }
 .iCMS_ucard .lower .meta .item:last-child { border-right: 0 none }
 /* pm */
-#iCMS-pm-box { display: none;}
+
+#iCMS-pm-box{ display: none;margin-left: -5px;}
 .iCMS_pm_dialog{width: 360px;}
 .iCMS_pm_dialog dt label { color: #999; text-align: right; font-size: 13px; float: left; width: 60px; }
 .iCMS_pm_dialog .pm_inbox { float: right; }
 .iCMS_pm_dialog .pm_content { width: 280px; padding: 5px; height: 60px; }
 .iCMS_pm_dialog .pm_warnmsg{text-align: right;color: #C3412F;display: none;font-size: 13px;}
+.iCMS_pm_dialog .buttons{padding-right: 3px !important;}
 /* favorite */
 .iCMS_favorite.popover .popover-content{padding: 1px !important;}
 .iCMS_favorite.popover .popover-title{font-weight: bold;color: #888;}

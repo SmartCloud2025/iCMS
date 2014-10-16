@@ -11,14 +11,10 @@ iACP::head();
 <script>
 $(function(){
   $('#makeurls').click(function(){
-      $.dialog({id: 'mkurldiv',width:"320px",lock: true,
+      iCMS.dialog({id: 'mkurldiv',width:"300px",lock: true,
         title:'添加采集地址',content:document.getElementById("mkurls"),
-          okValue: '确定',ok: function () {
-            return true;
-          },
-          cancelValue: "取消",cancel: function(){
-            return true;
-        }
+          okValue: '确定',ok: function () {},
+          cancelValue: "取消",cancel: function(){}
       });
   });
 })

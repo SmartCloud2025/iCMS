@@ -97,8 +97,53 @@ a.noneline { text-decoration: none !important; }
 .border { border: 1px solid #DADADA }
 .placeholder {color: #222}
 /* dialog */
-.iPHP-msg { text-align: center; margin: 5px; padding: 4px; }
-.iPHP-msg .label { padding: 8px 10px; font-size: 14px; letter-spacing: 1px; line-height: 160%; }
+.ui-popup {
+border-radius: 6px;
+/*border: 1px solid #888;*/
+box-shadow: 0 0 80px 0 rgba(0, 0, 0, 0.4);
+background: #fff;
+}
+.ui-popup .ui-dialog{border:0px;box-shadow:none;background-color:inherit;}
+.ui-popup .ui-dialog-header {
+position: relative;
+background-color: #1575D5;
+background-image: -moz-linear-gradient(top,#1d7fe2,#0865c2);
+background-image: -ms-linear-gradient(top,#1d7fe2,#0865c2);
+background-image: -webkit-gradient(linear,0 0,0 100%,from(#1D7FE2),to(#0865C2));
+background-image: -webkit-linear-gradient(top,#1D7FE2,#0865C2);
+background-image: -o-linear-gradient(top,#1d7fe2,#0865c2);
+background-image: linear-gradient(top,#1d7fe2,#0865c2);
+background-repeat: repeat-x;
+filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#1d7fe2', endColorstr='#0865c2', GradientType=0);
+padding: 5px 15px;
+cursor: move;
+border-radius: 6px 6px 0 0;
+border-bottom: 1px solid #0D6EB8;
+box-shadow: 0 1px 0 rgba(255, 255, 255, 0.1) inset,0 1px 1px rgba(0, 0, 0, 0.2);
+margin: -1px -1px 0;
+line-height: 14px;
+}
+.ui-popup .ui-dialog-header .ui-dialog-title {
+	color: #fff;
+	text-shadow: 0 1px 1px rgba(0, 0, 0, .4);
+	font-size: 15px;
+	font-weight: 700;padding: 0px;
+}
+.ui-popup .ui-dialog-header .ui-dialog-close{top:0px;right: 0px;}
+.ui-popup .ui-dialog-body{padding: 0px;}
+.ui-popup .ui-dialog-table{height:100%; width:auto; vertical-align: middle;}
+.ui-popup .ui-dialog-content{padding: 10px 15px;}
+.ui-popup .ui-dialog-content .buttons { padding: 0 15px; margin-bottom: 5px; text-align: right; background: #fff }
+.ui-popup .ui-dialog-content .buttons a.cancel { color: #259; margin-right: 15px; cursor: pointer; }
+.ui-popup .ui-dialog-content .buttons a.cancel:hover { text-decoration: underline; }
+/*.ui-popup .ui-dialog-header .ui-dialog-close {background-color: #fff;color: #1575d5;}*/
+/*.ui-popup .ui-dialog-body{background-color: #fff;}
+.ui-popup .ui-dialog-footer{background-color: #eee;}
+*/
+.ui-popup .ui-dialog-button{margin-bottom: 15px;}
+
+.iPHP-msg { text-align: center; margin: 0px 5px; padding: 0px 4px; }
+.iPHP-msg .label {/*white-space: pre-wrap;*/padding: 8px 10px; font-size: 14px; letter-spacing: 1px; line-height: 160%; }
 .iPHP-msg pre { width: 800px; text-align: left; }
 .iPHP-msg i { font-size: 18px; }
 .iPHP-msg .d-content .btn-group { position: absolute; }

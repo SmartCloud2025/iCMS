@@ -28,6 +28,7 @@ $(function() {
     }
     iCMS = $.extend(iCMS,_iCMS);//扩展 or 替换 iCMS属性
     iCMS.modal();
+    window.dialog = dialog;
     $(':checkbox[data-type!=switch],:radio[data-type!=switch]').uniform();
     $('.ui-datepicker').datepicker({format: 'yyyy-mm-dd'});
     $('.tip').tooltip({html:true});
@@ -195,21 +196,7 @@ function modal_icms(el,a){
                 },
                 options = $.extend(defaults, opt);
 
-            im.dialog = function(title,obj,h){
-                window.batch_dialog = $.dialog({id: 'iCMS-batch',width:"320px",lock: true,
-                    title:title,content:obj,
-                    okValue: '确定',ok: function () {
-                        content.html($(obj).clone(true));
-                        im.submit();
-                        return true;
-                    },
-                    cancelValue: "取消",cancel: function(){
-                        action.val(0);
-                        content.empty();
-                        return true;
-                    }
-                });
-            }
+
             $('[data-toggle="batch"]').click(function(){
                 if($("input[name]:checkbox:checked",im).length==0){
                     iCMS.alert("请选择要操作项目!");
@@ -223,13 +210,24 @@ function modal_icms(el,a){
                     action.val(act).appendTo(im);
                     if(ret==null){
                         if(typeof options[act]=="undefined"){
-                            ret = '<div class="iPHP-msg"><span class="label label-warning"><i class="icon-warning-sign icon-white"></i> 确定要'+$.trim(title)+"?</span></div>";
+                            ret = '确定要'+$.trim(title)+'?';
+                            iCMS.config.DIALOG = {label:'warning',icon:'warning'};
                         }else{
-                            var ret = document.createElement("div");
+                            ret = document.createElement("div");
                             $(ret).html(options[act]());
                         }
                     }
-                    im.dialog(title,ret);
+                    window.batch_dialog = iCMS.dialog({id:'iCMS-batch',lock: true,
+                        title:title,content:ret,
+                        okValue: '确定',ok: function () {
+                            content.html($(ret).clone(true));
+                            im.submit();
+                        },
+                        cancelValue: "取消",cancel: function(){
+                            action.val(0);
+                            content.empty();
+                        }
+                    });
             });
             return im;
         }

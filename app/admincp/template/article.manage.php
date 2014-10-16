@@ -43,17 +43,17 @@ $(function(){
 			eddesc	= $('#eddesc',box);
 
 		$(".chosen-select",box).chosen({disable_search_threshold: 30});
+
 		$.getJSON("<?php echo APP_URI; ?>",{'do':'getjson','id':aid},function(d){
 			edcid.val(d.cid).trigger("chosen:updated");	edpid.val(d.pid).trigger("chosen:updated");
 			edtags.val(d.tags);	edsource.val(d.source);
 			eddesc.val(d.description);
 		});
-		if(edialog) edialog.close();
 
-		edialog	= $.dialog({
-			lock:true,id:'edialog',title: '简易编辑 ['+title+']',content: document.getElementById('ed-box'),
+		iCMS.dialog({id:'edialog',title: '简易编辑 ['+title+']',
+        content:document.getElementById('ed-box'),
 		    button: [{value: '保存',callback: function () {
-						var title=edtitle.val(),cid=edcid.val();
+						var title = edtitle.val(),cid=edcid.val();
 						if(title==""){
 							iCMS.alert("请填写标题!");
 							edtitle.focus();
@@ -64,11 +64,16 @@ $(function(){
 							return false;
 						}
 						$(box).trigger("chosen:updated");
-						$.post("<?php echo APP_URI; ?>&do=updatetitle",{id:aid,cid:cid,title:title,pid:edpid.val(),source:edsource.val(),tags:edtags.val(),description:eddesc.val()},
-						function(o){
-							if(o=="1"){
-								window.location.reload();
-							}
+						$.post("<?php echo APP_URI; ?>&do=updatetitle",{
+                id:aid,cid:cid,pid:edpid.val(),
+                title:title,
+                source:edsource.val(),
+                tags:edtags.val(),
+                description:eddesc.val()},
+						  function(o){
+  							if(o=="1"){
+  								window.location.reload();
+  							}
 						});
 					}}]
 		});

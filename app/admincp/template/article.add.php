@@ -151,7 +151,8 @@ function modal_sweditor(el){
   _modal_dialog("继续上传");
 }
 function _modal_dialog(cancel_text){
-  iCMS.dialog('插入成功!',{
+  iCMS.dialog({
+      content:'插入成功!',
       okValue: '完成',
       ok: function () {
         window.iCMS_MODAL.destroy();

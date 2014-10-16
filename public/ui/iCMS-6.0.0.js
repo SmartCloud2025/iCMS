@@ -3,7 +3,7 @@
         pm:function(a){
             var $this  = $(a),$parent = $this.parent(),
                 box    = document.getElementById("iCMS-pm-box"),
-                dialog = $.dialog({content: box,id:'iPHP-DIALOG',title: '发送私信',lock:true}),
+                dialog = iCMS.dialog({content:box,title: '发送私信',lock:true}),
                 inbox  = $this.attr('href'),
                 data   = iCMS.multiple(a),
                 content = $("[name='content']", box);

@@ -19,14 +19,12 @@ window.onload=function(){
 
   xiuxiu.onUploadResponse = function (data){
     var a = $.parseJSON(data);
+    iCMS.alert(a.msg,a.code);
     if(a.code){
-      iCMS.dialog(a.msg);
       window.setTimeout(function(){
         window.location.reload();
       },2000);
-    }else{
-      iCMS.dialog(a.msg,{label:'warning',icon:'warning'});
     }
   }
 }
-</script> 
+</script>
