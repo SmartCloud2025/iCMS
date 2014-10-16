@@ -44,6 +44,7 @@ class iURL {
     public static function rule($matches) {
     	$b	= $matches[1];
     	list($a,$c,$tc) = self::$uriArray;
+
         switch($b) {
             case 'ID':		$e = $a['id'];break;
             case '0xID':	$e = sprintf("%08s",$a['id']);break;
@@ -89,9 +90,10 @@ class iURL {
                 $url     = $array['urlRule'];
                 break;
             case 'category':
-                $i->href= $array['url'];
-                $url	= $array['mode']==0?'{PHP}':$array['categoryRule'];
-                ($array['password'] && $array['mode'] ==1) && $url = '{PHP}';
+                $category = $array;
+                $i->href  = $category['url'];
+                $url      = $category['mode']==0?'{PHP}':$category['categoryRule'];
+                ($category['password'] && $category['mode'] ==1) && $url = '{PHP}';
                 break;
             case in_array($uri,array('article','content')):
                 $array    = (array)$a[0];
@@ -124,7 +126,7 @@ class iURL {
 
         	strstr($url,'{') && $url = preg_replace_callback ("/\{(.*?)\}/",'__iurl_rule__',$url);
             $i->path    = iFS::path(iPATH.$html_dir.$url);
-            $i->href    = $sURL.iFS::path('/'.$html_dir.$url);
+            $i->href    = rtrim($sURL,'/').'/'.ltrim(iFS::path($html_dir.$url),'/') ;
 //var_dump($i);
 			$pathA 		= pathinfo($i->path);
 //var_dump($pathA);

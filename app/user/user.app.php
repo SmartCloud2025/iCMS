@@ -117,6 +117,7 @@ class userApp {
         if(iPHP_DEVICE!=="pc" && empty($article)){
             $article['mobile'] = "1";
         }
+
         iPHP::assign('article',$article);
         iPHP::assign('article_data',$article_data);
         iPHP::assign('option',$this->select('',$cid));
@@ -190,7 +191,10 @@ class userApp {
         $author      = user::$nickname;
         $editor      = user::$nickname;
 
-        $mobile && $_POST['body'] = ubb2html($_POST['body']);
+        if($mobile){
+            $_POST['body'] = ubb2html($_POST['body']);
+            $_POST['body'] = trim($_POST['body']);
+        }
         $body = iPHP::cleanHtml($_POST['body']);
         empty($title)&& iPHP::alert('标题不能为空！');
         empty($cid)  && iPHP::alert('请选择所属栏目！');

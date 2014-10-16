@@ -82,16 +82,15 @@ class htmlApp{
 		$category	= $this->PG['cid'];
 		$rootid		= $this->PG['rootid'];
 		$k			= (int)$this->PG['k'];
-		if($k=="0" && empty($category)){
+		if(!$k && $this->page){
+			$category = iCache::get('iCMS/create.category');
+		}
+		if(!$k && empty($category)){
 			iPHP::alert('请选择需要生成静态的栏目!');
 		}
 		$category[0]=='all' && $category = $this->get_category(iCMS_APP_ARTICLE);
 
-		if($k){
-			$category = iCache::get('iCMS/create.category');
-		}else{
-			iCache::set('iCMS/create.category',$category,0);
-		}
+		$k OR iCache::set('iCMS/create.category',$category,0);
 
 		$_GET['loop'] && $loop=0;
 		$GLOBALS['page'] = $p+$this->page;
@@ -100,6 +99,7 @@ class htmlApp{
 		$cid = $category[$k];
 
 		$htm = iCMS::run('category','category',$cid,false);
+
 		$htm OR iPHP::alert("栏目[cid:$cid] URL规则设置问题! 此栏目不能生成静态");
 
 		$fpath = iPHP::p2num($htm[1]['iurl']['pagepath']);
@@ -119,10 +119,11 @@ class htmlApp{
 		$looptimes = ($total-$GLOBALS['page'])/$this->CP;
 		$use_time  = iPHP::timer_stop();
 		$msg.="用时<span class='label label-info'>{$use_time}</span>秒";
+		//$query["alltime"] =
 		$query["alltime"] = $this->alltime+$use_time;
 		$loopurl = $this->loopurl($total,$query);
-		//	print_r($loopurl);
-//		exit;
+		// print_r($loopurl);
+		// exit;
 		if($loopurl){
 			$moreBtn = array(
 				array("id"=>"btn_stop","text"=>"停止","url"=>APP_URI."&do=category"),

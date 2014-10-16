@@ -121,6 +121,7 @@ h3.title span { color: #70A700; font-size: 14px; font-weight: bold; height: 30px
 #iCMS-userApp .userApp_day .content .title { margin-right: 5px; }
 #iCMS-userApp .userApp_day .content .title a { display: block; }
 #iCMS-userApp .userApp_day .content .title.npic { background-color: #e8e7e7; padding: 4px 8px; }
+#iCMS-userApp #infscr-loading{padding: 5px 20px;}
 /* media */
 @media (min-width:768px) {
 	.navbar-toggle { display: block; }

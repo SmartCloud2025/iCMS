@@ -177,9 +177,12 @@ class iPages {
 		$return.='</select>';
 		return $return;
 	}
+	function current_page($style='current_page'){
+		return '<span class="'.$style.'">'.$this->lang['di'].$this->nowindex.$this->lang['unit'].'</span>';
+	}
 	//文字 说明
 	function bartext($style='bartext'){
-		return '<span class="'.$style.'">'.$this->lang['other'].$this->total.$this->unit.' '.$this->totalpage.$this->lang['unit'].'</span>';
+		return '<span class="'.$style.'">'.$this->total.$this->unit.'，'.$this->lang['other'].$this->totalpage.$this->lang['unit'].'</span>';
 //		return '<span class="'.$style.'">'.$this->lang['other'].$this->total.$this->unit.'，'.$this->perpage.$this->unit.'/'.$this->lang['unit'].' '.$this->lang['other'].$this->totalpage.$this->lang['unit'].'</span>';
 	}
 
@@ -217,6 +220,15 @@ class iPages {
 				break;
 			case '6':
 				return $this->pre_page().$this->next_page();
+				break;
+			case '7':
+				return $this->first_page().$this->pre_page().$this->current_page().$this->next_page().$this->last_page().$this->bartext();
+				break;
+			case '8':
+				return $this->first_page().$this->pre_page().$this->current_page().$this->next_page().$this->last_page();
+				break;
+			case '9':
+				return $this->first_page().$this->pre_page().$this->next_page().$this->last_page();
 				break;
 			default:
 				return $this->first_page().$this->pre_page().$this->nowbar().$this->next_page().$this->last_page().$this->bartext();

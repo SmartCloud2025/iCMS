@@ -22,7 +22,7 @@ class filesApp{
     }
 	function do_add(){
         iACP::MP('FILE.UPLOAD','page');
-		$this->id && $rs	= iFS::getFileData('id',$this->id);
+		$this->id && $rs = iFS::getFileData('id',$this->id);
 		include iACP::view("files.add");
 	}
 	function do_multi(){
@@ -225,7 +225,9 @@ class filesApp{
                 $file_ext  = $rs->ext;
             }
         }else{
-            $src = false;
+            $file_name= md5(uniqid());
+            $src      = false;
+            $file_ext = 'jpg';
         }
         $max_size  = (int)$this->upload_max_filesize;
         stristr($this->upload_max_filesize,'m') && $max_size = $max_size*1024*1024;

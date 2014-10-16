@@ -116,8 +116,10 @@ class spiderApp {
 			iPHP::$dialog_lock	= true;
 			iPHP::alert('暂无最新内容',0,30);
 		}
-		ob_implicit_flush();
 		$_count	= count($pubArray);
+        ob_start();
+        ob_end_flush();
+        ob_implicit_flush(1);
         foreach((array)$pubArray as $i=>$a){
             $this->sid   = $a['sid'];
             $this->cid   = $a['cid'];
@@ -129,20 +131,22 @@ class spiderApp {
             $updateMsg   = $i?true:false;
             $timeout     = ($i++)==$_count?'3':false;
 			iPHP::dialog($rs['msg'], 'js:'.$rs['js'],$timeout,0,$updateMsg);
-        	ob_end_flush();
+            ob_flush();
+            flush();
 		}
 		iPHP::dialog('success:#:check:#:采集完成!',0,3,0,true);
 	}
 	function multipublish(){
 		$a		= array();
 		$code	= $this->do_publish('multi');
-		//var_dump($pubRs,$pubRs==='-1');
-		$code==='-1' && $label='<br /><span class="label label-warning">该URL的文章已经发布过!请检查是否重复</span>';
-		$code===true && $label='<br /><span class="label label-success">发布成功!</span>';
-		if($label){
-			$a['msg']	= '标题:'.$this->title.'<br />URL:'.$this->url.$label.'<hr />';
-			$a['js']	= 'parent.$("#' . md5($this->url) . '").remove();';
-		}
+        //print_r($code);
+        if(is_array($code)){
+            $label='<span class="label label-success">发布成功!</span>';
+        }else{
+            $code=="-1" && $label='<span class="label label-warning">该URL的文章已经发布过!请检查是否重复</span>';
+        }
+        $a['msg'] = '标题:'.$this->title.'<br />URL:'.$this->url.'<br />'.$label.'<hr />';
+        $a['js']  = 'parent.$("#' . md5($this->url) . '").remove();';
 		return $a;
 	}
     function do_publish($work = null) {
@@ -156,7 +160,7 @@ class spiderApp {
         $sid	= iDB::value("SELECT `id` FROM `#iCMS@__spider_url` where `hash` = '$hash' and `publish`='1'");
         $msg	= '该URL的文章已经发布过!请检查是否重复';
         if ($sid) {
-            $work===NULL	&& iPHP::alert($msg.' [sid:'.$sid.']', 'js:parent.$("#' . $hash . '").remove();');
+            $work===NULL && iPHP::alert($msg.' [sid:'.$sid.']', 'js:parent.$("#' . $hash . '").remove();');
             if($work=='multi'){
 	            return '-1';
             }
@@ -171,7 +175,7 @@ class spiderApp {
                     );
                     iDB::insert('spider_url',$data);
                 }
-                $work===NULL	&& iPHP::alert($msg, 'js:parent.$("#' . $hash . '").remove();');
+                $work===NULL && iPHP::alert($msg, 'js:parent.$("#' . $hash . '").remove();');
 	            if($work=='multi'){
 					return '-1';
 	            }
@@ -203,7 +207,7 @@ class spiderApp {
         if ($callback['code'] == "1001") {
             if ($this->sid) {
                 iDB::query("UPDATE `#iCMS@__spider_url` SET `publish` = '1', `pubdate` = '" . time() . "' WHERE `id` = '$this->sid';");
-                $work===NULL	&& iPHP::success("发布成功!",'js:1');
+                $work===NULL && iPHP::success("发布成功!",'js:1');
             } else {
                 $hash    = md5($this->url);
                 $title   = iS::escapeStr($_POST['title']);
@@ -214,7 +218,7 @@ class spiderApp {
                     'hash'=>$hash, 'status'=>'1', 'publish'=>'1', 'addtime'=>time(), 'pubdate'=>time()
                 );
                 iDB::insert('spider_url',$data);
-		        $work===NULL	&& iPHP::success("发布成功!", 'js:parent.$("#' . $hash . '").remove();');
+		        $work===NULL && iPHP::success("发布成功!", 'js:parent.$("#' . $hash . '").remove();');
             }
         }
         if($work=="cmd"||$work=="multi"){
