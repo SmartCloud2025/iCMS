@@ -17,9 +17,9 @@
       <div id="guide">
         <div id="bdshare" class="bdshare_t bds_tools get-codes-bdshare"> <span class="bds_more" style="background:#fff!important;padding:0;">分享到：</span> <a class="bds_qzone"></a> <a class="bds_tsina"></a> <a class="bds_tqq"></a> <a class="bds_renren"></a> <a class="bds_t163"></a> <a class="shareCount" style="display:none"></a> </div>
         <strong>当前位置：</strong> <a href="<!--{$site.url}-->">网站首页</a> &nbsp;&raquo;&nbsp;<!--{$category.nav}-->&nbsp;&raquo;&nbsp;列表 </div>
-      <!-- Baidu Button BEGIN --> 
-      <script type="text/javascript" id="bdshare_js" data="type=tools&amp;uid=0" ></script> 
-      <script type="text/javascript" id="bdshell_js"></script> 
+      <!-- Baidu Button BEGIN -->
+      <script type="text/javascript" id="bdshare_js" data="type=tools&amp;uid=0" ></script>
+      <script type="text/javascript" id="bdshell_js"></script>
       <script type="text/javascript">
         var bds_config = {
         'bdText':'一篇好文,推荐之-【'+$('#page h1').text()+'】（来自:<!--{$site.title}-->）',
@@ -28,13 +28,13 @@
         <!--{/if}-->
         }
         document.getElementById("bdshell_js").src = "http://bdimg.share.baidu.com/static/js/shell_v2.js?cdnversion=" + Math.ceil(new Date()/3600000)
-        </script> 
+        </script>
       <!-- Baidu Button END -->
       <div id="page">
         <div class="list-item">
           <ul>
             <!--{iCMS:article:list loop="true" page="true" row="10" cid="$category.cid"}-->
-            <li class="item-detail clearfix"> 
+            <li class="item-detail clearfix">
               <!--{if $article_list.pic.url}-->
               <p class="pic"> <a href="<!--{$article_list.url}-->" target="_blank"><img src="<!--{$article_list.pic.url}-->"></a> </p>
               <!--{/if}-->
@@ -44,8 +44,8 @@
             <!--{/iCMS}-->
           </ul>
         </div>
-        <div class="iCMS_pagination"><!--{$iCMS.page.nav}--></div>
-        <script type="text/javascript">(function(){$("img",".article-detail").each(function(i){iCMS.imgFix(this,550,600);});})($);</script> 
+        <div class="iCMS_pagination"><!--{$iCMS.PAGE.NAV}--></div>
+        <script type="text/javascript">(function(){$("img",".article-detail").each(function(i){iCMS.imgFix(this,550,600);});})($);</script>
       </div>
       <div class="comments_list clearfix"> </div>
     </div>
@@ -56,7 +56,7 @@
         </div>
         <div class="bd">
           <ul class="artical-top artical-top-num">
-            <!--{iCMS:article:list loop="true" row="10" orderby="hot" cid="$category.cid"}--> 
+            <!--{iCMS:article:list loop="true" row="10" orderby="hot" cid="$category.cid"}-->
             <!--{if $article_list.rownum<4}-->
             <li class="top-1"><span><!--{$article_list.rownum}--></span>
               <p> <a href="<!--{$article_list.url}-->" target="_blank"><!--{$article_list.title}--></a> </p>
@@ -64,7 +64,7 @@
             </li>
             <!--{else}-->
             <li><span><!--{$article_list.rownum}--></span> <a href="<!--{$article_list.url}-->" target="_blank"><!--{$article_list.title}--></a> </li>
-            <!--{/if}--> 
+            <!--{/if}-->
             <!--{/iCMS}-->
           </ul>
         </div>
@@ -73,10 +73,10 @@
         <div class="hd">
           <h3>相关标签<span>RELATED</span></h3>
         </div>
-        <div class="bd"> 
-          <!--{iCMS:tag:list loop="true" row="10" cid="$category.cid"}--> 
-          <a href="<!--{$tag_list.url}-->" target="_blank"><!--{$tag_list.name}--></a> 
-          <!--{/iCMS}--> 
+        <div class="bd">
+          <!--{iCMS:tag:list loop="true" row="10" cid="$category.cid"}-->
+          <a href="<!--{$tag_list.url}-->" target="_blank"><!--{$tag_list.name}--></a>
+          <!--{/iCMS}-->
         </div>
       </div>
     </div>

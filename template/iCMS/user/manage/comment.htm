@@ -22,25 +22,17 @@
               <div class="clearfix mt10"></div>
               <p class="alert alert-info"><!--{$comment_list.content}--></p>
               <div class="clearfix"></div>
-
               <!--{if $comment_list.reply_id}-->
               <!--{iCMS:comment:array id=$comment_list.reply_id}-->
               <!--{if $comment_array}-->
-
               <p class="alert alert-success cmt-reply"> <a href="<!--{$comment_array.user.url}-->" target="_blank" data-tip="iCMS:ucard:<!--{$comment_list.userid}-->">@<!--{$comment_array.user.name}-->：</a>
                 <!--{$comment_array.content}-->
                 <span class="label"><!--{$comment_list.addtime|format_date}--></span> <span class="label label-info"><i class="fa fa-thumbs-o-up"></i> <!--{$comment_array.up}--></span> </p>
-
               <!--{else}-->
-
               <p class="alert alert-error cmt-reply">评论已被删除!</p>
-
               <!--{/if}-->
-
               <div class="clearfix"></div>
-
               <!--{/if}-->
-
               <div class="info"> <span class="label"><!--{$comment_list.addtime|format_date}--></span> <span class="label label-info"><i class="fa fa-thumbs-o-up"></i> <!--{$comment_list.up}--></span> </div></td>
             <td><a href="javascript:;" class="ml10 tip" data-action="del" data-id="<!--{$comment_list.id}-->" title="删除评论"><i class="fa fa-times"></i></a></td>
           </tr>
@@ -48,7 +40,7 @@
         </tbody>
         <tfoot>
           <tr>
-            <td colspan="3"><div class="iCMS_pagination"><!--{$iCMS.page.nav}--></div></td>
+            <td colspan="3"><div class="iCMS_pagination"><!--{$iCMS.PAGE.NAV}--></div></td>
           </tr>
         </tfoot>
       </table>

@@ -94,8 +94,8 @@ h3.title span { color: #70A700; font-size: 14px; font-weight: bold; height: 30px
 .iCMS-mobile .login_reg_wrapper .radio input { width: 18px; height: 18px; }
 .iCMS-mobile .login_reg_wrapper .radio label { font-size: 18px; }
 .iCMS-mobile .login_reg_wrapper .lr-btn { margin-left: 10px; }
-#iCMS-login-box .iCMS_login_btn, #iCMS-register-box .iCMS_register_btn { font-size: 18px; }
-#iCMS-login-box .findpwd { margin: 5px 5px 0px 0px; float: right; }
+#iCMS-login-page .iCMS_login_btn, #iCMS-register-box .iCMS_register_btn { font-size: 18px; }
+#iCMS-login-page .findpwd { margin: 5px 5px 0px 0px; float: right; }
 .iCMS_seccode { display: inline-block; width: 90px; height: 40px !important; }
 .iCMS_seccode_text { font-size: 16px; margin-left: 4px; }
 .iCMS_seccode_img { height: 30px; margin-top: 5px; }

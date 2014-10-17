@@ -35,17 +35,17 @@ return array(
 		'forbidden' =>'系统已关闭登陆功能！',
 	),
 	'category'=>array(
-		'empty'   =>'请输入分类名称!',
+		'empty'   =>'请输入分类名称！',
 		'filter'  =>'分类名称包含被系统屏蔽的字符，请重新填写!',
 		'max'     =>'最多只能创建10个分类!',
 		'success' =>'添加成功！',
 		'update'  =>'更新成功！',
 	),
 	'article'=>array(
-		'add_success'    =>'添加成功!',
-		'add_examine'    =>'添加成功!本栏目需要审核后才能正常显示',
+		'add_success'    =>'添加成功！',
+		'add_examine'    =>'添加成功！本栏目需要审核后才能正常显示。',
 		'update_success' =>'更新成功！',
-		'update_examine' =>'更新成功！本栏目需要审核后才能正常显示',
+		'update_examine' =>'更新成功！本栏目需要审核后才能正常显示。',
 	),
 	'publish'=>array(
 		'filter_title' =>'标题中包含被系统屏蔽的字符，请重新填写。',

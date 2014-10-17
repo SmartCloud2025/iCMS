@@ -171,20 +171,30 @@ class iCMS {
         self::$app_method = $prefix.$do;
         self::$app_tpl    = iPHP_APP_DIR.'/'.$app.'/template';
     	self::$app_vars   = array(
-            'version'    => iCMS_VER,
-            "is_mobile"  => iPHP::$mobile,
+            'VERSION'    => iCMS_VER,
+            "MOBILE"     => iPHP::$mobile,
             'API'        => iCMS_API,
             'UI'         => iCMS_UI,
             'UI_URL'     => iCMS_UI_URL,
             'SAPI'       => iCMS_API.'?app='.self::$app_name,
             'COOKIE_PRE' => iPHP_COOKIE_PRE,
-            'refer'      => __REF__,
-            'config'     => self::$config,
+            'REFER'      => __REF__,
+            'CONFIG'     => self::$config,
             "APP"        => array(
-                'name'   => self::$app_name,
-                'do'     => self::$app_do,
-                'method' => self::$app_method
+                'NAME'   => self::$app_name,
+                'DO'     => self::$app_do,
+                'METHOD' => self::$app_method
             ),
+            "APPID"        => array(
+                'ARTICLE'  => iCMS_APP_ARTICLE,
+                'CATEGORY' => iCMS_APP_CATEGORY,
+                'TAG'      => iCMS_APP_TAG,
+                'PUSH'     => iCMS_APP_PUSH,
+                'COMMENT'  => iCMS_APP_COMMENT,
+                'MESSAGE'  => iCMS_APP_MESSAGE,
+                'FAVORITE' => iCMS_APP_FAVORITE,
+            ),
+
         );
         define('iCMS_API_URL', iCMS_API.'?app='.self::$app_name);
         iPHP::$iTPL->_iTPL_VARS = self::$app_vars;
@@ -349,9 +359,15 @@ class iCMS {
         $lang   = iPHP::lang('iCMS:page');
         $iPages = new iPages($a,$lang);
         if($iPages->totalpage>1) {
-            $pagenav = $a['pagenav']?$a['pagenav']:'nav';
+            $pagenav = $a['pagenav']?strtoupper($a['pagenav']):'NAV';
             $pnstyle = $a['pnstyle']?$a['pnstyle']:0;
-            iPHP::$iTPL->_iTPL_VARS['page']  = array('count'=>$a['total'],'total'=>$iPages->totalpage,'current'=>$iPages->nowindex,$pagenav=>$iPages->show($pnstyle),'next'=>$iPages->next_page());
+            iPHP::$iTPL->_iTPL_VARS['PAGE']  = array(
+                $pagenav  =>$iPages->show($pnstyle),
+                'COUNT'   =>$a['total'],
+                'TOTAL'   =>$iPages->totalpage,
+                'CURRENT' =>$iPages->nowindex,
+                'NEXT'    =>$iPages->next_page()
+            );
             iPHP::$iTPL->_iTPL_VARS['PAGES'] = $iPages;
         }
         return $iPages;

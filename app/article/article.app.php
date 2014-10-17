@@ -27,14 +27,14 @@ class articleApp {
         $this->vote('bad');
     }
     private function vote($_do){
-        iPHP::app('user.class','static');
-        user::get_cookie() OR iPHP::code(0,'iCMS:!login',0,'json');
+        // iPHP::app('user.class','static');
+        // user::get_cookie() OR iPHP::code(0,'iCMS:!login',0,'json');
 
         $aid = (int)$_GET['iid'];
         $aid OR iPHP::code(0,'iCMS:article:empty_id',0,'json');
 
         $ackey = 'article_'.$_do.'_'.$aid;
-        $vote  = (int)iPHP::get_cookie($ackey);
+        $vote  = iPHP::get_cookie($ackey);
         $vote && iPHP::code(0,'iCMS:article:!'.$_do,0,'json');
 
         if($_do=='good'){
@@ -42,10 +42,8 @@ class articleApp {
         }else{
             $sql = '`bad`=bad+1';
         }
-        //empty($sql) && iPHP::code(0,'iCMS:error',0,'json');
-
         iDB::query("UPDATE `#iCMS@__article` SET {$sql} WHERE `id` ='{$aid}' limit 1");
-        iPHP::set_cookie($ackey,user::$userid,86400);
+        iPHP::set_cookie($ackey,time(),86400);
         iPHP::code(1,'iCMS:article:'.$_do,0,'json');
 
     }

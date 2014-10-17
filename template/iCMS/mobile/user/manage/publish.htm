@@ -21,7 +21,7 @@
 		<div class="input-group-btn">
 			<button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown"><span id="uc_select">默认分类</span> <span class="caret"></span></button>
 			<ul class="dropdown-menu pull-right">
-				<!--{iCMS:user:category loop="true" userid="$user.uid" appid="$iCMS.CONST[iCMS_APP_ARTICLE]"}-->
+				<!--{iCMS:user:category loop="true" userid="$user.uid" appid="$iCMS.APPID.ARTICLE"}-->
 			    	<li><a href="javascript:;" cid="<!--{$user_category.cid}-->" class="user_category"><!--{$user_category.name}--></a></li>
 			    <!--{/iCMS}-->
 	            <li id="user_category_0"><a href="javascript:;" cid="0" class="user_category">默认分类</a></li>

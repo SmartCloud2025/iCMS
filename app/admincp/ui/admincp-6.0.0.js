@@ -13,6 +13,15 @@ $(function() {
         checked: function(el){
             $(el).prop("checked",true).closest('.checker > span').addClass('checked');
         },
+        update_dialog: function (url,p){
+            $(".iPHP_FRAME_CLONE").remove();
+            var frame = $('#iPHP_FRAME').clone();
+            frame.attr('src',url)
+            .addClass("iPHP_FRAME_CLONE")
+            .attr('id','iPHP_FRAME_'+p)
+            .attr('name','iPHP_FRAME_'+p);
+            $('#iPHP_FRAME').after(frame);
+        },
         // popover:function(el){
         //     $(el).popover({
         //         html:true,
@@ -168,7 +177,137 @@ function modal_icms(el,a){
 	e.val(val);
     return 'off';
 }
+(function($) {
+    $.fn.modal = function(options) {
+        var im = $(this),
+            defaults = {
+                width: "360px",
+                height: "auto",
+                title: im.attr('title') || "iCMS 提示",
+                href: im.attr('href') || false,
+                target: im.attr('data-target') || "#iCMS-MODAL",
+                zIndex: im.attr('data-zIndex') || false,
+                overflow: im.attr('data-overflow') || false,
+            };
 
+        var meta = im.attr('data-meta') ? $.parseJSON(im.attr('data-meta')) : {};
+        var opts = $.extend(defaults, options, meta);
+        var moverlay = $('<div id="modal-overlay"></div>');
+
+        return im.each(function() {
+
+            var m = $(opts.target),
+                mBody = m.find(".modal-body"),
+                mTitle = m.find(".modal-title");
+            opts.title && mTitle.html(opts.title);
+            mBody.empty();
+
+            if (opts.overflow){
+                $("body").css({"overflow-y": "hidden"});
+            }
+
+            if (opts.html) {
+                var content = opts.html;
+                if (content instanceof jQuery){
+                    content.show();
+                    html = content.html();
+                    mBody.html(html);
+                }else if(content.nodeType === 1){
+                    if (im._elemBack) {
+                        im._elemBack();
+                        delete im._elemBack;
+                    };
+                    // artDialog 5.0.4
+                    // 让传入的元素在对话框关闭后可以返回到原来的地方
+                    var display = content.style.display;
+                    var prev    = content.previousSibling;
+                    var next    = content.nextSibling;
+                    var parent  = content.parentNode;
+                    im._elemBack = function () {
+                        if (prev && prev.parentNode) {
+                            prev.parentNode.insertBefore(content, prev.nextSibling);
+                        } else if (next && next.parentNode) {
+                            next.parentNode.insertBefore(content, next);
+                        } else if (parent) {
+                            parent.appendChild(content);
+                        };
+                        content.style.display = display;
+                        im._elemBack = null;
+                    };
+                    $(content).show();
+                    mBody[0].appendChild(content);
+                }else{
+                    mBody.html(html);
+                }
+                // mBody.css({
+                //     "overflow-y": "auto"
+                // });
+            } else if (opts.href) {
+                var mFrame = $('<iframe id="modal-iframe" frameborder="no" allowtransparency="true" scrolling="auto" hidefocus="" src="' + opts.href + '"></iframe>');
+                mFrameFix = $('<div id="modal-iframeFix"></div>');
+                mFrame.appendTo(mBody);
+                mFrameFix.appendTo(mBody);
+            }
+            moverlay.insertBefore(m).click(function() {
+                im.destroy();
+            });
+            $('[data-dismiss="modal"][aria-hidden="true"]').on('click', function() {
+                im.destroy();
+            });
+            im.__center = function () {
+                var $window = $(window);
+                var $document = $(document);
+                var fixed = this.fixed;
+                var dl = fixed ? 0 : $document.scrollLeft();
+                var dt = fixed ? 0 : $document.scrollTop();
+                var ww = $window.width();
+                var wh = $window.height();
+                var ow = m.width();
+                var oh = m.height();
+                var left = (ww - ow) / 2 + dl;
+                var top = (wh - oh) * 382 / 1000 + dt;// 黄金比例
+                var style = m[0].style;
+                style.position = 'absolute';
+                style.left = Math.max(parseInt(left), dl) + 'px';
+                style.top = Math.max(parseInt(top), dt) + 'px';
+            };
+            im.size = function(o) {
+                var opts = $.extend(opts, o);
+                opts.zIndex && m.css({
+                    "cssText": 'z-index:' + opts.zIndex + '!important'
+                });
+                m.css({
+                    width: opts.width
+                });
+                mBody.height(opts.height);
+            };
+            im.close = function() {
+                m.hide().removeClass('in');
+                return im;
+            };
+            im.destroy = function() {
+                moverlay.remove();
+                $("#modal-overlay").remove();
+                m.hide().removeClass('in');
+                if (im._elemBack) {
+                    im._elemBack();
+                }
+                m.find(".modal-title").html("iCMS 提示");
+                if (opts.overflow) {
+                    $("body").css({"overflow-y": "auto"});
+                }
+                window.stop ? window.stop() : document.execCommand("Stop");
+            };
+            $(window).scroll(function () {
+                im.__center();
+            });
+            im.size(opts);
+            im.__center();
+            m.show().addClass('in');
+            return im;
+        });
+    }
+})(jQuery);
 //批量操作
 (function($) {
     $.fn.extend({

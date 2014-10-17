@@ -3,7 +3,7 @@
 	<input name="pg" type="hidden" value="category" />
 	<div class="title"><span>我的分类</span></div>
 	<div class="category ml30">
-		<!--{iCMS:user:category loop="true" userid="$user.uid" appid="$iCMS.CONST[iCMS_APP_ARTICLE]"}-->
+		<!--{iCMS:user:category loop="true" userid="$user.uid" appid="$iCMS.APPID.ARTICLE"}-->
 		<input name="_cid[]" type="hidden" value="<!--{$user_category.cid}-->" />
 		<div class="input-prepend input-append">
 			<span class="add-on"><!--{$user_category.rownum}--></span>

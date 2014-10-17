@@ -36,15 +36,16 @@ class commentApp {
     }
 
     public function API_like(){
-        iPHP::app('user.class','static');
-        user::get_cookie() OR iPHP::code(0,'iCMS:!login',0,'json');
+        // iPHP::app('user.class','static');
+        // user::get_cookie() OR iPHP::code(0,'iCMS:!login',0,'json');
 
         $this->id OR iPHP::code(0,'iCMS:article:empty_id',0,'json');
         $lckey = 'like_comment_'.$this->id;
-        $like  = (int)iPHP::get_cookie($lckey);
+        $like  = iPHP::get_cookie($lckey);
         $like && iPHP::code(0,'iCMS:comment:!like',0,'json');
+        //$ip = iPHP::getIp();
         iDB::query("UPDATE `#iCMS@__comment` SET `up`=up+1 WHERE `id`='$this->id'");
-        iPHP::set_cookie($lckey,user::$userid,86400);
+        iPHP::set_cookie($lckey,time(),86400);
         iPHP::code(1,'iCMS:comment:like',0,'json');
     }
     public function API_json(){
@@ -56,8 +57,12 @@ class commentApp {
         );
         $_GET['by'] && $vars['by'] = iS::escapeStr($_GET['by']);
         $_GET['date_format'] && $vars['date_format'] = iS::escapeStr($_GET['date_format']);
-        iPHP::assign('vars',$vars);
-        iPHP::view('iCMS://comment/api.json.htm');
+        $vars['page'] = true;
+        iPHP::app('comment.func','static');
+        $array = comment_list($vars);
+        iPHP::json($array);
+        //iPHP::assign('vars',$vars);
+        //iPHP::view('iCMS://comment/api.json.htm');
     }
     function pm($a){
         $fields = array('send_uid','send_name','receiv_uid','receiv_name','content');

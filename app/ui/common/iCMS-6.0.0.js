@@ -30,16 +30,11 @@
             });
             doc.on("click", '.iCMS_article_do', function(event) {
                 event.preventDefault();
-                if (!iCMS.user_status) {
-                    iCMS.LoginBox();
-                    return false;
-                }
                 var param = iCMS.param($(this));
-
                 if (param.do =='comment') {
                     iCMS.comment.box(this);
                 } else if (param.do =='favorite') {
-                    iCMS.article.favorite(this);
+                    iCMS.user.favorite(this);
                 } else if (param.do =='good'||param.do =='bad') {
                     iCMS.article.vote(this);
                 }
@@ -57,6 +52,8 @@
             });
             $(".iCMS_API_iframe").load(function() {
                 iCMS.api_iframe_height($(this));
+            }).resize(function(){
+              iCMS.api_iframe_height($(this));
             });
             $(".tip").tooltip();
             $("img.lazy").lazyload();
@@ -102,7 +99,7 @@
               title:title,
             }).tooltip('show');
         },
-        alert: function(msg, ok) {
+        alert: function(msg,ok,callback) {
             var opts = ok ? {
                 label: 'success',
                 icon: 'check'
@@ -110,80 +107,109 @@
                 label: 'warning',
                 icon: 'warning'
             }
+            opts.id      = 'iPHP-DIALOG-ALERT';
             opts.content = msg;
-            iCMS.dialog(opts);
+            opts.height  = 150;
+            window.top.iCMS.dialog(opts,callback);
         },
-        dialog: function(options) {
-            var defaults = {id: 'iPHP-DIALOG',title: 'iCMS - 提示信息',
-                width: 360,height: 150,
-                fixed: true,lock: true,autofocus:false,
+        dialog: function(options,callback) {
+            var defaults = {
+                id:'iCMS-DIALOG',
+                title:'iCMS - 提示信息',
+                width:360,height:150,
+                className:'iCMS_dialog',//skin:'iCMS_dialog',
+                backdropBackground:'#666',backdropOpacity: 0.5,
+                fixed:true,lock:true,autofocus:false,quickClose:true,
                 time: 30000000,
-                label: 'success',icon: 'check'
-            },
+                label:'success',icon: 'check'
+            },_elemBack,timeOutID = null,
             opts = $.extend(defaults,options,iCMS.config.DIALOG);
+
+            if(opts.follow){
+                opts.fixed = false;
+                opts.lock  = false;
+                opts.skin = 'iCMS_tooltip'
+                opts.className = 'ui-popup';
+                opts.backdropOpacity = 0;
+            }
             var content = opts.content;
+            //console.log(typeof content,content.nodeType);
             if (content instanceof jQuery){
                 opts.content = content.html();
-            }else if (typeof content == "string") {
+            }else if (typeof content === "string") {
                 opts.content = '<table class=\"ui-dialog-table\" align=\"center\"><tr><td valign=\"middle\">'
                 +'<div class=\"iPHP-msg\"><span class=\"label label-' + opts.label + '\"><i class=\"fa fa-' + opts.icon + '\"></i> ' + content + '</span></div>'
                 +'</td></tr></table>';
-            }else if(content.nodeType === 1){
-                if (_elemBack) {
-                    _elemBack();
-                    delete _elemBack;
-                };
-                // artDialog 5.0.4
-                // 让传入的元素在对话框关闭后可以返回到原来的地方
-                var display = content.style.display;
-                var prev    = content.previousSibling;
-                var next    = content.nextSibling;
-                var parent  = content.parentNode;
-                var _elemBack = function () {
-                    if (prev && prev.parentNode) {
-                        prev.parentNode.insertBefore(content, prev.nextSibling);
-                    } else if (next && next.parentNode) {
-                        next.parentNode.insertBefore(content, next);
-                    } else if (parent) {
-                        parent.appendChild(content);
-                    };
-                    content.style.display = display;
-                    _elemBack = null;
-                };
-                opts.content = content;
-                $(content).show();
-                opts.onbeforeremove = function(){
+            }else if (typeof content === "object") {
+                if(content.nodeType === 1){
                     if (_elemBack) {
                         _elemBack();
-                    }
+                        delete _elemBack;
+                    };
+                    // artDialog 5.0.4
+                    // 让传入的元素在对话框关闭后可以返回到原来的地方
+                    var display = content.style.display;
+                    var prev    = content.previousSibling;
+                    var next    = content.nextSibling;
+                    var parent  = content.parentNode;
+                    _elemBack = function () {
+                        if (prev && prev.parentNode) {
+                            prev.parentNode.insertBefore(content, prev.nextSibling);
+                        } else if (next && next.parentNode) {
+                            next.parentNode.insertBefore(content, next);
+                        } else if (parent) {
+                            parent.appendChild(content);
+                        };
+                        content.style.display = display;
+                        _elemBack = null;
+                    };
+                    opts.width   = 'auto';
+                    opts.height  = 'auto';
+                    opts.content = content;
+                    $(content).show();
                 }
             }
+            opts.onclose    = function(){
+                //__callback('onclose');
+            };
+            opts.onremove   = function(){
+                 //console.log('onremove');
+                __callback('onremove');
+            };
 
             var d = dialog(opts);
             if(opts.lock){
                 d.showModal();
-                $(d.backdrop).click(function(){
-                    d.close();
-                })
+                // $(d.backdrop).addClass("ui-popup-overlay").click(function(){
+                //     d.close().remove();
+                // })
             }else{
                 d.show(opts.follow);
+                if(opts.follow){
+                    $(d.backdrop).remove();
+                    $("body").bind("click",function(){
+                        d.close().remove();
+                    })
+                }
+                //$(d.backdrop).css("opacity","0");
             }
             if(opts.time){
-                window.setTimeout(function(){
-                    d.close();
+                timeOutID = window.setTimeout(function(){
+                    d.close().remove();
                 },opts.time);
+            }
+            function __callback(type){
+                window.clearTimeout(timeOutID);
+                if (_elemBack) {
+                    _elemBack();
+                }
+                if (typeof(callback) === "function") {
+                    callback();
+                }
             }
             return d;
         },
-        update_dialog: function (url,p){
-            $(".iPHP_FRAME_CLONE").remove();
-            var frame = $('#iPHP_FRAME').clone();
-            frame.attr('src',url)
-            .addClass("iPHP_FRAME_CLONE")
-            .attr('id','iPHP_FRAME_'+p)
-            .attr('name','iPHP_FRAME_'+p);
-            $('#iPHP_FRAME').after(frame);
-        },
+
         setcookie: function(cookieName, cookieValue, seconds, path, domain, secure) {
             var expires = new Date();
             expires.setTime(expires.getTime() + seconds);
@@ -293,40 +319,6 @@
     };
     // article
     iCMS.article = {
-        favorite: function(a) {
-            var $this = $(a),data = iCMS.multiple(a);
-            data.action = 'favorite';
-            var box = $("#iCMS-favorite-box").clone();
-            $(".iCMS_tooltip").remove();
-            $this.poshytip({
-                className: 'iCMS_tooltip iCMS_favorite',showOn : 'none',
-                alignTo: 'target',alignX: 'center',
-                offsetX: 0,offsetY: 5,
-                fade: false,slide: false,
-                content:box
-            }).poshytip('show');
-
-            $('.cancel', box).click(function(event) {
-                event.preventDefault();
-                $this.poshytip('destroy');
-            });
-            $('[name="favorite"]', box).click(function(event){
-                $this.poshytip('destroy');
-            });
-
-
-            return;
-            $.post(iCMS.api('user'), data, function(c) {
-                if (c.code) {
-                   var numObj = '.iCMS_'+data.do+'_num',
-                       count = parseInt($(numObj, $this).text());
-                    $(numObj, $this).text(count + 1);
-                } else {
-                    iCMS.alert(c.msg, c.code);
-                    return false;
-                }
-            }, 'json');
-        },
         vote: function(a) {
             var $this = $(a),data = iCMS.multiple(a);
             $.get(iCMS.api('article'), data, function(c) {
@@ -343,97 +335,6 @@
     };
 })(jQuery);
 
-(function($) {
-    $.fn.modal = function(options) {
-        var im = $(this),
-            defaults = {
-                width: "360px",
-                height: "auto",
-                title: im.attr('title') || "iCMS 提示",
-                href: im.attr('href') || false,
-                target: im.attr('data-target') || "#iCMS-MODAL",
-                zIndex: im.attr('data-zIndex') || false,
-                overflow: im.attr('data-overflow') || false,
-            };
-
-        var meta = im.attr('data-meta') ? $.parseJSON(im.attr('data-meta')) : {};
-        var opts = $.extend(defaults, options, meta);
-        var mOverlay = $('<div id="modal-overlay"></div>');
-
-        return im.each(function() {
-
-            var m = $(opts.target),
-                mBody = m.find(".modal-body"),
-                mTitle = m.find(".modal-title");
-            opts.title && mTitle.html(opts.title);
-            mBody.empty();
-
-            if (opts.overflow) $("body").css({
-                "overflow-y": "hidden"
-            });
-
-            if (opts.html) {
-                var html = opts.html;
-                if (typeof opts.html == "object") {
-                    if (opts.html.jquery) {
-                        opts.html.show();
-                        html = opts.html.html();
-                    } else {
-                        opts.html.style.display = 'block';
-                    }
-                }
-                mBody.html(html).css({
-                    "overflow-y": "auto"
-                });
-            } else if (opts.href) {
-                var mFrame = $('<iframe id="modal-iframe" frameborder="no" allowtransparency="true" scrolling="auto" hidefocus="" src="' + opts.href + '"></iframe>');
-                mFrameFix = $('<div id="modal-iframeFix"></div>');
-                mFrame.appendTo(mBody);
-                mFrameFix.appendTo(mBody);
-            }
-            mOverlay.insertBefore(m).click(function() {
-                im.destroy();
-            });
-            $('[data-dismiss="modal"][aria-hidden="true"]').on('click', function() {
-                im.destroy();
-            });
-            im.size = function(o) {
-                var opts = $.extend(opts, o);
-                opts.zIndex && m.css({
-                    "cssText": 'z-index:' + opts.zIndex + '!important'
-                });
-                m.css({
-                    width: opts.width
-                });
-                mBody.height(opts.height);
-                var left = ($(window).width() - m.width()) / 2,
-                    top = ($(window).height() - m.height()) / 2;
-                m.css({
-                    "position": "fixed",
-                    left: left + "px",
-                    top: top + "px"
-                });
-
-                //console.log({left:left+"px",top:top+"px"});
-
-            };
-            im.destroy = function() {
-                window.stop ? window.stop() : document.execCommand("Stop");
-                m.hide().removeClass('in');
-                mOverlay.remove();
-                m.find(".modal-title").html("iCMS 提示");
-                if (opts.overflow) {
-                    $("body").css({
-                        "overflow-y": "auto"
-                    });
-                }
-            };
-            im.size(opts);
-            m.show().addClass('in');
-            return im;
-        });
-    }
-})(jQuery);
 // lazy load
 (function(a){
     a.fn.lazyload=function(b){var c={attr:"data-src",container:a(window),callback:a.noop};var d=a.extend({},c,b||{});d.cache=[];a(this).each(function(){var h=this.nodeName.toLowerCase(),g=a(this).attr(d.attr);var i={obj:a(this),tag:h,url:g};d.cache.push(i)});var f=function(g){if(a.isFunction(d.callback)){d.callback.call(g.get(0))}};var e=function(){var g=d.container.height();if(a(window).get(0)===window){contop=a(window).scrollTop()}else{contop=d.container.offset().top}a.each(d.cache,function(m,n){var p=n.obj,j=n.tag,k=n.url,l,h;if(p){l=p.offset().top-contop,l+p.height();if((l>=0&&l<g)||(h>0&&h<=g)){if(k){if(j==="img"){f(p.attr("src",k))}else{p.load(k,{},function(){f(p)})}}else{f(p)}n.obj=null}}})};e();d.container.bind("scroll",e)}}

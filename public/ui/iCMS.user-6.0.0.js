@@ -23,16 +23,17 @@
                 return iCMS.getcookie(iCMS.config.AUTH) ? true : false;
             },
             ucard:function(){
+              var ucardCache = {};
               $("[data-tip^='iCMS:ucard']").poshytip({
-                className: 'iCMS_tooltip',
-                alignTo: 'target',alignX: 'center',
-                offsetX: 0,offsetY: 5,
-                fade: false,slide: false,
+                className:'iCMS_tooltip',
+                alignTo:'target',alignX:'center',
+                offsetX:0,offsetY:5,
+                fade:false,slide:false,
                 content: function(updateCallback) {
-                    $.get(iCMS.api('user', "&do=ucard"),
-                      {'uid': $(this).attr('data-tip').replace('iCMS:ucard:','')},
-                      function(html) {
-                        updateCallback(html);
+                    var uid = $(this).attr('data-tip').replace('iCMS:ucard:','');
+                    $.get(iCMS.api('user', "&do=ucard"),{'uid':uid},
+                      function(container) {
+                        updateCallback(container);
                     });
                     return '<div class="tip_info"><img src="'+iCMS.config.PUBLIC+'/ui/img/lightgray-loading.gif"><span> 用户信息加载中……</span></div>';
                 }
@@ -43,12 +44,12 @@
                   iCMS.LoginBox();
                   return false;
                 }
-                var $this = $(a),data = iCMS.multiple(a);
+                var data = iCMS.multiple(a);
                 data.action = "follow";
                 $.post(iCMS.api('user'), data, function(c) {
                     if (c.code) {
                         if (typeof(callback) === "function") {
-                                callback(c,$this,data);
+                            callback(c,data);
                         }
                     } else {
                         iCMS.alert(c.msg);
@@ -56,6 +57,117 @@
                     }
                     // window.location.href = c.forward
                 }, 'json');
+            },
+            favorite: function(a,callback) {
+                if (!iCMS.user_status) {
+                    iCMS.LoginBox();
+                    return false;
+                }
+                var $this = $(a),
+                box    = document.getElementById("iCMS-favorite-box"),
+                dialog = iCMS.dialog({title: '添加到收藏夹',content:box});
+                $('.cancel', box).click(function(event) {
+                    event.preventDefault();
+                    dialog.remove();
+                });
+                $('.create,.cancel_create', box).click(function(event) {
+                    event.preventDefault();
+                    if($(this).hasClass('create')){
+                        dialog.title("创建新收藏夹");
+                    }else{
+                        dialog.title("添加到收藏夹");
+                    }
+                    $(".favorite_create",box).toggle();
+                    $(".favorite_list",box).toggle();
+                });
+
+                $('[name="create"]', box).click(function(event){
+                    event.preventDefault();
+                    var data = {
+                        'action':'create',
+                        'title':$('[name="title"]',box).val(),
+                        'description':$('[name="description"]',box).val(),
+                        'mode':$('[name="mode"]:checked',box).val(),
+                    }
+                    if(data.title==""){
+                        $('[name="title"]',box).focus();
+                        $('.fav_add_title_error',box).text('请填写标题').show();
+                        return false;
+                    }
+                    $.post(iCMS.api('favorite'), data, function(c) {
+                        $(".favorite_create",box).toggle();
+                        $(".favorite_list",box).toggle();
+                        if(c.code){
+                            item = __item({
+                                'id':c.forward,
+                                'title':data.title,
+                                'count':0,'follow':0,
+                            });
+                            $(".favorite_list_content",box).append(item);
+                        }else{
+                            $('.fav_add_title_error',box).text(c.msg).show();
+                        }
+                        //iCMS.alert(c.msg,c.code);
+                    }, 'json');
+                });
+                $('[name="favorite"]', box).click(function(event){
+
+                });
+                function __item(val){
+                    return '<a class="favo-list-item-link r5 " href="javascript:;" data-id="'+val.id+'">'
+                    +'<span class="favo-list-item-title">'+val.title+'</span>'
+                    +'<span class="meta gray">'
+                        +'<span class="num">'+val.count+'</span> 篇文章'
+                        +'<span class="bull">•</span> '+val.follow+' 人关注'
+                    +'</span></a><div class="clearfix mt10"></div>';
+                }
+
+                $.get(iCMS.api('favorite',"&do=list"),function(json) {
+                    var item ='';
+                    $.each(json, function(i,val){
+                        item+=__item(val);
+                    });
+                    $(".favorite_list_content",box).html(item);
+                },'json');
+
+                $(box).on("click", '.favo-list-item-link', function(event) {
+                    var $this = $(this),
+                    data = iCMS.multiple(a),
+                    num  = parseInt($('.num',$this).text());
+                    data.fid    = $this.attr('data-id');
+                    if($this.hasClass('active')){
+                        data.action = 'delete';
+                    }else{
+                        data.action = 'add';
+                    }
+                    $.post(iCMS.api('favorite'),data,function(c) {
+                        if(c.code){
+                            if($this.hasClass('active')){
+                                $('.num',$this).text(num-1);
+                                $this.removeClass('active');
+                            }else{
+                                $('.num',$this).text(num+1);
+                                $this.addClass('active');
+                            }
+                        }else{
+                            iCMS.alert(c.msg);
+                        }
+                    },'json');
+                });
+
+                // data = iCMS.multiple(a);
+                // data.action = 'favorite';
+
+                // $.post(iCMS.api('user'), data, function(c) {
+                //     if (c.code) {
+                //        var numObj = '.iCMS_'+data.do+'_num',
+                //            count = parseInt($(numObj, $this).text());
+                //         $(numObj, $this).text(count + 1);
+                //     } else {
+                //         iCMS.alert(c.msg, c.code);
+                //         return false;
+                //     }
+                // }, 'json');
             },
             noavatar: function() {
                 var img = event.srcElement;

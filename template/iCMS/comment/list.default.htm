@@ -4,7 +4,8 @@
 	<head>
 		<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
 		<title><!--{$comment_vars.title}-->评论_<!--{$site.title}-->_<!--{$site.seotitle}--></title>
-		<!--{iCMS:public:ui}-->
+		<!--{iCMS:public:ui script="false"}-->
+		<script>var iCMS = window.top.iCMS;</script>
 	</head>
 	<body class="iCMS-comment-page">
 <!--{else}-->
@@ -57,10 +58,6 @@
 	            //回复评论
 	            list_box.on('click', 'a[name="reply_comment"]', function(event) {
 	                event.preventDefault();
-	                if (!iCMS.user_status) {
-	                    iCMS.LoginBox();
-	                    return false;
-	                }
 		            iCMS.comment.reply(this);
 		            <!--{if $comment_vars.display=="iframe"}-->
 		            iCMS.api_iframe_height(false,'.commentApp-list-iframe');
@@ -69,24 +66,20 @@
 	            //提交评论
 	            list_box.on('click', 'a[name="addnew"]', function(event) {
 	                event.preventDefault();
-	                if (!iCMS.user_status) {
-	                    iCMS.LoginBox();
-	                    return false;
-	                }
+	                var that = $(this);
 	                iCMS.comment.addnew(this,param,function(c){
-	                    //var count = parseInt($('span', $this).text());
-	                    //$('span', $this).text(count + 1);
-	                    iCMS.comment.list(list_box,param['iid'],c.forward);
+	                    var item = that.closest(".commentApp-item");
+	                    iCMS.comment.list(item,param['iid'],c.forward,'after');
 	                })
 	            });
 	            //赞评论
 	            list_box.on('click', 'a[name="like_comment"]', function(event) {
 	                event.preventDefault();
-	                if (!iCMS.user_status) {
-	                    iCMS.LoginBox();
-	                    return false;
-	                }
 	                iCMS.comment.like(this);
+	            });
+	            list_box.on('click', 'a[name="iCMS-report"]', function(event) {
+	                event.preventDefault();
+	                iCMS.report(this);
 	            });
 			});
 			</script>

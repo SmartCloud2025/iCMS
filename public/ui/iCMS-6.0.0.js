@@ -1,19 +1,22 @@
 (function($) {
     var _iCMS = {
         pm:function(a){
-            var $this  = $(a),$parent = $this.parent(),
+            if (!iCMS.user_status) {
+                iCMS.LoginBox();
+                return false;
+            }
+            var $this  = $(a),
                 box    = document.getElementById("iCMS-pm-box"),
-                dialog = iCMS.dialog({content:box,title: '发送私信',lock:true}),
+                dialog = iCMS.dialog({title: '发送私信',content:box}),
                 inbox  = $this.attr('href'),
                 data   = iCMS.multiple(a),
-                content = $("[name='content']", box);
+                content = $("[name='content']", box).val('');
             $(".pm_warnmsg", box).hide();
-            content.val('');
             $('.pm_uname', box).text(data.name);
             $('.pm_inbox', box).attr("href",inbox);
             $('.cancel', box).click(function(event) {
                 event.preventDefault();
-                dialog.close();
+                dialog.remove();
             });
             $('[name="send"]', box).click(function(event) {
                 event.preventDefault();
@@ -25,20 +28,25 @@
                 }
                 data.action = 'pm';
                 $.post(iCMS.api('user'), data, function(c) {
-                    dialog.close();
+                    dialog.remove();
                     iCMS.alert(c.msg,c.code);
                 }, 'json');
             });
         },
         report:function(a) {
+            if (!iCMS.user_status) {
+                iCMS.LoginBox();
+                return false;
+            }
             var $this = $(a),
                 box   = document.getElementById("iCMS-report-box"),
-                modal = $this.modal({
-                    title: '为什么举报这个评论?',
-                    width: "460px",
-                    html: box,
-                    scroll: true
-                });
+                dialog = iCMS.dialog({title: '为什么举报这个评论?',content:box});
+                // modal = $this.modal({
+                //     title: '为什么举报这个评论?',
+                //     width: "420px",
+                //     html: box,
+                //     scroll: true
+                // });
             $("li", box).click(function(event) {
                 event.preventDefault();
                 $("li", box).removeClass('checked');
@@ -48,7 +56,8 @@
             });
             $('.cancel', box).click(function(event) {
                 event.preventDefault();
-                modal.destroy();
+                dialog.remove();
+                //modal.destroy();
             });
             $('[name="ok"]', box).click(function(event) {
                 event.preventDefault();
@@ -69,11 +78,12 @@
                 data.action = 'report';
                 $.post(iCMS.api('user'), data, function(c) {
                     content.val('');
-                    iCMS.alert(c.msg,c.code);
                     $("li", box).removeClass('checked');
                     $("[name='reason']", box).removeAttr('checked');
+                    iCMS.alert(c.msg,c.code);
                     if(c.code){
-                        modal.destroy();
+                        dialog.remove();
+                        //modal.destroy();
                     }
                 }, 'json');
             });
@@ -89,7 +99,8 @@
             }
             doc.on("click", '.iCMS_user_follow', function(event) {
                 event.preventDefault();
-                iCMS.user.follow(this,function(c,$this,param){
+                var $this = $(this);
+                iCMS.user.follow(this,function(c,param){
                     param.follow = (param.follow=='1'?'0':'1');
                     iCMS.param($this,param);
                     $this.removeClass((param.follow=='1'? 'follow' : 'unfollow'));
@@ -99,29 +110,25 @@
 
             doc.on('click', 'a[name="iCMS-report"]', function(event) {
                 event.preventDefault();
-                if (!iCMS.user_status) {
-                    iCMS.LoginBox();
-                    return false;
-                }
-                window.top.iCMS.report(this);
+                iCMS.report(this);
             });
             doc.on('click', 'a[name="iCMS-pm"]', function(event) {
                 event.preventDefault();
-                if (!iCMS.user_status) {
-                    iCMS.LoginBox();
-                    return false;
-                }
-                window.top.iCMS.pm(this);
+                iCMS.pm(this);
+            });
+            doc.on('click', 'a[name="iCMS-follow"]', function(event) {
+                event.preventDefault();
+                var $this = $(this),$parent = $this.parent();
+                iCMS.user.follow(this,function(){
+                    $('a[name="iCMS-follow"]',$parent).removeClass('hide');
+                    $this.addClass('hide');
+                });
             });
         },
         LoginBox: function(a) {
-            var dialog = window.top.document.getElementById("iCMS-login-dialog");
-            iCMS_Login_MODAL = window.top.$(this).modal({
-                width: "560px",
-                html: dialog,
-                scroll: true
-            });
-            this.user.login("#iCMS-login-dialog");
+            var box = document.getElementById("iCMS-login-box");
+            iCMS.dialog({title: '用户登陆',content:box});
+            iCMS.user.login(box);
         },
         hover: function(a, t, l) {
             var timeOutID = null,t = t || 0, l = l || 0,
@@ -132,8 +139,9 @@
                     top: position.top + t,
                     left: position.left + l
                 });
+                window.clearTimeout(timeOutID);
             }, function() {
-                timeOutID = setTimeout(function() {
+                timeOutID = window.setTimeout(function() {
                     $(b).hide();
                 }, 2500);
             });

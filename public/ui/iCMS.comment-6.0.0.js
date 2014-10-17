@@ -30,6 +30,10 @@
             });
         },
         reply:function (a) {
+            if (!iCMS.user_status) {
+                iCMS.LoginBox();
+                return false;
+            }
             var item = $(a).parent().parent(),
                 param = iCMS.param($(a)),
                 form  = this.form.clone(),
@@ -70,6 +74,10 @@
             }, 'json');
         },
         addnew:function (a,param,f) {
+           if (!iCMS.user_status) {
+                iCMS.LoginBox();
+                return false;
+            }
             var form = $(a).parent().parent(),
                 textarea = $('.commentApp-textarea', form),
                 data = textarea.data('param'),
@@ -94,7 +102,7 @@
                 }
             }, 'json');
         },
-        list:function (container,iid,id) {
+        list:function (container,iid,id,type) {
             if(!id){
                 iCMS.comment.page_no[iid]++;
                 if(iCMS.comment.page_total[iid]){
@@ -103,7 +111,11 @@
                     }
                 }
             }
-            list  = $('.commentApp-list',container);
+            if(type){
+                list = container;
+            }else{
+                list = $('.commentApp-list',container);
+            }
             $.get(iCMS.api('comment'),{
                     'do': 'json',
                     'iid': iid,
@@ -151,7 +163,13 @@
                             '</div>' +
                             '</div>' +
                             '</div>';
-                        list.append(item);
+                        if(type=="after"){
+                            list.after(item);
+                        }else if(type=="before"){
+                            list.before(item);
+                        }else{
+                            list.append(item);
+                        }
                     });
                     iCMS.user.ucard();
                     if(!id){
@@ -206,10 +224,12 @@
             //提交评论
             box.on('click', 'a[name="addnew"]', function(event) {
                 event.preventDefault();
+                var that = $(this);
                 iCMS.comment.addnew(this,param,function(c){
                     var count = parseInt($('.iCMS_comment_num', $this).text());
                     $('.iCMS_comment_num', $this).text(count + 1);
-                    iCMS.comment.list(box,iid,c.forward);
+                    var item = that.closest(".commentApp-item");
+                    iCMS.comment.list(item,iid,c.forward,'after');
                 })
             });
             //回复评论

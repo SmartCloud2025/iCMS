@@ -8,7 +8,7 @@
     <script src="<!--{$site.urls.ui}-->/iCMS.login-6.0.0.js"></script>
     <script>
     $(function(){
-      iCMS.user.login("#iCMS-login-box",function(b){
+      iCMS.user.login("#iCMS-login-page",function(b){
         iCMS.tip(b, '<i class="fa fa-check-circle" style="color: #33B800;"></i>');
       });
     })
@@ -30,7 +30,7 @@
       </div>
     </nav>
     <div class="container">
-      <div class="wrapper login_reg_wrapper" id="iCMS-login-box">
+      <div class="wrapper login_reg_wrapper" id="iCMS-login-page">
           <div class="logo"><a href="<!--{$site.url}-->"><img src="<!--{$site.urls.ui}-->/img/iCMS.logo-6.0.png" width="180"/></a></div>
           <div class="form-group">
             <label for="login_uname">用户名</label>

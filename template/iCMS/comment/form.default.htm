@@ -4,7 +4,8 @@
   <head>
 		<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
 		<title><!--{$comment_vars.title}-->评论_<!--{$site.title}-->_<!--{$site.seotitle}--></title>
-		<!--{iCMS:public:ui}-->
+		<!--{iCMS:public:ui script="false"}-->
+		<script>var iCMS = window.top.iCMS;</script>
 	</head>
 	<body class="iCMS-comment-page">
 <!--{/if}-->
@@ -47,10 +48,6 @@
             //提交评论
             $('.cmt-add').click(function(event) {
                 event.preventDefault();
-                if (!iCMS.user_status) {
-                    iCMS.LoginBox();
-                    return false;
-                }
                 iCMS.comment.addnew(this,param,function(c){
                 	var doc = window.top.document;
                     if (c.code) {

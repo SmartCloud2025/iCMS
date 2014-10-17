@@ -24,7 +24,7 @@ body { background-color: #fff; background-image: url(img/bg-v6.png); _background
 .card_top { height: 64px; line-height: normal; position: relative; *z-index: 1001; padding: 5px 0 10px 100px; }
 .card_info { padding: 10px 0; width: 400px; float: left; }
 .card_data { margin: 0; overflow: hidden; border: none; }
-.card_avatar { padding: 2px; border: 1px solid #CCC; *border: solid 1px #CCC; background: #fff; position: absolute; left: 0; top: 0; margin: 15px; box-shadow: 0 1px 5px #999; }
+.card_avatar { padding: 2px; border: 1px solid #CCC; *border: solid 1px #CCC; background: #fff; position: absolute; left: 0; top: 0; margin: 15px; box-shadow: 0 1px 10px #6D6D6D; }
 .card_avatar, .card_avatar_img { border-radius: 5px; width: 60px; height: 60px; display: block; overflow: hidden }
 .card_title_name { font-size: 22px; color: #333; margin-right: 15px }
 .card_title_name:hover { }

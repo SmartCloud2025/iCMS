@@ -22,34 +22,34 @@
           </tr>
         </thead>
         <tbody>
-          <!--{iCMS:user:category userid="$user.uid" appid="$iCMS.CONST[iCMS_APP_ARTICLE]"}--> 
+          <!--{iCMS:user:category userid="$user.uid" appid="$iCMS.APPID.ARTICLE"}-->
           <!--{iCMS:article:list loop="true" page="true" row="12" call="user" total_cache="G" status=$status cid=$cid userid=$user.uid}-->
           <tr id="id-<!--{$article_list.id}-->">
             <td><!--{$article_list.id}--></td>
-            <td><!--{if $article_list.status=="3"}--> 
-              <span class="label label-important">审核中</span> 
-              <!--{/if}--> 
-              <!--{if $article_list.status=="2"}--> 
-              <span class="label label-inverse">回收站</span> 
-              <!--{/if}--> 
-              <!--{if $article_list.status=="4"}--> 
-              <span class="label">未通过审核</span> 
-              <!--{/if}--> 
+            <td><!--{if $article_list.status=="3"}-->
+              <span class="label label-important">审核中</span>
+              <!--{/if}-->
+              <!--{if $article_list.status=="2"}-->
+              <span class="label label-inverse">回收站</span>
+              <!--{/if}-->
+              <!--{if $article_list.status=="4"}-->
+              <span class="label">未通过审核</span>
+              <!--{/if}-->
               <span class="label label-info"><!--{$user_category[$article_list.ucid].name}--></span> <a href="<!--{if $article_list.status=="1"}--><!--{$article_list.url}--><!--{else}-->javascript:;<!--{/if}-->" target="_blank"><!--{$article_list.title}--></a></td>
             <td><!--{$article_list.hits.count}-->/<!--{$article_list.comments}-->/<!--{$article_list.good}-->/<!--{$article_list.bad}--></td>
             <td><a href="<!--{$article.manage}-->&cid=<!--{$article_list.cid}-->"><!--{$article_list.category.name}--></a></td>
-            <td class="action"><a class="tip" href="<!--{$article.edit}-->&id=<!--{$article_list.id}-->" title="编辑文章"><i class="fa fa-edit"></i></a> 
-              <!--{if $article_list.status=="2"}--> 
-              <a href="javascript:;" class="tip ml10" data-id="<!--{$article_list.id}-->" data-action="delete" title="彻底删除"><i class="fa fa-trash-o"></i></a> <a href="javascript:;" class="tip ml10" data-id="<!--{$article_list.id}-->" data-action="renew" title="还原"><i class="fa fa-reply-all"></i></a> 
-              <!--{else}--> 
-              <a href="javascript:;" class="tip ml10" data-id="<!--{$article_list.id}-->" data-action="trash" title="删除到回收站"><i class="fa fa-times"></i></a> 
+            <td class="action"><a class="tip" href="<!--{$article.edit}-->&id=<!--{$article_list.id}-->" title="编辑文章"><i class="fa fa-edit"></i></a>
+              <!--{if $article_list.status=="2"}-->
+              <a href="javascript:;" class="tip ml10" data-id="<!--{$article_list.id}-->" data-action="delete" title="彻底删除"><i class="fa fa-trash-o"></i></a> <a href="javascript:;" class="tip ml10" data-id="<!--{$article_list.id}-->" data-action="renew" title="还原"><i class="fa fa-reply-all"></i></a>
+              <!--{else}-->
+              <a href="javascript:;" class="tip ml10" data-id="<!--{$article_list.id}-->" data-action="trash" title="删除到回收站"><i class="fa fa-times"></i></a>
               <!--{/if}--></td>
           </tr>
           <!--{/iCMS}-->
         </tbody>
         <tfoot>
           <tr>
-            <td colspan="5"><div class="iCMS_pagination"><!--{$iCMS.page.nav}--></div></td>
+            <td colspan="5"><div class="iCMS_pagination"><!--{$iCMS.PAGE.NAV}--></div></td>
           </tr>
         </tfoot>
       </table>
@@ -79,4 +79,4 @@ $(function(){
 		},'json');
 	});
 });
-</script> 
+</script>

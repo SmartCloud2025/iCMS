@@ -3,7 +3,7 @@
     <table class="table table-striped">
       <tbody>
         <!--{iCMS:user:follow loop="true" row="30" userid=$user.uid}-->
-        <tr>
+        <tr id="id-<!--{$user_follow.uid}-->">
           <td class="avatar_35"><a title="<!--{$user_follow.name}-->" href="<!--{$user_follow.url}-->">
               <img class="iCMS_user_avatar avatar_35" data-tip="iCMS:ucard:<!--{$user_follow.uid}-->" src="<!--{$user_follow.avatar}-->" onerror="iCMS.user.noavatar();">
             </a></td>
@@ -18,7 +18,7 @@
       </tbody>
       <tfoot>
         <tr>
-          <td colspan="3"><div class="iCMS_pagination"><!--{$iCMS.page.nav}--></div></td>
+          <td colspan="3"><div class="iCMS_pagination"><!--{$iCMS.PAGE.NAV}--></div></td>
         </tr>
       </tfoot>
     </table>
@@ -39,7 +39,8 @@
 	});
 	$(".btn_follow").click(function(event) {
 		event.preventDefault();
-	    iCMS.user.follow(this,function(c,$this,param){
+		var $this = $(this);
+	    iCMS.user.follow(this,function(c,param){
 			if (c.code) {
 				$("#id-"+param.uid).hide('500',function() {
 					$this.remove();

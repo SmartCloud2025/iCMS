@@ -24,7 +24,7 @@
       </tbody>
       <tfoot>
         <tr>
-          <td colspan="3"><div class="iCMS_pagination"><!--{$iCMS.page.nav}--></div></td>
+          <td colspan="3"><div class="iCMS_pagination"><!--{$iCMS.PAGE.NAV}--></div></td>
         </tr>
       </tfoot>
     </table>
@@ -32,7 +32,8 @@
   <script>
   $(".btn_follow").click(function(event) {
     event.preventDefault();
-    iCMS.user.follow(this,function(c,$this,param){
+    var $this = $(this);
+    iCMS.user.follow(this,function(c,param){
         if (c.code) {
           param.follow = (param.follow=='1'?'0':'1');
           iCMS.param($this,param);

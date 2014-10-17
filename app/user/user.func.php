@@ -20,7 +20,12 @@ function user_category($vars=null){
 	//iDB::debug(1);
 	$resource = array();
 	if($rs)foreach ($rs as $key => $value) {
-		$value['url']	= iPHP::router(array('/{uid}/{cid}/',array($value['uid'],$value['cid'])),iCMS_REWRITE);
+		if($value['appid']==iCMS_APP_ARTICLE){
+			$router ='/{uid}/{cid}/';
+		}else if($value['appid']==iCMS_APP_FAVORITE){
+			$router ='/{uid}/fav/{cid}/';
+		}
+		$value['url'] = iPHP::router(array($router,array($value['uid'],$value['cid'])),iCMS_REWRITE);
 		if(isset($vars['loop'])){
 			$resource[$key] = $value;
 		}else{

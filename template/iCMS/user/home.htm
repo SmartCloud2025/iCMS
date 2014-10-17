@@ -37,9 +37,9 @@
     </div>
     <div class="user_nav_wrap">
       <ul class="nav_list">
-        <li<!--{if $iCMS.APP.do=="home"}--> class="c"<!--{/if}-->><a href="<!--{$user.urls.home}-->" title="文章"><i class="fa fa-file-text-o"></i> 文章</a>
+        <li<!--{if $iCMS.APP.DO=="home"}--> class="c"<!--{/if}-->><a href="<!--{$user.urls.home}-->" title="文章"><i class="fa fa-file-text-o"></i> 文章</a>
         </li>
-        <li<!--{if $iCMS.APP.do=="favorite"}--> class="c"<!--{/if}-->> <a href="<!--{$user.urls.favorite}-->" title="收藏"><i class="fa fa-bookmark"></i> 收藏</a>
+        <li<!--{if $iCMS.APP.DO=="favorite"}--> class="c"<!--{/if}-->> <a href="<!--{$user.urls.favorite}-->" title="收藏"><i class="fa fa-bookmark"></i> 收藏</a>
         </li>
         <li> <a href="<!--{$user.urls.share}-->" title="分享" class="nav_icon icon_sha">分享</a></li>
       </ul>
@@ -48,14 +48,14 @@
       <!--{if $user.category.name}-->
       <h3 class="category_name"><span class="label label-info"><!--{$user.category.name}--></span></h3>
       <!--{/if}-->
-      <!--{if $iCMS.APP.do=="home"}-->
-      <!--{include file="./home.article.htm" import="true"}-->
+      <!--{if $iCMS.APP.DO=="home"}-->
+      <!--{include file="./home.article.htm"}-->
       <!--{/if}-->
-      <!--{if $iCMS.APP.do=="favorite"}-->
-      <!--{include file="./home.favorite.htm" import="true"}-->
+      <!--{if $iCMS.APP.DO=="favorite"}-->
+      <!--{include file="./home.favorite.htm"}-->
       <!--{/if}-->
       <div id="artpagenav" class="iCMS_pagination">
-        <!--{$iCMS.page.nav}-->
+        <!--{$iCMS.PAGE.NAV}-->
       </div>
     </div>
     <div class="right-col">
@@ -70,7 +70,7 @@
           <!--{/if}-->
         </div>
         <ul>
-          <!--{iCMS:user:category loop="true" userid="$user.uid" appid="$iCMS.CONST[iCMS_APP_ARTICLE]"}-->
+          <!--{iCMS:user:category loop="true" userid="$user.uid" appid="$iCMS.APPID.ARTICLE"}-->
           <li><a href="<!--{$user_category.url}-->"><!--{$user_category.name}--> <span>(<!--{$user_category.count}-->)</span></a></li>
           <!--{/iCMS}-->
         </ul>

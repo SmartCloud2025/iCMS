@@ -10,7 +10,7 @@
     <link rel="stylesheet" href="<!--{$site.urls.ui}-->/iCMS.loginreg-6.0.0.css" type="text/css" />
     <script>
     $(function(){
-      iCMS.user.login("#iCMS-login-box",function(b){
+      iCMS.user.login("#iCMS-login-page",function(b){
         iCMS.tip(b, '<i class="fa fa-check-circle" style="color: #33B800;"></i>');
       });
     })
@@ -23,7 +23,7 @@
         <div class="main-col">
           <h1>用户登录</h1>
           <div class="rl_center">
-            <div id="iCMS-login-box" class="rl_form">
+            <div id="iCMS-login-page" class="rl_form">
               <div class="lg_name"> <span>用户名：</span>
                 <input type="text" placeholder="邮箱 或 昵称" name="uname" class="iCMS_login_uname text">
               </div>

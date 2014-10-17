@@ -11,7 +11,7 @@ defined('iPHP') OR exit('What are you doing?');
 iPHP::app('user.class','static');
 iPHP::app('user.msg.class','static');
 class userApp {
-    public $methods = array('iCMS','home','favorite','article','publish','manage','profile','data','hits','check','follow','login','logout','register','add_category','upload','imageUp','mobileUp','getremote','report','fav_category','ucard');
+    public $methods = array('iCMS','home','favorite','article','publish','manage','profile','data','hits','check','follow','login','logout','register','add_category','upload','imageUp','mobileUp','getremote','report','fav_category','ucard','pm');
     public $openid  = null;
     public $user    = array();
     public $me      = array();
@@ -334,7 +334,6 @@ class userApp {
         $shoesize      = iS::escapeStr($_POST['shoesize']);
         $personstyle   = iS::escapeStr($_POST['personstyle']);
         $slogan        = iS::escapeStr($_POST['slogan']);
-        $unickEdit     = 0;
 
         $personstyle == iPHP::lang('user:profile:personstyle') && $personstyle = "";
         $slogan      == iPHP::lang('user:profile:slogan')      && $slogan      = "";
@@ -360,13 +359,15 @@ class userApp {
 
         $uid    = iDB::value("SELECT `uid` FROM `#iCMS@__user_data` where `uid`='".user::$userid."' limit 1");
 
-        $fields = array('weibo', 'province', 'city', 'year', 'month', 'day', 'constellation', 'profession', 'isSeeFigure', 'height', 'weight', 'bwhB', 'bwhW', 'bwhH', 'pskin', 'phair', 'shoesize', 'personstyle', 'slogan', 'unickEdit', 'coverpic');
+        $fields = array('weibo', 'province', 'city', 'year', 'month', 'day', 'constellation', 'profession', 'isSeeFigure', 'height', 'weight', 'bwhB', 'bwhW', 'bwhH', 'pskin', 'phair', 'shoesize', 'personstyle', 'slogan','coverpic');
         if($uid){
             $data = compact ($fields);
+            $unickEdit && $data['unickEdit'] = 1;
             iDB::update('user_data', $data, array('uid'=>user::$userid));
         }else{
+            $unickEdit = 0 ;
             $uid     = user::$userid;
-            $_fields = array('uid', 'realname', 'mobile', 'enterprise', 'address', 'zip','tb_nick', 'tb_buyer_credit', 'tb_seller_credit', 'tb_type', 'is_golden_seller');
+            $_fields = array('uid', 'realname','unickEdit','mobile', 'enterprise', 'address', 'zip','tb_nick', 'tb_buyer_credit', 'tb_seller_credit', 'tb_type', 'is_golden_seller');
             $fields  = array_merge($fields,$_fields);
             $data    = compact ($fields);
             iDB::insert('user_data',$data);
@@ -497,7 +498,7 @@ class userApp {
         $max >=10 && iPHP::code(0,'user:category:max','add_category','json');
         $count  = 0;
         $appid  = iCMS_APP_ARTICLE;
-        $fields = array('uid', 'name', 'count','appid');
+        $fields = array('uid', 'name', 'description', 'count', 'mode', 'appid');
         $data   = compact ($fields);
         $cid    = iDB::insert('user_category',$data);
         $cid && iPHP::code(1,'user:category:success',$cid,'json');
@@ -692,8 +693,9 @@ class userApp {
             'code' => $F['code']
         ));
     }
-    public function API_fav_category(){
-        iPHP::view('iCMS://user/card.htm');
+    public function API_collections(){
+
+        //iPHP::view('iCMS://user/card.htm');
     }
     public function API_ucard(){
         $this->user(true);

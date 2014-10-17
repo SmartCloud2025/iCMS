@@ -251,15 +251,18 @@ class iPHP{
 	}
 
 	public static function router($key,$static=false){
-		if($static) return $key;
-
-		$path   = iPHP_CONF_DIR.'/router.config.php';
-		@is_file($path) OR self::throwException($path.' not exist',0013);
-
-		$router = self::import($path,true);
-
+		if($static){
+			$router = false;
+		}else{
+			$path   = iPHP_CONF_DIR.'/router.config.php';
+			@is_file($path) OR self::throwException($path.' not exist',0013);
+			$router = self::import($path,true);
+		}
+		return self::router_url($key,$router);
+	}
+	private static function router_url($key,$router=null){
 		if(is_array($key)){
-			$url = $router[$key[0]];
+			$url = $router?$router[$key[0]]:$key[0];
 			if(is_array($key[1])){ /* 多个{} 例:/{uid}/{cid}/ */
 				preg_match_all('/\{(\w+)\}/i',$url, $matches);
 				$url = str_replace($matches[0], $key[1], $url);
@@ -268,7 +271,7 @@ class iPHP{
 			}
 			$key[2] && $url = $key[2].$url;
 		}else{
-			$url = $router[$key];
+			$url = $router?$router[$key]:$key;
 		}
 		return $url;
 	}

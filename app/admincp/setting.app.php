@@ -11,7 +11,7 @@
 */
 class settingApp{
     function __construct() {
-    	$this->apps	= array('index','article','tag','search','usercp','category','comment');
+    	$this->apps	= array('index','article','tag','search','usercp','category','comment','favorite');
 		foreach (glob(iPHP_APP_DIR."/*/*.app.php") as $filename) {
             $path_parts = pathinfo($filename);
             $dirname    = str_replace(iPHP_APP_DIR.'/','',$path_parts['dirname']);

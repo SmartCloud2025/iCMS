@@ -45,12 +45,19 @@ return array(
 	),
 	'pm'=>array(
 		'empty'   =>'请填写私信内容。',
-		'success' =>'发送成功',
+		'success' =>'发送成功！',
 	),
 	'favorite'=>array(
-		'failure' =>'您已经收藏过了',
+		'create_empty'   =>'请输入标题！',
+		'create_filter'  =>'您输入的内容中包含被系统屏蔽的字符，请重新填写！',
+		'create_max'     =>'最多只能创建10个收藏夹！',
+		'create_success' =>'添加成功！',
+		'create_failure' =>'添加失败！',
+		'update'  =>'更新成功！',
 		'url'     =>'URL不能为空',
 		'success' =>'收藏成功！',
+		'failure' =>'您已经收藏过了！',
+		'error' =>'收藏失败！',
 	),
 	'comment'=> array(
 		'empty'   =>'请输入内容！',

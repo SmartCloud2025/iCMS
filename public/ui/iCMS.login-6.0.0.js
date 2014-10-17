@@ -25,7 +25,7 @@
 
       $.post(iCMS.api('user'), param, function(ret) {
         if (ret.code) {
-          window.location.href = ret.forward;
+          window.top.location.href = ret.forward;
         } else {
           iCMS.alert(ret.msg);
         }
