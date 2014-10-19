@@ -50,7 +50,7 @@ $(function(){
 			eddesc.val(d.description);
 		});
 
-		iCMS.dialog({id:'edialog',title: '简易编辑 ['+title+']',
+		iCMS.dialog({title: '简易编辑 ['+title+']',
         content:document.getElementById('ed-box'),
 		    button: [{value: '保存',callback: function () {
 						var title = edtitle.val(),cid=edcid.val();

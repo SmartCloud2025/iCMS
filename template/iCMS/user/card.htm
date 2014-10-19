@@ -14,9 +14,13 @@
         <a class="item" target="_blank" href="<!--{$user.urls.fans}-->"> <span class="value"><!--{$user.fans|num10K}--></span> <span class="key">关注者</span> </a>
       </div>
       <div class="operation" data-param='{"uid":"<!--{$user.uid}-->","name":"<!--{$user.nickname}-->"}'>
+        <!--{if $status.isme}-->
+        <span class="self">我自己</span>
+        <!--{else}-->
         <a name="iCMS-follow" data-param='{"follow":"1"}' class="btn zg-btn <!--{if !$status.followed}--> hide<!--{/if}-->">取消关注</a>
         <a name="iCMS-follow" data-param='{"follow":"0"}' class="btn btn-success zg-btn <!--{if $status.followed}--> hide<!--{/if}-->"><i class="fa fa-plus"></i> 关注</a>
         <a name="iCMS-pm" class="btn zg-btn-white"  href="<!--{$user.inbox}-->"><i class="iCMS_icon zg-icon pm">私信</i></a>
+        <!--{/if}-->
       </div>
     </div>
 </div>

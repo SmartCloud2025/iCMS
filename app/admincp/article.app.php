@@ -192,10 +192,10 @@ class articleApp{
 		        	ob_end_flush();
 	   			}
 	   			iPHP::$break	= true;
-				iPHP::success('文章全部删除完成!','js:1');
+				iPHP::success('文章全部删除完成!','js:1',3,0,true);
     		break;
     		default:
-				$sql	= iACP::fields($batch);
+				$data = iACP::fields($batch);
     	}
         articleTable::batch($data,$ids);
 		iPHP::success('操作成功!','js:1');
@@ -465,9 +465,9 @@ class articleApp{
                     array("text" =>"编辑该文章","url"=>APP_URI."&do=add&id=".$aid),
                     array("text" =>"继续添加文章","url"=>APP_URI."&do=add&cid=".$cid),
                     array("text" =>"返回文章列表","url"=>$SELFURL),
-                    array("text" =>"查看网站首页","url"=>"../index.php","o"=>'target="_blank"')
+                    array("text" =>"查看网站首页","url"=>iCMS_URL,"target"=>'_blank')
             );
-            iPHP::$dialog_lock	= true;
+            iPHP::$dialog['lock']	= true;
             iPHP::dialog('success:#:check:#:文章添加完成!<br />10秒后返回文章列表','url:'.$SELFURL,10,$moreBtn);
         }else{
 			if($tags){
@@ -505,7 +505,7 @@ class articleApp{
         $msg = $this->delArticle($this->id);
         $msg.= $this->del_msg('文章删除完成!');
         $msg.= $this->del_msg('10秒后返回文章列表!');
-        iPHP::$dialog_lock   = true;
+        iPHP::$dialog['lock'] = true;
         iPHP::dialog($msg,'js:1');
     }
     function del_msg($str){

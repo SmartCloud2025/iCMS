@@ -7,7 +7,7 @@
             }
             var $this  = $(a),
                 box    = document.getElementById("iCMS-pm-box"),
-                dialog = iCMS.dialog({title: '发送私信',content:box}),
+                dialog = iCMS.dialog({title: '发送私信',content:box,elemBack:'remove'}),
                 inbox  = $this.attr('href'),
                 data   = iCMS.multiple(a),
                 content = $("[name='content']", box).val('');
@@ -40,7 +40,7 @@
             }
             var $this = $(a),
                 box   = document.getElementById("iCMS-report-box"),
-                dialog = iCMS.dialog({title: '为什么举报这个评论?',content:box});
+                dialog = iCMS.dialog({title: '为什么举报这个评论?',content:box,elemBack:'remove'});
                 // modal = $this.modal({
                 //     title: '为什么举报这个评论?',
                 //     width: "420px",
@@ -127,8 +127,8 @@
         },
         LoginBox: function(a) {
             var box = document.getElementById("iCMS-login-box");
-            iCMS.dialog({title: '用户登陆',content:box});
             iCMS.user.login(box);
+            iCMS.dialog({title: '用户登陆',content:box,elemBack:'remove'});
         },
         hover: function(a, t, l) {
             var timeOutID = null,t = t || 0, l = l || 0,

@@ -13,15 +13,15 @@ $(function() {
         checked: function(el){
             $(el).prop("checked",true).closest('.checker > span').addClass('checked');
         },
-        update_dialog: function (url,p){
-            $(".iPHP_FRAME_CLONE").remove();
-            var frame = $('#iPHP_FRAME').clone();
-            frame.attr('src',url)
-            .addClass("iPHP_FRAME_CLONE")
-            .attr('id','iPHP_FRAME_'+p)
-            .attr('name','iPHP_FRAME_'+p);
-            $('#iPHP_FRAME').after(frame);
+        modal: function(el){
+            $('[data-toggle="modal"]').click(function(){
+                event.preventDefault();
+                window.top.iCMS_MODAL = $(this).modal({width: "85%",height: "640px",overflow:true});
+                $(this).parent().parent().parent().removeClass("open");
+                return false;
+            });
         },
+
         // popover:function(el){
         //     $(el).popover({
         //         html:true,
@@ -34,10 +34,11 @@ $(function() {
         //       }
         //     });
         // },
-    }
+    };
     iCMS = $.extend(iCMS,_iCMS);//扩展 or 替换 iCMS属性
+    var doc = $(document);
     iCMS.modal();
-    window.dialog = dialog;
+    //window.dialog = dialog;
     $(':checkbox[data-type!=switch],:radio[data-type!=switch]').uniform();
     $('.ui-datepicker').datepicker({format: 'yyyy-mm-dd'});
     $('.tip').tooltip({html:true});
@@ -61,7 +62,7 @@ $(function() {
             }
         });
     });
-    $(document).on("click",'[data-toggle="insert"]',function() {
+    doc.on("click",'[data-toggle="insert"]',function() {
         var a = $(this), data = a.data('insert'),
         href = a.attr('href'), target = a.attr('data-target'),
         val = a.text();
@@ -70,12 +71,13 @@ $(function() {
         //console.log();
         return false;
     });
-    $('[data-toggle="createpass"]').on("click",function() {
+    doc.on("click",'[data-toggle="createpass"]',function() {
         var a = $(this),target = a.attr('data-target');
         $(target).val(iCMS.random(8));
         return false;
     });
-    $(document).on("click",'[data-toggle="insertContent"]',function() {
+    doc.on("click",'[data-toggle="insertContent"]',function() {
+        event.preventDefault();
         var a = $(this),
         href   = a.attr('href'),
         target = a.attr('data-target'),
@@ -91,6 +93,14 @@ $(function() {
         }
         return false;
     });
+    $('[data-toggle="modal"]').click(function(){
+    //doc.on("click",'[data-toggle="modal"]',function() {
+        event.preventDefault();
+        window.top.iCMS_MODAL = $(this).modal({width: "85%",height: "640px",overflow:true});
+        $(this).parent().parent().parent().removeClass("open");
+        return false;
+    });
+
     $.scrollUp({
         scrollName: 'scrollUp', // Element ID
         topDistance: '40', // Distance from top before showing element (px)
@@ -139,28 +149,30 @@ $(function() {
             ul.slideDown(250);
         }
     });
+
     $('#sidebar > #mini').click(function() {
         var b = $('body');
+        var mini = $(document).find(".sidebar-mini");
+        console.log(mini);
+        $("[data-menu]",mini).tooltip('destroy');
         if (b.hasClass('sidebar-mini')) {
         	iCMS.setcookie('ACP_sidebar_mini',0);
             b.removeClass('sidebar-mini');
         } else {
-            //$("ul li","#sidebar").addClass("tip-right");
-            //$('.tip-right',"#sidebar").tooltip({placement:'right',container:'body'});
-            // $("ul li","#sidebar").on('shown.bs.tooltip', function () {
-            //     $(".tooltip").css('left','40px');
-            // });
         	iCMS.setcookie('ACP_sidebar_mini',1);
             b.addClass('sidebar-mini');
+            mini_tip();
         }
         return false;
     });
-    // $(".sidebar-mini > #sidebar ul li")
-    // .tooltip({placement:'right',container:'body'})
-    // .on('shown.bs.tooltip', function () {
-    //     $(".tooltip").css('left','40px');
-    // });
-})
+});
+function mini_tip(){
+    var mini = $(document).find(".sidebar-mini");
+    $("[data-menu]",mini).tooltip({placement:'right',container:'body'})
+    .on('shown.bs.tooltip', function () {
+        $(".tooltip").css('left','40px');
+    });
+}
 function log(a) {
     try {
         console.log(a);
@@ -347,8 +359,9 @@ function modal_icms(el,a){
                     ret   = document.getElementById(act+'Batch'),
                     title = a.text();
                     action.val(act).appendTo(im);
+                    console.log(ret,typeof ret);
                     if(ret==null){
-                        if(typeof options[act]=="undefined"){
+                        if(typeof options[act]==="undefined"){
                             ret = '确定要'+$.trim(title)+'?';
                             iCMS.config.DIALOG = {label:'warning',icon:'warning'};
                         }else{
@@ -356,10 +369,12 @@ function modal_icms(el,a){
                             $(ret).html(options[act]());
                         }
                     }
-                    window.batch_dialog = iCMS.dialog({id:'iCMS-batch',lock: true,
+                    window.batch_dialog = iCMS.dialog({id:'iCMS-batch',
                         title:title,content:ret,
                         okValue: '确定',ok: function () {
-                            content.html($(ret).clone(true));
+                            if(typeof ret==="object"){
+                                content.html($(ret).clone(true));
+                            }
                             im.submit();
                         },
                         cancelValue: "取消",cancel: function(){

@@ -19,7 +19,7 @@
 			<!--{$option}-->
 		</select>
 		<div class="input-group-btn">
-			<button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown"><span id="uc_select">默认分类</span> <span class="caret"></span></button>
+			<button id="user_category" type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown"><span id="uc_select">默认分类</span> <span class="caret"></span></button>
 			<ul class="dropdown-menu pull-right">
 				<!--{iCMS:user:category loop="true" userid="$user.uid" appid="$iCMS.APPID.ARTICLE"}-->
 			    	<li><a href="javascript:;" cid="<!--{$user_category.cid}-->" class="user_category"><!--{$user_category.name}--></a></li>
@@ -66,7 +66,7 @@
 		<button class="btn btn-primary btn-lg btn-block" type="submit" id="iCMS-article" data-loading-text='<i class="fa fa-spinner"></i> 提交中...'><i class="fa fa-check"></i> 提交</button>
 	</div>
 </form>
-<div id="add_category-box" style="display: none;">
+<div id="add_category_box" style="display: none;">
   <input class="form-control" id="newcategoryname" type="text" placeholder="请输入分类名称">
 </div>
 <form id="upfileform" action="<!--{iCMS:router url='/api'}-->?app=user&do=mobileUp&callback=upload_pic" role="form" method="post" enctype="multipart/form-data" target="iCMS_FRAME">
@@ -149,38 +149,37 @@ $(function(){
         return false;
     });
     $('#add_category').click(function() {
-  		$.dialog({
-  		    follow: document.getElementById('btn-group'),
+  		iCMS.dialog({
+  		    follow: document.getElementById('user_category'),
   		    title: '添加新分类',
-  		    content: document.getElementById('add_category-box'),
-  		    button: [{
-  		    	id: 'add_category-btn',
-  		    	value: '添加',
-  				callback: function () {
-  			        var a = $("#newcategoryname"),n = a.val(),d=this;
-  			        if(n==""){
-  			        	alert("请输入分类名称!");
-  			        	a.focus();
-  			        	return false;
-  			        }else{
-  			        	$.post('<!--{iCMS:router url='/user'}-->',{'action': 'add_category',name:n},
-  			        	function(j){
-  			        		if(j.code){
-  				        		d.content(j.msg)
-  			        			.button({id: 'add_category-btn',value: '完成',
-	  			        			callback: function () {
-	  			        				$("#user_category_0").before('<li><a href="javascript:;" cid="'+j.forward+'" class="user_category">'+n+'</a></li>');
-	  			        			}
-  			        			});
-  			        		}else{
-  			        			alert(j.msg);
-  			        			a.focus();
-  			        			return false;
-  			        		}
-  			        	},"json");
-  			        }
-  			        return false;
-  				}}]
+  		    content: document.getElementById('add_category_box'),
+  		    okValue:'添加',
+  		    ok: function () {
+		        var a = $("#newcategoryname"),n = a.val(),d=this;
+		        if(n==""){
+		        	iCMS.alert("请输入分类名称!");
+		        	a.focus();
+		        	return false;
+		        }else{
+		        	$.post('<!--{iCMS:router url='/user'}-->',{'action': 'add_category',name:n},
+		        	function(j){
+		        		if(j.code){
+			        		d.content(j.msg)
+		        			.button([{
+		        				value: '完成',
+			        			callback: function () {
+			        				$("#user_category_0").before('<li><a href="javascript:;" cid="'+j.forward+'" class="user_category">'+n+'</a></li>');
+			        			},autofocus: true
+		        			}]);
+		        		}else{
+		        			alert(j.msg);
+		        			a.focus();
+		        			return false;
+		        		}
+		        	},"json");
+		        }
+		        return false;
+  		    }
   		});
     });
 

@@ -179,6 +179,7 @@ class htmlApp{
 			$title	= self::Article($aid);
 			iPHP::success($title.'<hr />生成静态完成!');
 		}
+
 		$category[0]=='all' && $category = $this->get_category(iCMS_APP_ARTICLE);
 
 		if($category){
@@ -244,14 +245,15 @@ class htmlApp{
 		unset($app,$htm);
 		return $title;
     }
-    function loopurl($total,$query2){
+    function loopurl($total,$_query){
     	if ($total>0 && $GLOBALS['page']<$total){
     		//$p++;
-    		$url	= $_SERVER["REQUEST_URI"];
-		    $urlA	= parse_url($url);
+			$url  = $_SERVER["REQUEST_URI"];
+			$urlA = parse_url($url);
+
 		    parse_str($urlA["query"], $query);
 		    $query['page']		= $GLOBALS['page'];
-		    $query 				= array_merge($query, (array)$query2);
+		    $query 				= array_merge($query, (array)$_query);
 		    $urlA["query"]		= http_build_query($query);
 		    $url	= $urlA["path"].'?'.$urlA["query"];
 		    return $url;

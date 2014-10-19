@@ -1,7 +1,7 @@
 @import "reset.css";
 /* iCMS */
 html, body { word-wrap: break-word; word-break: break-all; }
-body, button, input, select, textarea, label { color: #222; font: 13px/1.7 'Helvetica Neue', Helvetica, Arial, Sans-serif; }
+body, button, input, select, textarea, label { color: #222; font: 14px/1.75 'Helvetica Neue', Helvetica, Arial, Sans-serif; }
 input[type="checkbox"] { margin: 0px !important; }
 i { text-align: center; }
 a, a:hover, a:focus { color: #057AFD }
@@ -120,10 +120,10 @@ a:hover { text-decoration: none; }
 .iCMS_dialog .ui-dialog { opacity: 1; border: 0px; box-shadow: none; background-color: inherit; }
 .iCMS_dialog .ui-dialog-header { position: relative; background-color: #1575D5; background-image: -moz-linear-gradient(top, #1d7fe2, #0865c2); background-image: -ms-linear-gradient(top, #1d7fe2, #0865c2); background-image: -webkit-gradient(linear, 0 0, 0 100%, from(#1D7FE2), to(#0865C2)); background-image: -webkit-linear-gradient(top, #1D7FE2, #0865C2); background-image: -o-linear-gradient(top, #1d7fe2, #0865c2); background-image: linear-gradient(top, #1d7fe2, #0865c2); background-repeat: repeat-x; filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#1d7fe2', endColorstr='#0865c2', GradientType=0); padding: 0px; cursor: move; border-radius: 6px 6px 0 0; border: 1px solid #0D6EB8; box-shadow: 0 1px 0 rgba(255, 255, 255, 0.1) inset, 0 1px 1px rgba(0, 0, 0, 0.2); margin: -1px -1px 0; line-height: 14px; }
 .iCMS_dialog .ui-dialog-header .ui-dialog-title { color: #fff; text-shadow: 0 1px 1px rgba(0, 0, 0, .4); font-size: 15px; font-weight: 700; padding: 6px 15px; cursor: move; }
-.iCMS_dialog .ui-dialog-header .ui-dialog-close { top: 0px; right: 0px; padding: 6px 15px; }
+.iCMS_dialog .ui-dialog-header .ui-dialog-close { top: 0px; right: 0px; padding: 8px 12px; }
 .iCMS_dialog .ui-dialog-body { padding: 0px; }
-.iCMS_dialog .ui-dialog-table { height: 100%; width: auto; vertical-align: middle; }
-.iCMS_dialog .ui-dialog-content { padding: 10px; }
+.iCMS_dialog .ui-dialog-table { height: 100%; width: 100%; vertical-align: middle; }
+.iCMS_dialog .ui-dialog-content {color: #222;padding: 10px;max-width: 760px;max-height: 500px; min-width:240px;min-height:90px;}
 .iCMS_dialog .ui-dialog-content .buttons { text-align: right; background: #fff }
 .iCMS_dialog .ui-dialog-content .buttons a.cancel { color: #259; margin-right: 15px; cursor: pointer; }
 .iCMS_dialog .ui-dialog-content .buttons a.cancel:hover { text-decoration: underline; }
@@ -135,16 +135,26 @@ a:hover { text-decoration: none; }
 */
 /* .iCMS_dialog .ui-dialog-button { margin-bottom: 15px; }
 */
+
+.ui-popup-follow .iCMS_tooltip_popup {
+	-webkit-box-shadow: 0 5px 10px rgba(0, 0, 0, 0.4);
+	-moz-box-shadow: 0 5px 10px rgba(0,0,0,0.4);
+	box-shadow: 0 5px 10px rgba(0, 0, 0, 0.4);
+}
+.iCMS_tooltip_popup .ui-dialog-header .ui-dialog-title{padding: 6px 15px;}
+.iCMS_tooltip_popup .ui-dialog-header .ui-dialog-close{top:5px;}
+
 .iPHP-msg { text-align: center; margin: 0px 5px; padding: 0px 4px; }
 .iPHP-msg .label { /* white-space: pre-wrap;  */padding: 8px 10px; font-size: 14px; letter-spacing: 1px; line-height: 160%; }
-.iPHP-msg pre { width: 800px; text-align: left; }
+.iPHP-msg pre {text-align: left; }
 .iPHP-msg i { font-size: 18px; }
-.iPHP-msg .d-content .btn-group { position: absolute; }
+
+/*.iPHP-msg .d-content .btn-group { position: absolute; }
 .iPHP-msg .d-content { color: #222 }
 .d-content .buttons { padding: 0 15px; margin-bottom: 15px; text-align: right; background: #fff }
 .d-content .buttons a.cancel { color: #259; margin-right: 15px; cursor: pointer; }
 .d-content .buttons a.cancel:hover { text-decoration: underline; }
-/* tooltip */
+*//* tooltip */
 .tooltip { max-width: inherit; font-size: 14px; }
 .tooltip-inner { max-width: inherit !important; text-align: left !important; font-size: 14px; }
 .tooltip-inner hr, .d-content .iPHP-msg .label hr { margin: 10px 0px; border-bottom: none; }

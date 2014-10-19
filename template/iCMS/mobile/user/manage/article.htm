@@ -45,12 +45,12 @@
 							<a href="<!--{$article.manage}-->&cid=<!--{$article_list.cid}-->"><span class="label label-primary"><!--{$article_list.category.name}--></span></a>
 							<span class="label label-default">点/评/顶:<!--{$article_list.hits.count}-->/<!--{$article_list.comments}-->/<!--{$article_list.good}--></span>
 							<span class="action">
-								<a class="btn btn-primary btn-sm" href="<!--{$article.edit}-->&id=<!--{$article_list.id}-->" title="编辑文章"><i class="fa fa-edit"></i> 编辑</a>
+								<a class="btn btn-primary btn-xs" href="<!--{$article.edit}-->&id=<!--{$article_list.id}-->" title="编辑文章"><i class="fa fa-edit"></i> 编辑</a>
 								<!--{if $article_list.status=="2"}-->
-								<a href="javascript:;" class="btn btn-default btn-danger btn-sm" data-id="<!--{$article_list.id}-->" data-action="delete" title="彻底删除"><i class="fa fa-times"></i> 删除</a>
-								<a href="javascript:;" class="btn btn-default btn-sm" data-id="<!--{$article_list.id}-->" data-action="renew" title="还原"><i class="fa fa-reply-all"></i> 还原</a>
+								<a href="javascript:;" class="btn btn-default btn-danger btn-xs" data-id="<!--{$article_list.id}-->" data-action="delete" title="彻底删除"><i class="fa fa-times"></i> 删除</a>
+								<a href="javascript:;" class="btn btn-default btn-xs" data-id="<!--{$article_list.id}-->" data-action="renew" title="还原"><i class="fa fa-reply-all"></i> 还原</a>
 								<!--{else}-->
-								<a href="javascript:;" class="btn btn-default btn-warning btn-sm" data-id="<!--{$article_list.id}-->" data-action="trash" title="删除到回收站"><i class="fa fa-trash-o"></i> 回收站</a>
+								<a href="javascript:;" class="btn btn-default btn-warning btn-xs" data-id="<!--{$article_list.id}-->" data-action="trash" title="删除到回收站"><i class="fa fa-trash-o"></i> 回收站</a>
 								<!--{/if}-->
 							</span>
 						</div>

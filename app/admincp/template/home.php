@@ -8,7 +8,6 @@
 defined('iPHP') OR exit('What are you doing?');
 iACP::head();
 ?>
-<script>iCMS.alert("asdasd");</script>
 <div class="iCMS-container">
   <div class="row-fluid">
     <div class="span12 center" style="text-align: center;">

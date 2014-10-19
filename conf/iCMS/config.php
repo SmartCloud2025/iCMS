@@ -49,7 +49,7 @@ return array (
     'user_url' => 'http://v6.icms.com/u',
     'html_dir' => 'html/',
     'html_ext' => '.html',
-    'speed' => '1',
+    'speed' => '50',
     'rewrite' => '0',
     'tag_url' => 'http://v6.icms.com',
     'tag_rule' => '{PHP}',

@@ -65,7 +65,9 @@
                 }
                 var $this = $(a),
                 box    = document.getElementById("iCMS-favorite-box"),
-                dialog = iCMS.dialog({title: '添加到收藏夹',content:box});
+                dialog = iCMS.dialog({title: '添加到收藏夹',content:box,elemBack:'remove'});
+                //console.log(dialog);
+                $(".favorite_list_content",box).empty();
                 $('.cancel', box).click(function(event) {
                     event.preventDefault();
                     dialog.remove();
@@ -110,11 +112,9 @@
                         //iCMS.alert(c.msg,c.code);
                     }, 'json');
                 });
-                $('[name="favorite"]', box).click(function(event){
 
-                });
                 function __item(val){
-                    return '<a class="favo-list-item-link r5 " href="javascript:;" data-id="'+val.id+'">'
+                    return '<a class="favo-list-item-link r5 " href="javascript:;" data-fid="'+val.id+'">'
                     +'<span class="favo-list-item-title">'+val.title+'</span>'
                     +'<span class="meta gray">'
                         +'<span class="num">'+val.count+'</span> 篇文章'
@@ -131,10 +131,11 @@
                 },'json');
 
                 $(box).on("click", '.favo-list-item-link', function(event) {
+                    console.log(this);
                     var $this = $(this),
                     data = iCMS.multiple(a),
                     num  = parseInt($('.num',$this).text());
-                    data.fid    = $this.attr('data-id');
+                    data.fid    = $this.attr('data-fid');
                     if($this.hasClass('active')){
                         data.action = 'delete';
                     }else{
@@ -154,20 +155,6 @@
                         }
                     },'json');
                 });
-
-                // data = iCMS.multiple(a);
-                // data.action = 'favorite';
-
-                // $.post(iCMS.api('user'), data, function(c) {
-                //     if (c.code) {
-                //        var numObj = '.iCMS_'+data.do+'_num',
-                //            count = parseInt($(numObj, $this).text());
-                //         $(numObj, $this).text(count + 1);
-                //     } else {
-                //         iCMS.alert(c.msg, c.code);
-                //         return false;
-                //     }
-                // }, 'json');
             },
             noavatar: function() {
                 var img = event.srcElement;

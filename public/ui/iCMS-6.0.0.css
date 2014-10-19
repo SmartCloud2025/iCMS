@@ -119,7 +119,7 @@ a,a:hover,a:focus { color: #259 }
 .iCMS_report_dialog .loading { text-align: center; color: #999 }
 /* pm */
 #iCMS-pm-box{display: none;}
-.iCMS_pm_dialog{width: 360px;margin-left: -15px;}
+.iCMS_pm_dialog{width: 360px;margin-left: -10px;}
 .iCMS_pm_dialog dt label { color: #999; text-align: right; font-size: 13px; float: left; width: 60px; }
 .iCMS_pm_dialog .pm_inbox { float: right; }
 .iCMS_pm_dialog .pm_content { width: 280px; padding: 5px; height: 60px; }

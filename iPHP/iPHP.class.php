@@ -13,16 +13,14 @@
 defined('iPHP') OR exit('What are you doing?');
 
 class iPHP{
-	public static $pagenav      = NULL;
-	public static $offset       = NULL;
-	public static $break        = true;
-	public static $dialog_title = 'iPHP';
-	public static $dialog_code  = false;
-	public static $dialog_lock  = false;
-	public static $iTPL         = NULL;
-	public static $iTPL_MODE    = null;
-	public static $mobile       = false;
-	public static $time_start   = false;
+	public static $pagenav    = NULL;
+	public static $offset     = NULL;
+	public static $break      = true;
+	public static $dialog     = array();
+	public static $iTPL       = NULL;
+	public static $iTPL_MODE  = null;
+	public static $mobile     = false;
+	public static $time_start = false;
 
 
 	public static function iTemplate(){
@@ -448,11 +446,19 @@ class iPHP{
         self::$break && exit();
     }
 	public static function alert($msg,$js=null,$s=3) {
-		self::$dialog_lock = true;
+		self::$dialog = array(
+			'lock'   =>true,
+			'width'  =>360,
+			'height' =>120,
+		);
 		self::dialog('warning:#:warning:#:'.$msg,$js,$s);
     }
 	public static function success($msg,$js=null,$s=3) {
-		self::$dialog_lock = true;
+		self::$dialog = array(
+			'lock'   =>true,
+			'width'  =>360,
+			'height' =>120,
+		);
 		self::dialog('success:#:check:#:'.$msg,$js,$s);
     }
 	public static function dialog($info=array(),$js='js:',$s=3,$buttons=null,$update=false) {
@@ -461,38 +467,50 @@ class iPHP{
 		$content = $info[0];
         strstr($content,':#:') && $content=self::msg($content,true);
 		$content = addslashes('<table class="ui-dialog-table" align="center"><tr><td valign="middle">'.$content.'</td></tr></table>');
+//		$content = addslashes($content);
 
-		$dialog = "var options = {id:'iPHP-DIALOG',width:320,height:110,autofocus:false,";
-		$dialog.= "title:'".self::$dialog_title." - {$title}',";
-		//$content && $dialog.= "content: '{$content}',";
+//		$dialog = "var options = {id:'iPHP-DIALOG',width:320,height:110,autofocus:false,";
+		//print_r(self::$dialog);
+		$options = array(
+			"id:'iPHP-DIALOG'","time:null",
+			"title:'".(self::$dialog['title']?self::$dialog['title']:iPHP_APP)." - {$title}'",
+			"lock:".(self::$dialog['lock']?'true':'false'),
+			"width:'".(self::$dialog['width']?self::$dialog['width']:'auto')."'",
+			"height:'".(self::$dialog['height']?self::$dialog['height']:'auto')."'",
+			"api:'iPHP'",
+		);
+		//$content && $options[]="content:'{$content}'";
 		$auto_func = 'd.close();';
 		$func      = self::js($js,true);
 		if($func){
-      		$dialog.='okValue: "确定",ok: function(){'.$func.'return true;},';
-      		$auto_func = $func.'d.close();';
+			$buttons OR $options[] ='okValue: "确 定",ok: function(){'.$func.';},';
+			$auto_func = $func.'d.close();';
 		}
         if(is_array($buttons)) {
+            $okbtn ="{value:'确 定',callback:function(){".$func."},autofocus: true}";
             foreach($buttons as $key=>$val) {
-            	$val['url'] && $func = "iTOP.location.href='{$val['url']}';";
-            	$val['src'] && $func = "iTOP.iCMS.update_dialog('".$val['src']."','".$GLOBALS['page']."');return false;";
-                $val['top'] && $func = "iTOP.window.open('{$val['url']}','_blank');";
-                $val['id']	&& $id   = "id:'".$val['id']."',";
+                $val['id']	 && $id   = "id:'".$val['id']."',";
+            	$val['url']  && $func = "iTOP.location.href='{$val['url']}';";
+            	$val['src']  && $func = "iTOP.$('#iPHP_FRAME').attr('src','{$val['src']}');return false;";
+                $val['target'] && $func = "iTOP.window.open('{$val['url']}','_blank');";
+
                 $buttonA[]="{".$id."value:'".$val['text']."',callback:function(){".$func."}}";
                 $val['next'] && $auto_func = $func;
             }
-            $button	= implode(',',$buttonA);
+			//$buttonA[] = $okbtn;
+			$button    = implode(",",$buttonA);
       	}
-		$dialog.='};';
+      	$dialog = 'var iTOP = window.top,';
 		if($update){
-        	$dialog = " var iTOP = window.top,d = iTOP.dialog.get('iPHP-DIALOG');";
+			$dialog   .= "d = iTOP.dialog.get('iPHP-DIALOG');";
 			$auto_func = $func;
 		}else{
-			$dialog.= 'var iTOP = window.top,d = iTOP.dialog(options);';
-	        if(self::$dialog_lock){
-	        	$dialog.='d.showModal();';
-	        }else{
-	        	$dialog.='d.show();';
-	        }
+			$dialog.= 'options = {'.implode(',', $options).'},d = iTOP.iCMS.dialog(options);';
+	        // if(self::$dialog_lock){
+	        // 	$dialog.='d.showModal();';
+	        // }else{
+	        // 	$dialog.='d.show();';
+	        // }
     	}
 		$button && $dialog.= "d.button([$button]);";
 		$content&& $dialog.= "d.content('$content');";
@@ -501,11 +519,11 @@ class iPHP{
         $s>30	&& $timeout		= $s;
         $s===false && $timeout	= false;
         if($timeout){
-        	$dialog.='window.setTimeout(function(){'.$auto_func.'},'.$timeout.');';
+        	//$dialog.='window.setTimeout(function(){'.$auto_func.'},'.$timeout.');';
         }else{
-        	$update && $dialog.=$auto_func;
+        	$update && $dialog.= $auto_func;
         }
-		echo self::$dialog_code?$dialog:'<script>'.$dialog.'</script>';
+		echo self::$dialog['code']?$dialog:'<script>'.$dialog.'</script>';
         self::$break && exit();
     }
 
@@ -607,7 +625,7 @@ class iPHP{
             	$filepath	= iFS::path_join($iDir_PATH,$rs);
 				$filepath	= rtrim($filepath,'/');
 //				print_r('$filepath='.$filepath."\n");
-                $sFileType 	= filetype($filepath);
+                $sFileType 	= @filetype($filepath);
 //				print_r('$sFileType='.$sFileType."\n");
 				$path		= str_replace($sDir_PATH, '', $filepath);
                 if ($sFileType	=="dir" && !in_array($rs,array('.','..','admincp'))) {
@@ -692,7 +710,7 @@ function iPHP_ERROR_HANDLER($errno, $errstr, $errfile, $errline){
 	@header("Pragma: no-cache");
     $_GET['frame'] OR exit($html);
     $html = str_replace("\n",'<br />',$html);
-    iPHP::$dialog_lock = true;
+    iPHP::$dialog['lock'] = true;
     iPHP::dialog(array("warning:#:warning-sign:#:{$html}",'系统错误!可发邮件到 idreamsoft@qq.com 反馈错误!我们将及时处理'),'js:1',30);
     exit;
 }

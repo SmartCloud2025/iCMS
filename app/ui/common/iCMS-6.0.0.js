@@ -77,15 +77,6 @@
             if (!param) return {};
             return $.parseJSON(param);
         },
-        modal: function() {
-            //console.log($(window).width(),$(window).height());
-            $('[data-toggle="modal"]').on("click",function() {
-                event.preventDefault();
-                window.top.iCMS_MODAL = $(this).modal({width: "85%",height: "640px",overflow:true});
-                $(this).parent().parent().parent().removeClass("open");
-                return false;
-            });
-        },
         tip: function(el, title,placement) {
             placement = placement||el.attr('data-placement');
             var container = el.attr('data-container');
@@ -119,24 +110,25 @@
                 width:360,height:150,
                 className:'iCMS_dialog',//skin:'iCMS_dialog',
                 backdropBackground:'#666',backdropOpacity: 0.5,
-                fixed:true,lock:true,autofocus:false,quickClose:true,
-                time: 30000000,
-                label:'success',icon: 'check'
+                fixed:true,autofocus:false,quickClose:true,
+                lock:true,time: 30000000,
+                label:'success',icon: 'check',api:false,elemBack:'beforeremove',
             },_elemBack,timeOutID = null,
             opts = $.extend(defaults,options,iCMS.config.DIALOG);
 
             if(opts.follow){
                 opts.fixed = false;
                 opts.lock  = false;
-                opts.skin = 'iCMS_tooltip'
+                opts.skin = 'iCMS_tooltip_popup'
                 opts.className = 'ui-popup';
                 opts.backdropOpacity = 0;
             }
             var content = opts.content;
-            //console.log(typeof content,content.nodeType);
+            //console.log(typeof content);
             if (content instanceof jQuery){
                 opts.content = content.html();
             }else if (typeof content === "string") {
+                //console.log('typeof content === "string"');
                 opts.content = '<table class=\"ui-dialog-table\" align=\"center\"><tr><td valign=\"middle\">'
                 +'<div class=\"iPHP-msg\"><span class=\"label label-' + opts.label + '\"><i class=\"fa fa-' + opts.icon + '\"></i> ' + content + '</span></div>'
                 +'</td></tr></table>';
@@ -169,15 +161,17 @@
                     $(content).show();
                 }
             }
-            opts.onclose    = function(){
-                //__callback('onclose');
+            opts.onclose = function(){
+                __callback('close');
             };
-            opts.onremove   = function(){
-                 //console.log('onremove');
-                __callback('onremove');
+            opts.onbeforeremove = function(){
+                __callback('beforeremove');
             };
-
+            opts.onremove = function(){
+                __callback('remove');
+            };
             var d = dialog(opts);
+            //console.log(opts.api);
             if(opts.lock){
                 d.showModal();
                 // $(d.backdrop).addClass("ui-popup-overlay").click(function(){
@@ -186,10 +180,10 @@
             }else{
                 d.show(opts.follow);
                 if(opts.follow){
-                    $(d.backdrop).remove();
-                    $("body").bind("click",function(){
-                        d.close().remove();
-                    })
+                    //$(d.backdrop).remove();
+                    // $("body").bind("click",function(){
+                    //     d.close().remove();
+                    // })
                 }
                 //$(d.backdrop).css("opacity","0");
             }
@@ -198,13 +192,20 @@
                     d.close().remove();
                 },opts.time);
             }
+            d.destroy = function (){
+                d.close().remove();
+            }
             function __callback(type){
                 window.clearTimeout(timeOutID);
-                if (_elemBack) {
-                    _elemBack();
+                console.log('opts.elemBack:'+opts.elemBack,'type:'+type);
+                if(opts.elemBack==type){
+                    if (_elemBack) { //删除前把元素返回原来的地方
+                        _elemBack();
+                    }
                 }
+
                 if (typeof(callback) === "function") {
-                    callback();
+                    callback(type);
                 }
             }
             return d;

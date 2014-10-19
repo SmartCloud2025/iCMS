@@ -25,7 +25,10 @@ $(function(){
       if(click=="<?php echo $this->click;?>"){
         modal_callback(this);
       }else{
-        alert("当前只能选择"+click_type['<?php echo $this->click;?>']);
+        if($(this).prop("checked")){
+          $(this).prop("checked", '').closest('.checker > span').removeClass('checked');
+          iCMS.alert("当前只能选择"+click_type['<?php echo $this->click;?>']);
+        }
       }
     });
     <?php }?>
@@ -41,36 +44,39 @@ $(function(){
     <?php }?>
     $('#mkdir').click(function() {
   		iCMS.dialog({
+          follow:this,
+          content:document.getElementById('mkdir-box'),
           lock:false,
   		    title: '创建新目录',
-  		    button: [{
-  		    	id: 'mkdir-btn',
-  		    	value: '创建',
-  				  callback: function () {
-  			        var a = $("#newdirname"),n = a.val(),d=this;
-  			        if(n==""){
-  			        	iCMS.alert("请输入目录名称!");
-  			        	a.focus();
-  			        	return false;
-  			        }else{
-  			        	$.post('<?php echo APP_URI; ?>&do=mkdir',{name: n,'pwd':'<?php echo $pwd;?>'},
-  			        	function(j){
-  			        		if(j.code){
-  				        		d.content(j.msg)
-  			        			.button({id: 'mkdir-btn',value: '完成',callback: function () {window.location.reload();}});
-  			        			window.setTimeout(function(){
-  			        				window.location.reload();
-  								    },3000);
-  			        		}else{
-  			        			alert(j.msg);
-  			        			a.focus();
-  			        			return false;
-  			        		}
-  			        	},"json");
-  			        }
-  			        return false;
-  				}}]
-  		},document.getElementById('mkdir-box')).show(document.getElementById('mkdir'));
+          okValue:'创建',
+          ok: function () {
+              var a = $("#newdirname"),n = a.val(),d=this;
+              if(n==""){
+                iCMS.alert("请输入目录名称!");
+                a.focus();
+                return false;
+              }else{
+                $.post('<?php echo APP_URI; ?>&do=mkdir',{name: n,'pwd':'<?php echo $pwd;?>'},
+                function(j){
+                  if(j.code){
+                      d.content(j.msg).button([{value: '完成',
+                      callback: function () {
+                        window.location.reload();
+                      },autofocus: true
+                    }]);
+                    window.setTimeout(function(){
+                      window.location.reload();
+                    },3000);
+                  }else{
+                    iCMS.alert(j.msg);
+                    a.focus();
+                    return false;
+                  }
+                },"json");
+              }
+              return false;
+          }
+  		});
     });
 });
 </script>

@@ -19,11 +19,11 @@ define('iCMS_SUPERADMIN_UID', '1');
 require iPHP_APP_CORE.'/iMember.class.php';
 require iPHP_APP_CORE.'/iMenu.class.php';
 
-iDB::$show_errors   = true;
-iMember::$LOGIN_TPL = ACP_PATH;
-iMember::$AUTH      = 'ADMIN_AUTH';
-iMember::$AJAX      = iPHP::PG('ajax');
-iPHP::$dialog_title = 'iCMS';
+iDB::$show_errors      = true;
+iMember::$LOGIN_TPL    = ACP_PATH;
+iMember::$AUTH         = 'ADMIN_AUTH';
+iMember::$AJAX         = iPHP::PG('ajax');
+iPHP::$dialog['title'] = 'iCMS';
 
 class iACP {
     public static $apps       = NULL;

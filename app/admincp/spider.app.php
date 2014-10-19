@@ -112,8 +112,7 @@ class spiderApp {
 			}
 		}
 		if(empty($pubArray)){
-			iPHP::$break		= true;
-			iPHP::$dialog_lock	= true;
+			iPHP::$break = true;
 			iPHP::alert('暂无最新内容',0,30);
 		}
 		$_count	= count($pubArray);

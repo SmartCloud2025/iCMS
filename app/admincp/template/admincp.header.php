@@ -66,12 +66,14 @@ $(function(){
 	$("a[href ='#<?php echo iACP::$app_name; ?>-<?php echo $_GET['tab']; ?>']",$itab).parent().addClass("active");
 	$("#<?php echo iACP::$app_name; ?>-<?php echo $_GET['tab']; ?>").addClass("active").removeClass("hide");
 	<?php }?>
+  <?php if($body_class=='sidebar-mini'){?>
+    mini_tip();
+  <?php }?>
 })
 </script>
 </head>
 <body class="<?php echo $body_class; ?>">
 <iframe class="hide" id="iPHP_FRAME" name="iPHP_FRAME"></iframe>
-<div id="iPHP-DIALOG" title="iPHP提示" class="hide"><img src="./app/admincp/ui/loading.gif" /></div>
 <div id="iCMS-MODAL" class="modal">
   <div class="modal-header">
     <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>

@@ -138,7 +138,7 @@ class iCMS {
                     "avatar" => iCMS_FS_URL.'avatar/',
 			)
 		));
-        iPHP::$dialog_title  = self::$config['site']['name'];
+        iPHP::$dialog['title']  = self::$config['site']['name'];
     }
     /**
      * 运行应用程序

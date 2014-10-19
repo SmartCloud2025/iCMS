@@ -20,7 +20,9 @@ iACP::head();
       </ul>
     </div>
     <div class="widget-content nopadding">
-      <form action="<?php echo APP_FURI; ?>&do=createArticle" method="post" class="form-inline" id="iCMS-html" target="iPHP_FRAME">
+      <form action="<?php echo __SELF__ ; ?>" method="get" class="form-inline" id="iCMS-html" target="iPHP_FRAME">
+        <input type="hidden" name="app" value="<?php echo iACP::$app_name;?>" />
+        <input type="hidden" name="do" value="createArticle" />
         <div id="html-add" class="tab-content">
           <div class="input-prepend input-append"> <span class="add-on">按栏目</span>
             <select name="cid[]" multiple="multiple" class="span3" size="15">

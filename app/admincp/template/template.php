@@ -22,38 +22,40 @@ $(function(){
     });
     <?php }?>
     $('#mkdir').click(function() {
-		$.dialog({
-		    follow: document.getElementById('mkdir'),
-		    title: '创建新目录',
-		    content: document.getElementById('mkdir-box'),
-		    button: [{
-		    	id: 'mkdir-btn',
-		    	value: '创建',
-				callback: function () {
-			        var a = $("#newdirname"),n = a.val(),d=this;
-			        if(n==""){
-			        	alert("请输入目录名称!");
-			        	a.focus();
-			        	return false;
-			        }else{
-			        	$.post('<?php echo APP_URI; ?>&do=mkdir',{name: n,'pwd':'<?php echo $pwd;?>'},
-			        	function(j){
-			        		if(j.code){
-				        		d.content(j.msg)
-			        			.button({id: 'mkdir-btn',value: '完成',callback: function () {window.location.reload();}});
-			        			window.setTimeout(function(){
-			        				window.location.reload();
-								},3000);
-			        		}else{
-			        			alert(j.msg);
-			        			a.focus();
-			        			return false;
-			        		}
-			        	},"json");
-			        }
-			        return false;
-				}}]
-		});
+  		iCMS.dialog({
+          follow:this,
+          content:document.getElementById('mkdir-box'),
+          lock:false,
+  		    title: '创建新目录',
+          okValue:'创建',
+          ok: function () {
+              var a = $("#newdirname"),n = a.val(),d=this;
+              if(n==""){
+                iCMS.alert("请输入目录名称!");
+                a.focus();
+                return false;
+              }else{
+                $.post('<?php echo APP_URI; ?>&do=mkdir',{name: n,'pwd':'<?php echo $pwd;?>'},
+                function(j){
+                  if(j.code){
+                      d.content(j.msg).button([{value: '完成',
+                      callback: function () {
+                        window.location.reload();
+                      },autofocus: true
+                    }]);
+                    window.setTimeout(function(){
+                      window.location.reload();
+                    },3000);
+                  }else{
+                    iCMS.alert(j.msg);
+                    a.focus();
+                    return false;
+                  }
+                },"json");
+              }
+              return false;
+          }
+  		});
     });
 });
 </script>
