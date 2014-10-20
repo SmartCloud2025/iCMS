@@ -66,9 +66,9 @@ body { background-color: #fff; background-image: url(img/bg-v6.png); _background
 /* ----home.artList-------- */
 .category_name { margin-left: 20px; }
 .category_name .label { padding: 6px 20px; font-size: 16px; }
-#artList { font-size: 14px; }
-#artList ul { padding: 0 30px; }
-#artList li { width: 100%; overflow-y: hidden; padding: 16px 0 18px; border-bottom: 1px dotted #E4E4E4; line-height: 23px; }
+#artList,#favList{ font-size: 14px; }
+#artList ul,#favList ul{ padding: 0 30px; }
+#artList li,#favList li { width: 100%; overflow-y: hidden; padding: 16px 0 18px; border-bottom: 1px dotted #E4E4E4; line-height: 23px; }
 #artList .rep_num { float: left; font-size: 12px; padding: 0 4px 0 1px; overflow: hidden; width: 50px; height: 23px; line-height: 23px; text-align: center; color: #333; background: url(http://tb2.bdstatic.com/tb/static-frs/img/v2/reply_num_bg.gif?t=1398765586497) no-repeat; }
 #artList .list_top { height: 23px; line-height: 23px; overflow: hidden; }
 #artList .list_top .title { width: auto; float: left; display: inline-block; margin-left: 10px; }
@@ -79,6 +79,12 @@ body { background-color: #fff; background-image: url(img/bg-v6.png); _background
 #artList .list_detail .pic { /* height: 150px;  */overflow: hidden; }
 #artList .list_fun { text-align: right; }
 #artList .list_fun a { color: #333; margin-left: 10px; }
+
+#favList li { width: 100%; padding: 4px 0 10px; border-bottom: 1px dotted #E4E4E4; line-height: 23px; }
+#favList .fav-follow{float: right;margin-top: 10px;}
+#favList .fav-link h2{font-weight: bold;display: inline;}
+#favList .data{font-size: 12px;}
+#favList .fav-data-link{color: #698EBF;}
 /* ======userApp======== */
 /* ----home.btn-------- */
 #home_btn { font-weight: bold; margin-top: 10px; padding-left: 25px; padding-bottom: 15px; border-bottom: 1px dotted #DBDBDB; }

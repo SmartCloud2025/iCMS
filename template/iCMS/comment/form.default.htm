@@ -9,8 +9,8 @@
 	</head>
 	<body class="iCMS-comment-page">
 <!--{/if}-->
-		<link href="<!--{$site.urls.ui}-->/iCMS.comment-6.0.0.css" type="text/css" rel="stylesheet"/>
-		<script src="<!--{$site.urls.ui}-->/iCMS.comment-6.0.0.js"></script>
+<link href="<!--{$site.urls.ui}-->/iCMS.comment-6.0.0.css" type="text/css" rel="stylesheet"/>
+<script src="<!--{$site.urls.ui}-->/iCMS.comment-6.0.0.js"></script>
 		<div class="iCMS_comment_form_wrap">
 			<div id="iCMS-cmt-profile">
 				<!--{include file="iCMS://user/menu.htm"}-->
@@ -31,14 +31,27 @@
 			</div>
 		</div>
 		<script>
-        var param =<!--{$comment_vars.param|json_encode}-->;
 		$(function(){
+            <!--{if $comment_vars.display=="iframe"}-->
+            iCMS.comment.iframe_height('form');
+            <!--{/if}-->
             if (iCMS.user_status) {
+				window.setTimeout(function() {
+            		iCMS.user.set_info(iCMS.user.info,$(".iCMS_user_home"));
+                }, 1000);
                 $("#iCMS-cmt-login").hide();
                 $("#iCMS-cmt-profile").show();
-                iCMS.hover(".iCMS_user_home",20,-10);
+                iCMS.hover($(".iCMS_user_home"),20,-10);
             }
-
+            $(document).on("click", '.iCMS_user_logout', function(event) {
+                event.preventDefault();
+                iCMS.user.logout();
+                return false;
+            }).on("click", '.iCMS_user_login', function(event) {
+                event.preventDefault();
+                iCMS.LoginBox(true);
+                return false;
+            });
 			// 取消
 			$('.cmt-cancel').click(function(event) {
 				var pp = $(this).parent().parent();
@@ -47,6 +60,7 @@
 			});
             //提交评论
             $('.cmt-add').click(function(event) {
+        		var param =<!--{$comment_vars.param|json_encode}-->;
                 event.preventDefault();
                 iCMS.comment.addnew(this,param,function(c){
                 	var doc = window.top.document;

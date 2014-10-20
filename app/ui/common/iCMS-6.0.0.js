@@ -50,11 +50,7 @@
                     return false;
                 }
             });
-            $(".iCMS_API_iframe").load(function() {
-                iCMS.api_iframe_height($(this));
-            }).resize(function(){
-              iCMS.api_iframe_height($(this));
-            });
+
             $(".tip").tooltip();
             $("img.lazy").lazyload();
         },
@@ -129,15 +125,14 @@
                 opts.content = content.html();
             }else if (typeof content === "string") {
                 //console.log('typeof content === "string"');
-                opts.content = '<table class=\"ui-dialog-table\" align=\"center\"><tr><td valign=\"middle\">'
-                +'<div class=\"iPHP-msg\"><span class=\"label label-' + opts.label + '\"><i class=\"fa fa-' + opts.icon + '\"></i> ' + content + '</span></div>'
-                +'</td></tr></table>';
+                opts.content = __msg(content);
             }else if (typeof content === "object") {
                 if(content.nodeType === 1){
                     if (_elemBack) {
                         _elemBack();
                         delete _elemBack;
                     };
+                    //console.log($(content).data( "events" ));
                     // artDialog 5.0.4
                     // 让传入的元素在对话框关闭后可以返回到原来的地方
                     var display = content.style.display;
@@ -171,6 +166,7 @@
                 __callback('remove');
             };
             var d = dialog(opts);
+
             //console.log(opts.api);
             if(opts.lock){
                 d.showModal();
@@ -189,16 +185,18 @@
             }
             if(opts.time){
                 timeOutID = window.setTimeout(function(){
-                    d.close().remove();
+                    d.destroy();
                 },opts.time);
             }
             d.destroy = function (){
                 d.close().remove();
             }
+
             function __callback(type){
                 window.clearTimeout(timeOutID);
                 console.log('opts.elemBack:'+opts.elemBack,'type:'+type);
                 if(opts.elemBack==type){
+                    console.log('_elemBack:'+_elemBack);
                     if (_elemBack) { //删除前把元素返回原来的地方
                         _elemBack();
                     }
@@ -208,6 +206,20 @@
                     callback(type);
                 }
             }
+            function __msg(content){
+                return '<table class=\"ui-dialog-table\" align=\"center\"><tr><td valign=\"middle\">'
+                +'<div class=\"iPHP-msg\">'
+                +'<span class=\"label label-' + opts.label + '\">'
+                +'<i class=\"fa fa-' + opts.icon + '\"></i> '
+                + content
+                + '</span></div>'
+                +'</td></tr></table>';
+            }
+            // dd = $.extend(d,{
+            //     content:function(c){
+            //         d.content(__msg(c));
+            //     }
+            // });
             return d;
         },
 
@@ -257,12 +269,9 @@
                  arr.push('"' + i + '":'+ fmt(o[i]));
             return '{' + arr.join(',') + '}';
         },
-        api_iframe_height:function(a,b){
-            var a = a||window.top.$(b);
-            a.height(0); //用于每次刷新时控制IFRAME高度初始化
-            var height = a.contents().height();
-            a.height(height);
-            //window.top.$('.iCMS_API_iframe-loading').hide();
+        api_iframe_height:function(a,iframe){
+            var height = a.height();
+            $(iframe).height(height);
         },
         format:function(content,ubb) {
             content = content.replace(/\/"/g, '"')

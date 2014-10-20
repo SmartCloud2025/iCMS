@@ -13,24 +13,29 @@ defined('iPHP') OR exit('What are you doing?');
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
 <title>iCMS Administrator's Control Panel</title>
 <meta name="renderer" content="webkit">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="force-rendering" content="webkit">
+<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1"/>
 <meta content="iDreamSoft Inc." name="Copyright" />
 <link rel="stylesheet" href="./app/ui/common/bootstrap/2.3.1/css/bootstrap.min.css" type="text/css" />
 <link rel="stylesheet" href="./app/ui/common/bootstrap/2.3.1/css/bootstrap-responsive.min.css" type="text/css" />
 <link rel="stylesheet" href="./app/ui/common/font-awesome/4.2.0/css/font-awesome.min.css" type="text/css" />
-<link rel="stylesheet" href="./app/ui/common/artDialog/5.0.4/skins/default.css" type="text/css" />
+<link rel="stylesheet" href="./app/ui/common/artDialog/6.0.3/ui-dialog.css" type="text/css" />
 <link rel="stylesheet" href="./app/ui/common/iCMS-6.0.0.css" type="text/css" />
 <!--[if lt IE 9]>
   <script src="./app/ui/common/ie/html5shiv.min.js"></script>
   <script src="./app/ui/common/ie/respond.min.js"></script>
 <![endif]-->
 <script type="text/javascript" src="./app/ui/common/jquery-1.11.0.min.js"></script>
-<script type="text/javascript" src="./app/ui/common/artDialog/5.0.4/artDialog.min.js"></script>
-<script type="text/javascript" src="./app/ui/common/artDialog/5.0.4/artDialog.plugins.min.js"></script>
+<script type="text/javascript" src="./app/ui/common/artDialog/6.0.3/dialog-plus-min.js"></script>
 <script type="text/javascript" src="./app/ui/common/iCMS-6.0.0.js"></script>
 <style>
+/* dialog */
+.iCMS_dialog .ui-dialog-header { background-color: #333; background-image: -moz-linear-gradient(top, #3c3c3c, #0a0a0a); background-image: -ms-linear-gradient(top, #3c3c3c, #0a0a0a); background-image: -webkit-gradient(linear, 0 0, 0 100%, from(#3c3c3c), to(#0a0a0a)); background-image: -webkit-linear-gradient(top, #3c3c3c, #0a0a0a); background-image: -o-linear-gradient(top, #3c3c3c, #0a0a0a); background-image: linear-gradient(top, #3c3c3c, #0a0a0a); background-repeat: repeat-x; filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#3c3c3c', endColorstr='#0a0a0a', GradientType=0); border: 1px solid #111; }
+.iCMS_dialog .ui-dialog-header .ui-dialog-close { color: #999; opacity: .4; font-weight: normal; filter: alpha(opacity=40); }
+.iCMS_dialog .ui-dialog-header .ui-dialog-close:hover, .iCMS_dialog .ui-dialog-header .ui-dialog-close:focus { opacity: 0.7; filter: alpha(opacity=70); }
+/* login */
 body { background-color:#f8f8f8;}
-.iCMS-login {margin: auto;width: 720px;height: 150px;position: absolute;top: 30%;left: 22%;}
+.iCMS_login {margin: auto;width: 720px;height: 150px;position: absolute;top: 30%;left: 22%;}
 .btn { -webkit-box-shadow: none !important; -moz-box-shadow: none !important; box-shadow: none !important; background-image: none !important; }
 .info { float:left; width:360px; }
 .login { margin-left:380px; }
@@ -46,9 +51,9 @@ body { background-color:#f8f8f8;}
 
 @media (max-width:600px) {
   .container{padding: 20px;}
-  .iCMS-login{width:100%; height:auto;position:static;text-align: center;}
+  .iCMS_login{width:100%; height:auto;position:static;text-align: center;}
   .iCMS-logo{text-align: center;}
-  .iCMS-login p{text-align: left;padding: 10px;}
+  .iCMS_login p{text-align: left;padding: 10px;}
   .info{display: block;clear: both;margin: 0px auto;width: auto;float: none;}
   .login {display: block;clear: both;margin: 10px auto;}
   .login label{display: inline;float: none;}
@@ -87,7 +92,7 @@ $(function(){
 </head>
 <body>
 <div class="container">
-  <div class="iCMS-login">
+  <div class="iCMS_login">
     <div class="info">
       <a class="iCMS-logo" href="http://www.idreamsoft.com" target="_blank">
         <img src="./app/admincp/ui/iCMS.login-6.0.png" />

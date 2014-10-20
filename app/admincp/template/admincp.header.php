@@ -13,7 +13,8 @@ defined('iPHP') OR exit('What are you doing?');
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
 <title>iCMS Administrator's Control Panel</title>
 <meta name="renderer" content="webkit">
-<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+<meta name="force-rendering" content="webkit">
+<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1"/>
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
 <!-- <meta name="viewport" content="width=device-width,user-scalable=yes, minimum-scale=0.4, initial-scale=0.8,target-densitydpi=low-dpi" /> -->
 <meta content="iDreamSoft Inc." name="Copyright" />
@@ -22,7 +23,6 @@ defined('iPHP') OR exit('What are you doing?');
 <link rel="stylesheet" href="./app/ui/common/bootstrap/2.3.1/css/datepicker.css" type="text/css" />
 <link rel="stylesheet" href="./app/ui/common/bootstrap/2.3.1/css/bootstrap-switch.css" type="text/css" />
 <link rel="stylesheet" href="./app/ui/common/font-awesome/4.2.0/css/font-awesome.min.css" type="text/css" />
-<!-- <link rel="stylesheet" href="./app/ui/common/artDialog/5.0.4/skins/default.css" type="text/css" /> -->
 <link rel="stylesheet" href="./app/ui/common/artDialog/6.0.3/ui-dialog.css" type="text/css" />
 <link rel="stylesheet" href="./app/ui/common/iCMS-6.0.0.css" type="text/css" />
 <!--[if lt IE 9]>
@@ -30,8 +30,6 @@ defined('iPHP') OR exit('What are you doing?');
   <script src="./app/ui/common/ie/respond.min.js"></script>
 <![endif]-->
 <script src="./app/ui/common/jquery-1.11.0.min.js" type="text/javascript"></script>
-<!-- <script src="./app/ui/common/artDialog/5.0.4/artDialog.min.js" type="text/javascript"></script> -->
-<!-- <script src="./app/ui/common/artDialog/5.0.4/artDialog.plugins.min.js" type="text/javascript"></script> -->
 <script src="./app/ui/common/artDialog/6.0.3/dialog-plus-min.js" type="text/javascript"></script>
 <script src="./app/ui/common/bootstrap/2.3.1/js/bootstrap.min.js" type="text/javascript"></script>
 <script src="./app/ui/common/bootstrap/2.3.1/js/bootstrap-datepicker.js" type="text/javascript"></script>

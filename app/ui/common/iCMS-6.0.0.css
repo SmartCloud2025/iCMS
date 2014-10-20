@@ -115,6 +115,7 @@ a:hover { text-decoration: none; }
 .input-text { padding: 6px 10px !important; line-height: 15px; box-shadow: 0 1px 1px rgba(0, 0, 0, 0.1) inset; }
 .error { color: #C33; }
 .bull { padding: 0 3px; color: #BBB; display: inline-block; font-family: Arial; }
+.btn { outline: none !important; outline-style: none !important; }
 /* dialog */
 .iCMS_dialog { -webkit-border-radius: 6px; -moz-border-radius: 6px; border-radius: 6px; border: 1px solid #888; -webkit-box-shadow: 0 0 80px 0 rgba(0, 0, 0, 0.4); -moz-box-shadow: 0 0 80px 0 rgba(0, 0, 0, 0.4); box-shadow: 0 0 80px 0 rgba(0, 0, 0, 0.4); background: #fff; z-index: 99999 !important; }
 .iCMS_dialog .ui-dialog { opacity: 1; border: 0px; box-shadow: none; background-color: inherit; }

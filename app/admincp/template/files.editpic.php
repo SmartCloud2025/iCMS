@@ -15,13 +15,13 @@ iACP::head(false);
 .savetodir{margin-bottom: 0px;}
 </style>
 <script src="<?php echo iCMS_UI;?>/meitu/xiuxiu.js" type="text/javascript"></script>
-<div id="onBrowse" class="well hide">
+<div id="onBrowse" class="well" style="display:none;">
   <a class="btn btn-success" href="<?php echo __ADMINCP__; ?>=files&do=picture&from=modal&click=file&callback=brofile" data-toggle="modal" data-meta='{"width":"75%","height":"480px"}' data-zIndex="9999999" title="从网站选择图片"><i class="fa fa-picture-o"></i> 从网站选择</a>
   <hr />
   <a id="local" class="btn btn-primary"><i class="fa fa-upload"></i> 从电脑选择</a>
   <input id="localfile" type="file" multiple="multiple" accept="image/*" class="hide"/>
 </div>
-<div id="onUpload" class="well hide">
+<div id="onUpload" class="well" style="display:none;">
   <a class="btn btn-success" href="<?php echo __ADMINCP__; ?>=files&do=picture&from=modal&click=dir&callback=savetodir" data-toggle="modal" data-meta='{"width":"75%","height":"480px"}' data-zIndex="9999999" title="保存到新目录"><i class="fa fa-save"></i> 保存到..</a>
   <span class="span2 uneditable-input savetodir hide"></span>
   <hr />
@@ -81,10 +81,10 @@ $(function() {
 //console.log(sel_channel);
             loadPhoto(base64,true);
             reader.onload = null;
-            sel_dialog.close();
+            sel_dialog.destroy();
           };
         }else{
-          sel_dialog.close();
+          sel_dialog.destroy();
         }
     })
 
@@ -108,16 +108,16 @@ $(function() {
 //xiuxiu.uploadResponse(data);
 //xiuxiu.upload();
     xiuxiu.onBrowse = function(channel, multipleSelection, canClose, id){
-      var onBrowse = document.getElementById("onBrowse");
+      var _onBrowse = document.getElementById("onBrowse");
       //browse.style.display = 'black';
       sel_channel = channel;
-// console.log(sel_channel);
 // console.log(channel, multipleSelection, canClose, id);
       //iCMS.dialog("asdasd");
       sel_dialog = iCMS.dialog({
         title: 'iCMS - 打开图片',
-        content:onBrowse
+        content:_onBrowse
       });
+ console.log(sel_dialog);
 
       // sel_dialog  = dialog({
       //   id: 'iPHP-DIALOG',width: 360,height: 150,fixed: true,
@@ -181,12 +181,12 @@ function modal_brofile(el,a){
   var url = $(a).attr('url');
 //console.log(url);
   loadPhoto(url,false);
-  sel_dialog.close();
+  sel_dialog.destroy();
   return 'off';
 }
 
 function loading(){
-  sel_dialog.content('<div class="iPHP-msg"><img src="./app/admincp/ui/ajax_loader.gif" /> <span class="label label-inverse">图片正在努力加载中...请稍候!</span></div>');
+  //sel_dialog.content('<div class="iPHP-msg"><img src="./app/admincp/ui/ajax_loader.gif" /> <span class="label label-inverse">图片正在努力加载中...请稍候!</span></div>');
 }
 function loadPhoto(data,base64){
 //console.log('sel_channel:',sel_channel);

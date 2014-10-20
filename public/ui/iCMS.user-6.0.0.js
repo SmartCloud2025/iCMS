@@ -1,22 +1,26 @@
 (function($) {
     iCMS.user = {
-            data:{},
+            info:{},
             data: function(param) {
                 $.get(iCMS.api('user', '&do=data'), param, function(c) {
                     if(!c.code) {
                         window.top.location.href = c.forward
                         return false
                     };
-                    iCMS.user.data = c;
-                    var user_home = $(".iCMS_user_home")
-                    user_home.attr("href", c.url);
-                    $(".name", user_home).text(c.nickname);
-                    $(".avatar", user_home).attr("src", c.avatar);
+                    iCMS.user.info = c;
+                    iCMS.user.set_info(c,$(".iCMS_user_home"));
                 }, 'json');
             },
+            set_info:function(c,el){
+                var a = el.attr("href", c.url);
+                $(".name", a).text(c.nickname);
+                $(".avatar", a).attr("src", c.avatar);
+            },
             logout: function() {
-                $.get(iCMS.api('user', "&do=logout"), function(c) {
-                    window.top.location.href = c.forward
+                $.get(iCMS.api('user', "&do=logout"),{'forward':window.top.location.href},
+                function(c) {
+                    window.top.location.reload();
+                    //window.top.location.href = c.forward
                 }, 'json');
             },
             status: function() {

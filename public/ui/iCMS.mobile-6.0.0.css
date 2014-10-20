@@ -14,7 +14,6 @@ body { color: #2a2a2a; font-size: 14px; background-color: #f8f8f8; }
 .r3 { border-radius: 3px }
 .r5 { border-radius: 5px }
 .shadow { box-shadow: 0 6px 5px rgba(0, 0, 0, 0.4); }
-.btn { outline: none !important; outline-style: none !important; }
 .gr-btn { color: #fff; background-color: #5cb85c; border-color: #4cae4c; }
 .form-actions { padding: 19px 20px 20px; margin-top: 20px; margin-bottom: 20px; background-color: #f5f5f5; border-top: 1px solid #e5e5e5; }
 .iCMS-mobile .container { padding: 0px; }

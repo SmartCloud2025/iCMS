@@ -30,7 +30,7 @@ function favorite_list($vars=null){
 	$md5	= md5($where_sql.$orderSQL);
 	$offset	= 0;
 	if($vars['page']){
-		$total	= iPHP::total($md5,"SELECT count(*) FROM `#iCMS@__favorite` WHERE {$where_sql} ");
+		$total	= iPHP::total($md5,"SELECT count(*) FROM `#iCMS@__favorite` {$where_sql} ");
 		iPHP::assign("fav_total",$total);
         $multi	= iCMS::page(array('total'=>$total,'perpage'=>$maxperpage,'unit'=>iPHP::lang('iCMS:page:list'),'nowindex'=>$GLOBALS['page']));
         $offset	= $multi->offset;
@@ -43,8 +43,10 @@ function favorite_list($vars=null){
 		$rs  = iDB::all("SELECT * FROM `#iCMS@__favorite` {$where_sql} {$order_sql} LIMIT {$offset},{$maxperpage}");
 		//iDB::debug(1);
 		$resource = array();
+		$vars['user'] && iPHP::app('user.class','static');
 		if($rs)foreach ($rs as $key => $value) {
-			$value['url'] = iPHP::router(array('/favorite/{id}/',$value['id']),iCMS_REWRITE);
+			$value['url']  = iPHP::router(array('/favorite/{id}/',$value['id']),iCMS_REWRITE);
+			$vars['user'] && $value['user'] = user::info($value['uid'],$value['nickname']);
 			if(isset($vars['loop'])){
 				$resource[$key] = $value;
 			}else{
@@ -71,7 +73,7 @@ function favorite_data($vars=null){
 	$md5	= md5($where_sql.$orderSQL);
 	$offset	= 0;
 	if($vars['page']){
-		$total	= iPHP::total($md5,"SELECT count(*) FROM `#iCMS@__favorite_data` WHERE {$where_sql} ");
+		$total	= iPHP::total($md5,"SELECT count(*) FROM `#iCMS@__favorite_data` {$where_sql} ");
 		iPHP::assign("fav_data_total",$total);
         $multi	= iCMS::page(array('total'=>$total,'perpage'=>$maxperpage,'unit'=>iPHP::lang('iCMS:page:list'),'nowindex'=>$GLOBALS['page']));
         $offset	= $multi->offset;
@@ -81,17 +83,11 @@ function favorite_data($vars=null){
 		$resource   = iCache::get($cache_name);
 	}
 	if(empty($resource)){
-		$rs  = iDB::all("SELECT * FROM `#iCMS@__favorite_data` {$where_sql} {$order_sql} LIMIT {$offset},{$maxperpage}");
+		$resource  = iDB::all("SELECT * FROM `#iCMS@__favorite_data` {$where_sql} {$order_sql} LIMIT {$offset},{$maxperpage}");
 		//iDB::debug(1);
-		$resource = array();
-		if($rs)foreach ($rs as $key => $value) {
-			// $value['url'] = iPHP::router(array('/favorite/{id}/',$value['id']),iCMS_REWRITE);
-			// if(isset($vars['loop'])){
-			// 	$resource[$key] = $value;
-			// }else{
-			// 	$resource[$value['id']]=$value;
-			// }
-		}
+		// $resource = array();
+		// if($rs)foreach ($rs as $key => $value) {
+		// }
 		$vars['cache'] && iCache::set($cache_name,$resource,$cache_time);
 	}
 	return $resource;

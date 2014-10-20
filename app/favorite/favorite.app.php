@@ -65,6 +65,7 @@ class favoriteApp {
         $this->__login();
 
         $uid     = user::$userid;
+        $nickname= user::$nickname;
         $appid   = (int)$_POST['appid'];
         $iid     = (int)$_POST['iid'];
         $cid     = (int)$_POST['cid'];
@@ -78,7 +79,7 @@ class favoriteApp {
         $id  = iDB::value("SELECT `id` FROM `#iCMS@__favorite_data` WHERE `uid`='$uid' AND `fid`='$fid' AND `url`='$url' LIMIT 1");
         $id && iPHP::code(0,'iCMS:favorite:failure',0,'json');
 
-        $fields = array('uid', 'appid', 'fid', 'iid', 'url', 'title', 'addtime');
+        $fields = array('uid','nickname', 'appid', 'fid', 'iid', 'url', 'title', 'addtime');
         $data   = compact ($fields);
         $fdid   = iDB::insert('favorite_data',$data);
         if($fdid){

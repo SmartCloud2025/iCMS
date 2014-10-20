@@ -95,7 +95,7 @@
             var doc = $(document);
             this.user.ucard();
             if (this.user_status) {
-                this.hover(".iCMS_user_home",20,-10);
+                this.hover($(".iCMS_user_home"),20,-10);
             }
             doc.on("click", '.iCMS_user_follow', function(event) {
                 event.preventDefault();
@@ -132,20 +132,20 @@
         },
         hover: function(a, t, l) {
             var timeOutID = null,t = t || 0, l = l || 0,
-            b = $(a).parent().find('.popover');
-            $(a).hover(function() {
+            pop = a.parent().find('.popover');
+            a.hover(function() {
                 var position = $(this).position();
-                $(b).show().css({
+                pop.show().css({
                     top: position.top + t,
                     left: position.left + l
                 });
                 window.clearTimeout(timeOutID);
             }, function() {
                 timeOutID = window.setTimeout(function() {
-                    $(b).hide();
+                    pop.hide();
                 }, 2500);
             });
-            $(b).hover(function() {
+            pop.hover(function() {
                 window.clearTimeout(timeOutID);
                 $(this).show();
             }, function() {

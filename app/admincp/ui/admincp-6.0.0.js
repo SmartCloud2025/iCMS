@@ -1,6 +1,6 @@
-// if ($.browser.msie && ($.browser.version == "6.0" || $.browser.version == "7.0") && !$.support.style) {
-//     alert("系统检测到您使用的是IE内核的浏览器!!\n\nIE内核的浏览器访问本页面可能会出现各种不可预料的错误!!\n\n为了您更好的使用本页面\n\n推荐使用 Chrome,FireFox 等浏览器\n\n如使用 搜狗 或者 360 浏览器的请切换成 极速模式!");
-// }
+if ($.browser.msie && ($.browser.version == "6.0" || $.browser.version == "7.0") && !$.support.style) {
+    alert("系统检测到您使用的是IE内核的浏览器!!\n\nIE内核的浏览器访问可能会出现各种不可预料的错误!!\n\n为了您更好的使用本程序\n\n推荐使用 Chrome,FireFox 等浏览器\n\n如使用 搜狗 或者 360 等双核浏览器的请切换成 极速模式!");
+}
 $(function() {
     var _iCMS = {
         select: function(el, v) {
@@ -13,42 +13,23 @@ $(function() {
         checked: function(el){
             $(el).prop("checked",true).closest('.checker > span').addClass('checked');
         },
-        modal: function(el){
-            $('[data-toggle="modal"]').click(function(){
-                event.preventDefault();
-                window.top.iCMS_MODAL = $(this).modal({width: "85%",height: "640px",overflow:true});
-                $(this).parent().parent().parent().removeClass("open");
-                return false;
-            });
-        },
-
-        // popover:function(el){
-        //     $(el).popover({
-        //         html:true,
-        //         content:function(){
-        //           $.get('<?php echo APP_URI; ?>&do=get_reply',{'id': $(this).attr('data-id')},
-        //             function(html) {
-        //               $('.popover-content','.popover').html(html);
-        //           });
-        //           return '<p><img src="<?php echo ACP_UI;?>/loading.gif" /></p>';
-        //       }
-        //     });
-        // },
     };
     iCMS = $.extend(iCMS,_iCMS);//扩展 or 替换 iCMS属性
     var doc = $(document);
-    iCMS.modal();
-    //window.dialog = dialog;
+    //iCMS.modal();
+
     $(':checkbox[data-type!=switch],:radio[data-type!=switch]').uniform();
+    $(".chosen-select").chosen({disable_search_threshold: 30});
     $('.ui-datepicker').datepicker({format: 'yyyy-mm-dd'});
-    $('.tip').tooltip({html:true});
+
     $('[data-toggle="popover"]').popover({html:true});
+    $('.tip').tooltip({html:true});
     $('.tip-left').tooltip({placement:'left',html:true});
     $('.tip-right').tooltip({placement:'right',html:true});
     $('.tip-top').tooltip({placement:'top',html:true});
     $('.tip-bottom').tooltip({placement:'bottom',html:true});
-    $(".chosen-select").chosen({disable_search_threshold: 30});
-    $(".checkAll").click(function() {
+
+    doc.on("click",'.checkAll',function() {
         var target = $(this).attr('data-target'), checkedStatus = $(this).prop("checked");
         //$('input:checkbox',$(target)).prop("checked",checkedStatus);
         $(".checkAll").prop("checked", checkedStatus);
@@ -93,8 +74,8 @@ $(function() {
         }
         return false;
     });
+
     $('[data-toggle="modal"]').click(function(){
-    //doc.on("click",'[data-toggle="modal"]',function() {
         event.preventDefault();
         window.top.iCMS_MODAL = $(this).modal({width: "85%",height: "640px",overflow:true});
         $(this).parent().parent().parent().removeClass("open");
@@ -189,6 +170,8 @@ function modal_icms(el,a){
 	e.val(val);
     return 'off';
 }
+
+// modal
 (function($) {
     $.fn.modal = function(options) {
         var im = $(this),

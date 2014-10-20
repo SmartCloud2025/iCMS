@@ -11,8 +11,8 @@
 <!--{else}-->
 <!--{assign var="tip_selector" value="iCMS:ucard:"}-->
 <!--{/if}-->
-		<link href="<!--{$site.urls.ui}-->/iCMS.comment-6.0.0.css" type="text/css" rel="stylesheet"/>
-		<script src="<!--{$site.urls.ui}-->/iCMS.comment-6.0.0.js"></script>
+<link href="<!--{$site.urls.ui}-->/iCMS.comment-6.0.0.css" type="text/css" rel="stylesheet"/>
+<script src="<!--{$site.urls.ui}-->/iCMS.comment-6.0.0.js"></script>
 		<div class="commentApp-list-wrap" id="iCMS-comment-list-box">
 			<div class="commentApp-list">
 				<!--{iCMS:comment:list loop="true" page="true" row="5" by="ASC" vars="$comment_vars"}-->
@@ -53,20 +53,20 @@
 			</div>
 			<script>
 			$(function() {
-				var param    = <!--{$comment_vars.param|json_encode}-->;
+	            <!--{if $comment_vars.display=="iframe"}-->
+	            iCMS.comment.iframe_height('list');
+	            <!--{/if}-->
 				var list_box = $('#iCMS-comment-list-box');
 	            //回复评论
 	            list_box.on('click', 'a[name="reply_comment"]', function(event) {
 	                event.preventDefault();
 		            iCMS.comment.reply(this);
-		            <!--{if $comment_vars.display=="iframe"}-->
-		            iCMS.api_iframe_height(false,'.commentApp-list-iframe');
-		            <!--{/if}-->
 	            });
 	            //提交评论
 	            list_box.on('click', 'a[name="addnew"]', function(event) {
 	                event.preventDefault();
-	                var that = $(this);
+					var that = $(this),
+					param    = <!--{$comment_vars.param|json_encode}-->;
 	                iCMS.comment.addnew(this,param,function(c){
 	                    var item = that.closest(".commentApp-item");
 	                    iCMS.comment.list(item,param['iid'],c.forward,'after');

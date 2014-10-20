@@ -349,7 +349,7 @@ class iCMS {
     }
     //------------------------------------
     public static function gotohtml($fp,$url='') {
-        if(iPHP::$iTPL_MODE=='html'||empty($url)||stristr($url, '.php?')) return;
+        if(iPHP::$iTPL_MODE=='html'||empty($url)||stristr($url, '.php?')||iPHP_DEVICE!='pc') return;
 
         @is_file($fp) && iPHP::gotourl($url);
     }
