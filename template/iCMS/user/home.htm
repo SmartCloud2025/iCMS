@@ -35,12 +35,7 @@
         <div class="card_avatar"> <a href="<!--{$user.urls.home}-->"> <img class="iCMS_user_avatar card_avatar_img" src="<!--{$user.avatar}-->" onerror="iCMS.user.noavatar();"> </a> </div>
       </div>
     </div>
-    <div class="user_nav_wrap">
-      <ul class="nav_list">
-        <li<!--{if $iCMS.APP.DO=="home"}--> class="c"<!--{/if}-->><a href="<!--{$user.urls.home}-->" title="文章"><i class="fa fa-file-text-o"></i> 文章</a></li>
-        <li<!--{if $iCMS.APP.DO=="favorite"}--> class="c"<!--{/if}-->> <a href="<!--{$user.urls.favorite}-->" title="收藏"><i class="fa fa-bookmark"></i> 收藏</a></li>
-      </ul>
-    </div>
+
     <div class="main-col">
       <!--{if $user.category.name}-->
       <h3 class="category_name"><span class="label label-info"><!--{$user.category.name}--></span></h3>
@@ -48,9 +43,7 @@
       <!--{if $iCMS.APP.DO=="home"}-->
         <!--{include file="./home.article.htm"}-->
       <!--{/if}-->
-      <!--{if $iCMS.APP.DO=="favorite"}-->
-        <!--{include file="./home.favorite.htm"}-->
-      <!--{/if}-->
+
       <div id="artpagenav" class="iCMS_pagination">
         <!--{$iCMS.PAGE.NAV}-->
       </div>
