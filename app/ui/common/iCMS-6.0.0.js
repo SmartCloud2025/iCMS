@@ -114,7 +114,7 @@
                 className:'iCMS_dialog',//skin:'iCMS_dialog',
                 backdropBackground:'#666',backdropOpacity: 0.5,
                 fixed:true,autofocus:false,quickClose:true,
-                lock:true,time: 30000000,
+                lock:true,time: 3000,
                 label:'success',icon: 'check',api:false,elemBack:'beforeremove',
             },_elemBack,timeOutID = null,
             opts = $.extend(defaults,options,iCMS.config.DIALOG);

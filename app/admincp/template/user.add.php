@@ -51,7 +51,7 @@ $(function(){
             <div class="clearfix mb10"></div>
             <div class="input-prepend">
               <span class="add-on"> 头像</span>
-              <img src="<?php echo iCMS_FS_URL.get_user_file($this->uid);?>" class="img-polaroid">
+              <img src="<?php echo iCMS_FS_URL.get_user_pic($this->uid);?>" class="img-polaroid">
             </div>
             <?php };?>
             <div class="clearfix mb10"></div>

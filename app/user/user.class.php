@@ -24,7 +24,7 @@ class user {
 
 	public static function router($uid,$type,$size=0){
 	    switch($type){
-	        case 'avatar':return iCMS_FS_URL.get_user_file($uid,$size);break;
+	        case 'avatar':return iCMS_FS_URL.get_user_pic($uid,$size);break;
 	        case 'url':   return iPHP::router(array('/{uid}/',$uid),iCMS_REWRITE);break;
 	        case 'coverpic':
 	        	$dir = get_user_dir($uid,'coverpic');
@@ -74,7 +74,7 @@ class user {
 	}
 	public static function check($val,$field='username'){
 		$uid = iDB::value("SELECT uid FROM `#iCMS@__user` where `$field`='{$val}'");
-		return empty($uid)?true:$uid;
+		return empty($uid)?false:$uid;
 	}
 	public static function follow($uid=0,$fuid=0){
 		if($uid==='all'){ //all fans
@@ -96,13 +96,9 @@ class user {
 		$math=='-' && $sql = " AND `{$field}`>0";
 		iDB::query("UPDATE `#iCMS@__user` SET `{$field}` = {$field}{$math}{$count} WHERE `uid`='{$uid}' {$sql} LIMIT 1;");
 	}
-	public static function openid($uid=0){
-		$pf = array();
-		$rs = iDB::all("SELECT `openid`,`platform` FROM `#iCMS@__user_openid` where `uid`='{$uid}'");
-		foreach ((array)$rs as $key => $value) {
-			$pf[$value['platform']] = $value['openid'];
-		}
-		return $pf;
+	public static function openid($openid=0,$platform=0){
+		$uid = iDB::value("SELECT `uid` FROM `#iCMS@__user_openid` where `openid`='{$openid}' AND `platform`='{$platform}'");
+		return $uid;
 	}
 	public static function get_cache($uid){
 		return iCache::get('iCMS:user:'.$uid);
@@ -152,9 +148,6 @@ class user {
 			'id' =>'uid',
 			'nk' =>'nickname',
 			'un' =>'username',
-			'qq' =>'qqopenid',
-			'wb' =>'wbopenid',
-			'tb' =>'tbopenid',
 		);
 		$field = $field_map[$fm];
 		$field OR $field = 'username';

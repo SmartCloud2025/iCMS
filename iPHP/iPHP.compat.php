@@ -300,7 +300,7 @@ function get_user_dir($uid,$dir='avatar'){
     $path = $dir.'/'.$dir1.'/'.$dir2;
     return $path;
 }
-function get_user_file($uid,$size=0,$dir='avatar') {
+function get_user_pic($uid,$size=0,$dir='avatar') {
     $path = get_user_dir($uid,$dir).'/'.$uid.".jpg";
 	if ($size) {
 		$path.= '_'.$size.'x'.$size.'.jpg';

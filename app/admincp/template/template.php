@@ -35,7 +35,7 @@ $(function(){
                 a.focus();
                 return false;
               }else{
-                $.post('<?php echo APP_URI; ?>&do=mkdir',{name: n,'pwd':'<?php echo $pwd;?>'},
+                $.post('<?php echo __ADMINCP__;?>=files&do=mkdir',{name: n,'pwd':'<?php echo $pwd;?>'},
                 function(j){
                   if(j.code){
                       d.content(j.msg).button([{value: '完成',

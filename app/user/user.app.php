@@ -20,13 +20,11 @@ class userApp {
     public function __construct() {
         $this->auth    = user::get_cookie();
         $this->uid     = (int)$_GET['uid'];
-        $this->openid  = iS::escapeStr($_GET['openid']);
         $this->forward = iS::escapeStr($_GET['forward']);
         $this->forward OR iPHP::get_cookie('forward');
         $this->forward OR $this->forward = iCMS_URL;
         // iFS::config($GLOBALS['iCONFIG']['user_fs_conf'])
         iFS::$userid = user::$userid;
-        iPHP::assign('openid',$this->openid);
         iPHP::assign('forward',$this->forward);
     }
     private function user($userdata=false){
@@ -537,18 +535,23 @@ class userApp {
         $rstpassword = md5(trim($_POST['rstpassword']));
         $refer       = iS::escapeStr($_POST['refer']);
         $seccode     = iS::escapeStr($_POST['seccode']);
-        $openid      = iS::escapeStr($_POST['openid']);
-        $type        = iS::escapeStr($_POST['type']);
-        $agreement   = $_POST['agreement'];
 
+        $openid   = iS::escapeStr($_POST['openid']);
+        $type     = iS::escapeStr($_POST['platform']);
+        $avatar   = iS::escapeStr($_POST['avatar']);
+
+        $province = iS::escapeStr($_POST['province']);
+        $city     = iS::escapeStr($_POST['city']);
+
+        $agreement   = $_POST['agreement'];
 
         $username OR iPHP::code(0,'user:register:username:empty','username','json');
         preg_match("/^[\w\-\.]+@[\w\-]+(\.\w+)+$/i",$username) OR iPHP::code(0,'user:register:username:error','username','json');
-        user::check($username,'username') OR iPHP::code(0,'user:register:username:exist','username','json');
+        user::check($username,'username') && iPHP::code(0,'user:register:username:exist','username','json');
 
         $nickname OR iPHP::code(0,'user:register:nickname:empty','nickname','json');
         (cstrlen($nickname)>20 || cstrlen($nickname)<4) && iPHP::code(0,'user:register:nickname:error','nickname','json');
-        user::check($nickname,'nickname') OR iPHP::code(0,'user:register:nickname:exist','nickname','json');
+        user::check($nickname,'nickname') && iPHP::code(0,'user:register:nickname:exist','nickname','json');
 
         trim($_POST['password']) OR iPHP::code(0,'user:password:empty','password','json');
         trim($_POST['rstpassword']) OR iPHP::code(0,'user:password:rst_empty','rstpassword','json');
@@ -561,13 +564,32 @@ class userApp {
         $regip   = iS::escapeStr(iPHP::getIp());
         $regdate = time();
         $gid     = 0;
-        $fans    = $follow = $article = $comments = $share = $credit = $type = 0;
+        $fans    = $follow = $article = $comments = $share = $credit = 0;
         $lastloginip = $lastlogintime = '';
         $status = 1;
         $fields = array('gid', 'username', 'nickname', 'password', 'gender', 'fans', 'follow', 'article', 'comments','share', 'credit', 'regip', 'regdate', 'lastloginip', 'lastlogintime', 'type', 'status');
         $data   = compact ($fields);
         $uid    = iDB::insert('user',$data);
+
         user::set_cookie($username,$password,array('uid'=>$uid,'username'=>$username,'nickname'=>$nickname,'status'=>$status));
+
+        if($openid){
+            $platform = $type;
+            iDB::query("
+                INSERT INTO `#iCMS@__user_openid`
+                       (`uid`, `openid`, `platform`)
+                VALUES ('$uid', '$openid', '$platform');
+            ");
+        }
+        if($avatar){
+            $avatarData = iFS::remote($avatar);
+            if($avatarData){
+                $avatarpath = iFS::fp(get_user_pic($uid),'+iPATH');
+                iFS::mkdir(dirname($avatarpath));
+                iFS::write($avatarpath,$avatarData);
+            }
+        }
+
         //user::set_cache($uid);
         iPHP::set_cookie('forward', '',-31536000);
         iPHP::json(array('code'=>1,'forward'=>$this->forward));
@@ -699,14 +721,14 @@ class userApp {
                 if(!preg_match("/^[\w\-\.]+@[\w\-]+(\.\w+)+$/i", $value)){
                     $a = iPHP::code(0,'user:register:username:error','username');
                 }else{
-                    user::check($value,'username') OR $a = iPHP::code(0,'user:register:username:exist','username');
+                    user::check($value,'username') && $a = iPHP::code(0,'user:register:username:exist','username');
                 }
                 break;
             case 'nickname':
                 if(preg_match("/\d/", $value{0})||cstrlen($value)>20||cstrlen($value)<4){
                     $a = iPHP::code(0,'user:register:nickname:error','nickname');
                 }else{
-                    user::check($value,'nickname') OR $a = iPHP::code(0,'user:register:nickname:exist','nickname');
+                    user::check($value,'nickname') && $a = iPHP::code(0,'user:register:nickname:exist','nickname');
                 }
                 break;
             case 'password':
@@ -748,8 +770,46 @@ class userApp {
         user::logout();
         iPHP::code(1,0,$this->forward,'json');
     }
+    public function openid(){
+        if(!isset($_GET['sign'])){
+            return;
+        }
+        $sign  = $_GET['sign'];
+        $code  = $_GET['code'];
+        $state = $_GET['state'];
+        $platform_map = array('wx'=>1,'qq'=>2,'wb'=>3,'tb'=>4);
+        $platform     = $platform_map[$sign];
+        if($platform){
+            iPHP::app('user.open/'.$sign.'.class','static');
+            $sign::$url = USER_LOGIN_URL.'&sign='.$sign;
+            $sign::callback();
+
+            $userid = user::openid($sign::$openid,$platform);
+            if($userid){
+                $user = user::get($userid,false);
+                user::set_cookie($user->username,$user->password,array(
+                    'uid'      =>$userid,
+                    'username' =>$user->username,
+                    'nickname' =>$user->nickname,
+                    'status'   =>$user->status
+                    )
+                );
+                $sign::cleancookie();
+                iPHP::gotourl($this->forward);
+            }else{
+                $user             = $sign::get_user_info();
+                $user['openid']   = $sign::$openid;
+                $user['platform'] = $platform;
+                iDB::value("SELECT uid FROM `#iCMS@__user` where `nickname`='".$user['nickname']."' LIMIT 1") && $user['nickname']=$sign.'_'.$user['nickname'];
+                iPHP::assign('user',$user);
+                iPHP::view('iCMS://user/register.htm');
+                exit;
+            }
+        }
+    }
     public function API_login(){
         if(iCMS::$config['user']['login']){
+            self::openid();
             iPHP::set_cookie('forward',$this->forward);
             user::status($this->forward,"login");
             iPHP::view('iCMS://user/login.htm');

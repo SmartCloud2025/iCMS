@@ -540,13 +540,13 @@ class iFS {
     public static function filterExt($ext, $check = false) {
         if ($check) {
             $ext = strtolower(self::getExt($ext));
-            if (strstr($ext, 'ph') || in_array($ext, array('cer', 'htr', 'cdx', 'asa', 'asp', 'jsp', 'aspx', 'cgi'))) {
+            if (stristr($ext, 'ph') || in_array($ext, array('cer', 'htr', 'cdx', 'asa', 'asp', 'jsp', 'aspx', 'cgi'))) {
                 return false;
             } else {
                 return true;
             }
         }
-        strstr($ext, 'ph') && $ext = "phpfile";
+        stristr($ext, 'ph') && $ext = "phpfile";
         in_array($ext, array('cer', 'htr', 'cdx', 'asa', 'asp', 'jsp', 'aspx', 'cgi')) && $ext = "file";
         return $ext;
     }

@@ -23,6 +23,8 @@
       });
       if (_checkform) return false;
 
+      var param = $.extend(iCMS.user.OPENID,param);
+
       $.post(iCMS.api('user'), param, function(ret) {
         if (ret.code) {
           window.location.href = ret.forward;

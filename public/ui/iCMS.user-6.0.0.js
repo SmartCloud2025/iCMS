@@ -1,5 +1,6 @@
 (function($) {
     iCMS.user = {
+            OPENID:{},
             info:{},
             data: function(param) {
                 $.get(iCMS.api('user', '&do=data'), param, function(c) {

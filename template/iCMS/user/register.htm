@@ -2,7 +2,7 @@
 <html lang="zh-CN">
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-    <title>新用户注册 <!--{$site.title}-->_<!--{$site.seotitle}--></title>
+    <title><!--{if $user}-->欢迎加入<!--{else}-->新用户注册<!--{/if}--> <!--{$site.title}-->_<!--{$site.seotitle}--></title>
     <meta name="keywords" content="<!--{$site.keywords}-->" />
     <meta name="description" content="<!--{$site.description}-->"/>
     <meta name="mobile-agent" content="format=html5;url=<!--{$site.url}-->"/>
@@ -11,6 +11,11 @@
     <link href="<!--{$site.urls.ui}-->/iCMS.loginreg-6.0.0.css" rel="stylesheet" type="text/css" />
     <script>
     $(function(){
+      <!--{if $user}-->
+      iCMS.user.OPENID = <!--{$user|json_encode}-->;
+      console.log(iCMS.user.OPENID);
+      $("[name=gender][value=<!--{$user.gender}-->]").prop("checked",true);
+      <!--{/if}-->
       iCMS.user.register();
     })
     </script>
@@ -20,14 +25,17 @@
       <div class="logo"> <a href="<!--{$site.url}-->" class="iCMS fl" title="<!--{$site.title}-->"><!--{$site.title}--></a> </div>
       <div class="content">
         <div class="main-col">
-          <h1>新用户注册</h1>
+          <h1><!--{if $user}-->欢迎加入<!--{$site.title}--><!--{else}-->新用户注册<!--{/if}--></h1>
           <div class="rl_center">
+            <div class="alert" style="width: 500px;margin-top: 10px;margin-bottom: 5px;">
+              <strong>*</strong>请先补充必要的个人信息，只有补充完这些信息才能真正加入<!--{$site.title}-->哦
+            </div>
             <div id="iCMS-register-box" class="rl_form">
               <div class="reg_mail"> <span>电子邮箱：</span>
                 <input id="iCMS-reg-username" type="text" maxlength="36" name="username" class="text" value="">
               </div>
               <div class="reg_nickname"> <span>昵称：</span>
-                <input id="iCMS-reg-nickname" style="*margin-left:-1px;" maxlength="36" type="text" name="nickname" class="text" value="">
+                <input id="iCMS-reg-nickname" style="*margin-left:-1px;" maxlength="36" type="text" name="nickname" class="text" value="<!--{$user.nickname}-->">
               </div>
               <div class="reg_sex"> <span>性别：</span>
                 <div class="rdo">
@@ -42,7 +50,7 @@
               <div class="reg_respassword"> <span>确认密码：</span>
                 <input id="iCMS-reg-rstpassword" type="password" maxlength="36" name="rstpassword" class="text">
               </div>
-              <!--{if $iCMS.config.user.regseccode }-->
+              <!--{if $iCMS.CONFIG.user.regseccode }-->
               <div class="reg_check"> <span>验证码：</span>
                 <input id="iCMS-reg-seccode" type="text" maxlength="4" name="seccode" class="iCMS_seccode">
                 <img src="<!--{iCMS:router url='/api/seccode'}-->" alt="验证码" class="iCMS_seccode_img r3"/>
@@ -55,7 +63,6 @@
                 <div class="reg_submit">
                   <button class="submit iCMS_register_btn"></button>
                 </div>
-                <input id="iCMS-openid" value="<!--{$openid}-->" type="hidden">
               </div>
             </div>
           </div>

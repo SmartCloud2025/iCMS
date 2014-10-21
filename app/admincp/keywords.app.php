@@ -34,7 +34,7 @@ class keywordsApp{
         $data   = compact ($fields);
 
         if(empty($id)) {
-            iDB::value("SELECT `id` FROM `#iCMS@__keywords` where `keywtimesord` ='$keyword'") && iPHP::alert('该关键词已经存在!');
+            iDB::value("SELECT `id` FROM `#iCMS@__keywords` where `keyword` ='$keyword'") && iPHP::alert('该关键词已经存在!');
             iDB::insert('keywords',$data);
             $this->cache();
             $msg="关键词添加完成!";
