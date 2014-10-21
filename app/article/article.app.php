@@ -119,6 +119,9 @@ class articleApp {
             if($p_array)foreach($p_array as $key =>$_pic) {
                 $article['pics'][$key] = trim($_pic);
             }
+            if(strpos($art_data['body'], '#--iCMS.Markdown--#')!==false){
+                $art_data['body'] = iPHP::Markdown($art_data['body']);
+            }
             $body     = explode('#--iCMS.PageBreak--#',$art_data['body']);
             $count    = count($body);
             $total    = $count+1;

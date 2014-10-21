@@ -8,12 +8,6 @@
     <meta name="mobile-agent" content="format=html5;url=<!--{$site.url}-->"/>
     <!--{iCMS:public:ui}-->
     <link rel="stylesheet" href="<!--{$site.urls.public}-->/theme/default.css" type="text/css" />
-    <script src="http://s.ladyband.cn/js/jquery.slider.js"></script>
-    <script type="text/javascript">
-    $(function(){
-    $(".content_player").slider();
-    })
-    </script>
   </head>
   <body>
     <!--{include file="./header.htm"}-->
@@ -87,25 +81,6 @@
     <!--{/iCMS}-->
   </div>
   <div class="right-col">
-    <div class="index_login_show_wrap dot_bottom_mod ">
-      <form action="https://www.mogujie.com/login" method="post" id="index_login_form">
-        <div class="login_content">
-          <div class="clearfix posr">
-            <input type="text" name="uname" def-v="用户名" value="用户名" class="name i_text" style="color: rgb(204, 204, 204);">
-            <div class="uname_wrap mx_placehold_pass">
-              <input type="hidden" name="ws" value="1">
-              <input type="password" name="pass" class="password i_text mx_tagv" def-v="密码">
-            <span class="def_v mx_defv" style="display: block;">密码</span> </div>
-            <input type="submit" class="submit r3" value="登录">
-          </div>
-        </div>
-        <div class="reg_wrap mt5">
-          <input type="checkbox" value="1" checked="checked" id="rem_me" class="">
-          <label for="rem_me" class="ft6">记住我</label>
-          <a href="/register/" class="reg ft6">立即注册</a> <a href="/usersecurity/findpwd/" class="get_password ft6">忘记密码</a> </div>
-        </form>
-      </div>
-      <div class="clearfix mb10"></div>
       <div class="mod" id="hot_artical">
         <div class="hd">
           <h3>热门文章<span>HOT</span></h3>

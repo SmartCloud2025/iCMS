@@ -191,6 +191,17 @@ class iPHP{
 		}
 		return new $obj_name();
     }
+    public static function Markdown($content){
+    	self::import(iPHP_LIB.'/Parsedown.php');
+		$Parsedown = new Parsedown();
+		$content   = str_replace(array(
+		'#--iCMS.Markdown--#',
+		'#--iCMS.PageBreak--#'
+		),array('','@--iCMS.PageBreak--@'),$content);
+		$content   = $Parsedown->text($content);
+		$content   = str_replace('@--iCMS.PageBreak--@','#--iCMS.PageBreak--#',$content);
+    	return $content;
+    }
     public static function cleanHtml($content){
     	$content = stripslashes($content);
 
