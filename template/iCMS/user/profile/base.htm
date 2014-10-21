@@ -135,7 +135,7 @@
       <dl>
         <dt>个人标签：</dt>
         <dd>
-          <input autocomplete="off" id="user_style" name="personstyle" class=" pstyle" type="text" value="<!--{if $userdata.personstyle}--><!--{$userdata.personstyle}--><!--{else}--><!--{iCMS:lang key='user:profile:personstyle'}--><!--{/if}-->">
+          <input autocomplete="off" id="user_style" name="personstyle" class=" pstyle" type="text" placeholder="多个标签之间请用逗号隔开" value="<!--{$userdata.personstyle}-->">
           <div class="tags_list carousel slide" id='tags-list-box' data-ride="carousel" data-interval="30000">
             <ul class="carousel-inner" role="listbox">
               <li class="item active">
@@ -168,7 +168,7 @@
         </dd>
         <dt>自我介绍：</dt>
         <dd>
-          <textarea name="slogan" class="span5" style="padding: 5px;" rows="5" placeholder="<!--{iCMS:lang key='user:profile:slogan'}-->"><!--{if $userdata.slogan}--><!--{$userdata.slogan}--><!--{else}--><!--{iCMS:lang key='user:profile:slogan'}--><!--{/if}--></textarea>
+          <textarea name="slogan" class="span5" style="padding: 5px;" rows="5" placeholder="随便写点什么，让大家了解你吧。"><!--{$userdata.slogan}--></textarea>
         </dd>
         <dd class="clearfix mt20 pl40">
           <input type="submit" class="btn btn-primary btn-large" value="确认修改">

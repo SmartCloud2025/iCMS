@@ -131,63 +131,11 @@
         </dd>
       </dl>
 
-      <!--
-<div class="title mt30"> <span>身材信息</span> <span style="font-weight:normal;font-size:12px;padting-left:10px;">^_^ 用心填写这几项信息，会帮助女人邦给你推荐合适的衣服和鞋子哦~</span>
-		<select name="isSeeFigure" id="isSeeFigure" class="is_show_sel">
-			<option value="1" selected="">我关注的人可见</option>
-			<option value="2">所有人可见</option>
-			<option value="0">仅自己可见</option>
-		</select>
-	</div>
-	<dl>
-		<dt>身高：</dt>
-		<dt class="posr">
-		<input name="height" class="gray_text" type="text" value="">
-		cm </dt>
-		<dt>体重：</dt>
-		<dt class="posr">
-		<input name="weight" class="gray_text" type="text" value="">
-		kg </dt>
-		<dt>三围：</dt>
-		<dt class="posr">
-		<input name="bwhB" style="width:35px; color:#999;" class="gray_text" type="text" value="胸围" placeholder="胸围">
-		cm
-		<input name="bwhW" style="width:35px;margin-left:5px; color:#999;" class="gray_text" type="text" value="腰围" placeholder="腰围">
-		cm
-		<input name="bwhH" style="width:35px;margin-left:5px; color:#999;" class="gray_text " type="text" value="臀围" placeholder="臀围">
-		cm </dt>
-		<dt>肤质：</dt>
-		<dt class="posr">
-		<select name="pskin" id="pskin">
-			<option selected><!--{iCMS:lang key='user:profile:pskin'}-->
-      </option>
-      <option value="中性肤质">中性肤质</option>
-      <option value="干性肤质">干性肤质</option>
-      <option value="油性肤质">油性肤质</option>
-      <option value="混合性肤质">混合性肤质</option>
-      <option value="敏感性肤质">敏感性肤质</option>
-      </select>
-      </dt>
-      <dt>发质：</dt>
-      <dt class="posr">
-        <select id="phair" name="phair">
-          <option selected><!--{iCMS:lang key='user:profile:phair'}--></option>
-          <option value="油性发质">油性发质</option>
-          <option value="干性发质">干性发质</option>
-          <option value="中性发质">中性发质</option>
-        </select>
-      </dt>
-      <dt>鞋码尺寸：</dt>
-      <dt class="posr">
-        <input name="shoesize" class="gray_text" type="text" value="<!--{$userdata.shoesize}-->">
-        码 </dt>
-      </dl>
-      -->
       <h3 class="title mt10"> <span><i class="fa fa-info-circle"></i> 其他信息</span> </h3>
       <dl>
         <dt>个人标签：</dt>
         <dd style="margin-bottom:5px;position:relative;">
-          <input autocomplete="off" style=" color:#999" id="user_style" name="personstyle" class="form-control pstyle" type="text" value="<!--{if $userdata.personstyle}--><!--{$userdata.personstyle}--><!--{else}--><!--{iCMS:lang key='user:profile:personstyle'}--><!--{/if}-->">
+          <input autocomplete="off" style=" color:#999" id="user_style" name="personstyle" class="form-control pstyle" type="text" placeholder="多个标签之间请用逗号隔开" value="<!--{$userdata.personstyle}-->">
           <div class="tags_list carousel slide" id='tags-list-box' data-ride="carousel" data-interval="30000">
             <ul class="carousel-inner" role="listbox">
               <li class="item active">
@@ -222,7 +170,7 @@
         </dd>
         <dt>自我介绍：</dt>
         <dd>
-          <textarea name="slogan" class="form-control" style="padting: 5px;height:120px;"placeholder="<!--{iCMS:lang key='user:profile:slogan'}-->"><!--{if $userdata.slogan}--><!--{$userdata.slogan}--><!--{else}--><!--{iCMS:lang key='user:profile:slogan'}--><!--{/if}--></textarea>
+          <textarea name="slogan" class="form-control" style="padting: 5px;height:120px;"placeholder="随便写点什么，让大家了解你吧。"><!--{$userdata.slogan}--></textarea>
         </dd>
         <dt>&nbsp;&nbsp;</dt>
         <dd>
