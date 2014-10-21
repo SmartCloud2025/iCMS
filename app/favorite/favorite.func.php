@@ -61,7 +61,7 @@ function favorite_data($vars=null){
 	$maxperpage = isset($vars['row'])?(int)$vars['row']:"10";
 	$where_sql  = "WHERE 1=1 ";
 	isset($vars['userid'])&& $where_sql .= " AND `uid`='".(int)$vars['userid']."' ";
-	isset($vars['fid'])   && $where_sql .= " AND `fid`='".(int)$vars['fid']."' ";
+	$vars['fid']          && $where_sql .= " AND `fid`='".(int)$vars['fid']."' ";
 	isset($vars['appid']) && $where_sql .= " AND `appid`='".(int)$vars['appid']."' ";
 
 	$cache_time	= isset($vars['time'])?(int)$vars['time']:-1;

@@ -65,7 +65,6 @@ class favoriteApp {
         $this->__login();
 
         $uid     = user::$userid;
-        $nickname= user::$nickname;
         $appid   = (int)$_POST['appid'];
         $iid     = (int)$_POST['iid'];
         $cid     = (int)$_POST['cid'];
@@ -79,7 +78,7 @@ class favoriteApp {
         $id  = iDB::value("SELECT `id` FROM `#iCMS@__favorite_data` WHERE `uid`='$uid' AND `fid`='$fid' AND `url`='$url' LIMIT 1");
         $id && iPHP::code(0,'iCMS:favorite:failure',0,'json');
 
-        $fields = array('uid','nickname', 'appid', 'fid', 'iid', 'url', 'title', 'addtime');
+        $fields = array('uid', 'appid', 'fid', 'iid', 'url', 'title', 'addtime');
         $data   = compact ($fields);
         $fdid   = iDB::insert('favorite_data',$data);
         if($fdid){
@@ -99,6 +98,7 @@ class favoriteApp {
         $this->__login();
 
         $uid         = user::$userid;
+        $nickname    = user::$nickname;
         $title       = iS::escapeStr($_POST['title']);
         $description = iS::escapeStr($_POST['description']);
         $mode        = (int)$_POST['mode'];
@@ -116,7 +116,7 @@ class favoriteApp {
         $max >=10 && iPHP::code(0,'iCMS:favorite:create_max',0,'json');
         $count  = 0;
         $follow = 0;
-        $fields = array('uid', 'title', 'description', 'follow', 'count', 'mode');
+        $fields = array('uid', 'nickname', 'title', 'description', 'follow', 'count', 'mode');
         $data   = compact ($fields);
         $cid    = iDB::insert('favorite',$data);
         $cid && iPHP::code(1,'iCMS:favorite:create_success',$cid,'json');

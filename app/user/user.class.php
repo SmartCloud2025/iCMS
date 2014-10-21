@@ -26,6 +26,13 @@ class user {
 	    switch($type){
 	        case 'avatar':return iCMS_FS_URL.get_user_file($uid,$size);break;
 	        case 'url':   return iPHP::router(array('/{uid}/',$uid),iCMS_REWRITE);break;
+	        case 'coverpic':
+	        	$dir = get_user_dir($uid,'coverpic');
+				return array(
+					'pc' => iFS::fp($dir.'/'.$uid.".jpg",'+http'),
+					'mo' => iFS::fp($dir.'/m_'.$uid.".jpg",'+http')
+				);
+	        	break;
 	        case 'urls':
 	            return array(
 					'inbox'    => iPHP::router(array('/user/inbox/{uid}',$uid),iCMS_REWRITE),
@@ -97,8 +104,12 @@ class user {
 		}
 		return $pf;
 	}
+	public static function get_cache($uid){
+		return iCache::get('iCMS:user:'.$uid);
+	}
 	public static function set_cache($uid){
-		$user	= iDB::row("SELECT * FROM `#iCMS@__user` where `uid`='{$uid}'",ARRAY_A);
+		$user = iDB::row("SELECT * FROM `#iCMS@__user` where `uid`='{$uid}'",ARRAY_A);
+		unset($user['password']);
 		iCache::set('iCMS:user:'.$user['uid'],$user,0);
 	}
 	public static function category($cid=0,$appid=1){
@@ -114,11 +125,12 @@ class user {
 		if(empty($user)){
 			return false;
 		}
-		$user->gender = $user->gender?'male':'female';
-		$user->avatar = self::router($user->uid,'avatar');
-		$user->urls   = self::router($user->uid,'urls');
-		$user->url    = $user->urls['home'];
-		$user->inbox  = $user->urls['inbox'];
+		$user->gender   = $user->gender?'male':'female';
+		$user->avatar   = self::router($user->uid,'avatar');
+		$user->urls     = self::router($user->uid,'urls');
+		$user->coverpic = self::router($user->uid,'coverpic');
+		$user->url      = $user->urls['home'];
+		$user->inbox    = $user->urls['inbox'];
 	   	if($unpass) unset($user->password);
 	   	return $user;
 	}
@@ -129,11 +141,8 @@ class user {
         $data = iDB::row("SELECT * FROM `#iCMS@__user_data` where `uid`='{$uid}' limit 1;");
         //iDB::debug(1);
         if($data){
-            if($data->coverpic){
-                $data->coverpic = iFS::fp($data->coverpic,'+http');
-            }else{
-                $data->coverpic = iCMS_PUBLIC_URL.iCMS::$config['user']['coverpic'];
-            }
+            // if($data->coverpic){
+            // }
             $data->enterprise && $data->enterprise = unserialize($data->enterprise);
         }
         return $data;

@@ -1,30 +1,43 @@
-<form action="<!--{iCMS:router url='/user'}-->" method="post" target="iCMS_FRAME">
+<form class="form-inline" role="form" action="<!--{iCMS:router url='/user'}-->" method="post" target="iCMS_FRAME">
 	<input name="action" type="hidden" value="manage" />
 	<input name="pg" type="hidden" value="category" />
-	<div class="title"><span>我的分类</span></div>
-	<div class="category ml30">
+	<h3 class="title"><span><i class="fa fa-list-alt"></i> 我的分类</span></h3>
+	<div class="category">
 		<!--{iCMS:user:category loop="true" userid="$user.uid" appid="$iCMS.APPID.ARTICLE"}-->
 		<input name="_cid[]" type="hidden" value="<!--{$user_category.cid}-->" />
-		<div class="input-prepend input-append">
-			<span class="add-on"><!--{$user_category.rownum}--></span>
-			<input class="span3" name="name[<!--{$user_category.cid}-->]" type="text" value="<!--{$user_category.name}-->">
-			<span class="add-on" style="width:85px;text-align:left;">文章数:<!--{$user_category.count}--></span>
-			<a href="javascript:;" class="btn del_uc tip" title="删除后,记得更新哦">删除</a>
+		<div class="input-group clearfix mt10">
+			<span class="input-group-addon"><!--{$user_category.rownum}--></span>
+			<input class="form-control" name="name[<!--{$user_category.cid}-->]" type="text" value="<!--{$user_category.name}-->">
+			<span class="input-group-addon">文章数:<!--{$user_category.count}--></span>
+			<span class="input-group-btn">
+        		<button class="btn btn-default del_uc" type="button">删除</button>
+      		</span>
 		</div>
-		<div class="clearfix"></div>
 		<!--{/iCMS}-->
-		<div class="input-prepend">
-			<span class="add-on">新分类</span>
-			<input class="span4" name="newname" type="text" value="">
+		<div class="input-group clearfix mt10">
+			<span class="input-group-addon">新分类</span>
+			<input class="form-control" name="newname" type="text" value="">
 		</div>
-		<div class="clearfix"></div>
-		<button class="btn btn-primary" type="submit"><i class="fa fa-check"></i> 更新</button>
+		<div class="clearfix mt10"></div>
+		<button id="submit" class="btn btn-primary btn-block" type="submit" data-loading-text='<i class="fa fa-spinner"></i> 数据提交中...'><i class="fa fa-check"></i> 更 新</button>
+		<div class="alert alert-danger mt10" role="alert">删除后,记得更新哦!~~~~</div>
 	</div>
 </form>
 <script type="text/javascript">
+
+function callback(a){
+	if(a.code){
+		 window.location.reload();
+	}else{
+		iCMS.alert(a.msg);
+	}
+}
 $(function(){
+    $("#submit").click(function() {
+		$(this).button('loading');
+    })
 	$(document).on('click', '.del_uc', function() {
-		$(this).parent().remove();
+		$(this).parent().parent().remove();
 	});
 });
 </script>

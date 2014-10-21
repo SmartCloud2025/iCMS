@@ -124,7 +124,7 @@ a:hover { text-decoration: none; }
 .iCMS_dialog .ui-dialog-header .ui-dialog-close { top: 0px; right: 0px; padding: 8px 12px; }
 .iCMS_dialog .ui-dialog-body { padding: 0px; }
 .iCMS_dialog .ui-dialog-table { height: 100%; width: 100%; vertical-align: middle; }
-.iCMS_dialog .ui-dialog-content {color: #222;padding: 10px;max-width: 760px;max-height: 500px; min-width:240px;min-height:90px;}
+.iCMS_dialog .ui-dialog-content { color: #222; padding: 10px; max-width: 760px; max-height: 500px; min-width: 240px; min-height: 90px; }
 .iCMS_dialog .ui-dialog-content .buttons { text-align: right; background: #fff }
 .iCMS_dialog .ui-dialog-content .buttons a.cancel { color: #259; margin-right: 15px; cursor: pointer; }
 .iCMS_dialog .ui-dialog-content .buttons a.cancel:hover { text-decoration: underline; }
@@ -137,31 +137,27 @@ a:hover { text-decoration: none; }
 /* .iCMS_dialog .ui-dialog-button { margin-bottom: 15px; }
 */
 
-.ui-popup-follow .iCMS_tooltip_popup {
-	-webkit-box-shadow: 0 5px 10px rgba(0, 0, 0, 0.4);
-	-moz-box-shadow: 0 5px 10px rgba(0,0,0,0.4);
-	box-shadow: 0 5px 10px rgba(0, 0, 0, 0.4);
-}
-.iCMS_tooltip_popup .ui-dialog-header .ui-dialog-title{padding: 6px 15px;}
-.iCMS_tooltip_popup .ui-dialog-header .ui-dialog-close{top:5px;}
-
+.ui-popup-follow .iCMS_tooltip_popup { -webkit-box-shadow: 0 5px 10px rgba(0, 0, 0, 0.4); -moz-box-shadow: 0 5px 10px rgba(0, 0, 0, 0.4); box-shadow: 0 5px 10px rgba(0, 0, 0, 0.4); }
+.iCMS_tooltip_popup .ui-dialog-header .ui-dialog-title { padding: 6px 15px; }
+.iCMS_tooltip_popup .ui-dialog-header .ui-dialog-close { top: 5px; }
+.iCMS_tooltip_popup .ui-dialog-body{padding: 10px;}
 .iPHP-msg { text-align: center; margin: 0px 5px; padding: 0px 4px; }
 .iPHP-msg .label { /* white-space: pre-wrap;  */padding: 8px 10px; font-size: 14px; letter-spacing: 1px; line-height: 160%; }
-.iPHP-msg pre {text-align: left; }
+.iPHP-msg pre { text-align: left; }
 .iPHP-msg i { font-size: 18px; }
-
-/*.iPHP-msg .d-content .btn-group { position: absolute; }
+/* .iPHP-msg .d-content .btn-group { position: absolute; }
 .iPHP-msg .d-content { color: #222 }
 .d-content .buttons { padding: 0 15px; margin-bottom: 15px; text-align: right; background: #fff }
 .d-content .buttons a.cancel { color: #259; margin-right: 15px; cursor: pointer; }
 .d-content .buttons a.cancel:hover { text-decoration: underline; }
-*//* tooltip */
+*/
+/* tooltip */
 .tooltip { max-width: inherit; font-size: 14px; }
 .tooltip-inner { max-width: inherit !important; text-align: left !important; font-size: 14px; }
 .tooltip-inner hr, .d-content .iPHP-msg .label hr { margin: 10px 0px; border-bottom: none; }
 /* pagination */
 .pagination .muted { height: 20px; line-height: 20px; }
-/** /
+/**/
 #iCMS_public_crontab { display: none; }
 .iCMS_seccode { width: 60px; }
 .iCMS_seccode_img { vertical-align: top; margin-left: 5px; }
@@ -172,3 +168,42 @@ a:hover { text-decoration: none; }
 .avatar_60 { width: 60px; height: 60px; border-radius: 3px; }
 .avatar_90 { width: 90px; height: 90px; border-radius: 4px; }
 .avatar_120 { width: 120px; height: 120px; border-radius: 4px; }
+/* dialog box */
+/* ==========report============= */
+#iCMS-report-box { display: none; }
+.iCMS_report_dialog { width: 400px; }
+.iCMS_report_dialog.loading .modal-dialog-buttons { display: none }
+.iCMS_report_dialog .options { margin-top: 8px }
+.iCMS_report_dialog .options li { padding: 4px 6px; list-style: none; line-height: 2 }
+.iCMS_report_dialog .options li li { padding: 0 6px; display: inline-block; -webkit-box-sizing: border-box; -moz-box-sizing: border-box; -ms-box-sizing: border-box; box-sizing: border-box; width: 50% }
+.iCMS_report_dialog .options label { cursor: pointer; margin: 2px 0px }
+.iCMS_report_dialog .options input[type=radio] { margin: 0px 5px 2px 0px }
+.iCMS_report_dialog .options .description, .iCMS_report_dialog .options .group-description { padding-left: 1em; line-height: 1.7; color: #999 }
+.iCMS_report_dialog .options .group-options { margin-left: 10px }
+.iCMS_report_dialog .options .visible-if-checked { display: none }
+.iCMS_report_dialog .options li.checked { background-color: #eff6fa; border-radius: 3px }
+.iCMS_report_dialog .options li.checked .visible-if-checked { display: block }
+.iCMS_report_dialog .reason-text { width: 100%; height: 30px; margin: 10px 0; -webkit-box-sizing: border-box; -moz-box-sizing: border-box; -ms-box-sizing: border-box; box-sizing: border-box }
+.iCMS_report_dialog .error-container { color: #fa8282; text-align: right }
+.iCMS_report_dialog .input-container { position: relative }
+.iCMS_report_dialog .headnote { float: right; color: #999 }
+.iCMS_report_dialog .footnote { color: #999 }
+.iCMS_report_dialog .loading { text-align: center; color: #999 }
+/* pm */
+#iCMS-pm-box { display: none; }
+.iCMS_pm_dialog { width: 340px;}
+.iCMS_pm_dialog dt {text-align: right;float: left; }
+.iCMS_pm_dialog dt label { color: #999; font-size: 13px; }
+.iCMS_pm_dialog .pm_inbox { float: right; }
+.iCMS_pm_dialog .pm_content { width: 80%; padding: 5px; height: 60px; }
+.iCMS_pm_dialog .pm_warnmsg { text-align: right; color: #C3412F; display: none; font-size: 13px; }
+.iCMS_pm_dialog .buttons { padding-right: 3px !important; }
+/* favorite */
+#iCMS-favorite-box { display: none; }
+.iCMS_favorite_dialog { width: 400px; }
+.iCMS_favorite_dialog .buttons .create { margin-top: 5px; }
+.iCMS_favorite_dialog .fav_add_title_error { color: #C33; margin-left: 10px; display: none; }
+.iCMS_favorite_dialog .favorite_list_content .favo-list-item-link { display: block; margin: 0 12px; border: solid 1px #DDD; padding: 8px 12px; box-shadow: 0 1px 1px rgba(0, 0, 0, .05) }
+.iCMS_favorite_dialog .favorite_list_content .favo-list-item-link .meta { display: block }
+.iCMS_favorite_dialog .favorite_list_content .favo-list-item-link:hover { text-decoration: none; background-color: #F5F5F5 }
+.iCMS_favorite_dialog .favorite_list_content .active { background: url(img/check.png) no-repeat 96% center; }

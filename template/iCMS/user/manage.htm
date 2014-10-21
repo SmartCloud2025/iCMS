@@ -12,7 +12,7 @@
   <body>
     <!--{include file="{iTPL}/header.htm"}-->
     <div id="body_wrap" class="clearfix">
-      <div class="userApp-box" id="manage_box">
+      <div class="userApp-box">
         <div class="piece">
           <div class="piece_hd"> <b class="hl"></b> <b class="hr"></b> </div>
           <div class="piece_bd clearfix">
@@ -24,40 +24,38 @@
                 <p class="clearfix"><a href="<!--{iCMS:router url='/user/category'}-->"<!--{if $pg=="category"}--> class="c"<!--{/if}-->><i class="fa fa-list-alt"></i> 我的分类</a></p>
                 <p class="clearfix"><a href="<!--{iCMS:router url='/user/comment'}-->"<!--{if $pg=="comment"}--> class="c"<!--{/if}-->><i class="fa fa-comments"></i> 我的评论</a></p>
                 <p class="clearfix"><a href="<!--{iCMS:router url='/user/inbox'}-->"<!--{if $pg=="inbox"}--> class="c"<!--{/if}-->><i class="fa fa-envelope-o"></i> 我的私信</a></p>
-                <!-- <p class="clearfix"><a href="<!--{iCMS:router url='/user/manage/favorite'}-->"<!--{if $pg=="favorite"}--> class="c"<!--{/if}-->><i class="fa fa-star"></i> 我的收藏</a></p> -->
+                <p class="clearfix"><a href="<!--{iCMS:router url='/user/manage/favorite'}-->"<!--{if $pg=="favorite"}--> class="c"<!--{/if}-->><i class="fa fa-bookmark"></i> 我的收藏</a></p>
                 <!-- <p class="clearfix"><a href="<!--{iCMS:router url='/user/manage/share'}-->"<!--{if $pg=="share"}--> class="c"<!--{/if}-->><i class="fa fa-share-alt"></i> 我的分享</a></p> -->
                 <p class="clearfix"><a href="<!--{iCMS:router url='/user/manage/follow'}-->"<!--{if $pg=="follow"}--> class="c"<!--{/if}-->><i class="fa fa-heart-o"></i> 我的关注</a></p>
                 <p class="clearfix"><a href="<!--{iCMS:router url='/user/manage/fans'}-->"<!--{if $pg=="fans"}--> class="c"<!--{/if}-->><i class="fa fa-group"></i> 我的粉丝</a></p>
               </div>
             </div>
             <div class="contents fl">
-              <div id="user_form">
-                <div class="basic">
-                  <form action="<!--{iCMS:router url='/user'}-->" method="post" target="iCMS_FRAME">
-                  <input name="action" type="hidden" value="manage" />
-                  <input name="pg" type="hidden" value="<!--{$pg}-->" />
-                  <!--{switch from=$pg}-->
-                    <!--{case value="publish"}-->
-                      <!--{include file="./manage/publish.htm" import="true"}-->
-                    <!--{case value="category"}-->
-                      <!--{include file="./manage/category.htm" import="true"}-->
-                    <!--{case value="article"}-->
-                      <!--{include file="./manage/article.htm" import="true"}-->
-                    <!--{case value="comment"}-->
-                      <!--{include file="./manage/comment.htm" import="true"}-->
-                    <!--{case value="inbox"}-->
-                      <!--{include file="./manage/inbox.htm" import="true"}-->
-                    <!--{case value="favorite"}-->
-                      <!--{include file="./manage/favorite.htm" import="true"}-->
-                    <!--{case value="share"}-->
-                      <!--{include file="./manage/share.htm" import="true"}-->
-                    <!--{case value="follow"}-->
-                      <!--{include file="./manage/follow.htm" import="true"}-->
-                    <!--{case value="fans"}-->
-                      <!--{include file="./manage/fans.htm" import="true"}-->
-                  <!--{/switch}-->
-                </form>
-              </div>
+              <div class="manage_wrapper">
+                <form action="<!--{iCMS:router url='/user'}-->" method="post" target="iCMS_FRAME">
+                <input name="action" type="hidden" value="manage" />
+                <input name="pg" type="hidden" value="<!--{$pg}-->" />
+                <!--{switch from=$pg}-->
+                  <!--{case value="publish"}-->
+                    <!--{include file="./manage/publish.htm" import="true"}-->
+                  <!--{case value="category"}-->
+                    <!--{include file="./manage/category.htm" import="true"}-->
+                  <!--{case value="article"}-->
+                    <!--{include file="./manage/article.htm" import="true"}-->
+                  <!--{case value="comment"}-->
+                    <!--{include file="./manage/comment.htm" import="true"}-->
+                  <!--{case value="inbox"}-->
+                    <!--{include file="./manage/inbox.htm" import="true"}-->
+                  <!--{case value="favorite"}-->
+                    <!--{include file="./manage/favorite.htm" import="true"}-->
+                  <!--{case value="share"}-->
+                    <!--{include file="./manage/share.htm" import="true"}-->
+                  <!--{case value="follow"}-->
+                    <!--{include file="./manage/follow.htm" import="true"}-->
+                  <!--{case value="fans"}-->
+                    <!--{include file="./manage/fans.htm" import="true"}-->
+                <!--{/switch}-->
+              </form>
             </div>
           </div>
         </div>

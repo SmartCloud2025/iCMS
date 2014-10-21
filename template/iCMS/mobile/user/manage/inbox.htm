@@ -3,18 +3,19 @@
 .label-1{background-color: #468847;}
 .label-2{background-color: #FFD600;}
 .label-3{background-color: #3A87AD;}
-.info{text-align: right;}
+.info_td{border: none;margin: 0px;padding: 0px;}
+.info{text-align: right; float: right;}
 .info span{float: left;}
 </style>
-<div class="title"><span>我的私信</span></div>
+<h3 class="title"><span>我的私信</span></h3>
 <form action="<!--{iCMS:router url='/user'}-->" method="post" target="iCMS_FRAME">
 	<input name="action" type="hidden" value="manage" />
 	<input name="pg" type="hidden" value="pm" />
-	<div class="pm w670">
+	<div class="pm">
 		<table class="table table-striped">
 			<tbody>
 			<!--{iCMS:user:inbox loop="true"}-->
-				<tr id="id-<!--{$user_inbox.id}-->">
+				<tr class="id-<!--{$user_inbox.id}-->">
 					<td class="avatar_35">
 						<a data-tip="iCMS:ucard:<!--{$user_inbox.user.uid}-->" href="<!--{$user_inbox.user.url}-->">
 							<img class="iCMS_user_avatar avatar_35" src="<!--{$user_inbox.user.avatar}-->" onerror="iCMS.user.noavatar();">
@@ -32,24 +33,27 @@
 								<!--{$user_inbox.user.link}-->
 							<!--{/if}-->
 							：<!--{$user_inbox.content}-->
-						<div class="clearfix mt10"></div>
+						</td>
+				</tr>
+				<tr class="id-<!--{$user_inbox.id}-->">
+					<td colspan="2" style="border: none;">
 						<div class="info" data-param='{"id":"<!--{$user_inbox.id}-->"}'>
-							<span class="label"><!--{$user_inbox.sendtime|format_date}--></span>
 							<!--{if $msg_count}-->
 							<a href="<!--{$user_inbox.url}-->" > 共 <!--{$user_inbox.msg_count}--> 条对话 </a>
 							<!--{/if}-->
 							<!--{if $user_inbox.type}-->
-							<a href="javascript:;" class="btn btn-small btn-primary" name="iCMS-pm" data-param='{"uid":"<!--{$user_inbox.user.uid}-->","name":"<!--{$user_inbox.user.name}-->"}'><i class="fa fa-reply"></i> 回复</a>
+							<a href="javascript:;" class="btn btn-default btn-xs" name="iCMS-pm" data-param='{"uid":"<!--{$user_inbox.user.uid}-->","name":"<!--{$user_inbox.user.name}-->"}'><i class="fa fa-reply"></i> 回复</a>
 							<!--{/if}-->
 							<!--{if $user_inbox.type && $msg_count}-->
-							<a href="javascript:;" class="btn btn-small btn-warning"  name="iCMS-report" data-param='{"appid":"6","iid":"<!--{$user_inbox.id}-->","userid":"<!--{$user_inbox.send_uid}-->"}' title="举报私信骚扰"><i class="fa fa-flag"></i> 举报</a>
+							<a href="javascript:;" class="btn btn-warning btn-xs" name="iCMS-report" data-param='{"appid":"6","iid":"<!--{$user_inbox.id}-->","userid":"<!--{$user_inbox.send_uid}-->"}' title="举报私信骚扰"><i class="fa fa-flag"></i> 举报</a>
 							<!--{/if}-->
 							<!--{if $msg_count}-->
-							<a href="javascript:;" class="btn btn-small btn-danger" data-id="<!--{$user_inbox.id}-->" data-user="<!--{$user_inbox.user.uid}-->" data-action="del"><i class="fa fa-trash-o"></i> 删除</a>
+							<a href="javascript:;" class="btn btn-danger btn-xs" data-id="<!--{$user_inbox.id}-->" data-user="<!--{$user_inbox.user.uid}-->" data-action="del"><i class="fa fa-trash-o"></i> 删除</a>
 							<!--{else}-->
-							<a href="javascript:;" class="btn btn-small btn-danger" data-id="<!--{$user_inbox.id}-->" data-action="del"><i class="fa fa-trash-o"></i> 删除</a>
+							<a href="javascript:;" class="btn btn-danger btn-xs" data-id="<!--{$user_inbox.id}-->" data-action="del"><i class="fa fa-trash-o"></i> 删除</a>
 							<!--{/if}-->
 						</div>
+						<span class="label label-default"><!--{$user_inbox.sendtime|format_date}--></span>
 					</td>
 				</tr>
 			<!--{/iCMS}-->
@@ -74,7 +78,7 @@ $(function(){
 		}
 		$.post("<!--{iCMS:router url='/user'}-->",param,function(c) {
 			if (c.code) {
-				$("#id-"+param.id).hide('500',function() {
+				$(".id-"+param.id).hide('500',function() {
 					$(this).remove();
 				});
 			}else{

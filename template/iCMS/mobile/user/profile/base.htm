@@ -1,58 +1,57 @@
 <style>
-.base select { width: 90px; font-size: 14px; }
-.base textarea { height: 120px; width: 466px; border: 1px solid #cfcfcf; color: #666; padding: 5px; }
-.unick span { color: #f00; margin-left: 10px; margin-right: 5px; font-weight: bold; }
-.unick { font-size: 12px; }
-.pstyle, .weibo input { width: 365px; }
-.is_show_sel { margin-top: 2px; float: right; margin-top: -23px\9; font-size: 12px !important; width: 100px !important; height: 25px !important; }
+#province,#city{width: 150px;display: inline-block;}
+.birthday select { width: 90px; display: inline-block;}
+.birthday #month,.birthday #day{width: 70px;}
+.base textarea { height: 120px; color: #666; padding: 5px; }
 #tags-list-box { display: none; }
-.tags_list{width: 400px;}
+.tags_list{width: 320px;}
 .tags_list h4 { height: 22px; padding-top: 6px; margin-bottom: 18px; font: normal 18px/21px; color: #999; }
 .tags_list h4 em { color: #F08800; }
 .tags_list li a { display: inline-block; height: 24px; padding: 5px 8px 0; margin: 3px 3px 3px 0; color: #52878F; line-height: 1.231; white-space: nowrap; background: #D9ECEF; }
 .tags_list li a:hover { color: #FFF; text-decoration: none; background: #69B8C4; }
-.carousel-inner {width: 320px;margin: 0px auto;}
-.carousel-control {left: 0px;font-size: 40px;line-height: 24px;width: 30px;height: 30px;}
-.carousel-control.right{right: 0px;}
+.carousel-inner { padding: 0px 24px; }
+.carousel-control { width: 10px; font-size: 24px; }
+.carousel-control.tl { }
+.carousel-control.tr { right: 0; left: auto; }
 </style>
+<h3 class="title"> <span><i class="fa fa-info-circle"></i> 基本资料</span> </h3>
 <div class="basic">
     <form action="<!--{iCMS:router url='/user'}-->" method="post" target="iCMS_FRAME">
       <input name="action" type="hidden" value="profile" />
       <input name="pg" type="hidden" value="base" />
-      <div class="title"> <span>基本资料</span> </div>
       <dl class="base">
         <dt>昵称：</dt>
         <dd class="unick"><!--{$me.nickname}--></dd>
         <dt>性别：</dt>
-        <dd class="sex" style="line-height: 30px;">
-          <input checked="" name="gender" value="0" type="radio" style="margin:0">
-          女
-          <input  name="gender" type="radio" value="1">
-          男 </dd>
+        <dd class="sex radio" style="line-height: 30px;">
+          <label><input checked="" name="gender" value="0" type="radio">
+          女</label>
+          <label><input name="gender" type="radio" value="1">
+          男</label> </dd>
         <dt>邮箱：</dt>
-        <dd style="padding-top:5px;"><!--{$me.username}--></dd>
+        <dd style="padting-top:5px;"><!--{$me.username}--></dd>
         <dt>个人博客：</dt>
         <dd class="weibo">
-          <input name="weibo" type="text" value="<!--{$userdata.weibo}-->">
+          <input class="form-control" name="weibo" type="text" value="<!--{$userdata.weibo}-->">
         </dd>
         <dt>所在地：</dt>
         <dd class="location">
-          <select id="province" name="province">
+          <select class="form-control" id="province" name="province">
           </select>
           &nbsp;&nbsp;
-          <select id="city" name="city">
+          <select class="form-control" id="city" name="city">
           </select>
         </dd>
         <dt>生日：</dt>
         <dd class="birthday">
-          <select name="year" id="year">
+          <select class="form-control" name="year" id="year">
             <option selected value=""></option>
             <!--{for start=1970 stop=2004 value=i}-->
             <option value="<!--{$i}-->"><!--{$i}--></option>
             <!--{/for}-->
           </select>
           &nbsp;年&nbsp;
-          <select name="month" id="month">
+          <select class="form-control" name="month" id="month">
             <option selected></option>
             <option value="1">1</option>
             <option value="2">2</option>
@@ -68,7 +67,7 @@
             <option value="12">12</option>
           </select>
           &nbsp;月&nbsp;
-          <select name="day" id="day">
+          <select class="form-control" name="day" id="day">
             <option selected></option>
             <option value="1">1</option>
             <option value="2">2</option>
@@ -105,7 +104,7 @@
           &nbsp;日 </dd>
         <dt>星座：</dt>
         <dd class="constellation">
-          <select id="constellation" name="constellation">
+          <select class="form-control" id="constellation" name="constellation">
             <option selected id="xingzuo_name"></option>
             <option value="水瓶座">水瓶座</option>
             <option value="双鱼座">双鱼座</option>
@@ -123,7 +122,7 @@
         </dd>
         <dt>职业：</dt>
         <dd class="profession">
-          <select id="profession" name="profession">
+          <select class="form-control" id="profession" name="profession">
             <option selected></option>
             <option value="白领">白领</option>
             <option value="学生">学生</option>
@@ -131,11 +130,64 @@
           </select>
         </dd>
       </dl>
-      <div class="title mt30"> <span>其他信息</span> </div>
+
+      <!--
+<div class="title mt30"> <span>身材信息</span> <span style="font-weight:normal;font-size:12px;padting-left:10px;">^_^ 用心填写这几项信息，会帮助女人邦给你推荐合适的衣服和鞋子哦~</span>
+		<select name="isSeeFigure" id="isSeeFigure" class="is_show_sel">
+			<option value="1" selected="">我关注的人可见</option>
+			<option value="2">所有人可见</option>
+			<option value="0">仅自己可见</option>
+		</select>
+	</div>
+	<dl>
+		<dt>身高：</dt>
+		<dt class="posr">
+		<input name="height" class="gray_text" type="text" value="">
+		cm </dt>
+		<dt>体重：</dt>
+		<dt class="posr">
+		<input name="weight" class="gray_text" type="text" value="">
+		kg </dt>
+		<dt>三围：</dt>
+		<dt class="posr">
+		<input name="bwhB" style="width:35px; color:#999;" class="gray_text" type="text" value="胸围" placeholder="胸围">
+		cm
+		<input name="bwhW" style="width:35px;margin-left:5px; color:#999;" class="gray_text" type="text" value="腰围" placeholder="腰围">
+		cm
+		<input name="bwhH" style="width:35px;margin-left:5px; color:#999;" class="gray_text " type="text" value="臀围" placeholder="臀围">
+		cm </dt>
+		<dt>肤质：</dt>
+		<dt class="posr">
+		<select name="pskin" id="pskin">
+			<option selected><!--{iCMS:lang key='user:profile:pskin'}-->
+      </option>
+      <option value="中性肤质">中性肤质</option>
+      <option value="干性肤质">干性肤质</option>
+      <option value="油性肤质">油性肤质</option>
+      <option value="混合性肤质">混合性肤质</option>
+      <option value="敏感性肤质">敏感性肤质</option>
+      </select>
+      </dt>
+      <dt>发质：</dt>
+      <dt class="posr">
+        <select id="phair" name="phair">
+          <option selected><!--{iCMS:lang key='user:profile:phair'}--></option>
+          <option value="油性发质">油性发质</option>
+          <option value="干性发质">干性发质</option>
+          <option value="中性发质">中性发质</option>
+        </select>
+      </dt>
+      <dt>鞋码尺寸：</dt>
+      <dt class="posr">
+        <input name="shoesize" class="gray_text" type="text" value="<!--{$userdata.shoesize}-->">
+        码 </dt>
+      </dl>
+      -->
+      <h3 class="title mt10"> <span><i class="fa fa-info-circle"></i> 其他信息</span> </h3>
       <dl>
         <dt>个人标签：</dt>
-        <dd>
-          <input autocomplete="off" id="user_style" name="personstyle" class=" pstyle" type="text" value="<!--{if $userdata.personstyle}--><!--{$userdata.personstyle}--><!--{else}--><!--{iCMS:lang key='user:profile:personstyle'}--><!--{/if}-->">
+        <dd style="margin-bottom:5px;position:relative;">
+          <input autocomplete="off" style=" color:#999" id="user_style" name="personstyle" class="form-control pstyle" type="text" value="<!--{if $userdata.personstyle}--><!--{$userdata.personstyle}--><!--{else}--><!--{iCMS:lang key='user:profile:personstyle'}--><!--{/if}-->">
           <div class="tags_list carousel slide" id='tags-list-box' data-ride="carousel" data-interval="30000">
             <ul class="carousel-inner" role="listbox">
               <li class="item active">
@@ -158,20 +210,23 @@
                 <a>过目不忘</a><a>记忆力超常</a><a>力大无穷</a><a>晒不黑</a><a>狂吃不胖</a><a>没生过病</a><a>能睁着眼睛睡觉</a><a>耳朵可以动</a><a>能倒立睡觉</a><a>单个眉毛可以动</a> <a>舌头可以舔到鼻子</a> <a>睁着眼睛睡觉</a> </li>
             </ul>
           <!-- Controls -->
-            <a class="carousel-control left" href="#tags-list-box" role="button" data-slide="prev">
-              &lsaquo;
+            <a class="tl carousel-control" href="#tags-list-box" role="button" data-slide="prev">
+              <span class="glyphicon glyphicon-chevron-left"></span>
+              <span class="sr-only">Previous</span>
             </a>
-            <a class="carousel-control right" href="#tags-list-box" role="button" data-slide="next">
-             &rsaquo;
+            <a class="tr carousel-control" href="#tags-list-box" role="button" data-slide="next">
+              <span class="glyphicon glyphicon-chevron-right"></span>
+              <span class="sr-only">Next</span>
             </a>
           </div>
         </dd>
         <dt>自我介绍：</dt>
         <dd>
-          <textarea name="slogan" class="span5" style="padding: 5px;" rows="5" placeholder="<!--{iCMS:lang key='user:profile:slogan'}-->"><!--{if $userdata.slogan}--><!--{$userdata.slogan}--><!--{else}--><!--{iCMS:lang key='user:profile:slogan'}--><!--{/if}--></textarea>
+          <textarea name="slogan" class="form-control" style="padting: 5px;height:120px;"placeholder="<!--{iCMS:lang key='user:profile:slogan'}-->"><!--{if $userdata.slogan}--><!--{$userdata.slogan}--><!--{else}--><!--{iCMS:lang key='user:profile:slogan'}--><!--{/if}--></textarea>
         </dd>
-        <dd class="clearfix mt20 pl40">
-          <input type="submit" class="btn btn-primary btn-large" value="确认修改">
+        <dt>&nbsp;&nbsp;</dt>
+        <dd>
+          <button class="btn btn-primary btn-lg btn-block" type="submit" data-loading-text='<i class="fa fa-spinner"></i> 提交中...'><i class="fa fa-check"></i> 确认修改</button>
         </dd>
       </dl>
     </form>
@@ -181,7 +236,7 @@
 $(function(){
 	initPlace('<!--{$userdata.city}-->','<!--{$userdata.province}-->');
 	<!--{if $me.gender}-->
-	$("[name=gender][value=<!--{$me.gender}-->]").attr("checked",true);
+	$("[name=gender][value=<!--{$me.gender}-->]").prop("checked",true);
 	<!--{/if}-->
 	<!--{if $userdata.isSeeFigure}-->
 	$("#isSeeFigure").val("<!--{$userdata.isSeeFigure}-->");
@@ -232,15 +287,12 @@ $(function(){
         c.val(b);
         c.focus();
     });
-
+    $(".btn-block").click(function(event) {
+      $(this).button('loading');
+      window.setTimeout(function() {
+        $(".btn-block").button("reset");
+      }, 5000);
+    });
 })
-function isParent(a, b) {
-	for (; a != void 0 && a != null && a.tagName.toUpperCase() != "BODY"; ) {
-	    if (a == b)
-	        return !0;
-	    a = a.parentNode
-	}
-	return !1
-}
 </script>
 

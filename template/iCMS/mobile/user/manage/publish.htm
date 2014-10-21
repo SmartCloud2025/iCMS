@@ -73,10 +73,10 @@
 	<input type="file" name="upfile" class="hide">
 </form>
 <script type="text/javascript">
-function upload_pic(info){
+function upload_pic(c){
 	//console.log(info);
-	if(info.code){
-		$('#abody').insertContent('[img]'+info.url+'[/img]');
+	if(c.code){
+		$('#abody').insertContent('[img]'+c.url+'[/img]');
 		$("#upload").button('reset');
 	}
 }

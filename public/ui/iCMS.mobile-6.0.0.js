@@ -89,6 +89,6 @@
         },
         hover: function() {},
     };
-    iCMS.config.DIALOG = {width:300,height:120,time:300000000};
+    iCMS.config.DIALOG = {width:320,height:120,time:300000000};
     iCMS = $.extend(iCMS,_iCMS);//扩展 or 替换 iCMS方法
 })(jQuery);

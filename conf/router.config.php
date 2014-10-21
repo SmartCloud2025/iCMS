@@ -21,7 +21,6 @@ return array(
 
 	'/user/manage'              => iCMS_URL.'/user.php?do=manage',
 	'/user/manage/favorite'     => iCMS_URL.'/user.php?do=manage&pg=favorite',
-	'/user/manage/share'        => iCMS_URL.'/user.php?do=manage&pg=share',
 	'/user/manage/fans'         => iCMS_URL.'/user.php?do=manage&pg=fans',
 	'/user/manage/follow'       => iCMS_URL.'/user.php?do=manage&pg=follow',
 

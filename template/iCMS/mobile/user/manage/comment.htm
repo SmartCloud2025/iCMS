@@ -1,72 +1,69 @@
 <style>
-.cmt-avatar{width: 36px;height:36px;}
-.cmt-avatar img{width: 35px;height:35px;}
-.cmt-reply{margin-left: 20px;}
+.alert{padding: 5px; margin: 5px;}
+.cmt-reply { margin-left: 20px; }
+.cmt-reply-info{text-align: right;}
 </style>
-<div class="title"><span>我的评论</span></div>
-<form action="<!--{iCMS:router url='/user'}-->" method="post" target="iCMS_FRAME">
-	<input name="action" type="hidden" value="manage" />
-	<input name="pg" type="hidden" value="comment" />
-	<div class="comment w670">
-		<table class="table table-striped">
-			<tbody>
-			<!--{iCMS:comment:list loop="true" page="true" row="10" total_cache="G" userid=$user.uid}-->
-				<tr id="id-<!--{$comment_list.id}-->">
-					<td class="cmt-avatar">
-						<a title="<!--{$comment_list.user.name}-->" href="<!--{$comment_list.user.url}-->">
-							<img class="iCMS_user_avatar" src="<!--{$comment_list.user.avatar}-->" onerror="iCMS.user.noavatar();">
-						</a>
-					</td>
-						<td><a href="<!--{$comment_list.user.url}-->" target="_blank"><span class="label label-info"><!--{$comment_list.user.name}--></span></a>
-						在<!--{$iAPP[$comment_list.appid].title}-->：<a href="<!--{$comment_list.url}-->" target="_blank"><!--{$comment_list.title}--></a>
-						<!--{if $comment_list.reply_uid}-->
-						对<span class="label label-success"><!--{$comment_list.reply_name}--></span>的回帖发表评论
-						<!--{else}-->
-						发表评论
-						<!--{/if}-->：
-						<div class="clearfix mt10"></div>
-						<p class="alert alert-info"><!--{$comment_list.content}--></p>
-						<div class="clearfix"></div>
-						<!--{if $comment_list.reply_id}-->
-							<!--{iCMS:comment:array id=$comment_list.reply_id}-->
-							<!--{if $comment_array}-->
-								<p class="alert alert-success cmt-reply">
-									<a href="<!--{$comment_array.user.url}-->" target="_blank" data-tip="iCMS:ucard:<!--{$comment_list.userid}-->">@<!--{$comment_array.user.name}-->：</a>
-									<!--{$comment_array.content}-->
-									<span class="label"><!--{$comment_list.addtime|format_date}--></span>
-									<span class="label label-info"><i class="fa fa-thumbs-o-up"></i> <!--{$comment_array.up}--></span>
-								</p>
-							<!--{else}-->
-								<p class="alert alert-error cmt-reply">评论已被删除!</p>
-							<!--{/if}-->
-							<div class="clearfix"></div>
-						<!--{/if}-->
-						<div class="info">
-							<span class="label"><!--{$comment_list.addtime|format_date}--></span>
-							<span class="label label-info"><i class="fa fa-thumbs-o-up"></i> <!--{$comment_list.up}--></span>
-						</div>
-					</td>
-					<td><a href="javascript:;" class="del_comment ml10 tip" data-id="<!--{$comment_list.id}-->" title="删除评论"><i class="fa fa-times"></i></a></td>
-				</tr>
-			<!--{/iCMS}-->
-			</tbody>
-			<tfoot>
-	            <tr>
-	              <td colspan="3"><div class="iCMS_pagination"><!--{$iCMS.PAGE.NAV}--></div></td>
-	            </tr>
-          </tfoot>
-		</table>
-	</div>
-</form>
-<script type="text/javascript">
+  <h3 class="title"><span><i class="fa fa-comments"></i> 我的评论</span></h3>
+  <form action="<!--{iCMS:router url='/user'}-->" method="post" target="iCMS_FRAME">
+    <input name="action" type="hidden" value="manage" />
+    <input name="pg" type="hidden" value="comment" />
+    <div class="comment">
+      <table class="table table-striped">
+        <tbody>
+          <!--{iCMS:comment:list loop="true" page="true" row="10" total_cache="G" userid=$user.uid}-->
+          <tr id="id-<!--{$comment_list.id}-->">
+            <td>您 在<!--{$iAPP[$comment_list.appid].title}-->：<a href="<!--{$comment_list.url}-->" target="_blank"><!--{$comment_list.title}--></a>
+              <!--{if $comment_list.reply_uid}-->
+              对<span class="label label-success"><!--{$comment_list.reply_name}--></span>的回帖发表评论
+              <!--{else}-->
+              发表评论
+              <!--{/if}-->：
+              <div class="clearfix mt5"></div>
+              <p class="alert alert-info"><!--{$comment_list.content}--></p>
+              <!--{if $comment_list.reply_id}-->
+              <!--{iCMS:comment:array id=$comment_list.reply_id}-->
+              <!--{if $comment_array}-->
+              <div class="alert alert-success cmt-reply">
+              	<a href="<!--{$comment_array.user.url}-->" target="_blank" data-tip="iCMS:ucard:<!--{$comment_list.userid}-->">@<!--{$comment_array.user.name}-->：</a>
+                <!--{$comment_array.content}-->
+                <br />
+	            <span class="label label-default"><!--{$comment_list.addtime|format_date}--></span>
+	            <span class="label label-info"><i class="fa fa-thumbs-o-up"></i> <!--{$comment_array.up}--></span>
+              </div>
+              <!--{else}-->
+              <p class="alert alert-error cmt-reply">评论已被删除!</p>
+              <!--{/if}-->
+              <div class="clearfix"></div>
+              <!--{/if}-->
+              <div class="info"> <span class="label label-default"><!--{$comment_list.addtime|format_date}--></span> <span class="label label-info"><i class="fa fa-thumbs-o-up"></i> <!--{$comment_list.up}--></span> </div></td>
+            <td><a href="javascript:;" class="ml10" data-action="del" data-id="<!--{$comment_list.id}-->" title="删除评论"><i class="fa fa-times"></i></a></td>
+          </tr>
+          <!--{/iCMS}-->
+        </tbody>
+        <tfoot>
+	        <tr>
+	          <td colspan="2">
+	          	<div class="iCMS_pagination"><!--{$iCMS.PAGES|method:'current_page():bartext()'}--></div>
+	          	<div class="iCMS_pagination"><!--{$iCMS.PAGES|method:'show(9)'}--></div>
+	          </td>
+	        </tr>
+        </tfoot>
+      </table>
+    </div>
+  </form>
+  <script type="text/javascript">
 $(function(){
-	$(".del_comment").on('click',function(event) {
+	$("[data-action]").on('click',function(event) {
 		event.preventDefault();
-		var id = $(this).attr("data-id");
-		$.post("<!--{iCMS:router url='/user'}-->",{action:'delete',pg:'comment',id:id},
+		var param = {
+			'id':$(this).attr("data-id"),
+			'act':$(this).attr("data-action"),
+			'pg':'comment','action':'manage'
+		}
+		$.post("<!--{iCMS:router url='/user'}-->",param,
 		function(c) {
 			if (c.code) {
-				$("#id-"+id).hide('500',function() {
+				$("#id-"+param.id).hide('500',function() {
 					$(this).remove();
 				});
 			}else{

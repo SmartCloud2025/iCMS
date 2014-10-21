@@ -13,10 +13,23 @@
     <!--{include file="./navbar.htm"}-->
     <div class="container">
       <div class="wrapper">
-        <div class="profile_header">
+        <div class="profile_wrapper">
+        <!--{switch from=$pg}-->
+          <!--{case value="base"}-->
+            <!--{include file="./profile/base.htm" import="true"}-->
+          <!--{case value="avatar"}-->
+            <!--{include file="./profile/avatar.htm" import="true"}-->
+          <!--{case value="setpassword"}-->
+            <!--{include file="./profile/setpassword.htm" import="true"}-->
+          <!--{case value="bind"}-->
+            <!--{include file="./profile/bind.htm" import="true"}-->
+          <!--{case value="custom"}-->
+            <!--{include file="./profile/custom.htm" import="true"}-->
+        <!--{/switch}-->
         </div>
       </div>
     </div>
+    <iframe class="hide" id="iCMS_FRAME" name="iCMS_FRAME"></iframe>
     <!--{include file="{iTPL}/footer.htm"}-->
   </body>
 </html>

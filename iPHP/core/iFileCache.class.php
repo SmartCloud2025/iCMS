@@ -24,10 +24,7 @@ class iFC {
 		$this->_have_zlib       = function_exists("gzcompress");
 		$this->_cache_sock      = array();
 	}
-	//PHP4 Class
-	function iFC($args){
-		$this->__construct($args);
-	}
+
 	function add ($key, $val, $exp = 0){
 		$this->_file = $this->get_file($key,'add');
 		$value       = array(
@@ -35,7 +32,7 @@ class iFC {
 			"Expires" =>$exp,
 			"Data"    =>$val,
 		);
-		$data=serialize($value);
+		$data = serialize($value);
 		$this->_cache_sock='<?php exit;?>';
 		if ($this->_have_zlib && $this->_compress_enable){
 			$this->_cache_sock.=gzcompress($data, 9);
@@ -72,13 +69,13 @@ class iFC {
 		$key     = str_replace(':','/',$key);
 		$dirPath = $this->_dirs.'/'.(strpos($key,'/')!==false?dirname($key):'');
    		if($this->_dir_level!=-1){
-	   		$a=$this->str_split(md5($key),$this->_dir_level);
-	   		$dirPath.='/'.implode('/',$a).'/';
+			$md5_array  = $this->str_split(md5($key),$this->_dir_level);
+			$dirPath   .= '/'.implode('/',$md5_array).'/';
 		}
 		if (!file_exists($dirPath) && $method=='add'){
 			$this->mkdir($dirPath);
 		}
-		$strrchr=strrchr($key,'/');
+		$strrchr = strrchr($key,'/');
 		$strrchr!==false && $key=$strrchr;
 		return $dirPath.$key.'.php';
    	}

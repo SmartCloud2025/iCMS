@@ -1,0 +1,44 @@
+<style>
+#upload_form{display: none;}
+#avatar_box { width: 300px; height: 300px; border: 1px solid #D4D4D4; padding: 1px; overflow: hidden;}
+</style>
+  <h3 class="title"> <span>设置头像</span> </h3>
+  <div id="avatar_box">
+    <img id="avatar" src="<!--{$me.avatar}-->?<!--{$iCMS.TIME}-->" alt="个人封面" onerror="iCMS.user.noavatar();">
+  </div>
+  <span id="avatar_info" class="label label-info hide"></span>
+  <div class="clearfix mt10"></div>
+  <span class="label label-danger">头像建议尺寸：300像素 * 300像素</span>
+  <div class="clearfix mt10"></div>
+  <div class="alert alert-warning" role="alert">手机版无法使用在线头像编辑功能!<br />可使用手机中的图片编辑应用 修改完成在上传!</div>
+  <div class="clearfix mt10"></div>
+  <button id="upload" href="javascript:;" class="btn btn-primary btn-lg btn-block" data-loading-text='<i class="fa fa-spinner"></i> 上传中...'><i class="fa fa-upload"></i> 更换头像</button>
+  <form role="form" id="upload_form" action="<!--{iCMS:router url='/user'}-->" method="post" enctype="multipart/form-data" target="iCMS_FRAME">
+    <input name="action" type="hidden" value="profile" />
+    <input name="pg" type="hidden" value="avatar" />
+    <input type="file" name="upfile" class="hide">
+  </form>
+<script>
+$(function() {
+    $("#avatar").load(function() {
+      $("#avatar_info").text('当前头像尺寸:'+this.width+'像素 * '+this.height+'像素').removeClass('hide');
+    });
+    $("#upload").click(function() {
+        $("input[name=upfile]").click();
+    })
+    $("input[name=upfile]").change(function(){
+        $("#upload").button('loading');
+        $("#upload_form").submit();
+    })
+})
+function callback(c) {
+  if(c.code){
+    $("#avatar").attr({
+      src: c.url+'?'+ Math.random()
+    }).show();
+    $("#upload").button('reset');
+  }else{
+    iCMS.alert('上传失败!请重请上传');
+  }
+}
+</script>

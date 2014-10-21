@@ -97,56 +97,6 @@ a,a:hover,a:focus { color: #259 }
 .iCMS_login_dialog .lb_bd .lb_s { margin: 0 auto; padding: 55px; width: 180px; height: 45px }
 .iCMS_login_dialog .lb_bd .lb_s .lb_s_img { display: block; float: left; width: 43px; height: 43px }
 .iCMS_login_dialog .lb_bd .lb_s .lb_s_t { display: block; float: left; margin: 12px 0 0 12px; width: 120px; color: #333; font-size: 22px }
-/* ==========report============= */
-#iCMS-report-box {display: none;}
-.iCMS_report_dialog {width: 400px;}
-.iCMS_report_dialog.loading .modal-dialog-buttons { display: none }
-.iCMS_report_dialog .options { margin-top: 8px }
-.iCMS_report_dialog .options li { padding: 4px 6px; list-style: none; line-height: 2 }
-.iCMS_report_dialog .options li li { padding: 0 6px; display: inline-block; -webkit-box-sizing: border-box; -moz-box-sizing: border-box; -ms-box-sizing: border-box; box-sizing: border-box; width: 50% }
-.iCMS_report_dialog .options label { cursor: pointer; margin: 2px 0px }
-.iCMS_report_dialog .options input[type=radio] { margin: 0px 5px 2px 0px }
-.iCMS_report_dialog .options .description, .iCMS_report_dialog .options .group-description { padding-left: 1em; line-height: 1.7; color: #999 }
-.iCMS_report_dialog .options .group-options { margin-left: 10px }
-.iCMS_report_dialog .options .visible-if-checked { display: none }
-.iCMS_report_dialog .options li.checked { background-color: #eff6fa; border-radius: 3px }
-.iCMS_report_dialog .options li.checked .visible-if-checked { display: block }
-.iCMS_report_dialog .reason-text { width: 100%; height: 30px; margin: 10px 0; -webkit-box-sizing: border-box; -moz-box-sizing: border-box; -ms-box-sizing: border-box; box-sizing: border-box }
-.iCMS_report_dialog .error-container { color: #fa8282; text-align: right }
-.iCMS_report_dialog .input-container { position: relative }
-.iCMS_report_dialog .headnote { float: right; color: #999 }
-.iCMS_report_dialog .footnote { color: #999 }
-.iCMS_report_dialog .loading { text-align: center; color: #999 }
-/* pm */
-#iCMS-pm-box{display: none;}
-.iCMS_pm_dialog{width: 360px;margin-left: -10px;}
-.iCMS_pm_dialog dt label { color: #999; text-align: right; font-size: 13px; float: left; width: 60px; }
-.iCMS_pm_dialog .pm_inbox { float: right; }
-.iCMS_pm_dialog .pm_content { width: 280px; padding: 5px; height: 60px; }
-.iCMS_pm_dialog .pm_warnmsg{text-align: right;color: #C3412F;display: none;font-size: 13px;}
-.iCMS_pm_dialog .buttons{padding-right: 3px !important;}
-/* favorite */
-#iCMS-favorite-box{display: none;}
-.iCMS_favorite_dialog{width: 400px;}
-.iCMS_favorite_dialog .buttons .create{margin-top: 5px;}
-.iCMS_favorite_dialog .fav_add_title_error{color: #C33;margin-left: 10px;display: none;}
-.iCMS_favorite_dialog .favorite_list_content .favo-list-item-link {
-    display: block;
-    margin: 0 12px;
-    border: solid 1px #DDD;
-    padding: 8px 12px;
-    box-shadow: 0 1px 1px rgba(0,0,0,.05)
-}
-.iCMS_favorite_dialog .favorite_list_content .favo-list-item-link .meta {
-    display: block
-}
-.iCMS_favorite_dialog .favorite_list_content .favo-list-item-link:hover {
-    text-decoration: none;
-    background-color: #F5F5F5
-}
-.iCMS_favorite_dialog .favorite_list_content .active {
-background: url(img/check.png) no-repeat 96% center;
-}
 /* ================================ */
 .iCMS_agreement_wrap { padding-right: 40px; padding-left: 40px; width: 880px; _width: 880px }
 .iCMS_agreement_wrap .agr_h { margin-bottom: 50px; text-align: center; font-weight: bold; font-size: 26px }

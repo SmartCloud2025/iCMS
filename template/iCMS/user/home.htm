@@ -16,7 +16,7 @@
   <!--{include file="{iTPL}/header.htm"}-->
   <div class="userApp_home clearfix">
     <div class="userApp_header">
-      <div class="card_banner"> <img src="<!--{$userdata.coverpic}-->" alt="<!--{$user.nickname}-->的封面" onerror="iCMS.user.nocover();"> </div>
+      <div class="card_banner"> <img src="<!--{$user.coverpic.pc}-->" alt="<!--{$user.nickname}-->的封面" onerror="iCMS.user.nocover();"> </div>
       <div class="card_top">
         <div class="card_info"> <a class="card_title_name" data-tip="iCMS:ucard:<!--{$user.uid}-->" href="<!--{$user.urls.home}-->">
             <!--{$user.nickname}-->
@@ -35,7 +35,6 @@
         <div class="card_avatar"> <a href="<!--{$user.urls.home}-->"> <img class="iCMS_user_avatar card_avatar_img" src="<!--{$user.avatar}-->" onerror="iCMS.user.noavatar();"> </a> </div>
       </div>
     </div>
-
     <div class="main-col">
       <!--{if $user.category.name}-->
       <h3 class="category_name"><span class="label label-info"><!--{$user.category.name}--></span></h3>
@@ -43,7 +42,6 @@
       <!--{if $iCMS.APP.DO=="home"}-->
         <!--{include file="./home.article.htm"}-->
       <!--{/if}-->
-
       <div id="artpagenav" class="iCMS_pagination">
         <!--{$iCMS.PAGE.NAV}-->
       </div>

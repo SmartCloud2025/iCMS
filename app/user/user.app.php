@@ -90,11 +90,14 @@ class userApp {
         $pg        = iS::escapeStr($_GET['pg']);
         $pg OR $pg ='base';
         if (in_array ($pg,$pgArray)) {
-            $this->user(true);
+            $this->user();
             iPHP::assign('pg',$pg);
             if($pg=='bind'){
                 $platform = user::openid(user::$userid);
                 iPHP::assign('platform',$platform);
+            }
+            if($pg=='base'){
+                iPHP::assign('userdata',(array)user::data(user::$userid));
             }
             iPHP::view("iCMS://user/profile.htm");
         }
@@ -108,6 +111,13 @@ class userApp {
             'edit'   => iPHP::router('/user/publish'),
         ));
     }
+    private function __do_manage_favorite(){
+        iPHP::assign('favorite',array(
+            'fid'    => (int)$_GET['fid'],
+            'manage' => iPHP::router('/user/manage/favorite'),
+        ));
+    }
+
     private function __do_manage_publish(){
         $id    = (int)$_GET['id'];
         iPHP::app('article.table');
@@ -261,7 +271,13 @@ class userApp {
             $status = '0';
             $act =="renew" && $status = '1';
             $act =="trash" && $status = '2';
-            iDB::query("UPDATE `#iCMS@__article` SET `status` ='$status' WHERE `userid` = '".user::$userid."' AND `id`='$id' LIMIT 1;");
+            iDB::query("
+                UPDATE `#iCMS@__article`
+                SET `status` ='$status'
+                WHERE `userid` = '".user::$userid."'
+                AND `id`='$id'
+                LIMIT 1;
+            ");
             iPHP::code(1,0,0,'json');
         }
     }
@@ -276,9 +292,19 @@ class userApp {
             iPHP::import(iPHP_APP_CORE .'/iAPP.class.php');
             $table = app::get_table($comment->appid);
 
-            iDB::query("UPDATE {$table['name']} SET comments = comments-1 WHERE `comments`>0 AND `{$table['primary']}`='{$comment->iid}' LIMIT 1;");
+            iDB::query("
+                UPDATE {$table['name']}
+                SET comments = comments-1
+                WHERE `comments`>0
+                AND `{$table['primary']}`='{$comment->iid}'
+                LIMIT 1;
+            ");
 
-            iDB::query("DELETE FROM `#iCMS@__comment` WHERE `userid` = '".user::$userid."' AND `id`='$id' LIMIT 1;");
+            iDB::query("
+                DELETE FROM `#iCMS@__comment`
+                WHERE `userid` = '".user::$userid."'
+                AND `id`='$id' LIMIT 1;
+            ");
             user::update_count(user::$userid,1,'comments','-');
             iPHP::code(1,0,0,'json');
         }
@@ -291,10 +317,36 @@ class userApp {
 
             $user = (int)$_POST['user'];
             if($user){
-                iDB::query("UPDATE `#iCMS@__message` SET `status` ='0' WHERE `userid` = '".user::$userid."' AND `friend`='".$user."';");
+                iDB::query("
+                    UPDATE `#iCMS@__message`
+                    SET `status` ='0'
+                    WHERE `userid` = '".user::$userid."'
+                    AND `friend`='".$user."';
+                ");
             }elseif($id){
-                iDB::query("UPDATE `#iCMS@__message` SET `status` ='0' WHERE `userid` = '".user::$userid."' AND `id`='$id';");
+                iDB::query("
+                    UPDATE `#iCMS@__message`
+                    SET `status` ='0'
+                    WHERE `userid` = '".user::$userid."'
+                    AND `id`='$id';
+                ");
             }
+            iPHP::code(1,0,0,'json');
+        }
+    }
+    private function __action_manage_favorite(){
+        $actArray = array('delete');
+        $act = iS::escapeStr($_POST['act']);
+        if (in_array ($act,$actArray)){
+            $id = (int)$_POST['id'];
+            $id OR iPHP::code(0,'iCMS:error',0,'json');
+            iDB::query("
+                DELETE
+                FROM `#iCMS@__favorite_data`
+                WHERE `uid` = '".user::$userid."'
+                AND `id`='$id'
+                LIMIT 1;
+            ");
             iPHP::code(1,0,0,'json');
         }
     }
@@ -341,18 +393,18 @@ class userApp {
         $phair       == iPHP::lang('user:profile:phair')       && $phair       = "";
 
 
-        if($nickname!=user::$nickname){
-            $has_nick = iDB::value("SELECT uid FROM `#iCMS@__user` where `nickname`='{$nickname}' AND `uid` <> '".user::$userid."'");
-            $has_nick && iPHP::alert('user:profile:nickname');
-            $userdata = user::data(user::$userid);
-            if($userdata->unickEdit>1){
-                iPHP::alert('user:profile:unickEdit');
-            }
-            if($nickname){
-                iDB::update('user',array('nickname'=>$nickname),array('uid'=>user::$userid));
-                $unickEdit = 1;
-            }
-        }
+        // if($nickname!=user::$nickname){
+        //     $has_nick = iDB::value("SELECT uid FROM `#iCMS@__user` where `nickname`='{$nickname}' AND `uid` <> '".user::$userid."'");
+        //     $has_nick && iPHP::alert('user:profile:nickname');
+        //     $userdata = user::data(user::$userid);
+        //     if($userdata->unickEdit>1){
+        //         iPHP::alert('user:profile:unickEdit');
+        //     }
+        //     if($nickname){
+        //         iDB::update('user',array('nickname'=>$nickname),array('uid'=>user::$userid));
+        //         $unickEdit = 1;
+        //     }
+        // }
         if($gender!=$this->me->gender){
             iDB::update('user',array('gender'=>$gender),array('uid'=>user::$userid));
         }
@@ -378,13 +430,26 @@ class userApp {
         iFS::$watermark     = false;
         iFS::$checkFileData = false;
         $dir = get_user_dir(user::$userid,'coverpic');
-        $F   = iFS::upload('upfile',$dir,user::$userid,'jpg');
+        $filename = user::$userid;
+        if(iPHP_DEVICE!='pc'){
+            $filename = 'm_'.user::$userid;
+        }
+        $F   = iFS::upload('upfile',$dir,$filename,'jpg');
+        if(empty($F)){
+            if($_POST['format']=='json'){
+                iPHP::code(0,'user:iCMS:error',0,'json');
+            }else{
+                iPHP::js_callback(array("code"=>0));
+            }
+        }
+        $F OR iPHP::code(0,'user:iCMS:error',0,'json');
         $F['code'] && iDB::update('user_data',array('coverpic'=>$F["path"]),array('uid'=>user::$userid));
         $url = iFS::fp($F['path'],'+http');
         if($_POST['format']=='json'){
             iPHP::code(1,'user:profile:custom',$url,'json');
         }
         $array = array(
+            "code"     => $F["code"],
             "value"    => $F["path"],
             "url"      => $url,
             "fid"      => $F["fid"],
@@ -399,15 +464,34 @@ class userApp {
         iFS::$watermark     = false;
         iFS::$checkFileData = false;
         $dir = get_user_dir(user::$userid);
-        $F   = iFS::upload('avatar',$dir,user::$userid,'jpg');
-        $F OR iPHP::code(0,'user:iCMS:error',0,'json');
-        $avatarurl = iFS::fp($F['path'],'+http');
-        iPHP::code(1,'user:profile:avatar',$avatarurl,'json');
+        $F   = iFS::upload('upfile',$dir,user::$userid,'jpg');
+        if(empty($F)){
+            if($_POST['format']=='json'){
+                iPHP::code(0,'user:iCMS:error',0,'json');
+            }else{
+                iPHP::js_callback(array("code"=>0));
+            }
+        }
+        $url = iFS::fp($F['path'],'+http');
+        if($_POST['format']=='json'){
+            iPHP::code(1,'user:profile:avatar',$url,'json');
+        }
+        $array = array(
+            "code"     => $F["code"],
+            "value"    => $F["path"],
+            "url"      => $url,
+            "fid"      => $F["fid"],
+            "fileType" => $F["ext"],
+            "image"    => in_array($F["ext"],array('gif','jpg','jpeg','png'))?1:0,
+            "original" => $F["oname"],
+            "state"    => ($F['code']?'SUCCESS':$F['state'])
+        );
+       iPHP::js_callback($array);
     }
 
     private function __action_profile_setpassword(){
 
-        iPHP::seccode($_POST['validCode']) OR iPHP::alert('iCMS:seccode:error');
+        iPHP::seccode($_POST['seccode']) OR iPHP::alert('iCMS:seccode:error');
 
         $oldPwd     = md5($_POST['oldPwd']);
         $newPwd1    = md5($_POST['newPwd1']);

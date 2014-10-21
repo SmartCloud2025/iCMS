@@ -1,0 +1,46 @@
+<style>
+#coverpic_box { width: 100%; height: 300px; border: 1px solid #D4D4D4; padding: 1px; overflow: hidden;}
+#coverpic {/* height: 300px;*/ }
+#upload_form{display: none;}
+</style>
+<h3 class="title"> <span>设置主页封面</span> </h3>
+  <div id="coverpic_box">
+    <img id="coverpic" src="<!--{$user.coverpic.mo}-->?<!--{$iCMS.TIME}-->" alt="个人封面" onerror="iCMS.user.nocover('m');">
+  </div>
+  <span id="coverpic_info" class="label label-info hide"></span>
+  <div class="clearfix mt10"></div>
+  <span class="label label-danger">手机版封面图片建议尺寸至少：480像素 * 300像素</span>
+  <div class="clearfix mt10"></div>
+  <div class="alert alert-warning" role="alert">手机版无法使用在线封面编辑功能!<br />可使用手机中的图片编辑应用 修改完成在上传!</div>
+  <div class="clearfix mt10"></div>
+  <button id="upload" href="javascript:;" class="btn btn-primary btn-lg btn-block" data-loading-text='<i class="fa fa-spinner"></i> 上传中...'><i class="fa fa-upload"></i> 更换封面</button>
+  <form role="form" id="upload_form" action="<!--{iCMS:router url='/user'}-->" method="post" enctype="multipart/form-data" target="iCMS_FRAME">
+    <input name="action" type="hidden" value="profile" />
+    <input name="pg" type="hidden" value="custom" />
+    <input type="file" name="upfile" class="hide">
+  </form>
+<script>
+$(function() {
+    $("#coverpic").load(function() {
+      $("#coverpic_info").text('当前封面图片尺寸:'+this.width+'像素 * '+this.height+'像素').removeClass('hide');
+    });
+    $("#upload").click(function() {
+        $("input[name=upfile]").click();
+    })
+    $("input[name=upfile]").change(function(){
+        $("#upload").button('loading');
+        $("#upload_form").submit();
+    })
+})
+function callback(c) {
+    if(c.code){
+      $("#coverpic").attr({
+        src: c.url+'?'+ Math.random()
+      }).show();
+      $("#upload").button('reset');
+    }else{
+      iCMS.alert('上传失败!请重请上传');
+    }
+}
+</script>
+

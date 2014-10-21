@@ -39,7 +39,14 @@
                     iCMS.article.vote(this);
                 }
             });
-
+            doc.on('click', 'a[name="iCMS-report"]', function(event) {
+                event.preventDefault();
+                iCMS.user.report(this);
+            });
+            doc.on('click', 'a[name="iCMS-pm"]', function(event) {
+                event.preventDefault();
+                iCMS.user.pm(this);
+            });
             $(".iCMS_seccode_img,.iCMS_seccode_text").click(function() {
                 $(".iCMS_seccode_img").attr('src', iCMS.api('public', '&do=seccode&') + Math.random());
             });
@@ -165,7 +172,7 @@
             opts.onremove = function(){
                 __callback('remove');
             };
-            var d = dialog(opts);
+            var d = window.dialog(opts);
 
             //console.log(opts.api);
             if(opts.lock){

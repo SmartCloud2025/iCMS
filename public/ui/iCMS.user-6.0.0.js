@@ -35,11 +35,13 @@
                 fade:false,slide:false,
                 content: function(updateCallback) {
                     var uid = $(this).attr('data-tip').replace('iCMS:ucard:','');
-                    $.get(iCMS.api('user', "&do=ucard"),{'uid':uid},
-                      function(container) {
-                        updateCallback(container);
-                    });
-                    return '<div class="tip_info"><img src="'+iCMS.config.PUBLIC+'/ui/img/lightgray-loading.gif"><span> 用户信息加载中……</span></div>';
+                    if(uid){
+                        $.get(iCMS.api('user', "&do=ucard"),{'uid':uid},
+                          function(container) {
+                            updateCallback(container);
+                        });
+                        return '<div class="tip_info"><img src="'+iCMS.config.PUBLIC+'/ui/img/lightgray-loading.gif"><span> 用户信息加载中……</span></div>';
+                    }
                 }
               });
             },
@@ -61,6 +63,87 @@
                     }
                     // window.location.href = c.forward
                 }, 'json');
+            },
+            pm:function(a){
+                if (!iCMS.user_status) {
+                    iCMS.LoginBox();
+                    return false;
+                }
+                var $this  = $(a),
+                    box    = document.getElementById("iCMS-pm-box"),
+                    dialog = iCMS.dialog({title: '发送私信',content:box,elemBack:'remove'}),
+                    inbox  = $this.attr('href'),
+                    data   = iCMS.multiple(a),
+                    content = $("[name='content']", box).val('');
+                $(".pm_warnmsg", box).hide();
+                $('.pm_uname', box).text(data.name);
+                $('.pm_inbox', box).attr("href",inbox);
+                $('.cancel', box).click(function(event) {
+                    event.preventDefault();
+                    dialog.remove();
+                });
+                $('[name="send"]', box).click(function(event) {
+                    event.preventDefault();
+                    data.content = content.val();
+                    if (!data.content) {
+                        content.focus();
+                        $(".pm_warnmsg", box).show();
+                        return false;
+                    }
+                    data.action = 'pm';
+                    $.post(iCMS.api('user'), data, function(c) {
+                        dialog.remove();
+                        iCMS.alert(c.msg,c.code);
+                    }, 'json');
+                });
+            },
+            report:function(a) {
+                if (!iCMS.user_status) {
+                    iCMS.LoginBox();
+                    return false;
+                }
+                var $this = $(a),
+                _title    = $this.attr('title')||'为什么举报这个评论?',
+                box       = document.getElementById("iCMS-report-box"),
+                dialog    = iCMS.dialog({title:_title,content:box,elemBack:'remove'});
+                $("li", box).click(function(event) {
+                    event.preventDefault();
+                    $("li", box).removeClass('checked');
+                    $(this).addClass('checked');
+                    //$("[name='reason']",box).prop("checked",false);
+                    $("[name='reason']",this).prop("checked",true);
+                });
+                $('.cancel', box).click(function(event) {
+                    event.preventDefault();
+                    dialog.remove();
+                });
+                $('[name="ok"]', box).click(function(event) {
+                    event.preventDefault();
+                    var data    = iCMS.param($this),
+                    content     = $("[name='content']", box);
+                    data.reason = $("[name='reason']:checked", box).val();
+                    if (!data.reason) {
+                        iCMS.alert("请选择举报的原因");
+                        return false;
+                    }
+                    if (data.reason == "0") {
+                        data.content = content.val();
+                        if (!data.content) {
+                            iCMS.alert("请填写举报的原因");
+                            return false;
+                        }
+                    }
+                    data.action = 'report';
+                    $.post(iCMS.api('user'), data, function(c) {
+                        content.val('');
+                        $("li", box).removeClass('checked');
+                        $("[name='reason']", box).removeAttr('checked');
+                        iCMS.alert(c.msg,c.code);
+                        if(c.code){
+                            dialog.remove();
+                        }
+                    }, 'json');
+                });
             },
             favorite: function(a,callback) {
                 if (!iCMS.user_status) {
@@ -164,9 +247,13 @@
                 var img = event.srcElement;
                 img.src = iCMS.config.PUBLIC+'/ui/avatar.gif';
             },
-            nocover: function() {
+            nocover: function(t) {
                 var img = event.srcElement;
-                img.src = iCMS.config.PUBLIC+'/ui/coverpic.jpg';
+                var name= 'coverpic'
+                if(t=='m'){
+                    name = 'm_coverpic';
+                }
+                img.src = img.src = iCMS.config.PUBLIC+'/ui/'+name+'.jpg';
             },
     };
 })(jQuery);
