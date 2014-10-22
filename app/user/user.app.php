@@ -777,14 +777,17 @@ class userApp {
         $sign  = $_GET['sign'];
         $code  = $_GET['code'];
         $state = $_GET['state'];
-        $platform_map = array('wx'=>1,'qq'=>2,'wb'=>3,'tb'=>4);
-        $platform     = $platform_map[$sign];
+        $platform_map = array('WX'=>1,'QQ'=>2,'WB'=>3,'TB'=>4);
+        $api          = strtoupper($sign);
+        $platform     = $platform_map[$api];
         if($platform){
-            iPHP::app('user.open/'.$sign.'.class','static');
-            $sign::$url = USER_LOGIN_URL.'&sign='.$sign;
-            $sign::callback();
+            iPHP::app('user.open/'.$api.'.class','static');
+            $api::$appid  = iCMS::$config['open'][$api]['appid'];
+            $api::$appkey = iCMS::$config['open'][$api]['appkey'];
+            $api::$url    = USER_LOGIN_URL.'&sign='.$sign;
+            $api::callback();
 
-            $userid = user::openid($sign::$openid,$platform);
+            $userid = user::openid($api::$openid,$platform);
             if($userid){
                 $user = user::get($userid,false);
                 user::set_cookie($user->username,$user->password,array(
@@ -794,11 +797,11 @@ class userApp {
                     'status'   =>$user->status
                     )
                 );
-                $sign::cleancookie();
+                $api::cleancookie();
                 iPHP::gotourl($this->forward);
             }else{
-                $user             = $sign::get_user_info();
-                $user['openid']   = $sign::$openid;
+                $user             = $api::get_user_info();
+                $user['openid']   = $api::$openid;
                 $user['platform'] = $platform;
                 iDB::value("SELECT uid FROM `#iCMS@__user` where `nickname`='".$user['nickname']."' LIMIT 1") && $user['nickname']=$sign.'_'.$user['nickname'];
                 iPHP::assign('user',$user);

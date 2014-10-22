@@ -1,7 +1,7 @@
 <?php
-class qq {
-	public static $appid  = 203432;
-	public static $appkey = '4ff15cb55015171e61036f2c87cdb3b7';
+class QQ {
+	public static $appid  = '';
+	public static $appkey = '';
 	public static $scope  = "get_user_info,add_topic,add_one_blog,add_album,upload_pic,list_album,add_share,check_page_fans,do_like,get_tenpay_address,get_info,get_other_info,get_fanslist,get_idolist,add_idol";
 	public static $openid = '';
 	public static $url    = '';
@@ -17,8 +17,7 @@ class qq {
 	}
 	public static function callback(){
 		$state	= authcode(iPHP::get_cookie("QQ_STATE"), 'DECODE');
-		if($_GET['state']!=$state){
-			//die('QQ.api.err::1000');
+		if($_GET['state']!=$state && empty($_GET['code'])){
 			self::login();
 			exit;
 		}
@@ -28,6 +27,7 @@ class qq {
             . "&client_secret=" . self::$appkey. "&code=" . $_GET["code"];
 
         $response = self::get_url_contents($token_url);
+
         if (strpos($response, "callback") !== false){
 			$lpos     = strpos($response, "(");
 			$rpos     = strrpos($response, ")");
@@ -53,10 +53,6 @@ class qq {
 	    $user = json_decode($str);
 	    isset($user->error) && self::login();
 
-	    //print_r($user);
-	    //debug
-	    //echo("Hello " . $user->openid);
-	    //set openid to session
 	    self::$openid	= $user->openid;
 	    iPHP::set_cookie("QQ_OPENID",authcode($user->openid,'ENCODE'));
 	}

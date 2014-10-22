@@ -8,6 +8,19 @@
 defined('iPHP') OR exit('What are you doing?');
 iACP::head();
 ?>
+<style>
+h3{
+  display: inline-block;
+height: 35px;
+margin-bottom: 5px;
+background-color: #DFDFDF;
+margin-top: 5px;
+padding-left: 10px;
+font-weight: bold;
+color: #696969;
+text-shadow: 0 1px 0 #FFF;
+border-radius: 4px 4px 0px 0px;width: 330px;}
+</style>
 <script type="text/javascript">
 
 $(function(){
@@ -489,26 +502,51 @@ function modal_tplfile(el,a){
               <input type="text" name="config[user][coverpic]" class="span4" id="user_coverpic" value="<?php echo $config['user']['coverpic'] ; ?>"/>
             </div>
             <span class="help-inline">请将图片放在public目录下</span>
-            <fieldset class="openid r3">
-              <legend>QQ开放平台</legend>
-              <div class="input-prepend"> <span class="add-on" style="width:60px;">APPID:</span>
-                <input type="text" name="config[openapi][QQ][appid]" class="span3" id="thumb_width" value="<?php echo $config['thumb']['width'] ; ?>"/>
-              </div>
-              <div class="clearfloat mb10"></div>
-              <div class="input-prepend"> <span class="add-on"style="width:60px;">APPKEY:</span>
-                <input type="text" name="config[openapi][QQ][appkey]" class="span3" id="thumb_height" value="<?php echo $config['thumb']['height'] ; ?>"/>
-              </div>
-            </fieldset>
-            <fieldset class="openid r3">
-              <legend>QQ开放平台</legend>
-              <div class="input-prepend"> <span class="add-on" style="width:60px;">APPID:</span>
-                <input type="text" name="config[openapi][QQ][appid]" class="span3" id="thumb_width" value="<?php echo $config['thumb']['width'] ; ?>"/>
-              </div>
-              <div class="clearfloat mb10"></div>
-              <div class="input-prepend"> <span class="add-on"style="width:60px;">APPKEY:</span>
-                <input type="text" name="config[openapi][QQ][appkey]" class="span3" id="thumb_height" value="<?php echo $config['thumb']['height'] ; ?>"/>
-              </div>
-            </fieldset>
+            <div class="clearfloat mb10"></div>
+            <hr />
+            <h3>微信开放平台</h3>
+            <span class="help-inline">申请地址:https://open.weixin.qq.com/</span>
+            <div class="clearfloat"></div>
+            <div class="input-prepend"> <span class="add-on" style="width:60px;">APPID:</span>
+              <input type="text" name="config[open][WX][appid]" class="span3" id="wx_appid" value="<?php echo $config['open']['WX']['appid'] ; ?>"/>
+            </div>
+            <div class="clearfloat mb10"></div>
+            <div class="input-prepend"> <span class="add-on"style="width:60px;">APPKEY:</span>
+              <input type="text" name="config[open][WX][appkey]" class="span3" id="wx_appkey" value="<?php echo $config['open']['WX']['appkey'] ; ?>"/>
+            </div>
+            <hr />
+            <h3>QQ开放平台</h3>
+            <span class="help-inline">申请地址:http://connect.qq.com/</span>
+            <div class="clearfloat"></div>
+            <div class="input-prepend"> <span class="add-on" style="width:60px;">APPID:</span>
+              <input type="text" name="config[open][QQ][appid]" class="span3" id="qq_appid" value="<?php echo $config['open']['QQ']['appid'] ; ?>"/>
+            </div>
+            <div class="clearfloat mb10"></div>
+            <div class="input-prepend"> <span class="add-on"style="width:60px;">APPKEY:</span>
+              <input type="text" name="config[open][QQ][appkey]" class="span3" id="qq_appkey" value="<?php echo $config['open']['QQ']['appkey'] ; ?>"/>
+            </div>
+            <hr />
+            <h3>微博开放平台</h3>
+            <span class="help-inline">申请地址:http://open.weibo.com/authentication/</span>
+            <div class="clearfloat"></div>
+            <div class="input-prepend"> <span class="add-on" style="width:60px;">APPID:</span>
+              <input type="text" name="config[open][WB][appid]" class="span3" id="WB_appid" value="<?php echo $config['open']['WB']['appid']; ?>"/>
+            </div>
+            <div class="clearfloat mb10"></div>
+            <div class="input-prepend"> <span class="add-on"style="width:60px;">APPKEY:</span>
+              <input type="text" name="config[open][WB][appkey]" class="span3" id="WB_appkey" value="<?php echo $config['open']['WB']['appkey'] ; ?>"/>
+            </div>
+            <hr />
+            <h3>淘客开放平台</h3>
+            <span class="help-inline">申请地址:http://open.taobao.com/</span>
+            <div class="clearfloat"></div>
+            <div class="input-prepend"> <span class="add-on" style="width:60px;">APPID:</span>
+              <input type="text" name="config[open][TB][appid]" class="span3" id="TB_appid" value="<?php echo $config['open']['TB']['appid']; ?>"/>
+            </div>
+            <div class="clearfloat mb10"></div>
+            <div class="input-prepend"> <span class="add-on"style="width:60px;">APPKEY:</span>
+              <input type="text" name="config[open][TB][appkey]" class="span3" id="TB_appkey" value="<?php echo $config['open']['TB']['appkey'] ; ?>"/>
+            </div>
           </div>
           <div id="setting-publish" class="tab-pane hide">
             <div class="input-prepend"> <span class="add-on">自动排版</span>
