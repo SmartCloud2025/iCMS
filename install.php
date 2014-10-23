@@ -11,3 +11,4 @@
 */
 require dirname(__file__).'/iCMS.php';
 
+echo 'asd';
