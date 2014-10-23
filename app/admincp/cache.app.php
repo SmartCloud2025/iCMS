@@ -41,7 +41,7 @@ class cacheApp{
         $categoryApp->do_cache();
     }
     function do_tpl(){
-    	iCMS::clear_compiled_tpl();
+    	iPHP::clear_compiled_tpl();
     	iPHP::success('清理完成');
     }
     function do_artCount(){
