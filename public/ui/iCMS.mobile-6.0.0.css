@@ -54,6 +54,7 @@ a.circle { color: #fff; }
 #iCMS-menu-box .navbar-nav li.active a { color: #fff; }
 #iCMS-menu-box .divider { border-top: solid #111 1px; border-bottom: solid #444 1px; display: block; }
 #iCMS-menu-box .menu_head .mlogo { padding: 10px 0px; }
+#iCMS-menu-box .menu_head .mlogo img{ width: 90px; }
 #iCMS-menu-box .menu_head #iCMS-nav-login a.btn { height: auto; font-size: 12px; float: right; margin-right: 10px; margin-top: 15px; width: auto; }
 #iCMS-menu-box .nav>li>a:hover, #iCMS-menu-box .nav>li>a:focus { background-color: #444; }
 #iCMS-menu-box .nav .open>a, #iCMS-menu-box .nav .open>a:hover, #iCMS-menu-box .nav .open>a:focus { background-color: #444; }
@@ -93,8 +94,12 @@ a.circle { color: #fff; }
 .iCMS-mobile .login_reg_wrapper .radio input { width: 18px; height: 18px; }
 .iCMS-mobile .login_reg_wrapper .radio label { font-size: 18px; }
 .iCMS-mobile .login_reg_wrapper .lr-btn { margin-left: 10px; }
+.iCMS-mobile .login_reg_wrapper .open-btn { margin-top: 10px;float: left; display: inline; font-size: 12px;}
+.iCMS-mobile .login_reg_wrapper .open-btn a{ /*margin-left: 10px;*/}
 #iCMS-login-page .iCMS_login_btn, #iCMS-register-box .iCMS_register_btn { font-size: 18px; }
 #iCMS-login-page .findpwd { margin: 5px 5px 0px 0px; float: right; }
+#iCMS-login-page .other { margin-top: 10px;float: right;}
+
 .iCMS_seccode { display: inline-block; width: 90px; height: 40px !important; }
 .iCMS_seccode_text { font-size: 16px; margin-left: 4px; }
 .iCMS_seccode_img { height: 30px; margin-top: 5px; }
@@ -136,7 +141,8 @@ a.circle { color: #fff; }
 .iCMS_pm_dialog { width: 320px; }
 .iCMS_favorite_dialog { width: 320px; }
 /* media */
-/* @media (max-width:480px) {
+/*
+ @media (max-width:480px) {
 }
 @media (min-width:481px) and (max-width:767px) {
 }
@@ -158,6 +164,7 @@ a.circle { color: #fff; }
 	#iCMS-navbar-login { display: none; }
 }
 /* ==index== */
+.navbar-brand img{width: 180px;}
 /* slide */
 .rotator { margin-top: 4px; border-bottom: 1px solid #d4d4d4; width: 100%; position: relative; -moz-box-sizing: border-box; -webkit-box-sizing: border-box; -ms-box-sizing: border-box; box-sizing: border-box }
 .rotator .slide_show { height: 200px; }
@@ -245,3 +252,21 @@ footer p { padding: 0px 10px; margin-bottom: 4px; color: #777; font-size: 12px; 
 footer .links { margin: 10px 0; }
 footer .links li { display: inline; padding: 0 2px; }
 footer .links li:first-child { padding-left: 0; }
+/* media */
+@media (max-width:480px) {
+	.navbar-brand {width: 120px;}
+	.mlogo{width: 60px;}
+	.mlogo img{width: 60px !important;}
+}
+/*@media (min-width: 481px) and (max-width: 768px) {
+	.panel{float: left;width: 200px;margin-right: 5px;}
+}
+@media (min-width: 769px) and (max-width: 980px) {
+	.panel{float: left;width: 235px;margin-right: 5px;}
+}
+@media (min-width: 981px) and (max-width: 1199px) {
+	.panel{float: left;width: 300px;margin-right: 10px;}
+}
+@media (min-width: 1200px) {
+	.panel{float: left;width: 360px;margin-right: 10px;}
+}*/

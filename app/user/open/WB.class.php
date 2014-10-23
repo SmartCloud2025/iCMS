@@ -32,27 +32,34 @@ class WB {
 		$token    = json_decode($response, true);
 		if ( is_array($token) && !isset($token['error']) ) {
 			iPHP::set_cookie("WB_ACCESS_TOKEN",	authcode($token['access_token'],'ENCODE'));
-	    	iPHP::set_cookie("WB_REFRESH_TOKEN",	authcode($token['refresh_token'],'ENCODE'));
-		    iPHP::set_cookie("WB_OPENID",			authcode($token['uid'],'ENCODE'));
+	    	iPHP::set_cookie("WB_REFRESH_TOKEN",authcode($token['refresh_token'],'ENCODE'));
+		    iPHP::set_cookie("WB_OPENID",		authcode($token['uid'],'ENCODE'));
 		    self::$openid = $token['uid'];
 		} else {
 			self::login();
 			exit;
 		}
 	}
+	public static function get_openid(){
+		self::$openid  = authcode(iPHP::get_cookie("WB_OPENID"), 'DECODE');
+		return self::$openid;
+	}
 	public static function get_user_info(){
-		$access_token	= authcode(iPHP::get_cookie("WB_ACCESS_TOKEN"), 'DECODE');
-		$refresh_token	= authcode(iPHP::get_cookie("WB_REFRESH_TOKEN"), 'DECODE');
-		//$openid			= authcode(iPHP::get_cookie("QQ_openid"), 'DECODE');
-	    $url = "https://api.weibo.com/2/users/show.json?uid=".self::$openid;
-	    $info = self::get_url_contents($url,$access_token);
-	    $arr = json_decode($info, true);
-	    $arr['nickname']= $arr['screen_name'];
-	    $arr['avatar']	= $arr['avatar_large'];
-	    $arr['gender']	= $arr['gender']=="m"?'1':'0';
+		$access_token  = authcode(iPHP::get_cookie("WB_ACCESS_TOKEN"), 'DECODE');
+		$refresh_token = authcode(iPHP::get_cookie("WB_REFRESH_TOKEN"), 'DECODE');
+		self::$openid  = authcode(iPHP::get_cookie("WB_OPENID"), 'DECODE');
+		$url  = "https://api.weibo.com/2/users/show.json?uid=".self::$openid;
+		$info = self::get_url_contents($url,$access_token);
+		$arr  = json_decode($info, true);
+		$arr['nickname'] = $arr['screen_name'];
+		$arr['avatar']   = $arr['avatar_large'];
+		$arr['gender']   = $arr['gender']=="m"?'1':'0';
 	    return $arr;
 	}
 	public static function cleancookie(){
+		iPHP::set_cookie('WB_ACCESS_TOKEN', '',-31536000);
+		iPHP::set_cookie('WB_REFRESH_TOKEN', '',-31536000);
+		iPHP::set_cookie('WB_OPENID', '',-31536000);
 		iPHP::set_cookie('WB_STATE', '',-31536000);
 	}
 	public static function get_url_contents($url,$access_token=""){

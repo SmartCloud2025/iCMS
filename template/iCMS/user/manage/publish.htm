@@ -110,7 +110,7 @@ $(function(){
 	    }
 	});
 
-	$(document).on('click', '.user_category', function() {
+	$(document).on('click', '.user_category', function(event) {
     	event.preventDefault();
 		var $this = $(this),
 		cid       = $this.attr("cid"),

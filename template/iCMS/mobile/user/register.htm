@@ -1,13 +1,17 @@
 <!DOCTYPE html>
 <html lang="zh-cn">
   <head>
-    <title>注册新用户 <!--{$site.title}-->_<!--{$site.seotitle}--></title>
+    <title><!--{if $user}-->欢迎加入<!--{else}-->新用户注册<!--{/if}--> <!--{$site.title}-->_<!--{$site.seotitle}--></title>
     <meta name="keywords" content="<!--{$site.keywords}-->" />
     <meta name="description" content="<!--{$site.description}-->"/>
     <!--{iCMS:public:ui}-->
     <script src="<!--{$site.urls.ui}-->/iCMS.register-6.0.0.js"></script>
     <script>
     $(function(){
+      <!--{if $user}-->
+      iCMS.user.OPENID = <!--{$user|json_encode}-->;
+      $("[name=gender][value=<!--{$user.gender}-->]").prop("checked",true);
+      <!--{/if}-->
       iCMS.user.register();
     })
     </script>
@@ -24,13 +28,18 @@
           <span class="icon-bar"></span>
           <span class="icon-bar"></span>
           </button>
-          <h3 class="header-title">注册新用户</h1>
+          <h3 class="header-title"><!--{if $user}-->欢迎加入<!--{$site.title}--><!--{else}-->新用户注册<!--{/if}--></h1>
         </div>
       </div>
     </nav>
     <div class="container">
       <div class="wrapper login_reg_wrapper" id="iCMS-register-box">
           <div class="logo"><a href="<!--{$site.url}-->"><img src="<!--{$site.urls.ui}-->/img/iCMS.logo-6.0.png" width="180"/></a></div>
+          <!--{if $user}-->
+            <div class="alert alert-warning" role="alert" style="margin-top: 10px;margin-bottom: 10px;">
+              <strong>*</strong>请先补充必要的个人信息，只有补充完这些信息才能真正加入<!--{$site.title}-->哦
+            </div>
+          <!--{/if}-->
           <div class="form-group">
             <!-- <label for="iCMS-reg-username">电子邮箱</label> -->
             <input type="text" placeholder="电子邮箱" data-container=".username_tip" name="username" id="iCMS-reg-username" class="form-control">
@@ -75,8 +84,24 @@
           </div>
           <button type="submit" class="btn btn-primary btn-lg btn-block iCMS_register_btn">注 册</button>
           <div class="clearfix mt10 mb10">
-            <a class="btn btn-success lr-btn" href="<!--{iCMS:router url='/api/user/login'}-->" style="margin-top: 8px;"><i class="fa fa-user"></i> 我有账号 »</a>
+            <a class="btn btn-success" href="<!--{iCMS:router url='/api/user/login' query="$query"}-->" style="margin-top: 8px;"><i class="fa fa-user"></i> 已经有帐号？请直接登录 »</a>
           </div>
+          <!--{if !$user}-->
+          <hr />
+          <div class="open-btn">
+            <h3 class="gray mb10">您也可以用以下方式登录：</h3>
+            <!--{if $iCMS.CONFIG.open.QQ.enable }-->
+            <a class="btn btn-primary btn-sm" href="<!--{iCMS:router url='/api/user/login/qq'}-->"><i class="fa fa-qq"></i> QQ 登录</a>
+            <!--{/if}-->
+            <!--{if $iCMS.CONFIG.open.WB.enable }-->
+            <a class="btn btn-danger btn-sm" href="<!--{iCMS:router url='/api/user/login/wb'}-->"><i class="fa fa-weibo"></i> 微博登录</a>
+            <!--{/if}-->
+            <!--{if $iCMS.CONFIG.open.WX.enable }-->
+            <a class="btn btn-success btn-sm" href="<!--{iCMS:router url='/api/user/login/wx'}-->"><i class="fa fa-weixin"></i> 微信登录</a>
+            <!--{/if}-->
+          </div>
+          <!--{/if}-->
+          <div class="clearfix mb20"></div>
       </div>
     </div>
     <!--{include file="{iTPL}/footer.htm"}-->

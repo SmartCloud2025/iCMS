@@ -43,6 +43,12 @@ class settingApp{
         $config['router']['html_dir']   = rtrim($config['router']['html_dir'],'/').'/';
         $config['router']['tag_dir']    = rtrim($config['router']['tag_dir'],'/').'/';
 
+        foreach ((array)$config['open'] as $platform => $value) {
+            if($value['appid'] && $value['appkey']){
+                $config['open'][$platform]['enable'] = true;
+            }
+        }
+
         $config['apps']	= $this->apps;
     	foreach($config AS $n=>$v){
     		iACP::setConfig($v,$n,0);

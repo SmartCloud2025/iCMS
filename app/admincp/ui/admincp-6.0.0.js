@@ -57,7 +57,7 @@ $(function() {
         $(target).val(iCMS.random(8));
         return false;
     });
-    doc.on("click",'[data-toggle="insertContent"]',function() {
+    doc.on("click",'[data-toggle="insertContent"]',function(event) {
         event.preventDefault();
         var a = $(this),
         href   = a.attr('href'),
@@ -75,7 +75,7 @@ $(function() {
         return false;
     });
 
-    $('[data-toggle="modal"]').click(function(){
+    $('[data-toggle="modal"]').click(function(event){
         event.preventDefault();
         window.top.iCMS_MODAL = $(this).modal({width: "85%",height: "640px",overflow:true});
         $(this).parent().parent().parent().removeClass("open");
@@ -92,8 +92,8 @@ $(function() {
         scrollText: '', // Text for element
         activeOverlay: false // Set CSS color to display scrollUp active point, e.g '#00FFFF'
     });
-    $('.submenu > a').click(function(e) {
-        e.preventDefault();
+    $('.submenu > a').click(function(event) {
+        event.preventDefault();
         var submenu = $(this).siblings('ul');
         var li = $(this).parents('li');
         var submenus = $('#sidebar li.submenu ul');
@@ -118,9 +118,9 @@ $(function() {
         }
     });
 
-    $('#sidebar > a').click(function(e) {
+    $('#sidebar > a').click(function(event) {
+        event.preventDefault();
 	    var ul = $('#sidebar > ul');
-        e.preventDefault();
         var sidebar = $('#sidebar');
         if (sidebar.hasClass('open')) {
             sidebar.removeClass('open');
@@ -134,7 +134,7 @@ $(function() {
     $('#sidebar > #mini').click(function() {
         var b = $('body');
         var mini = $(document).find(".sidebar-mini");
-        console.log(mini);
+        //console.log(mini);
         $("[data-menu]",mini).tooltip('destroy');
         if (b.hasClass('sidebar-mini')) {
         	iCMS.setcookie('ACP_sidebar_mini',0);
@@ -374,10 +374,8 @@ function modal_icms(el,a){
 //插入内容
 (function($) {
     $.fn.extend({
-        insertContent: function(val, t) {
-            event.preventDefault();
+        insertContent: function(val,t) {
             var $t = $(this)[0];
-
             if (document.selection) { //ie
                 this.focus();
                 var sel = document.selection.createRange();

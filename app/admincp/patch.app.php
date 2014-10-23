@@ -12,8 +12,9 @@
 defined('iPHP') OR exit('What are you doing?');
 
 iPHP::import(iPHP_APP_CORE .'/iPatch.class.php');
+
 class patchApp{
-	
+
 	function __construct() {
 		$this->msg		= "";
 		$this->patch	= iPatch::init(isset($_GET['force'])?true:false);

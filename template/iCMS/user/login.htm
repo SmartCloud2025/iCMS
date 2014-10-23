@@ -2,7 +2,7 @@
 <html lang="zh-CN">
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-    <title>用户登录 <!--{$site.title}-->_<!--{$site.seotitle}--></title>
+    <title><!--{if $user}-->绑定已有用户<!--{else}-->用户登录<!--{/if}--> <!--{$site.title}-->_<!--{$site.seotitle}--></title>
     <meta name="keywords" content="<!--{$site.keywords}-->" />
     <meta name="description" content="<!--{$site.description}-->"/>
     <meta name="mobile-agent" content="format=html5;url=<!--{$site.url}-->"/>
@@ -10,6 +10,9 @@
     <link rel="stylesheet" href="<!--{$site.urls.ui}-->/iCMS.loginreg-6.0.0.css" type="text/css" />
     <script>
     $(function(){
+      <!--{if $user}-->
+      iCMS.user.OPENID = <!--{$user|json_encode}-->;
+      <!--{/if}-->
       iCMS.user.login("#iCMS-login-page",function(b){
         iCMS.tip(b, '<i class="fa fa-check-circle" style="color: #33B800;"></i>');
       });
@@ -21,7 +24,7 @@
       <div class="logo"> <a href="<!--{$site.url}-->" class="iCMS fl" title="<!--{$site.title}-->"><!--{$site.title}--></a> </div>
       <div class="content">
         <div class="main-col">
-          <h1>用户登录</h1>
+          <h1><!--{if $user}-->绑定已有用户<!--{else}-->用户登录<!--{/if}--></h1>
           <div class="rl_center">
             <div id="iCMS-login-page" class="rl_form">
               <div class="lg_name"> <span>用户名：</span>
@@ -54,9 +57,15 @@
               <div class="ot_login">
                 <span>您也可以用以下方式登录：</span>
                 <div class="ot_btn">
+                  <!--{if $iCMS.CONFIG.open.QQ.enable }-->
                   <a href="<!--{iCMS:router url='/api/user/login/qq'}-->" class="login_qq"></a>
+                  <!--{/if}-->
+                  <!--{if $iCMS.CONFIG.open.WB.enable }-->
                   <a href="<!--{iCMS:router url='/api/user/login/wb'}-->" class="login_wb"></a>
+                  <!--{/if}-->
+                  <!--{if $iCMS.CONFIG.open.WX.enable }-->
                   <a href="<!--{iCMS:router url='/api/user/login/wx'}-->" class="login_wx"></a>
+                  <!--{/if}-->
                 </div>
               </div>
             </div>

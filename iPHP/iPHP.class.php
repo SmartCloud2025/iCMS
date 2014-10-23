@@ -491,11 +491,11 @@ class iPHP{
 			"api:'iPHP'",
 		);
 		//$content && $options[]="content:'{$content}'";
-		$auto_func = 'd.close();';
+		$auto_func = 'd.close().remove();';
 		$func      = self::js($js,true);
 		if($func){
 			$buttons OR $options[] ='okValue: "确 定",ok: function(){'.$func.';},';
-			$auto_func = $func.'d.close();';
+			$auto_func = $func.'d.close().remove();';
 		}
         if(is_array($buttons)) {
             $okbtn ="{value:'确 定',callback:function(){".$func."},autofocus: true}";
@@ -530,7 +530,7 @@ class iPHP{
         $s>30	&& $timeout		= $s;
         $s===false && $timeout	= false;
         if($timeout){
-        	//$dialog.='window.setTimeout(function(){'.$auto_func.'},'.$timeout.');';
+        	$dialog.='window.setTimeout(function(){'.$auto_func.'},'.$timeout.');';
         }else{
         	$update && $dialog.= $auto_func;
         }

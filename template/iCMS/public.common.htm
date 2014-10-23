@@ -30,8 +30,21 @@
           </dl>
         </div>
         <div class="reg_or_weibo">
-          <div class="register_box">还没有<!--{$site.title}-->账号？ <a href="<!--{iCMS:router url='/api/user/login/qq'}-->" style="display:block; margin:10px 0 20px"><img src="<!--{$site.urls.ui}-->/img/login_for_qq_v3.png"></a></div>
-          <div class="l_o"> <a style="background-position: 0 -137px;" href="<!--{iCMS:router url='/api/user/login/wx'}-->">用微信帐号登录</a> <a href="<!--{iCMS:router url='/api/user/login/wb'}-->">用微博帐号登录</a><br>
+          <div class="register_box">
+            还没有<!--{$site.title}-->账号？
+            <!--{if $iCMS.CONFIG.open.QQ.enable }-->
+            <a href="<!--{iCMS:router url='/api/user/login/qq'}-->" style="display:block; margin:10px 0 20px">
+              <img src="<!--{$site.urls.ui}-->/img/login_for_qq_v3.png">
+            </a>
+            <!--{/if}-->
+          </div>
+          <div class="l_o mb10">
+            <!--{if $iCMS.CONFIG.open.WX.enable }-->
+            <a class="iCMS_open_icon icon_wx" href="<!--{iCMS:router url='/api/user/login/wx'}-->">用微信帐号登录</a>
+            <!--{/if}-->
+            <!--{if $iCMS.CONFIG.open.WB.enable }-->
+            <a class="iCMS_open_icon icon_wb" href="<!--{iCMS:router url='/api/user/login/wb'}-->">用微博帐号登录</a>
+            <!--{/if}-->
           </div>
           <a href="<!--{iCMS:router url='/api/user/register'}-->" style="font-size:14px; text-decoration:underline;">直接注册<!--{$site.title}-->帐号</a> </div>
       </div>

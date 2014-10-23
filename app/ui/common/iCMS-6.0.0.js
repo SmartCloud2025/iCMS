@@ -104,6 +104,7 @@
             opts.id      = 'iPHP-DIALOG-ALERT';
             opts.content = msg;
             opts.height  = 150;
+            opts.time    = 3000;
             window.top.iCMS.dialog(opts,callback);
         },
         dialog: function(options,callback) {
@@ -114,7 +115,7 @@
                 className:'iCMS_dialog',//skin:'iCMS_dialog',
                 backdropBackground:'#666',backdropOpacity: 0.5,
                 fixed:true,autofocus:false,quickClose:true,
-                lock:true,time: 3000,
+                lock:true,time: null,
                 label:'success',icon: 'check',api:false,elemBack:'beforeremove',
             },_elemBack,timeOutID = null,
             opts = $.extend(defaults,options,iCMS.config.DIALOG);

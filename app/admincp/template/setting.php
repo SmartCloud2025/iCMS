@@ -688,12 +688,12 @@ function modal_tplfile(el,a){
           </div>
           <div id="setting-other" class="tab-pane hide">
             <div class="input-prepend"> <span class="add-on">拼音分割符</span>
-              <input type="text" name="config[other][CLsplit]" class="span3" id="CLsplit" value="<?php echo $config['other']['CLsplit'] ; ?>"/>
+              <input type="text" name="config[other][py_split]" class="span3" id="py_split" value="<?php echo $config['other']['py_split'] ; ?>"/>
             </div>
             <span class="help-inline">留空，按紧凑型生成(pinyin)</span>
             <div class="clearfloat mb10"></div>
             <div class="input-prepend"> <span class="add-on">关键字替换</span>
-              <input type="text" name="config[other][kwCount]" class="span3" id="kwCount" value="<?php echo $config['other']['kwCount'] ; ?>"/>
+              <input type="text" name="config[other][keyword_limit]" class="span3" id="keyword_limit" value="<?php echo $config['other']['keyword_limit'] ; ?>"/>
             </div>
             <span class="help-inline">内链关键字替换次数 0为不替换，-1全部替换</span>
             <div class="clearfloat mb10"></div>

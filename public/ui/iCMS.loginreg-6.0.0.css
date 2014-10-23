@@ -3,7 +3,8 @@ body { color: #2a2a2a; font-size: 14px; background-color: #f2f2f2; background-im
 .iCMS_register_wrap, .iCMS_login_wrap { margin: 0 auto; width: 984px; }
 .logo { height: 106px; background: url(img/iCMS.logo-6.0.png) no-repeat 0 30px; _background-image: none; _filter: progid:DXImageTransform.Microsoft.AlphaImageLoader(src='img/login-reg-logo.png', sizingMethod="crop"); }
 .logo .iCMS { overflow: hidden; margin-right: 10px; width: 220px; height: 75px; text-indent: -999em; }
-.iCMS_login_wrap .content, .iCMS_register_wrap .content { height: 564px; background-color: #fff; border: 1px solid #CECECE; box-shadow: 0 0 3px #fff inset, 0 1px 1px rgba(0, 0, 0, .1); }
+.iCMS_login_wrap .content, .iCMS_register_wrap .content {background-color: #fff; border: 1px solid #CECECE; box-shadow: 0 0 3px #fff inset, 0 1px 1px rgba(0, 0, 0, .1); }
+/*.iCMS_register_wrap .content*/
 .content { padding-left: 55px; }
 .content .tooltip.right .tooltip-arrow {border-right-color: #fff;}
 .content .tooltip .tooltip-inner {background-color: #fff;color: #08c;font-size: 12px;width: 240px;}
@@ -25,9 +26,7 @@ body { color: #2a2a2a; font-size: 14px; background-color: #f2f2f2; background-im
 .right-col .rst_login a { display: block; margin-top: 12px; width: 81px; height: 29px; background-position: right -150px; }
 .right-col .other_login { margin-top: 65px; margin-left: 32px; }
 .right-col .other_login span { margin-bottom: 2px; color: #999; }
-.content .reg_icon { display: block; margin-top: 12px; padding-top: 2px; padding-top: 5px\9; padding-left: 20px; width: 100px; height: 16px; line-height: 16px; *padding-top: 5px; _padding-top: 7px; }
-.reg_icon.icon_qq { background: url(img/icon_qq.png) no-repeat left center; }
-.reg_icon.icon_sina { background: url(img/icon_sina.png) no-repeat left center; }
+.content .iCMS_open_icon {display: block; margin-top: 12px; padding-top: 3px\9; padding-left: 20px; width: 100px; height: 16px; line-height: 16px; *padding-top: 3px; _padding-top: 5px; }
 .reg_mail { overflow: hidden; margin-top: 15px; margin-left: 20px; line-height: 30px; room: 1; _width: 334px; }
 .reg_nickname { overflow: hidden; margin-top: 18px; margin-left: 48px; line-height: 30px; room: 1; _width: 334px; }
 .reg_sex { overflow: hidden; margin-top: 16px; margin-left: 48px; height: 30px; line-height: 30px; room: 1; _width: 300px; }

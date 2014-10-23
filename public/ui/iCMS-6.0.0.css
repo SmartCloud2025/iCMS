@@ -52,8 +52,18 @@ a,a:hover,a:focus { color: #259 }
 .mod .bd { overflow: hidden; zoom: 1 }
 .mod .bd:after { display: block; visibility: hidden; clear: both; height: 0; content: "." }
 /* ==iCMS== */
-/* icon */
 .iCMS_API_iframe { width: 100% }
+/* icon */
+.iCMS_open_icon { display: inline-block;height: 16px; padding: 0 0 0 19px; background: url(img/login_method_v3.png) no-repeat 0 0; color: #666; line-height: 16px }
+.iCMS_open_icon.icon_qq{background-position: 0 -27px;}
+.iCMS_open_icon.icon_tb{background-position: 0 -52px;}
+.iCMS_open_icon.icon_txwb{background-position: 0 -77px;}
+.iCMS_open_icon.icon_db{background-position: 0 -107px;}
+.iCMS_open_icon.icon_wx{background-position: 0 -136px;}
+.iCMS_open_icon.icon_rr{background-position: 0 -166px;}
+.iCMS_open_icon.icon_wb{background-position: 0 -223px;}
+.iCMS_open_icon.icon_arr{background-position: 0 -197px;}
+
 .iCMS_icon { width: 16px; height: 16px; background-image: url(img/sprites-1.9.1.png); background-repeat: no-repeat; display: inline-block; vertical-align: middle }
 /* pagination */
 .iCMS_pagination { margin: 10px; clear: both; max-height: 30px; position: relative; text-align: center }

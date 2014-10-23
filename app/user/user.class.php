@@ -160,6 +160,8 @@ class user {
 			return $user->status;
 		}
 		self::set_cookie($user->username,$user->password,(array)$user);
+		self::$userid   = $user->uid;
+		self::$nickname = $user->nickname;
 		return true;
 	}
 	public static function get_cookie($unpw=false) {

@@ -8,6 +8,9 @@
     <script src="<!--{$site.urls.ui}-->/iCMS.login-6.0.0.js"></script>
     <script>
     $(function(){
+      <!--{if $user}-->
+      iCMS.user.OPENID = <!--{$user|json_encode}-->;
+      <!--{/if}-->
       iCMS.user.login("#iCMS-login-page",function(b){
         iCMS.tip(b, '<i class="fa fa-check-circle" style="color: #33B800;"></i>');
       });
@@ -25,7 +28,7 @@
           <span class="icon-bar"></span>
           <span class="icon-bar"></span>
           </button>
-          <h3 class="header-title">用户登录</h1>
+          <h3 class="header-title"><!--{if $user}-->绑定已有用户<!--{else}-->用户登录<!--{/if}--></h1>
         </div>
       </div>
     </nav>
@@ -51,9 +54,24 @@
             <button type="submit" class="btn btn-primary btn-lg btn-block iCMS_login_btn">登 录</button>
           </div>
           <div class="clearfix mt10">
-            <a class="btn btn-link findpwd" href="<!--{$iCMS.SAPI}-->&do=findpwd">忘记密码？</a>
-            <a class="btn btn-success lr-btn" href="<!--{iCMS:router url='/api/user/register'}-->"><i class="fa fa-user"></i> 注册 »</a>
+            <a class="btn btn-success" href="<!--{iCMS:router url='/api/user/register'}-->"><i class="fa fa-user"></i> 我没有账号？去注册 »</a>
           </div>
+          <!--{if !$user}-->
+          <hr />
+          <div class="open-btn">
+            <h3 class="gray mb10">您也可以用以下方式登录：</h3>
+            <!--{if $iCMS.CONFIG.open.QQ.enable }-->
+            <a class="btn btn-primary btn-sm" href="<!--{iCMS:router url='/api/user/login/qq'}-->"><i class="fa fa-qq"></i> QQ 登录</a>
+            <!--{/if}-->
+            <!--{if $iCMS.CONFIG.open.WB.enable }-->
+            <a class="btn btn-danger btn-sm" href="<!--{iCMS:router url='/api/user/login/wb'}-->"><i class="fa fa-weibo"></i> 微博登录</a>
+            <!--{/if}-->
+            <!--{if $iCMS.CONFIG.open.WX.enable }-->
+            <a class="btn btn-success btn-sm" href="<!--{iCMS:router url='/api/user/login/wx'}-->"><i class="fa fa-weixin"></i> 微信登录</a>
+            <!--{/if}-->
+          </div>
+          <!--{/if}-->
+          <div class="clearfix mb20"></div>
       </div>
     </div>
     <!--{include file="{iTPL}/footer.htm"}-->

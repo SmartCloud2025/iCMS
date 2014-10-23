@@ -150,11 +150,17 @@ iACP::head();
         <table class="table table-bordered">
           <tr>
             <td style="width:60px">版权所有</td>
-            <td><a class="btn btn-primary" href="http://www.idreamsoft.com" target="_blank"><i class="fa fa-bullseye"></i> 艾梦软件</a> <a class="btn btn-success" href="https://me.alipay.com/icms" target="_blank"><i class="fa fa-jpy"></i> 捐赠</a></td>
+            <td>
+              <a class="btn btn-primary" href="http://www.idreamsoft.com" target="_blank"><i class="fa fa-copyright"></i> 艾梦软件</a>
+              <a class="btn btn-success" href="https://me.alipay.com/icms" target="_blank"><i class="fa fa-jpy"></i> 捐赠</a>
+            </td>
           </tr>
           <tr>
             <td>开 发 者</td>
-            <td><a class="btn" href="http://t.qq.com/idreamsoft" target="_blank">枯木(@idreamsoft)</a></td>
+            <td>
+              <a class="btn btn-inverse" href="http://t.qq.com/idreamsoft" target="_blank"><i class="fa fa-at"></i> 枯木(@idreamsoft)</a>
+              <a class="btn" href="https://github.com/idreamsoft/iCMS" target="_blank"><i class="fa fa-github"></i> GitHub</a>
+            </td>
           </tr>
           <tr>
             <td>帮助</td>
@@ -162,7 +168,7 @@ iACP::head();
           </tr>
           <tr>
             <td>许可协议</td>
-            <td><a class="btn" href="http://www.idreamsoft.com/doc/iCMS.License.html" target="_blank">LGPL 开源协议</a> <a class="btn btn-danger" href="http://www.idreamsoft.com/service" target="_blank"><i class="fa fa-ticket"></i> 商业授权</a></td>
+            <td><a class="btn" href="http://www.idreamsoft.com/doc/iCMS.LGPL.html" target="_blank">LGPL 开源协议</a> <a class="btn btn-danger" href="http://www.idreamsoft.com/service" target="_blank"><i class="fa fa-ticket"></i> 商业授权</a></td>
           </tr>
           <tr>
             <td>相关链接</td>
@@ -178,15 +184,19 @@ iACP::head();
         <h5>BUG提交</h5>
       </div>
       <div class="widget-content nopadding">
-        <textarea id="bug_content" class="tip" title="为了保证效率，请务必描述清楚你的问题，例如包含 iCMS 版本号、服务器操作系统、WEB服务器版本、浏览器版本等必要信息，不合格问题将可能会被无视掉" style="width:95%; height: 158px; margin:4px 0px 4px 10px;">
-iCMS 版本号:iCMS <?php echo iCMS_VER ; ?>[<?php echo iCMS_RELEASE ; ?>]
-服务器操作系统:<?php echo PHP_OS ; ?>;
-WEB服务器版本:<?php echo $_SERVER['SERVER_SOFTWARE'] ; ?>;
-浏览器版本:<?php echo $_SERVER['HTTP_USER_AGENT'] ; ?>;
-问题:</textarea>
-        <a id="bug_submit" class="btn btn-primary fr mr20"><i class="fa fa-check"></i> 提交</a>
-        <input id="bug_url" type="text" class="span4 ml10" placeholder="出问题的URL">
-        <div class="clearfloat"></div>
+        <form action="http://www.idreamsoft.com/cms/feedback.php" method="post" class="form-inline" id="iCMS-feedback" target="iPHP_FRAME">
+          <textarea id="bug_content" name="content" class="tip" title="为了保证效率，请务必描述清楚你的问题，例如包含 iCMS 版本号、服务器操作系统、WEB服务器版本、浏览器版本等必要信息，不合格问题将可能会被无视掉" style="width:95%; height: 160px; margin:4px 0px 4px 10px;padding: 4px;">
+  iCMS 版本号:iCMS <?php echo iCMS_VER ; ?>[<?php echo iCMS_RELEASE ; ?>]
+  服务器操作系统:<?php echo PHP_OS ; ?>;
+  WEB服务器版本:<?php echo $_SERVER['SERVER_SOFTWARE'] ; ?>;
+  浏览器版本:<?php echo $_SERVER['HTTP_USER_AGENT'] ; ?>;
+  出问题的URL:
+  问题:</textarea>
+          <div class="clearfix mt10"></div>
+          <button id="bug_button" class="btn btn-primary fr mr20" type="submit"><i class="fa fa-check"></i> 提交</button>
+          <input id="bug_email" name="email" type="text" class="span4 ml10" placeholder="您的邮箱">
+          <div class="clearfix mt10"></div>
+        </form>
       </div>
     </div>
   </div>
@@ -195,7 +205,7 @@ WEB服务器版本:<?php echo $_SERVER['SERVER_SOFTWARE'] ; ?>;
 <script type="text/javascript">
 $(function(){
 	window.setTimeout(function(){
-		$.getJSON("http://www.idreamsoft.com/cms/getVersion.php?callback=?",
+		$.getJSON("http://www.idreamsoft.com/cms/version.php?callback=?",
 		    function(o){
 		        $('#newversion').text(o.version);
 		    }

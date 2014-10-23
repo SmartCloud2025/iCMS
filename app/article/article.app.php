@@ -268,7 +268,7 @@ class articleApp {
     }
     //内链
     private static function keywords($content) {
-        if(iCMS::$config['other']['kwCount']==0) return $content;
+        if(iCMS::$config['other']['keyword_limit']==0) return $content;
 
         $keywords   = iCache::get('iCMS/keywords');
         if($keywords){

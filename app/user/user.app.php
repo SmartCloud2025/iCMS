@@ -511,12 +511,23 @@ class userApp {
         $remember = (bool)$_POST['remember']?ture:false;
         $seccode  = iS::escapeStr($_POST['seccode']);
 
+        $openid   = iS::escapeStr($_POST['openid']);
+        $platform = iS::escapeStr($_POST['platform']);
+
         if(iCMS::$config['user']['loginseccode']){
             iPHP::seccode($seccode) OR iPHP::code(0,'iCMS:seccode:error','seccode','json');
         }
         $remember && user::$cookietime = 14*86400;
         $user = user::login($uname,$pass,(strpos($uname,'@')===false?'nk':'un'));
         if($user===true){
+            if($openid){
+                $uid =
+                iDB::query("
+                    INSERT INTO `#iCMS@__user_openid`
+                           (`uid`, `openid`, `platform`)
+                    VALUES ('".user::$userid."', '$openid', '$platform');
+                ");
+            }
             iPHP::code(1,0,$this->forward,'json');
         }else{
             // $lang = 'user:login:error';
@@ -770,46 +781,7 @@ class userApp {
         user::logout();
         iPHP::code(1,0,$this->forward,'json');
     }
-    public function openid(){
-        if(!isset($_GET['sign'])){
-            return;
-        }
-        $sign  = $_GET['sign'];
-        $code  = $_GET['code'];
-        $state = $_GET['state'];
-        $platform_map = array('WX'=>1,'QQ'=>2,'WB'=>3,'TB'=>4);
-        $api          = strtoupper($sign);
-        $platform     = $platform_map[$api];
-        if($platform){
-            iPHP::app('user.open/'.$api.'.class','static');
-            $api::$appid  = iCMS::$config['open'][$api]['appid'];
-            $api::$appkey = iCMS::$config['open'][$api]['appkey'];
-            $api::$url    = USER_LOGIN_URL.'&sign='.$sign;
-            $api::callback();
 
-            $userid = user::openid($api::$openid,$platform);
-            if($userid){
-                $user = user::get($userid,false);
-                user::set_cookie($user->username,$user->password,array(
-                    'uid'      =>$userid,
-                    'username' =>$user->username,
-                    'nickname' =>$user->nickname,
-                    'status'   =>$user->status
-                    )
-                );
-                $api::cleancookie();
-                iPHP::gotourl($this->forward);
-            }else{
-                $user             = $api::get_user_info();
-                $user['openid']   = $api::$openid;
-                $user['platform'] = $platform;
-                iDB::value("SELECT uid FROM `#iCMS@__user` where `nickname`='".$user['nickname']."' LIMIT 1") && $user['nickname']=$sign.'_'.$user['nickname'];
-                iPHP::assign('user',$user);
-                iPHP::view('iCMS://user/register.htm');
-                exit;
-            }
-        }
-    }
     public function API_login(){
         if(iCMS::$config['user']['login']){
             self::openid();
@@ -893,5 +865,59 @@ class userApp {
         }
         return $option;
     }
+    public function openid(){
+        if(!isset($_GET['sign'])){
+            return;
+        }
+        $sign  = $_GET['sign'];
+        $code  = $_GET['code'];
+        $state = $_GET['state'];
+        $platform_map = array('WX'=>1,'QQ'=>2,'WB'=>3,'TB'=>4);
+        $api          = strtoupper($sign);
+        $platform     = $platform_map[$api];
+        $bind         = $sign;
+        if($platform){
+            iPHP::app('user.open/'.$api.'.class','static');
+            $api::$appid  = iCMS::$config['open'][$api]['appid'];
+            $api::$appkey = iCMS::$config['open'][$api]['appkey'];
+            $api::$url    = USER_LOGIN_URL.'&sign='.$sign;
+            if(isset($_GET['bind']) && $_GET['bind']==$sign){
+                $api::get_openid();
+            }else{
+                $api::callback();
+            }
 
+            $userid = user::openid($api::$openid,$platform);
+            if($userid){
+                $user = user::get($userid,false);
+                user::set_cookie($user->username,$user->password,array(
+                    'uid'      => $userid,
+                    'username' => $user->username,
+                    'nickname' => $user->nickname,
+                    'status'   => $user->status
+                    )
+                );
+                $api::cleancookie();
+                iPHP::gotourl($this->forward);
+            }else{
+                if(isset($_GET['bind'])){
+                    $user = array();
+                    $user['openid']   = $api::$openid;
+                    $user['platform'] = $platform;
+                    $api::cleancookie();
+                    iPHP::assign('user',$user);
+                    iPHP::view('iCMS://user/login.htm');
+                }else{
+                    $user = $api::get_user_info();
+                    $user['openid']   = $api::$openid;
+                    $user['platform'] = $platform;
+                    iDB::value("SELECT `uid` FROM `#iCMS@__user` where `nickname`='".$user['nickname']."' LIMIT 1") && $user['nickname']=$sign.'_'.$user['nickname'];
+                    iPHP::assign('user',$user);
+                    iPHP::assign('query',compact(array('sign','code','state','bind')));
+                    iPHP::view('iCMS://user/register.htm');
+                }
+                exit;
+            }
+        }
+    }
 }

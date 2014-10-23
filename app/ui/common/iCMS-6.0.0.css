@@ -116,6 +116,7 @@ a:hover { text-decoration: none; }
 .error { color: #C33; }
 .bull { padding: 0 3px; color: #BBB; display: inline-block; font-family: Arial; }
 .btn { outline: none !important; outline-style: none !important; }
+
 /* dialog */
 .iCMS_dialog { -webkit-border-radius: 6px; -moz-border-radius: 6px; border-radius: 6px; border: 1px solid #888; -webkit-box-shadow: 0 0 80px 0 rgba(0, 0, 0, 0.4); -moz-box-shadow: 0 0 80px 0 rgba(0, 0, 0, 0.4); box-shadow: 0 0 80px 0 rgba(0, 0, 0, 0.4); background: #fff; z-index: 99999 !important; }
 .iCMS_dialog .ui-dialog { opacity: 1; border: 0px; box-shadow: none; background-color: inherit; }
@@ -140,11 +141,12 @@ a:hover { text-decoration: none; }
 .ui-popup-follow .iCMS_tooltip_popup { -webkit-box-shadow: 0 5px 10px rgba(0, 0, 0, 0.4); -moz-box-shadow: 0 5px 10px rgba(0, 0, 0, 0.4); box-shadow: 0 5px 10px rgba(0, 0, 0, 0.4); }
 .iCMS_tooltip_popup .ui-dialog-header .ui-dialog-title { padding: 6px 15px; }
 .iCMS_tooltip_popup .ui-dialog-header .ui-dialog-close { top: 5px; }
-.iCMS_tooltip_popup .ui-dialog-body{padding: 10px;}
+.iCMS_tooltip_popup .ui-dialog-body { padding: 10px; }
 .iPHP-msg { text-align: center; margin: 0px 5px; padding: 0px 4px; }
 .iPHP-msg .label { /* white-space: pre-wrap;  */padding: 8px 10px; font-size: 14px; letter-spacing: 1px; line-height: 160%; }
 .iPHP-msg pre { text-align: left; }
 .iPHP-msg i { font-size: 18px; }
+.iPHP-msg .label-success hr { margin: 10px 0; border-top: 1px solid #007202; border-bottom: 1px solid #6A946B; }
 /* .iPHP-msg .d-content .btn-group { position: absolute; }
 .iPHP-msg .d-content { color: #222 }
 .d-content .buttons { padding: 0 15px; margin-bottom: 15px; text-align: right; background: #fff }
@@ -157,7 +159,7 @@ a:hover { text-decoration: none; }
 .tooltip-inner hr, .d-content .iPHP-msg .label hr { margin: 10px 0px; border-bottom: none; }
 /* pagination */
 .pagination .muted { height: 20px; line-height: 20px; }
-/**/
+/* public */
 #iCMS_public_crontab { display: none; }
 .iCMS_seccode { width: 60px; }
 .iCMS_seccode_img { vertical-align: top; margin-left: 5px; }
@@ -191,8 +193,8 @@ a:hover { text-decoration: none; }
 .iCMS_report_dialog .loading { text-align: center; color: #999 }
 /* pm */
 #iCMS-pm-box { display: none; }
-.iCMS_pm_dialog { width: 340px;}
-.iCMS_pm_dialog dt {text-align: right;float: left; }
+.iCMS_pm_dialog { width: 340px; }
+.iCMS_pm_dialog dt { text-align: right; float: left; }
 .iCMS_pm_dialog dt label { color: #999; font-size: 13px; }
 .iCMS_pm_dialog .pm_inbox { float: right; }
 .iCMS_pm_dialog .pm_content { width: 80%; padding: 5px; height: 60px; }

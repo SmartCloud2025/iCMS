@@ -104,7 +104,7 @@ class tag {
 	            iDB::query("UPDATE `#iCMS@__tags` SET  `count`=count+1,`pubdate`='".time()."'  WHERE `id`='$tid'");
 	        }
 	    }else {
-			$tkey   = pinyin($tag,iCMS::$config['other']['CLsplit']);
+			$tkey   = pinyin($tag,iCMS::$config['other']['py_split']);
 			// $fields = array('uid', 'cid', 'tcid', 'pid', 'tkey', 'name', 'seotitle', 'subtitle', 'keywords', 'description', 'haspic', 'pic', 'url', 'related', 'count', 'weight', 'tpl', 'ordernum', 'pubdate', 'status');
 			// $data   = compact ($fields);
 			// $data['pid'] = '0';

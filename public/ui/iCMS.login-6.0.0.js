@@ -23,6 +23,7 @@
 
       param.remember = $(".iCMS_login_remember:checked", login).val();
 
+      var param = $.extend(iCMS.user.OPENID,param);
       $.post(iCMS.api('user'), param, function(ret) {
         if (ret.code) {
           window.top.location.href = ret.forward;

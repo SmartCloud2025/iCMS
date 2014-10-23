@@ -40,11 +40,14 @@ class WX {
 			exit;
 		}
 	}
-
+	public static function get_openid(){
+		self::$openid  = authcode(iPHP::get_cookie("WX_OPENID"), 'DECODE');
+		return self::$openid;
+	}
 	public static function get_user_info(){
-		$access_token	= authcode(iPHP::get_cookie("WX_ACCESS_TOKEN"), 'DECODE');
-		$openid	= authcode(iPHP::get_cookie("WX_OPENID"), 'DECODE');
-	    $get_user_info = "https://api.weixin.qq.com/sns/userinfo?"
+		$access_token  = authcode(iPHP::get_cookie("WX_ACCESS_TOKEN"), 'DECODE');
+		$openid        = authcode(iPHP::get_cookie("WX_OPENID"), 'DECODE');
+		$get_user_info = "https://api.weixin.qq.com/sns/userinfo?"
 	        . "access_token=" . $access_token
 	        . "&openid=" .$openid;
 
@@ -61,12 +64,11 @@ class WX {
 	}
 	public static function get_url_contents($url){
 		$result =  file_get_contents($url);
-
-//	    $ch = curl_init();
-//	    curl_setopt($ch, CURLOPT_RETURNTRANSFER, TRUE);
-//	    curl_setopt($ch, CURLOPT_URL, $url);
-//	    $result =  curl_exec($ch);
-//	    curl_close($ch);
+	    // $ch = curl_init();
+	    // curl_setopt($ch, CURLOPT_RETURNTRANSFER, TRUE);
+	    // curl_setopt($ch, CURLOPT_URL, $url);
+	    // $result =  curl_exec($ch);
+	    // curl_close($ch);
 	    return $result;
 	}
 }

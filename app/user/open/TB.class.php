@@ -34,15 +34,21 @@ class TB {
 			exit;
 	    }
 	    self::$openid	= self::$info['taobao_user_id'];
+	    iPHP::set_cookie("TB_OPENID",self::$openid);
+	}
+	public static function get_openid(){
+		self::$openid  = authcode(iPHP::get_cookie("TB_OPENID"), 'DECODE');
+		return self::$openid;
 	}
 	public static function get_user_info(){
-		$user['nickname']=self::$info['taobao_user_nick'];
-		$user['gender']	=0; //$user['gender']=="??"?'1':0;
-		$user['avatar']	=''; //$user['figureurl_2'];
+		$user['nickname'] =self::$info['taobao_user_nick'];
+		$user['gender']   =0; //$user['gender']=="??"?'1':0;
+		$user['avatar']   =''; //$user['figureurl_2'];
 		return $user;
 	}
 	public static function cleancookie(){
 		iPHP::set_cookie('TB_STATE', '',-31536000);
+		iPHP::set_cookie('TB_OPENID', '',-31536000);
 	}
 
 	public static function postUrl($url, $POSTFIELDS) {
