@@ -51,7 +51,7 @@ class iCMS {
     private static function config(){
         $site   = iPHP_MULTI_SITE ? $_SERVER['HTTP_HOST']:iPHP_APP;
         if(iPHP_MULTI_DOMAIN){ //只绑定主域
-            preg_match("/[^\.\/]+\.[^\.\/]+$/", $site, $matches);
+            preg_match("/[^\.\/][\w\-]+\.[^\.\/]+$/", $site, $matches);
             $site = $matches[0];
         }
         strpos($site, '..') === false OR exit('<h1>What are you doing?(code:0001)</h1>');
@@ -69,11 +69,12 @@ class iCMS {
         //config.php --END--
 
         define('iPHP_URL_404',$config['router']['404']);//404定义
+        ini_set('display_errors','OFF');
+        error_reporting(0);
 
         if(iPHP_DEBUG||iPHP_TPL_DEBUG){
             ini_set('display_errors','ON');
             error_reporting(E_ALL & ~E_NOTICE);
-            set_error_handler('iPHP_ERROR_HANDLER');
         }
 
         $timezone = $config['time']['zone'];

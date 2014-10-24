@@ -209,3 +209,13 @@ a:hover { text-decoration: none; }
 .iCMS_favorite_dialog .favorite_list_content .favo-list-item-link .meta { display: block }
 .iCMS_favorite_dialog .favorite_list_content .favo-list-item-link:hover { text-decoration: none; background-color: #F5F5F5 }
 .iCMS_favorite_dialog .favorite_list_content .active { background: url(img/check.png) no-repeat 96% center; }
+/* Desktop large @media (min-width:1200px)
+------------------------- */
+/* Desktop @media (max-width:980px) {
+------------------------- */
+/* Tablet to desktop @media (min-width:768px) and (max-width:979px) {
+------------------------- */
+/* Tablet @media (max-width:767px) {
+------------------------- */
+/* Landscape phones @media (max-width:480px) {
+------------------------- */

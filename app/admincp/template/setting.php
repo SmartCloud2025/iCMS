@@ -11,15 +11,16 @@ iACP::head();
 <style>
 h3{
   display: inline-block;
-height: 35px;
-margin-bottom: 5px;
-background-color: #DFDFDF;
-margin-top: 5px;
-padding-left: 10px;
-font-weight: bold;
-color: #696969;
-text-shadow: 0 1px 0 #FFF;
-border-radius: 4px 4px 0px 0px;width: 330px;}
+  height: 35px;
+  margin-bottom: 5px;
+  background-color: #DFDFDF;
+  margin-top: 5px;
+  padding-left: 10px;
+  font-weight: bold;
+  color: #696969;
+  text-shadow: 0 1px 0 #FFF;
+  border-radius: 4px 4px 0px 0px;width: 330px;
+}
 </style>
 <script type="text/javascript">
 

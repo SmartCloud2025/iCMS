@@ -249,7 +249,7 @@ class iPHP{
 		if(!headers_sent() && $h404){
 			self::http_status(404,$code);
 		}
-	    trigger_error(iPHP_APP.''.$msg. '(' . $code . ')',E_USER_ERROR);
+	    trigger_error(iPHP_APP.' '.$msg. '(' . $code . ')',E_USER_ERROR);
 	}
 	public static function p2num($path,$page=false){
 		$page===false && $page	= $GLOBALS['page'];

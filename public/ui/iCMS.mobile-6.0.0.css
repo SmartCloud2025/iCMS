@@ -255,8 +255,8 @@ footer .links li:first-child { padding-left: 0; }
 /* media */
 @media (max-width:480px) {
 	.navbar-brand {width: 120px;}
-	.mlogo{width: 60px;}
-	.mlogo img{width: 60px !important;}
+	.mlogo{width: 100px;}
+	.mlogo img{width: 90px !important;}
 }
 /*@media (min-width: 481px) and (max-width: 768px) {
 	.panel{float: left;width: 200px;margin-right: 5px;}

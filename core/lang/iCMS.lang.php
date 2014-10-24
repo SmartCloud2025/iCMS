@@ -41,7 +41,7 @@ return array(
 	),
 	'report'=>array(
 		'empty'   =>'请填写举报的原因！',
-		'success' =>'谢谢您的反馈!我们会尽快处理的！',
+		'success' =>'谢谢您的反馈！我们会尽快处理的！',
 	),
 	'pm'=>array(
 		'empty'   =>'请填写私信内容。',
