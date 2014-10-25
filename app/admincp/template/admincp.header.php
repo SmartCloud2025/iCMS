@@ -18,10 +18,10 @@ defined('iPHP') OR exit('What are you doing?');
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
 <!-- <meta name="viewport" content="width=device-width,user-scalable=yes, minimum-scale=0.4, initial-scale=0.8,target-densitydpi=low-dpi" /> -->
 <meta content="iDreamSoft Inc." name="Copyright" />
-<link rel="stylesheet" href="./app/ui/common/bootstrap/2.3.1/css/bootstrap.min.css" type="text/css" />
-<link rel="stylesheet" href="./app/ui/common/bootstrap/2.3.1/css/bootstrap-responsive.min.css" type="text/css" />
-<link rel="stylesheet" href="./app/ui/common/bootstrap/2.3.1/css/datepicker.css" type="text/css" />
-<link rel="stylesheet" href="./app/ui/common/bootstrap/2.3.1/css/bootstrap-switch.css" type="text/css" />
+<link rel="stylesheet" href="./app/ui/common/bootstrap/2.3.2/css/bootstrap.min.css" type="text/css" />
+<link rel="stylesheet" href="./app/ui/common/bootstrap/2.3.2/css/bootstrap-responsive.min.css" type="text/css" />
+<link rel="stylesheet" href="./app/ui/common/bootstrap/2.3.2/css/datepicker.css" type="text/css" />
+<link rel="stylesheet" href="./app/ui/common/bootstrap/2.3.2/css/bootstrap-switch.css" type="text/css" />
 <link rel="stylesheet" href="./app/ui/common/font-awesome/4.2.0/css/font-awesome.min.css" type="text/css" />
 <link rel="stylesheet" href="./app/ui/common/artDialog/6.0.3/ui-dialog.css" type="text/css" />
 <link rel="stylesheet" href="./app/ui/common/iCMS-6.0.0.css" type="text/css" />
@@ -31,9 +31,9 @@ defined('iPHP') OR exit('What are you doing?');
 <![endif]-->
 <script src="./app/ui/common/jquery-1.11.0.min.js" type="text/javascript"></script>
 <script src="./app/ui/common/artDialog/6.0.3/dialog-plus-min.js" type="text/javascript"></script>
-<script src="./app/ui/common/bootstrap/2.3.1/js/bootstrap.min.js" type="text/javascript"></script>
-<script src="./app/ui/common/bootstrap/2.3.1/js/bootstrap-datepicker.js" type="text/javascript"></script>
-<script src="./app/ui/common/bootstrap/2.3.1/js/bootstrap-switch.min.js" type="text/javascript"></script>
+<script src="./app/ui/common/bootstrap/2.3.2/js/bootstrap.min.js" type="text/javascript"></script>
+<script src="./app/ui/common/bootstrap/2.3.2/js/bootstrap-datepicker.js" type="text/javascript"></script>
+<script src="./app/ui/common/bootstrap/2.3.2/js/bootstrap-switch.min.js" type="text/javascript"></script>
 <script src="./app/ui/common/iCMS-6.0.0.js" type="text/javascript"></script>
 
 <!-- admincp ui -->

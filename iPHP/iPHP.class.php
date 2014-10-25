@@ -191,6 +191,16 @@ class iPHP{
 		}
 		return new $obj_name();
     }
+    public static function QRcode($content){
+        self::import(iPHP_LIB.'/phpqrcode.php');
+		$content = iS::escapeStr($content);
+		$expires = 86400;
+        header("Cache-Control: maxage=".$expires);
+        header('Last-Modified: '.gmdate('D, d M Y H:i:s',time()).' GMT');
+        header('Expires: '.gmdate('D, d M Y H:i:s',time()+$expires).' GMT');
+        header('Content-type: image/png');
+        QRcode::png($content, false, 'L', 6, 2);
+    }
     public static function Markdown($content){
     	self::import(iPHP_LIB.'/Parsedown.php');
 		$Parsedown = new Parsedown();

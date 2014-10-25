@@ -8,17 +8,9 @@
  */
 class publicApp {
 	public $methods	= array('seccode','agreement','crontab','time');
-	public function API_seccode(){
-		@header("Expires: -1");
-		@header("Cache-Control: no-store, private, post-check=0, pre-check=0, max-age=0", FALSE);
-		@header("Pragma: no-cache");
-		iPHP::loadClass("Seccode");
-		iSeccode::run();
-	}
     public function API_agreement(){
     	iPHP::view('iCMS://agreement.htm');
     }
-
     public function API_crontab(){
         $timeline = iCMS::timeline();
         //var_dump($timeline);
@@ -41,5 +33,16 @@ class publicApp {
         	iDB::query("UPDATE `#iCMS@__article` SET {$sql}");
         	iDB::query("UPDATE `#iCMS@__user_data` SET {$sql}");
         }
-   }
+    }
+    public function API_seccode(){
+        @header("Expires: -1");
+        @header("Cache-Control: no-store, private, post-check=0, pre-check=0, max-age=0", FALSE);
+        @header("Pragma: no-cache");
+        iPHP::loadClass("Seccode");
+        iSeccode::run();
+    }
+
+    public function qrcode(){
+        iPHP::QRcode();
+    }
 }

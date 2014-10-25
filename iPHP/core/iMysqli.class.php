@@ -44,7 +44,7 @@ class iDB {
                     return self::$link;
             }
         }
-        var_dump('expression');
+        //var_dump('expression');
         self::$link = new mysqli(iPHP_DB_HOST, iPHP_DB_USER, iPHP_DB_PASSWORD);
         self::$link->connect_errno && self::bail("<h1>数据库连接失败</h1><p>请检查 <em><strong>config.php</strong></em> 的配置是否正确!</p><ul><li>请确认主机支持MySQL?</li><li>请确认用户名和密码正确?</li><li>请确认主机名正确?(一般为localhost)</li></ul><p>如果你不确定这些情况,请询问你的主机提供商.如果你还需要帮助你可以随时浏览 <a href='http://www.iiiphp.com'>iPHP 支持论坛</a>.</p>");
 

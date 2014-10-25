@@ -29,8 +29,8 @@ $lock_file = iPATH.'cache/install.lock';
 		<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
 		<meta name="viewport" content="width=device-width, initial-scale=1.0">
 		<meta content="iDreamSoft Inc." name="Copyright" />
-		<link href="../app/ui/common/bootstrap/2.3.1/css/bootstrap.min.css" type="text/css" rel="stylesheet"/>
-		<link href="../app/ui/common/bootstrap/2.3.1/css/bootstrap-responsive.min.css" type="text/css" rel="stylesheet"/>
+		<link href="../app/ui/common/bootstrap/2.3.2/css/bootstrap.min.css" type="text/css" rel="stylesheet"/>
+		<link href="../app/ui/common/bootstrap/2.3.2/css/bootstrap-responsive.min.css" type="text/css" rel="stylesheet"/>
 		<link href="../app/ui/common/font-awesome/4.2.0/css/font-awesome.min.css" type="text/css" rel="stylesheet"/>
 		<link href="../app/ui/common/artDialog/6.0.3/ui-dialog.css" type="text/css" rel="stylesheet"/>
 		<link href="../app/ui/common/iCMS-6.0.0.css" type="text/css" rel="stylesheet"/>
@@ -40,7 +40,7 @@ $lock_file = iPATH.'cache/install.lock';
 		<script src="../app/ui/common/ie/respond.min.js"></script>
 		<![endif]-->
 		<script src="../app/ui/common/jquery-1.11.0.min.js"></script>
-		<script src="../app/ui/common/bootstrap/2.3.1/js/bootstrap.min.js"></script>
+		<script src="../app/ui/common/bootstrap/2.3.2/js/bootstrap.min.js"></script>
 		<script src="../app/ui/common/artDialog/6.0.3/dialog-plus-min.js"></script>
 		<script src="../app/ui/common/iCMS-6.0.0.js"></script>
 		<script>
@@ -57,6 +57,9 @@ $lock_file = iPATH.'cache/install.lock';
 			},
 			step3:function (a,b) {
 				this.step(3,4);
+			},
+			step4:function (a,b) {
+				this.step(4,5);
 			},
 			step:function (a,b) {
 				$("#step"+b).show();
@@ -82,10 +85,12 @@ $lock_file = iPATH.'cache/install.lock';
 			$("#install_btn").click(function(event) {
 				event.preventDefault();
 
-				var db_host = $('#DB_HOST').val(),
-				db_user     = $('#DB_USER').val(),
-				db_password = $('#DB_PASSWORD').val(),
-				db_name     = $('#DB_NAME').val();
+				var db_host    = $('#DB_HOST').val(),
+				db_user        = $('#DB_USER').val(),
+				db_password    = $('#DB_PASSWORD').val(),
+				db_name        = $('#DB_NAME').val(),
+				admin_name     = $('#ADMIN_NAME').val(),
+				admin_password = $('#ADMIN_PASSWORD').val();
 
 				if(db_host==''){
 					iCMS.alert('请填写数据库服务器地址');
@@ -110,12 +115,31 @@ $lock_file = iPATH.'cache/install.lock';
 					return false;
 				}
 
+				if(admin_name==''){
+					iCMS.alert('请填写超级管理账号');
+					$('#ADMIN_NAME').focus();
+					return false;
+				}
+				if(admin_password==''){
+					iCMS.alert('请填写超级管理员密码');
+					$('#ADMIN_PASSWORD').focus();
+					return false;
+				}
+		        if (admin_password.length < 6) {
+					iCMS.alert('请设置至少6位以上带字母、数字及符号的密码');
+					$('#ADMIN_PASSWORD').focus();
+					return false;
+		        }
 				//$(this).button('loading');
 				$("#install_form").submit();
 			});
+
 		})
-		function install_callback(){
-			//$("#install_btn").button('reset');
+		function callback(el){
+			if(el){
+				$(el).focus();
+			}
+			$("#install_btn").button('reset');
 		}
 		</script>
 	</head>
@@ -361,7 +385,7 @@ $lock_file = iPATH.'cache/install.lock';
 						<label class="control-label" for="DB_HOST">服务器地址</label>
 						<div class="controls">
 							<input type="text" class="span4" id="DB_HOST" name="DB_HOST" value="localhost">
-							<span class="help-block">数据库服务器名或服务器ip,一般为localhost</span>
+							<span class="help-block">数据库服务器名或服务器ip，一般为localhost</span>
 						</div>
 					</div>
 					<div class="control-group">
@@ -386,7 +410,21 @@ $lock_file = iPATH.'cache/install.lock';
 						<label class="control-label" for="DB_PREFIX">数据表名前缀</label>
 						<div class="controls">
 							<input type="text" class="span4" id="DB_PREFIX" name="DB_PREFIX" value="icms_">
-							<span class="help-block">数据表名前缀, 同一数据库安装多个请修改此处</span>
+							<span class="help-block">数据表名前缀，同一数据库安装多个请修改此处。<span class="label label-important">如果存在同名数据表，程序将自动删除</span></span>
+						</div>
+					</div>
+					<h2>设置超级管理员</h2>
+					<div class="control-group">
+						<label class="control-label" for="ADMIN_NAME">账号</label>
+						<div class="controls">
+							<input type="text" id="ADMIN_NAME" name="ADMIN_NAME" placeholder="管理员账号">
+						</div>
+					</div>
+					<div class="control-group">
+						<label class="control-label" for="ADMIN_PASSWORD">密码</label>
+						<div class="controls">
+							<input type="text" id="ADMIN_PASSWORD" name="ADMIN_PASSWORD" placeholder="管理员密码">
+							<span class="help-block">管理员密码，请设置至少6位以上带字母、数字及符号的密码</span>
 						</div>
 					</div>
 					<h2>网站配置</h2>
@@ -410,24 +448,12 @@ $lock_file = iPATH.'cache/install.lock';
 				</form>
 			</div>
 			<div class="well hide step" id="step5">
-				<h1>第四步：超级管理员配置</h1>
-				<form class="form-horizontal">
-					<div class="control-group">
-						<label class="control-label" for="DB_NAME">管理员账号</label>
-						<div class="controls">
-							<input type="text" id="DB_NAME" placeholder="数据库名">
-						</div>
-					</div>
-					<div class="control-group">
-						<label class="control-label" for="DB_PASSWORD">管理员密码</label>
-						<div class="controls">
-							<input type="text" id="DB_PASSWORD" placeholder="数据库密码">
-						</div>
-					</div>
-					<div class="form-actions">
-						<button type="button" class="btn btn-large btn-primary">下一步</button>
-					</div>
-				</form>
+				<h1>第四步：恭喜您！顺利安装完成。</h1>
+				<div style="width: 300px;margin:50px auto;">
+					<a href="../admincp.php" class="btn btn-large btn-block btn-success" target="_blank">管理后台 »</a>
+					<hr />
+					<a href="../index.php" class="btn btn-large btn-block btn-primary" target="_blank">网站首页 »</a>
+				</div>
 			</div>
 		</div>
 		<iframe class="hide" id="iCMS_FRAME" name="iCMS_FRAME"></iframe>

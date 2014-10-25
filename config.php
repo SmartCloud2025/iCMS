@@ -10,36 +10,31 @@
 * $Id: config.php 2349 2013-02-25 04:10:05Z coolmoo $
 */
 //---------------数据库配置------------------
-define('iPHP_DB_TYPE',		'mysql');//数据库类型 mysql sqlite (SQLite3)
-define('iPHP_DB_NAME',		'icms6');// 数据库名
-define('iPHP_DB_USER',		'root');// 数据库用户
-define('iPHP_DB_PASSWORD',	'123456');//数据库密码
-define('iPHP_DB_HOST',		'localhost');// 服务器名或服务器ip,一般为localhost
-define('iPHP_DB_CHARSET',	'utf8');//MYSQL编码设置.如果您的程序出现乱码现象，需要设置此项来修复. 请不要随意更改此项，否则将可能导致系统出现乱码现象
-define('iPHP_DB_PREFIX',	'icms_');// 表名前缀, 同一数据库安装多个请修改此处
+define('iPHP_DB_TYPE','mysql');//数据库类型 mysql sqlite (SQLite3)
+define('iPHP_DB_HOST','localhost');// 服务器名或服务器ip,一般为localhost
+define('iPHP_DB_USER','root');// 数据库用户
+define('iPHP_DB_PASSWORD','123456');//数据库密码
+define('iPHP_DB_NAME','test');// 数据库名
+define('iPHP_DB_PREFIX','icms_');// 表名前缀, 同一数据库安装多个请修改此处
+define('iPHP_DB_CHARSET','utf8');//MYSQL编码设置.如果您的程序出现乱码现象，需要设置此项来修复. 请不要随意更改此项，否则将可能导致系统出现乱码现象
 define('iPHP_DB_PREFIX_TAG','#iCMS@__');// SQL表名前缀替换
 //define('iPHP_DB_COLLATE', 	'');
 //----------------------------------------
-define('iPHP_KEY',		'wct4EGMurritaokeT2pAwpWqPcs7VAxT');
-define('iPHP_CHARSET',	'utf-8');
+define('iPHP_KEY','n9pSQYvdWhtBz3UHZFVL7c6vf4x6fePk');
+define('iPHP_CHARSET','utf-8');
 //---------------cookie设置-------------------------
-define ('iPHP_COOKIE_DOMAIN',	'.icms.com');
-define ('iPHP_COOKIE_PATH',		'/');
-define ('iPHP_COOKIE_PRE',		'iCMS');
-define ('iPHP_COOKIE_TIME',		'8640000');
-define ('iPHP_AUTH_IP',		true);
-define ('iPHP_UAUTH_IP',	false);
+define('iPHP_COOKIE_DOMAIN','.ladyband.com');
+define('iPHP_COOKIE_PATH','/');
+define('iPHP_COOKIE_PRE','iCMS');
+define('iPHP_COOKIE_TIME','86400');
+define('iPHP_AUTH_IP',true);
+define('iPHP_UAUTH_IP',false);
 //---------------时间设置------------------------
 define('iPHP_TIME_ZONE',"Asia/Shanghai");
 define('iPHP_DATE_FORMAT','Y-m-d H:i:s');
 //define('iPHP_TIME_CORRECT',"0"); //网站动态配置
 //---------------模板------------------------
-define('iPHP_TPL_VAR',	'iCMS');//模板标签定义
-//---------------文章主体存储方式------------------------
-//注：此项设置后，请勿改动 以方式存储请想清楚在决定
-//define('iCMS_ARTICLE_DATA',	'DB');//以数据库形式存储
-//define('iCMS_ARTICLE_DATA',	'FILE');//以文件形式存储
-
+define('iPHP_TPL_VAR','iCMS');//模板标签定义
 //---------------DEBUG------------------------
 //define('iPHP_DEBUG',false);
 //define('iPHP_TPL_DEBUG',false);

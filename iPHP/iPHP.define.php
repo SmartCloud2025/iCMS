@@ -17,7 +17,7 @@ defined('iPHP_DB_USER') OR define('iPHP_DB_USER',		'root');// 数据库用户
 defined('iPHP_DB_PASSWORD') OR define('iPHP_DB_PASSWORD',	'');//数据库密码
 defined('iPHP_DB_HOST') OR define('iPHP_DB_HOST',		'localhost');// 服务器名或服务器ip,一般为localhost
 defined('iPHP_DB_CHARSET') OR define('iPHP_DB_CHARSET',	'utf8');//MYSQL编码设置.如果您的程序出现乱码现象，需要设置此项来修复. 请不要随意更改此项，否则将可能导致系统出现乱码现象
-defined('iPHP_DB_PREFIX') OR define('iPHP_DB_PREFIX',		'iPHP');// 表名前缀, 同一数据库安装多个请修改此处
+defined('iPHP_DB_PREFIX') OR define('iPHP_DB_PREFIX',		'iPHP_');// 表名前缀, 同一数据库安装多个请修改此处
 defined('iPHP_DB_PREFIX_TAG') OR define('iPHP_DB_PREFIX_TAG',	'#iPHP@__');// SQL表名前缀替换
 //defined('iPHP_DB_COLLATE') OR define('iPHP_DB_COLLATE', 	'');
 //----------------------------------------

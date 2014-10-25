@@ -36,6 +36,7 @@ $(function(){
 			this.name=this.name.replace('[__NO__]','['+length+']');
 		});
 		$('.tip',ntr).tooltip();
+    $(':checkbox,:radio',ntr).uniform();
 		ntr.appendTo(tbody);
 		return false;
 	});

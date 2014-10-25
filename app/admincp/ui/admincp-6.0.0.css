@@ -74,7 +74,7 @@ background: url("top.png") no-repeat; }
 .br0 { -webkit-border-radius: 0; -moz-border-radius: 0; border-radius: 0; }
 .iframe { background-color: #fff; }
 .separator { height: 15px; border-top: 1px dotted #999; margin: 10px 0px 0px 0px; width: 90%; }
-.input-sp textarea { height: 90px; }
+.input-sp textarea { height: 82px; }
 .input-sp .add-on { height: 82px !important; width: 30px !important; white-space: normal !important; line-height: 20px !important; text-align: left; }
 .input-sp .s4 { width: 14px !important; }
 .openid { border: 1px solid #e5e5e5; -webkit-border-radius: 4px; -moz-border-radius: 4px; border-radius: 4px; padding: 10px 20px; width: 400px; }

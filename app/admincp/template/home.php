@@ -151,8 +151,7 @@ iACP::head();
           <tr>
             <td style="width:60px">版权所有</td>
             <td>
-              <a class="btn btn-primary" href="http://www.idreamsoft.com" target="_blank"><i class="fa fa-copyright"></i> 艾梦软件</a>
-              <a class="btn btn-success" href="https://me.alipay.com/icms" target="_blank"><i class="fa fa-jpy"></i> 捐赠</a>
+              <a class="btn btn-inverse" href="http://www.idreamsoft.com" target="_blank"><i class="fa fa-copyright"></i> 艾梦软件（iDreamSoft.com）</a>
             </td>
           </tr>
           <tr>
@@ -168,7 +167,11 @@ iACP::head();
           </tr>
           <tr>
             <td>许可协议</td>
-            <td><a class="btn" href="http://www.idreamsoft.com/doc/iCMS.LGPL.html" target="_blank">LGPL 开源协议</a> <a class="btn btn-danger" href="http://www.idreamsoft.com/service" target="_blank"><i class="fa fa-ticket"></i> 商业授权</a></td>
+            <td>
+              <a class="btn" href="http://www.idreamsoft.com/doc/iCMS.LGPL.html" target="_blank">LGPL 开源协议</a>
+              <a class="btn btn-danger" href="http://www.idreamsoft.com/service.html" target="_blank"><i class="fa fa-ticket"></i> 商业授权</a>
+              <a class="btn btn-success" href="http://www.idreamsoft.com/donate.html" target="_blank"><i class="fa fa-jpy"></i> 捐赠</a>
+            </td>
           </tr>
           <tr>
             <td>相关链接</td>

@@ -16,8 +16,8 @@ defined('iPHP') OR exit('What are you doing?');
 <meta name="force-rendering" content="webkit">
 <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1"/>
 <meta content="iDreamSoft Inc." name="Copyright" />
-<link rel="stylesheet" href="./app/ui/common/bootstrap/2.3.1/css/bootstrap.min.css" type="text/css" />
-<link rel="stylesheet" href="./app/ui/common/bootstrap/2.3.1/css/bootstrap-responsive.min.css" type="text/css" />
+<link rel="stylesheet" href="./app/ui/common/bootstrap/2.3.2/css/bootstrap.min.css" type="text/css" />
+<link rel="stylesheet" href="./app/ui/common/bootstrap/2.3.2/css/bootstrap-responsive.min.css" type="text/css" />
 <link rel="stylesheet" href="./app/ui/common/font-awesome/4.2.0/css/font-awesome.min.css" type="text/css" />
 <link rel="stylesheet" href="./app/ui/common/artDialog/6.0.3/ui-dialog.css" type="text/css" />
 <link rel="stylesheet" href="./app/ui/common/iCMS-6.0.0.css" type="text/css" />
