@@ -20,8 +20,6 @@ $_DIR      = substr(dirname($_URI),0,-8);
 $_DIR      = trim($_DIR,'/').'/';
 $_URL      = 'http://'.$_SERVER['HTTP_HOST'];
 $lock_file = iPATH.'cache/install.lock';
-
-file_exists($lock_file) && exit();
 ?>
 <!DOCTYPE html>
 <html lang="zh-CN">
@@ -132,7 +130,7 @@ file_exists($lock_file) && exit();
 					$('#ADMIN_PASSWORD').focus();
 					return false;
 		        }
-				//$(this).button('loading');
+				$(this).button('loading');
 				$("#install_form").submit();
 			});
 
@@ -151,7 +149,11 @@ file_exists($lock_file) && exit();
 				<h1>iCMS V6</h1>
 				<p>简洁、高效、开源的内容管理系统，让网站管理更高效、简单。</p>
 				<p>
+					<?php if(file_exists($lock_file)){ ?>
+					<button type="button" class="btn btn-large" disabled>开始安装</button>
+					<?php }else{;?>
 					<a class="btn btn-primary btn-large" data-toggle="start"> 开始安装</a>
+					<?php };?>
 				</p>
 				<ul class="masthead-links">
 					<li>
@@ -177,6 +179,14 @@ file_exists($lock_file) && exit();
 		</div>
 		<div class="container">
 			<div class="clearfix mt60"></div>
+			<?php if(file_exists($lock_file)){ ?>
+			<div class="alert">
+			  <button type="button" class="close" data-dismiss="alert">&times;</button>
+			  <strong>Warning!</strong> 您已经安装过iCMS了，如果想要重新安装，请先删除 <span class="label label-info">cache/install.lock</span>这个文件。
+			  <br />
+			  如果已经安装完成，请马上删除本安装程序<span class="label label-important">install</span>目录，以免存在安全隐患
+			</div>
+			<?php };?>
 			<div class="marketing step" id="step0">
 				<h1>iCMS V6介绍。</h1>
 				<p class="marketing-byline">需要为爱上iCMS找N多理由吗？ 就在眼前。</p>
@@ -204,6 +214,7 @@ file_exists($lock_file) && exit();
 					</div>
 				</div>
 			</div>
+
 			<div class="license well hide step" id="step1">
 				<h1>iCMS使用许可协议</h1>
 				<p></p>
