@@ -18,15 +18,15 @@ iACP::head();
 <div class="iCMS-container">
   <div class="well iCMS-well iCMS-account-job job">
     <h4><?php echo $rs->nickname ;?> 工作统计</h4>
-    <table class="table table-bordered table-condensed table-hover span6">
+    <table class="table table-bordered table-hover table-condensed span6">
       <thead>
         <tr>
-          <th><i class="fa fa-bar-chart-o"></i> 统计</th>
+          <th><i class="icon-calendar"></i> 统计</th>
         </tr>
       </thead>
       <tbody>
         <tr>
-          <td>今天<span class="label label-success"><?php echo date('Y-m-d',$job->today['start']) ;?></span>已经发布<span class="label label-success"><?php echo $job->today['count'] ;?></span>篇文章 <span class="label label-important"><?php echo $job->today['count0'] ;?></span>篇文章未审核</td>
+          <td>今天<span class="label label-success"><?php echo date('Y-m-d',$job->today['start']) ;?></span>已经发布<span class="label label-success"><?php echo $job->today['count'] ;?></span>篇文章 <span class="label label-important"><?php echo (int)$job->today['count0'] ;?></span>篇文章未审核</td>
         </tr>
         <tr>
           <td>昨天<span class="label label-success"><?php echo date('Y-m-d',$job->yesterday['start']) ;?></span>已经发布<span class="label label-success"><?php echo $job->yesterday['count'] ;?></span>篇文章</td>
@@ -46,7 +46,7 @@ iACP::head();
     <table class="table table-bordered table-condensed span6">
       <thead>
         <tr>
-          <th colspan="7"><i class="fa fa-calendar"></i> 本月 <span class="label label-success">今天 <?php echo $month['year'];?>年<?php echo $month['month'];?>月<?php echo $month['day'];?>日 <?php echo $month['week'];?></span></th>
+          <th colspan="7"><i class="icon-calendar"></i> 本月 <span class="label label-success">今天 <?php echo $month['year'];?>年<?php echo $month['month'];?>月<?php echo $month['day'];?>日 <?php echo $month['week'];?></span></th>
         </tr>
         <tr class="week">
           <th>日</th>
@@ -65,7 +65,7 @@ iACP::head();
     <table class="table table-bordered table-condensed span6">
       <thead>
         <tr>
-          <th colspan="7"><i class="fa fa-calendar"></i> 上个月 <span class="label label-success"><?php echo $pmonth['year'];?>年<?php echo $pmonth['month'];?>月<?php echo $pmonth['day'];?>日 <?php echo $pmonth['week'];?></span></th>
+          <th colspan="7"><i class="icon-calendar"></i> 上个月 <span class="label label-success"><?php echo $pmonth['year'];?>年<?php echo $pmonth['month'];?>月<?php echo $pmonth['day'];?>日 <?php echo $pmonth['week'];?></span></th>
         </tr>
         <tr class="week">
           <th>日</th>

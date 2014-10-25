@@ -15,5 +15,6 @@ define('iCMS_APP_CATEGORY',	2);		//分类
 define('iCMS_APP_TAG',		3);		//标签
 define('iCMS_APP_PUSH',		4);		//推送
 define('iCMS_APP_COMMENT',	5);		//评论
-define('iCMS_APP_MESSAGE',	6);		//私信
-define('iCMS_APP_FAVORITE',	7);		//收藏
+define('ICMS_APP_PROP',	    6);		//属性
+define('iCMS_APP_MESSAGE',	7);		//私信
+define('iCMS_APP_FAVORITE',	8);		//收藏

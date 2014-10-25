@@ -22,7 +22,7 @@ iACP::head();
         <input name="id" type="hidden" value="<?php echo $this->id; ?>" />
         <div id="<?php echo APP_BOXID;?>" class="tab-content">
           <div class="input-prepend"> <span class="add-on">分类</span>
-            <input type="text" name="sortid" class="span1" id="sortid" value="<?php echo $rs['sortid'] ; ?>"/>
+            <input type="text" name="cid" class="span1" id="cid" value="<?php echo $rs['cid'] ; ?>"/>
           </div>
           <div class="clearfloat mb10"></div>
           <div class="input-prepend"> <span class="add-on">网站</span>

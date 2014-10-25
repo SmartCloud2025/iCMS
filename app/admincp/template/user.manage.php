@@ -103,7 +103,7 @@ $(function(){
               </td>
             </tr>
             <?php if($_GET['job']){
-    		$job->countPost($rs[$i]['uid']);
+    		$job->count_post($rs[$i]['uid']);
     		?>
             <tr>
               <td colspan="10"><div class="job">

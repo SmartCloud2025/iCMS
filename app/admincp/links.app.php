@@ -24,7 +24,7 @@ class linksApp{
     }
     function do_save(){
 		$id			= (int)$_POST['id'];
-		$sortid		= (int)$_POST['sortid'];
+		$cid		= (int)$_POST['cid'];
 		$name		= iS::escapeStr($_POST['name']);
 		$logo		= iS::escapeStr($_POST['logo']);
 		$url		= iS::escapeStr($_POST['url']);
@@ -33,7 +33,7 @@ class linksApp{
 
         $name 	OR iPHP::alert('网站不能为空!');
         $url 	OR iPHP::alert('链接不能为空!');
-        $fields = array('sortid', 'name', 'logo', 'url', 'desc', 'ordernum');
+        $fields = array('cid', 'name', 'logo', 'url', 'desc', 'ordernum');
         $data   = compact ($fields);
         if(empty($id)) {
             iDB::value("SELECT `id` FROM `#iCMS@__links` where `name` ='$name'") && iPHP::alert('该网站已经存在!');
@@ -51,8 +51,8 @@ class linksApp{
         if($_GET['keywords']) {
 			$sql=" WHERE CONCAT(name,url) REGEXP '{$_GET['keywords']}'";
         }
-        if($_GET['sortid']) {
-			$sql=" WHERE `sortid` = '{$_GET['sortid']}'";
+        if($_GET['cid']) {
+			$sql=" WHERE `cid` = '{$_GET['cid']}'";
         }
 
         $orderby	=$_GET['orderby']?$_GET['orderby']:"id DESC";

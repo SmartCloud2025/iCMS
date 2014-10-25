@@ -54,7 +54,7 @@ $(function(){
             <?php for($i=0;$i<$_count;$i++){?>
             <tr id="tr<?php echo $rs[$i]['id'] ; ?>">
               <td><input type="checkbox" name="id[]" value="<?php echo $rs[$i]['id'] ; ?>" /></td>
-              <td><a href="<?php echo APP_URI; ?>&sortid=<?php echo $rs[$i]['sortid'] ; ?>"><?php echo $rs[$i]['sortid'] ; ?></a></td>
+              <td><a href="<?php echo APP_URI; ?>&cid=<?php echo $rs[$i]['cid'] ; ?>"><?php echo $rs[$i]['cid'] ; ?></a></td>
               <td><?php echo $rs[$i]['name'] ; ?></td>
               <td><?php echo $rs[$i]['url'] ; ?></td>
               <td><a href="<?php echo APP_URI; ?>&do=add&id=<?php echo $rs[$i]['id'] ; ?>" class="btn btn-small"><i class="fa fa-edit"></i> 编辑</a> <a href="<?php echo APP_FURI; ?>&do=del&id=<?php echo $rs[$i]['id'] ; ?>" target="iPHP_FRAME" class="del btn btn-small" title='永久删除'  onclick="return confirm('确定要删除?');"/><i class="fa fa-trash-o"></i> 删除</a></td>

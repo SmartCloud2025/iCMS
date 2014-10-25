@@ -16,12 +16,13 @@ class accountApp{
     }
 
     function do_job(){
-		require_once iPHP_APP_CORE.'/job.class.php';
+		require_once iPHP_APP_CORE.'/iJob.class.php';
 		$job	= new JOB;
-		$job->countPost($this->uid);
-		$month	= $job->month();
-		$pmonth	= $job->month($job->pmonth['start']);
-		$rs			= iDB::row("SELECT * FROM `#iCMS@__members` WHERE `uid`='$this->uid' LIMIT 1;");
+        $this->uid OR $this->uid = iMember::$userid;
+		$job->count_post($this->uid);
+        $month  = $job->month();
+        $pmonth = $job->month($job->pmonth['start']);
+        $rs     = iDB::row("SELECT * FROM `#iCMS@__members` WHERE `uid`='$this->uid' LIMIT 1;");
 		include iACP::view("account.job");
     }
     function do_edit(){
@@ -37,7 +38,7 @@ class accountApp{
     }
     function do_iCMS(){
     	if($_GET['job']){
-    		require_once iPHP_APP_CORE.'/job.class.php';
+    		require_once iPHP_APP_CORE.'/iJob.class.php';
     		$job	=new JOB;
     	}
     	$sql	= "WHERE 1=1";
@@ -71,7 +72,7 @@ class accountApp{
         $info['signature'] = iS::escapeStr($_POST['signature']);
         $info              = addslashes(serialize($info));
         $_POST['pwd'] && $password = md5($_POST['pwd']);
-        
+
         $username OR iPHP::alert('账号不能为空');
 
         if(iACP::is_superadmin()){

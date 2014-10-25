@@ -3,10 +3,10 @@ defined('iPHP') OR exit('Access Denied');
 return array (
   'site' => 
   array (
-    'name' => 'iCMS V6',
-    'seotitle' => '网站标题',
-    'keywords' => '',
-    'description' => '',
+    'name' => 'iCMS',
+    'seotitle' => 'iCMS 内容管理系统',
+    'keywords' => 'iCMS,idreamsoft,艾梦软件',
+    'description' => 'iCMS 是一套采用 PHP 和 MySQL 构建的高效简洁的内容管理系统,为您的网站提供一个完美的开源解决方案',
     'icp' => '',
   ),
   'debug' => 
@@ -26,32 +26,32 @@ return array (
     'mobile' => 
     array (
       'agent' => 'WAP,Smartphone,Mobile,UCWEB,Opera Mini,Windows CE,Symbian,SAMSUNG,iPhone,Android,BlackBerry,HTC,Mini,LG,SonyEricsson,J2ME,MOT',
-      'domain' => 'http://v6.icms.com',
+      'domain' => 'http://demo.idreamsoft.com',
       'tpl' => 'mobile',
     ),
     'device' => 
     array (
       0 => 
       array (
-        'name' => 'iPad',
-        'ua' => 'iPad',
-        'domain' => 'http://ipad.idreamsoft.com',
-        'tpl' => 'iPad',
+        'name' => 'micromessenger',
+        'ua' => 'weixin',
+        'domain' => 'http://demo.idreamsoft.com',
+        'tpl' => 'weixin',
       ),
     ),
   ),
   'router' => 
   array (
-    'URL' => 'http://v6.icms.com',
+    'URL' => 'http://demo.idreamsoft.com',
     'DIR' => '/',
-    404 => 'http://v6.icms.com/404.html',
-    'public_url' => 'http://v6.icms.com/public',
-    'user_url' => 'http://v6.icms.com/u',
+    404 => 'http://demo.idreamsoft.com/404.html',
+    'public_url' => 'http://demo.idreamsoft.com/public',
+    'user_url' => 'http://demo.idreamsoft.com/usercp',
     'html_dir' => 'html/',
     'html_ext' => '.html',
     'speed' => '50',
     'rewrite' => '0',
-    'tag_url' => 'http://v6.icms.com',
+    'tag_url' => 'http://demo.idreamsoft.com',
     'tag_rule' => '{PHP}',
     'tag_dir' => '/',
   ),
@@ -65,7 +65,7 @@ return array (
   ),
   'FS' => 
   array (
-    'url' => 'http://v6.icms.com/res/',
+    'url' => 'http://demo.idreamsoft.com/res/',
     'dir' => 'res',
     'dir_format' => 'Y/m-d/H',
     'allow_ext' => 'gif,jpg,rar,swf,jpeg,png',
@@ -96,23 +96,38 @@ return array (
     'register' => '1',
     'regseccode' => '1',
     'login' => '1',
-    'loginseccode' => '0',
+    'loginseccode' => '1',
     'agreement' => '',
     'coverpic' => '/ui/coverpic.jpg',
   ),
-  'openapi' => 
+  'open' => 
   array (
+    'WX' => 
+    array (
+      'appid' => '',
+      'appkey' => '',
+    ),
     'QQ' => 
     array (
-      'appid' => '140',
-      'appkey' => '140',
+      'appid' => '',
+      'appkey' => '',
+    ),
+    'WB' => 
+    array (
+      'appid' => '',
+      'appkey' => '',
+    ),
+    'TB' => 
+    array (
+      'appid' => '',
+      'appkey' => '',
     ),
   ),
   'publish' => 
   array (
     'autoformat' => '0',
     'remote' => '0',
-    'autopic' => '0',
+    'autopic' => '1',
     'autodesc' => '1',
     'descLen' => '100',
     'autoPage' => '0',
@@ -124,7 +139,7 @@ return array (
   array (
     'enable' => '1',
     'examine' => '1',
-    'seccode' => '0',
+    'seccode' => '1',
   ),
   'time' => 
   array (
@@ -134,8 +149,8 @@ return array (
   ),
   'other' => 
   array (
-    'CLsplit' => ',',
-    'kwCount' => '1',
+    'py_split' => '',
+    'keyword_limit' => '-1',
     'sidebar_enable' => '1',
     'sidebar' => '1',
   ),

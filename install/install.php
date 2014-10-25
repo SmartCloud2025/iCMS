@@ -52,6 +52,40 @@ if($action=='install'){
 	$domain  = $matches[0]?'.'.$matches[0]:"";
 	$content = preg_replace("/define\(\'iPHP_COOKIE_DOMAIN\',\s*\'.*?\'\)/is", 			"define('iPHP_COOKIE_DOMAIN','$domain')",$content);
 	iFS::write($config_file,$content,false);
+//开始安装 数据库
+	$installSQL = 'iCMS_SQL.sql';
+	is_readable($installSQL) OR iPHP::alert('数据库文件不存在或者读取失败');
+
 	require_once ($config_file);
-	require_once (iPATH.'install/sql_map.php');
+	$sql_content = iFS::read($installSQL);
+	run_query($sql_content);
+	//require_once (iPATH.'install/sql_map.php');
 }
+function run_query($sql) {
+    global  $tablenum;
+    $sql = str_replace("\r", "\n", str_replace('#iCMS@__',iPHP_DB_PREFIX,$sql));
+    $ret = array();
+    $num = 0;
+    foreach(explode(";\n", trim($sql)) as $query) {
+        $queries = explode("\n", trim($query));
+        foreach($queries as $query) {
+            $ret[$num] .= $query[0] == '#' ? '' : $query;
+        }
+        $num++;
+    }
+    unset($sql);
+    foreach($ret as $query) {
+        $query = trim($query);
+        if($query) {
+            if(substr($query, 0, 12) == 'CREATE TABLE') {
+                preg_match("|CREATE TABLE (.*) \(  |i",$query, $name);
+                flush();
+                echo '创建表 '.$name[1].' ... <font color="#0000EE">成功</font><br />';
+                flush();
+                $tablenum++;
+            }
+            iDB::query($query);
+        }
+    }
+}
+

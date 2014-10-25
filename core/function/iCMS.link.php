@@ -13,7 +13,7 @@ function iCMS_link($vars){
 		case "text":$sql[]=" `logo`='' ";break;
 		case "logo":$sql[]=" `logo`!='' ";break;
 	}
-	isset($vars['sortid']) && $sql[]=" sortid='".$vars['sortid']."'";
+	isset($vars['cid']) && $sql[]=" cid='".$vars['cid']."'";
 	$sql && $where ='WHERE '.implode(' AND ',$sql);
 	$iscache	= true;
 	if($vars['cache']==false||isset($vars['page'])){
