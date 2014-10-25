@@ -13,6 +13,9 @@ define('iPHP',TRUE);
 define('iPHP_APP','iCMS'); //应用名
 define('iPATH',dirname(strtr(__FILE__,'\\','/'))."/../");
 require iPATH.'iPHP/iPHP.php';//iPHP框架文件
+$lock_file = iPATH.'cache/install.lock';
+
+file_exists($lock_file) && exit();
 
 $action = $_POST['action'];
 if($action=='install'){
@@ -116,6 +119,7 @@ if($action=='install'){
 	$output.= ';';
 	iFS::write(iPATH.'conf/iCMS/config.php',$output,false);
 //写入数据库配置<hr />开始安装数据库<hr />数据库安装完成<hr />设置超级管理员<hr />更新网站缓存<hr />
+	iFS::write($lock_file,'iCMS.'.time(),false);
 	iFS::rmdir(iPATH.'install');
 	iPHP::success("安装完成",'js:top.install.step4();');
 }

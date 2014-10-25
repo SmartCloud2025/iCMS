@@ -20,6 +20,8 @@ $_DIR      = substr(dirname($_URI),0,-8);
 $_DIR      = trim($_DIR,'/').'/';
 $_URL      = 'http://'.$_SERVER['HTTP_HOST'];
 $lock_file = iPATH.'cache/install.lock';
+
+file_exists($lock_file) && exit();
 ?>
 <!DOCTYPE html>
 <html lang="zh-CN">
