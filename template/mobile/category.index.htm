@@ -9,6 +9,8 @@
   <body class="iCMS-mobile">
     <!--{include file="./navbar.htm"}-->
     <div class="container">
+      <!--{iCMS:article:list pic="true" row="8" cid="$category.cid"}-->
+      <!--{if $article_list}-->
       <div id="cat_carousel" class="carousel slide" data-ride="carousel">
          <!-- 轮播（Carousel）指标 -->
          <ol class="carousel-indicators">
@@ -21,7 +23,6 @@
             <li data-target="#cat_carousel" data-slide-to="6"></li>
             <li data-target="#cat_carousel" data-slide-to="7"></li>
          </ol>
-         <!--{iCMS:article:list pic="true" row="8" cid="$category.cid"}-->
          <!-- 轮播（Carousel）项目 -->
          <div class="carousel-inner" role="listbox">
             <!--{foreach key=key value=alist from="$article_list"}-->
@@ -39,6 +40,7 @@
          <a class="carousel-control left" href="#cat_carousel" data-slide="prev"><span class="glyphicon glyphicon-chevron-left"></span></a>
          <a class="carousel-control right" href="#cat_carousel" data-slide="next"><span class="glyphicon glyphicon-chevron-right"></span></a>
       </div>
+      <!--{/if}-->
       <div class="clearfix mb10"></div>
       <div id="iCMS-article-list" class="article_list">
         <h3 class="title"><span><!--{$category.name}--></span></h3>

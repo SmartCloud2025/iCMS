@@ -24,10 +24,11 @@
   <body class="iCMS-mobile">
     <!--{include file="./navbar.htm"}-->
     <div class="container">
+    <!--{iCMS:article:list pic="true" row="5"}-->
+      <!--{if $article_list}-->
       <div class="rotator">
         <div id="slider" class="slide_show">
           <ul>
-            <!--{iCMS:article:list pic="true" row="5"}-->
             <!--{foreach value=alist from=$article_list}-->
             <li><a href="<!--{$alist.url}-->"><img src="<!--{$alist.pic.url}-->" alt="<!--{$alist.title}-->"></a></li>
             <!--{/foreach}-->
@@ -39,6 +40,7 @@
           <!--{/foreach}-->
         </ul>
       </div>
+      <!--{/if}-->
       <div class="clearfix mb10"></div>
       <div id="iCMS-article-list" class="article_list">
         <!--{iCMS:article:list loop="true" page="true" user="true" row="3"}-->
