@@ -23,7 +23,7 @@ define('iPHP_DB_PREFIX_TAG','#iCMS@__');// SQL表名前缀替换
 define('iPHP_KEY','n9pSQYvdWhtBz3UHZFVL7c6vf4x6fePk');
 define('iPHP_CHARSET','utf-8');
 //---------------cookie设置-------------------------
-define('iPHP_COOKIE_DOMAIN','.ladyband.com');
+define('iPHP_COOKIE_DOMAIN','');
 define('iPHP_COOKIE_PATH','/');
 define('iPHP_COOKIE_PRE','iCMS');
 define('iPHP_COOKIE_TIME','86400');
