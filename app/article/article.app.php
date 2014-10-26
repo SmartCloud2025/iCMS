@@ -231,7 +231,11 @@ class articleApp {
 
         $article['hits'] = array(
             'script' => iCMS_API.'?app=article&do=hits&cid='.$article['cid'].'&id='.$article['id'],
-            'count'  => $article['hits']
+            'count'  => $article['hits'],
+            'today'  => $article['hits_today'],
+            'yday'   => $article['hits_yday'],
+            'week'   => $article['hits_week'],
+            'month'  => $article['hits_month'],
         );
         $article['comment'] = array(
             'url'   => iCMS_API."?app=comment&do=article&appid={$article['appid']}&iid={$article['id']}&cid={$article['cid']}",

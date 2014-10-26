@@ -61,6 +61,8 @@ class userApp{
     }
     function do_save(){
         $uid      = (int)$_POST['uid'];
+        $pid      = implode(',', (array)$_POST['pid']);
+        $_pid     = iS::escapeStr($_POST['_pid']);
         $user     = $_POST['user'];
         $userdata = $_POST['userdata'];
         $username = $user['username'];
@@ -74,21 +76,26 @@ class userApp{
 
         $user['regdate']       = iPHP::str2time($user['regdate']);
         $user['lastlogintime'] = iPHP::str2time($user['lastlogintime']);
+        $user['pid']           = $pid;
 
+        iPHP::import(iPHP_APP_CORE .'/iMAP.class.php');
 
-        if(empty($uid)) {
+       if(empty($uid)) {
             $password OR iPHP::alert('密码不能为空');
             $user['password'] = md5($password);
-
             iDB::value("SELECT `uid` FROM `#iCMS@__user` where `username` ='$username' LIMIT 1") && iPHP::alert('该账号已经存在');
             iDB::value("SELECT `uid` FROM `#iCMS@__user` where `nickname` ='$nickname' LIMIT 1") && iPHP::alert('该昵称已经存在');
-            iDB::insert('user',$user);
+            $uid = iDB::insert('user',$user);
+            map::init('prop',iCMS_APP_USER);
+            map::add($pid,$uid);
             $msg = "账号添加完成!";
         }else {
             iDB::value("SELECT `uid` FROM `#iCMS@__user` where `username` ='$username' AND `uid` !='$uid' LIMIT 1") && iPHP::alert('该账号已经存在');
             iDB::value("SELECT `uid` FROM `#iCMS@__user` where `nickname` ='$nickname' AND `uid` !='$uid' LIMIT 1") && iPHP::alert('该昵称已经存在');
             $password && $user['password'] = md5($password);
             iDB::update('user', $user, array('uid'=>$uid));
+            map::init('prop',iCMS_APP_USER);
+            map::diff($pid,$_pid,$uid);
             if(iDB::value("SELECT `uid` FROM `#iCMS@__user_data` where `uid`='$uid' LIMIT 1")){
                 iDB::update('user_data', $userdata, array('uid'=>$uid));
             }else{

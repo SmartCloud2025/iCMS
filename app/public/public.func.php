@@ -8,8 +8,9 @@
  */
 function public_ui($vars=null){
 	isset($vars['script']) OR $vars['script'] = true;
+	$dir = isset($vars['dir'])?$vars['dir'].'/':'';
 	iPHP::assign("ui",$vars);
-	echo iPHP::view('iCMS://public.ui.htm');
+	echo iPHP::view("iCMS://{$dir}public.ui.htm");
 }
 function public_common($vars=null){
 	echo iPHP::view('iCMS://public.common.htm');

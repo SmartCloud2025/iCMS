@@ -13,10 +13,9 @@ body { color: #2a2a2a; font-size: 14px; background-color: #f8f8f8; }
 #iCMS-scrollUp { display: none; bottom: 20px; right: 10px; height: 40px; width: 40px; line-height: 40px; position: fixed; }
 .iCMS-mobile .container { padding: 0px; }
 .iCMS-mobile .container .wrapper { background-color: #F8F8F8; padding: 10px; min-height: 400px; }
-.iCMS-mobile dd .form-control{height: 40px; font-size: 16px;}
+.iCMS-mobile dd .form-control { height: 40px; font-size: 16px; }
 .iCMS-mobile h3.title { border-radius: 3px; background-color: #e8e8e8; height: 30px; line-height: 30px; padding-left: 10px; margin-bottom: 10px; }
 .iCMS-mobile h3.title span { color: #70A700; font-size: 14px; font-weight: bold; height: 30px; line-height: 30px; }
-
 .r3 { border-radius: 3px }
 .r5 { border-radius: 5px }
 .shadow { box-shadow: 0 6px 5px rgba(0, 0, 0, 0.4); }
@@ -32,9 +31,8 @@ a.circle { color: #fff; }
 #header .header-title { line-height: 44px; font-size: 20px; text-align: center; width: 100%; display: block; }
 #header .header-back { background-color: transparent; float: left; border-color: #ddd; margin-top: 8px; margin-left: 10px; margin-bottom: 8px; }
 #header .header-back i { color: #888; font-size: 18px; }
-#header.affix { width: 100%; box-shadow: 0 3px 10px 2px rgba(0, 0, 0, 0.3); z-index: 999; }
+#header.affix { width: 100%; box-shadow: 0 3px 10px 2px rgba(0, 0, 0, 0.3); z-index: 999;position: fixed;top: 0px;left: 0px; }
 .search-toggle { border: none; color: #333; background-color: #eee; position: relative; float: right; margin: 10px 10px 0px 0px; width: 40px; line-height: 32px; height: 32px; font-size: 18px; }
-
 /* navbar.htm */
 #iCMS-search-box .navbar-form { border: none; }
 #iCMS-navbar-login { /* box-shadow: 0 4px 3px rgba(0, 0, 0, 0.3);  */ background-color: #F8F8F8; }
@@ -54,7 +52,7 @@ a.circle { color: #fff; }
 #iCMS-menu-box .navbar-nav li.active a { color: #fff; }
 #iCMS-menu-box .divider { border-top: solid #111 1px; border-bottom: solid #444 1px; display: block; }
 #iCMS-menu-box .menu_head .mlogo { padding: 10px 0px; }
-#iCMS-menu-box .menu_head .mlogo img{ width: 90px; }
+#iCMS-menu-box .menu_head .mlogo img { width: 90px; }
 #iCMS-menu-box .menu_head #iCMS-nav-login a.btn { height: auto; font-size: 12px; float: right; margin-right: 10px; margin-top: 15px; width: auto; }
 #iCMS-menu-box .nav>li>a:hover, #iCMS-menu-box .nav>li>a:focus { background-color: #444; }
 #iCMS-menu-box .nav .open>a, #iCMS-menu-box .nav .open>a:hover, #iCMS-menu-box .nav .open>a:focus { background-color: #444; }
@@ -94,20 +92,19 @@ a.circle { color: #fff; }
 .iCMS-mobile .login_reg_wrapper .radio input { width: 18px; height: 18px; }
 .iCMS-mobile .login_reg_wrapper .radio label { font-size: 18px; }
 .iCMS-mobile .login_reg_wrapper .lr-btn { margin-left: 10px; }
-.iCMS-mobile .login_reg_wrapper .open-btn { margin-top: 10px;float: left; display: inline; font-size: 12px;}
-.iCMS-mobile .login_reg_wrapper .open-btn a{ /*margin-left: 10px;*/}
+.iCMS-mobile .login_reg_wrapper .open-btn { margin-top: 10px; float: left; display: inline; font-size: 12px; }
+.iCMS-mobile .login_reg_wrapper .open-btn a { /* margin-left: 10px;  */ }
 #iCMS-login-page .iCMS_login_btn, #iCMS-register-box .iCMS_register_btn { font-size: 18px; }
 #iCMS-login-page .findpwd { margin: 5px 5px 0px 0px; float: right; }
-#iCMS-login-page .other { margin-top: 10px;float: right;}
-
+#iCMS-login-page .other { margin-top: 10px; float: right; }
 .iCMS_seccode { display: inline-block; width: 90px; height: 40px !important; }
 .iCMS_seccode_text { font-size: 16px; margin-left: 4px; }
 .iCMS_seccode_img { height: 30px; margin-top: 5px; }
 /* userApp */
 #iCMS-userApp { padding: 0px; max-width: 900px; }
 #iCMS-userApp .userApp_header { position: relative; height: 360px; }
-#iCMS-userApp .userApp_cover { width: 100%; height: 300px; max-width: inherit; overflow: hidden; border-bottom: solid #ddd 1px; background-color: #eee;}
-#iCMS-userApp .userApp_cover img{height: 300px; max-width: inherit; }
+#iCMS-userApp .userApp_cover { width: 100%; height: 300px; max-width: inherit; overflow: hidden; border-bottom: solid #ddd 1px; background-color: #eee; }
+#iCMS-userApp .userApp_cover img { height: 300px; max-width: inherit; }
 #iCMS-userApp .userApp_name { position: absolute; right: 120px; bottom: 62px; }
 #iCMS-userApp .userApp_name a { color: #fff; font-size: 18px; font-weight: bold; -webkit-text-shadow: 1px 1px 0px rgba(0, 0, 0, 0.8); text-shadow: 1px 1px 0px rgba(0, 0, 0, 0.8); }
 #iCMS-userApp .userApp_avatar { position: absolute; bottom: 20px; right: 20px; }
@@ -130,19 +127,16 @@ a.circle { color: #fff; }
 /* manage */
 .iCMS-mobile .manage_wrapper { }
 .iCMS-mobile .manage_wrapper h4.title { background-color: #428bca; width: 100%; height: 30px; line-height: 30px; padding-left: 20px; margin-bottom: 10px; color: #fff; border-radius: 5px; }
-.iCMS-mobile .profile_wrapper {}
-.iCMS-mobile .profile_wrapper dl dt{margin-bottom: 10px;}
-.iCMS-mobile .profile_wrapper dl dd{margin-bottom: 10px;}
-.iCMS-mobile .profile_wrapper dl dd .form-control{padding: 6px 10px !important;}
-
-
+.iCMS-mobile .profile_wrapper { }
+.iCMS-mobile .profile_wrapper dl dt { margin-bottom: 10px; }
+.iCMS-mobile .profile_wrapper dl dd { margin-bottom: 10px; }
+.iCMS-mobile .profile_wrapper dl dd .form-control { padding: 6px 10px !important; }
 /* dialog box */
 .iCMS_report_dialog { width: 320px; }
 .iCMS_pm_dialog { width: 320px; }
 .iCMS_favorite_dialog { width: 320px; }
 /* media */
-/*
- @media (max-width:480px) {
+/* @media (max-width:480px) {
 }
 @media (min-width:481px) and (max-width:767px) {
 }
@@ -164,7 +158,7 @@ a.circle { color: #fff; }
 	#iCMS-navbar-login { display: none; }
 }
 /* ==index== */
-.navbar-brand img{width: 180px;}
+.navbar-brand img { width: 180px; }
 /* slide */
 .rotator { margin-top: 4px; border-bottom: 1px solid #d4d4d4; width: 100%; position: relative; -moz-box-sizing: border-box; -webkit-box-sizing: border-box; -ms-box-sizing: border-box; box-sizing: border-box }
 .rotator .slide_show { height: 200px; }
@@ -254,19 +248,25 @@ footer .links li { display: inline; padding: 0 2px; }
 footer .links li:first-child { padding-left: 0; }
 /* media */
 @media (max-width:480px) {
-	.navbar-brand {width: 120px;}
-	.mlogo{width: 100px;}
-	.mlogo img{width: 90px !important;}
+	.navbar-brand { width: 120px; }
+	.mlogo { width: 100px; }
+	.mlogo img { width: 90px !important; }
 }
-/*@media (min-width: 481px) and (max-width: 768px) {
-	.panel{float: left;width: 200px;margin-right: 5px;}
+/* @media (min-width:481px) and (max-width:768px) {
+	.panel { float: left; width: 200px; margin-right: 5px; }
 }
-@media (min-width: 769px) and (max-width: 980px) {
-	.panel{float: left;width: 235px;margin-right: 5px;}
+@media (min-width:769px) and (max-width:980px) {
+	.panel { float: left; width: 235px; margin-right: 5px; }
 }
-@media (min-width: 981px) and (max-width: 1199px) {
-	.panel{float: left;width: 300px;margin-right: 10px;}
+@media (min-width:981px) and (max-width:1199px) {
+	.panel { float: left; width: 300px; margin-right: 10px; }
 }
-@media (min-width: 1200px) {
-	.panel{float: left;width: 360px;margin-right: 10px;}
-}*/
+@media (min-width:1200px) {
+	.panel { float: left; width: 360px; margin-right: 10px; }
+}
+*/
+.iCMS-weixin { background: #EBEBEB; }
+.iCMS-weixin .index_pic_list { border: 1px solid #C9C9C9; border-bottom: 0px; border-radius: 3px; background-color: #fff; }
+.iCMS-weixin .media { display: table; width: 100%; padding: 10px; margin-top: 0px; border-bottom: 1px solid #CBCBCB; height: 60px; }
+.iCMS-weixin .media-list .media-object { width: 60px; height: 60px; }
+.iCMS-weixin .media-list .media-heading { font-size: 17px; color: #000; height: 60px; vertical-align: middle; line-height: 160%; display: table-cell; }

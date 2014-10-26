@@ -192,8 +192,10 @@ class iCMS {
                 'TAG'      => iCMS_APP_TAG,
                 'PUSH'     => iCMS_APP_PUSH,
                 'COMMENT'  => iCMS_APP_COMMENT,
+                'PROP'     => ICMS_APP_PROP,
                 'MESSAGE'  => iCMS_APP_MESSAGE,
                 'FAVORITE' => iCMS_APP_FAVORITE,
+                'USER'     => iCMS_APP_USER,
             ),
 
         );

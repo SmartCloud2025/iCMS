@@ -106,8 +106,8 @@ if($action=='install'){
 
 	$setting['FS']['url']            = $router_url.'/res/';
 
-	$setting['mobile']['domain']     = $router_url;
-	$setting['device'][0]['domain']  = $router_url;
+	$setting['template']['mobile']['domain']     = $router_url;
+	$setting['template']['device'][0]['domain']  = $router_url;
 
 	foreach($setting AS $n=>$v){
         is_array($v) && $v = addslashes(serialize($v));

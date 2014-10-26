@@ -220,3 +220,6 @@ a:hover { text-decoration: none; }
 ------------------------- */
 /* Landscape phones @media (max-width:480px) {
 ------------------------- */
+.iCMS_icon_male, .iCMS_icon_female { float: left; width: 16px; height: 16px; overflow: hidden; margin: 4px 2px 0px 5px; vertical-align: middle; background: url(img/gender.png) no-repeat top left; }
+.iCMS_icon_female { background-position: 4px 0px; }
+.iCMS_icon_male { background-position: -12px 0px; }

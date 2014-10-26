@@ -35,13 +35,13 @@ function tag_list($vars){
 	$cache_time	= isset($vars['time'])?(int)$vars['time']:-1;
 	$by			= $vars['by']=='ASC'?"ASC":"DESC";
 	switch ($vars['orderby']) {
-		case "hot":		$orderSQL=" ORDER BY `count` $by";		break;
-		case "new":		$orderSQL=" ORDER BY `id` $by";			break;
-		case "order":	$orderSQL=" ORDER BY `ordernum` $by";	break;
-//		case "rand":	$orderSQL=" ORDER BY rand() $by";		break;
-		default:		$orderSQL=" ORDER BY `id` $by";
+		case "hot":		$order_sql=" ORDER BY `count` $by";		break;
+		case "new":		$order_sql=" ORDER BY `id` $by";			break;
+		case "order":	$order_sql=" ORDER BY `ordernum` $by";	break;
+//		case "rand":	$order_sql=" ORDER BY rand() $by";		break;
+		default:		$order_sql=" ORDER BY `id` $by";
 	}
-	$md5	= md5($where_sql.$orderSQL);
+	$md5	= md5($where_sql.$order_sql);
 	$offset	= 0;
 	if($vars['page']){
 		$total	= iPHP::total($md5,"SELECT count(*) FROM `#iCMS@__tags` WHERE {$where_sql} ");
@@ -54,7 +54,7 @@ function tag_list($vars){
 		$resource   = iCache::get($cache_name);
 	}
 	if(empty($resource)){
-		$resource = iDB::all("SELECT * FROM `#iCMS@__tags` WHERE {$where_sql} {$orderSQL} LIMIT {$offset},{$maxperpage}");
+		$resource = iDB::all("SELECT * FROM `#iCMS@__tags` WHERE {$where_sql} {$order_sql} LIMIT {$offset},{$maxperpage}");
 		//iDB::debug(1);
 		$resource = __tag_array($vars,$resource);
 		$vars['cache'] && iCache::set($cache_name,$resource,$cache_time);
@@ -83,13 +83,13 @@ function tag_flist($vars){
 	$cache_time	= isset($vars['time'])?(int)$vars['time']:-1;
 	$by			= $vars['by']=='ASC'?"ASC":"DESC";
 	switch ($vars['orderby']) {
-		case "hot":		$orderSQL=" ORDER BY `count` $by";		break;
-		case "new":		$orderSQL=" ORDER BY `id` $by";			break;
-		case "order":	$orderSQL=" ORDER BY `ordernum` $by";	break;
-//		case "rand":	$orderSQL=" ORDER BY rand() $by";		break;
-		default:		$orderSQL=" ORDER BY `id` $by";
+		case "hot":		$order_sql=" ORDER BY `count` $by";		break;
+		case "new":		$order_sql=" ORDER BY `id` $by";			break;
+		case "order":	$order_sql=" ORDER BY `ordernum` $by";	break;
+//		case "rand":	$order_sql=" ORDER BY rand() $by";		break;
+		default:		$order_sql=" ORDER BY `id` $by";
 	}
-	$md5	= md5($where_sql.$orderSQL);
+	$md5	= md5($where_sql.$order_sql);
 	$offset	= 0;
 	if($vars['page']){
 		$total	= iPHP::total($md5,"SELECT count(*) FROM `#iCMS@__ftags` WHERE {$where_sql} ");
@@ -103,7 +103,7 @@ function tag_flist($vars){
 	}
 	if(empty($resource)){
 		iPHP::app('tag.class','static');
-		$resource = iDB::all("SELECT * FROM `#iCMS@__ftags` WHERE {$where_sql} {$orderSQL} LIMIT {$offset},{$maxperpage}");
+		$resource = iDB::all("SELECT * FROM `#iCMS@__ftags` WHERE {$where_sql} {$order_sql} LIMIT {$offset},{$maxperpage}");
 		$resource = __tag_array($vars,$resource);
 		$vars['cache'] && iCache::set($cache_name,$resource,$cache_time);
 	}
@@ -149,10 +149,10 @@ function tag_search($vars){
 	$SPH->SetLimits($start,$maxperpage,10000);
 
 	$orderBy  = '@id DESC, @weight DESC';
-	$orderSQL = ' order by id DESC';
+	$order_sql = ' order by id DESC';
 
 	$vars['orderBy'] && $orderBy	= $vars['orderBy'];
-	$vars['orderSQL']&& $orderSQL= ' order by '.$vars['orderSQL'];
+	$vars['order_sql']&& $order_sql= ' order by '.$vars['order_sql'];
 
 	$vars['pic'] && $SPH->SetFilter('haspic',array(1));
 	$vars['id!'] && $SPH->SetFilter('@id',array($vars['id!']),true);
@@ -182,7 +182,7 @@ function tag_search($vars){
 		$multi   = iCMS::page(array('total'=>$total,'perpage'=>$maxperpage,'unit'=>iPHP::lang('iCMS:page:list'),'nowindex'=>$GLOBALS['page']));
 		$offset  = $multi->offset;
 	}
-	$resource = iDB::all("SELECT * FROM `#iCMS@__tags` WHERE {$where_sql} {$orderSQL} LIMIT {$maxperpage}");
+	$resource = iDB::all("SELECT * FROM `#iCMS@__tags` WHERE {$where_sql} {$order_sql} LIMIT {$maxperpage}");
 	$resource = __tag_array($vars,$resource);
 	return $resource;
 }

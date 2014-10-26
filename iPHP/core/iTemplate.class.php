@@ -982,6 +982,7 @@ class iTemplate_Compiler extends iTemplate {
 					case 'REQUEST_URI':	$_result = "\$_SERVER['REQUEST_URI']";break;
 					case 'SERVER_NAME':	$_result = "\$_SERVER['SERVER_NAME']";break;
 					case 'SERVER_PORT':	$_result = "\$_SERVER['SERVER_PORT']";break;
+					case 'USER_AGENT':	$_result = "\$_SERVER['HTTP_USER_AGENT']";break;
 					case 'TIME':		$_result = "time()";break;
 					case 'NOW':			$_result = "time()";break;
 					case 'SECTION':		$_result = "\$this->_sections";break;

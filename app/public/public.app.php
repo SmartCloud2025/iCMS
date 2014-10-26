@@ -31,7 +31,7 @@ class publicApp {
         if($sql){
         	//点击初始化
         	iDB::query("UPDATE `#iCMS@__article` SET {$sql}");
-        	iDB::query("UPDATE `#iCMS@__user_data` SET {$sql}");
+        	iDB::query("UPDATE `#iCMS@__user` SET {$sql}");
         }
     }
     public function API_seccode(){

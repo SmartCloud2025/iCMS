@@ -27,7 +27,7 @@ function favorite_list($vars=null){
 		default: $order_sql = " ORDER BY `id` $by";
 	}
 
-	$md5	= md5($where_sql.$orderSQL);
+	$md5	= md5($where_sql.$order_sql);
 	$offset	= 0;
 	if($vars['page']){
 		$total	= iPHP::total($md5,"SELECT count(*) FROM `#iCMS@__favorite` {$where_sql} ");
@@ -70,7 +70,7 @@ function favorite_data($vars=null){
 		default: $order_sql = " ORDER BY `id` $by";
 	}
 
-	$md5	= md5($where_sql.$orderSQL);
+	$md5	= md5($where_sql.$order_sql);
 	$offset	= 0;
 	if($vars['page']){
 		$total	= iPHP::total($md5,"SELECT count(*) FROM `#iCMS@__favorite_data` {$where_sql} ");

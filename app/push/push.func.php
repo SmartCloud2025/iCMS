@@ -33,17 +33,17 @@ function push_list($vars){
 
 	$by=$vars['by']=="ASC"?"ASC":"DESC";
     switch ($vars['orderby']) {
-        case "id":		$orderSQL=" ORDER BY `id` $by";			break;
-        case "addtime":	$orderSQL=" ORDER BY `addtime` $by";    break;
-        case "disorder":$orderSQL=" ORDER BY `ordernum` $by";    break;
-        default:        $orderSQL=" ORDER BY `id` DESC";
+        case "id":		$order_sql=" ORDER BY `id` $by";			break;
+        case "addtime":	$order_sql=" ORDER BY `addtime` $by";    break;
+        case "disorder":$order_sql=" ORDER BY `ordernum` $by";    break;
+        default:        $order_sql=" ORDER BY `id` DESC";
     }
 	if($vars['cache']){
         $cache_name = 'push/'.md5($where_sql);
         $resource   = iCache::get($cache_name);
 	}
 	if(empty($resource)){
-        $resource = iDB::all("SELECT * FROM `#iCMS@__push` {$where_sql} {$orderSQL} LIMIT $maxperpage");
+        $resource = iDB::all("SELECT * FROM `#iCMS@__push` {$where_sql} {$order_sql} LIMIT $maxperpage");
 		//iDB::debug(1);
         if($resource)foreach ($resource as $key => $value) {
             $value['pic']     && $value['pic']  = iFS::fp($value['pic'],'+http');

@@ -11,13 +11,13 @@ iACP::head();
 <script type="text/javascript">
 $(function(){
 	iCMS.select('gid',"<?php echo $rs->gid ; ?>");
+  iCMS.select('pid',"<?php echo $rs->pid?$rs->pid:0; ?>");
 	iCMS.select('gender',"<?php echo $userdata->gender ; ?>");
 	iCMS.select('year',"<?php echo $userdata->year ; ?>");
 	iCMS.select('month',"<?php echo $userdata->month ; ?>");
   iCMS.select('day',"<?php echo $userdata->day ; ?>");
   iCMS.select('status',"<?php echo $this->uid?$rs->status:'1' ; ?>");
   iCMS.select('isSeeFigure',"<?php echo $userdata->isSeeFigure ; ?>");
-
 });
 </script>
 
@@ -36,6 +36,7 @@ $(function(){
       <form action="<?php echo APP_FURI; ?>&do=save" method="post" class="form-inline" id="iCMS-user" target="iPHP_FRAME">
         <input name="uid" type="hidden" value="<?php echo $this->uid; ?>" />
         <input  name="user[type]" type="hidden"value="<?php echo $rs->type ; ?>"/>
+        <input name="_pid" type="hidden" value="<?php echo $rs->pid; ?>" />
 
         <div id="user-add" class="tab-content">
           <div id="user-info" class="tab-pane active">
@@ -47,8 +48,15 @@ $(function(){
               </select>
             </div>
             <?php }?>
-            <?php if($this->uid){;?>
             <div class="clearfix mb10"></div>
+            <div class="input-prepend"> <span class="add-on">属 性</span>
+              <select name="pid[]" id="pid" class="chosen-select span6" multiple="multiple">
+                <option value="0">普通用户[pid='0']</option>
+                <?php echo iACP::getProp("pid") ; ?>
+              </select>
+            </div>
+            <?php if($this->uid){;?>
+            <div class="clearfloat mb10"></div>
             <div class="input-prepend">
               <span class="add-on"> 头像</span>
               <img src="<?php echo iCMS_FS_URL.get_user_pic($this->uid);?>" class="img-polaroid">
@@ -70,7 +78,6 @@ $(function(){
             <div class="clearfix mb10"></div>
             <div class="input-prepend"> <span class="add-on">性别</span>
               <select name="user[gender]" id="gender" class="chosen-select">
-                <option value="2">保密</option>
                 <option value="1">男</option>
                 <option value="0">女</option>
               </select>
@@ -110,6 +117,20 @@ $(function(){
             <div class="input-prepend"><span class="add-on">最后登陆时间</span>
               <input type="text" name="user[lastlogintime]" class="span3" id="lastlogintime" value="<?php echo get_date($rs->lastlogintime) ; ?>"/>
             </div>
+            <div class="clearfix mb10"></div>
+            <div class="input-prepend input-append">
+              <span class="add-on">总点击数</span>
+              <input type="text" name="user[hits]" class="span2" id="hits" value="<?php echo $rs->hits ; ?>"/>
+              <span class="add-on">当天点击数</span>
+              <input type="text" name="user[hits_today]" class="span2" id="hits_today" value="<?php echo $rs->hits_today ; ?>"/>
+              <span class="add-on">昨天点击数</span>
+              <input type="text" name="user[hits_yday]" class="span2" id="hits_yday" value="<?php echo $rs->hits_yday ; ?>"/>
+              <span class="add-on">周点击</span>
+              <input type="text" name="user[hits_week]" class="span2" id="hits_week" value="<?php echo $rs->hits_week ; ?>"/>
+              <span class="add-on">月点击</span>
+              <input type="text" name="user[hits_month]" class="span2" id="hits_month" value="<?php echo $rs->hits_month ; ?>"/>
+            </div>
+
             <div class="clearfix mb10"></div>
             <div class="input-prepend"> <span class="add-on">账号状态</span>
               <select name="user[status]" id="status" class="chosen-select">
@@ -284,19 +305,6 @@ $(function(){
             <div class="clearfix mb10"></div>
             <div class="input-prepend"> <span class="add-on">是否金牌卖家</span>
               <input type="text" name="userdata[is_golden_seller]" id="is_golden_seller" class="span3" value="<?php echo $userdata->is_golden_seller ; ?>" />
-            </div>
-            <div class="clearfix mb10"></div>
-            <div class="input-prepend input-append">
-              <span class="add-on">总点击数</span>
-              <input type="text" name="userdata[hits]" class="span2" id="hits" value="<?php echo $userdata->hits ; ?>"/>
-              <span class="add-on">当天点击数</span>
-              <input type="text" name="userdata[hits_today]" class="span2" id="hits_today" value="<?php echo $userdata->hits_today ; ?>"/>
-              <span class="add-on">昨天点击数</span>
-              <input type="text" name="userdata[hits_yday]" class="span2" id="hits_yday" value="<?php echo $userdata->hits_yday ; ?>"/>
-              <span class="add-on">周点击</span>
-              <input type="text" name="userdata[hits_week]" class="span2" id="hits_week" value="<?php echo $userdata->hits_week ; ?>"/>
-              <span class="add-on">月点击</span>
-              <input type="text" name="userdata[hits_month]" class="span2" id="hits_month" value="<?php echo $userdata->hits_month ; ?>"/>
             </div>
             <div class="clearfix mb10"></div>
           </div>

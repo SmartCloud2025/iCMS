@@ -9,9 +9,66 @@
 defined('iPHP') OR exit('What are you doing?');
 
 iPHP::app('user.class','static');
+
 function user_list($vars=null){
-	//return iPHP::view('iCMS','public.js');
+	$maxperpage = isset($vars['row'])?(int)$vars['row']:"100";
+	$cache_time	= isset($vars['time'])?(int)$vars['time']:"-1";
+
+    $where_sql	= "WHERE `status`='1'";
+
+	isset($vars['userid'])&& $where_sql.=" AND `uid`='{$vars['userid']}'";
+	isset($vars['gid'])   && $where_sql.= " AND `gid` ='{$vars['gid']}'";
+
+	isset($vars['type'])  && $where_sql.= " AND `type` ='{$vars['type']}'";
+
+    if($vars['pid']){
+        iPHP::import(iPHP_APP_CORE .'/iMAP.class.php');
+        map::init('prop',iCMS_APP_USER);
+        $where_sql.= map::exists($vars['pid'],'`#iCMS@__user`.uid'); //map 表大的用exists
+    }
+
+	$by=$vars['by']=="ASC"?"ASC":"DESC";
+    switch ($vars['orderby']) {
+        case "id":		$order_sql=" ORDER BY `uid` $by";			break;
+        case "article":	$order_sql=" ORDER BY `article` $by";    break;
+        case "comments":$order_sql=" ORDER BY `comments` $by";    break;
+        case "follow":$order_sql=" ORDER BY `follow` $by";    break;
+        case "fans":$order_sql=" ORDER BY `fans` $by";    break;
+        case "hits":$order_sql=" ORDER BY `hits` $by";    break;
+        default:$order_sql=" ORDER BY `uid` $by";
+    }
+	$md5	= md5($where_sql.$order_sql);
+	$offset	= 0;
+	if($vars['page']){
+		$total	= iPHP::total($md5,"SELECT count(*) FROM `#iCMS@__user` {$where_sql} ");
+		iPHP::assign("user_total",$total);
+        $multi	= iCMS::page(array('total'=>$total,'perpage'=>$maxperpage,'unit'=>iPHP::lang('iCMS:page:list'),'nowindex'=>$GLOBALS['page']));
+        $offset	= $multi->offset;
+	}
+
+	if($vars['cache']){
+        $cache_name = 'user_list/'.md5($where_sql);
+        $resource   = iCache::get($cache_name);
+	}
+
+	if(empty($resource)){
+        $resource = iDB::all("SELECT * FROM `#iCMS@__user` {$where_sql} {$order_sql} LIMIT {$offset},{$maxperpage}");
+		//iDB::debug(1);
+        if($resource)foreach ($resource as $key => $value) {
+			$value['url']    = user::router($value['uid'],"url");
+			$value['urls']   = user::router($value['uid'],"urls");
+			$value['avatar'] = user::router($value['uid'],"avatar",$vars['size']?$vars['size']:0);
+			$value['at']     = '<a href="'.$value['url'].'" class="iCMS_user_link" target="_blank" data-tip="iCMS:ucard:'.$value['uid'].'">@'.$value['nickname'].'</a>';
+			$value['link']   = '<a href="'.$value['url'].'" class="iCMS_user_link" target="_blank" data-tip="iCMS:ucard:'.$value['uid'].'">'.$value['nickname'].'</a>';
+			$value['gender'] = $value['gender']?'male':'female';
+			isset($vars['data']) && $value['data'] = (array)user::data($value['uid']);
+			$resource[$key]  = $value;
+        }
+		$vars['cache'] && iCache::set($cache_name,$resource,$cache_time);
+	}
+	return $resource;
 }
+
 function user_category($vars=null){
 	$row       = isset($vars['row'])?(int)$vars['row']:"10";
 	$where_sql = "WHERE `uid`='".(int)$vars['userid']."' ";

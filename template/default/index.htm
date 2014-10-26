@@ -8,87 +8,105 @@
     <meta name="mobile-agent" content="format=html5;url=<!--{$site.url}-->"/>
     <!--{iCMS:public:ui}-->
     <link rel="stylesheet" href="<!--{$site.urls.public}-->/theme/default.css" type="text/css" />
+    <script>
+    $(function () {
+      $('.carousel').carousel({
+        interval: 2000
+      })
+      $('.index_tab a:first').tab('show');
+    })
+    </script>
   </head>
   <body>
     <!--{include file="./header.htm"}-->
     <div id="body" class="clearfix">
       <div class="main-col">
-        <div class="row-fluid index_model">
+        <div class="index_model">
+          <!--{iCMS:article:list pic="true" row="8" cid="$category.cid"}-->
+          <!--{if $article_list}-->
           <div id="index_carousel" class="carousel slide" data-ride="carousel">
-             <!-- 轮播（Carousel）指标 -->
-             <ol class="carousel-indicators">
-                <li data-target="#index_carousel" data-slide-to="0" class="active"></li>
-                <li data-target="#index_carousel" data-slide-to="1"></li>
-                <li data-target="#index_carousel" data-slide-to="2"></li>
-                <li data-target="#index_carousel" data-slide-to="3"></li>
-                <li data-target="#index_carousel" data-slide-to="4"></li>
-                <li data-target="#index_carousel" data-slide-to="5"></li>
-                <li data-target="#index_carousel" data-slide-to="6"></li>
-                <li data-target="#index_carousel" data-slide-to="7"></li>
-             </ol>
-             <!--{iCMS:article:list pic="true" row="8" cid="$category.cid"}-->
-             <!-- 轮播（Carousel）项目 -->
-             <div class="carousel-inner">
-                <!--{foreach key=key value=alist from="$article_list"}-->
-                <div class="item<!--{if $key=="0"}--> active<!--{/if}-->">
-                   <a href="<!--{$alist.url}-->">
-                     <img src="<!--{$alist.pic.url}-->" alt="<!--{$alist.title}-->">
-                     <div class="carousel-caption">
-                      <h3><!--{$alist.title}--></h3>
-                     </div>
-                  </a>
-                </div>
-                <!--{/foreach}-->
-             </div>
-             <!-- 轮播（Carousel）导航 -->
-             <a class="carousel-control left" href="#index_carousel" data-slide="prev">&lsaquo;</a>
-             <a class="carousel-control right" href="#index_carousel" data-slide="next">&rsaquo;</a>
+            <!-- 轮播（Carousel）指标 -->
+            <ol class="carousel-indicators">
+              <li data-target="#index_carousel" data-slide-to="0" class="active"></li>
+              <li data-target="#index_carousel" data-slide-to="1"></li>
+              <li data-target="#index_carousel" data-slide-to="2"></li>
+              <li data-target="#index_carousel" data-slide-to="3"></li>
+              <li data-target="#index_carousel" data-slide-to="4"></li>
+              <li data-target="#index_carousel" data-slide-to="5"></li>
+              <li data-target="#index_carousel" data-slide-to="6"></li>
+              <li data-target="#index_carousel" data-slide-to="7"></li>
+            </ol>
+            <!-- 轮播（Carousel）项目 -->
+            <div class="carousel-inner">
+              <!--{foreach key=key value=alist from="$article_list"}-->
+              <div class="item<!--{if $key=="0"}--> active<!--{/if}-->">
+              <a href="<!--{$alist.url}-->">
+              <img src="<!--{$alist.pic.url}-->" alt="<!--{$alist.title}-->">
+              <div class="carousel-caption">
+                <h3><!--{$alist.title}--></h3>
+              </div>
+              </a>
+            </div>
+            <!--{/foreach}-->
           </div>
+          <!-- 轮播（Carousel）导航 -->
+          <a class="carousel-control left" href="#index_carousel" data-slide="prev">&lsaquo;</a>
+          <a class="carousel-control right" href="#index_carousel" data-slide="next">&rsaquo;</a>
         </div>
-        <div class="clearfix mb10"></div>
-        <div class="mod tbox" id="today_news">
-          <div class="hd">
-            <h3>今日推荐</h3>
-          </div>
-          <div class="bd">
-            <ul class="w-ul ulist">
-              <!--{iCMS:article:list loop="true" user="true" pid="1" row="10"}-->
-              <li><a href="<!--{$article_list.url}-->" target="_blank" class="art-title"><!--{$article_list.title}--></a><a href="<!--{$article_list.user.url}-->" target="_blank" class="art-author"><!--{$article_list.user.name}--></a></li>
+        <!--{/if}-->
+      </div>
+      <div class="clearfix mt30"></div>
+      <div class="mod index_tab">
+        <!--{iCMS:category:list stype='top' row="10"}-->
+        <ul class="nav nav-tabs">
+          <!--{foreach key=key value=cat_list from="$category_list"}-->
+          <li><a href="#cat_content_<!--{$cat_list.cid}-->" data-toggle="tab"><!--{$cat_list.name}--></a></li>
+          <!--{/foreach}-->
+        </ul>
+        <div class="tab-content">
+          <!--{foreach key=key value=cat_list from="$category_list"}-->
+          <div class="tab-pane" id="cat_content_<!--{$cat_list.cid}-->">
+          <div class="index_content">
+            <ul class="media-list">
+              <!--{iCMS:article:list loop="true" user="true" tags="true" pic="true" row="10" cids="$cat_list.cid"}-->
+              <li class="media">
+                <a class="pull-left" href="<!--{$article_list.url}-->">
+                <img class="media-object" src="<!--{$article_list.pic.url}-->">
+                </a>
+                <div class="media-body">
+                  <h4 class="media-heading"><a href="<!--{$article_list.url}-->" target="_blank"><!--{$article_list.title}--></a></h4>
+                  <p class="media-text"><!--{$article_list.description}--></p>
+                  <div class="media-info">
+                    <!--{if $article_list.tags_link}-->
+                    <p class="pull-right tags"><!--{$article_list.tags_link}--></p>
+                    <!--{/if}-->
+                    <!--{$article_list.user.at}-->
+                    <span class="pubdate"><!--{$article_list.pubdate|date:'Y-m-d'}--></span>
+                    <span class="count">阅读（<!--{$article_list.hits.count}-->）</span>
+                  </div>
+                </div>
+              </li>
+              <!--{if !$article_list.last}-->
+              <div class="clearfix media-bg"></div>
+              <!--{/if}-->
               <!--{/iCMS}-->
             </ul>
           </div>
         </div>
-        <!--{iCMS:category:list loop="true" stype='top' row="10" pid='0'}-->
-        <div class="mod lbox <!--{cycle values="fl,fr"}-->">
-        <div class="hd">
-          <h3><!--{$category_list.name}--></h3>
-          <span class="ext"></span><a href="<!--{$category_list.url}-->" target="_blank" class="more">更多&gt;&gt;</a></div>
-          <div class="bd"><!--{iCMS:article:list row="10" cids="$category_list.cid"}-->
-          <!--{if $article_list}-->
-          <ul class="w-ul ulist">
-            <!--{if $article_list[0].pic.url}-->
-            <li class="fb"><a href="<!--{$article_list[0].url}-->" target="_blank"><img src="<!--{$article_list[0].pic.url}-->"></a><a href="<!--{$article_list[0].url}-->" target="_blank"><!--{$article_list[0].title}--></a>
-            <p><!--{$article_list[0].description|html2txt}--></p>
-          </li>
-          <!--{/if}-->
-          <!--{for start=1 stop=10 value=i}-->
-          <li><a href="<!--{$article_list[$i].url}-->" target="_blank"><!--{$article_list[$i].title}--></a></li>
-          <!--{/for}-->
-        </ul>
-        <!--{/if}-->
+        <!--{/foreach}-->
       </div>
     </div>
-    <!--{/iCMS}-->
   </div>
   <div class="right-col">
-      <div class="mod" id="hot_artical">
-        <div class="hd">
-          <h3>热门文章<span>HOT</span></h3>
-        </div>
-        <div class="bd"><!--{iCMS:article:list row="10" orderby="hot"}-->
-        <ul class="artical-top">
-          <!--{if $article_list[0].pic.url}-->
-          <li class="first-item clearfix"> <span><a href="<!--{$article_list[0].url}-->" target="_blank"><img src="<!--{$article_list[0].pic.url}-->" style="height: 72px;"></a></span>
+    <div class="mod" id="hot_artical">
+      <div class="hd">
+        <h3>热门文章<span>HOT</span></h3>
+      </div>
+      <div class="bd"><!--{iCMS:article:list row="10" orderby="hot"}-->
+      <ul class="artical-top">
+        <!--{if $article_list[0].pic.url}-->
+        <li class="first-item clearfix">
+          <span><a href="<!--{$article_list[0].url}-->" target="_blank"><img src="<!--{$article_list[0].pic.url}-->" style="height: 72px;width: 120px;"></a></span>
           <p class="title"><a href="<!--{$article_list[0].url}-->" target="_blank"><!--{$article_list[0].title}--></a></p>
           <p class="text"><!--{$article_list[0].description|html2txt}--></p>
         </li>
@@ -103,43 +121,46 @@
   </div>
   <div class="mod" id="author_list">
     <div class="hd">
-      <h3>作家推荐<span>AUTHORS</span></h3>
-      <a href="/?tn=listauthor" target="_blank" class="more">更多&gt;&gt;</a></div>
-      <div class="bd">
-        <!--{iCMS:user:list loop="true" row="10" pid="1"}-->
-        <div class="author-m clearfix">
-          <div class="author-pic"><a href="http://wuli.baijia.baidu.com/" mon="name=recommend&amp;pos=pic&amp;pn=1" target="_blank"><img src="/news/pic/item/960a304e251f95cafa342cddcb177f3e66095293.jpg"></a></div>
-          <div class="author-name"><a href="http://wuli.baijia.baidu.com/" mon="name=recommend&amp;pos=name&amp;pn=1" target="_blank">吴澧</a></div>
-          <div class="author-text">旅美学者，《南方周末》专栏作者</div>
-          <div class="author-artical"><a href="http://wuli.baijia.baidu.com/article/2748" mon="name=recommend&amp;pos=title&amp;pn=1" target="_blank">从英语四六级考试看语文程度</a></div>
+      <h3>用户推荐<span>AUTHORS</span></h3>
+    </div>
+    <div class="bd">
+      <!--{iCMS:user:list loop="true" row="10" pid="1" data="true"}-->
+      <div class="author-m clearfix">
+        <div class="author-pic">
+          <a href="<!--{$user_list.url}-->" target="_blank">
+          <img src="<!--{$user_list.avatar}-->" onerror="iCMS.user.noavatar();">
+          </a>
         </div>
-        <!--{/iCMS}-->
+        <div class="author-name"><!--{$user_list.link}--></div>
+        <div class="author-text"><!--{$user_list.data.slogan|default:'这家伙太懒了,什么都没有留下!'}--></div>
       </div>
-    </div>
-    <div class="mod" id="tags">
-      <div class="hd">
-        <h3>热门标签<span>TAG</span></h3>
-      </div>
-      <div class="bd">
-        <!--{iCMS:tag:list loop="true" row="10" orderby="hot"}-->
-        <a href="<!--{$tag_list.url}-->" target="_blank"><!--{$tag_list.name}--></a>
-        <!--{/iCMS}-->
-      </div>
+      <!--{/iCMS}-->
     </div>
   </div>
-  <div class="clearfix mb10"></div>
-  <div id="links">
-    <div class="mod">
-      <div class="hd">
-        <h3>友情链接<span>LINK</span></h3>
-      </div>
-      <div class="bd">
-        <!--{iCMS:link loop='true'}-->
-        <a target="_blank" href="<!--{$link.url}-->"><!--{$link.name}--></a>
-        <!--{/iCMS}-->
-      </div>
+  <div class="mod" id="tags">
+    <div class="hd">
+      <h3>热门标签<span>TAG</span></h3>
+    </div>
+    <div class="bd">
+      <!--{iCMS:tag:list loop="true" row="10" orderby="hot"}-->
+      <a href="<!--{$tag_list.url}-->" target="_blank"><!--{$tag_list.name}--></a>
+      <!--{/iCMS}-->
     </div>
   </div>
+</div>
+<div class="clearfix mb10"></div>
+<div id="links">
+  <div class="mod">
+    <div class="hd">
+      <h3><i class="fa fa-link"></i> 友情链接<span>LINK</span></h3>
+    </div>
+    <div class="bd">
+      <!--{iCMS:link loop='true'}-->
+      <a target="_blank" href="<!--{$link.url}-->"><!--{$link.name}--></a>
+      <!--{/iCMS}-->
+    </div>
+  </div>
+</div>
 </div>
 <!--{include file="./footer.htm"}-->
 </body>

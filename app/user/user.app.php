@@ -575,10 +575,12 @@ class userApp {
         $regip   = iS::escapeStr(iPHP::getIp());
         $regdate = time();
         $gid     = 0;
+        $pid     = 0;
         $fans    = $follow = $article = $comments = $share = $credit = 0;
+        $hits    = $hits_today = $hits_yday = $hits_week = $hits_month = 0;
         $lastloginip = $lastlogintime = '';
         $status = 1;
-        $fields = array('gid', 'username', 'nickname', 'password', 'gender', 'fans', 'follow', 'article', 'comments','share', 'credit', 'regip', 'regdate', 'lastloginip', 'lastlogintime', 'type', 'status');
+        $fields = array('gid','pid', 'username', 'nickname', 'password', 'gender', 'fans', 'follow', 'article', 'comments','share', 'credit', 'regip', 'regdate', 'lastloginip', 'lastlogintime','hits', 'hits_today', 'hits_yday', 'hits_week', 'hits_month', 'type', 'status');
         $data   = compact ($fields);
         $uid    = iDB::insert('user',$data);
 
@@ -720,7 +722,7 @@ class userApp {
         $uid===null && $uid = (int)$_GET['uid'];
         if($uid){
             $sql = iCMS::hits_sql();
-            iDB::query("UPDATE `#iCMS@__user_data` SET {$sql} WHERE `uid` ='$uid'");
+            iDB::query("UPDATE `#iCMS@__user` SET {$sql} WHERE `uid` ='$uid'");
         }
     }
     public function API_check(){

@@ -18,3 +18,4 @@ define('iCMS_APP_COMMENT',	5);		//评论
 define('ICMS_APP_PROP',	    6);		//属性
 define('iCMS_APP_MESSAGE',	7);		//私信
 define('iCMS_APP_FAVORITE',	8);		//收藏
+define('iCMS_APP_USER',		9);		//用户
