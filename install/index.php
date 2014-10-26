@@ -326,32 +326,32 @@ $lock_file = iPATH.'cache/install.lock';
 				$incorrect  = '<span class="chk" style="color:red;">× 777属性检测不通过</span>';
 				$uncorrect  = '<span class="chk" style="color:red;">× 文件不存在请上传此文件</span>';
 				$check_list = array(
-				array('config.php','系统配置文件'),
-				array('conf','网站配置目录'),
-				array('conf/iCMS','网站配置目录'),
-				array('cache','缓存目录'),
-				array('cache/iCMS','系统缓存目录'),
-				array('cache/template','模板编译目录'),
-				array('res','资源上传目录'),
-				array('html','静态生成目录'),
+					array('config.php','系统配置文件'),
+					array('conf','网站配置目录'),
+					array('conf/iCMS','网站配置目录'),
+					array('cache','缓存目录'),
+					array('cache/iCMS','系统缓存目录'),
+					array('cache/template','模板编译目录'),
+					array('res','资源上传目录'),
+					array('html','静态生成目录'),
 				);
 				if($fp=@fopen(iPATH.'iCMS.txt',"wb")) {
-				$state = $correct;
-				fclose($fp);
+					$state = $correct;
+					fclose($fp);
 				} else {
-				$state = $incorrect.'程序根目录无法书写,请速将根目录属性设置为777';
+					$state = $incorrect.'程序根目录无法书写,请速将根目录属性设置为777';
 				}
 				foreach ($check_list as $key => $value) {
-				$file = iPATH.$value[0];
-				if(!file_exists($file)) {
-				$check_list[$key][2]= $uncorrect;
-				$check = 0;
-				} elseif(is_writable($file)) {
-				$check_list[$key][2]= $correct;
-				} else {
-				$check_list[$key][2]= $incorrect;
-				$check = 0;
-				}
+					$file = iPATH.$value[0];
+					if(!file_exists($file)) {
+						$check_list[$key][2]= $uncorrect;
+						$check = 0;
+					} elseif(is_writable($file)) {
+						$check_list[$key][2]= $correct;
+					} else {
+						$check_list[$key][2]= $incorrect;
+						$check = 0;
+					}
 				}
 				$check && @unlink(iPATH.'iCMS.txt');
 				?>
