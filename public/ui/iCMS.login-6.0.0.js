@@ -45,6 +45,11 @@
       if (val == def) {
         b.focus();
         iCMS.tip(b, '<i class="fa fa-times-circle"></i> '+info[el]);
+        if (el == 'seccode') {
+          b.next('.tooltip').css({
+            'margin-left': '186px'
+          });
+        }
         return true;
       } else {
         if (typeof(success) === "function") {

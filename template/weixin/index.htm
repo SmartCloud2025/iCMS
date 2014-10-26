@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="zh-cn">
+	<head>
+		<title><!--{$site.title}--></title>
+		<meta name="keywords" content="<!--{$site.keywords}-->" />
+		<meta name="description" content="<!--{$site.description}-->"/>
+		<!--{iCMS:public:ui}-->
+	</head>
+	<body class="iCMS-weixin">
+		<!--{include file="./navbar.htm"}-->
+		<div class="index_brand">
+			<img src="<!--{$site.urls.ui}-->/img/iCMS.logo-6.0.png"/>
+		</div>
+		<div class="container" id="index_wrapper">
+			<div class="index_title">
+				<span class="label label-default">最新文章</span>
+			</div>
+			<div class="index_pic_list">
+				<ul class="media-list">
+					<!--{iCMS:article:list loop="true" pic="true" page="true" row="5"}-->
+					<li class="media">
+						<!--{if $article_list.first}-->
+						<div class="media-pic">
+							<a href="<!--{$article_list.url}-->">
+							<img src="<!--{$article_list.pic.url}-->" alt="<!--{$article_list.title}-->">
+							<p class="title"><span><!--{$article_list.title}--></span></p>
+							</a>
+						</div>
+						<!--{else}-->
+						<a class="pull-right" href="<!--{$article_list.url}-->">
+						<img class="media-object" src="<!--{$article_list.pic.url}-->" alt="<!--{$article_list.title}-->">
+						</a>
+						<a href="<!--{$article_list.url}-->">
+						<div class="media-body">
+							<h4 class="media-heading"><!--{$article_list.title}--></h4>
+						</div>
+						</a>
+						<!--{/if}-->
+					</li>
+					<!--{/iCMS}-->
+				</ul>
+			</div>
+		</div>
+		<div id="pages_next" class="hide">
+			<!--{$iCMS.PAGE.NEXT}-->
+		</div>
+		<script>
+		iCMS.scrollLoad("#index_wrapper",".index_pic_list","#pages_next","<!--{$iCMS.PAGE.TOTAL}-->");
+		</script>
+	</body>
+</html>

@@ -13,9 +13,9 @@
             nextSelector: next + ' a', // selector for the NEXT link (to page 2)
             itemSelector: contents + ' ' + one, // selector for all items you'll retrieve
             loading: {
-              finishedMsg: '<a href="javascript:;" class="click_more btn btn-success btn-lg btn-block"><i class="fa fa-gift"></i> 恭喜您！居然到底了！</a>',
+              finishedMsg: '<button class="click_more btn btn-success btn-lg btn-block"><i class="fa fa-gift"></i> 恭喜您！居然到底了！</button>',
               msgText: '<p class="loading_wrap"><i class="fa fa-spinner"></i> 正在加载...</p>',
-              clickMoreMsg:'<a href="javascript:;" class="click_more btn btn-primary btn-lg btn-block"><i class="fa fa-cloud-download"></i> 点击加载更多</a>',
+              clickMoreMsg:'<button class="click_more btn btn-primary btn-lg btn-block"><i class="fa fa-cloud-download"></i> 点击加载更多</button>',
               img: '',
             }
           },

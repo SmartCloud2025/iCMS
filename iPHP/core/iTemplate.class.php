@@ -189,14 +189,19 @@ class iTemplate {
 	}
 	function get_tpl($tpl){
         if(strpos($tpl,iPHP_APP.':/') !==false){
-			$_tpl = str_replace(iPHP_APP.':/',iPHP_APP.'/'.iPHP_TPL_DEFAULT,$tpl); // iCMS/default/
+        	if(iPHP_DEVICE=='pc'){
+				$_tpl = str_replace(iPHP_APP.':/',iPHP_APP.'/'.iPHP_DEFAULT_TPL,$tpl); // iCMS/default/
+			}else{//移动设备
+				$_tpl = str_replace(iPHP_APP.':/',iPHP_APP.'/'.iPHP_MOBILE_TPL,$tpl); // iCMS/mobile/
+        	}
+
 			if(@is_file(iPHP_TPL_DIR."/".$_tpl)){
-				$tpl = $_tpl;
+				return $_tpl;
 			}else{// iCMS/
 				$tpl = str_replace(iPHP_APP.':/',iPHP_APP,$tpl);
 			}
 		}elseif(strpos($tpl,'{iTPL}') !==false){
-			$tpl = str_replace('{iTPL}',iPHP_TPL_DEFAULT,$tpl);
+			$tpl = str_replace('{iTPL}',iPHP_DEFAULT_TPL,$tpl);
 		}
 		$path = iPHP_TPL_DIR."/".$tpl;
 		@is_file($path) OR $this->trigger_error("file '$path' does not exist", E_USER_ERROR);

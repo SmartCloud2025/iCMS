@@ -45,6 +45,14 @@
             <input type="password" placeholder="请输入您的密码" data-container=".pass_tip" name="pass" id="login_pass" class="iCMS_login_pass form-control">
             <span class="help-block pass_tip"></span>
           </div>
+          <!--{if $iCMS.CONFIG.user.loginseccode }-->
+          <div class="form-group">
+            <input type="text" maxlength="4" name="seccode" class="iCMS_login_seccode iCMS_seccode form-control" placeholder="验证码"  data-container=".seccode_tip" >
+            <img src="<!--{iCMS:router url='/api/seccode'}-->" alt="验证码" class="iCMS_seccode_img r3"/>
+            <a href="javascript:;" class="iCMS_seccode_text" style="float: none">换一张</a>
+            <span class="help-block seccode_tip">请输入图片中的字符!</span>
+          </div>
+          <!--{/if}-->
           <div class="checkbox">
             <label for="login_remember">
               <input type="checkbox" value="1" name="remember" id="login_remember" class="iCMS_login_remember" checked="checked"><span>记住我（两周免登录）</span>

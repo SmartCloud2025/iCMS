@@ -93,28 +93,35 @@ class iCMS {
             $has_tpl = self::device_agent($device['ua']);
             if($device['tpl'] && $has_tpl){
                 $device_name = $device['name'];
-                $def_tpl     = $device['tpl'];
-                $def_domain  = $device['domain'];
+                $device_tpl  = $device['tpl'];
+                $domain      = $device['domain'];
                 break;
             }
         }
-        if(empty($def_tpl)){
-            if(self::device_agent($template['mobile']['agent'])){
-                $device_name = 'mobile';
-                $def_tpl     = $template['mobile']['tpl'];
-                $def_domain  = $template['mobile']['domain'];
-            }
+
+        //检查是否移动设备
+        if(self::device_agent($template['mobile']['agent'])){
+            $device_name = 'mobile';
+            $mobile_tpl  = $template['mobile']['tpl'];
+            $domain      = $template['mobile']['domain'];
         }
+
+        if($device_tpl){ //设备模板
+            $def_tpl = $device_tpl;
+        }else{ //没有设置设备模板 但是移动设备
+            $mobile_tpl && $def_tpl = $mobile_tpl;
+        }
+
         if(empty($def_tpl)){
             $device_name = 'pc';
             $def_tpl     = $template['pc']['tpl'];
-            $def_domain  = false;
+            $domain      = false;
         }
-        define('iPHP_TPL_DEFAULT',$def_tpl);
+        define('iPHP_DEFAULT_TPL',$def_tpl);
+        define('iPHP_MOBILE_TPL',$mobile_tpl);
         define('iPHP_DEVICE',$device_name);
-        if($def_domain){
-            $_router_url      = $config['router']['URL'];
-            $config['router'] = str_replace($_router_url, $def_domain, $config['router']);
+        if($domain){
+            $config['router'] = str_replace($config['router']['URL'], $domain, $config['router']);
         }
     }
     private static function device_agent($user_agent){
@@ -122,23 +129,19 @@ class iCMS {
         return ($user_agent && preg_match('/'.$user_agent.'/i',$_SERVER["HTTP_USER_AGENT"]));
     }
     public static function assign_site(){
-        iPHP::assign('site',array(
-            "title"       => self::$config['site']['name'],
-            "seotitle"    => self::$config['site']['seotitle'],
-            "keywords"    => self::$config['site']['keywords'],
-            "description" => self::$config['site']['description'],
-            "icp"         => self::$config['site']['icp'],
-            '404'         => self::$config['router']['404'],
-            'url'         => iCMS_URL,
-            "tpl"         => iPHP_TPL_DEFAULT,
-            'urls'        => array(
-                    "public" => iCMS_PUBLIC_URL,
-                    "user"   => iCMS_USER_URL,
-                    "res"    => iCMS_FS_URL,
-                    "ui"     => iCMS_PUBLIC_URL.'/ui',
-                    "avatar" => iCMS_FS_URL.'avatar/',
-			)
-		));
+        $site          = self::$config['site'];
+        $site['title'] = self::$config['site']['name'];
+        $site['404']   = self::$config['router']['404'];
+        $site['url']   = iCMS_URL;
+        $site['tpl']   = iPHP_DEFAULT_TPL;
+        $site['urls']  = array(
+            "public" => iCMS_PUBLIC_URL,
+            "user"   => iCMS_USER_URL,
+            "res"    => iCMS_FS_URL,
+            "ui"     => iCMS_PUBLIC_URL.'/ui',
+            "avatar" => iCMS_FS_URL.'avatar/',
+        );
+        iPHP::assign('site',$site);
         iPHP::$dialog['title']  = self::$config['site']['name'];
     }
     /**

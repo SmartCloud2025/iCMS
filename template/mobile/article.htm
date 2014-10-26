@@ -5,6 +5,14 @@
     <meta name="keywords" content="<!--{$article.keywords}-->" />
     <meta name="description" content="<!--{$article.description}-->"/>
     <!--{iCMS:public:ui}-->
+    <script type="text/javascript">
+    $(function(){
+      $("img",".article_body").each(function(i){
+        iCMS.imgFix(this,300);
+        $(this).fadeIn();
+      });
+    })
+    </script>
   </head>
   <body class="iCMS-mobile">
     <!--{include file="./navbar.htm"}-->
@@ -38,13 +46,6 @@
               </div>
             </div>
           </div>
-          <script type="text/javascript">
-          $(function(){
-            $("img",".article_body").each(function(i){
-              iCMS.imgFix(this,300);
-            });
-          })
-          </script>
           <div class="article_pagenav iCMS_pagination clearfix">
             <!--{$article.page.text}-->
           </div>
@@ -91,7 +92,7 @@
         }
       })
       //滚动加载
-      iCMS.scrollLoad(".article_body",".content","#pages_next",<!--{$article.page.total}-->,
+      iCMS.scrollLoad(".article_body",".content","#pages_next","<!--{$article.page.total}-->",
       function(e){
         //$("#scrollLoad-switcher").show();
         var pages_nav = $("#pages_nav",e).html();

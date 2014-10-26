@@ -127,7 +127,7 @@
       $(e).data('check', false);
     }
     if (n == 'seccode') {
-      $("#iCMS-reg-seccode").next('.tooltip').css({
+      b.next('.tooltip').css({
         'margin-left': '186px'
       });
     }

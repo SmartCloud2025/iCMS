@@ -53,7 +53,7 @@ window.iCMS.init({
   UI:'./app/ui/common',
   URL:'<?php echo iCMS_URL;?>',
   PUBLIC:'<?php echo iCMS_PUBLIC_URL;?>',
-  DEFTPL:'<?php echo iPHP_TPL_DEFAULT;?>',
+  DEFTPL:'<?php echo iPHP_DEFAULT_TPL;?>',
   COOKIE:'<?php echo iPHP_COOKIE_PRE;?>',
 });
 $(function(){
