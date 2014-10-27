@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="zh-cn">
+	<head>
+		<title><!--{$category.name}-->_<!--{$site.title}-->_<!--{$site.seotitle}--></title>
+		<meta name="keywords" content="<!--{$category.keywords}-->" />
+		<meta name="description" content="<!--{$category.description}-->"/>
+		<!--{iCMS:public:ui dir="mobile"}-->
+	</head>
+	<body class="iCMS-weixin">
+		<!--{include file="./navbar.htm"}-->
+		<div class="container" id="index_wrapper">
+			<div class="index_title">
+				<span class="label label-default">最新文章</span>
+			</div>
+			<div class="index_pic_list">
+				<ul class="media-list">
+					<!--{iCMS:article:list loop="true" row="5" cid="$category.cid"}-->
+					<li class="media">
+						<!--{if $article_list.first && $article_list.pic}-->
+						<div class="media-pic">
+							<img src="<!--{$article_list.pic.url}-->" alt="<!--{$article_list.title}-->">
+							<p class="title"><span><!--{$article_list.title}--></span></p>
+						</div>
+						<!--{else}-->
+						<!--{if $article_list.pic}-->
+						<a class="pull-right" href="<!--{$article_list.url}-->">
+							<img class="media-object" src="<!--{$article_list.pic.url}-->" alt="<!--{$article_list.title}-->">
+						</a>
+						<!--{/if}-->
+						<a href="<!--{$article_list.url}-->">
+						<div class="media-body">
+							<h4 class="media-heading"><!--{$article_list.title}--></h4>
+						</div>
+						</a>
+						<!--{/if}-->
+					</li>
+					<!--{/iCMS}-->
+				</ul>
+			</div>
+		</div>
+		<div id="pages_next" class="hide">
+			<!--{$iCMS.PAGE.NEXT}-->
+		</div>
+		<script>
+		iCMS.scrollLoad("#index_wrapper",".index_pic_list","#pages_next","<!--{$iCMS.PAGE.TOTAL}-->");
+		</script>
+	</body>
+</html>

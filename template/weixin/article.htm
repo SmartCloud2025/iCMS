@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="zh-cn">
+	<head>
+		<title><!--{$article.title}-->_<!--{$category.name}-->_<!--{$site.title}-->_<!--{$site.seotitle}--></title>
+		<meta name="keywords" content="<!--{$article.keywords}-->" />
+		<meta name="description" content="<!--{$article.description}-->"/>
+		<!--{iCMS:public:ui}-->
+		<script>
+		$(function(){
+			$("img",".content").each(function(i){
+				iCMS.imgFix(this,300);
+				$(this).fadeIn();
+			});
+		})
+		</script>
+	</head>
+	<body class="iCMS-weixin">
+		<!--{include file="./navbar.htm"}-->
+		<div class="container article_wrapper">
+			<article>
+			<h1><!--{$article.title}--></h1>
+			<div class="info">
+				<!--{$article.pubdate|date:"Y-m-d H:s"}--> <!--{$article.user.at}-->
+			</div>
+			<div class="article_body">
+				<div class="content">
+					<!--{$article.body}-->
+					<!--{if $article.page.end}-->
+					<div class="list-group">
+						<!--{iCMS:article:list loop="true" row="10" cid="$category.cid"}-->
+						<a href="<!--{$article_list.url}-->" class="list-group-item">
+						<h4 class="list-group-item-heading r3"><!--{$article_list.title}--></h4>
+						<p class="list-group-item-text"><!--{$article_list.description|cut:40:'...'}--></p>
+						</a>
+						<!--{/iCMS}-->
+					</div>
+					<!--{/if}-->
+					<div id="pages_nav" class="hide">
+						<!--{$article.page.text}-->
+					</div>
+				</div>
+			</div>
+			<div class="article_pagenav iCMS_pagination clearfix">
+				<!--{$article.page.text}-->
+			</div>
+			<div id="pages_next" class="hide">
+				<!--{if !$article.page.end}-->
+				<a href="<!--{$article.page.next}-->"/>下一页</a>
+				<!--{/if}-->
+			</div>
+			</article>
+			<div class="clearfix"></div>
+			<section class="panel panel-default related">
+				<div class="panel-heading">
+					<h3><i class="fa fa-fire"></i> 热门文章<span>HOT</span></h3>
+				</div>
+				<div class="list-group">
+					<!--{iCMS:article:list loop="true" row="10" orderby="hot" cid="$category.cid"}-->
+					<a class="list-group-item" href="<!--{$article_list.url}-->" target="_blank"><!--{$article_list.title}--></a>
+					<!--{/iCMS}-->
+				</div>
+			</section>
+		</div>
+		<script>
+		$(function(){
+			//滚动加载
+			iCMS.scrollLoad(".article_body",".content","#pages_next","<!--{$article.page.total}-->",
+			function(e){
+				//$("#scrollLoad-switcher").show();
+				var pages_nav = $("#pages_nav",e).html();
+				$("#pages_nav",e).remove();
+				$(".article_pagenav").html(pages_nav);
+			});
+		})
+		</script>
+		<script src="<!--{$article.hits.script}-->"></script>
+	</body>
+</html>

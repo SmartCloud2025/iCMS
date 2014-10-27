@@ -266,9 +266,8 @@ footer .links li:first-child { padding-left: 0; }
 	.panel { float: left; width: 360px; margin-right: 10px; }
 }
 */
+
 .iCMS-weixin { background: #EBEBEB;padding-bottom: 60px;}
-.iCMS-weixin a:link{color: #000;}
-.iCMS-weixin a:visited{color: #999;}
 .iCMS-weixin hr{border-top: 1px solid #C9C9C9;border-bottom: 1px solid #efefef;}
 .iCMS-weixin .index_brand{text-align: center;background-color: #efefef;margin-bottom: 10px;padding: 20px;border-bottom: 1px solid #CBCBCB;}
 .iCMS-weixin .index_title{text-align: center;}
@@ -285,9 +284,6 @@ footer .links li:first-child { padding-left: 0; }
 .iCMS-weixin .navbar{z-index: 9999; border-top: 1px solid #CBCBCB;box-shadow: 0px 0px 4px rgba(0, 0, 0, 0.4);min-height: 45px;height: 45px;}
 .iCMS-weixin .navbar .navbar-brand{border-right: 1px solid #CBCBCB;width:60px;text-align: center;padding: 8px;}
 .iCMS-weixin .navbar .navbar-brand .fa{font-size: 30px;}
+
 /*.iCMS-weixin .navbar .navbar-brand.pull-right{border-left: 1px solid #CBCBCB;}*/
-/*.iCMS-weixin .article_wrapper a:link{color: #607FA6;}
-.iCMS-weixin .article_wrapper a:visited{color: #999;}*/
-/*.iCMS-weixin .article_wrapper .content{font-size: 16px;line-height: 160%;}
-.iCMS-weixin .article_wrapper .content img{display: none;}*/
 

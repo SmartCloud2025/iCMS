@@ -1,0 +1,16 @@
+
+    <nav class="navbar navbar-default navbar-fixed-bottom" role="navigation">
+      <div class="navbar-header">
+        <a class="navbar-brand" href="<!--{$site.url}-->"><i class="fa fa-home"></i></a>
+        <div class="btn-group dropup pull-right">
+          <a class="navbar-brand dropdown-toggle" href="javascript:;" data-toggle="dropdown" id="dropdownMenu1"><i class="fa fa-bars"></i></a>
+            <ul class="dropdown-menu" role="menu" aria-labelledby="dropdownMenu1">
+              <!--{iCMS:category:list loop="true" stype='top' row="10"}-->
+              <li role="presentation"><a role="menuitem" href="<!--{$category_list.url}-->"><!--{$category_list.name}--></a></li>
+              <!--{if !$category_list.last}--><li class="divider"></li><!--{/if}-->
+              <!--{/iCMS}-->
+            </ul>
+        </div>
+        <a class="navbar-brand" onclick="javascript:window.location.reload();"><i class="fa fa-refresh"></i></a>
+      </div>
+    </nav>
