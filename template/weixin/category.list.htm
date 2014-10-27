@@ -4,13 +4,13 @@
 		<title><!--{$category.name}-->_<!--{$site.title}-->_<!--{$site.seotitle}--></title>
 		<meta name="keywords" content="<!--{$category.keywords}-->" />
 		<meta name="description" content="<!--{$category.description}-->"/>
-		<!--{iCMS:public:ui dir="mobile"}-->
+		<!--{iCMS:public:ui}-->
 	</head>
 	<body class="iCMS-weixin">
 		<!--{include file="./navbar.htm"}-->
 		<div class="container" id="index_wrapper">
 			<div class="index_title">
-				<span class="label label-default">最新文章</span>
+				<span class="label label-default"><!--{$category.name}-->最新文章</span>
 			</div>
 			<div class="index_pic_list">
 				<ul class="media-list">

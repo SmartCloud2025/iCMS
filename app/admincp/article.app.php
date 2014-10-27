@@ -146,11 +146,11 @@ class articleApp{
     		case 'tag':
     			iPHP::app('tag.class','static');
 		     	foreach($_POST['id'] AS $id){
-		    		$art = articleTable::row($id,'tags,cid');
+                    $art  = articleTable::row($id,'tags,cid');
+                    $mtag = iS::escapeStr($_POST['mtag']);
 			        if($_POST['pattern']=='replace') {
-			        	$mtag = iS::escapeStr($_POST['mtag']);
 			        }elseif($_POST['pattern']=='addto') {
-			        	$mtag = $art['tags']?$art['tags'].','.iS::escapeStr($_POST['mtag']):iS::escapeStr($_POST['mtag']);
+			        	$art['tags'] && $mtag = $this->detag($art['tags']).','.$mtag;
 			        }
 			        $tags = tag::diff($mtag,$art['tags'],iMember::$userid,$id,$this->categoryApp->rootid($art['cid']));
                     $tags = addslashes($tags);
