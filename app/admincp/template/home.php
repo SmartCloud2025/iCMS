@@ -175,7 +175,10 @@ iACP::head();
           </tr>
           <tr>
             <td>相关链接</td>
-            <td><a class="btn btn-small" href="http://www.idreamsoft.com" target="_blank">iDreamSoft</a> <a class="btn btn-small" href="http://www.idreamsoft.com/iCMS/" target="_blank">iCMS</a> <a class="btn btn-small" href="http://www.idreamsoft.com/template/" target="_blank">&#x6A21;&#x677F;</a> <a class="btn btn-small" href="http://www.idreamsoft.com/iCMS/doc" target="_blank">&#x6587;&#x6863;</a> <a class="btn btn-small" href="http://www.idreamsoft.com/feedback/" target="_blank">&#x8BA8;&#x8BBA;&#x533A;</a></td>
+            <td><a class="btn btn-small" href="http://www.idreamsoft.com" target="_blank">iDreamSoft</a>
+              <a class="btn btn-small" href="http://www.idreamsoft.com/iCMS/" target="_blank">iCMS</a>
+              <a class="btn btn-small" href="http://www.idreamsoft.com/template/" target="_blank">&#x6A21;&#x677F;</a>
+              <a class="btn btn-small" href="http://www.idreamsoft.com/doc" target="_blank">&#x6587;&#x6863;</a> <a class="btn btn-small" href="http://www.idreamsoft.com/feedback/" target="_blank">&#x8BA8;&#x8BBA;&#x533A;</a></td>
           </tr>
         </table>
       </div>
