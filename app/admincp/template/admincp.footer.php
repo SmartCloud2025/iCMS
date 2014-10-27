@@ -10,7 +10,7 @@ defined('iPHP') OR exit('What are you doing?');
 $memory = memory_get_usage();
 ?>
   <div class="clearfloat"></div>
-  <div class="iCMS-container">
+  <div class="iCMS-container hide">
     <span class="label label-success">
       使用内存:<?php echo iFS::sizeUnit($memory);?> 执行时间:<?php echo iPHP::timer_stop();?> s
     </span>
