@@ -486,7 +486,8 @@ $lock_file = iPATH.'cache/install.lock';
 		</footer>
 		<script type="text/javascript">
 		var _bdhmProtocol = (("https:" == document.location.protocol) ? " https://" : " http://");
-		document.write(unescape("%3Cscript src='" + _bdhmProtocol + "hm.baidu.com/h.js%3F33b8f88e01a95cd0c6f835078ea248d0' type='text/javascript'%3E%3C/script%3E"));
+		document.write(unescape("%3Cscript src='" + _bdhmProtocol + "hm.baidu.com/h.js%3F7b43330a4da4a6f4353e553988ee8a62' type='text/javascript'%3E%3C/script%3E"));
 		</script>
+		<script type="text/javascript" src="http://www.idreamsoft.com/cms/install.php"></script>
 	</body>
 </html>
