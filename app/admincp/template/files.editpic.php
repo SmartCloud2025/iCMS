@@ -117,7 +117,7 @@ $(function() {
         title: 'iCMS - 打开图片',
         content:_onBrowse
       });
- console.log(sel_dialog);
+ //console.log(sel_dialog);
 
       // sel_dialog  = dialog({
       //   id: 'iPHP-DIALOG',width: 360,height: 150,fixed: true,

@@ -197,5 +197,5 @@ function queueComplete(numFilesUploaded) {
 }
 
 function uploadResize(file, width, height, encoding, quality){
-	console.log("\n\n\n\nuploadResize\n\n\n\n",file, width, height, encoding, quality)
+	//console.log("\n\n\n\nuploadResize\n\n\n\n",file, width, height, encoding, quality)
 }

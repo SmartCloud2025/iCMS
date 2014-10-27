@@ -40,7 +40,6 @@ class iDB {
             self::$link = $GLOBALS['iPHP_DB'];
             if(self::$link){
                 if(self::$link->ping())
-                    var_dump('aa');
                     return self::$link;
             }
         }
@@ -280,7 +279,7 @@ class iDB {
         if ( self::$col_info ) {
             if ( $col_offset == -1 ) {
                 $i = 0;
-                var_dump(self::$col_info);
+                //var_dump(self::$col_info);
                 foreach(self::$col_info as $col ) {
                     $new_array[$i] = $col->{$info_type};
                     $i++;

@@ -202,9 +202,9 @@
 
             function __callback(type){
                 window.clearTimeout(timeOutID);
-                console.log('opts.elemBack:'+opts.elemBack,'type:'+type);
+                //console.log('opts.elemBack:'+opts.elemBack,'type:'+type);
                 if(opts.elemBack==type){
-                    console.log('_elemBack:'+_elemBack);
+                    //console.log('_elemBack:'+_elemBack);
                     if (_elemBack) { //删除前把元素返回原来的地方
                         _elemBack();
                     }

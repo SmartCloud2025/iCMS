@@ -219,7 +219,7 @@
                 },'json');
 
                 $(box).on("click", '.favo-list-item-link', function(event) {
-                    console.log(this);
+                    //console.log(this);
                     var $this = $(this),
                     data = iCMS.multiple(a),
                     num  = parseInt($('.num',$this).text());
