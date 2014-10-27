@@ -18,7 +18,7 @@ require iPATH.'iPHP/iPHP.php';		//iPHP框架文件
 $_URI      = $_SERVER['PHP_SELF'];
 $_DIR      = substr(dirname($_URI),0,-8);
 $_DIR      = trim($_DIR,'/').'/';
-$_URL      = 'http://'.$_SERVER['HTTP_HOST'];
+$_URL      = 'http://'.$_SERVER['HTTP_HOST'].'/'.trim($_DIR,'/');
 $lock_file = iPATH.'cache/install.lock';
 ?>
 <!DOCTYPE html>
