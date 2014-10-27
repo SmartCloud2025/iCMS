@@ -15,7 +15,7 @@ define('iPATH',dirname(strtr(__FILE__,'\\','/'))."/../");
 require iPATH.'iPHP/iPHP.php';//iPHP框架文件
 $lock_file = iPATH.'cache/install.lock';
 
-file_exists($lock_file) && iPHP::alert('请先删除 cache/install.lock 这个文件。 ');
+file_exists($lock_file) && iPHP::alert('请先删除 cache/install.lock 这个文件。','js:top.callback();');
 
 $action = $_POST['action'];
 if($action=='install'){
