@@ -447,11 +447,11 @@ class articleApp{
             $aid  = articleTable::insert(compact($fields));
 
             map::init('prop',iCMS_APP_ARTICLE);
-            map::add($pid,$aid);
+            $pid && map::add($pid,$aid);
 
             map::init('category',iCMS_APP_ARTICLE);
             map::add($cid,$aid);
-            map::add($scid,$aid);
+            $scid && map::add($scid,$aid);
 
             $tagArray && tag::map_iid($tagArray,$aid);
 
@@ -509,7 +509,7 @@ class articleApp{
         iPHP::dialog($msg,'js:1');
     }
     function del_msg($str){
-        return iPHP::msg('success:#:check:#:'.$str,true);
+        return iPHP::msg('success:#:check:#:'.$str.'<hr />',true);
     }
     function del_pic($pic){
         //$thumbfilepath    = gethumb($pic,'','',false,true,true);
@@ -542,6 +542,9 @@ class articleApp{
             iPHP::app('tag.class','static');
             $msg.=tag::del($art['tags']);
         }
+        iDB::query("DELETE FROM `#iCMS@__category_map` WHERE `iid` = '$id' AND `appid` = '".iCMS_APP_ARTICLE."';");
+        iDB::query("DELETE FROM `#iCMS@__prop_map` WHERE `iid` = '$id' AND `appid` = '".iCMS_APP_ARTICLE."' ;");
+
         articleTable::del_filedata($id,'indexid');
         $msg.= $this->del_msg('相关文件数据删除');
         articleTable::del_comment($id);

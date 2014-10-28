@@ -116,11 +116,11 @@ class tagsApp{
 			tag::cache($id,'id');
 
             map::init('prop',iCMS_APP_TAG);
-            map::add($pid,$id);
+            $pid && map::add($pid,$id);
 
             map::init('category',iCMS_APP_TAG);
             map::add($cid,$id);
-            map::add($tcid,$id);
+            $tcid && map::add($tcid,$id);
 
 	        iPHP::success('标签添加完成',"url:".APP_URI);
 		}else{
@@ -144,6 +144,9 @@ class tagsApp{
     }
     function do_del($id = null,$dialog=true){
     	$id===null && $id=$this->id;
+        iDB::query("DELETE FROM `#iCMS@__category_map` WHERE `iid` = '$id' AND `appid` = '".iCMS_APP_TAG."';");
+        iDB::query("DELETE FROM `#iCMS@__prop_map` WHERE `iid` = '$id' AND `appid` = '".iCMS_APP_TAG."' ;");
+
     	tag::del($id,'id');
     	$dialog && iPHP::success("标签删除成功",'js:parent.$("#tr'.$id.'").remove();');
     }

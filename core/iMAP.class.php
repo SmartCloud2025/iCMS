@@ -19,6 +19,15 @@ class map {
 	public static function table(){
 		return'#iCMS@__'.self::$table.'_map';
 	}
+	public static function del($nodes,$iid="0") {
+		$_array   = explode(',',$nodes);
+		$_count   = count($_array);
+		$varArray = array();
+	    for($i=0;$i<$_count;$i++) {
+	    	$_node = $_array[$i];
+			iDB::query("DELETE FROM `".self::table()."` WHERE `".self::$field."`='$_node' AND `iid`='$iid' AND `appid`='".self::$appid."'");
+	    }
+	}
 	public static function add($nodes,$iid="0") {
 		$_array   = explode(',',$nodes);
 		$_count   = count($_array);
@@ -79,9 +88,9 @@ class map {
 		if(empty($nodes)) return false;
 
 		$sql = self::sql($nodes)." AND iid =".$iid;
-		return ' AND exists ('.$sql.')';		
+		return ' AND exists ('.$sql.')';
 	}
 	public static function multi($nodes=0,$iid=''){
-		
+
 	}
 }

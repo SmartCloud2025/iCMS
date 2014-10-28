@@ -87,7 +87,7 @@ class userApp{
             iDB::value("SELECT `uid` FROM `#iCMS@__user` where `nickname` ='$nickname' LIMIT 1") && iPHP::alert('该昵称已经存在');
             $uid = iDB::insert('user',$user);
             map::init('prop',iCMS_APP_USER);
-            map::add($pid,$uid);
+            $pid && map::add($pid,$uid);
             $msg = "账号添加完成!";
         }else {
             iDB::value("SELECT `uid` FROM `#iCMS@__user` where `username` ='$username' AND `uid` !='$uid' LIMIT 1") && iPHP::alert('该账号已经存在');
@@ -126,6 +126,8 @@ class userApp{
     	$uid===null && $uid=$this->uid;
 		$uid OR iPHP::alert('请选择要删除的用户');
 		iDB::query("DELETE FROM `#iCMS@__user` WHERE `uid` = '$uid'");
+        iDB::query("DELETE FROM `#iCMS@__prop_map` WHERE `iid` = '$uid' AND `appid` = '".iCMS_APP_USER."' ;");
+
 		$dialog && iPHP::success('用户删除完成','js:parent.$("#tr'.$uid.'").remove();');
     }
 }

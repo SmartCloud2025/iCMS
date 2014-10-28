@@ -165,7 +165,7 @@ class categoryApp extends category{
                 $data['comments']   = '0';
 
                 $cid = iDB::insert('category',$data);
-                map::add($pid,$cid);
+                $pid && map::add($pid,$cid);
 	            $this->cache(false,$this->appid);
 	            $this->cahce_one($cid);
             }
@@ -319,13 +319,16 @@ class categoryApp extends category{
         $cid===null && $cid=(int)$_GET['cid'];
         iACP::CP($cid,'d','alert');
         $msg    = '请选择要删除的'.$this->name_text.'!';
+
         if(empty($this->_array[$cid])) {
             $this->delcontent($cid);
             iDB::query("DELETE FROM `#iCMS@__category` WHERE `cid` = '$cid'");
+            iDB::query("DELETE FROM `#iCMS@__category_map` WHERE `node` = '$cid' AND `appid` = '".$this->appid."';");
+            iDB::query("DELETE FROM `#iCMS@__prop_map` WHERE `iid` = '$cid' AND `appid` = '".iCMS_APP_CATEGORY."' ;");
             $dialog && $this->cache(true,$this->appid);
-            $msg    = '删除成功!';
+            $msg = '删除成功!';
         }else {
-            $msg    = '请先删除本'.$this->name_text.'下的子'.$this->name_text.'!';
+            $msg = '请先删除本'.$this->name_text.'下的子'.$this->name_text.'!';
         }
         $dialog && iPHP::success($msg,'js:parent.$("#'.$cid.'").parent().remove();');
     }
