@@ -75,6 +75,7 @@ class iURL {
             case 'EXT':		$e = $c['htmlext']?$c['htmlext']:self::$config['html_ext'];break;
             case 'TITLE':   $e = urlencode(iS::escapeStr($a['title']));break;
             case 'LINK':    $e = $a['LINK'];break;
+            case 'P':       $e = '{P}';break;
         }
         return $e;
     }
@@ -142,7 +143,7 @@ class iURL {
             $i->ext  = '.'.$pathA['extension'];
             $i->name OR $i->name = $i->file;
 //var_dump($GLOBALS['page']);
-//print_r($i);
+//var_dump($i);
 //var_dump($pathA);
 
             if(empty($i->file)||substr($url,-1)=='/'||empty($pathA['extension'])) {
@@ -156,7 +157,10 @@ class iURL {
             }
             if(strstr($i->file,'{P}')===false) {
                 $i->pfile = $i->name."_{P}".$i->ext;
-			}
+			}else{
+                $i->pfile = $i->file;
+            }
+
 	        if($uri=="http"||strstr($url,'http://')){
                 $hi->href    = $url;
                 $hi->ext     = $i->ext;
@@ -186,10 +190,12 @@ class iURL {
             }
             $i->pageurl  = $i->hdir.'/'.$i->pfile ;
             $i->pagepath = $i->dir.'/'.$i->pfile;
-//            $i->href	= str_replace('{P}',$p,$i->href);
-//            $i->path	= str_replace('{P}',$p,$i->path);
-//            $i->file	= str_replace('{P}',$p,$i->file);
-//            $i->name	= str_replace('{P}',$p,$i->name);
+
+
+           $i->href	= str_replace('{P}',1,$i->href);
+           $i->path	= str_replace('{P}',1,$i->path);
+           $i->file	= str_replace('{P}',1,$i->file);
+           $i->name	= str_replace('{P}',1,$i->name);
 //var_dump($i);
 //exit;
         }else {

@@ -279,11 +279,9 @@ class iPages {
 	function _get_url($pageno=1){
 		if($this->is_ajax) return (int)$pageno;
 		if($pageno<2){
-			$url	= $this->url;
-			if(!$this->html['enable']){
-				$url	= str_replace(array('?'.$this->page_name.'={P}','&'.$this->page_name.'={P}'),'',$this->url);
-			}
-			return str_replace('_{P}','',$url);
+			$url = $this->url;
+			$this->html['enable'] OR $url = str_replace(array('?'.$this->page_name.'={P}','&'.$this->page_name.'={P}'),'',$this->url);
+			return str_replace(array('_{P}','{P}'),array('',1),$url);
 		}
 		return str_replace('{P}',$pageno,$this->url);
 	}
