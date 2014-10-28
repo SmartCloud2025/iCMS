@@ -21,6 +21,7 @@ class spiderApp {
         $this->poid  = (int) $_GET['poid'];
         $this->title = $_GET['title'];
         $this->url   = $_GET['url'];
+        $this->work  = false;
     }
     function do_batch(){
         $idArray = (array)$_POST['id'];
@@ -185,6 +186,16 @@ class spiderApp {
 
     function post($work = null) {
         $_POST        = $this->spider_content();
+        if($this->work){
+           if(empty($_POST['title'])){
+               echo "标题不能为空\n";
+               return false;
+           }
+           if(empty($_POST['body'])){
+               echo "内容不能为空\n";
+               return false;
+           }
+        }
         $pid          = $this->pid;
         $project      = $this->project($pid);
         $sleep        = $project['sleep'];
@@ -220,10 +231,65 @@ class spiderApp {
 		        $work===NULL && iPHP::success("发布成功!", 'js:parent.$("#' . $hash . '").remove();');
             }
         }
-        if($work=="cmd"||$work=="multi"){
+        if($work=="shell"||$work=="multi"){
             $callback['work']=$work;
         	return $callback;
         }
+    }
+    function mkurls($url,$format,$begin,$num,$step,$zeroize,$reverse) {
+        $urls = "";
+        $start = (int)$begin;
+        if($format==0){
+            $end = $start+$num;
+        }else if($format==1){
+            $end = $start*pow($step,$num-1);
+        }else if($format==2){
+            $start = ord($begin);
+            $end   = ord($num);
+            $step  = 1;
+        }
+        $zeroize = ($zeroize=='true'?true:false);
+        $reverse = ($reverse=='true'?true:false);
+        //var_dump($url.','.$format.','.$begin.','.$num.','.$step,$zeroize,$reverse);
+        if($reverse){
+            for($i=$end;$i>=$start;){
+                $id = $i;
+                if($format==2){
+                    $id = chr($i);
+                }
+                if($zeroize){
+                    $len = strlen($end);
+                    //$len==1 && $len=2;
+                    $id  = sprintf("%0{$len}d", $i);
+                }
+                $urls[]=str_replace('<*>',$id,$url);
+                if($format==1){
+                  $i=$i/$step;
+                }else{
+                  $i=$i-$step;
+                }
+            }
+        }else{
+            for($i=$start;$i<=$end;){
+                $id = $i;
+                if($format==2){
+                    $id = chr($i);
+                }
+                if($zeroize){
+                    $len = strlen($end);
+                    //$len==1 && $len=2;
+                    $id  = sprintf("%0{$len}d", $i);
+                }
+                $urls[]=str_replace('<*>',$id,$url);
+                if($format==1){
+                  $i=$i*$step;
+                }else{
+                  $i=$i+$step;
+                }
+            }
+        }
+        return $urls;
+        //var_dump($urls);
     }
 
     function spider_url($work = NULL) {
@@ -237,16 +303,43 @@ class spiderApp {
             $cid = $this->cid;
             $rid = $this->rid;
         }
-
+        if($work=='shell'){
+            echo '开始采集方案['.$pid."]\n";
+        }
         $ruleA = $this->rule($rid);
         $rule = $ruleA['rule'];
         $urls = $rule['list_urls'];
         $project['urls'] && $urls = $project['urls'];
-        $urlsArray = explode("\n", $urls);
-        $urlsArray = array_filter($urlsArray);
+
+        $urlsArray  = explode("\n", $urls);
+        $urlsArray  = array_filter($urlsArray);
+        $_urlsArray = $urlsArray;
+        $urlsList   = array();
+        foreach ($_urlsArray AS $_key => $_url) {
+            $_url = htmlspecialchars_decode($_url);
+            preg_match('|.*<(.*)>.*|is',$_url, $_matches);
+            if($_matches){
+                list($format,$begin,$num,$step,$zeroize,$reverse) = explode(',',$_matches[1]);
+                $url = str_replace($_matches[1], '*',trim($_matches[0]));
+                $_urlsList = $this->mkurls($url,$format,$begin,$num,$step,$zeroize,$reverse);
+                unset($urlsArray[$_key]);
+                $urlsList = array_merge($urlsList,$_urlsList);
+            }
+        }
+        $urlsArray = array_merge($urlsArray,$urlsList);
+        unset($_urlsArray,$_key,$_url,$_matches,$_urlsList,$urlsList);
+        $urlsArray  = array_unique($urlsArray);
+
         $this->useragent = $rule['user_agent'];
         $this->charset = $rule['charset'];
-        empty($urlsArray) && iPHP::alert('采集列表为空!请填写!', 'js:parent.window.iCMS_MODAL.destroy();');
+
+        if(empty($urlsArray)){
+            if($work=='shell'){
+                echo "采集列表为空!请填写!\n";
+                return false;
+            }
+            iPHP::alert('采集列表为空!请填写!', 'js:parent.window.iCMS_MODAL.destroy();');
+        }
 
 //    	if($this->ruleTest){
 //	    	echo "<pre>";
@@ -258,6 +351,9 @@ class spiderApp {
         $pubArray = array();
         foreach ($urlsArray AS $key => $url) {
             $url = trim($url);
+            if($work=='shell'){
+                echo '开始采集列表:'.$url."\n";
+            }
             if ($this->ruleTest) {
                 echo $url . "<br />";
             }
@@ -334,25 +430,27 @@ class spiderApp {
 		$lists = null;
         unset($lists);
 		gc_collect_cycles();
+
         if ($work) {
-            $sArrayTmp = iDB::all("SELECT `hash` FROM `#iCMS@__spider_url` where `pid`='$pid'");
-            $_count = count($sArrayTmp);
-            for ($i = 0; $i < $_count; $i++) {
-                $sArray[$sArrayTmp[$i]['hash']] = 1;
-            }
-			if($work=="cmd"){
+			if($work=="shell"){
 				$urlArray	= array();
+                echo '共采集到'.count($listsArray)."页\n";
 				foreach ($listsArray AS $furl => $lists) {
+                    echo "开始采集:".$furl." 列表 ".count($lists)."条记录\n";
 					foreach ($lists AS $lkey => $row) {
-						$url 	= str_replace('<%url%>', $row['url'], $rule['list_url']);
-						$hash 	= md5($url);
-						if(!$sArray[$hash]){
+                        $url  = str_replace('<%url%>', $row['url'], $rule['list_url']);
+                        $hash = md5($url);
+                        echo "title:".$row['title']."\n";
+                        echo "url:".$url."\n";
+						if(!$this->checkurl($hash)){
+                            echo "开始采集....";
 							//$urlArray[]= $url;
                             $this->rid = $rid;
                             $this->url = $url;
-                            $callback  = $this->post("cmd");
+
+                            $callback  = $this->post("shell");
 							if ($callback['code'] == "1001") {
-								echo "url:".$url."\n";
+                                echo "....OK\n";
 								if($project['sleep']){
 									echo "sleep:".$project['sleep']."s\n";
 									unset($lists[$lkey]);
@@ -362,13 +460,24 @@ class spiderApp {
 									sleep(1);
 								}
 							}else{
-								die("error");
+                                echo "error\n\n";
+                                continue;
+								//die("error");
 							}
-						}
+						}else{
+                            echo "采集过了\n\n";
+                        }
 					}
 				}
 				return $urlArray;
 			}
+
+            $sArrayTmp = iDB::all("SELECT `hash` FROM `#iCMS@__spider_url` where `pid`='$pid'");
+            $_count = count($sArrayTmp);
+            for ($i = 0; $i < $_count; $i++) {
+                $sArray[$sArrayTmp[$i]['hash']] = 1;
+            }
+            unset($sArrayTmp);
             include iACP::view("spider.lists");
         }
     }
@@ -413,7 +522,15 @@ class spiderApp {
 
         $responses = array();
         $html = $this->remote($url);
-        empty($html) && iPHP::alert('错误:001..采集 ' . $url . ' 文件内容为空!请检查采集规则');
+        if(empty($html)){
+            if($this->work=='shell'){
+                echo '错误:001..采集 ' . $url . "文件内容为空!请检查采集规则\n";
+                return false;
+            }else{
+                iPHP::alert('错误:001..采集 ' . $url . ' 文件内容为空!请检查采集规则');
+            }
+        }
+
 //    	$http	= $this->check_content_code($html);
 //
 //    	if($http['match']==false){
@@ -424,9 +541,10 @@ class spiderApp {
         $responses['reurl'] = $url;
         $rule['__url__']	= $url;
         foreach ($dataArray AS $key => $data) {
-            $responses[$data['name']] = $this->content($html,$data,$rule);
-            if($data['name']=='title' && empty($responses['title'])){
-            	$responses['title'] = $title;
+            $content = $this->content($html,$data,$rule);
+            $responses[$data['name']] = $content;
+            if($data['name']=='title' && empty($content)){
+                $responses['title'] = $title;
             }
         }
 		$html = null;
@@ -584,10 +702,15 @@ class spiderApp {
         }
 
         if ($data['empty'] && empty($content)) {
-            iPHP::alert($name . '内容为空!请检查,规则是否正确!!');
+            if($this->work){
+                echo "\n[".$name . "内容为空!请检查,规则是否正确!]\n";
+                return false;
+            }else{
+                iPHP::alert($name . '内容为空!请检查,规则是否正确!!');
+            }
         }
         if($data['array']){
-        	return	array($content);
+        	return array($content);
         }
         return $content;
     }

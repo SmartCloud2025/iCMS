@@ -26,6 +26,7 @@ $(function(){
     <div class="widget-content">
       <form action="<?php echo __SELF__; ?>" method="get" class="form-inline">
         <input type="hidden" name="app" value="<?php echo iACP::$app_name;?>" />
+        <input type="hidden" name="do" value="<?php echo iACP::$app_do;?>" />
         <div class="input-prepend input-append"> <span class="add-on">栏目</span>
           <select name="cid" id="cid" class="span3 chosen-select">
             <option value="0">所有栏目</option>

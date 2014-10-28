@@ -237,6 +237,7 @@ class iFS {
 					$curl_error = curl_error($ch);
 					curl_close($ch);
 					unset($responses,$info);
+                    echo $url." remote:{$_count}\n";
 					echo "cURL Error ($errno): $curl_error\n";
 					return false;
 	            }
