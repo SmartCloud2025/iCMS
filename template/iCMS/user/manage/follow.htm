@@ -5,7 +5,7 @@
         <!--{iCMS:user:follow loop="true" row="30" userid=$user.uid}-->
         <tr id="id-<!--{$user_follow.uid}-->">
           <td class="avatar_35"><a title="<!--{$user_follow.name}-->" href="<!--{$user_follow.url}-->">
-              <img class="iCMS_user_avatar avatar_35" data-tip="iCMS:ucard:<!--{$user_follow.uid}-->" src="<!--{$user_follow.avatar}-->" onerror="iCMS.user.noavatar();">
+              <img class="iCMS_user_avatar avatar_35" data-tip="iCMS:ucard:<!--{$user_follow.uid}-->" src="<!--{$user_follow.avatar}-->" onerror="iCMS.user.noavatar(this);">
             </a></td>
           <td><div class="info"> <span class="label"><!--{$user_follow.name}--></span> </div></td>
           <td class="span2"><div data-param='{"uid":"<!--{$user_follow.uid}-->","name":"<!--{$user_follow.name}-->"}'> <a href="javascript:;" data-param='{"follow":"1"}' class="btn_follow"><i class="fa fa-check"></i> 已关注，取消</a> </div></td>

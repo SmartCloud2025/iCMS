@@ -1,6 +1,6 @@
 <div class="iCMS_ucard member">
     <div class="upper"> <a class="avatar-link" href="<!--{$user.urls.home}-->">
-        <img class="iCMS_user_avatar avatar" src="<!--{$user.avatar}-->" onerror="iCMS.user.noavatar();">
+        <img class="iCMS_user_avatar avatar" src="<!--{$user.avatar}-->" onerror="iCMS.user.noavatar(this);">
         <span class="name"><!--{$user.nickname}--></span> </a> <i class="iCMS_icon <!--{$user.gender}-->"></i>
       <div class="tagline"><!--{$userdata.slogan|default:'这家伙太懒了,什么都没有留下!'}--></div>
       <!--{if $secondary}-->

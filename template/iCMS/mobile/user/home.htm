@@ -13,13 +13,13 @@
       <div class="wrapper" id="iCMS-userApp">
         <div class="userApp_header">
           <p class="userApp_cover">
-            <img class="userApp_cover_img" src="<!--{$user.coverpic.mo}-->" onerror="iCMS.user.nocover('m');"></a>
+            <img class="userApp_cover_img" src="<!--{$user.coverpic.mo}-->" onerror="iCMS.user.nocover(this,'m');"></a>
           </p>
           <p class="userApp_name">
             <a href="<!--{$user.urls.home}-->"><!--{$user.nickname}--></a>
           </p>
           <p class="userApp_avatar"><a href="<!--{$user.urls.home}-->">
-            <img class="iCMS_user_avatar userApp_avatar_img" src="<!--{$user.avatar}-->" onerror="iCMS.user.noavatar();"></a>
+            <img class="iCMS_user_avatar userApp_avatar_img" src="<!--{$user.avatar}-->" onerror="iCMS.user.noavatar(this);"></a>
           </p>
           <p class="userApp_slogan">
             <!--{$userdata.slogan|default:'这家伙太懒了,什么都没有留下!'}-->

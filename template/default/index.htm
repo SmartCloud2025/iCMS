@@ -71,7 +71,7 @@
               <!--{iCMS:article:list loop="true" user="true" tags="true" pic="true" row="10" cids="$cat_list.cid"}-->
               <li class="media">
                 <a class="pull-left" href="<!--{$article_list.url}-->">
-                <img class="media-object" src="<!--{$article_list.pic.url}-->">
+                <img class="media-object lazy" data-src="<!--{$article_list.pic.url}-->" src="<!--{$site.urls.ui}-->/img/img-default.png">
                 </a>
                 <div class="media-body">
                   <h4 class="media-heading"><a href="<!--{$article_list.url}-->" target="_blank"><!--{$article_list.title}--></a></h4>
@@ -128,7 +128,7 @@
       <div class="author-m clearfix">
         <div class="author-pic">
           <a href="<!--{$user_list.url}-->" target="_blank">
-          <img src="<!--{$user_list.avatar}-->" onerror="iCMS.user.noavatar();">
+          <img src="<!--{$user_list.avatar}-->" onerror="iCMS.user.noavatar(this);">
           </a>
         </div>
         <div class="author-name"><!--{$user_list.link}--></div>

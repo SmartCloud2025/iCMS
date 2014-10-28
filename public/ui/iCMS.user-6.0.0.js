@@ -244,17 +244,15 @@
                     },'json');
                 });
             },
-            noavatar: function() {
-                var img = event.srcElement;
+            noavatar: function(img) {
                 img.src = iCMS.config.PUBLIC+'/ui/avatar.gif';
             },
-            nocover: function(t) {
-                var img = event.srcElement;
-                var name= 'coverpic'
-                if(t=='m'){
+            nocover: function(img,type) {
+                var name = 'coverpic';
+                if(type=="m"){
                     name = 'm_coverpic';
                 }
-                img.src = img.src = iCMS.config.PUBLIC+'/ui/'+name+'.jpg';
+                img.src = iCMS.config.PUBLIC+'/ui/'+name+'.jpg';
             },
     };
 })(jQuery);

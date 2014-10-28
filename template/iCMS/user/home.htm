@@ -16,7 +16,7 @@
   <!--{include file="{iTPL}/header.htm"}-->
   <div class="userApp_home clearfix">
     <div class="userApp_header">
-      <div class="card_banner"> <img src="<!--{$user.coverpic.pc}-->" alt="<!--{$user.nickname}-->的封面" onerror="iCMS.user.nocover();"> </div>
+      <div class="card_banner"> <img src="<!--{$user.coverpic.pc}-->" alt="<!--{$user.nickname}-->的封面" onerror="iCMS.user.nocover(this);"> </div>
       <div class="card_top">
         <div class="card_info"> <a class="card_title_name" data-tip="iCMS:ucard:<!--{$user.uid}-->" href="<!--{$user.urls.home}-->">
             <!--{$user.nickname}-->
@@ -32,7 +32,7 @@
             <li class='first'> <a href="<!--{$user.urls.home}-->"> <span class="text_count"><!--{$user.article|num10K}--></span> <span class="text_atr">文章</span> </a> </li>
           </ul>
         </div>
-        <div class="card_avatar"> <a href="<!--{$user.urls.home}-->"> <img class="iCMS_user_avatar card_avatar_img" src="<!--{$user.avatar}-->" onerror="iCMS.user.noavatar();"> </a> </div>
+        <div class="card_avatar"> <a href="<!--{$user.urls.home}-->"> <img class="iCMS_user_avatar card_avatar_img" src="<!--{$user.avatar}-->" onerror="iCMS.user.noavatar(this);"> </a> </div>
       </div>
     </div>
     <div class="main-col">
@@ -69,7 +69,7 @@
           <a href="<!--{iCMS:router url='/user/manage/fans'}-->" target="_blank" class="more">管理&gt;&gt;</a> </div>
         <ul class="avatar_list">
           <!--{iCMS:user:follow loop="true" row="30" fuid=$user.uid}-->
-          <li><a href="<!--{$user_follow.url}-->" title="<!--{$user_follow.name}-->"> <img class="iCMS_user_avatar avatar_30" data-tip="iCMS:ucard:<!--{$user_follow.uid}-->" src="<!--{$user_follow.avatar}-->" onerror="iCMS.user.noavatar();"> </a></li>
+          <li><a href="<!--{$user_follow.url}-->" title="<!--{$user_follow.name}-->"> <img class="iCMS_user_avatar avatar_30" data-tip="iCMS:ucard:<!--{$user_follow.uid}-->" src="<!--{$user_follow.avatar}-->" onerror="iCMS.user.noavatar(this);"> </a></li>
           <!--{iCMSelse}-->
           <li><span class="label label-inverse">居然没人关注，太low了吧</span></li>
           <!--{/iCMS}-->
@@ -81,7 +81,7 @@
           <a href="<!--{iCMS:router url='/user/manage/follow'}-->" target="_blank" class="more">管理&gt;&gt;</a> </div>
         <ul class="avatar_list">
           <!--{iCMS:user:follow loop="true" row="30" userid=$user.uid}-->
-          <li><a href="<!--{$user_follow.url}-->" title="<!--{$user_follow.name}-->"> <img class="iCMS_user_avatar avatar_30" data-tip="iCMS:ucard:<!--{$user_follow.uid}-->" src="<!--{$user_follow.avatar}-->" onerror="iCMS.user.noavatar();"></a></li>
+          <li><a href="<!--{$user_follow.url}-->" title="<!--{$user_follow.name}-->"> <img class="iCMS_user_avatar avatar_30" data-tip="iCMS:ucard:<!--{$user_follow.uid}-->" src="<!--{$user_follow.avatar}-->" onerror="iCMS.user.noavatar(this);"></a></li>
           <!--{iCMSelse}-->
           <li><span class="label label-inverse">没有关注</span></li>
           <!--{/iCMS}-->

@@ -11,7 +11,7 @@
           <!--{iCMS:comment:list loop="true" page="true" row="10" total_cache="G" userid=$user.uid}-->
           <tr id="id-<!--{$comment_list.id}-->">
             <td class="avatar_35"><a title="<!--{$comment_list.user.name}-->" href="<!--{$comment_list.user.url}-->" data-tip="iCMS:ucard:<!--{$comment_list.user.uid}-->">
-                <img class="iCMS_user_avatar avatar_35" src="<!--{$comment_list.user.avatar}-->" onerror="iCMS.user.noavatar();">
+                <img class="iCMS_user_avatar avatar_35" src="<!--{$comment_list.user.avatar}-->" onerror="iCMS.user.noavatar(this);">
               </a></td>
             <td>您 在<!--{$iAPP[$comment_list.appid].title}-->：<a href="<!--{$comment_list.url}-->" target="_blank"><!--{$comment_list.title}--></a>
               <!--{if $comment_list.reply_uid}-->
