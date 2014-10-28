@@ -126,7 +126,7 @@ CREATE TABLE `#iCMS@__category` (
   `comments` int(10) unsigned NOT NULL DEFAULT '0',
   `isexamine` tinyint(1) unsigned NOT NULL DEFAULT '0',
   `issend` tinyint(1) unsigned NOT NULL DEFAULT '1',
-  `isucshow` tinyint(1) NOT NULL DEFAULT '1',
+  `isucshow` tinyint(1) unsigned NOT NULL DEFAULT '1',
   `status` tinyint(1) unsigned NOT NULL DEFAULT '1',
   `createtime` int(10) unsigned NOT NULL DEFAULT '0',
   PRIMARY KEY (`cid`),
