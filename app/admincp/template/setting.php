@@ -538,7 +538,7 @@ function modal_tplfile(el,a){
               <input type="text" name="config[open][WB][appkey]" class="span3" id="WB_appkey" value="<?php echo $config['open']['WB']['appkey'] ; ?>"/>
             </div>
             <hr />
-            <h3>淘客开放平台</h3>
+            <h3>淘宝开放平台</h3>
             <span class="help-inline">申请地址:http://open.taobao.com/</span>
             <div class="clearfloat"></div>
             <div class="input-prepend"> <span class="add-on" style="width:60px;">APPID:</span>
@@ -706,7 +706,15 @@ function modal_tplfile(el,a){
             <div class="switch" data-on-label="打开" data-off-label="最小化">
               <input type="checkbox" data-type="switch" name="config[other][sidebar]" id="other_sidebar" <?php echo $config['other']['sidebar']?'checked':''; ?>/>
             </div>
-            <span class="help-inline">后台侧边栏默认开启,启用后可选择打开或者最小化</span> </div>
+            <span class="help-inline">后台侧边栏默认开启,启用后可选择打开或者最小化</span>
+            <hr />
+            <h3>微信公众平台</h3>
+            <span class="help-inline">申请地址:https://mp.weixin.qq.com/</span>
+            <div class="clearfloat"></div>
+            <div class="input-prepend"> <span class="add-on">Token(令牌)</span>
+              <input type="text" name="config[api][weixin][token]" class="span3" id="weixin_token" value="<?php echo $config['api']['weixin']['token'] ; ?>"/>
+            </div>
+          </div>
           <div id="setting-patch" class="tab-pane hide">
             <div class="input-prepend"> <span class="add-on">系统更新</span>
               <select name="config[system][patch]" id="system_patch" class="span3 chosen-select">
