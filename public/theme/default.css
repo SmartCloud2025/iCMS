@@ -39,7 +39,7 @@ body { background: #FFF url(img/body-bg.png) repeat-x; }
 #body .content_player #content_player_prev { background: url(img/imgplayer_left_btn.png) no-repeat center 4px; }
 #body .content_player #content_player_next { background: url(img/imgplayer_right_btn.png) no-repeat center 4px; }
 .index_tab { border-top: 1px solid #ddd; }
-.index_tab .nav-tabs li { margin-left: 10px; }
+.index_tab .nav-tabs li { /*margin-left: 10px;*/ }
 .index_tab .nav-tabs li:first-child { margin-left: 0px; }
 .index_tab .nav-tabs li:first-child.active a { border-left: 0px; padding-left: 20px; }
 .index_tab .nav-tabs>li>a { border-radius: 0px; -webkit-border-radius: 0px; -moz-border-radius: 0px; padding: 5px 20px; font: 18px/1.75 "微软雅黑", "Hiragino Sans GB"; }

@@ -30,13 +30,12 @@
 				<button class="btn btn-primary cmt-add" type="submit"><i class="fa fa-check"></i> 评 论</button>
 				<a href="javascript:;" class="cmt-cancel">取 消</a>
 			</div>
+            <div class="clearfix mb10"></div>
 		</div>
 		<script>
 		$(function(){
             <!--{if $comment_vars.display=="iframe"}-->
-                window.setTimeout(function() {
-                    iCMS.comment.iframe_height('form');
-                }, 1500);
+            iCMS.comment.iframe_height('form');
             <!--{/if}-->
             if (iCMS.user_status) {
 				window.setTimeout(function() {
