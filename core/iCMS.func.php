@@ -112,6 +112,9 @@ function nl2p($html){
     $_htmlArray = explode("\n",$html);
     $_htmlArray = array_map("trim", $_htmlArray);
     $_htmlArray = array_filter($_htmlArray);
+    if(empty($_htmlArray)){
+        return false;
+    }
     $isempty    = false;
     $emptycount = 0;
     foreach($_htmlArray as $hkey=>$_html){

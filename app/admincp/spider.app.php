@@ -663,10 +663,13 @@ class spiderApp {
             $content = preg_replace('/<[\/\!]*?[^<>]*?>/is', '', $content);
         }
         if ($data['format'] && $content) {
-            $content = iPHP::cleanHtml($content);
+            $_content = iPHP::cleanHtml($content);
+            trim($_content) && $content = $_content;
             $content = autoformat($content);
             $content = stripslashes($content);
+            unset($_content);
         }
+
 
         $data['trim'] && $content = trim($content);
 
@@ -793,6 +796,9 @@ class spiderApp {
             );
         }
         $rule['sort'] OR $rule['sort'] = 1;
+        $rule['page_no_start'] OR $rule['page_no_start'] = 1;
+        $rule['page_no_end'] OR $rule['page_no_end'] = 5;
+        $rule['page_no_step'] OR $rule['page_no_step'] = 1;
         include iACP::view("spider.addrule");
     }
 
