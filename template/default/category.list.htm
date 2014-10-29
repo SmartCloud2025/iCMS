@@ -12,7 +12,7 @@
 <body>
   <!--{include file="./header.htm"}-->
   <!-- <div class="l-header-ad">文章顶部横幅通栏 960x60</div> -->
-  <div id="body" class="clearfix">
+  <div id="body">
     <div class="main-col">
       <div id="guide">
         <div id="bdshare" class="bdshare_t bds_tools get-codes-bdshare" style="float:right"> <span class="bds_more" style="background:#fff!important;padding:0;">分享到：</span> <a class="bds_qzone"></a> <a class="bds_tsina"></a> <a class="bds_tqq"></a> <a class="bds_renren"></a> <a class="bds_t163"></a> <a class="shareCount" style="display:none"></a> </div>
@@ -34,20 +34,22 @@
         <div class="list-item">
           <ul>
             <!--{iCMS:article:list loop="true" page="true" row="10" cid="$category.cid"}-->
-            <li class="item-detail clearfix">
+            <li class="item-detail">
               <!--{if $article_list.pic.url}-->
               <p class="pic"> <a href="<!--{$article_list.url}-->" target="_blank"><img src="<!--{$article_list.pic.url}-->"></a> </p>
               <!--{/if}-->
               <p class="title"> <a href="<!--{$article_list.url}-->" target="_blank"><!--{$article_list.title}--></a> </p>
               <p class="info"><!--{$article_list.description}--></p>
             </li>
+            <div class="clearfix"></div>
             <!--{/iCMS}-->
           </ul>
         </div>
         <div class="iCMS_pagination"><!--{$iCMS.PAGE.NAV}--></div>
         <script type="text/javascript">(function(){$("img",".article-detail").each(function(i){iCMS.imgFix(this,550,600);});})($);</script>
       </div>
-      <div class="comments_list clearfix"> </div>
+      <div class="clearfix"></div>
+      <div class="comments_list"> </div>
     </div>
     <div class="right-col">
       <div class="mod" id="artical">

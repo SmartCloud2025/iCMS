@@ -177,7 +177,7 @@
                         'action':'create',
                         'title':$('[name="title"]',box).val(),
                         'description':$('[name="description"]',box).val(),
-                        'mode':$('[name="mode"]:checked',box).val(),
+                        'mode':$('[name="mode"]:checked',box).val()
                     }
                     if(data.title==""){
                         $('[name="title"]',box).focus();
@@ -191,7 +191,7 @@
                             item = __item({
                                 'id':c.forward,
                                 'title':data.title,
-                                'count':0,'follow':0,
+                                'count':0,'follow':0
                             });
                             $(".favorite_list_content",box).append(item);
                         }else{
@@ -253,6 +253,6 @@
                     name = 'm_coverpic';
                 }
                 img.src = iCMS.config.PUBLIC+'/ui/'+name+'.jpg';
-            },
+            }
     };
 })(jQuery);

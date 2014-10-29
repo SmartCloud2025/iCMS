@@ -5,7 +5,7 @@
             PUBLIC: '/',
             COOKIE: 'iCMS_',
             AUTH:'USER_AUTH',
-            DIALOG:[],
+            DIALOG:[]
         },
         init: function(options) {
             this.config = $.extend(this.config,options);
@@ -31,11 +31,11 @@
             doc.on("click", '.iCMS_article_do', function(event) {
                 event.preventDefault();
                 var param = iCMS.param($(this));
-                if (param.do =='comment') {
+                if (param['do'] =='comment') {
                     iCMS.comment.box(this);
-                } else if (param.do =='favorite') {
+                } else if (param['do'] =='favorite') {
                     iCMS.user.favorite(this);
-                } else if (param.do =='good'||param.do =='bad') {
+                } else if (param['do'] =='good'||param['do'] =='bad') {
                     iCMS.article.vote(this);
                 }
             });
@@ -90,7 +90,7 @@
               html: true,container:container||false,
               placement: placement||'right',
               trigger: 'manual',
-              title:title,
+              title:title
             }).tooltip('show');
         },
         alert: function(msg,ok,callback) {
@@ -116,7 +116,7 @@
                 backdropBackground:'#666',backdropOpacity: 0.5,
                 fixed:true,autofocus:false,quickClose:true,
                 lock:true,time: null,
-                label:'success',icon: 'check',api:false,elemBack:'beforeremove',
+                label:'success',icon: 'check',api:false,elemBack:'beforeremove'
             },_elemBack,timeOutID = null,
             opts = $.extend(defaults,options,iCMS.config.DIALOG);
 
@@ -333,7 +333,7 @@
                 }
             }
             return c;
-        },
+        }
     };
     // article
     iCMS.article = {
@@ -341,7 +341,7 @@
             var $this = $(a),data = iCMS.multiple(a);
             $.get(iCMS.api('article'), data, function(c) {
                 if (c.code) {
-                   var numObj = '.iCMS_'+data.do+'_num',
+                   var numObj = '.iCMS_'+data['do']+'_num',
                        count = parseInt($(numObj, $this).text());
                     $(numObj, $this).text(count + 1);
                 } else {

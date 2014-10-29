@@ -89,8 +89,8 @@ a,a:hover,a:focus { color: #259 }
 #iCMS-login-box {display: none;}
 .iCMS_login_dialog{width: 560px;}
 .iCMS_login_dialog .login_box { padding: 0 12px 24px; background-color: #fff }
-.iCMS_login_dialog .login_form { float: left; padding: 10px 25px 5px 10px; width: 280px; *padding-top: 10px }
-.iCMS_login_dialog .login_form dd { float: left; width: 58px; vertical-align: middle; text-align: right; line-height: 26px }
+.iCMS_login_dialog .login_form { float: left; padding: 10px 25px 5px 10px; width: 280px;+width: 300px; *padding-top: 10px }
+.iCMS_login_dialog .login_form dd { float: left; width: 58px;+width: 70px; vertical-align: middle; text-align: right; line-height: 26px }
 .iCMS_login_dialog .login_form dt { margin-bottom: 15px; height: 26px; color: #666; font-weight: normal; _margin-bottom: 10px }
 .iCMS_login_dialog .login_form dt .checkbox { margin: 0px 4px 0px 0px; vertical-align: top }
 .iCMS_login_dialog .login_form a { padding-left: 12px; color: #8e8e8e; _margin_bottom: 5px }

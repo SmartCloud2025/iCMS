@@ -53,7 +53,7 @@
             }, function() {
                 $(this).hide();
             });
-        },
+        }
     };
-    iCMS = $.extend(iCMS,_iCMS);//扩展 or 替换 iCMS方法
+    window.iCMS = $.extend(window.iCMS,_iCMS);//扩展 or 替换 iCMS方法
 })(jQuery);

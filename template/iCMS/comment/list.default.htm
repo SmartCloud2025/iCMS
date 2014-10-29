@@ -54,7 +54,9 @@
 			<script>
 			$(function() {
 	            <!--{if $comment_vars.display=="iframe"}-->
-	            iCMS.comment.iframe_height('list');
+                window.setTimeout(function() {
+                    iCMS.comment.iframe_height('list');
+                }, 1500);
 	            <!--{/if}-->
 				var list_box = $('#iCMS-comment-list-box');
 	            //回复评论

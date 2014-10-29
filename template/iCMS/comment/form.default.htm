@@ -25,7 +25,8 @@
 			<div class="iCMS_cmt_editor">
 				<textarea class="iCMS_editor_text commentApp-textarea form-control" placeholder="写下你的评论…"></textarea>
 			</div>
-			<div class="iCMS_cmt_command clearfix">
+            <div class="clearfix"></div>
+			<div class="iCMS_cmt_command">
 				<button class="btn btn-primary cmt-add" type="submit"><i class="fa fa-check"></i> 评 论</button>
 				<a href="javascript:;" class="cmt-cancel">取 消</a>
 			</div>
@@ -33,7 +34,9 @@
 		<script>
 		$(function(){
             <!--{if $comment_vars.display=="iframe"}-->
-            iCMS.comment.iframe_height('form');
+                window.setTimeout(function() {
+                    iCMS.comment.iframe_height('form');
+                }, 1500);
             <!--{/if}-->
             if (iCMS.user_status) {
 				window.setTimeout(function() {

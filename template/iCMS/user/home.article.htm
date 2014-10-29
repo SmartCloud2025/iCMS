@@ -1,25 +1,27 @@
 <div id="artList">
     <ul>
       <!--{iCMS:article:list loop="true" page="true" row="10" userid="$user.uid" ucid="$user.category.cid"}-->
-      <li class="clearfix">
+      <li>
         <div class="list_top">
           <div class="rep_num" title="回复"><!--{$article_list.hits.count}--></div>
           <div class="title"> <a href="<!--{$article_list.url}-->" target="_blank" class="i_th_tit"><!--{$article_list.title}--></a> </div>
           <div class="info"> <span class="date"><!--{$article_list.pubdate|date:'Y-m-d'}--></span> </div>
         </div>
-        <div class="list_detail clearfix">
+        <div class="list_detail">
           <div class="text"><!--{$article_list.description}--></div>
           <!--{if $article_list.pic.url}-->
           <div class="pic"><img class="lazy" data-src="<!--{$article_list.pic.url}-->" src="<!--{$site.urls.ui}-->/img/img-default.png" onload="iCMS.imgFix(this,550,150);"></div>
           <!--{/if}-->
         </div>
-        <div class="list_fun clearfix" data-param='<!--{$article_list.param|json_encode}-->'>
+        <div class="clearfix"></div>
+        <div class="list_fun" data-param='<!--{$article_list.param|json_encode}-->'>
           <a href="javascript:;" data-param='{"do":"good"}' class="iCMS_article_do" title="给你32个赞"><i class="fa fa-thumbs-o-up"></i> (<span class="iCMS_good_num"><!--{$article_list.good}--></span>)</a>
           <a href="javascript:;" data-param='{"do":"comment"}' class="iCMS_article_do" title="评论"><i class="fa fa-comment-o"></i> (<span class="iCMS_comment_num"><!--{$article_list.comments}--></span>)</a>
           <a href="javascript:;" data-param='{"do":"favorite"}' class="iCMS_article_do" title="添加到收藏夹"><i class="fa fa-bookmark-o"></i> (<span class="iCMS_favorite_num"><!--{$article_list.favorite}--></span>)</a> </div>
       </li>
+      <div class="clearfix"></div>
       <!--{iCMSelse}-->
-      <li class="clearfix">暂无内容</li>
+      <li>暂无内容</li>
       <!--{/iCMS}-->
     </ul>
   </div>

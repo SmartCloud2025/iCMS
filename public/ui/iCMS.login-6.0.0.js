@@ -38,7 +38,7 @@
       var info = {
         'uname':'请输入用户名',
         'pass':'请输入密码',
-        'seccode':'请输入验证码',
+        'seccode':'请输入验证码'
       }
       var b = $(".iCMS_login_" + el,login);
       b.tooltip('destroy');

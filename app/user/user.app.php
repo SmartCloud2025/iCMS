@@ -55,7 +55,9 @@ class userApp {
         $userdata && iPHP::assign('userdata',(array)user::data($this->user->uid));
     }
 
-    public function do_iCMS($a = null) {}
+    public function do_iCMS($a = null) {
+        $this->do_home();
+    }
     public function do_home(){
         $this->user(true);
         $u['category'] = user::category((int)$_GET['cid'],iCMS_APP_ARTICLE);

@@ -19,7 +19,7 @@
   </head>
   <body>
     <!--{include file="./header.htm"}-->
-    <div id="body" class="clearfix">
+    <div id="body">
       <div class="main-col">
         <div class="index_model">
           <!--{iCMS:article:list pic="true" row="8" cid="$category.cid"}-->
@@ -87,7 +87,8 @@
                 </div>
               </li>
               <!--{if !$article_list.last}-->
-              <div class="clearfix media-bg"></div>
+              <div class="clearfix"></div>
+              <div class="media-bg"></div>
               <!--{/if}-->
               <!--{/iCMS}-->
             </ul>
@@ -105,11 +106,12 @@
       <div class="bd"><!--{iCMS:article:list row="10" orderby="hot"}-->
       <ul class="artical-top">
         <!--{if $article_list[0].pic.url}-->
-        <li class="first-item clearfix">
-          <span><a href="<!--{$article_list[0].url}-->" target="_blank"><img src="<!--{$article_list[0].pic.url}-->" style="height: 72px;width: 120px;"></a></span>
+        <li class="first-item">
+          <a class="pull-left" href="<!--{$article_list[0].url}-->" target="_blank"><img src="<!--{$article_list[0].pic.url}-->" style="height: 72px;width: 120px;"></a>
           <p class="title"><a href="<!--{$article_list[0].url}-->" target="_blank"><!--{$article_list[0].title}--></a></p>
           <p class="text"><!--{$article_list[0].description|html2txt}--></p>
         </li>
+        <div class="clearfix"></div>
         <!--{/if}-->
         <!--{foreach key=akey value=alist from=$article_list}-->
         <!--{if $akey>0}-->
@@ -125,7 +127,7 @@
     </div>
     <div class="bd">
       <!--{iCMS:user:list loop="true" row="10" pid="1" data="true"}-->
-      <div class="author-m clearfix">
+      <div class="author-m">
         <div class="author-pic">
           <a href="<!--{$user_list.url}-->" target="_blank">
           <img src="<!--{$user_list.avatar}-->" onerror="iCMS.user.noavatar(this);">
@@ -134,6 +136,7 @@
         <div class="author-name"><!--{$user_list.link}--></div>
         <div class="author-text"><!--{$user_list.data.slogan|default:'这家伙太懒了,什么都没有留下!'}--></div>
       </div>
+      <div class="clearfix"></div>
       <!--{/iCMS}-->
     </div>
   </div>

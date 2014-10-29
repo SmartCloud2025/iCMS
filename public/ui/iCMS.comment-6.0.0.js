@@ -8,7 +8,8 @@
                 '<div class="commentApp-ipt">' +
                 '<input class="commentApp-textarea form-control" type="text" placeholder="写下你的评论…">' +
                 '</div>' +
-                '<div class="cmt-command clearfix">' +
+                '<div class="clearfix"></div>' +
+                '<div class="cmt-command">' +
                 '<a href="javascript:;" name="addnew" class="btn btn-primary">评论</a>' +
                 '<a href="javascript:;" name="closeform" class="cmt-command-cancel">取消</a>' +
                 '</div>'+
@@ -61,7 +62,7 @@
         },
         like:function (a) {
             var $this = $(a),param = iCMS.param($this);
-            param.do = 'like';
+            param["do"] = 'like';
             $.get(iCMS.api('comment'), param, function(c) {
                 if (c.code) {
                     var p = $this.parent(),

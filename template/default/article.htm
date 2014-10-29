@@ -12,7 +12,7 @@
 <body>
   <!--{include file="./header.htm"}-->
   <!-- <div class="l-header-ad"> 文章顶部横幅通栏 960x60 </div> -->
-  <div id="body" class="clearfix">
+  <div id="body">
     <div class="main-col">
       <div id="guide"><strong>当前位置：</strong> <a href="<!--{$site.url}-->">网站首页</a> &nbsp;&raquo;&nbsp;<!--{$category.nav}-->&nbsp;&raquo;&nbsp;<!--{$article.link}-->&nbsp;&raquo;&nbsp;正文</div>
       <div id="page">
@@ -64,8 +64,9 @@
             });
           })
           </script>
-        <div class="article-pagenav iCMS_pagination clearfix">
+        <div class="article-pagenav iCMS_pagination">
           <!--{$article.page.nav}-->
+          <div class="clearfix"></div>
         </div>
         <div class="tip clr">提示：键盘也能翻页，试试"← →"键</div>
       </div>
@@ -75,11 +76,12 @@
         <p>下一篇 : <!--{$article.next}--></p>
       </div>
       <div class="clearfix mb20"></div>
-      <div class="comments_list clearfix">
+      <div class="comments_list">
         <h3 class="label label-info"><i class="fa fa-comments"></i> 精彩评论</h3>
         <!--{iCMS:comment:list display="iframe" page="true" row="5" appid="$article.appid" iid="$article.id"}-->
       </div>
-      <div class="comment_form clearfix">
+      <div class="clearfix"></div>
+      <div class="comment_form">
         <!--{iCMS:comment:form display="iframe" ref="true"}-->
       </div>
     </div>
