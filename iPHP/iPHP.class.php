@@ -32,7 +32,7 @@ class iPHP{
         self::$iTPL->register_modifier("date", "get_date");
         self::$iTPL->register_modifier("cut", "csubstr");
         self::$iTPL->register_modifier("htmlcut","htmlcut");
-        self::$iTPL->register_modifier("count","cstrlen");
+        self::$iTPL->register_modifier("cnlen","cstrlen");
         self::$iTPL->register_modifier("html2txt","html2text");
         //self::$iTPL->register_modifier("pinyin","GetPinyin");
         self::$iTPL->register_modifier("unicode","get_unicode");

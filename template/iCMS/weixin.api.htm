@@ -7,7 +7,7 @@
 	<!--{if $article_list}-->
 	<MsgType><![CDATA[news]]></MsgType>
 	<Content><![CDATA[]]></Content>
-	<ArticleCount>5</ArticleCount>
+	<ArticleCount><!--{$article_list|count}--></ArticleCount>
 	<Articles>
 	<!--{foreach key=key value=art_list from="$article_list"}-->
 		<item>

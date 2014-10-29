@@ -16,6 +16,11 @@ class publicApp {
             // ob_start();
             // iDB::$show_errors = true;
         }
+
+        if ($_GET["api_token"]!=iCMS::$config['api']['weixin']['token']) {
+            throw new Exception('TOKEN is error!');
+        }
+
         if($_GET["echostr"] && !$_GET['msg_signature']){
             if($this->weixin_checkSignature()){
                 echo $_GET["echostr"];

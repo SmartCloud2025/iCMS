@@ -714,6 +714,7 @@ function modal_tplfile(el,a){
             <div class="input-prepend"> <span class="add-on">Token(令牌)</span>
               <input type="text" name="config[api][weixin][token]" class="span3" id="weixin_token" value="<?php echo $config['api']['weixin']['token'] ; ?>"/>
             </div>
+            <span class="help-inline">公共平台接口URL:<?php echo $config['router']['public_url'] ; ?>/api.php?app=public&do=weixin&api_token=Token(令牌)</span>
           </div>
           <div id="setting-patch" class="tab-pane hide">
             <div class="input-prepend"> <span class="add-on">系统更新</span>
