@@ -722,7 +722,9 @@ class spiderApp {
         $ruleArray = explode("\n", $rules);
         foreach ($ruleArray AS $key => $rule) {
             list($_pattern, $_replacement) = explode("==", $rule);
-            $pattern[$key] = '|' . $this->pregTag($_pattern) . '|is';
+            $_pattern          = trim($_pattern);
+            $_replacement      = trim($_replacement);
+            $pattern[$key]     = '|' . $this->pregTag($_pattern) . '|is';
             $replacement[$key] = $_replacement;
         }
         return preg_replace($pattern, $replacement, $string);
