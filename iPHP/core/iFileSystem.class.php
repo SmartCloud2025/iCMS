@@ -613,7 +613,7 @@ class iFS {
 
         $sql = self::$userid === false ? '' : " AND `userid`='" . self::$userid . "'";
         $rs = iDB::row("SELECT * FROM ".iPHP_DB_PREFIX.self::$TABLE." WHERE `$f`='$v' {$sql} LIMIT 1");
-        $rs && $rs->filepath = $rs->path . '/' . $rs->filename . '.' . $rs->ext;
+        $rs && $rs->filepath = $rs->path . $rs->filename . '.' . $rs->ext;
         return $rs;
     }
 
@@ -625,7 +625,7 @@ class iFS {
             if($ret=='array'){
                 return self::_array(1,$frs,$RootPath);
             }
-            return $frs->path . "/" . $frs->filename . "." . $frs->ext;
+            return $frs->path . $frs->filename . "." . $frs->ext;
         }
 
         $FileExt = self::CheckValidExt($http); //判断过滤文件类型
@@ -672,7 +672,7 @@ class iFS {
                 if($ret=='array'){
                     return self::_array(1,$frs,$RootPath);
                 }
-                $FilePath = $frs->path . "/" . $frs->filename . "." . $frs->ext;
+                $FilePath = $frs->path . $frs->filename . "." . $frs->ext;
             }
             return $FilePath;
         } else {
@@ -739,6 +739,7 @@ class iFS {
         $img = array();
         preg_match_all("/<img.*?src\s*=[\"|'](.*?)[\"|']/is", $content, $match);
 
+
         $_array = (array) array_unique($match[1]);
         $uri = parse_url(self::$config['url']);
         foreach ($_array AS $_k => $imgurl) {
@@ -751,7 +752,10 @@ class iFS {
         }
         self::$forceExt = "jpg";
         foreach ($_array as $key => $value) {
-            $filepath = self::http($value);
+            $value        = str_replace(array("\n","\r"),'',$value);
+            $filepath     = self::http($value);
+print_r($filepath);
+exit;
             $fArray[$key] = $filepath ? self::fp($filepath, '+http') : $value;
         }
         $content = str_replace($_array, $fArray, $content);
