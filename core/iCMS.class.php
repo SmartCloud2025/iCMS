@@ -305,14 +305,16 @@ class iCMS {
         // }
         return $param;
     }
-    public static function get_category_lite($c){
-        $category = array();
-        $category['name']        = $c['name'];
-        $category['description'] = $c['description'];
-        $category['sname']       = $c['subname'];
-        $category['pic']         = $c['pic'];
-        $category['url']         = $c['iurl']->href;
-        $category['link']        = "<a href='{$category['url']}'>{$c['name']}</a>";
+
+    public static function get_category_lite($C){
+        $category                = array();
+        $C['iurl'] OR $C['iurl'] = iURL::get('category',$C);
+        $category['name']        = $C['name'];
+        $category['description'] = $C['description'];
+        $category['sname']       = $C['subname'];
+        $category['pic']         = $C['pic'];
+        $category['url']         = $C['iurl']->href;
+        $category['link']        = "<a href='{$category['url']}'>{$C['name']}</a>";
         return $category;
     }
     public static function get_category_ids($cid = "0",$all=true) {
@@ -379,6 +381,7 @@ class iCMS {
         return $iPages;
     }
     public static function set_html_url($iurl){
+        var_dump($iurl);
         if(isset($GLOBALS['iPage'])) return;
 
         $GLOBALS['iPage']['url']  = $iurl->pageurl;

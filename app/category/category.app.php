@@ -17,7 +17,7 @@ class categoryApp{
         $cid = (int)$_GET['cid'];
         $dir = iS::escapeStr($_GET['dir']);
 		if(empty($cid) && $dir){
-			$cid	= iCache::get('iCMS/category/dir2cid',$dir);
+			$cid = iCache::get('iCMS/category/dir2cid',$dir);
             empty($cid) && iPHP::throwException('运行出错！找不到该栏目<b>dir:'.$dir.'</b> 请更新栏目缓存或者确认栏目是否存在', 20002);
 		}
     	return $this->category($cid,$tpl);
@@ -27,19 +27,21 @@ class categoryApp{
        	$category OR iPHP::throwException('运行出错！找不到该栏目<b>cid:'. $id.'</b> 请更新栏目缓存或者确认栏目是否存在', 20001);
         if($category['status']==0) return false;
         if(iPHP::$iTPL_MODE=="html" && (strstr($category['contentRule'],'{PHP}')||$category['outurl']||empty($category['mode']))) return false;
-        if($tpl && $category['outurl']) return iPHP::gotourl($category['outurl']);
+        if($tpl && $category['url']) return iPHP::gotourl($category['url']);
 
-        $iurl = $category['iurl'];
+        $iurl = iURL::get('category',$category);
 
         ($tpl && $category['mode']=='1') && iCMS::gotohtml($iurl->path,$iurl->href);
 
         $category['iurl']   = (array)$iurl;
+        $category['url']    = $iurl->href;
+        $category['link']   = "<a href='{$category['url']}' target='_blank'>{$category['name']}</a>";
         $category['subid']  = iCache::get('iCMS/category/rootid',$id);
         $category['subids'] = implode(',',(array)$category['subid']);
 
         $category['parent'] = array();
         if($category['rootid']){
-            $_parent = iCache::get('iCMS/category/'.$category['rootid']);
+            $_parent            = iCache::get('iCMS/category/'.$category['rootid']);
             $category['parent'] = iCMS::get_category_lite($_parent);
             unset($_parent);
         }

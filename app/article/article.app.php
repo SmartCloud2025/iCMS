@@ -104,11 +104,14 @@ class articleApp {
 
         ($tpl && $category['mode']=='1') && iCMS::gotohtml($article['iurl']->path,$article['iurl']->href);
 
-        if($vars['category_lite']){
+        // if($vars['category_lite']){
             $article['category'] = iCMS::get_category_lite($category);
-        }else{
-            $article['category'] = $category;
-        }
+        // }else{
+        //     $category['iurl']    = iURL::get('category',$category);
+        //     $category['url']     = $category['iurl']->href;
+        //     $category['link']    = "<a href='{$category['url']}' target='_blank'>{$category['name']}</a>";
+        //     $article['category'] = $category;
+        // }
 
         if($art_data){
             $pageurl = $article['iurl']->pageurl;

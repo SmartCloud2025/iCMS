@@ -73,10 +73,10 @@ class category {
 	    	}
 	    	$C['metadata']=$mdArray;
 	    }
-        $C['iurl']   = iURL::get('category',$C);
-        $C['outurl'] = $C['url'];
-        $C['url']    = $C['iurl']->href;
-        $C['link']   = "<a href='{$C['url']}' target='_blank'>{$C['name']}</a>";
+        // $C['iurl']   = iURL::get('category',$C);
+        // $C['outurl'] = $C['url'];
+        // $C['url']    = $C['iurl']->href;
+        // $C['link']   = "<a href='{$C['url']}' target='_blank'>{$C['name']}</a>";
         $C['pic']    = get_pic($C['pic']);
         $C['mpic']   = get_pic($C['mpic']);
         $C['spic']   = get_pic($C['spic']);
