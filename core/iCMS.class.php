@@ -381,7 +381,6 @@ class iCMS {
         return $iPages;
     }
     public static function set_html_url($iurl){
-        var_dump($iurl);
         if(isset($GLOBALS['iPage'])) return;
 
         $GLOBALS['iPage']['url']  = $iurl->pageurl;
