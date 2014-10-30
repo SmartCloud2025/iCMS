@@ -20,6 +20,12 @@ $(function(){
   <?php if(isset($_GET['status'])){  ?>
   iCMS.select('status',"<?php echo $_GET['status'] ; ?>");
   <?php } ?>
+  <?php if($_GET['orderby']){ ?>
+  iCMS.select('orderby',"<?php echo $_GET['orderby'] ; ?>");
+  <?php } ?>
+  <?php if(isset($_GET['pid']) && $_GET['pid']!='-1'){  ?>
+  iCMS.select('pid',"<?php echo (int)$_GET['pid'] ; ?>");
+  <?php } ?>
 	$("#<?php echo APP_FORMID;?>").batch();
 });
 </script>
@@ -46,6 +52,13 @@ $(function(){
           <input type="text" name="loginip" id="loginip" class="span2" value="<?php echo $_GET['loginip'] ; ?>"/>
         </div>
         <div class="clearfix mt10"></div>
+        <div class="input-prepend"> <span class="add-on">用户属性</span>
+          <select name="pid" id="pid" class="span2 chosen-select">
+            <option value="-1">所有用户</option>
+            <option value="0">普通用户[pid='0']</option>
+            <?php echo iACP::getProp("pid") ; ?>
+          </select>
+        </div>
         <div class="input-prepend"> <span class="add-on">排序</span>
           <select name="orderby" id="orderby" class="span2 chosen-select">
             <option value="">默认排序</option>
@@ -96,7 +109,7 @@ $(function(){
               <th>昵称</th>
               <th>用户组</th>
               <th>最后登陆IP</th>
-              <th style="width:80px;"><a class="fa fa-clock-o tip-top" title="最后登陆时间"></a></th>
+              <th style="width:130px;"><a class="fa fa-clock-o tip-top" title="注册时间/最后登陆时间"></a></th>
               <th>操作</th>
             </tr>
           </thead>
@@ -107,7 +120,15 @@ $(function(){
             <tr id="tr<?php echo $rs[$i]['uid'] ; ?>">
               <td><?php if($rs[$i]['uid']!="1"){ ; ?><input type="checkbox" name="id[]" value="<?php echo $rs[$i]['uid'] ; ?>" /><?php } ; ?></td>
               <td><a href="<?php echo $url; ?>" target="_blank"><?php echo $rs[$i]['uid'] ; ?></a></td>
-              <td><a class="tip-top" title="注册时间:<?php if($rs[$i]['regtime']) echo get_date($rs[$i]['regtime'],"Y-m-d") ; ?><hr />累计登陆次数:<?php echo $rs[$i]['logintimes'] ; ?>"><?php echo $rs[$i]['username'] ; ?></a></td>
+              <td><a class="tip-top" title="
+                粉丝:<?php echo $rs[$i]['fans'] ; ?><br />
+                关注:<?php echo $rs[$i]['follow'] ; ?><br />
+                评论:<?php echo $rs[$i]['comments'] ; ?><br />
+                文章:<?php echo $rs[$i]['article'] ; ?><br />
+                点击:<?php echo $rs[$i]['hits'] ; ?><br />
+                周点击:<?php echo $rs[$i]['hits_week'] ; ?><br />
+                月点击:<?php echo $rs[$i]['hits_month'] ; ?><br />
+                "><?php echo $rs[$i]['username'] ; ?></a></td>
               <td><?php echo $rs[$i]['nickname'] ; ?>
                 <?php if($rs[$i]['status']=="2"){
                   echo '<span class="label label-inverse">黑名单</span>';
@@ -121,7 +142,9 @@ $(function(){
                 <?php echo iACP::getProp("pid",$rs[$i]['pid'],'text',APP_DOURI.'&pid={PID}&'.$uri) ; ?>
               </td>
               <td><?php echo $rs[$i]['lastloginip'] ; ?></td>
-              <td><?php if($rs[$i]['lastlogintime']) echo get_date($rs[$i]['lastlogintime'],"Y-m-d") ; ?></td>
+              <td>
+                <?php if($rs[$i]['regdate']) echo get_date($rs[$i]['regdate'],"Y-m-d H:i:s") ; ?><br />
+                <?php if($rs[$i]['lastlogintime']) echo get_date($rs[$i]['lastlogintime'],"Y-m-d") ; ?></td>
               <td>
                 <a href="<?php echo APP_URI; ?>&do=login&id=<?php echo $rs[$i]['uid'] ; ?>" class="btn btn-small" target="_blank">登陆</a>
                 <a href="<?php echo __ADMINCP__; ?>=article&do=user&userid=<?php echo $rs[$i]['uid'] ; ?>&pt=0" class="btn btn-small"><i class="fa fa-list-alt"></i> 文章</a>
@@ -172,6 +195,8 @@ $(function(){
                   </span>
                   <div class="btn-group dropup" id="iCMS-batch"> <a class="btn dropdown-toggle" data-toggle="dropdown" tabindex="-1"><i class="fa fa-wrench"></i> 批 量 操 作 </a><a class="btn dropdown-toggle" data-toggle="dropdown" tabindex="-1"> <span class="caret"></span></a>
                     <ul class="dropdown-menu">
+                      <li><a data-toggle="batch" data-action="prop"><i class="fa fa-puzzle-piece"></i> 设置用户属性</a></li>
+                      <li class="divider"></li>
                       <li><a data-toggle="batch" data-action="dels"><i class="fa fa-trash-o"></i> 删除</a></li>
                     </ul>
                   </div>

@@ -39,7 +39,8 @@ class userApp{
     }
     function do_iCMS(){
         //iPHP::app('user.class','static');
-        $sql   = "WHERE 1=1";
+        $sql = "WHERE 1=1";
+        $pid = $_GET['pid'];
         if($_GET['keywords']) {
             $sql.=" AND CONCAT(username,nickname) REGEXP '{$_GET['keywords']}'";
         }
@@ -50,6 +51,16 @@ class userApp{
         }
         $_GET['regip'] && $sql.=" AND `regip`='{$_GET['regip']}'";
         $_GET['loginip'] && $sql.=" AND `lastloginip`='{$_GET['loginip']}'";
+
+        if(isset($_GET['pid']) && $pid!='-1'){
+            iPHP::import(iPHP_APP_CORE .'/iMAP.class.php');
+            map::init('prop',iCMS_APP_USER);
+            $sql.= $psql = map::exists($pid,'`#iCMS@__user`.uid'); //map 表大的用exists
+            $uri_array['pid'] = $pid;
+            if($_GET['pid']==0 && !$psql){
+                $sql.= iPHP::where('','pid');
+            }
+        }
 
         $orderby    = $_GET['orderby']?$_GET['orderby']:"uid DESC";
         $maxperpage = $_GET['perpage']>0?(int)$_GET['perpage']:20;
@@ -112,6 +123,19 @@ class userApp{
     	$ids	= implode(',',(array)$_POST['id']);
     	$batch	= $_POST['batch'];
     	switch($batch){
+            case 'prop':
+                iPHP::import(iPHP_APP_CORE .'/iMAP.class.php');
+                map::init('prop',iCMS_APP_USER);
+
+                $pid = implode(',', (array)$_POST['pid']);
+                foreach((array)$_POST['id'] AS $id) {
+                    $_pid = iDB::value("SELECT `pid` FROM `#iCMS@__user` where `uid`='$id' LIMIT 1");
+                    iDB::update('user',compact('pid'),array('uid'=>$id));
+                    map::diff($pid,$_pid,$id);
+                }
+                iPHP::success('用户属性设置完成!','js:1');
+
+            break;
     		case 'dels':
                 iPHP::$break = false;
 	    		foreach($idA AS $id){
