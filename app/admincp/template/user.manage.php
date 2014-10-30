@@ -46,6 +46,29 @@ $(function(){
           <input type="text" name="loginip" id="loginip" class="span2" value="<?php echo $_GET['loginip'] ; ?>"/>
         </div>
         <div class="clearfix mt10"></div>
+        <div class="input-prepend"> <span class="add-on">排序</span>
+          <select name="orderby" id="orderby" class="span2 chosen-select">
+            <option value="">默认排序</option>
+            <optgroup label="降序">
+            <option value="id DESC">ID[降序]</option>
+            <option value="hits DESC">总点击[降序]</option>
+            <option value="fans DESC">粉丝[降序]</option>
+            <option value="hits_month DESC">月点击[降序]</option>
+            <option value="hits_week DESC">周点击[降序]</option>
+            <option value="article DESC">文章数[降序]</option>
+            <option value="comments DESC">评论[降序]</option>
+            </optgroup>
+            <optgroup label="升序">
+            <option value="id ASC">ID[升序]</option>
+            <option value="hits ASC">总点击[升序]</option>
+            <option value="fans ASC">粉丝[升序]</option>
+            <option value="hits_month ASC">月点击[升序]</option>
+            <option value="hits_week ASC">周点击[升序]</option>
+            <option value="article ASC">文章数[降序]</option>
+            <option value="comments ASC">评论[升序]</option>
+            </optgroup>
+          </select>
+        </div>
         <div class="input-prepend input-append"> <span class="add-on">每页</span>
           <input type="text" name="perpage" id="perpage" value="<?php echo $maxperpage ; ?>" style="width:36px;"/>
           <span class="add-on">条记录</span> </div>
@@ -92,7 +115,11 @@ $(function(){
                   echo '<span class="label">禁止</span>';
                 } ?>
               </td>
-              <td><a href="<?php echo APP_URI; ?>&gid=<?php echo $rs[$i]['gid'] ; ?>"><?php echo $group->all[$rs[$i]['gid']]['name'] ; ?></a></td>
+              <td>
+                <a href="<?php echo APP_URI; ?>&gid=<?php echo $rs[$i]['gid'] ; ?>"><?php echo $group->all[$rs[$i]['gid']]['name'] ; ?></a>
+                <br />
+                <?php echo iACP::getProp("pid",$rs[$i]['pid'],'text',APP_DOURI.'&pid={PID}&'.$uri) ; ?>
+              </td>
               <td><?php echo $rs[$i]['lastloginip'] ; ?></td>
               <td><?php if($rs[$i]['lastlogintime']) echo get_date($rs[$i]['lastlogintime'],"Y-m-d") ; ?></td>
               <td>

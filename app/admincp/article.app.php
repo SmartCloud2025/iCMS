@@ -297,6 +297,9 @@ class articleApp{
             $sql.= map::exists($pid,'`#iCMS@__article`.id'); //map 表大的用exists
             $uri_array['pid'] = $pid;
         }
+        if($_GET['pid']==0){
+            $sql.= iPHP::where('','pid');
+        }
 
         $cids = iACP::CP('__CID__','cs');//取得所有有权限的栏目ID
 
