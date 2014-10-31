@@ -10,6 +10,9 @@
 class tagApp {
     public $methods = array('iCMS');
     public function __construct() {}
+    public function API_iCMS(){
+        return $this->do_iCMS();
+    }
     public function do_iCMS($a = null) {
         if ($_GET['name']) {
             $name  = $_GET['name'];

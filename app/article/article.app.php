@@ -13,6 +13,9 @@ class articleApp {
     public function do_iCMS($a = null) {
     	return $this->article((int)$_GET['id'],isset($_GET['p'])?(int)$_GET['p']:1);
     }
+    public function API_iCMS(){
+        return $this->do_iCMS();
+    }
     public function API_hits($id = null){
         $id===null && $id = (int)$_GET['id'];
         if($id){

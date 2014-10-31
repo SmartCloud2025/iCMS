@@ -59,7 +59,7 @@ iACP::head();
         </div>
         <div class="span3">
           <ul class="site-stats">
-            <li><i class="fa fa-cloud"></i> <strong><?php echo iFS::sizeUnit($datasize+$indexsize) ; ?></strong> <small>数据库</small></li>
+            <li><i class="fa fa-database"></i> <strong><?php echo iFS::sizeUnit($datasize+$indexsize) ; ?></strong> <small>数据库</small></li>
             <li><i class="fa fa-puzzle-piece"></i> <strong><?php echo count($iTable) ; ?></strong><small>iCMS表</small></li>
             <li><i class="fa fa-puzzle-piece"></i> <strong><?php echo count($oTable) ; ?></strong> <small>其它表</small></li>
             <li class="divider"></li>

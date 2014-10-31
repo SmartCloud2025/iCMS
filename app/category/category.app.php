@@ -22,6 +22,10 @@ class categoryApp{
 		}
     	return $this->category($cid,$tpl);
     }
+    public function API_iCMS(){
+        return $this->do_iCMS();
+    }
+
     public function category($id,$tpl='index') {
         $category = iCache::get('iCMS/category/'.$id);
        	$category OR iPHP::throwException('运行出错！找不到该栏目<b>cid:'. $id.'</b> 请更新栏目缓存或者确认栏目是否存在', 20001);

@@ -167,9 +167,10 @@ class iCMS {
             $_GET['do'] && $do = iS::escapeStr($_GET['do']);
         }
         if($_POST['action']){
-            $do     = $_POST['action'];
+            $do     = iS::escapeStr($_POST['action']);
             $prefix = 'ACTION_';
         }
+
         self::$app_name   = $app;
         self::$app_do     = $do;
         self::$app_method = $prefix.$do;
