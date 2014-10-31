@@ -754,8 +754,6 @@ class iFS {
         foreach ($_array as $key => $value) {
             $value        = str_replace(array("\n","\r"),'',$value);
             $filepath     = self::http($value);
-print_r($filepath);
-exit;
             $fArray[$key] = $filepath ? self::fp($filepath, '+http') : $value;
         }
         $content = str_replace($_array, $fArray, $content);
