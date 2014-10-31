@@ -277,13 +277,11 @@ $(function(){
                   <div class="btn-group dropup" id="iCMS-batch"> <a class="btn dropdown-toggle" data-toggle="dropdown" tabindex="-1"><i class="fa fa-wrench"></i> 批 量 操 作 </a><a class="btn dropdown-toggle" data-toggle="dropdown" tabindex="-1"> <span class="caret"></span></a>
                     <ul class="dropdown-menu">
                       <li><a data-toggle="batch" data-action="pubdate:now"><i class="fa fa-clock-o"></i> 更新发布时间</a></li>
-                      <?php if($doType=="inbox"||$doType=="trash"){ ?>
+                      <?php if($stype=="inbox"||$stype=="trash"){ ?>
                       <li><a data-toggle="batch" data-action="status:1"><i class="fa fa-share"></i> 发布</a></li>
                       <li><a data-toggle="batch" data-action="status:1,pubdate:now"><i class="fa fa-clock-o"></i> 发布并更新时间</a></li>
                       <?php } ?>
-                      <?php if(!$doType){ ?>
                       <li><a data-toggle="batch" data-action="status:0"><i class="fa fa-inbox"></i> 转为草稿</a></li>
-                      <?php } ?>
                       <li class="divider"></li>
                       <li><a data-toggle="batch" data-action="prop"><i class="fa fa-puzzle-piece"></i> 设置文章属性</a></li>
                       <li><a data-toggle="batch" data-action="move"><i class="fa fa-fighter-jet"></i> 移动栏目</a></li>
