@@ -7,9 +7,18 @@
  * @$Id: public.app.php 1392 2013-05-20 12:28:08Z coolmoo $
  */
 class publicApp {
-	public $methods	= array('weixin','seccode','agreement','crontab','time');
+	public $methods	= array('weixin','sitemapindex','sitemap','seccode','agreement','crontab','time');
     public function API_agreement(){
     	iPHP::view('iCMS://agreement.htm');
+    }
+    public function API_sitemapindex(){
+        header("Content-type:text/xml");
+        iPHP::view('iCMS://sitemap.index.htm');
+    }
+    public function API_sitemap(){
+        header("Content-type:text/xml");
+        iPHP::assign('cid',(int)$_GET['cid']);
+        iPHP::view('iCMS://sitemap.baidu.htm');
     }
     public function API_weixin(){
         if(iPHP_DEBUG){
