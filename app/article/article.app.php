@@ -95,6 +95,7 @@ class articleApp {
         // $categoryApp = iPHP::app("category");
         // $category    = $categoryApp->category($article['cid'],false);
         $category = iCache::get('iCMS/category/'.$article['cid']);
+        $category OR iPHP::throwException('运行出错！找不到该文章的栏目缓存<b>cid:'. $article['cid'].'</b> 请更新栏目缓存或者确认栏目是否存在', 10002);
 
         if($category['status']==0) return false;
 
