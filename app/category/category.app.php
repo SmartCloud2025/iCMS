@@ -57,7 +57,7 @@ class categoryApp{
 
         if($category['rootid']){
             $_parent            = iCache::get('iCMS/category/'.$category['rootid']);
-            $category['parent'] = iCMS::get_category_lite($_parent);
+            $category['parent'] = $this->get_lite($_parent);
             unset($_parent);
         }
         if($category['password']){
