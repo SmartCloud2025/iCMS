@@ -55,7 +55,7 @@ function tag_list($vars){
 	}
 	if(empty($resource)){
 		$resource = iDB::all("SELECT * FROM `#iCMS@__tags` WHERE {$where_sql} {$order_sql} LIMIT {$offset},{$maxperpage}");
-		//iDB::debug(1);
+		iDB::debug(1);
 		$resource = __tag_array($vars,$resource);
 		$vars['cache'] && iCache::set($cache_name,$resource,$cache_time);
 	}

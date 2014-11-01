@@ -307,17 +307,6 @@ class iCMS {
         return $param;
     }
 
-    public static function get_category_lite($C){
-        $category                = array();
-        $C['iurl'] OR $C['iurl'] = iURL::get('category',$C);
-        $category['name']        = $C['name'];
-        $category['description'] = $C['description'];
-        $category['sname']       = $C['subname'];
-        $category['pic']         = $C['pic'];
-        $category['url']         = $C['iurl']->href;
-        $category['link']        = "<a href='{$category['url']}'>{$C['name']}</a>";
-        return $category;
-    }
     public static function get_category_ids($cid = "0",$all=true,$root_array=null) {
         $root_array OR $root_array = iCache::get('iCMS/category/rootid');
         $cids = array();

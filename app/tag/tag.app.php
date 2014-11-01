@@ -55,13 +55,14 @@ class tagApp {
         }
     }
     public function value($tag) {
+        $categoryApp = iPHP::app("category");
         if($tag['cid']){
-            $category        = iCache::get('iCMS/category/' . $tag['cid']);
-            $tag['category'] = iCMS::get_category_lite($category);
+            $category        = $categoryApp->category($tag['cid'],false);
+            $tag['category'] = $categoryApp->get_lite($category);
         }
         if($tag['tcid']){
-            $tag_category        = iCache::get('iCMS/category/' . $tag['tcid']);
-            $tag['tag_category'] = iCMS::get_category_lite($tag_category);
+            $tag_category        = $categoryApp->category($tag['tcid'],false);
+            $tag['tag_category'] = $categoryApp->get_lite($tag_category);
         }
 
         $tag['iurl'] = iURL::get('tag', array($tag, $category, $tag_category));

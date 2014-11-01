@@ -92,9 +92,9 @@ class articleApp {
 
         $article['appid'] = iCMS_APP_ARTICLE;
 
-        // $categoryApp = iPHP::app("category");
-        // $category    = $categoryApp->category($article['cid'],false);
-        $category = iCache::get('iCMS/category/'.$article['cid']);
+        $categoryApp = iPHP::app("category");
+        $category    = $categoryApp->category($article['cid'],false);
+
         $category OR iPHP::throwException('运行出错！找不到该文章的栏目缓存<b>cid:'. $article['cid'].'</b> 请更新栏目缓存或者确认栏目是否存在', 10002);
 
         if($category['status']==0) return false;
@@ -109,11 +109,8 @@ class articleApp {
         ($tpl && $category['mode']=='1') && iCMS::gotohtml($article['iurl']->path,$article['iurl']->href);
 
         if($vars['category_lite']){
-            $article['category'] = iCMS::get_category_lite($category);
+            $article['category'] = $categoryApp->get_lite($category);
         }else{
-            $category['iurl']    = iURL::get('category',$category);
-            $category['url']     = $category['iurl']->href;
-            $category['link']    = "<a href='{$category['url']}' target='_blank'>{$category['name']}</a>";
             $article['category'] = $category;
         }
 

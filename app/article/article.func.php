@@ -127,7 +127,7 @@ function article_list($vars){
     // }
     if(empty($resource)){
         $resource = iDB::all("SELECT * FROM `#iCMS@__article` WHERE {$where_sql} {$order_sql} {$limit}");
-        //iDB::debug(1);
+        iDB::debug(1);
         $resource = __article_array($vars,$resource);
         $vars['cache'] && iCache::set($cache_name,$resource,$cache_time);
     }
