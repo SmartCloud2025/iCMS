@@ -321,8 +321,8 @@ $(function(){
             </table>
           </div>
           <div id="category-add-body" class="tab-pane hide">
-            <script type="text/javascript" charset="utf-8" src="<?php echo iCMS_UI;?>/iCMS.editor-6.0.0.js"></script>
-            <script type="text/javascript" charset="utf-8" src="<?php echo iCMS_UI;?>/ueditor/ueditor.all.min.js"></script>
+            <script type="text/javascript" charset="utf-8" src="./app/ui/common/iCMS.editor-6.0.0.js"></script>
+            <script type="text/javascript" charset="utf-8" src="./app/ui/common/ueditor/ueditor.all.min.js"></script>
             <span class="help-inline">大文本段,支持HTML,至于干嘛用,我也不知道...你爱怎么用就怎么用!!</span>
             <a class="btn" href="javascript:iCMS.editor.cleanup();"><i class="fa fa-magic"></i> 自动排版</a>
             <textarea type="text/plain" id="iCMS-editor-1" name="body"><?php echo $rs['body'] ; ?></textarea>

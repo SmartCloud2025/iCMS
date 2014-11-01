@@ -88,8 +88,8 @@
 
 (function($) {
     iCMS.editor = {
-        Id:1,
-        editor:[],
+        id:1,
+        container:[],
         multi:function(){
           var ed = this;
           $(".iCMS-editor").each(function(n,a){
@@ -97,23 +97,26 @@
             ed.create(n);
           });
         },
-        create:function(eId) {
-            if(eId) this.Id = eId;
-            this.editor[this.Id] = UE.getEditor('iCMS-editor-' + this.Id);
+        get:function(eid) {
+            return this.container[eid];
+        },
+        create:function(eid) {
+            if(eid) this.id = eid;
+            this.container[this.id] = UE.getEditor('iCMS-editor-' + this.id);
         },
         insPageBreak:function (argument) {
-            var ed = this.editor[this.Id];
+            var ed = this.container[this.id];
             ed.execCommand('pagebreak');
             ed.focus();
         },
         delPageBreakflag:function() {
-            var ed = this.editor[this.Id], html = ed.getContent();
+            var ed = this.container[this.id], html = ed.getContent();
             html = html.replace(/#--iCMS.PageBreak--#/g, '');
             ed.setContent(html);
             ed.focus();
         },
         cleanup:function() {
-            var ed = this.editor[this.Id],
+            var ed = this.container[this.id],
             html = iCMS.format(ed.getContent());
             ed.setContent(html);
             ed.execCommand("autoTypeset");

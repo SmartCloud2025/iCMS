@@ -14,14 +14,14 @@ defined('iPHP') OR exit('What are you doing?');
 <title>iCMS Permission Denied!</title>
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <meta content="iDreamSoft Inc." name="Copyright" />
-<link rel="stylesheet" href="<?php echo iCMS_UI;?>/bootstrap/2.3.2/css/bootstrap.min.css" type="text/css" />
-<link rel="stylesheet" href="<?php echo iCMS_UI;?>/bootstrap/2.3.2/css/bootstrap-responsive.min.css" type="text/css" />
-<link rel="stylesheet" href="<?php echo iCMS_UI;?>/iCMS-6.0.0.css" type="text/css" />
+<link rel="stylesheet" href="./app/ui/common/bootstrap/2.3.2/css/bootstrap.min.css" type="text/css" />
+<link rel="stylesheet" href="./app/ui/common/bootstrap/2.3.2/css/bootstrap-responsive.min.css" type="text/css" />
+<link rel="stylesheet" href="./app/ui/common/iCMS-6.0.0.css" type="text/css" />
 <!--[if lt IE 9]>
-  <script src="<?php echo iCMS_UI;?>/ie/html5shiv.min.js"></script>
-  <script src="<?php echo iCMS_UI;?>/ie/respond.min.js"></script>
+  <script src="./app/ui/common/ie/html5shiv.min.js"></script>
+  <script src="./app/ui/common/ie/respond.min.js"></script>
 <![endif]-->
-<script type="text/javascript" src="<?php echo iCMS_UI;?>/jquery-1.11.0.min.js"></script>
+<script type="text/javascript" src="./app/ui/common/jquery-1.11.0.min.js"></script>
 <style>
 body { background-color:#f8f8f8;}
 .iCMS-permission { margin: 240px auto 0; width:720px; }

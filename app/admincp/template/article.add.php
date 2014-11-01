@@ -8,8 +8,8 @@
 defined('iPHP') OR exit('What are you doing?');
 iACP::head();
 ?>
-<script type="text/javascript" charset="utf-8" src="<?php echo iCMS_UI;?>/iCMS.editor-6.0.0.js"></script>
-<script type="text/javascript" charset="utf-8" src="<?php echo iCMS_UI;?>/ueditor/ueditor.all.min.js"></script>
+<script type="text/javascript" charset="utf-8" src="./app/ui/common/iCMS.editor-6.0.0.js"></script>
+<script type="text/javascript" charset="utf-8" src="./app/ui/common/ueditor/ueditor.all.min.js"></script>
 <script type="text/javascript">
 $(function(){
 	iCMS.config.fileTypes	= "<?php echo '*.'.str_replace(',',';*.',iCMS::$config['FS']['allow_ext']);?>";
@@ -19,7 +19,7 @@ $(function(){
 		$(".iCMS-editor").hide();
 		$("#editor-"+this.value).show();
     iCMS.editor.create(this.value);
-		iCMS.editor[this.value].focus();
+		iCMS.editor.get(this.value).focus();
 		$(".iCMS-editor-page").val(this.value).trigger("chosen:updated");
 	});
   iCMS.select('pid',"<?php echo $rs['pid']?$rs['pid']:0 ; ?>");
@@ -63,7 +63,7 @@ $(function(){
 			return false;
 		}
 		if($("#url").val()==''){
-			var n=$(".iCMS-editor-page:eq(0) option:first").val(),ed = iCMS.editor[n];
+			var n=$(".iCMS-editor-page:eq(0) option:first").val(),ed = iCMS.editor.get(n);
 			if(!ed.hasContents()){
         ed.focus();
 				iCMS.alert("第"+n+"页内容不能为空!");
@@ -88,7 +88,7 @@ function addEditorPage(){
 	$("#editor-"+index).after('<div class="iCMS-editor" id="editor-'+n+'">'+unescape('%3Ctextarea type="text/plain" id="iCMS-editor-'+n+'" name="body[]"%3E%3C/3Ctextarea%3E')+'</div>');
 	$(".iCMS-editor-page").append('<option value="'+n+'">第 '+n+' 页</option>').val(n).trigger("chosen:updated");
 	iCMS.editor.create(n);
-	iCMS.editor[n].focus();
+	iCMS.editor.get(n).focus();
 }
 function delEditorPage(){
 	if($(".iCMS-editor-page:eq(0) option").length==1) return;
@@ -103,18 +103,18 @@ function delEditorPage(){
   s.remove();
 	$(".iCMS-editor-page").val(index).trigger("chosen:updated");
 	$("#editor-"+index).show();
-	iCMS.editor.Id	= index;
-	iCMS.editor[index].focus();
+	iCMS.editor.id	= index;
+	iCMS.editor.get(index).focus();
 
-	iCMS.editor[i].destroy();
+	iCMS.editor.get(i).destroy();
   $("#editor-"+i).remove();
   $("#iCMS-editor-"+i).remove();
 }
 function modal_picture(el,a){
   if(!a.checked) return;
 
-  var i       = iCMS.editor.Id,
-  ed          = iCMS.editor[i],
+  var i       = iCMS.editor.id,
+  ed          = iCMS.editor.get(i),
   url         = $(a).attr("url");
   // if(a.checked){
   var imgObj  = {};
@@ -140,7 +140,7 @@ function modal_sweditor(el){
   fileType = e.attr('_fileType'),
   original = e.attr('_original'),
   url      = e.attr('url'),
-  ed       = iCMS.editor[iCMS.editor.Id];
+  ed       = iCMS.editor.get(iCMS.editor.id);
 
   if(url=='undefined') return;
   var html = '<p class="attachment icon_'+fileType+'"><a href="'+url+'" target="_blank">' + original + '</a></p>';
