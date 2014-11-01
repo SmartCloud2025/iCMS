@@ -31,27 +31,20 @@ function article_list($vars){
     }
 
     if(isset($vars['cid!'])){
-    	$ncids    = $vars['cid!'];
-    	if($vars['sub']){
-        	$ncids	= iCMS::get_category_ids($vars['cid!'],true);
-        	array_push ($ncids,$vars['cid!']);
-        }
+    	$ncids    = explode(',',$vars['cid!']);
+        $vars['sub'] && $ncids+=iCMS::get_category_ids($ncids,true);
         $where_sql.= iPHP::where($ncids,'cid','not');
     }
     if($vars['cid'] && !isset($vars['cids'])){
-        $cid    = $vars['cid'];
-        if($vars['sub']){
-            $cid  = iCMS::get_category_ids($vars['cid'],true);
-            array_push ($cid,$vars['cid']);
-        }
+        $cid = explode(',',$vars['cid']);
+        $vars['sub'] && $cid+=iCMS::get_category_ids($cid,true);
         $where_sql.= iPHP::where($cid,'cid');
     }
     if(isset($vars['cids']) && !$vars['cid']){
-        $cids = $vars['cids'];
-        if($vars['sub']){
-            $cids  = iCMS::get_category_ids($vars['cids'],true);
-            array_push ($cids,$vars['cids']);
-        }
+        $cids = explode(',',$vars['cids']);
+        $vars['sub'] && $cids+=iCMS::get_category_ids($vars['cids'],true);
+        array_push ($cids,$vars['cids']);
+
         if($cids){
             iPHP::import(iPHP_APP_CORE .'/iMAP.class.php');
             map::init('category',iCMS_APP_ARTICLE);

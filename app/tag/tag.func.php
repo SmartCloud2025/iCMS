@@ -21,14 +21,14 @@ function tag_list($vars){
 	}
 
     if(isset($vars['cid!'])){
-        $cids	= $vars['sub']?iCMS::get_category_ids($vars['cid!'],true):$vars['cid!'];
-        $cids OR $cids	= $vars['cid!'];
-        $where_sql.= iPHP::where($cids,'cid','not');
+    	$ncids    = explode(',',$vars['cid!']);
+        $vars['sub'] && $ncids+=iCMS::get_category_ids($ncids,true);
+        $where_sql.= iPHP::where($ncids,'cid','not');
     }
     if(isset($vars['cid'])){
-        $cids	= $vars['sub']?iCMS::get_category_ids($vars['cid'],true):$vars['cid'];
-        $cids OR $cids	= $vars['cid'];
-        $where_sql.= iPHP::where($cids,'cid');
+        $cid = explode(',',$vars['cid']);
+        $vars['sub'] && $cid+=iCMS::get_category_ids($cid,true);
+        $where_sql.= iPHP::where($cid,'cid');
     }
 
 	$maxperpage	= isset($vars['row'])?(int)$vars['row']:"10";

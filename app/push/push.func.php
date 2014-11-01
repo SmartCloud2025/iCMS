@@ -15,15 +15,16 @@ function push_list($vars){
     isset($vars['userid'])    &&     $where_sql.=" AND `userid`='{$vars['userid']}'";
 
     if(isset($vars['cid!'])){
-        $cids	= $vars['sub']?iCMS::get_category_ids($vars['cid!'],true):$vars['cid!'];
-        $cids OR $cids	= $vars['cid!'];
-        $where_sql.= iPHP::where($cids,'cid','not');
+        $ncids    = explode(',',$vars['cid!']);
+        $vars['sub'] && $ncids+=iCMS::get_category_ids($ncids,true);
+        $where_sql.= iPHP::where($ncids,'cid','not');
     }
     if(isset($vars['cid'])){
-        $cids	= $vars['sub']?iCMS::get_category_ids($vars['cid'],true):$vars['cid'];
-        $cids OR $cids	= $vars['cid'];
-        $where_sql.= iPHP::where($cids,'cid');
+        $cid = explode(',',$vars['cid']);
+        $vars['sub'] && $cid+=iCMS::get_category_ids($cid,true);
+        $where_sql.= iPHP::where($cid,'cid');
     }
+
     isset($vars['pid']) 	&& $where_sql.= " AND `type` ='{$vars['pid']}'";
     isset($vars['pic']) 	&& $where_sql.= " AND `haspic`='1'";
     isset($vars['nopic']) 	&& $where_sql.= " AND `haspic`='0'";
