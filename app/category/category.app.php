@@ -92,7 +92,7 @@ class categoryApp{
     }
     public function get_nav($C) {
         if($C) {
-            $iurl = (array)$rc['iurl'];
+            $iurl = (array)$C['iurl'];
             $link = "<a href='{$iurl['href']}'>{$C['name']}</a>";
             if($C['rootid']){
                 $rc = iCache::get('iCMS/category/'.$C['rootid']);
