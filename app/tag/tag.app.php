@@ -34,8 +34,13 @@ class tagApp {
     public function tag($val, $field = 'name', $tpl = 'tag') {
         $val OR iPHP::throwException('运行出错！TAG不能为空', 30002);
         $tag = iDB::row("SELECT * FROM `#iCMS@__tags` where `$field`='$val' LIMIT 1;", ARRAY_A);
-
-        iPHP::http404($tag, 'TAG:empty');
+        if(empty($tag)){
+            if($tpl){
+                iPHP::http404($tag, 'TAG:empty');
+            }else{
+                return false;
+            }
+        }
         $tag = $this->value($tag);
         if ($tpl) {
             iCMS::hooks('enable_comment',true);
@@ -68,13 +73,13 @@ class tagApp {
         $tag['pic']   = get_pic($tag['pic']);
         return $tag;
     }
-    public function decode($tags) {
+    public function get_array($tags) {
         if(empty($tags)){
             return;
         }
-        $array  = json_decode($tags);
-        foreach ($array as $key => $value) {
-            $tag_array[$key] = $this->tag($value[1],'id',false);
+        $array  = explode(',', $tags);
+        foreach ($array as $key => $tag) {
+            $tag_array[$key] = $this->tag($tag,'name',false);
         }
         return $tag_array;
     }

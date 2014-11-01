@@ -193,7 +193,7 @@ class articleApp {
         if($vars['tags']){
             if($article['tags']) {
                 $tagApp   = iPHP::app("tag");
-                $tagArray = $tagApp->decode($article['tags']);
+                $tagArray = $tagApp->get_array($article['tags']);
                 $article['tags'] = array();
                 foreach((array)$tagArray AS $tk=>$tag) {
                     $article['tags'][$tk]['name'] = $tag['name'];
@@ -211,8 +211,8 @@ class articleApp {
                 unset($tagApp,$tagArray);
             }
 
-            $article['relTags'] = $relTags?$relTags:$category['name'];
-            $article['rel']     = $article['related'];
+            $article['rel_tags'] = $relTags?$relTags:$category['name'];
+            $article['rel']      = $article['related'];
         }
 
         if($vars['meta']){

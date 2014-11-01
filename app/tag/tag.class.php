@@ -91,7 +91,7 @@ class tag {
 	    for($i=0;$i<$c;$i++) {
 	        $tagArray[$i] = self::update($a[$i],$uid,$iid,$cid,$tcid);
 	    }
-	    return $tagArray;
+	    return implode(',', (array)$tagArray);
 	}
 	public function update($tag,$uid="0",$iid="0",$cid='0',$tcid='0') {
 	    if(empty($tag)) return;
@@ -117,8 +117,7 @@ VALUES ('$uid', '$cid', '$tcid', '0', '$tkey', '$tag', '', '', '', '', '', '', '
 	        iDB::query("INSERT INTO `#iCMS@__tags_map` (`node`, `iid`, `appid`) VALUES ('$tid', '$iid', '".TAG_APPID."')");
 	    	$tmid = iDB::$insert_id;
 	    }
-//	    return array($tag,$tid,$cid,$tcid,$tmid);
-	    return array($tag,$tid);
+	    return $tag;
 	}
 	public function diff($Ntags,$Otags,$uid="0",$iid="0",$cid='0',$tcid='0') {
 		$N        = explode(',', $Ntags);
@@ -139,7 +138,7 @@ VALUES ('$uid', '$cid', '$tcid', '0', '$tkey', '$tag', '', '', '', '', '', '', '
 	            iDB::query("DELETE FROM `#iCMS@__tags_map` WHERE `iid`='$iid' and `node`='$tA->id' AND `appid`='".TAG_APPID."'");
 	        }
 	   }
-	   return json_encode($tagArray);
+	   return implode(',', (array)$tagArray);
 	}
 	public function del($tags,$field='name',$iid=0){
 	    $tagArray	= explode(",",$tags);

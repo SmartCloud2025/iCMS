@@ -22,16 +22,16 @@ class articleApp{
         $this->_postype    = '1';
         $this->_status     = '1';
     }
-    function detag($tags){
-        if($tags{0}.$tags{1}=='[['){
-            $tagsArray = json_decode($tags);
-            foreach ((array)$tagsArray as $k => $_tag) {
-                $_tagArray[] = $_tag[0];
-            }
-            $tags =implode(',', (array)$_tagArray);
-        }
-        return $tags;
-    }
+    // function detag($tags){
+    //     if($tags{0}.$tags{1}=='[['){
+    //         $tagsArray = json_decode($tags);
+    //         foreach ((array)$tagsArray as $k => $_tag) {
+    //             $_tagArray[] = $_tag[0];
+    //         }
+    //         $tags =implode(',', (array)$_tagArray);
+    //     }
+    //     return $tags;
+    // }
     function do_add(){
         $_GET['cid'] && iACP::CP($_GET['cid'],'ca','page');//添加权限
         $rs      = array();
@@ -50,7 +50,7 @@ class articleApp{
         //$metadata          = array_merge((array)$contentprop,(array)$rs['metadata']);
         $rs['pubdate']       = get_date($rs['pubdate'],'Y-m-d H:i:s');
         $rs['metadata'] && $rs['metadata'] = unserialize($rs['metadata']);
-        $rs['tags'] = $this->detag($rs['tags']);
+
         if(empty($this->id)){
             $rs['status']  = "1";
             $rs['postype'] = "1";
@@ -203,7 +203,6 @@ class articleApp{
     function do_getjson(){
         $id = (int)$_GET['id'];
         $rs = articleTable::row($id);
-        $rs['tags'] && $rs['tags'] = $this->detag($rs['tags']);
         iPHP::json($rs);
     }
     function do_getmeta(){
@@ -377,7 +376,7 @@ class articleApp{
         $editor      = iS::escapeStr($_POST['editor']);
         $description = iS::escapeStr($_POST['description']);
         $keywords    = iS::escapeStr($_POST['keywords']);
-        $tags        = iS::escapeStr($_POST['tags']);
+        $tags        = str_replace('，', ',',iS::escapeStr($_POST['tags']));
         $clink       = iS::escapeStr($_POST['clink']);
         $url         = iS::escapeStr($_POST['url']);
         $tpl         = iS::escapeStr($_POST['tpl']);
@@ -442,13 +441,14 @@ class articleApp{
             $good = $bad = $comments = 0;
             $ischapter && $chapter = 1;
             $mobile = 0;
-            if($tags){
-                iPHP::app('tag.class','static');
-                $tagArray = tag::add($tags,$userid,$aid,$this->categoryApp->rootid($cid));
-                $tags = addslashes(json_encode($tagArray));
-            }
 
             $aid  = articleTable::insert(compact($fields));
+
+            if($tags){
+                iPHP::app('tag.class','static');
+                tag::add($tags,$userid,$aid,$this->categoryApp->rootid($cid));
+                //articleTable::update(compact('tags'),array('id'=>$aid));
+            }
 
             map::init('prop',iCMS_APP_ARTICLE);
             $pid && map::add($pid,$aid);
@@ -476,8 +476,7 @@ class articleApp{
         }else{
 			if($tags){
 				iPHP::app('tag.class','static');
-	            $tags = tag::diff($tags,$_tags,iMember::$userid,$aid,$this->categoryApp->rootid($cid));
-			    $tags = addslashes($tags);
+	            tag::diff($tags,$_tags,iMember::$userid,$aid,$this->categoryApp->rootid($cid));
             }
             $picdata = $this->picdata($pic,$mpic,$spic);
 
