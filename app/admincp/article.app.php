@@ -129,8 +129,8 @@ class articleApp{
                 iPHP::success('文章属性设置完成!','js:1');
 
     		break;
-    		case 'top':
-                $data = array('top'=>_int($_POST['mtop']));
+    		case 'weight':
+                $data = array('weight'=>_int($_POST['mweight']));
     		break;
     		case 'keyword':
     			if($_POST['pattern']=='replace') {
@@ -328,7 +328,7 @@ class articleApp{
                 case "title": $sql.=" AND `title` REGEXP '{$kws}'";break;
                 case "tag":   $sql.=" AND `tags` REGEXP '{$kws}'";break;
                 case "source":$sql.=" AND `source` REGEXP '{$kws}'";break;
-                case "top":   $sql.=" AND `top`='{$kws}'";break;
+                case "weight":$sql.=" AND `weight`='{$kws}'";break;
                 case "id":    $sql.=" AND `id` REGEXP '{$kws}'";break;
                 case "tkd":   $sql.=" AND CONCAT(title,keywords,description) REGEXP '{$kws}'";break;
             }
@@ -388,7 +388,7 @@ class articleApp{
 
         iACP::CP($cid,($aid?'ce':'ca'),'alert');
 
-        $top       = _int($_POST['top']);
+        $weight       = _int($_POST['weight']);
         $pubdate   = iPHP::str2time($_POST['pubdate']);
         $postype   = $_POST['postype']?$_POST['postype']:0;
         $ischapter = isset($_POST['ischapter'])?1:0;

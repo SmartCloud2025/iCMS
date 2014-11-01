@@ -156,7 +156,7 @@ $(function(){
             <option value="tag">标签</option>
             <option value="source">出处</option>
             <option value="id">ID</option>
-            <option value="top">置顶权重</option>
+            <option value="weight">置顶权重</option>
             <option value="tkd">标题/关键字/简介</option>
             <option value="pic">缩略图</option>
           </select>
@@ -250,7 +250,7 @@ $(function(){
               <td><a href="<?php echo APP_DOURI; ?>&cid=<?php echo $value['cid'] ; ?>&<?php echo $uri ; ?>"><?php echo $C['name'] ; ?></a><br />
                 <?php echo iACP::getProp("pid",$value['pid'],'text',APP_DOURI.'&pid={PID}&'.$uri) ; ?></td>
               <td><a href="<?php echo APP_DOURI; ?>&userid=<?php echo $value['userid'] ; ?>&<?php echo $uri ; ?>"><?php echo $value['editor'] ; ?></a><br /><?php echo $value['author'] ; ?></td>
-              <td><?php echo $value['hits']; ?>/<?php echo _int($value['top']); ?></td>
+              <td><?php echo $value['hits']; ?>/<?php echo _int($value['weight']); ?></td>
               <td><?php if($value['status']=="1"){ ?>
                 <a href="<?php echo $value['url']; ?>" class="btn btn-success btn-mini" target="_blank">查看</a>
                 <?php } ?>
@@ -287,7 +287,7 @@ $(function(){
                       <li><a data-toggle="batch" data-action="move"><i class="fa fa-fighter-jet"></i> 移动栏目</a></li>
                       <li><a data-toggle="batch" data-action="scid"><i class="fa fa-code-fork"></i> 设置副栏目</a></li>
                       <li><a data-toggle="batch" data-action="thumb"><i class="fa fa-picture-o"></i> 提取缩略图</a></li>
-                      <li><a data-toggle="batch" data-action="top"><i class="fa fa-cog"></i> 设置置顶权重</a></li>
+                      <li><a data-toggle="batch" data-action="weight"><i class="fa fa-cog"></i> 设置置顶权重</a></li>
                       <li><a data-toggle="batch" data-action="keyword"><i class="fa fa-star"></i> 设置关键字</a></li>
                       <li><a data-toggle="batch" data-action="tag"><i class="fa fa-tags"></i> 设置标签</a></li>
                       <li><a data-toggle="batch" data-action="order"><i class="fa fa-list-ol"></i> 更新排序</a></li>

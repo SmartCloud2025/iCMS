@@ -342,7 +342,7 @@ function _modal_dialog(cancel_text){
             </div>
             <div class="clearfloat mb10"></div>
             <div class="input-prepend"> <span class="add-on">权重</span>
-              <input id="top" class="span2" value="<?php echo _int($rs['top']) ; ?>" name="top" type="text"/>
+              <input id="weight" class="span2" value="<?php echo _int($rs['weight']) ; ?>" name="weight" type="text"/>
             </div>
             <div class="clearfloat mb10"></div>
             <div class="input-prepend input-append"> <span class="add-on">模板</span>

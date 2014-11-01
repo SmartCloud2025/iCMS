@@ -24,7 +24,7 @@ function article_list($vars){
     $maxperpage = isset($vars['row'])?(int)$vars['row']:10;
     $cache_time = isset($vars['time'])?(int)$vars['time']:-1;
     isset($vars['userid'])&& $where_sql.= " AND `userid`='{$vars['userid']}'";
-    isset($vars['top'])   && $where_sql.= " AND `top`='"._int($vars['top'])."'";
+    isset($vars['weight'])   && $where_sql.= " AND `weight`='"._int($vars['weight'])."'";
 
     if(isset($vars['ucid']) && $vars['ucid']!=''){
         $where_sql.= " AND `ucid`='{$vars['ucid']}'";
@@ -43,7 +43,6 @@ function article_list($vars){
     if(isset($vars['cids']) && !$vars['cid']){
         $cids = explode(',',$vars['cids']);
         $vars['sub'] && $cids+=iCMS::get_category_ids($vars['cids'],true);
-        array_push ($cids,$vars['cids']);
 
         if($cids){
             iPHP::import(iPHP_APP_CORE .'/iMAP.class.php');
@@ -51,15 +50,22 @@ function article_list($vars){
             $where_sql.= map::exists($cids,'`#iCMS@__article`.id'); //map 表大的用exists
         }
     }
-    if(isset($vars['pid'])){
+    if($vars['pid'] && !isset($vars['pids'])){
+        $pid = explode(',',$vars['pid']);
+        $vars['sub'] && $pid+=iCMS::get_category_ids($pid,true);
+        $where_sql.= iPHP::where($pid,'pid');
+    }
+
+    if(isset($vars['pids']) && !$vars['pid']){
         iPHP::import(iPHP_APP_CORE .'/iMAP.class.php');
         map::init('prop',iCMS_APP_ARTICLE);
-        $where_sql.= map::exists($vars['pid'],'`#iCMS@__article`.id'); //map 表大的用exists
+        $where_sql.= map::exists($vars['pids'],'`#iCMS@__article`.id'); //map 表大的用exists
     }
-    if(isset($vars['tid'])){
+
+    if(isset($vars['tids'])){
         iPHP::import(iPHP_APP_CORE .'/iMAP.class.php');
         map::init('tags',iCMS_APP_ARTICLE);
-        $where_sql.= map::exists($vars['tid'],'`#iCMS@__article`.id'); //map 表大的用exists
+        $where_sql.= map::exists($vars['tids'],'`#iCMS@__article`.id'); //map 表大的用exists
     }
     if($vars['keywords']){ //最好使用 iCMS:article:search
         if(strpos($vars['keywords'],',')===false){
@@ -88,7 +94,7 @@ function article_list($vars){
         case "pubdate":     $order_sql =" ORDER BY `pubdate` $by";       break;
         case "disorder":    $order_sql =" ORDER BY `ordernum` $by";      break;
         case "rand":        $order_sql =" ORDER BY rand() $by";          break;
-        case "top":         $order_sql =" ORDER BY `top`,`ordernum` ASC";break;
+        case "weight":      $order_sql =" ORDER BY `weight`,`ordernum` ASC";break;
         default:            $order_sql =" ORDER BY `id` DESC";
     }
     isset($vars['startdate'])&& $where_sql .= " AND `pubdate`>='".strtotime($vars['startdate'])."'";

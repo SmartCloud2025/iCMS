@@ -18,9 +18,9 @@ $memory = memory_get_usage();
 </div>
 <a id="scrollUp" href="#top"></a>
 <div class="iCMS-batch">
-  <div id="topBatch">
+  <div id="weightBatch">
     <div class="input-prepend"><span class="add-on">权重</span>
-      <input type="text" class="span2" name="mtop"/>
+      <input type="text" class="span2" name="mweight"/>
     </div>
   </div>
   <div id="keywordBatch">

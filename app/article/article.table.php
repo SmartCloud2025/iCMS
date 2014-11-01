@@ -18,7 +18,7 @@ class articleTable {
             'author', 'editor', 'userid',
             'haspic','pic','mpic','spic', 'picdata',
             'related', 'metadata', 'pubdate', 'chapter', 'url','clink',
-            'ordernum','top', 'postype', 'creative', 'tpl','status');
+            'ordernum','weight', 'postype', 'creative', 'tpl','status');
 
         if(!$update){ //更新
             $_fields = array('mobile','postime','hits','hits_today','hits_yday','hits_week','hits_month','favorite','comments', 'good', 'bad');

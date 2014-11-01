@@ -203,9 +203,9 @@ class tagsApp{
     			$pid = $_POST['pid'];
 		        $sql	="`pid` = '$pid'";
     		break;
-    		case 'top':
-		        $top	=_int($_POST['mtop']);
-		        $sql	="`weight` = '$top'";
+    		case 'weight':
+		        $weight	=_int($_POST['mweight']);
+		        $sql	="`weight` = '$weight'";
     		break;
     		case 'keyword':
     			if($_POST['pattern']=='replace') {
