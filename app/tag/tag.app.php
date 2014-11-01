@@ -79,7 +79,7 @@ class tagApp {
         }
         $array  = explode(',', $tags);
         foreach ($array as $key => $tag) {
-            $tag_array[$key] = $this->tag($tag,'name',false);
+            $tag && $tag_array[$key] = $this->tag($tag,'name',false);
         }
         return $tag_array;
     }
