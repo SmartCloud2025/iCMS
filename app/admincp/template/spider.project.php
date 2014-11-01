@@ -15,7 +15,7 @@ $(function(){
 	iCMS.select('cid',"<?php echo $_GET['cid'] ; ?>");
 	<?php } ?>
 	<?php if($_GET['sub']=="on"){ ?>
-	$("#sub").prop("checked",true);
+	iCMS.checked('#sub');
 	<?php } ?>
 	$("#<?php echo APP_FORMID;?>").batch();
 });

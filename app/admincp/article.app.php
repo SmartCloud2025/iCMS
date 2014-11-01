@@ -12,15 +12,16 @@
 defined('iPHP') OR exit('What are you doing?');
 
 iPHP::app('article.table');
-define('TAG_APPID',iCMS_APP_ARTICLE);
 class articleApp{
     function __construct() {
+        $this->appid       = iCMS_APP_ARTICLE;
         $this->id          = (int)$_GET['id'];
         $this->dataid      = (int)$_GET['dataid'];
-        $this->categoryApp = iACP::app('category',iCMS_APP_ARTICLE);
+        $this->categoryApp = iACP::app('category',$this->appid);
         $this->category    = $this->categoryApp->category;
         $this->_postype    = '1';
         $this->_status     = '1';
+        define('TAG_APPID',$this->appid);
     }
     // function detag($tags){
     //     if($tags{0}.$tags{1}=='[['){
@@ -86,7 +87,7 @@ class articleApp{
     		case 'move':
 		        $_POST['cid'] OR iPHP::alert("请选择目标栏目!");
                 iPHP::import(iPHP_APP_CORE .'/iMAP.class.php');
-                map::init('category',iCMS_APP_ARTICLE);
+                map::init('category',$this->appid);
                 $cid = (int)$_POST['cid'];
                 iACP::CP($cid,'ca','alert');
 		        foreach((array)$_POST['id'] AS $id) {
@@ -103,7 +104,7 @@ class articleApp{
             case 'scid':
                 //$_POST['scid'] OR iPHP::alert("请选择目标栏目!");
                 iPHP::import(iPHP_APP_CORE .'/iMAP.class.php');
-                map::init('category',iCMS_APP_ARTICLE);
+                map::init('category',$this->appid);
                 $scid = implode(',', (array)$_POST['scid']);
                 foreach((array)$_POST['id'] AS $id) {
                     $_scid = articleTable::value('scid',$id);
@@ -117,7 +118,7 @@ class articleApp{
                 // $sql ="`pid` = '$pid'";
 
                 iPHP::import(iPHP_APP_CORE .'/iMAP.class.php');
-                map::init('prop',iCMS_APP_ARTICLE);
+                map::init('prop',$this->appid);
 
                 $pid = implode(',', (array)$_POST['pid']);
                 foreach((array)$_POST['id'] AS $id) {
@@ -292,7 +293,7 @@ class articleApp{
 
         if(isset($_GET['pid']) && $pid!='-1'){
             iPHP::import(iPHP_APP_CORE .'/iMAP.class.php');
-            map::init('prop',iCMS_APP_ARTICLE);
+            map::init('prop',$this->appid);
             $sql.= $psql = map::exists($pid,'`#iCMS@__article`.id'); //map 表大的用exists
             $uri_array['pid'] = $pid;
             if($_GET['pid']==0 && !$psql){
@@ -313,7 +314,7 @@ class articleApp{
         if($_GET['scid']){
             if($cids){
                 iPHP::import(iPHP_APP_CORE .'/iMAP.class.php');
-                map::init('category',iCMS_APP_ARTICLE);
+                map::init('category',$this->appid);
                 $sql.= map::exists($cids,'`#iCMS@__article`.id'); //map 表大的用exists
             }
         }else{
@@ -450,10 +451,10 @@ class articleApp{
                 //articleTable::update(compact('tags'),array('id'=>$aid));
             }
 
-            map::init('prop',iCMS_APP_ARTICLE);
+            map::init('prop',$this->appid);
             $pid && map::add($pid,$aid);
 
-            map::init('category',iCMS_APP_ARTICLE);
+            map::init('category',$this->appid);
             map::add($cid,$aid);
             $scid && map::add($scid,$aid);
 
@@ -482,10 +483,10 @@ class articleApp{
 
             articleTable::update(compact($fields),array('id'=>$aid));
 
-            map::init('prop',iCMS_APP_ARTICLE);
+            map::init('prop',$this->appid);
             map::diff($pid,$_pid,$aid);
 
-            map::init('category',iCMS_APP_ARTICLE);
+            map::init('category',$this->appid);
             map::diff($cid,$_cid,$aid);
             map::diff($scid,$_scid,$aid);
 
@@ -545,8 +546,8 @@ class articleApp{
             iPHP::app('tag.class','static');
             $msg.=tag::del($art['tags']);
         }
-        iDB::query("DELETE FROM `#iCMS@__category_map` WHERE `iid` = '$id' AND `appid` = '".iCMS_APP_ARTICLE."';");
-        iDB::query("DELETE FROM `#iCMS@__prop_map` WHERE `iid` = '$id' AND `appid` = '".iCMS_APP_ARTICLE."' ;");
+        iDB::query("DELETE FROM `#iCMS@__category_map` WHERE `iid` = '$id' AND `appid` = '".$this->appid."';");
+        iDB::query("DELETE FROM `#iCMS@__prop_map` WHERE `iid` = '$id' AND `appid` = '".$this->appid."' ;");
 
         articleTable::del_filedata($id,'indexid');
         $msg.= $this->del_msg('相关文件数据删除');

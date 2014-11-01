@@ -20,9 +20,9 @@ $(function(){
 	<?php } if($_GET['orderby']){ ?>
 	iCMS.select('orderby',"<?php echo $_GET['orderby'] ; ?>");
 	<?php } if($_GET['sub']=="on"){ ?>
-	$("#sub").prop("checked",true);
+	iCMS.checked('#sub');
 	<?php } if($_GET['tfsub']=="on"){ ?>
-	$("#tfsub").prop("checked",true);
+  iCMS.checked('#tfsub');
 	<?php } ?>
 	$("#<?php echo APP_FORMID;?>").batch({
 		mvtcid: function(){

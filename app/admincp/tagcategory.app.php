@@ -24,7 +24,9 @@ class tagcategoryApp extends categoryApp {
         $cc = iDB::value("SELECT count(*) FROM `#iCMS@__tags` where `tcid`='$cid'");
         iDB::query("UPDATE `#iCMS@__category` SET `count` ='$cc' WHERE `cid` ='$cid'");
     }
-    function listbtn($rs){}
+    function listbtn($C){
+        return $this->treebtn($C);
+    }
     function treebtn($C){
         return '<a href="'.__ADMINCP__.'=tags&do=add&tcid='.$C['cid'].'" class="btn btn-small"><i class="fa fa-edit"></i> 标签</a> <a href="'.__ADMINCP__.'=tags&do=manage&tcid='.$C['cid'].'&sub=on" class="btn btn-small"><i class="fa fa-list-alt"></i> 标签管理</a> ';
     }

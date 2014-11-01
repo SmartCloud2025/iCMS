@@ -14,8 +14,8 @@ defined('iPHP') OR exit('What are you doing?');
 iPHP::app('tag.class','static');
 class tagsApp{
     function __construct() {
-        $this->id          = (int)$_GET['id'];
         $this->appid       = iCMS_APP_TAG;
+        $this->id          = (int)$_GET['id'];
         $this->tagcategory = iACP::app('tagcategory');
         $this->categoryApp = iACP::app('category','all');
     }
@@ -42,10 +42,18 @@ class tagsApp{
         $_GET['keywords'] && $sql.=" AND CONCAT(name,seotitle,subtitle,keywords,description) REGEXP '{$_GET['keywords']}'";
 
         $sql.= $this->categoryApp->search_sql($cid);
-        $sql.= $this->tagcategory->search_sql($cid,'tcid');
+        $sql.= $this->tagcategory->search_sql($tcid,'tcid');
 
+        if(isset($_GET['pid']) && $pid!='-1'){
+            iPHP::import(iPHP_APP_CORE .'/iMAP.class.php');
+            map::init('prop',$this->appid);
+            $sql.= $psql = map::exists($pid,'`#iCMS@__tags`.id'); //map 表大的用exists
+            $uri_array['pid'] = $pid;
+            if($_GET['pid']==0 && !$psql){
+                $sql.= iPHP::where('','pid');
+            }
+        }
 		isset($_GET['pic']) && $sql.=" AND `haspic` ='".($_GET['pic']?1:0)."'";
-		isset($_GET['pid']) && $_GET['pid']!="-1" && $sql.=" AND `pid` ='".(int)$_GET['pid']."'";
 
         $orderby	= $_GET['orderby']?$_GET['orderby']:"id DESC";
         $maxperpage = $_GET['perpage']>0?(int)$_GET['perpage']:20;
@@ -115,10 +123,10 @@ class tagsApp{
             $id = iDB::insert('tags',$data);
 			tag::cache($id,'id');
 
-            map::init('prop',iCMS_APP_TAG);
+            map::init('prop',$this->appid);
             $pid && map::add($pid,$id);
 
-            map::init('category',iCMS_APP_TAG);
+            map::init('category',$this->appid);
             map::add($cid,$id);
             $tcid && map::add($tcid,$id);
 
@@ -128,10 +136,10 @@ class tagsApp{
             iDB::update('tags', $data, array('id'=>$id));
 			tag::cache($id,'id');
 
-            map::init('prop',iCMS_APP_TAG);
+            map::init('prop',$this->appid);
             map::diff($pid,$_pid,$id);
 
-            map::init('category',iCMS_APP_TAG);
+            map::init('category',$this->appid);
             map::diff($cid,$_cid,$id);
             map::diff($tcid,$_tcid,$id);
         	iPHP::success('标签更新完成',"url:".APP_URI);
@@ -144,8 +152,8 @@ class tagsApp{
     }
     function do_del($id = null,$dialog=true){
     	$id===null && $id=$this->id;
-        iDB::query("DELETE FROM `#iCMS@__category_map` WHERE `iid` = '$id' AND `appid` = '".iCMS_APP_TAG."';");
-        iDB::query("DELETE FROM `#iCMS@__prop_map` WHERE `iid` = '$id' AND `appid` = '".iCMS_APP_TAG."' ;");
+        iDB::query("DELETE FROM `#iCMS@__category_map` WHERE `iid` = '$id' AND `appid` = '".$this->appid."';");
+        iDB::query("DELETE FROM `#iCMS@__prop_map` WHERE `iid` = '$id' AND `appid` = '".$this->appid."' ;");
 
     	tag::del($id,'id');
     	$dialog && iPHP::success("标签删除成功",'js:parent.$("#tr'.$id.'").remove();');

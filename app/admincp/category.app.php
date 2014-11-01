@@ -425,10 +425,12 @@ class categoryApp extends category{
         $html.='<input'.$readonly.($C['rootid']==0?' style="font-weight:bold"':'').' type="text" name="name['.$C['cid'].']" value="'.$C['name'].'"/> ';
         $C['status'] OR $html.=' <i class="fa fa-eye-slash" title="隐藏'.$this->name_text.'"></i> ';
         $html.='<span class="label label-success">cid:<a href="'.$C['iurl']->href.'" target="_blank">'.$C['cid'].'</a></span> ';
-        $C['url'] && $html.=' <span class="label label-warning">∞</span> ';
-        $html.='<span class="label label-inverse">pid:'.$C['pid'].'</span> ';
-        ($C['mode'] && $C['domain']) && $html.='<span class="label label-important">绑定域名</span> ';
-        $html.='<span class="label label-info">'.$C['count'].'条记录</span> <span class="label">创建者:'.$C['creator'].'</span></span><span class="operation">';
+        $C['url'] && $html.=' <span class="label label-warning">∞</span>';
+        $C['pid'] && $html.=' <span class="label label-inverse">pid:'.$C['pid'].'</span>';
+        ($C['mode'] && $C['domain']) && $html.=' <span class="label label-important">绑定域名</span>';
+        $html.=' <span class="label label-info">'.$C['count'].'条记录</span>';
+        $C['creator'] && $html.=' <span class="label">创建者:'.$C['creator'].'</span>';
+        $html.='</span><span class="operation">';
         iACP::CP($C['cid'],'a')  && $html.='<a href="'.APP_URI.'&do=add&rootid='.$C['cid'].'" class="btn btn-small"><i class="fa fa-plus-square"></i> 添加子'.$this->name_text.'</a> ';
         $html.=$this->treebtn($C);
         iACP::CP($C['cid'],'e') && $html.='<a href="'.APP_URI.'&do=add&cid='.$C['cid'].'" title="编辑'.$this->name_text.'设置"  class="btn btn-small"><i class="fa fa-edit"></i> 编辑</a>';
@@ -492,10 +494,12 @@ class categoryApp extends category{
     function listbtn($rs){
         $a='<a href="'.iURL::get('category',$rs)->href.'" class="btn btn-small"><i class="fa fa-link"></i> 访问</a> ';
         iACP::CP($rs['cid'],'ca') && $a.='<a href="'.__ADMINCP__.'=article&do=add&cid='.$rs['cid'] .'" class="btn btn-small"><i class="fa fa-edit"></i> 添加文章</a> ';
-        iACP::CP($rs['cid'],'cs') && $a.='<a href="'.__ADMINCP__.'=article&cid='.$rs['cid'] .'" class="btn btn-small"><i class="fa fa-list-alt"></i> 文章管理</a>';
+        iACP::CP($rs['cid'],'cs') && $a.='<a href="'.__ADMINCP__.'=article&cid='.$rs['cid'] .'&sub=on" class="btn btn-small"><i class="fa fa-list-alt"></i> 文章管理</a>';
         return $a;
     }
-    function treebtn($rs){}
+    function treebtn($rs){
+        return $this->listbtn($rs);
+    }
     function batchbtn(){
         return '<li><a data-toggle="batch" data-action="mode"><i class="fa fa-cogs"></i> 访问模式</a></li>
                 <li class="divider"></li>

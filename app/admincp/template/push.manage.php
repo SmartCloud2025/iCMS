@@ -19,9 +19,9 @@ $(function(){
 	<?php } if($_GET['orderby']){ ?>
 	$("#orderby").val("<?php echo $_GET['orderby'] ; ?>");
 	<?php } if($_GET['sub']=="on"){ ?>
-	$("#sub").prop("checked",true);
+	iCMS.checked('#sub');
 	<?php } if($_GET['nopic']=="on"){ ?>
-	$("#nopic").prop("checked",true);
+  iCMS.checked('#nopic');
 	<?php } ?>
 	$("#<?php echo APP_FORMID;?>").batch();
 });

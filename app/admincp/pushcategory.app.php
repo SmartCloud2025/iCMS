@@ -40,7 +40,9 @@ class pushcategoryApp extends categoryApp {
         $cc = iDB::value("SELECT count(*) FROM `#iCMS@__push` where `cid`='$cid'");
         iDB::query("UPDATE `#iCMS@__category` SET `count` ='$cc' WHERE `cid` ='$cid'");
     }
-    function listbtn($rs){}
+    function listbtn($C){
+        return $this->treebtn($C);
+    }
     function treebtn($C){
         return '<a href="'.__ADMINCP__.'=push&do=add&cid='.$C['cid'].'" class="btn btn-small"><i class="fa fa-edit"></i> 推送</a> <a href="'.__ADMINCP__.'=push&do=manage&cid='.$C['cid'].'&sub=on" class="btn btn-small"><i class="fa fa-list-alt"></i> 推送管理</a> ';
     }
