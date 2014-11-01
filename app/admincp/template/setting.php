@@ -9,7 +9,7 @@ defined('iPHP') OR exit('What are you doing?');
 iACP::head();
 ?>
 <style>
-h3{
+.iCMS-setting h3{
   display: inline-block;
   height: 35px;
   margin-bottom: 5px;

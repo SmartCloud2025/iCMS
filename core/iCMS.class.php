@@ -328,7 +328,7 @@ class iCMS {
 
 		if(isset($GLOBALS['iSPH'])) return $GLOBALS['iSPH'];
 
-		$hosts				= self::$config['sphinx']['hosts'];
+		$hosts				= self::$config['sphinx']['host'];
 		$GLOBALS['iSPH']	= new SphinxClient();
 		if(strstr($hosts, 'unix:')){
 			$hosts	= str_replace("unix://",'',$hosts);
