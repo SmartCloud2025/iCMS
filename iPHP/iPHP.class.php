@@ -357,7 +357,7 @@ class iPHP{
 	}
 
 	public static function where($vars,$field,$not=false,$noand=false) {
-		if (is_bool($vars)) return '';
+		if (is_bool($vars)||empty($vars)) return '';
 
 	    if(is_array($vars)) {
 			foreach ($vars as $key => $value) {
