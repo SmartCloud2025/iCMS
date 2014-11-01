@@ -38,6 +38,7 @@ class tagsApp{
         $sql  = " where 1=1";
         $cid  = (int)$_GET['cid'];
         $tcid = (int)$_GET['tcid'];
+        $pid  = (int)$_GET['pid'];
 
         $_GET['keywords'] && $sql.=" AND CONCAT(name,seotitle,subtitle,keywords,description) REGEXP '{$_GET['keywords']}'";
 
