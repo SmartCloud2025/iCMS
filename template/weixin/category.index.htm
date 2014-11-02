@@ -18,8 +18,10 @@
 					<li class="media">
 						<!--{if $article_list.first && $article_list.pic}-->
 						<div class="media-pic">
+							<a href="<!--{$article_list.url}-->">
 							<img src="<!--{$article_list.pic.url}-->" alt="<!--{$article_list.title}-->">
 							<p class="title"><span><!--{$article_list.title}--></span></p>
+							</a>
 						</div>
 						<!--{else}-->
 						<!--{if $article_list.pic}-->
