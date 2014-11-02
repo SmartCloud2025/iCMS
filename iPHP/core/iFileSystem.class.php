@@ -33,20 +33,22 @@
  */
 class iFS {
 
-    public static $TABLE         = null;
-    public static $forceExt      = false;
-    public static $isRedirect    = false;
-    public static $checkFileData = true;
-    public static $isValidext    = true;
-    public static $config        = null;
-    public static $userid        = 0;
-    public static $callback      = false;
-    public static $FileData      = null;
-    public static $watermark     = true;
+    public static $TABLE            = null;
+    public static $forceExt         = false;
+    public static $isRedirect       = false;
+    public static $checkFileData    = true;
+    public static $isValidext       = true;
+    public static $config           = null;
+    public static $userid           = 0;
+    public static $callback         = false;
+    public static $FileData         = null;
+    public static $watermark        = true;
+    public static $watermark_config = null;
 
-    public static function init($config,$table='') {
-        self::$config = $config;
-        $_table_name  = $config['table'];
+    public static function init($config,$watermark_config,$table='') {
+        self::$config           = $config;
+        self::$watermark_config = $watermark_config;
+        $_table_name            = $config['table'];
         if(empty($_table_name)){
             self::$TABLE  = $table ? $table : 'filedata';//文件记录表
         }
@@ -386,6 +388,7 @@ class iFS {
     public static function watermark($ext,$frp){
         if (in_array($ext, array('gif', 'jpg', 'jpeg', 'png')) && self::$watermark) {
             iPHP::LoadClass('Pic');
+            iPic::init(self::$watermark_config);
             iPic::watermark($frp);
         }
     }

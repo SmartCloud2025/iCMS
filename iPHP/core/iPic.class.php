@@ -19,26 +19,27 @@ class iPic {
 		self::$watermark = iPHP_APP_CONF;
     }
     public static function watermark($pf) {
-        if(!self::$config['watermark']['enable']) return;
-        
-        
+        if(!self::$config['enable']) return;
+
+
         list($width, $height,$imagetype) = @getimagesize($pf);
 
-        if ( $width < self::$config['watermark']['width'] || $height<self::$config['watermark']['height'] ) {
+
+        if ( $width < self::$config['width'] || $height<self::$config['height'] ) {
             return FALSE;
         }
         $isWaterImage	= FALSE;
         $formatMsg		= "暂不支持该文件格式，请用图片处理软件将图片转换为GIF、JPG、PNG等格式。";
         //读取水印文件
-        $waterImgPath	= self::$watermark.'/'.self::$config['watermark']['img'];
+        $waterImgPath	= self::$watermark.'/'.self::$config['img'];
 
-        if(self::$config['watermark']['img'] && file_exists($waterImgPath)) {
+        if(self::$config['img'] && file_exists($waterImgPath)) {
             list($water_w, $water_h,$water_imagetype) = @getimagesize($waterImgPath);
             $water_im	 = self::imagecreate($water_imagetype,$waterImgPath);
             $water_im OR die($formatMsg);
             $isWaterImage = TRUE;
         }else {
-            $fontfile	= self::$watermark.'/'.self::$config['watermark']['font'];
+            $fontfile	= self::$watermark.'/'.self::$config['font'];
         }
 
         //读取背景图片
@@ -54,24 +55,24 @@ class iPic {
             $w = $water_w;
             $h = $water_h;
         }else { //文字水印
-            if(self::$config['watermark']['font']){
-                $temp = imagettfbbox(self::$config['watermark']['fontsize'],0,$fontfile,self::$config['watermark']['text']);//取得使用 TrueType 字体的文本的范围
+            if(self::$config['font']){
+                $temp = imagettfbbox(self::$config['fontsize'],0,$fontfile,self::$config['text']);//取得使用 TrueType 字体的文本的范围
                 $w = $temp[2] - $temp[6];
                 $h = $temp[3] - $temp[7];
                 unset($temp);
             }else {
-                $w = self::$config['watermark']['fontsize']*cstrlen(self::$config['watermark']['text']);
-                $h = self::$config['watermark']['fontsize']+5;
+                $w = self::$config['fontsize']*cstrlen(self::$config['text']);
+                $h = self::$config['fontsize']+5;
             }
         }
         if( ($ground_w<$w) || ($ground_h<$h) ){
             //       echo "需要加水印的图片的长度或宽度比水印".$label."还小，无法生成水印！";
             return;
         }
-        switch(self::$config['watermark']['pos']) {
+        switch(self::$config['pos']) {
             case '-1'://自定义
-                $posX = $ground_w - $w-self::$config['watermark']['x'];
-                $posY = $ground_h - $h-self::$config['watermark']['y'];
+                $posX = $ground_w - $w-self::$config['x'];
+                $posY = $ground_h - $h-self::$config['y'];
                 break;
             case 1://1为顶端居左
                 $posX = 0;
@@ -114,8 +115,8 @@ class iPic {
                 $posY = rand($h,($ground_h - $h));
                 break;
         }
-        $posX = $posX-self::$config['watermark']['x'];
-        $posY = $posY-self::$config['watermark']['y'];
+        $posX = $posX-self::$config['x'];
+        $posY = $posY-self::$config['y'];
 
         //设定图像的混色模式
         imagealphablending($ground_im, true);
@@ -124,22 +125,22 @@ class iPic {
         	if(strtolower(substr(strrchr($waterImgPath, "."),1))=='png'){
 	            imagecopy ($ground_im,$water_im,$posX, $posY, 0,0,$water_w,$water_h);
         	}else{
-				imagecopymerge($ground_im, $water_im, $posX, $posY, 0, 0, $water_w,$water_h,self::$config['watermark']['transparent']);//拷贝水印到目标文件
+				imagecopymerge($ground_im, $water_im, $posX, $posY, 0, 0, $water_w,$water_h,self::$config['transparent']);//拷贝水印到目标文件
         	}
         }else{//文字水印
-            self::$config['watermark']['color'] OR self::$config['watermark']['color']="#FFFFFF";
-            if(!empty(self::$config['watermark']['color']) && (strlen(self::$config['watermark']['color'])==7) ) {
-                $R = hexdec(substr(self::$config['watermark']['color'],1,2));
-                $G = hexdec(substr(self::$config['watermark']['color'],3,2));
-                $B = hexdec(substr(self::$config['watermark']['color'],5));
+            self::$config['color'] OR self::$config['color']="#FFFFFF";
+            if(!empty(self::$config['color']) && (strlen(self::$config['color'])==7) ) {
+                $R = hexdec(substr(self::$config['color'],1,2));
+                $G = hexdec(substr(self::$config['color'],3,2));
+                $B = hexdec(substr(self::$config['color'],5));
                 $textcolor = imagecolorallocate($ground_im, $R, $G, $B);
             }else {
                 die("水印文字颜色格式不正确！");
             }
-            if(self::$config['watermark']['font']) {
-                imagettftext($ground_im,self::$config['watermark']['fontsize'], 0, $posX, $posY, $textcolor,$fontfile, self::$config['watermark']['text']);
+            if(self::$config['font']) {
+                imagettftext($ground_im,self::$config['fontsize'], 0, $posX, $posY, $textcolor,$fontfile, self::$config['text']);
             }else {
-                imagestring ($ground_im, self::$config['watermark']['fontsize'], $posX, $posY, self::$config['watermark']['text'],$textcolor);
+                imagestring ($ground_im, self::$config['fontsize'], $posX, $posY, self::$config['text'],$textcolor);
             }
         }
 
@@ -153,7 +154,7 @@ class iPic {
     }
     public static function thumbnail($src,$tw="0",$th="0",$scale=true) {
     	if(!self::$config['thumb']['enable']) return;
-    	
+
         $rs	= array();
         $tw	= empty($tw)?self::$config['thumb']['width']:(int)$tw;
         $th	= empty($th)?self::$config['thumb']['height']:(int)$th;

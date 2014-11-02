@@ -22,9 +22,9 @@ $(function(){
 		iCMS.editor.get(this.value).focus();
 		$(".iCMS-editor-page").val(this.value).trigger("chosen:updated");
 	});
-  iCMS.select('pid',"<?php echo $rs['pid']?$rs['pid']:0 ; ?>");
+  iCMS.select('pid',"<?php echo $rs['pid']?trim($rs['pid']):0 ; ?>");
   iCMS.select('cid',"<?php echo $rs['cid']; ?>");
-  iCMS.select('scid',"<?php echo $rs['scid']; ?>");
+  iCMS.select('scid',"<?php echo trim($rs['scid']);?>");
 	$("#cid").change(function() {
     var cid = this.value;
 		$.getJSON("<?php echo APP_URI; ?>",{'do':'getmeta','cid':cid},function(prop){

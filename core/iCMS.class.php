@@ -28,7 +28,7 @@ class iCMS {
 
 	public static function init(){
         self::config();
-        iFS::init(self::$config['FS'],'filedata');
+        iFS::init(self::$config['FS'],self::$config['watermark'],'filedata');
         iCache::init(self::$config['cache']);
         iURL::init(self::$config['router']);
         iPHP::iTemplate();

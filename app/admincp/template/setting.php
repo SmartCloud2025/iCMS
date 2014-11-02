@@ -460,12 +460,17 @@ function modal_tplfile(el,a){
             <div class="input-prepend"> <span class="add-on">水印图片文件</span>
               <input type="text" name="config[watermark][img]" class="span3" id="watermark_img" value="<?php echo $config['watermark']['img'] ; ?>"/>
             </div>
-            <span class="help-inline">水印图片存放路径：include/watermark/watermark.png， 如果水印图片不存在，则使用文字水印</span>
+            <span class="help-inline">水印图片存放路径：conf/iCMS/watermark.png， 如果水印图片不存在，则使用文字水印</span>
             <div class="clearfloat mb10"></div>
             <div class="input-prepend"> <span class="add-on">水印文字</span>
               <input type="text" name="config[watermark][text]" class="span3" id="watermark_text" value="<?php echo $config['watermark']['text'] ; ?>"/>
             </div>
-            <span class="help-inline">暂不支持中文</span>
+            <span class="help-inline">如果设置为中文,字体文件必需要支持中文字体 ,存放路径：conf/iCMS/</span>
+            <div class="clearfloat mb10"></div>
+            <div class="input-prepend"> <span class="add-on">文字字体</span>
+              <input type="text" name="config[watermark][font]" class="span3" id="watermark_font" value="<?php echo $config['watermark']['font'] ; ?>"/>
+            </div>
+            <span class="help-inline">字体文件</span>
             <div class="clearfloat mb10"></div>
             <div class="input-prepend"> <span class="add-on">水印文字字体大小</span>
               <input type="text" name="config[watermark][fontsize]" class="span3" id="watermark_fontsize" value="<?php echo $config['watermark']['fontsize'] ; ?>"/>
@@ -474,6 +479,7 @@ function modal_tplfile(el,a){
             <div class="input-prepend"> <span class="add-on">水印文字颜色</span>
               <input type="text" name="config[watermark][color]" class="span3" id="watermark_color" value="<?php echo $config['watermark']['color'] ; ?>"/>
             </div>
+            <span class="help-inline">例#000000 长度必须7位</span>
             <div class="clearfloat mb10"></div>
             <div class="input-prepend"> <span class="add-on">水印透明度</span>
               <input type="text" name="config[watermark][transparent]" class="span3" id="watermark_transparent" value="<?php echo $config['watermark']['transparent'] ; ?>"/>
