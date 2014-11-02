@@ -63,7 +63,7 @@ class map {
 		$sql      = self::sql($nodes);
 		$rs       = iDB::all($sql);
 		$resource = array();
-		iDB::debug(1);
+		//iDB::debug(1);
 		foreach((array)$rs AS $_vars) {
 			$resource[] = $_vars['iid'];
 		}
