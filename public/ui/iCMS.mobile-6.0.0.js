@@ -1,11 +1,19 @@
 (function($) {
     var _iCMS = {
-        scrollLoad:function (contents,one,next,maxPage,callback){
+        scrollLoad:function (contents,one,next,maxPage,callback,pathParse){
           if ( !( $(contents).length && $(next).length) ){
             return false;
           };
           var $container = $(contents);
           $container.infinitescroll({
+            pathParse:pathParse,
+            //  pathParse: function(path, page){
+            //   return function(curPage) {
+            //     return path.replace("{P}",curPage);
+            //   };
+            // },
+            //debug:true,
+            dataType:"html+callback",
             showPageNum:5,
             maxPage: maxPage||100,
             clickMoreBtn:'.click_more',

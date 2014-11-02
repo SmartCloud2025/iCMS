@@ -51,7 +51,7 @@
           </div>
           <div id="pages_next" class="hide">
             <!--{if !$article.page.end}-->
-            <a href="<!--{$article.page.next}-->"/>下一页</a>
+            <a href="<!--{$article.page.pageurl}-->"/>下一页</a>
             <!--{/if}-->
           </div>
         </article>
@@ -98,6 +98,10 @@
         var pages_nav = $("#pages_nav",e).html();
         $("#pages_nav",e).remove();
         $(".article_pagenav").html(pages_nav);
+      },function(path, page){
+        return function(curPage) {
+          return path.replace("{P}",curPage);
+        };
       });
       //滚动加载 开关
       $('#scrollLoad-switcher .btn').click(function(e) {

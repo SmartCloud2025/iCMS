@@ -166,6 +166,7 @@ class articleApp {
                 'nav'     => $pagenav,
                 'prev'    => $prev_url,
                 'next'    => $next_url,
+                'pageurl' => $pageurl,
                 'end'     => ($total==$page?true:false)
             );
             unset($index_nav,$prev_nav,$num_nav,$next_nav,$end_nav,$pagenav);
