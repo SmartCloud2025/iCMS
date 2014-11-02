@@ -294,11 +294,12 @@ class articleApp{
         if(isset($_GET['pid']) && $pid!='-1'){
             iPHP::import(iPHP_APP_CORE .'/iMAP.class.php');
             map::init('prop',$this->appid);
-            $sql.= $psql = map::exists($pid,'`#iCMS@__article`.id'); //map 表大的用exists
+            $psql = map::exists($pid,'`#iCMS@__article`.id'); //map 表大的用exists
             $uri_array['pid'] = $pid;
             if($_GET['pid']==0 && !$psql){
-                $sql.= iPHP::where('','pid');
+                $psql = " AND `pid`=''";
             }
+            $sql.= $psql;
         }
 
         $cids = iACP::CP('__CID__','cs');//取得所有有权限的栏目ID
