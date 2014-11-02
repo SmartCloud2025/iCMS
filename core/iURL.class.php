@@ -127,7 +127,11 @@ class iURL {
 
         	strstr($url,'{') && $url = preg_replace_callback ("/\{(.*?)\}/",'__iurl_rule__',$url);
             $i->path    = iFS::path(iPATH.$html_dir.$url);
-            $i->href    = rtrim($sURL,'/').'/'.ltrim(iFS::path($html_dir.$url),'/') ;
+            if(strstr($html_dir,'..')===false) {
+                $i->href = rtrim($sURL,'/').'/'.ltrim(iFS::path($html_dir.$url),'/') ;
+            }else{
+                $i->href = rtrim($sURL,'/').'/'.ltrim(iFS::path($url),'/') ;
+            }
 //var_dump($i);
 			$pathA 		= pathinfo($i->path);
 //var_dump($pathA);
