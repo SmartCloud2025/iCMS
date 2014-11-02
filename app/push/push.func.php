@@ -45,7 +45,7 @@ function push_list($vars){
 	}
 	if(empty($resource)){
         $resource = iDB::all("SELECT * FROM `#iCMS@__push` {$where_sql} {$order_sql} LIMIT $maxperpage");
-		//iDB::debug(1);
+		iPHP_SQL_DEBUG && iDB::debug(1);
         if($resource)foreach ($resource as $key => $value) {
             $value['pic']     && $value['pic']  = iFS::fp($value['pic'],'+http');
             $value['pic2']    && $value['pic2'] = iFS::fp($value['pic2'],'+http');

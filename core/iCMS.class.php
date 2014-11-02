@@ -65,6 +65,7 @@ class iCMS {
         //config.php 中开启后 此处设置无效
         defined('iPHP_DEBUG')        OR define('iPHP_DEBUG', $config['debug']['php']);       //程序调试模式
         defined('iPHP_TPL_DEBUG')    OR define('iPHP_TPL_DEBUG',$config['debug']['tpl']);    //模板调试
+        defined('iPHP_SQL_DEBUG')    OR define('iPHP_SQL_DEBUG',$config['debug']['sql']);    //模板调试
         defined('iPHP_TIME_CORRECT') OR define('iPHP_TIME_CORRECT',$config['time']['cvtime']);
         //config.php --END--
 

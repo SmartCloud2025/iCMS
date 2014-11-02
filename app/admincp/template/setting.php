@@ -123,6 +123,13 @@ function modal_tplfile(el,a){
               </div>
             </div>
             <span class="help-inline">模板错误提示!如果网站显示空白或者不完整,可开启此项,方便排除错误!模板调整时也可开启,开启此项也要开"程序提示"</span> </div>
+            <div class="clearfloat mb10"></div>
+            <div class="input-prepend"> <span class="add-on">mysql调试</span>
+              <div class="switch">
+                <input type="checkbox" data-type="switch" name="config[debug][sql]" id="debug_sql" <?php echo $config['debug']['sql']?'checked':''; ?>/>
+              </div>
+            </div>
+            <span class="help-inline">开启后将显示 EXPLAIN 信息</span> </div>
             <div id="setting-tpl" class="tab-pane hide">
             <div class="input-prepend hide"> <span class="add-on">首页静态</span>
               <div class="switch">

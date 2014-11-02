@@ -53,7 +53,7 @@ function user_list($vars=null){
 
 	if(empty($resource)){
         $resource = iDB::all("SELECT * FROM `#iCMS@__user` {$where_sql} {$order_sql} LIMIT {$offset},{$maxperpage}");
-		//iDB::debug(1);
+		iPHP_SQL_DEBUG && iDB::debug(1);
         if($resource)foreach ($resource as $key => $value) {
 			$value['url']    = user::router($value['uid'],"url");
 			$value['urls']   = user::router($value['uid'],"urls");
@@ -74,7 +74,7 @@ function user_category($vars=null){
 	$where_sql = "WHERE `uid`='".(int)$vars['userid']."' ";
 	$where_sql.= " AND `appid`='".(int)$vars['appid']."'";
 	$rs  = iDB::all("SELECT * FROM `#iCMS@__user_category` {$where_sql} ORDER BY `cid` ASC LIMIT $row");
-	//iDB::debug(1);
+	iPHP_SQL_DEBUG && iDB::debug(1);
 	$resource = array();
 	if($rs)foreach ($rs as $key => $value) {
 		if($value['appid']==iCMS_APP_ARTICLE){
@@ -102,7 +102,7 @@ function user_follow($vars=null){
 		$where_sql = "WHERE `uid`='".$vars['userid']."'";	//follow
 	}
 	$resource = iDB::all("SELECT * FROM `#iCMS@__user_follow` {$where_sql} LIMIT $row");
-	//iDB::debug();
+	iPHP_SQL_DEBUG && iDB::debug(1);
 	if($resource)foreach ($resource as $key => $value) {
 		if($vars['fuid']){
 			$value['avatar'] = user::router($value['uid'],'avatar');
@@ -154,7 +154,7 @@ function user_inbox($vars=null){
     $multi	= iCMS::page(array('total'=>$total,'perpage'=>$maxperpage,'unit'=>iPHP::lang('iCMS:page:list'),'nowindex'=>$GLOBALS['page']));
     $offset	= $multi->offset;
 	$resource = iDB::all("SELECT {$s_fields} FROM `#iCMS@__message` {$where_sql} {$group_sql} ORDER BY `id` DESC LIMIT {$offset},{$maxperpage}");
-	//iDB::debug(1);
+	iPHP_SQL_DEBUG && iDB::debug(1);
 	$msg_type_map = array(
 		'0'=>'系统信息',
 		'1'=>'私信',

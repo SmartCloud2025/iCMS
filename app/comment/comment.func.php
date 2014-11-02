@@ -16,7 +16,7 @@ function comment_array($vars){
 	isset($vars['userid']) && $where_sql.= " AND `userid`='".(int)$vars['userid']."'";
 
 	$rs = iDB::row("SELECT * FROM `#iCMS@__comment` WHERE {$where_sql} LIMIT 1;",ARRAY_A);
-	//iDB::debug(1);
+	iPHP_SQL_DEBUG && iDB::debug(1);
 	if($rs){
 		$rs['user'] = user::info($rs['userid'],$rs['username']);
 	}

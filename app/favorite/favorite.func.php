@@ -41,7 +41,7 @@ function favorite_list($vars=null){
 	}
 	if(empty($resource)){
 		$rs  = iDB::all("SELECT * FROM `#iCMS@__favorite` {$where_sql} {$order_sql} LIMIT {$offset},{$maxperpage}");
-		//iDB::debug(1);
+		iPHP_SQL_DEBUG && iDB::debug(1);
 		$resource = array();
 		$vars['user'] && iPHP::app('user.class','static');
 		if($rs)foreach ($rs as $key => $value) {
@@ -84,7 +84,7 @@ function favorite_data($vars=null){
 	}
 	if(empty($resource)){
 		$resource  = iDB::all("SELECT * FROM `#iCMS@__favorite_data` {$where_sql} {$order_sql} LIMIT {$offset},{$maxperpage}");
-		//iDB::debug(1);
+		iPHP_SQL_DEBUG && iDB::debug(1);
 		// $resource = array();
 		// if($rs)foreach ($rs as $key => $value) {
 		// }
