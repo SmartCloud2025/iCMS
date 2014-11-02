@@ -2,14 +2,14 @@
 class WX {
 	public static $appid  = '';
 	public static $appkey = '';
-	public static $scope  = "get_user_info,add_topic,add_one_blog,add_album,upload_pic,list_album,add_share,check_page_fans,do_like,get_tenpay_address,get_info,get_other_info,get_fanslist,get_idolist,add_idol";
+	public static $scope  = "snsapi_base,snsapi_userinfo";
 	public static $openid = '';
 	public static $url    = '';
 
 	public static function login(){
 	    $state = md5(uniqid(rand(), TRUE)); //CSRF protection
 	    iPHP::set_cookie("WX_STATE",authcode($state,'ENCODE'));
-	    $login_url = "https://open.weixin.qq.com/connect/qrconnect?&response_type=code"
+	    $login_url = "https://open.weixin.qq.com/connect/qrconnect?response_type=code"
 	        . "&appid=" . self::$appid
 	        . "&redirect_uri=" . urlencode(self::$url)
 	        . "&state=" .$state

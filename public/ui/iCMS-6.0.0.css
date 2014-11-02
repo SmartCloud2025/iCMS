@@ -97,7 +97,7 @@ a,a:hover,a:focus { color: #259 }
 .iCMS_login_dialog .register_box { line-height: 16px }
 .iCMS_login_dialog .reg_btn { display: block; margin: 10px 0 20px; width: 141px; height: 30px; background: url(img/book_regist.png) no-repeat; cursor: pointer }
 .iCMS_login_dialog .lb_bd { width: 560px }
-.iCMS_login_dialog .l_o a { display: inline-block; margin: 2px 5px 10px; padding: 0 0 0 19px; background: url(img/login_method_v3.png) no-repeat 0 0; color: #666; line-height: 16px }
+/*.iCMS_login_dialog .l_o a { display: inline-block; margin: 2px 5px 10px; padding: 0 0 0 19px; background: url(img/login_method_v3.png) no-repeat 0 0; color: #666; line-height: 16px }*/
 .iCMS_login_dialog .login_fail { font-size: 12px; visibility: hidden; padding-top: 10px; padding-left: 65px; width: 360px; color: #FE2617 }
 .iCMS_login_dialog .login_fail .tooltip { position: static !important; margin: 0px !important; padding: 0px !important; }
 .iCMS_login_dialog .login_fail .tooltip .tooltip-arrow { display: none; }
