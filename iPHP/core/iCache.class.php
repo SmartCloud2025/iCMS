@@ -34,7 +34,7 @@ class iCache{
 		}
 		self::$config['engine'] OR self::$config['engine']='file';
 		self::$config['reset']	&& self::$link	= null;
-		
+
         if(self::$link===null){
         	switch(self::$config['engine']){
         		case 'memcached':
@@ -58,7 +58,7 @@ class iCache{
         				$port	= 0;
         			}
                     $db         = (int)str_replace('db:','',$db);
-                    $db OR $db  = 1;
+                    $db=='' && $db = 1;
                     self::$link = new Redis(array(
 					    'host'     => $host,
 					    'port'     => $port,

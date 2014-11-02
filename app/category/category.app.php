@@ -108,6 +108,7 @@ class categoryApp{
         $C['iurl'] OR $C['iurl'] = (array)iURL::get('category',$C);
         $category['name']        = $C['name'];
         $category['description'] = $C['description'];
+        $category['subname']     = $C['subname'];
         $category['sname']       = $C['subname'];
         $category['pic']         = $C['pic'];
         $category['url']         = $C['iurl']['href'];
