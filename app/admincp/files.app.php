@@ -118,10 +118,8 @@ class filesApp{
     	if($fileresults){
     		iFS::mkdir(dirname($FileRootPath));
     		iFS::write($FileRootPath,$fileresults);
-            if(in_array($rs->ext,array('gif','jpg','jpeg','png')) && !isset($_GET['unwatermark'])) {
-            	iPHP::LoadClass('Pic');
-                iPic::watermark($FileRootPath);
-            }
+            iFS::$watermark = !isset($_GET['unwatermark']);
+            iFS::watermark($rs->ext,$FileRootPath);
     		$_FileSize	= strlen($fileresults);
     		if($_FileSize!=$rs->size){
 	    		iDB::query("update `#iCMS@__filedata` SET `size`='$_FileSize' WHERE `id` = '$this->id'");
