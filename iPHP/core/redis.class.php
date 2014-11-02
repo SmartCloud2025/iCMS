@@ -177,7 +177,7 @@ class Redis{
     public function add($name, $value, $exp=0){
         $value = serialize($value);
         $this->write('SET',$name, $value);
-        $this->expire($name, $exp);
+        $exp && $this->expire($name, $exp);
         return $this->get_response();
     }
     public function get($name){
