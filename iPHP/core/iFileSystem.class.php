@@ -199,7 +199,7 @@ class iFS {
 
     public static function path_join($base, $path) {
 
-        if (!self::path_is_absolute($base))
+        if (!self::path_is_absolute($path))
             $path = rtrim($base, '/') . '/' . ltrim($path, '/');
 
         return self::path($path).'/';
