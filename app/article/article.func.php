@@ -175,8 +175,8 @@ function article_search($vars){
         $SPH->SetFilter('cid',$cids);
     }
     if(isset($vars['startdate'])){
-        $startime    =strtotime($vars['startdate']);
-        $enddate    =empty($vars['enddate'])?time():strtotime($vars['enddate']);
+        $startime = strtotime($vars['startdate']);
+        $enddate  = empty($vars['enddate'])?time():strtotime($vars['enddate']);
         $SPH->SetFilterRange('pubdate',$startime,$enddate);
     }
     $SPH->SetLimits($start,$maxperpage,10000);
@@ -185,7 +185,7 @@ function article_search($vars){
     $order_sql = ' order by id DESC';
 
     $vars['orderby']  && $orderby  = $vars['orderby'];
-    $vars['order_sql']&& $order_sql= ' order by '.$vars['order_sql'];
+    $vars['ordersql']&& $order_sql = ' order by '.$vars['ordersql'];
 
     $vars['pic'] && $SPH->SetFilter('haspic',array(1));
     $vars['id!'] && $SPH->SetFilter('@id',array($vars['id!']),true);

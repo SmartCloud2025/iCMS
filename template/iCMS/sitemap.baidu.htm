@@ -10,12 +10,12 @@
 
         <!--{iCMS:category:list loop="true" stype='sub' row="1000" cid="$cid"}-->
         <url>
-            <loc><!--{$sub_category.url|escape}--></loc>
+            <loc><!--{$category_list.url|escape}--></loc>
             <changefreq>hourly</changefreq>
             <priority>1.0</priority>
         </url>
     	<!--{/iCMS}-->
-        <!--{iCMS:article:list loop="true" row="10000" sub="all" cid="$cid"}-->
+        <!--{iCMS:article:list loop="true" row="5000" sub="all" cid="$cid"}-->
         <url>
             <loc><!--{$article_list.url|escape}--></loc>
             <lastmod><!--{$article_list.pubdate|date:"Y-m-d"}--></lastmod>
