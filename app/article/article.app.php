@@ -179,13 +179,29 @@ class articleApp {
             }
         }
 
-        if($vars['prev_next']){
-            $article['prev'] = iPHP::lang('iCMS:article:first');
-            $article['next'] = iPHP::lang('iCMS:article:last');
-            $prers = iDB::row("SELECT * FROM `#iCMS@__article` WHERE `id` < '{$article['id']}' AND `cid`='{$article['cid']}' AND `status`='1' order by id DESC LIMIT 1;");
-            $prers && $article['prev']  = '<a href="'.iURL::get('article',array((array)$prers,$category))->href.'" class="prev" target="_self">'.$prers->title.'</a>';
-            $nextrs = iDB::row("SELECT * FROM `#iCMS@__article` WHERE `id` > '{$article['id']}'  and `cid`='{$article['cid']}' AND `status`='1' order by id ASC LIMIT 1;");
-            $nextrs && $article['next'] = '<a href="'.iURL::get('article',array((array)$nextrs,$category))->href.'" class="next" target="_self">'.$nextrs->title.'</a>';
+        if($vars['prev_next']){ //实测 mysql消耗大户 不缓存顶不住
+            //上一篇
+            $prev_cache_name = 'article/'.$article['id'].'/prev';
+            $prev = iCache::get($prev_cache_name);
+            if(empty($prev)){
+                $prers = iDB::row("SELECT * FROM `#iCMS@__article` WHERE `id` < '{$article['id']}' AND `cid`='{$article['cid']}' AND `status`='1' order by id DESC LIMIT 1;");
+                if($prers){
+                    $prev  = '<a href="'.iURL::get('article',array((array)$prers,$category))->href.'" class="prev" target="_self">'.$prers->title.'</a>';
+                    iCache::set($prev_cache_name,$prev);
+                }
+            }
+            $article['prev'] = $prev?$prev:iPHP::lang('iCMS:article:first');
+            //下一篇
+            $next_cache_name = 'article/'.$article['id'].'/next';
+            $next = iCache::get($next_cache_name);
+            if(empty($next)){
+                $nextrs = iDB::row("SELECT * FROM `#iCMS@__article` WHERE `id` > '{$article['id']}'  and `cid`='{$article['cid']}' AND `status`='1' order by id ASC LIMIT 1;");
+                if($nextrs){
+                    $next  = '<a href="'.iURL::get('article',array((array)$nextrs,$category))->href.'" class="next" target="_self">'.$nextrs->title.'</a>';
+                    iCache::set($next_cache_name,$next);
+                }
+            }
+            $article['next'] = $next?$next:iPHP::lang('iCMS:article:last');;
         }
 
         if($vars['tags']){

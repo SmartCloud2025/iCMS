@@ -2,7 +2,7 @@
 class WX {
 	public static $appid  = '';
 	public static $appkey = '';
-	public static $scope  = "snsapi_base,snsapi_userinfo";
+	public static $scope  = "snsapi_login";
 	public static $openid = '';
 	public static $url    = '';
 

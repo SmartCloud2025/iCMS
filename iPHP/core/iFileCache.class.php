@@ -46,7 +46,7 @@ class iFC {
 		if(!file_exists($this->_file)) return NULL;
 		$D     = file_get_contents($this->_file);
 		$D     = str_replace('<?php exit;?>','',$D);
-		$value = unserialize(($this->_have_zlib && $this->_compress_enable)?gzuncompress($D):$D);
+		$value = unserialize(($this->_have_zlib && $this->_compress_enable)?@gzuncompress($D):$D);
 		if($value['Expires']==0){
 			return $value['Data'];
 		}else{

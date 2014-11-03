@@ -62,7 +62,8 @@ class iCache{
                     self::$link = new Redis(array(
 					    'host'     => $host,
 					    'port'     => $port,
-					    'db'       => $db
+					    'db'       => $db,
+                        'compress' => self::$config['compress']
 					));
         		break;
         		case 'file':

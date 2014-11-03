@@ -19,6 +19,8 @@ class Redis{
     protected $schema = array();
     protected $history= array();
     protected $socket;
+    protected $compress;
+    protected $_have_zlib;
     protected static $instace;
 
     public static function get_instance($config = array())
@@ -35,6 +37,7 @@ class Redis{
             $this->$key = $val;
         }
         $this->history[] = $this->db;
+        $this->_have_zlib = function_exists("gzcompress");
     }
 
     public function new_connect($config = array())
@@ -175,7 +178,10 @@ class Redis{
       Commands operating on string values
     */
     public function add($name, $value, $exp=0){
-        $value = serialize($value);
+        $value = is_scalar($value) ? (string) $value : serialize($value);
+        if ($this->_have_zlib && $this->compress){
+            $value = gzcompress($value, 9);
+        }
         $this->write('SET',$name, $value);
         $exp && $this->expire($name, $exp);
         return $this->get_response();
@@ -183,11 +189,17 @@ class Redis{
     public function get($name){
         $this->write('GET', $name);
         $response = $this->get_response();
-        return unserialize($response);
+        if ($this->_have_zlib && $this->compress){
+            $response = @gzuncompress($response);
+        }
+        return $response?unserialize($response):false;
     }
     public function set($name, $value, $preserve=false)
     {
         $value = is_scalar($value) ? (string) $value : serialize($value);
+        if ($this->_have_zlib && $this->compress){
+            $value = gzcompress($value, 9);
+        }
         $this->write(($preserve ? 'SETNX' : 'SET') ,$name, $value);
         return $this->get_response();
     }
@@ -195,6 +207,9 @@ class Redis{
         $this->write('MGET', $keys);
     	$res	= array_map('unserialize', $this->get_response());
         foreach($keys as $i =>$key){
+            if ($this->_have_zlib && $this->compress){
+                $res[$i] = @gzuncompress($res[$i]);
+            }
             $value[$key] = $res[$i];
         }
         return $value;
