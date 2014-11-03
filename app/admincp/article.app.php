@@ -412,6 +412,7 @@ class articleApp{
         strstr($mpic, 'http://') && $mpic = iFS::http($mpic);
         strstr($spic, 'http://') && $spic = iFS::http($spic);
 
+
         $haspic   = empty($pic)?0:1;
 
         $SELFURL = __SELF__.$_POST['REFERER'];
@@ -456,7 +457,7 @@ class articleApp{
 
             $tagArray && tag::map_iid($tagArray,$aid);
 
-            $url OR $this->article_data($body,$aid);
+            $url OR $this->article_data($body,$aid,$haspic);
             $this->categoryApp->update_count_one($cid);
             if($callback){
             	return array("code"=>$callback,'indexId'=>$aid);
@@ -486,7 +487,7 @@ class articleApp{
             map::diff($cid,$_cid,$aid);
             map::diff($scid,$_scid,$aid);
 
-            $url OR $this->article_data($body,$aid);
+            $url OR $this->article_data($body,$aid,$haspic);
 
             //$ischapter && $this->chapter_count($aid);
             if($_cid!=$cid) {
@@ -561,7 +562,7 @@ class articleApp{
         articleTable::chapter_count($aid);
     }
 
-    function article_data($bodyArray,$aid=0){
+    function article_data($bodyArray,$aid=0,$haspic=0){
         $id       = (int)$_POST['adid'];
         $subtitle = iS::escapeStr($_POST['subtitle']);
         $body     = implode('#--iCMS.PageBreak--#',$bodyArray);
@@ -579,27 +580,31 @@ class articleApp{
         iFS::remotepic($body,$remote,$autopic);
 
         $fields = articleTable::data_fields($id);
+
         $data   = compact ($fields);
         if($id){
             articleTable::data_update($data,compact('id'));
         }else{
             articleTable::data_insert($data);
         }
-        $this->insert_db_pic($body,$aid,$autopic);
+        $this->insert_db_pic($body,$aid,$autopic,$haspic);
     }
-    function insert_db_pic($content,$id,$autopic) {
+    function insert_db_pic($content,$id,$autopic,$haspic) {
         $content = stripslashes($content);
         preg_match_all("/<img.*?src\s*=[\"|'](.*?)[\"|']/is",$content,$match);
         $_array = array_unique($match[1]);
+        $picdata= (array)articleTable::value('picdata',$id);
+        $picdata && $picdata = unserialize($picdata);
         foreach($_array as $key =>$value) {
             $pic      = iFS::fp($value,'-http');
             $filename = basename($pic);
             $filename = substr($filename,0, 32);
-            $_pic     = articleTable::value('pic',$id);
-            if($autopic && $key==0 && empty($_pic)){
+            if($autopic && $key==0 && empty($haspic)){
 				$uri  = parse_url(iCMS_FS_URL);
 	            if(strstr(strtolower($value),$uri['host'])){
-                   $picdata = $this->picdata($pic);
+                   list($width, $height, $type, $attr) = @getimagesize(iFS::fp($pic,'+iPATH'));
+                   $picdata['b'] = array('w'=>$width,'h'=>$height);
+                   $picdata = addslashes(serialize($picdata));
                    $haspic  = 1;
                    articleTable::update(compact('haspic','pic','picdata'),compact('id'));
                 }

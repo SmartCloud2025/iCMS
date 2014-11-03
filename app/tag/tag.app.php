@@ -36,7 +36,7 @@ class tagApp {
         $tag = iDB::row("SELECT * FROM `#iCMS@__tags` where `$field`='$val' LIMIT 1;", ARRAY_A);
         if(empty($tag)){
             if($tpl){
-                iPHP::http404($tag, 'TAG:empty');
+                iPHP::throwException('运行出错！找不到标签: <b>'.$field.':'. $val.'</b>', 30003);
             }else{
                 return false;
             }

@@ -52,6 +52,7 @@ class articleApp {
     }
     public function article($id,$page=1,$tpl=true){
         $article = iDB::row("SELECT * FROM `#iCMS@__article` WHERE id='".(int)$id."' AND `status` ='1' LIMIT 1;",ARRAY_A);
+        $article OR iPHP::throwException('运行出错！找不到文章: <b>ID:'. $id.'</b>', 10001);
         if($article['url']) {
             if(iPHP::$iTPL_MODE=="html") {
                 return false;
@@ -61,8 +62,6 @@ class articleApp {
             }
         }
         $article && $article_data = iDB::row("SELECT body,subtitle FROM `#iCMS@__article_data` WHERE aid='".(int)$id."' LIMIT 1;",ARRAY_A);
-
-        empty($article) && iPHP::throwException('运行出错！找不到文章: <b>ID:'. $id.'</b>', 10001);
         $vars = array(
             'tags'          =>true,
             'user'          =>true,
