@@ -278,7 +278,7 @@ class articleApp {
 
         return $article;
     }
-    private function ubb($content){
+    public function ubb($content){
         if(strpos($content, '[img]')!==false){
             $content = stripslashes($content);
             preg_match_all("/\[img\][\"|'|\s]*(http:\/\/.*?\.(gif|jpg|jpeg|bmp|png))\[\/img\]/is",$content,$img_array);
@@ -292,7 +292,7 @@ class articleApp {
         return $content;
     }
     //内链
-    private static function keywords($content) {
+    public function keywords($content) {
         if(iCMS::$config['other']['keyword_limit']==0) return $content;
 
         $keywords   = iCache::get('iCMS/keywords');

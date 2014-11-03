@@ -92,11 +92,11 @@ class publicApp {
                 }elseif ($bool>1) {
                     $pieces[]="`hits_yday` = 0";
                 }
-                continue;
+            }else{
+                $bool OR $pieces[]="`{$field}` = 0";
             }
-            $bool OR $pieces[]="`{$field}` = 0";
         }
-        $sql = implode(',', $pieces);
+        $pieces && $sql = implode(',', $pieces);
         if($sql){
         	//点击初始化
         	iDB::query("UPDATE `#iCMS@__article` SET {$sql}");

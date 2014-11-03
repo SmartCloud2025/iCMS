@@ -181,16 +181,16 @@ function article_search($vars){
     }
     $SPH->SetLimits($start,$maxperpage,10000);
 
-    $orderBy   = '@id DESC, @weight DESC';
+    $orderby   = '@id DESC, @weight DESC';
     $order_sql = ' order by id DESC';
 
-    $vars['orderBy']  && $orderBy  = $vars['orderBy'];
+    $vars['orderby']  && $orderby  = $vars['orderby'];
     $vars['order_sql']&& $order_sql= ' order by '.$vars['order_sql'];
 
     $vars['pic'] && $SPH->SetFilter('haspic',array(1));
     $vars['id!'] && $SPH->SetFilter('@id',array($vars['id!']),true);
 
-    $SPH->setSortMode(SPH_SORT_EXTENDED,$orderBy);
+    $SPH->setSortMode(SPH_SORT_EXTENDED,$orderby);
 
     $query    = $vars['q'];
     $vars['acc']&& $query = '"'.$vars['q'].'"';
@@ -217,6 +217,7 @@ function article_search($vars){
         $offset  = $multi->offset;
     }
     $resource = iDB::all("SELECT * FROM `#iCMS@__article` WHERE {$where_sql} {$order_sql} LIMIT {$maxperpage}");
+    iPHP_SQL_DEBUG && iDB::debug(1);
     $resource = __article_array($vars,$resource);
     return $resource;
 }
@@ -225,8 +226,8 @@ function __article_array($vars,$variable){
     $resource = array();
     if($variable){
         $articleApp = iPHP::app("article");
+        $vars['category_lite'] = true;
         foreach ($variable as $key => $value) {
-            $vars['category_lite'] = true;
             $value = $articleApp->value($value,false,$vars);
             if($value===false){
                 continue;

@@ -207,7 +207,7 @@ class spiderApp {
             $postArray = array_filter($postArray);
             foreach ($postArray AS $key => $pstr) {
                 list($pkey, $pval) = explode("=", $pstr);
-                $_POST[$pkey] = $pval;
+                $_POST[$pkey] = trim($pval);
             }
         }
         iS::slashes($_POST);

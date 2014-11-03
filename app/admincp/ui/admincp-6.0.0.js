@@ -309,7 +309,7 @@ function modal_icms(el,a){
         batch: function(opt) {
             var im   = $(this),_this = this,
                 action   = $('<input type="hidden" name="batch">'),
-                content  = $('<div class="hide"></div>').appendTo(im),
+                batch_content  = $('<div class="batch_content hide"></div>').appendTo(im),
                 defaults = {
                     move: function(){
                         var select  = $("#cid").clone().show()
@@ -339,24 +339,24 @@ function modal_icms(el,a){
                 var a = $(this),b = this,
                     act   = a.attr('data-action'),
                     ab    = $('#'+act+'Batch'),
-                    ret   = document.getElementById(act+'Batch'),
+                    box   = document.getElementById(act+'Batch'),
                     title = a.text();
                     action.val(act).appendTo(im);
-                    console.log(ret,typeof ret);
-                    if(ret==null){
+                    //console.log(box,typeof box);
+                    if(box==null){
                         if(typeof options[act]==="undefined"){
-                            ret = '确定要'+$.trim(title)+'?';
+                            box = '确定要'+$.trim(title)+'?';
                             iCMS.config.DIALOG = {label:'warning',icon:'warning'};
                         }else{
-                            ret = document.createElement("div");
-                            $(ret).html(options[act]());
+                            box = document.createElement("div");
+                            $(box).html(options[act]());
                         }
                     }
                     window.batch_dialog = iCMS.dialog({id:'iCMS-batch',
-                        title:title,content:ret,
+                        title:title,content:box,
                         okValue: '确定',ok: function () {
-                            if(typeof ret==="object"){
-                                content.html($(ret).clone(true));
+                            if(typeof box=="object"){
+                                batch_content.html($(box).clone(true));
                             }
                             im.submit();
                         },

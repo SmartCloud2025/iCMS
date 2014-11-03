@@ -114,12 +114,8 @@ class articleApp{
                 iPHP::success('文章副栏目设置完成!','js:1');
             break;
             case 'prop':
-                // $pid = $_POST['pid'];
-                // $sql ="`pid` = '$pid'";
-
                 iPHP::import(iPHP_APP_CORE .'/iMAP.class.php');
                 map::init('prop',$this->appid);
-
                 $pid = implode(',', (array)$_POST['pid']);
                 foreach((array)$_POST['id'] AS $id) {
                     $_pid = articleTable::value('pid',$id);
@@ -127,7 +123,6 @@ class articleApp{
                     map::diff($pid,$_pid,$id);
                 }
                 iPHP::success('文章属性设置完成!','js:1');
-
     		break;
     		case 'weight':
                 $data = array('weight'=>_int($_POST['mweight']));
