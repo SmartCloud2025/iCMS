@@ -183,7 +183,7 @@ class iFS {
 
     public static function path_is_absolute($path) {
         // this is definitive if true but fails if $path does not exist or contains a symbolic link
-        if (realpath($path) == $path)
+        if (@realpath($path) == $path)
             return true;
 
         if (strlen($path) == 0 || $path{0} == '.')
