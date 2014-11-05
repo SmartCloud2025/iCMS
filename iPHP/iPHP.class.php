@@ -356,7 +356,7 @@ class iPHP{
 	    }
 	}
 
-	public static function where($vars,$field,$not=false,$noand=false) {
+	public static function where($vars,$field,$not=false,$noand=false,$table='') {
 		if (is_bool($vars)||empty($vars)) return '';
 
 	    if(is_array($vars)) {
@@ -369,7 +369,8 @@ class iPHP{
 			$vars = addslashes($vars);
 			$sql  = $not?"<>'$vars' ":"='$vars' ";
 	    }
-	    $sql = "`{$field}`".$sql;
+	    $table && $table.='.';
+	    $sql = "{$table}`{$field}`".$sql;
 	    if($noand){
 	    	return $sql;
 	    }

@@ -270,6 +270,7 @@ class articleApp{
             'examine' =>'3',//待审核
             'off'     =>'4',//未通过
         );
+        $map_where = array();
         //status:[0:草稿][1:正常][2:回收][3:待审核][4:不合格]
         //postype: [0:用户][1:管理员]
         $stype && $this->_status = $stype_map[$stype];
@@ -287,35 +288,41 @@ class articleApp{
         }
 
         if(isset($_GET['pid']) && $pid!='-1'){
-            iPHP::import(iPHP_APP_CORE .'/iMAP.class.php');
-            map::init('prop',$this->appid);
-            $psql = map::exists($pid,'`#iCMS@__article`.id'); //map 表大的用exists
             $uri_array['pid'] = $pid;
-            if($_GET['pid']==0 && !$psql){
-                $psql = " AND `pid`=''";
+            if($_GET['pid']==0){
+                $sql.= " AND `pid`=''";
+            }else{
+                iPHP::import(iPHP_APP_CORE .'/iMAP.class.php');
+                map::init('prop',$this->appid);
+                $map_where+=map::where($pid);
             }
-            $sql.= $psql;
         }
 
-        $cids = iACP::CP('__CID__','cs');//取得所有有权限的栏目ID
+        $cp_cids = iACP::CP('__CID__','cs');//取得所有有权限的栏目ID
 
-        if($cid) {
-            $cids  = $cid;
-            if($_GET['sub']){
-                $cids  = $this->categoryApp->get_ids($cid,true);
+        if($cp_cids) {
+            if(is_array($cp_cids)){
+                if($cid){
+                    array_search($cid,$cp_cids)===false && iACP::permission_msg('栏目[cid:'.$cid.']',$ret);
+                }else{
+                    $cids = $cp_cids;
+                }
+            }else{
+                $cids = $cid;
+            }
+            if($_GET['sub'] && $cid){
+                $cids = $this->categoryApp->get_ids($cid,true);
                 array_push ($cids,$cid);
             }
-        }
-
-        if($_GET['scid']){
-            if($cids){
+            if($_GET['scid'] && $cid){
                 iPHP::import(iPHP_APP_CORE .'/iMAP.class.php');
                 map::init('category',$this->appid);
-                $sql.= map::exists($cids,'`#iCMS@__article`.id'); //map 表大的用exists
+                $map_where+= map::where($cids);
+            }else{
+                $sql.= iPHP::where($cids,'cid');
             }
         }else{
-            $cids OR $cids ='-1';
-            $sql.= iPHP::where($cids,'cid');
+            $sql.= iPHP::where('-1','cid');
         }
 
         if($_GET['keywords']) {
@@ -342,11 +349,39 @@ class articleApp{
         isset($_GET['cid'])    && $uri_array['cid']     = $_GET['cid'];
 		$uri_array	&& $uri = http_build_query($uri_array);
 
-        $orderby	= $_GET['orderby']?$_GET['orderby']:"id DESC";
+        $orderby    = $_GET['orderby']?$_GET['orderby']:"id DESC";
         $maxperpage = $_GET['perpage']>0?(int)$_GET['perpage']:20;
-        $total		= iPHP::total(false,articleTable::count_sql($sql),"G");
+
+        if($map_where){
+            $map_sql = iCMS::map_sql($map_where);
+            $sql     = ",({$map_sql}) map {$sql} AND `id` = map.`iid`";
+        }
+
+        $total = iPHP::total(false,articleTable::count_sql($sql),"G");
         iPHP::pagenav($total,$maxperpage,"篇文章");
-        $rs     = articleTable::select($sql,$orderby,iPHP::$offset,$maxperpage);
+
+        $limit = 'LIMIT '.iPHP::$offset.','.$maxperpage;
+
+        if($map_sql||iPHP::$offset){
+            // if($map_sql){
+                $ids_array = iDB::all("
+                    SELECT `id` FROM `#iCMS@__article` {$sql}
+                    ORDER BY {$orderby} {$limit}
+                ");
+                //iDB::debug(1);
+                $ids = iCMS::get_ids($ids_array);
+                $ids = $ids?$ids:'0';
+                $sql = "WHERE `id` IN({$ids})";
+            // }else{
+                // $sql = ",(
+                    // SELECT `id` AS aid FROM `#iCMS@__article` {$sql}
+                    // ORDER BY {$orderby} {$limit}
+                // ) AS art WHERE `id` = art.aid ";
+            // }
+            $limit = '';
+        }
+        $rs = iDB::all("SELECT * FROM `#iCMS@__article` {$sql} ORDER BY {$orderby} {$limit}");
+        //iDB::debug(1);
         $_count = count($rs);
         include iACP::view("article.manage");
     }

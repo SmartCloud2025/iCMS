@@ -24,7 +24,8 @@ function user_list($vars=null){
     if($vars['pid']){
         iPHP::import(iPHP_APP_CORE .'/iMAP.class.php');
         map::init('prop',iCMS_APP_USER);
-        $where_sql.= map::exists($vars['pid'],'`#iCMS@__user`.uid'); //map 表大的用exists
+        //$where_sql.= map::exists($vars['pid'],'`#iCMS@__user`.uid'); //map 表大的用exists
+        $map_where = map::where($vars['pids']);
     }
 
 	$by=$vars['by']=="ASC"?"ASC":"DESC";
@@ -37,22 +38,37 @@ function user_list($vars=null){
         case "hits":$order_sql=" ORDER BY `hits` $by";    break;
         default:$order_sql=" ORDER BY `uid` $by";
     }
+    if($map_where){
+        $map_sql   = iCMS::map_sql($map_where);
+        $where_sql = ",({$map_sql}) map {$where_sql} AND `uid` = map.`iid`";
+    }
 	$md5	= md5($where_sql.$order_sql);
 	$offset	= 0;
+	$limit  = "LIMIT {$maxperpage}";
 	if($vars['page']){
 		$total	= iPHP::total($md5,"SELECT count(*) FROM `#iCMS@__user` {$where_sql} ");
 		iPHP::assign("user_total",$total);
-        $multi	= iCMS::page(array('total'=>$total,'perpage'=>$maxperpage,'unit'=>iPHP::lang('iCMS:page:list'),'nowindex'=>$GLOBALS['page']));
-        $offset	= $multi->offset;
+		$multi  = iCMS::page(array('total'=>$total,'perpage'=>$maxperpage,'unit'=>iPHP::lang('iCMS:page:list'),'nowindex'=>$GLOBALS['page']));
+		$offset = $multi->offset;
+		$limit  = "LIMIT {$offset},{$maxperpage}";
 	}
-
+    if($map_sql || $offset){
+        $ids_array = iDB::all("
+            SELECT `uid` FROM `#iCMS@__user`
+            {$where_sql} {$order_sql} {$limit}
+        ");
+        //iDB::debug(1);
+        $ids       = iCMS::get_ids($ids_array,'uid');
+        $ids       = $ids?$ids:'0';
+        $where_sql = "WHERE `uid` IN({$ids})";
+    }
 	if($vars['cache']){
         $cache_name = 'user_list/'.md5($where_sql);
         $resource   = iCache::get($cache_name);
 	}
 
 	if(empty($resource)){
-        $resource = iDB::all("SELECT * FROM `#iCMS@__user` {$where_sql} {$order_sql} LIMIT {$offset},{$maxperpage}");
+        $resource = iDB::all("SELECT * FROM `#iCMS@__user` {$where_sql} {$order_sql} {$limit}");
 		iPHP_SQL_DEBUG && iDB::debug(1);
         if($resource)foreach ($resource as $key => $value) {
 			$value['url']    = user::router($value['uid'],"url");

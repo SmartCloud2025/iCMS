@@ -11,6 +11,7 @@
 */
 class userApp{
     function __construct() {
+        $this->appid    = iCMS_APP_USER;
         $this->uid      = (int)$_GET['id'];
         $this->groupApp = iACP::app('groups',0);
     }
@@ -53,20 +54,37 @@ class userApp{
         $_GET['loginip'] && $sql.=" AND `lastloginip`='{$_GET['loginip']}'";
 
         if(isset($_GET['pid']) && $pid!='-1'){
-            iPHP::import(iPHP_APP_CORE .'/iMAP.class.php');
-            map::init('prop',iCMS_APP_USER);
-            $sql.= $psql = map::exists($pid,'`#iCMS@__user`.uid'); //map 表大的用exists
             $uri_array['pid'] = $pid;
-            if($_GET['pid']==0 && !$psql){
-                $sql.= iPHP::where('','pid');
+            if($_GET['pid']==0){
+                $sql.= " AND `pid`=''";
+            }else{
+                iPHP::import(iPHP_APP_CORE .'/iMAP.class.php');
+                map::init('prop',$this->appid);
+                $map_where = map::where($pid);
             }
         }
 
+        if($map_where){
+            $map_sql = iCMS::map_sql($map_where);
+            $sql     = ",({$map_sql}) map {$sql} AND `uid` = map.`iid`";
+        }
         $orderby    = $_GET['orderby']?$_GET['orderby']:"uid DESC";
         $maxperpage = $_GET['perpage']>0?(int)$_GET['perpage']:20;
         $total      = iPHP::total(false,"SELECT count(*) FROM `#iCMS@__user` {$sql}","G");
         iPHP::pagenav($total,$maxperpage,"个用户");
-        $rs     = iDB::all("SELECT * FROM `#iCMS@__user` {$sql} order by {$orderby} LIMIT ".iPHP::$offset." , {$maxperpage}");
+        $limit  = 'LIMIT '.iPHP::$offset.','.$maxperpage;
+        if($map_sql||iPHP::$offset){
+            $ids_array = iDB::all("
+                SELECT `uid` FROM `#iCMS@__user` {$sql}
+                ORDER BY {$orderby} {$limit}
+            ");
+            //iDB::debug(1);
+            $ids   = iCMS::get_ids($ids_array,'uid');
+            $ids   = $ids?$ids:'0';
+            $sql   = "WHERE `uid` IN({$ids})";
+            $limit = '';
+        }
+        $rs     = iDB::all("SELECT * FROM `#iCMS@__user` {$sql} ORDER BY {$orderby} {$limit}");
         $_count = count($rs);
         include iACP::view("user.manage");
     }

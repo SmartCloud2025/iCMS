@@ -1,4 +1,5 @@
 body { background-color: #EDEDED; color: #000; }
+/*.xdebug-var-dump { position: fixed; z-index: 999999; right: 10px; bottom: 100px; box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2); padding: 10px; }*/
 /* bootstrap */
 .btn, .add-on, .navbar-inner, .label, .navbar a, .switch-left, .switch-right { background-image: none !important; -webkit-box-shadow: none !important; -moz-box-shadow: none !important; box-shadow: none !important; }
 .form-inline input, .form-inline textarea, .form-inline select { color: #1A1A1A !important; }

@@ -45,22 +45,39 @@ class tagsApp{
         $sql.= $this->categoryApp->search_sql($cid);
         $sql.= $this->tagcategory->search_sql($tcid,'tcid');
 
+        isset($_GET['pic']) && $sql.=" AND `haspic` ='".($_GET['pic']?1:0)."'";
         if(isset($_GET['pid']) && $pid!='-1'){
-            iPHP::import(iPHP_APP_CORE .'/iMAP.class.php');
-            map::init('prop',$this->appid);
-            $sql.= $psql = map::exists($pid,'`#iCMS@__tags`.id'); //map 表大的用exists
             $uri_array['pid'] = $pid;
-            if($_GET['pid']==0 && !$psql){
-                $sql.= iPHP::where('','pid');
+            if($_GET['pid']==0){
+                $sql.= " AND `pid`=''";
+            }else{
+                iPHP::import(iPHP_APP_CORE .'/iMAP.class.php');
+                map::init('prop',$this->appid);
+                $map_where = map::where($pid);
             }
         }
-		isset($_GET['pic']) && $sql.=" AND `haspic` ='".($_GET['pic']?1:0)."'";
+        if($map_where){
+            $map_sql = iCMS::map_sql($map_where);
+            $sql     = ",({$map_sql}) map {$sql} AND `id` = map.`iid`";
+        }
 
         $orderby	= $_GET['orderby']?$_GET['orderby']:"id DESC";
         $maxperpage = $_GET['perpage']>0?(int)$_GET['perpage']:20;
         $total		= iPHP::total(false,"SELECT count(*) FROM `#iCMS@__tags` {$sql}","G");
         iPHP::pagenav($total,$maxperpage,"个标签");
-        $rs     = iDB::all("SELECT * FROM `#iCMS@__tags` {$sql} order by {$orderby} LIMIT ".iPHP::$offset." , {$maxperpage}");
+        $limit  = 'LIMIT '.iPHP::$offset.','.$maxperpage;
+        if($map_sql||iPHP::$offset){
+            $ids_array = iDB::all("
+                SELECT `id` FROM `#iCMS@__tags` {$sql}
+                ORDER BY {$orderby} {$limit}
+            ");
+            //iDB::debug(1);
+            $ids   = iCMS::get_ids($ids_array);
+            $ids   = $ids?$ids:'0';
+            $sql   = "WHERE `id` IN({$ids})";
+            $limit = '';
+        }
+        $rs     = iDB::all("SELECT * FROM `#iCMS@__tags` {$sql} ORDER BY {$orderby} {$limit}");
         $_count = count($rs);
     	include iACP::view("tags.manage");
     }
@@ -175,33 +192,46 @@ class tagsApp{
     		break;
     		case 'move':
 		        $_POST['cid'] OR iPHP::alert("请选择目标栏目!");
-		        $cid	=(int)$_POST['cid'];
+                iPHP::import(iPHP_APP_CORE .'/iMAP.class.php');
+                map::init('category',$this->appid);
+		        $cid = (int)$_POST['cid'];
 		        foreach($idArray AS $id) {
-		            $ocid	= iDB::value("SELECT `cid` FROM `#iCMS@__tags` where `id` ='$id'");
-		            iDB::query("UPDATE `#iCMS@__tags` SET cid='$cid' WHERE `id` ='$id'");
-		            if($ocid!=$cid) {
-		                iDB::query("UPDATE `#iCMS@__category` SET `count` = count-1 WHERE `cid` ='{$ocid}' AND `count`>0 LIMIT 1 ");
-		                iDB::query("UPDATE `#iCMS@__category` SET `count` = count+1 WHERE `cid` ='{$cid}' LIMIT 1 ");
+                    $_cid = iDB::value("SELECT `cid` FROM `#iCMS@__tags` where `id` ='$id'");
+                    iDB::update("tags",compact('cid'),compact('id'));
+		            if($_cid!=$cid) {
+                        map::diff($cid,$_cid,$id);
+                        $this->categoryApp->update_count_one($_cid,'-');
+                        $this->categoryApp->update_count_one($cid);
 		            }
 		        }
 		        iPHP::success('成功移动到目标栏目!','js:1');
     		break;
     		case 'mvtcid':
 		        $_POST['tcid'] OR iPHP::alert("请选择目标分类!");
-		        $tcid	=(int)$_POST['tcid'];
+                iPHP::import(iPHP_APP_CORE .'/iMAP.class.php');
+                map::init('category',$this->appid);
+		        $tcid = (int)$_POST['tcid'];
 		        foreach($idArray AS $id) {
-		            $otcid	= iDB::value("SELECT `tcid` FROM `#iCMS@__tags` where `id` ='$id'");
-		            iDB::query("UPDATE `#iCMS@__tags` SET tcid='$tcid' WHERE `id` ='$id'");
-		            if($otcid!=$tcid) {
-		                iDB::query("UPDATE `#iCMS@__category` SET `count` = count-1 WHERE `cid` ='{$otcid}' AND `count`>0 LIMIT 1 ");
-		                iDB::query("UPDATE `#iCMS@__category` SET `count` = count+1 WHERE `cid` ='{$tcid}' LIMIT 1 ");
+                    $_tcid = iDB::value("SELECT `tcid` FROM `#iCMS@__tags` where `id` ='$id'");
+                    iDB::update("tags",compact('tcid'),compact('id'));
+		            if($_tcid!=$tcid) {
+                        map::diff($tcid,$_tcid,$id);
+                        $this->categoryApp->update_count_one($_tcid,'-');
+                        $this->categoryApp->update_count_one($tcid);
 		            }
 		        }
 		        iPHP::success('成功移动到目标分类!','js:1');
     		break;
     		case 'prop':
-    			$pid = $_POST['pid'];
-		        $sql	="`pid` = '$pid'";
+                iPHP::import(iPHP_APP_CORE .'/iMAP.class.php');
+                map::init('prop',$this->appid);
+                $pid = implode(',', (array)$_POST['pid']);
+                foreach((array)$_POST['id'] AS $id) {
+                    $_pid = iDB::value("SELECT pid FROM `#iCMS@__tags` WHERE `id`='$id'");;
+                    iDB::update("tags",compact('pid'),compact('id'));
+                    map::diff($pid,$_pid,$id);
+                }
+                iPHP::success('属性设置完成!','js:1');
     		break;
     		case 'weight':
 		        $weight	=_int($_POST['mweight']);
@@ -212,8 +242,8 @@ class tagsApp{
     				$sql	="`keywords` = '".iS::escapeStr($_POST['mkeyword'])."'";
     			}elseif($_POST['pattern']=='addto') {
 		        	foreach($idArray AS $id){
-		        		$keywords	= iDB::value("SELECT keywords FROM `#iCMS@__tags` WHERE `id`='$id'");
-		        		$sql		="`keywords` = '".($keywords?$keywords.','.iS::escapeStr($_POST['mkeyword']):iS::escapeStr($_POST['mkeyword']))."'";
+                        $keywords = iDB::value("SELECT keywords FROM `#iCMS@__tags` WHERE `id`='$id'");
+                        $sql      ="`keywords` = '".($keywords?$keywords.','.iS::escapeStr($_POST['mkeyword']):iS::escapeStr($_POST['mkeyword']))."'";
 				        iDB::query("UPDATE `#iCMS@__tags` SET {$sql} WHERE `id`='$id'");
 		        	}
 		        	iPHP::success('关键字更改完成!','js:1');
@@ -232,7 +262,7 @@ class tagsApp{
     			}
     		break;
     		default:
-				$sql	= iACP::fields($batch);
+				$sql = iACP::fields($batch);
 
 		}
 		iDB::query("UPDATE `#iCMS@__tags` SET {$sql} WHERE `id` IN ($ids)");

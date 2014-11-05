@@ -316,6 +316,7 @@ function modal_icms(el,a){
                             //.removeClass("chosen-select")
                             .attr("id",iCMS.random(3));
                         $("option:first",select).remove();
+                        select.find("option:selected").attr("selected", false);
                         return select;
                     },
                     prop: function(){
@@ -324,7 +325,8 @@ function modal_icms(el,a){
                             .attr("name",'pid[]')
                             .attr("multiple",'multiple')
                             .attr("id",iCMS.random(3));
-                        $("option:first",select).remove();
+                        $("option:first",select).remove()
+                        select.find("option:selected").attr("selected", false);
                         return select;
                     },
                 },
@@ -362,7 +364,7 @@ function modal_icms(el,a){
                         },
                         cancelValue: "取消",cancel: function(){
                             action.val(0);
-                            content.empty();
+                            batch_content.empty();
                         }
                     });
             });

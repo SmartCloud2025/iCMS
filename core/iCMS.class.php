@@ -324,6 +324,40 @@ class iCMS {
         $cids = array_filter($cids);
         return $cids;
     }
+    public static function get_ids($rs,$field='id') {
+        if(empty($rs)){
+            return false;
+        }
+        $resource = array();
+        foreach((array)$rs AS $_vars) {
+            $resource[] = "'".$_vars[$field]."'";
+        }
+        unset($rs);
+        if($resource){
+            $resource = array_unique ($resource);
+            $resource = implode(',',$resource);
+            return $resource;
+        }
+        return false;
+    }
+    public static function map_sql($where,$field='iid') {
+        if(empty($where)){
+            return false;
+        }
+        foreach ($where as $key => $value) {
+            $_FROM[]  = $key;
+            $_WHERE[] = $value;
+            $_FIELD[] = $key.".`{$field}`";
+        }
+        $_field = $_FIELD[0];
+        $_count = count($_FIELD);
+        if($_count>1){
+            foreach ($_FIELD as $fkey => $fd) {
+                $fkey && array_push($_WHERE,$_field.' = '.$fd);
+            }
+        }
+        return 'SELECT '.$_field.' AS '.$field.' FROM '.implode(',', $_FROM).' WHERE '.implode(' AND ', $_WHERE);
+    }
     public static function sphinx(){
     	iPHP::import(iPHP_APP_CORE.'/sphinx.class.php');
 

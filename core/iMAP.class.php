@@ -60,20 +60,22 @@ class map {
 	public static function ids($nodes=0){
 		if(empty($nodes)) return false;
 
-		$sql      = self::sql($nodes);
-		$rs       = iDB::all($sql);
-		$resource = array();
-		//iDB::debug(1);
-		foreach((array)$rs AS $_vars) {
-			$resource[] = $_vars['iid'];
-		}
-		if($resource){
-			$resource = array_unique ($resource);
-			$resource = implode(',',$resource);
-			return $resource;
-		}
-		return false;
+		$sql = self::sql($nodes);
+		$all = iDB::all($ids.'Limit 10000');
+		return iCMS::get_ids($all,'iid');
 	}
+	public static function where($nodes=0){
+		if(empty($nodes)) return false;
+
+		if(!is_array($nodes) && strstr($nodes, ',')){
+			$nodes = explode(',', $nodes);
+		}
+		$table     = self::table();
+		$where_sql = iPHP::where(self::$appid,'appid',false,true,$table);
+		$where_sql.= iPHP::where($nodes,self::$field,false,false,$table);
+		return array($table=>$where_sql);
+	}
+
 	public static function sql($nodes=0){
 		if(empty($nodes)) return false;
 
@@ -84,6 +86,7 @@ class map {
 		$where_sql.= iPHP::where($nodes,self::$field);
 		return "SELECT `iid` FROM ".self::table()." WHERE {$where_sql}";
 	}
+
 	public static function exists($nodes=0,$iid=''){
 		if(empty($nodes)) return false;
 

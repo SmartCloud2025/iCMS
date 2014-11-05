@@ -42,10 +42,10 @@ function category_list($vars){
 	if(isset($vars['pid'])){
 		iPHP::import(iPHP_APP_CORE .'/iMAP.class.php');
 		map::init('prop',iCMS_APP_CATEGORY);
+		$where_sql.= map::exists($vars['pid'],'`#iCMS@__category`.cid'); //主表小 map表大
+//		$map_where=map::where($vars['pids']); //主表大 map表大
 //		$map_ids    = map::ids($vars['pid']);
 //		$map_sql    = map::sql($vars['pid']); //map 表小的用 in
-		$where_sql.= map::exists($vars['pid'],'`#iCMS@__category`.cid'); //map 表大的用exists
-
 //		$where_sql.=" AND `pid` = '{$vars['pid']}'";
 		//if(empty($map_ids)) return $resource;
 		//$where_sql.=" AND `cid` IN ($map_ids)";

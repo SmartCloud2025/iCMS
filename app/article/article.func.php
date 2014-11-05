@@ -14,12 +14,13 @@ function article_list($vars){
         return false;
     }
     $resource  = array();
+    $map_where = array();
     $status    = '1';
     isset($vars['status']) && $status = (int)$vars['status'];
-    $where_sql = "`status`='{$status}'";
+    $where_sql = "WHERE `status`='{$status}'";
     $vars['call'] =='user'  && $where_sql.= " AND `postype`='0'";
     $vars['call'] =='admin' && $where_sql.= " AND `postype`='1'";
-    $hidden    = iCache::get('iCMS/category/hidden');
+    $hidden     = iCache::get('iCMS/category/hidden');
     $hidden &&  $where_sql.=iPHP::where($hidden,'cid','not');
     $maxperpage = isset($vars['row'])?(int)$vars['row']:10;
     $cache_time = isset($vars['time'])?(int)$vars['time']:-1;
@@ -47,7 +48,7 @@ function article_list($vars){
         if($cids){
             iPHP::import(iPHP_APP_CORE .'/iMAP.class.php');
             map::init('category',iCMS_APP_ARTICLE);
-            $where_sql.= map::exists($cids,'`#iCMS@__article`.id'); //map 表大的用exists
+            $map_where+=map::where($cids);
         }
     }
     if($vars['pid'] && !isset($vars['pids'])){
@@ -59,13 +60,13 @@ function article_list($vars){
     if(isset($vars['pids']) && !$vars['pid']){
         iPHP::import(iPHP_APP_CORE .'/iMAP.class.php');
         map::init('prop',iCMS_APP_ARTICLE);
-        $where_sql.= map::exists($vars['pids'],'`#iCMS@__article`.id'); //map 表大的用exists
+        $map_where+=map::where($vars['pids']);
     }
 
     if(isset($vars['tids'])){
         iPHP::import(iPHP_APP_CORE .'/iMAP.class.php');
         map::init('tags',iCMS_APP_ARTICLE);
-        $where_sql.= map::exists($vars['tids'],'`#iCMS@__article`.id'); //map 表大的用exists
+        $map_where+=map::where($vars['tids']);
     }
     if($vars['keywords']){ //最好使用 iCMS:article:search
         if(strpos($vars['keywords'],',')===false){
@@ -100,22 +101,33 @@ function article_list($vars){
     isset($vars['startdate'])&& $where_sql .= " AND `pubdate`>='".strtotime($vars['startdate'])."'";
     isset($vars['enddate'])  && $where_sql .= " AND `pubdate`<='".strtotime($vars['enddate'])."'";
     isset($vars['where'])    && $where_sql .= $vars['where'];
+
+    if($map_where){
+        $map_sql   = iCMS::map_sql($map_where);
+        $where_sql = ",({$map_sql}) map {$where_sql} AND `id` = map.`iid`";
+    }
     $md5    = md5($where_sql.$order_sql.$maxperpage);
     $offset = 0;
     $limit  = "LIMIT {$maxperpage}";
     if($vars['page']){
         $total_type = $vars['total_cache']?$vars['total_cache']:null;
-        $total      = iPHP::total($md5,"SELECT count(*) FROM `#iCMS@__article` WHERE {$where_sql}",$total_type);
+        $total      = iPHP::total($md5,"SELECT count(*) FROM `#iCMS@__article` {$where_sql}",$total_type);
         $pagenav    = isset($vars['pagenav'])?$vars['pagenav']:"pagenav";
         $pnstyle    = isset($vars['pnstyle'])?$vars['pnstyle']:0;
         $multi      = iCMS::page(array('total_type'=>$total_type,'total'=>$total,'perpage'=>$maxperpage,'unit'=>iPHP::lang('iCMS:page:list'),'nowindex'=>$GLOBALS['page']));
         $offset     = $multi->offset;
         $limit      = "LIMIT {$offset},{$maxperpage}";
-        // if($offset>1000){
-        //     $where_sql.=" AND `id` >= (SELECT `id` FROM `#iCMS@__article` WHERE {$where_sql} {$order_sql} LIMIT {$offset},1)";
-        //     $limit  = "LIMIT {$maxperpage}";
-        // }
         iPHP::assign("article_list_total",$total);
+    }
+    if($map_sql || $offset){
+        $ids_array = iDB::all("
+            SELECT `id` FROM `#iCMS@__article`
+            {$where_sql} {$order_sql} {$limit}
+        ");
+        //iDB::debug(1);
+        $ids       = iCMS::get_ids($ids_array);
+        $ids       = $ids?$ids:'0';
+        $where_sql = "WHERE `id` IN({$ids})";
     }
     if($vars['cache']){
         $cache_name = 'article/'.$md5."/".(int)$GLOBALS['page'];
@@ -126,7 +138,7 @@ function article_list($vars){
     //     $func = '__article_user_home_array';
     // }
     if(empty($resource)){
-        $resource = iDB::all("SELECT * FROM `#iCMS@__article` WHERE {$where_sql} {$order_sql} {$limit}");
+        $resource = iDB::all("SELECT * FROM `#iCMS@__article` {$where_sql} {$order_sql} {$limit}");
         iPHP_SQL_DEBUG && iDB::debug(1);
         $resource = __article_array($vars,$resource);
         $vars['cache'] && iCache::set($cache_name,$resource,$cache_time);

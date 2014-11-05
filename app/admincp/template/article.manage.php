@@ -247,7 +247,18 @@ $(function(){
               </td>
               <td><?php if($value['pubdate']) echo get_date($value['pubdate'],'Y-m-d H:i');?><br />
                 <?php if($value['postime']) echo get_date($value['postime'],'Y-m-d H:i');?></td>
-              <td><a href="<?php echo APP_DOURI; ?>&cid=<?php echo $value['cid'] ; ?>&<?php echo $uri ; ?>"><?php echo $C['name'] ; ?></a><br />
+              <td>
+                <a href="<?php echo APP_DOURI; ?>&cid=<?php echo $value['cid'] ; ?>&<?php echo $uri ; ?>"><?php echo $C['name'] ; ?></a><br />
+                <?php
+                 if($value['scid']){
+                   $scid_array = explode(',', $value['scid']);
+                   foreach ($scid_array as $sc_key => $sc_id) {
+                    if($sc_id!=$value['cid']){
+                      echo '<a href="'.APP_DOURI.'&cid='.$value['cid'].'&'.$uri.'">'.$this->category[$sc_id]['name'].'</a><br />';
+                    }
+                   }
+                 }
+                ?>
                 <?php echo iACP::getProp("pid",$value['pid'],'text',APP_DOURI.'&pid={PID}&'.$uri) ; ?></td>
               <td><a href="<?php echo APP_DOURI; ?>&userid=<?php echo $value['userid'] ; ?>&<?php echo $uri ; ?>"><?php echo $value['editor'] ; ?></a><br /><?php echo $value['author'] ; ?></td>
               <td><?php echo $value['hits']; ?>/<?php echo _int($value['weight']); ?></td>

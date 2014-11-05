@@ -7,18 +7,23 @@
  * @$Id: tag.tpl.php 159 2013-03-23 04:11:53Z coolmoo $
  */
 function tag_list($vars){
-	$where_sql=" status='1'";
-
+	$where_sql ="WHERE status='1'";
+	$map_where = array();
 	if(isset($vars['tcid'])){
         iPHP::import(iPHP_APP_CORE .'/iMAP.class.php');
         map::init('category',iCMS_APP_TAG);
-        $where_sql.= map::exists($vars['tcid'],'`#iCMS@__tags`.id'); //map 表大的用exists
+        //$where_sql.= map::exists($vars['tcid'],'`#iCMS@__tags`.id'); //map 表大的用exists
+        $map_where+=map::where($vars['tcid']);
 	}
-	if(isset($vars['pid'])){
+	if(isset($vars['pids']) && !$vars['pid']){
         iPHP::import(iPHP_APP_CORE .'/iMAP.class.php');
         map::init('prop',iCMS_APP_TAG);
-        $where_sql.= map::exists($vars['pid'],'`#iCMS@__tags`.id'); //map 表大的用exists
+        //$where_sql.= map::exists($vars['pids'],'`#iCMS@__tags`.id'); //map 表大的用exists
+        $map_where+= map::where($vars['pids']);
 	}
+    if($vars['pid'] && !isset($vars['pids'])){
+        $where_sql.= iPHP::where($vars['pid'],'pid');
+    }
 
     if(isset($vars['cid!'])){
     	$ncids    = explode(',',$vars['cid!']);
@@ -41,10 +46,16 @@ function tag_list($vars){
 //		case "rand":	$order_sql=" ORDER BY rand() $by";		break;
 		default:		$order_sql=" ORDER BY `id` $by";
 	}
+    if($map_where){
+        $map_sql   = iCMS::map_sql($map_where);
+        $where_sql = ",({$map_sql}) map {$where_sql} AND `id` = map.`iid`";
+    }
+
 	$md5	= md5($where_sql.$order_sql);
 	$offset	= 0;
+	$limit  = "LIMIT {$maxperpage}";
 	if($vars['page']){
-		$total	= iPHP::total($md5,"SELECT count(*) FROM `#iCMS@__tags` WHERE {$where_sql} ");
+		$total	= iPHP::total($md5,"SELECT count(*) FROM `#iCMS@__tags` {$where_sql} ");
 		iPHP::assign("tags_total",$total);
         $multi	= iCMS::page(array('total'=>$total,'perpage'=>$maxperpage,'unit'=>iPHP::lang('iCMS:page:list'),'nowindex'=>$GLOBALS['page']));
         $offset	= $multi->offset;
@@ -53,8 +64,18 @@ function tag_list($vars){
 		$cache_name = 'tags/'.$md5."/".(int)$GLOBALS['page'];
 		$resource   = iCache::get($cache_name);
 	}
+    if($map_sql || $offset){
+        $ids_array = iDB::all("
+            SELECT `id` FROM `#iCMS@__tags`
+            {$where_sql} {$order_sql} {$limit}
+        ");
+        //iDB::debug(1);
+        $ids       = iCMS::get_ids($ids_array);
+        $ids       = $ids?$ids:'0';
+        $where_sql = "WHERE `id` IN({$ids})";
+    }
 	if(empty($resource)){
-		$resource = iDB::all("SELECT * FROM `#iCMS@__tags` WHERE {$where_sql} {$order_sql} LIMIT {$offset},{$maxperpage}");
+		$resource = iDB::all("SELECT * FROM `#iCMS@__tags` {$where_sql} {$order_sql} {$limit}");
 		iPHP_SQL_DEBUG && iDB::debug(1);
 		$resource = __tag_array($vars,$resource);
 		$vars['cache'] && iCache::set($cache_name,$resource,$cache_time);
