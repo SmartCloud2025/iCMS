@@ -47,7 +47,7 @@ function callback(obj) {
           </tr>
           <tr>
             <td>原文件名</td>
-            <td><?php echo $rs->ofilename; ?></td>
+            <td style="height: 20px;overflow: hidden;display: block;"><?php echo $rs->ofilename; ?></td>
           </tr>
           <tr>
             <td>文件类型</td>

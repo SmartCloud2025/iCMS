@@ -619,8 +619,8 @@ class iPHP{
 
 
 
-//    	print_r('$dir='.$dir.'<br />');
-//    	print_r('$gDir='.$gDir.'<br />');
+    	// print_r('$dir='.$dir.'<br />');
+    	// print_r('$gDir='.$gDir.'<br />');
 
     	//$gDir && $dir	= $gDir;
 
@@ -631,8 +631,8 @@ class iPHP{
         $sDir_PATH	= iFS::path_join(iPATH,$sDir);
         $iDir_PATH	= iFS::path_join($sDir_PATH,$gDir);
 
-//    	print_r('$sDir_PATH='.$sDir_PATH."\n");
-//    	print_r('$iDir_PATH='.$iDir_PATH."\n");
+   	// print_r('$sDir_PATH='.$sDir_PATH."\n");
+   	// print_r('$iDir_PATH='.$iDir_PATH."\n");
 
 		strpos($iDir_PATH,$sDir_PATH)===false && self::alert("对不起!您访问的目录有问题!");
 
@@ -643,32 +643,38 @@ class iPHP{
 		$url	= buildurl(false,'dir');
         if ($handle = opendir($iDir_PATH)) {
             while (false !== ($rs = readdir($handle))) {
-//				print_r('$rs='.$rs."\n");
+				// print_r('$rs='.$rs."\n");
             	$filepath	= iFS::path_join($iDir_PATH,$rs);
 				$filepath	= rtrim($filepath,'/');
 //				print_r('$filepath='.$filepath."\n");
                 $sFileType 	= @filetype($filepath);
 //				print_r('$sFileType='.$sFileType."\n");
-				$path		= str_replace($sDir_PATH, '', $filepath);
+				// var_dump($sDir_PATH,$filepath);
+				$path = str_replace($sDir_PATH, '', $filepath);
+				$path = ltrim($path,'/');
                 if ($sFileType	=="dir" && !in_array($rs,array('.','..','admincp'))) {
-                    $dirArray[]	= array('path'=>$path,'name'=>$rs,'url'=>$url.urlencode($path));
+                    $dirArray[]	= array(
+						'path' =>$path,
+						'name' =>$rs,
+						'url'  =>$url.urlencode($path)
+                    );
                 }
                 if ($sFileType	=="file" && !in_array($rs,array('..','.iPHP'))) {
                 	$filext		= iFS::getExt($rs);
 	                $fileinfo	= array(
-	                		'path'=>$path,
-	                		'dir'=>dirname($path),
-	                        'url'=>iFS::fp($path,'+http'),
-	                        'name'=>$rs,
-	                        'modified'=>get_date(filemtime($filepath),"Y-m-d H:i:s"),
-	                        'md5'=>md5_file($filepath),
-	                        'ext'=>$filext,
-	                        'size'=>iFS::sizeUnit(filesize($filepath))
+							'path'     =>$path,
+							'dir'      =>dirname($path),
+							'url'      =>iFS::fp($path,'+http'),
+							'name'     =>$rs,
+							'modified' =>get_date(filemtime($filepath),"Y-m-d H:i:s"),
+							'md5'      =>md5_file($filepath),
+							'ext'      =>$filext,
+							'size'     =>iFS::sizeUnit(filesize($filepath))
 	                );
 	                if($type){
-	                	 in_array(strtolower($filext),$type) && $fileArray[]	= $fileinfo;
+	                	 in_array(strtolower($filext),$type) && $fileArray[] = $fileinfo;
 	                }else{
-	                	$fileArray[]	= $fileinfo;
+	                	$fileArray[] = $fileinfo;
 	                }
                 }
             }
@@ -680,7 +686,7 @@ class iPHP{
 		$pos            = strripos($a['pwd'],'/');
 		$a['parent']    = ltrim(substr($a['pwd'],0,$pos), '/');
 		$a['URI']       = $url;
-//    	print_r($a);
+   	// var_dump($a);
 //    	exit;
         return $a;
     }

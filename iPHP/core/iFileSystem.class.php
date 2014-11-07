@@ -165,9 +165,10 @@ class iFS {
     }
 
     public static function path($p = '') {
-        $a = explode('/', $p);
-        $o = array();
-        $c = count($a);
+        $end = substr ($p,-1);
+        $a   = explode('/', $p);
+        $o   = array();
+        $c   = count($a);
         for ($i = 0; $i < $c; $i++) {
             if ($a[$i] == '.' || $a[$i] == '')
                 continue;
@@ -177,8 +178,9 @@ class iFS {
                 $o[] = $a[$i];
             }
         }
-        $o['0'] == 'http:' && $o['0'] = 'http:/';
-        return ($p{0} == '/' ? '/' : '') . implode('/', $o);
+        $o[0] == 'http:' && $o[0] = 'http:/';
+
+        return ($p{0} == '/' ? '/' : '').implode('/', $o).($end == '/' ? '/':'');
     }
 
     public static function path_is_absolute($path) {
@@ -197,12 +199,13 @@ class iFS {
         return (bool) preg_match('#^[/\\\\]#', $path);
     }
 
-    public static function path_join($base, $path) {
+    public static function path_join($base, $path,$rtrim=false) {
+        //if (!self::path_is_absolute($path))
 
-        if (!self::path_is_absolute($path))
-            $path = rtrim($base, '/') . '/' . ltrim($path, '/');
-
-        return self::path($path).'/';
+        $path = rtrim($base,'/').'/'.ltrim($path, '/');
+        $path = self::path($path);
+        $rtrim && $path = rtrim($path,'/').'/';
+        return $path;
     }
 
     //获取远程页面的内容
@@ -335,7 +338,8 @@ class iFS {
 
 //-----------upload-------------
     public static function get_dir() {
-        return self::path(iPATH . '/' . self::$config['dir']) . '/';
+        $dir = self::path_join(iPATH,self::$config['dir']);
+        return  rtrim($dir,'/'). '/';
     }
 
     public static function mk_udir($_dir='') {
@@ -577,21 +581,21 @@ class iFS {
         $config = $_config ? $_config : self::$config;
         switch ($m) {
             case '+http':
-                $fp = $config['url']. $f;
+                $fp = rtrim($config['url'],'/').'/'.ltrim($f, '/');
                 break;
             case '-http':
                 $fp = str_replace($config['url'], '', $f);
                 break;
             case 'http2iPATH':
-                $f = str_replace($config['url'], '', $f);
-                $fp = self::path_join(iPATH, $config['dir']). $f;
+                $f  = str_replace($config['url'], '', $f);
+                $fp = self::path_join(iPATH, $config['dir'],'/').ltrim($f, '/');
                 break;
             case 'iPATH2http':
                 $f = str_replace(self::path_join(iPATH, $config['dir']),'', $f);
-                $fp = $config['url']. $f;
+                $fp = $config['url'].$f;
                 break;
             case '+iPATH':
-                $fp = self::path_join(iPATH, $config['dir']).$f;
+                $fp = self::path_join(iPATH, $config['dir'],'/').ltrim($f, '/');
                 break;
             case '-iPATH':
                 $fp = str_replace(self::path_join(iPATH, $config['dir']), '', $f);

@@ -119,22 +119,20 @@ class iURL {
                 $url = $array['urlRule'];
         }
 //var_dump($a);
-
         if($i->href) return $i;
 
         if(strstr($url,'{PHP}')===false) {
         	self::$uriArray	= array($array,$category,(array)$tag_cate);
 
         	strstr($url,'{') && $url = preg_replace_callback ("/\{(.*?)\}/",'__iurl_rule__',$url);
-            $i->path    = iFS::path(iPATH.$html_dir.$url);
+
+            $i->path = rtrim(iFS::path(iPATH.$html_dir.$url),'/') ;
             if(strstr($html_dir,'..')===false) {
                 $i->href = rtrim($sURL,'/').'/'.ltrim(iFS::path($html_dir.$url),'/') ;
             }else{
                 $i->href = rtrim($sURL,'/').'/'.ltrim(iFS::path($url),'/') ;
             }
-//var_dump($i);
-			$pathA 		= pathinfo($i->path);
-//var_dump($pathA);
+			$pathA = pathinfo($i->path);
 
 //            if(in_array($uri,array('article','content'))) {
 //                $i->path    = FS::path($Curl->dmdir.'/'.$url);
@@ -159,6 +157,7 @@ class iURL {
                 $i->dir  = dirname($i->path);
                 $i->hdir = dirname($i->href.'/'.$i->file);
             }
+//var_dump($i);
             if(strstr($i->file,'{P}')===false) {
                 $i->pfile = $i->name."_{P}".$i->ext;
 			}else{
@@ -181,11 +180,11 @@ class iURL {
                     $__dir__   = $i->dir.'/'.$m->pdir;
                     $i->path   = str_replace($i->dir,$__dir__,$i->path);
                     $i->dir    = $__dir__;
-                    $i->dmdir  = iFS::path_join(iPATH,$html_dir.'/'.$m->pd);
+                    $i->dmdir  = iFS::path(iPATH.$html_dir.'/'.$m->pd);
                     $bits      = parse_url($i->href);
                     $i->domain = $bits['scheme'].'://'.$bits['host'];
                 }else {
-                    $i->dmdir  = iFS::path_join(iPATH,$html_dir);
+                    $i->dmdir  = iFS::path(iPATH.$html_dir);
                     $i->domain = $sURL;
                 }
 		        if(strstr($array['domain'],'http://')){
