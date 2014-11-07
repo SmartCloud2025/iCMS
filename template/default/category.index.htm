@@ -39,7 +39,13 @@
               <p class="pic"> <a href="<!--{$article_list.url}-->" target="_blank"><img src="<!--{$article_list.pic.url}-->"></a> </p>
               <!--{/if}-->
               <p class="title"> <a href="<!--{$article_list.url}-->" target="_blank"><!--{$article_list.title}--></a> </p>
-              <p class="info"><!--{$article_list.description}--></p>
+              <p class="description">
+                <!--{$article_list.description}-->
+                <a href="<!--{$article_list.url}-->" target="_blank">查看全文&gt;&gt;</a>
+                <span class="date">
+                  <!--{$article_list.pubdate|date:"Y-m-d"}-->
+                </span>
+              </p>
               <p class="clearfix"></p>
             </li>
             <!--{/iCMS}-->

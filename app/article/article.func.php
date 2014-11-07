@@ -91,6 +91,8 @@ function article_list($vars){
     switch ($vars['orderby']) {
         case "id":          $order_sql =" ORDER BY `id` $by";            break;
         case "hot":         $order_sql =" ORDER BY `hits` $by";          break;
+        case "week":        $order_sql =" ORDER BY `hits_week` $by";    break;
+        case "month":       $order_sql =" ORDER BY `hits_month` $by";  break;
         case "comment":     $order_sql =" ORDER BY `comments` $by";      break;
         case "pubdate":     $order_sql =" ORDER BY `pubdate` $by";       break;
         case "disorder":    $order_sql =" ORDER BY `ordernum` $by";      break;
@@ -124,10 +126,11 @@ function article_list($vars){
             SELECT `id` FROM `#iCMS@__article`
             {$where_sql} {$order_sql} {$limit}
         ");
-        //iDB::debug(1);
+        iPHP_SQL_DEBUG && iDB::debug(1);
         $ids       = iCMS::get_ids($ids_array);
         $ids       = $ids?$ids:'0';
         $where_sql = "WHERE `id` IN({$ids})";
+        $limit     = '';
     }
     if($vars['cache']){
         $cache_name = 'article/'.$md5."/".(int)$GLOBALS['page'];

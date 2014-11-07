@@ -639,14 +639,11 @@ class iTemplate_Compiler extends iTemplate {
 				array_push($this->_foreachelse_stack, false);
 				$_args = $this->_parse_arguments($arguments);
 				isset($_args['from']) OR $this->trigger_error("missing 'from' attribute in 'foreach'", E_USER_ERROR, __FILE__, __LINE__);
-				if (!isset($_args['value']) && !isset($_args['item'])){
-					$this->trigger_error("missing 'value' attribute in 'foreach'", E_USER_ERROR, __FILE__, __LINE__);
-				}
-				if (isset($_args['value'])){
-					$_args['value'] = $this->_dequote($_args['value']);
-				}elseif (isset($_args['item'])){
-					$_args['value'] = $this->_dequote($_args['item']);
-				}
+				isset($_args['value']) OR $this->trigger_error("missing 'value' attribute in 'foreach'", E_USER_ERROR, __FILE__, __LINE__);
+				isset($_args['value']) && $_args['value'] = $this->_dequote($_args['value']);
+				isset($_args['start']) && $_args['start'] = $this->_dequote($_args['start']);
+				isset($_args['end'])   && $_args['end'] = $this->_dequote($_args['end']);
+
 //				isset($_args['key']) ? $_args['key'] = "\$this->_vars['".$this->_dequote($_args['key'])."'] => " : $_args['key'] = '';
 				isset($_args['key']) OR $_args['key'] ='key_'.rand(1,999);
 				$hash    = rand(1,999);
@@ -660,10 +657,20 @@ class iTemplate_Compiler extends iTemplate {
 					$this->_vars[\'' . $_args['value'] . '\'][\'last\']=false;
 					$this->_vars[\'' . $_args['value'] . '\'][\'first\']=false;
 					foreach ((array)' . $_args['from'] . ' as ' . $keystr . '$this->_vars[\'' . $_args['value'] . '\']){
-					$fec_'.$hash.'==1 && $this->_vars[\'' . $_args['value'] . '\'][\'first\']=true;
-					$fec_'.$hash.'==$_count_'.$hash.' && $this->_vars[\'' . $_args['value'] . '\'][\'last\']=true;
-					$fec_'.$hash.'++;
-				?>';
+						$fec_'.$hash.'==1 && $this->_vars[\'' . $_args['value'] . '\'][\'first\']=true;
+						$fec_'.$hash.'==$_count_'.$hash.' && $this->_vars[\'' . $_args['value'] . '\'][\'last\']=true;
+				';
+				if(isset($_args['start'])){
+					$_result.='if($fec_'.$hash.'<'.$_args['start'].'){
+						$fec_'.$hash.'++;
+						continue;
+					}';
+				}
+				if(isset($_args['end'])){
+					$_result.='if($fec_'.$hash.'>'.$_args['end'].'){break;}';
+				}
+				$_result.='$fec_'.$hash.'++;';
+				$_result.='?>';
 				return $_result;
 				break;
 			case 'foreachelse':
@@ -680,9 +687,9 @@ class iTemplate_Compiler extends iTemplate {
 			case 'for':
 				$this->_for_stack++;
 				$_args = $this->_parse_arguments($arguments);
-				isset($_args['start'])	OR $this->trigger_error("missing 'start' attribute in 'for'", E_USER_ERROR, __FILE__, __LINE__);
-				isset($_args['stop'])	OR $this->trigger_error("missing 'stop' attribute in 'for'", E_USER_ERROR, __FILE__, __LINE__);
-				isset($_args['step'])	OR $_args['step'] = 1;
+				isset($_args['start']) OR $this->trigger_error("missing 'start' attribute in 'for'", E_USER_ERROR, __FILE__, __LINE__);
+				isset($_args['stop'])  OR $this->trigger_error("missing 'stop' attribute in 'for'", E_USER_ERROR, __FILE__, __LINE__);
+				isset($_args['step'])  OR $_args['step'] = 1;
 				$_result = '<?php for($for' . $this->_for_stack . ' = ' . $_args['start'] . '; ((' . $_args['start'] . ' < ' . $_args['stop'] . ') ? ($for' . $this->_for_stack . ' < ' . $_args['stop'] . ') : ($for' . $this->_for_stack . ' > ' . $_args['stop'] . ')); $for' . $this->_for_stack . ' += ((' . $_args['start'] . ' < ' . $_args['stop'] . ') ? ' . $_args['step'] . ' : -' . $_args['step'] . ')){ ?>';
 				isset($_args['value']) &&$_result .= '<?php $this->assign(\'' . $this->_dequote($_args['value']) . '\', $for' . $this->_for_stack . '); ?>';
 				return $_result;

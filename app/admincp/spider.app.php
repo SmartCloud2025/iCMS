@@ -992,7 +992,7 @@ class spiderApp {
             	exit();
             }
         }
-        if ($info['http_code'] == 301 || $info['http_code'] == 302) {
+        if (($info['http_code'] == 301 || $info['http_code'] == 302) && $_count < 5) {
             $newurl = $info['redirect_url'];
 	        if(empty($newurl)){
 		    	curl_setopt($ch, CURLOPT_HEADER, 1);

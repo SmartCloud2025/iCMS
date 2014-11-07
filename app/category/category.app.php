@@ -41,12 +41,9 @@ class categoryApp{
                 ||empty($category['mode'])
                 )
             ) {return false;}
-
             if($category['url']) return iPHP::gotourl($category['url']);
             if($category['mode']=='1') return iCMS::gotohtml($iurl->path,$iurl->href);
-
         }
-
         $category['iurl']   = (array)$iurl;
         $category['url']    = $iurl->href;
         $category['link']   = "<a href='{$category['url']}' target='_blank'>{$category['name']}</a>";
@@ -113,6 +110,11 @@ class categoryApp{
         $category['pic']         = $C['pic'];
         $category['url']         = $C['iurl']['href'];
         $category['link']        = "<a href='{$category['url']}'>{$C['name']}</a>";
+        if($C['rootid']){
+            $_parent            = iCache::get('iCMS/category/'.$C['rootid']);
+            $category['parent'] = $this->get_lite($_parent);
+            unset($_parent);
+        }
         return $category;
     }
 }

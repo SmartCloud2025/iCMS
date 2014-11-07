@@ -244,7 +244,7 @@ class iFS {
 					return false;
 	            }
 			}
-            if ($info['http_code'] == 301 || $info['http_code'] == 302) {
+            if (($info['http_code'] == 301 || $info['http_code'] == 302) && $_count < 5) {
                 $newurl = $info['redirect_url'];
 		        if(empty($newurl)){
 			    	curl_setopt($ch, CURLOPT_HEADER, 1);
@@ -261,7 +261,8 @@ class iFS {
 		        $newurl	= trim($newurl);
 				curl_close($ch);
 				unset($responses,$info);
-                return self::remote($newurl, $_referer,1);
+                $_count++;
+                return self::remote($newurl, $_referer,$_count);
             }
             if ((empty($responses)||empty($info['http_code'])) && $_count < 5) {
                 $_count++;

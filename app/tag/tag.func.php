@@ -7,7 +7,7 @@
  * @$Id: tag.tpl.php 159 2013-03-23 04:11:53Z coolmoo $
  */
 function tag_list($vars){
-	$where_sql ="WHERE status='1'";
+	$where_sql ="WHERE status='1' ";
 	$map_where = array();
 	if(isset($vars['tcid'])){
         iPHP::import(iPHP_APP_CORE .'/iMAP.class.php');
@@ -15,27 +15,37 @@ function tag_list($vars){
         //$where_sql.= map::exists($vars['tcid'],'`#iCMS@__tags`.id'); //map 表大的用exists
         $map_where+=map::where($vars['tcid']);
 	}
+
+    if($vars['pid'] && !isset($vars['pids'])){
+        $where_sql.= iPHP::where($vars['pid'],'pid');
+    }
 	if(isset($vars['pids']) && !$vars['pid']){
         iPHP::import(iPHP_APP_CORE .'/iMAP.class.php');
         map::init('prop',iCMS_APP_TAG);
         //$where_sql.= map::exists($vars['pids'],'`#iCMS@__tags`.id'); //map 表大的用exists
         $map_where+= map::where($vars['pids']);
 	}
-    if($vars['pid'] && !isset($vars['pids'])){
-        $where_sql.= iPHP::where($vars['pid'],'pid');
-    }
 
-    if(isset($vars['cid!'])){
-    	$ncids    = explode(',',$vars['cid!']);
-        $vars['sub'] && $ncids+=iCMS::get_category_ids($ncids,true);
-        $where_sql.= iPHP::where($ncids,'cid','not');
-    }
-    if(isset($vars['cid'])){
+    // if(isset($vars['cid!'])){
+    // 	$ncids    = explode(',',$vars['cid!']);
+    //     $vars['sub'] && $ncids+=iCMS::get_category_ids($ncids,true);
+    //     $where_sql.= iPHP::where($ncids,'cid','not');
+    // }
+    if($vars['cid'] && !isset($vars['cids'])){
         $cid = explode(',',$vars['cid']);
         $vars['sub'] && $cid+=iCMS::get_category_ids($cid,true);
         $where_sql.= iPHP::where($cid,'cid');
     }
+    if(isset($vars['cids']) && !$vars['cid']){
+        $cids = explode(',',$vars['cids']);
+        $vars['sub'] && $cids+=iCMS::get_category_ids($vars['cids'],true);
 
+        if($cids){
+            iPHP::import(iPHP_APP_CORE .'/iMAP.class.php');
+            map::init('category',iCMS_APP_TAG);
+            $map_where+=map::where($cids);
+        }
+    }
 	$maxperpage	= isset($vars['row'])?(int)$vars['row']:"10";
 	$cache_time	= isset($vars['time'])?(int)$vars['time']:-1;
 	$by			= $vars['by']=='ASC'?"ASC":"DESC";
@@ -73,6 +83,7 @@ function tag_list($vars){
         $ids       = iCMS::get_ids($ids_array);
         $ids       = $ids?$ids:'0';
         $where_sql = "WHERE `id` IN({$ids})";
+        $limit     = '';
     }
 	if(empty($resource)){
 		$resource = iDB::all("SELECT * FROM `#iCMS@__tags` {$where_sql} {$order_sql} {$limit}");

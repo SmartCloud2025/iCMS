@@ -148,7 +148,7 @@ class articleApp{
 			        }elseif($_POST['pattern']=='addto') {
 			        	$art['tags'] && $mtag = $this->detag($art['tags']).','.$mtag;
 			        }
-			        $tags = tag::diff($mtag,$art['tags'],iMember::$userid,$id,$this->categoryApp->rootid($art['cid']));
+			        $tags = tag::diff($mtag,$art['tags'],iMember::$userid,$id,$art['cid']);
                     $tags = addslashes($tags);
                     articleTable::update(compact('tags'),compact('id'));
 		    	}
@@ -218,7 +218,7 @@ class articleApp{
 		$art = articleTable::row($id,'tags,cid');
 		if($tags){
 			iPHP::app('tag.class','static');
-			$tags = tag::diff($tags,$art['tags'],iMember::$userid,$id,$this->categoryApp->rootid($art['cid']));
+			$tags = tag::diff($tags,$art['tags'],iMember::$userid,$id,$art['cid']);
 		    $tags = addslashes($tags);
         }
         $data = compact('cid','pid','title','tags','description');
@@ -479,7 +479,7 @@ class articleApp{
 
             if($tags){
                 iPHP::app('tag.class','static');
-                tag::add($tags,$userid,$aid,$this->categoryApp->rootid($cid));
+                tag::add($tags,$userid,$aid,$cid);
                 //articleTable::update(compact('tags'),array('id'=>$aid));
             }
 
@@ -509,7 +509,7 @@ class articleApp{
         }else{
 			if($tags){
 				iPHP::app('tag.class','static');
-	            tag::diff($tags,$_tags,iMember::$userid,$aid,$this->categoryApp->rootid($cid));
+	            tag::diff($tags,$_tags,iMember::$userid,$aid,$cid);
             }
             $picdata = $this->picdata($pic,$mpic,$spic);
 

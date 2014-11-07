@@ -38,22 +38,22 @@
             </ol>
             <!-- 轮播（Carousel）项目 -->
             <div class="carousel-inner">
-              <!--{foreach key=key value=alist from="$article_list"}-->
+            <!--{foreach key=key value=alist from="$article_list"}-->
               <div class="item<!--{if $key=="0"}--> active<!--{/if}-->">
-              <a href="<!--{$alist.url}-->">
-              <img src="<!--{$alist.pic.url}-->" alt="<!--{$alist.title}-->">
-              <div class="carousel-caption">
-                <h3><!--{$alist.title}--></h3>
+                <a href="<!--{$alist.url}-->">
+                  <img src="<!--{$alist.pic.url}-->" alt="<!--{$alist.title}-->" />
+                  <div class="carousel-caption">
+                    <h3><!--{$alist.title}--></h3>
+                  </div>
+                </a>
               </div>
-              </a>
-            </div>
             <!--{/foreach}-->
+            </div>
+            <!-- 轮播（Carousel）导航 -->
+            <a class="carousel-control left" href="#index_carousel" data-slide="prev">&lsaquo;</a>
+            <a class="carousel-control right" href="#index_carousel" data-slide="next">&rsaquo;</a>
           </div>
-          <!-- 轮播（Carousel）导航 -->
-          <a class="carousel-control left" href="#index_carousel" data-slide="prev">&lsaquo;</a>
-          <a class="carousel-control right" href="#index_carousel" data-slide="next">&rsaquo;</a>
-        </div>
-        <!--{/if}-->
+          <!--{/if}-->
       </div>
       <div class="clearfix mt30"></div>
       <div class="mod index_tab">
