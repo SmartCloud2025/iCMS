@@ -17,22 +17,22 @@ class pushcategoryApp extends categoryApp {
         parent::__construct(iCMS_APP_PUSH);
         $this->name_text = "版块";
     }
-    function do_add(){
-        if($this->cid) {
-            iACP::CP($this->cid,'e','page');
-            $rs		= iDB::row("SELECT * FROM `#iCMS@__category` WHERE `cid`='$this->cid' LIMIT 1;",ARRAY_A);
-            $rootid	= $rs['rootid'];
-        }else {
-            $rootid=(int)$_GET['rootid'];
-            $rootid && iACP::CP($rootid,'a','page');;
-        }
-        if(empty($rs)) {
-            $rs=array();
-            $rs['status']		= '1';
-            $rs['ordernum']		= '0';
-        }
-        include iACP::view("pushcategory.add");
-    }
+    // function do_add(){
+    //     if($this->cid) {
+    //         iACP::CP($this->cid,'e','page');
+    //         $rs		= iDB::row("SELECT * FROM `#iCMS@__category` WHERE `cid`='$this->cid' LIMIT 1;",ARRAY_A);
+    //         $rootid	= $rs['rootid'];
+    //     }else {
+    //         $rootid=(int)$_GET['rootid'];
+    //         $rootid && iACP::CP($rootid,'a','page');;
+    //     }
+    //     if(empty($rs)) {
+    //         $rs=array();
+    //         $rs['status']		= '1';
+    //         $rs['ordernum']		= '0';
+    //     }
+    //     include iACP::view("pushcategory.add");
+    // }
     function merge($tocid,$cid){
         iDB::query("UPDATE `#iCMS@__push` SET `cid` ='$tocid' WHERE `cid` ='$cid'");
     }
