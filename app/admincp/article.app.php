@@ -629,7 +629,7 @@ class articleApp{
         preg_match_all("/<img.*?src\s*=[\"|'](.*?)[\"|']/is",$content,$match);
         $_array = array_unique($match[1]);
         $picdata= (array)articleTable::value('picdata',$id);
-        $picdata && $picdata = unserialize($picdata);
+        $picdata && $picdata = @unserialize($picdata);
         foreach($_array as $key =>$value) {
             $pic      = iFS::fp($value,'-http');
             $filename = basename($pic);

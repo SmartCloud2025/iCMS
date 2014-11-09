@@ -45,7 +45,7 @@ class articleTable {
         if(empty($id)){
             return;
         }
-        return iDB::value("SELECT {$field} FROM `#iCMS@__article` WHERE `id`='$id';",ARRAY_A);
+        return iDB::value("SELECT {$field} FROM `#iCMS@__article` WHERE `id`='$id';");
     }
     public static function row($id=0,$field='*',$sql=''){
         return iDB::row("SELECT {$field} FROM `#iCMS@__article` WHERE `id`='$id' {$sql} LIMIT 1;",ARRAY_A);

@@ -69,12 +69,12 @@ class categoryApp{
 
         $category['hasbody'] && $category['body'] = iCache::get('iCMS/category/'.$category['cid'].'.body');
         $category['appid']  = iCMS_APP_CATEGORY;
-        $category['mode'] && iCMS::set_html_url($iurl);
         $category['pic']  = get_pic($category['pic']);
         $category['mpic'] = get_pic($category['mpic']);
         $category['spic'] = get_pic($category['spic']);
 
         if($tpl) {
+            $category['mode'] && iCMS::set_html_url($iurl);
             iCMS::hooks('enable_comment',true);
             iPHP::assign('category',$category);
             if(strstr($tpl,'.htm')){

@@ -70,7 +70,12 @@ class tagApp {
         $tag['iurl'] = iURL::get('tag', array($tag, $category, $tag_category));
         $tag['url'] OR $tag['url'] = $tag['iurl']->href;
         $tag['link']  = '<a href="'.$tag['url'].'" class="tag" target="_blank">'.$tag['name'].'</a>';
-        $category['mode']&& iCMS::set_html_url($tag['iurl']);
+
+
+        if($category['mode']||stristr($tag['url'], '.php?')===false){
+            iCMS::set_html_url($tag['iurl']);
+        }
+
         $tag['related']  && $tag['relArray'] = explode(',', $tag['related']);
         $tag['appid'] = iCMS_APP_TAG;
         $tag['pic']   = get_pic($tag['pic']);

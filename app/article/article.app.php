@@ -112,7 +112,7 @@ class articleApp {
         }else{
             $article['category'] = $category;
         }
-
+        $this->taoke = false;
         if($art_data){
             $pageurl = $article['iurl']->pageurl;
             $art_data['body'] = $this->ubb($art_data['body']);
@@ -129,9 +129,10 @@ class articleApp {
             $count    = count($body);
             $total    = $count+1;
             $article['body']     = $this->keywords($body[intval($page-1)]);
+            $article['body']     = $this->taoke($article['body']);
             $article['subtitle'] = $art_data['subtitle'];
             unset($art_data);
-
+            $article['taoke']    = $this->taoke;
             if($total>1) {
                 $flag    = 0;
                 $num_nav = '';
@@ -305,5 +306,28 @@ class articleApp {
            return iCMS::str_replace_limit($search, $replace,stripslashes($content),iCMS::$config['other']['kwCount']);
         }
         return $content;
+    }
+    public function taoke($content){
+        preg_match_all('/<[^>]+>(http:\/\/(item|detail)\.(taobao|tmall)\.com\/.+)<\/[^>]+>/isU',$content,$taoke_array);
+        if($taoke_array[1]){
+            $tk_array = array_unique($taoke_array[1]);
+            foreach ($tk_array as $tkid => $tk_url) {
+                    $tk_url   = htmlspecialchars_decode($tk_url);
+                    $tk_parse = parse_url($tk_url);
+                    parse_str($tk_parse['query'], $tk_item_array);
+                    $itemid         = $tk_item_array['id'];
+                    $tk_data[$tkid] = $this->tmpl($itemid,$tk_url);
+            }
+            $content = str_replace($tk_array,$tk_data,$content);
+            $this->taoke = true;
+        }
+        return $content;
+    }
+    public function tmpl($itemid,$url,$title=''){
+        $title OR $title = $url;
+        return '<a data-type="0"
+        biz-itemid="'.$itemid.'"
+        data-tmpl="350x100" data-tmplid="6" data-rd="2" data-style="2" data-border="1"
+        href="'.$url.'">'.$tk_url.'</a>';
     }
 }
