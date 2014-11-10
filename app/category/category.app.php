@@ -90,11 +90,11 @@ class categoryApp{
     public function get_nav($C) {
         if($C) {
             $iurl = (array)$C['iurl'];
-            $link = "<a href='{$iurl['href']}'>{$C['name']}</a>";
+            $link = "<li><a href='{$iurl['href']}'>{$C['name']}</a><span class=\"divider\">".iPHP::lang('iCMS:navTag')."</span></li>";
             if($C['rootid']){
                 $rc = iCache::get('iCMS/category/'.$C['rootid']);
                 $rc['iurl'] = (array)iURL::get('category',$rc);
-                $nav.=$this->get_nav($rc).iPHP::lang('iCMS:navTag');
+                $nav.= $this->get_nav($rc);
             }
             $nav.= $link;
         }

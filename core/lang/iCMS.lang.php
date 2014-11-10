@@ -70,5 +70,5 @@ return array(
 		'error'=>'验证码不正确！请更换一张再试试。',
 	),
 	//导航
-	'navTag'=>' »  ',
+	'navTag'=>'»',
 );

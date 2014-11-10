@@ -65,7 +65,15 @@ class articleApp{
     }
     function do_update(){
     	$data = iACP::fields($_GET['iDT']);
-        $data && articleTable::update($data,array('id'=>$this->id));
+        if($data){
+            if(isset($data['pid'])){
+                iPHP::import(iPHP_APP_CORE .'/iMAP.class.php');
+                map::init('prop',$this->appid);
+                $_pid = articleTable::value('pid',$this->id);
+                map::diff($data['pid'],$_pid,$this->id);
+            }
+            articleTable::update($data,array('id'=>$this->id));
+        }
     	iPHP::success('操作成功!','js:1');
     }
     function do_updateorder(){

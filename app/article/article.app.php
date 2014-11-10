@@ -225,7 +225,7 @@ class articleApp {
                 unset($tagApp,$tagArray);
             }
 
-            $article['rel_tags'] = $relTags?$relTags:$category['name'];
+            $article['rel_name'] = $relTags?$relTags:$category['name'];
             $article['rel']      = $article['related'];
         }
 
@@ -295,7 +295,8 @@ class articleApp {
     public function keywords($content) {
         if(iCMS::$config['other']['keyword_limit']==0) return $content;
 
-        $keywords   = iCache::get('iCMS/keywords');
+        $keywords = iCache::get('iCMS/keywords');
+
         if($keywords){
             foreach($keywords AS $i=>$val) {
                 if($val['times']>0) {
@@ -303,7 +304,7 @@ class articleApp {
                     $replace[] = '<a class="keyword" target="_blank" href="'.$val['url'].'">'.$val['keyword'].'</a>';
                 }
            }
-           return iCMS::str_replace_limit($search, $replace,stripslashes($content),iCMS::$config['other']['kwCount']);
+           return iCMS::str_replace_limit($search, $replace,stripslashes($content),iCMS::$config['other']['keyword_limit']);
         }
         return $content;
     }

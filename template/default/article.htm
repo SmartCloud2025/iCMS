@@ -14,7 +14,11 @@
   <!-- <div class="l-header-ad"> 文章顶部横幅通栏 960x60 </div> -->
   <div id="body">
     <div class="main-col">
-      <div id="guide"><strong>当前位置：</strong> <a href="<!--{$site.url}-->"><!--{$site.title}--></a> &nbsp;&raquo;&nbsp;<!--{$category.nav}-->&nbsp;&raquo;&nbsp;<!--{$article.link}-->&nbsp;&raquo;&nbsp;正文</div>
+      <ul class="breadcrumb">
+        <li><a href="<!--{$site.url}-->">首页</a> <span class="divider">»</span></li>
+        <!--{$category.nav}-->
+        <li class="active"><!--{$article.link}--></li>
+      </ul>
       <div id="page">
         <h1><!--{$article.title}--></h1>
         <div class="article-info">
@@ -51,25 +55,25 @@
             <!--{/if}-->
           </div>
         </div>
-        <script type="text/javascript">
-          $(function(){
-            $("img",".article-body").each(function(i){
-              iCMS.imgFix(this,500,600);
-            });
-            $(window).keydown(function(event){
-              switch(event.keyCode) {
-                case 37: window.location.href='<!--{$article.page.prev}-->';break;
-                case 39: window.location.href='<!--{$article.page.next}-->';break;
-              }
-            });
-          })
-          </script>
         <div class="article-pagenav iCMS_pagination">
           <!--{$article.page.nav}-->
           <div class="clearfix"></div>
         </div>
         <div class="tip clr">提示：键盘也能翻页，试试"← →"键</div>
       </div>
+      <script type="text/javascript">
+        $(function(){
+          $("img",".article-body").each(function(i){
+            iCMS.imgFix(this,500,600);
+          });
+          $(window).keydown(function(event){
+            switch(event.keyCode) {
+              case 37: window.location.href='<!--{$article.page.prev}-->';break;
+              case 39: window.location.href='<!--{$article.page.next}-->';break;
+            }
+          });
+        })
+      </script>
       <!--{include file="./article.up_down.htm"}-->
       <div class="prev-next">
         <p>上一篇 : <!--{$article.prev}--></p>
