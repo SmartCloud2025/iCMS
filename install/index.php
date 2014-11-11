@@ -340,7 +340,7 @@ $lock_file = iPATH.'cache/install.lock';
 					$state = $correct;
 					fclose($fp);
 				} else {
-					$state = $incorrect.'程序根目录无法书写,请速将根目录属性设置为777';
+					$state = $incorrect.'程序根目录没有写权限,请将根目录属性设置为777';
 				}
 				foreach ($check_list as $key => $value) {
 					$file = iPATH.$value[0];
