@@ -739,34 +739,6 @@ class iFS {
         return $responses;
     }
 
-    public static function remotepic(&$content, $remote = false, $autopic = false) {
-        if (!$remote && !$autopic)
-            return;
-
-        $content = stripslashes($content);
-        $img = array();
-        preg_match_all("/<img.*?src\s*=[\"|'](.*?)[\"|']/is", $content, $match);
-
-
-        $_array = (array) array_unique($match[1]);
-        $uri = parse_url(self::$config['url']);
-        foreach ($_array AS $_k => $imgurl) {
-            if (strstr(strtolower($imgurl), $uri['host']))
-                unset($_array[$_k]);
-        }
-        if (empty($_array)) {
-            $content = addslashes($content);
-            return;
-        }
-        self::$forceExt = "jpg";
-        foreach ($_array as $key => $value) {
-            $value        = str_replace(array("\n","\r"),'',$value);
-            $filepath     = self::http($value);
-            $fArray[$key] = $filepath ? self::fp($filepath, '+http') : $value;
-        }
-        $content = str_replace($_array, $fArray, $content);
-        $content = addslashes($content);
-    }
 
     function a($a,$break=false) {
 		$stateMap = array(

@@ -8,11 +8,13 @@
 defined('iPHP') OR exit('What are you doing?');
 iACP::head();
 ?>
+<script type="text/javascript">
+window.iCMS.config.catchRemoteImageEnable = <?php echo iCMS::$config['publish']['remote']=="1"?'true':'false';?>;
+</script>
 <script type="text/javascript" charset="utf-8" src="./app/ui/common/iCMS.editor-6.0.0.js"></script>
 <script type="text/javascript" charset="utf-8" src="./app/ui/common/ueditor/ueditor.all.min.js"></script>
 <script type="text/javascript">
 $(function(){
-	iCMS.config.fileTypes	= "<?php echo '*.'.str_replace(',',';*.',iCMS::$config['FS']['allow_ext']);?>";
   iCMS.editor.create();
   $("#title").focus();
 	$(".iCMS-editor-page").change(function(){
@@ -87,16 +89,23 @@ function mergeEditorPage(){
         iCMS.editor.container[eid].destroy();
     }
     var content = $("textarea",this).val();
-    html.push(content);
+    content && html.push(content);
     if(n){
         $(this).remove();
     }
   });
-  var allHtml = html.join('#--iCMS.PageBreak--#');
-  var ned = $("textarea",".iCMS-editor"),neid = ned.attr('id').replace('iCMS-editor-','');
-  ned.val(allHtml);
+
+  $(".iCMS-editor").show();
+  var allHtml = html.join('#--iCMS.PageBreak--#'),
+  ned = $("textarea",".iCMS-editor"),
+  neid = ned.attr('id').replace('iCMS-editor-','');
+  ned.val(allHtml).css({
+    width: "100%",
+    height: '500px'
+  });
   iCMS.editor.create(neid).focus();
   $(".iCMS-editor-page").html('<option value="1">第 1 页</option>').val(1).trigger("chosen:updated");
+
 }
 function addEditorPage(){
 	//iCMSed.cleanup(iCMSed.id);
@@ -285,9 +294,25 @@ function _modal_dialog(cancel_text){
               <textarea name="description" id="description" class="span6" style="height: 150px;"><?php echo $rs['description'] ; ?></textarea>
             </div>
             <div class="clearfloat mb10"></div>
+            <div class="input-prepend"> <span class="add-on" id="chapterText">副标题</span>
+                <input type="text" name="subtitle" class="span6" id="subtitle" value="<?php echo $adRs['subtitle'] ; ?>" />
+              </div>
+            <div class="clearfloat mb10"></div>
             <div class="input-prepend input-append">
               <div class="btn-group">
                 <button class="btn btn-primary" type="submit"><i class="fa fa-check"></i> 提交</button>
+                <div class="input-prepend"> <span class="add-on"><i class="fa fa-building-o"></i> 内容</span>
+                  <select class="iCMS-editor-page chosen-select">
+                <?php
+                  $option ='';
+                  for($i=0;$i<$bodyCount;$i++){
+                    $idNum  = $i+1;
+                    $option .= '<option value="'.$idNum.'">第 '.$idNum.' / '.$bodyCount.' 页</option>';
+                  }
+                  echo $option;
+                ?>
+                  </select>
+                </div>
                 <a class="btn" href="javascript:addEditorPage();"><i class="fa fa-file-o"></i> 新增一页</a>
                 <a class="btn" href="javascript:delEditorPage();"><i class="fa fa-times-circle"></i> 删除当前页</a>
                 <a class="btn" href="javascript:mergeEditorPage();"><i class="fa fa-align-justify"></i> 合并分页</a>
@@ -301,18 +326,6 @@ function _modal_dialog(cancel_text){
               </div-->
             </div>
             <div class="clearfloat mb10"></div>
-            <div class="input-prepend"> <span class="add-on"><i class="fa fa-building-o"></i> 内容</span>
-              <select class="iCMS-editor-page chosen-select">
-            <?php
-              $option ='';
-              for($i=0;$i<$bodyCount;$i++){
-                $idNum  = $i+1;
-                $option .= '<option value="'.$idNum.'">第 '.$idNum.' / '.$bodyCount.' 页</option>';
-              }
-              echo $option;
-            ?>
-              </select>
-            </div>
             <div class="input-prepend input-append">
               <!-- <span class="add-on wauto">
               <input name="ischapter" type="checkbox" id="ischapter" value="1" <?php if($rs['chapter']) echo 'checked="checked"'  ?>/>
@@ -335,10 +348,6 @@ function _modal_dialog(cancel_text){
               不添加水印</span>
               <?php }?>
             </div>
-            <div class="clearfloat mb10"></div>
-            <div class="input-prepend"> <span class="add-on" id="chapterText">副标题</span>
-                <input type="text" name="subtitle" class="span6" id="subtitle" value="<?php echo $adRs['subtitle'] ; ?>" />
-              </div>
             <div class="clearfloat mb10"></div>
             <?php for($i=0;$i<$bodyCount;$i++){
                 $idNum  = $i+1;

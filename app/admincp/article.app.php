@@ -425,6 +425,9 @@ class articleApp{
         $body        = (array)$_POST['body'];
         $creative    = (int)$_POST['creative'];
 
+        $autopic  = isset($_POST['autopic']) ?true:false;
+        $remote   = isset($_POST['remote']) ?true:false;
+
         iACP::CP($cid,($aid?'ce':'ca'),'alert');
 
         $weight       = _int($_POST['weight']);
@@ -611,50 +614,81 @@ class articleApp{
         $body     = implode('#--iCMS.PageBreak--#',$bodyArray);
         $body     = preg_replace(array('/<script.+?<\/script>/is','/<form.+?<\/form>/is'),'',$body);
 
-        $autopic  = isset($_POST['autopic']) ?true:false;
         $remote   = isset($_POST['remote']) ?true:false;
         $dellink  = isset($_POST['dellink']) ?true:false;
         $_POST['isRedirect']  && iFS::$isRedirect = true;
         $_POST['iswatermark'] && $GLOBALS['iCONFIG']['watermark']['enable'] = false;
         $dellink && $body   = preg_replace("/<a[^>].*?>(.*?)<\/a>/si", "\\1",$body);
 
-        iFS::remotepic($body,$remote,$autopic);
-        iFS::remotepic($body,$remote,$autopic);
-        iFS::remotepic($body,$remote,$autopic);
+        $body = $this->remotepic($body,$remote);
+        $body = $this->remotepic($body,$remote);
+        $body = $this->remotepic($body,$remote);
 
         $fields = articleTable::data_fields($id);
-
         $data   = compact ($fields);
         if($id){
             articleTable::data_update($data,compact('id'));
         }else{
             articleTable::data_insert($data);
         }
-        $this->insert_db_pic($body,$aid,$autopic,$haspic);
+
+        if(isset($_POST['autopic']) && empty($haspic)){
+            $picurl = $this->remotepic($body,'autopic');
+            $uri    = parse_url(iCMS_FS_URL);
+            if (stripos($picurl,$uri['host']) !== false){
+                $picdata = (array)articleTable::value('picdata',$aid);
+                $picdata && $picdata = @unserialize($picdata);
+                $pic = iFS::fp($picurl,'-http');
+                list($width, $height, $type, $attr) = @getimagesize(iFS::fp($pic,'+iPATH'));
+                $picdata['b'] = array('w'=>$width,'h'=>$height);
+                $picdata = addslashes(serialize($picdata));
+                $haspic  = 1;
+                articleTable::update(compact('haspic','pic','picdata'),array('id'=>$aid));
+            }
+        }
+        $this->insert_db_pic($body,$aid);
     }
-    function insert_db_pic($content,$id,$autopic,$haspic) {
+    function insert_db_pic($content,$aid) {
         $content = stripslashes($content);
         preg_match_all("/<img.*?src\s*=[\"|'](.*?)[\"|']/is",$content,$match);
-        $_array = array_unique($match[1]);
-        $picdata= (array)articleTable::value('picdata',$id);
-        $picdata && $picdata = @unserialize($picdata);
-        foreach($_array as $key =>$value) {
-            $pic      = iFS::fp($value,'-http');
-            $filename = basename($pic);
-            $filename = substr($filename,0, 32);
-            if($autopic && $key==0 && empty($haspic)){
-				$uri  = parse_url(iCMS_FS_URL);
-	            if(strstr(strtolower($value),$uri['host'])){
-                   list($width, $height, $type, $attr) = @getimagesize(iFS::fp($pic,'+iPATH'));
-                   $picdata['b'] = array('w'=>$width,'h'=>$height);
-                   $picdata = addslashes(serialize($picdata));
-                   $haspic  = 1;
-                   articleTable::update(compact('haspic','pic','picdata'),compact('id'));
-                }
+        $array = array_unique($match[1]);
+        $uri   = parse_url(iCMS_FS_URL);
+        foreach($array as $key =>$value) {
+            $value = trim($value);
+            if (stripos($value,$uri['host']) !== false){
+                $pic      = iFS::fp($value,'-http');
+                $filename = basename($pic);
+                $filename = substr($filename,0, 32);
+                $faid     = articleTable::filedata_value($filename);
+                empty($faid) && articleTable::filedata_update_indexid($aid,$filename);
             }
-            $faid = articleTable::filedata_value($filename);
-            empty($faid) && articleTable::filedata_update_indexid($aid,$filename);
         }
+    }
+
+    function remotepic($content,$remote = false) {
+        if (!$remote) return $content;
+
+        iFS::$forceExt = "jpg";
+        $content = stripslashes($content);
+        preg_match_all("/<img.*?src\s*=[\"|'](.*?)[\"|']/is", $content, $match);
+        $array = array_unique($match[1]);
+        $uri    = parse_url(iCMS_FS_URL);
+        $fArray = array();
+        foreach ($array as $key => $value) {
+            $value = trim($value);
+            if (stripos($value,$uri['host']) === false){
+                $filepath = iFS::http($value);
+                $filepath && $value = iFS::fp($filepath, '+http');
+                $fArray[$key] = $value;
+            }else{
+                unset($array[$key]);
+            }
+            if($remote==="autopic" && $key==0){
+                return $value;
+            }
+        }
+        $array && $fArray && $content = str_replace($array, $fArray, $content);
+        return addslashes($content);
     }
     function picdata($pic='',$mpic='',$spic=''){
         $picdata = array();

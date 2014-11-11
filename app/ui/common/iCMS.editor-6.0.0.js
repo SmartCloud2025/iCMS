@@ -3,6 +3,7 @@
     window.UEDITOR_CONFIG = {
         UEDITOR_HOME_URL: URL
         ,iCMS_PUBLIC_URL:window.iCMS.config.PUBLIC
+        ,catchRemoteImageEnable:window.iCMS.config.catchRemoteImageEnable||false //远程图片本地化
         ,serverUrl: window.iCMS.config.API + '?app=editor'
         ,toolbars: [
         [
@@ -14,7 +15,7 @@
             'date', 'time', '|',
             'horizontal', 'spechars', 'blockquote', 'highlightcode', '|',
             'formatmatch', 'removeformat', 'autotypeset', '|',
-            'template', 'pagebreak', 'drafts'
+            'template', 'pagebreak', '|','drafts'
         ], [
             'paragraph', 'fontfamily', 'fontsize', '|',
             'bold', 'italic', 'underline', 'strikethrough',
@@ -75,7 +76,6 @@
     //wordCount
     ,wordCount:true          //是否开启字数统计
     ,maximumWords:500000       //允许的最大字符数
-    ,catchRemoteImageEnable:true
     //removeFormat
     //清除格式时可以删除的标签和属性
     //removeForamtTags标签

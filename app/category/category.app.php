@@ -108,6 +108,7 @@ class categoryApp{
         $category['subname']     = $C['subname'];
         $category['sname']       = $C['subname'];
         $category['pic']         = $C['pic'];
+        $category['nav']         = $this->get_nav($C);;
         $category['url']         = $C['iurl']['href'];
         $category['link']        = "<a href='{$category['url']}'>{$C['name']}</a>";
         if($C['rootid']){
