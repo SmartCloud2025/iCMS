@@ -18,8 +18,7 @@ $(function(){
 	$(".iCMS-editor-page").change(function(){
 		$(".iCMS-editor").hide();
 		$("#editor-"+this.value).show();
-    iCMS.editor.create(this.value);
-		iCMS.editor.get(this.value).focus();
+    iCMS.editor.create(this.value).focus();
 		$(".iCMS-editor-page").val(this.value).trigger("chosen:updated");
 	});
   iCMS.select('pid',"<?php echo $rs['pid']?trim($rs['pid']):0 ; ?>");
@@ -80,15 +79,32 @@ $(function(){
 	});
 
 });
-
+function mergeEditorPage(){
+  var html = [];
+  $(".iCMS-editor").each(function(n,a){
+    var id = a.id,eid = id.replace('editor-','');
+    if(iCMS.editor.container[eid]){
+        iCMS.editor.container[eid].destroy();
+    }
+    var content = $("textarea",this).val();
+    html.push(content);
+    if(n){
+        $(this).remove();
+    }
+  });
+  var allHtml = html.join('#--iCMS.PageBreak--#');
+  var ned = $("textarea",".iCMS-editor"),neid = ned.attr('id').replace('iCMS-editor-','');
+  ned.val(allHtml);
+  iCMS.editor.create(neid).focus();
+  $(".iCMS-editor-page").html('<option value="1">第 1 页</option>').val(1).trigger("chosen:updated");
+}
 function addEditorPage(){
 	//iCMSed.cleanup(iCMSed.id);
 	var index	= parseInt($(".iCMS-editor-page option:last").val()),n	= index+1;
 	$(".iCMS-editor").hide();
-	$("#editor-"+index).after('<div class="iCMS-editor" id="editor-'+n+'">'+unescape('%3Ctextarea type="text/plain" id="iCMS-editor-'+n+'" name="body[]"%3E%3C/3Ctextarea%3E')+'</div>');
+	$("#editor-"+index).after('<div class="iCMS-editor" id="editor-'+n+'"><textarea type="text/plain" id="iCMS-editor-'+n+'" name="body[]"></textarea></div>');
 	$(".iCMS-editor-page").append('<option value="'+n+'">第 '+n+' 页</option>').val(n).trigger("chosen:updated");
-	iCMS.editor.create(n);
-	iCMS.editor.get(n).focus();
+	iCMS.editor.create(n).focus();
 }
 function delEditorPage(){
 	if($(".iCMS-editor-page:eq(0) option").length==1) return;
@@ -101,14 +117,15 @@ function delEditorPage(){
     var index = p.val();
 	}
   s.remove();
+  UE.delEditor("iCMS-editor-"+i);
+  //iCMS.editor.get(i).destroy();
+  $("#iCMS-editor-"+i).remove();
+  $("#editor-"+i).remove();
+
 	$(".iCMS-editor-page").val(index).trigger("chosen:updated");
 	$("#editor-"+index).show();
 	iCMS.editor.id	= index;
 	iCMS.editor.get(index).focus();
-
-	iCMS.editor.get(i).destroy();
-  $("#editor-"+i).remove();
-  $("#iCMS-editor-"+i).remove();
 }
 function modal_picture(el,a){
   if(!a.checked) return;
@@ -271,8 +288,17 @@ function _modal_dialog(cancel_text){
             <div class="input-prepend input-append">
               <div class="btn-group">
                 <button class="btn btn-primary" type="submit"><i class="fa fa-check"></i> 提交</button>
-                <a class="btn" href="javascript:addEditorPage();"><i class="fa fa-file-o"></i> 新增一页</a> <a class="btn" href="javascript:delEditorPage();"><i class="fa fa-times-circle"></i> 删除当前页</a> <a class="btn" href="javascript:iCMS.editor.insPageBreak();"><i class="fa fa-ellipsis-h"></i> 插入分页符</a> <a class="btn" href="javascript:iCMS.editor.delPageBreakflag();"><i class="fa fa-ban"></i> 删除分页符</a> <a class="btn" href="javascript:iCMS.editor.cleanup();"><i class="fa fa-magic"></i> 自动排版</a> </div>
-              <div class="btn-group"><a class="btn" href="<?php echo __ADMINCP__; ?>=files&do=multi&from=modal&callback=sweditor" data-toggle="modal" title="批量上传"><i class="fa fa-upload"></i> 批量上传</a> <a class="btn" href="<?php echo __ADMINCP__; ?>=files&do=picture&from=modal&click=file&callback=picture" data-toggle="modal" title="从网站选择图片"><i class="fa fa-picture-o"></i> 从网站选择</a> </div>
+                <a class="btn" href="javascript:addEditorPage();"><i class="fa fa-file-o"></i> 新增一页</a>
+                <a class="btn" href="javascript:delEditorPage();"><i class="fa fa-times-circle"></i> 删除当前页</a>
+                <a class="btn" href="javascript:mergeEditorPage();"><i class="fa fa-align-justify"></i> 合并分页</a>
+                <a class="btn" href="javascript:iCMS.editor.insPageBreak();"><i class="fa fa-ellipsis-h"></i> 插入分页符</a>
+                <a class="btn" href="javascript:iCMS.editor.delPageBreakflag();"><i class="fa fa-ban"></i> 删除分页符</a>
+                <a class="btn" href="javascript:iCMS.editor.cleanup();"><i class="fa fa-magic"></i> 自动排版</a>
+              </div>
+              <!--div class="btn-group">
+                <a class="btn" href="<?php echo __ADMINCP__; ?>=files&do=multi&from=modal&callback=sweditor" data-toggle="modal" title="批量上传"><i class="fa fa-upload"></i> 批量上传</a>
+                <a class="btn" href="<?php echo __ADMINCP__; ?>=files&do=picture&from=modal&click=file&callback=picture" data-toggle="modal" title="从网站选择图片"><i class="fa fa-picture-o"></i> 从网站选择</a>
+              </div-->
             </div>
             <div class="clearfloat mb10"></div>
             <div class="input-prepend"> <span class="add-on"><i class="fa fa-building-o"></i> 内容</span>
@@ -328,8 +354,14 @@ function _modal_dialog(cancel_text){
               </select>
             </div>
             <div class="input-prepend input-append">
-              <div class="btn-group"> <a class="btn" href="javascript:addEditorPage();"><i class="fa fa-file-o"></i> 新增一页</a> <a class="btn" href="javascript:delEditorPage();"><i class="fa fa-times-circle"></i> 删除当前页</a> <a class="btn" href="javascript:iCMS.editor.insPageBreak();"><i class="fa fa-ellipsis-h"></i> 插入分页符</a> <a class="btn" href="javascript:iCMS.editor.delPageBreakflag();"><i class="fa fa-ban"></i> 删除分页符</a> <a class="btn" href="javascript:iCMS.editor.cleanup();"><i class="fa fa-magic"></i> 自动排版</a> </div>
-              <div class="btn-group"><a class="btn" href="<?php echo __ADMINCP__; ?>=files&do=multi&from=modal&callback=sweditor" data-toggle="modal" title="批量上传"><i class="fa fa-upload"></i> 批量上传</a> <a class="btn" href="<?php echo __ADMINCP__; ?>=files&do=picture&from=modal&click=file&callback=picture" data-toggle="modal" title="从网站选择图片"><i class="fa fa-picture-o"></i> 从网站选择</a> </div>
+              <div class="btn-group">
+                <a class="btn" href="javascript:addEditorPage();"><i class="fa fa-file-o"></i> 新增一页</a>
+                <a class="btn" href="javascript:delEditorPage();"><i class="fa fa-times-circle"></i> 删除当前页</a>
+                <a class="btn" href="javascript:mergeEditorPage();"><i class="fa fa-align-justify"></i> 合并分页</a>
+                <a class="btn" href="javascript:iCMS.editor.insPageBreak();"><i class="fa fa-ellipsis-h"></i> 插入分页符</a>
+                <a class="btn" href="javascript:iCMS.editor.delPageBreakflag();"><i class="fa fa-ban"></i> 删除分页符</a>
+                <a class="btn" href="javascript:iCMS.editor.cleanup();"><i class="fa fa-magic"></i> 自动排版</a>
+              </div>
             </div>
           </div>
           <div id="article-add-publish" class="tab-pane hide">

@@ -11,7 +11,7 @@ defined('iPHP') OR exit('What are you doing?');
 iPHP::app('user.class','static');
 iPHP::app('user.msg.class','static');
 class userApp {
-    public $methods = array('iCMS','home','favorite','article','publish','manage','profile','data','hits','check','follow','login','logout','register','add_category','upload','imageUp','mobileUp','getremote','report','fav_category','ucard','pm');
+    public $methods = array('iCMS','home','favorite','article','publish','manage','profile','data','hits','check','follow','login','logout','register','add_category','upload','mobileUp','config','uploadvideo','uploadimage','catchimage','report','fav_category','ucard','pm');
     public $openid  = null;
     public $user    = array();
     public $me      = array();
@@ -796,17 +796,26 @@ class userApp {
             iPHP::view('iCMS://user/login.close.htm');
         }
     }
-    public function API_getremote(){
+    public function API_config(){
         $this->auth OR iPHP::code(0,'iCMS:!login',0,'json');
         $editorApp = iPHP::app("admincp.editor.app");
-        $editorApp->do_getremote();
+        $editorApp->do_config();
     }
-    public function API_imageUp(){
+    public function API_catchimage(){
         $this->auth OR iPHP::code(0,'iCMS:!login',0,'json');
         $editorApp = iPHP::app("admincp.editor.app");
-        $editorApp->do_imageUp();
+        $editorApp->do_catchimage();
     }
-    //手机上传
+    public function API_uploadimage(){
+        $this->auth OR iPHP::code(0,'iCMS:!login',0,'json');
+        $editorApp = iPHP::app("admincp.editor.app");
+        $editorApp->do_uploadimage();
+    }
+    public function API_uploadvideo(){
+        $this->auth OR iPHP::code(0,'iCMS:!login',0,'json');
+        $editorApp = iPHP::app("admincp.editor.app");
+        $editorApp->do_uploadvideo();
+    }    //手机上传
     public function API_mobileUp(){
         $this->auth OR iPHP::code(0,'iCMS:!login',0,'json');
         $F = iFS::upload('upfile');
