@@ -386,7 +386,7 @@ class iFS {
             'dir'         => $frs->path,
             'ext'         => $frs->ext,
             'RootPath'    => $RP . '/' . $frs->path.$frs->filename . "." . $frs->ext,
-            'path'        => $frs->path . $frs->filename . "." . $frs->ext,
+            'path'        => $frs->filepath,
             'dirRootPath' => $RP . '/' . $frs->path
         );
     }
@@ -633,7 +633,7 @@ class iFS {
             if($ret=='array'){
                 return self::_array(1,$frs,$RootPath);
             }
-            return $frs->path . $frs->filename . "." . $frs->ext;
+            return $frs->filepath;
         }
 
         $FileExt = self::CheckValidExt($http); //判断过滤文件类型
@@ -644,7 +644,17 @@ class iFS {
         if ($fileresults) {
             $file_md5 = md5($fileresults);
             $frs = self::getFileData('filename', $file_md5);
-            if (empty($frs)) {
+            if($frs){
+                $FilePath     = $frs->filepath;
+                $FileRootPath = iFS::fp($FilePath,"+iPATH");
+                if(!is_file($FileRootPath)){
+                    self::write($FileRootPath, $fileresults);
+                    self::watermark($FileExt,$FileRootPath);
+                }
+                if($ret=='array'){
+                    return self::_array(1,$frs,$RootPath);
+                }
+            }else{
                 $FileName = $file_md5 . "." . $FileExt;
                 $FilePath = $FileDir .$FileName;
                 $FileRootPath = $RootPath .$FileName;
@@ -676,11 +686,6 @@ class iFS {
                         'dirRootPath' => $RootPath
                     );
                 }
-            } else {
-                if($ret=='array'){
-                    return self::_array(1,$frs,$RootPath);
-                }
-                $FilePath = $frs->path . $frs->filename . "." . $frs->ext;
             }
             return $FilePath;
         } else {

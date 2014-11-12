@@ -59,6 +59,8 @@ class spiderApp {
         $doType == "inbox" && $sql.=" AND `publish` ='0'";
         $_GET['pid'] && $sql.=" AND `pid` ='" . (int) $_GET['pid'] . "'";
         $_GET['rid'] && $sql.=" AND `rid` ='" . (int) $_GET['rid'] . "'";
+        $_GET['starttime'] && $sql.=" AND `addtime`>=UNIX_TIMESTAMP('".$_GET['starttime']." 00:00:00')";
+        $_GET['endtime']   && $sql.=" AND `addtime`<=UNIX_TIMESTAMP('".$_GET['endtime']." 23:59:59')";
 
         $sql.=$categoryApp->search_sql($this->cid);
 
@@ -993,6 +995,7 @@ class spiderApp {
             }
         }
         if (($info['http_code'] == 301 || $info['http_code'] == 302) && $_count < 5) {
+            $_count++;
             $newurl = $info['redirect_url'];
 	        if(empty($newurl)){
 		    	curl_setopt($ch, CURLOPT_HEADER, 1);

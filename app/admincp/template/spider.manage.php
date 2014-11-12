@@ -27,6 +27,7 @@ $(function(){
       <form action="<?php echo __SELF__; ?>" method="get" class="form-inline">
         <input type="hidden" name="app" value="<?php echo iACP::$app_name;?>" />
         <input type="hidden" name="do" value="<?php echo iACP::$app_do;?>" />
+        <input type="hidden" name="rid" value="<?php echo $_GET['rid'];?>" />
         <div class="input-prepend input-append"> <span class="add-on">栏目</span>
           <select name="cid" id="cid" class="span3 chosen-select">
             <option value="0">所有栏目</option>
@@ -82,8 +83,9 @@ $(function(){
               <td><?php echo $rs[$i]['id']; ?></td>
               <td><?php echo $rs[$i]['title']; ?><br />
                 <?php echo $rs[$i]['url']; ?></td>
-              <td><a href="<?php echo APP_URI; ?>&do=inbox&cid=<?php echo $rs[$i]['cid']; ?>&<?php echo $uri; ?>"><?php echo $C['name']; ?></a> <br />
-                <a href="<?php echo APP_URI; ?>&do=inbox&rid=<?php echo $rs[$i]['rid']; ?>&<?php echo $uri; ?>"><?php echo $ruleArray[$rs[$i]['rid']]; ?></a></td>
+              <td>
+                <a href="<?php echo APP_URI; ?>&do=manage&cid=<?php echo $rs[$i]['cid']; ?>&<?php echo $uri; ?>"><?php echo $C['name']; ?></a> <br />
+                <a href="<?php echo APP_URI; ?>&do=manage&rid=<?php echo $rs[$i]['rid']; ?>&<?php echo $uri; ?>"><?php echo $ruleArray[$rs[$i]['rid']]; ?></a></td>
               <td><?php echo get_date($rs[$i]['addtime'], 'Y-m-d H:i'); ?></td>
               <td><?php echo $rs[$i]['pubdate'] ? get_date($rs[$i]['pubdate'], 'Y-m-d H:i') : '未发布' ?></td>
               <td><?php echo $rs[$i]['status']; ?>/<?php echo $rs[$i]['publish']; ?></td>

@@ -38,6 +38,11 @@
       <div id="page">
         <div class="title">
           <h1><!--{$tag.name}--></h1>
+          <!--{if $tag.description}-->
+          <blockquote>
+            <p><!--{$tag.description}--></p>
+          </blockquote>
+          <!--{/if}-->
         </div>
         <div class="list-item">
           <ul>

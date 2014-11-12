@@ -137,7 +137,7 @@ function modal_tplfile(el,a){
                 <input type="checkbox" data-type="switch" name="config[template][index_mode]" id="index_mode" <?php echo $config['template']['index_mode']?'checked':''; ?>/>
               </div>
             </div>
-            <span class="help-inline">只对PC端有效.首页生成静态后自动跳转</span>
+            <span class="help-inline">只对PC端有效.首页生成静态后自动跳转.如果出现循环跳转请关闭此项</span>
             <div class="clearfloat mb10"></div>
             <div class="input-prepend"> <span class="add-on">首页REWRITE</span>
               <div class="switch">
@@ -577,6 +577,13 @@ function modal_tplfile(el,a){
               </div>
             </div>
             <span class="help-inline">开启后发布文章时,程序会自动对内容进行清理无用代码.采集时推荐开启.如果内容格式丢失 请关闭此项</span>
+            <div class="clearfloat mb10"></div>
+            <div class="input-prepend"> <span class="add-on">编辑器图片</span>
+              <div class="switch">
+                <input type="checkbox" data-type="switch" name="config[publish][catch_remote]" id="publish_catch_remote" <?php echo $config['publish']['catch_remote']?'checked':''; ?>/>
+              </div>
+            </div>
+            <span class="help-inline">开启后发表文章时只要有图片 就会自动下载</span>
             <div class="clearfloat mb10"></div>
             <div class="input-prepend"> <span class="add-on">下载远程图片</span>
               <div class="switch">

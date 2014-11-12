@@ -1,7 +1,7 @@
 @import "reset.css";
 /* iCMS */
 html, body { word-wrap: break-word; word-break: break-all; }
-body, button, input, select, textarea, label { color: #222; font: 14px/1.75 'Helvetica Neue', Helvetica, Arial, Sans-serif; }
+body, button, input, select, textarea, label { color: #222; font: 14px/1.75 Tahoma,Helvetica,Arial, Sans-serif; }
 input[type="checkbox"] { margin: 0px !important; }
 textarea{padding: 4px 6px;}
 i { text-align: center; }

@@ -113,10 +113,10 @@ class editorApp{
     function do_catchimage(){
     	$url_array = (array)$_POST['source'];
 		/* 抓取远程图片 */
-		$list = array();
-		$uri = parse_url(iCMS::$config['FS']['url']);
+        $list = array();
+        $uri  = parse_url(iCMS_FS_URL);
 		foreach ($url_array as $_k => $imgurl) {
-			if (strstr(strtolower($imgurl), $uri['host'])){
+            if (stripos($imgurl,$uri['host']) !== false){
 				unset($_array[$_k]);
 			}
 

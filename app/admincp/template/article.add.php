@@ -9,7 +9,7 @@ defined('iPHP') OR exit('What are you doing?');
 iACP::head();
 ?>
 <script type="text/javascript">
-window.iCMS.config.catchRemoteImageEnable = <?php echo iCMS::$config['publish']['remote']=="1"?'true':'false';?>;
+window.iCMS.config.catchRemoteImageEnable = <?php echo iCMS::$config['publish']['catch_remote']=="1"?'true':'false';?>;
 </script>
 <script type="text/javascript" charset="utf-8" src="./app/ui/common/iCMS.editor-6.0.0.js"></script>
 <script type="text/javascript" charset="utf-8" src="./app/ui/common/ueditor/ueditor.all.min.js"></script>
