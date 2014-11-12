@@ -2,7 +2,7 @@
 <html lang="zh-CN">
 <head>
   <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-  <title><!--{$tag.name}-->_<!--{$site.title}-->_<!--{$site.seotitle}--></title>
+  <title><!--{$tag.name}--><!--{if $tag.seotitle}-->_<!--{$tag.seotitle}--><!--{/if}-->_<!--{$site.title}--></title>
   <meta name="keywords" content="<!--{$tag.keywords}-->" />
   <meta name="description" content="<!--{$tag.description}-->"/>
   <meta name="mobile-agent" content="format=html5;url=<!--{$tag.url}-->"/>
