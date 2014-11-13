@@ -208,18 +208,18 @@ class articleApp {
             if($article['tags']) {
                 $tagApp   = iPHP::app("tag");
                 $tagArray = $tagApp->get_array($article['tags']);
-                $article['tags'] = array();
+                $article['tag_array'] = array();
                 foreach((array)$tagArray AS $tk=>$tag) {
-                    $article['tags'][$tk]['name'] = $tag['name'];
-                    $article['tags'][$tk]['url']  = $tag['url'];
-                    $article['tags'][$tk]['link'] = $tag['link'];
+                    $article['tag_array'][$tk]['name'] = $tag['name'];
+                    $article['tag_array'][$tk]['url']  = $tag['url'];
+                    $article['tag_array'][$tk]['link'] = $tag['link'];
                     $article['tags_link'].= $tag['link'];
                 }
                 $_tc = count($tagArray);
                 if($_tc>3){
-                    $relTags = array_slice($article['tags'],0,3);
+                    $relTags = array_slice($article['tag_array'],0,3);
                 }else{
-                    $relTags = $article['tags'];
+                    $relTags = $article['tag_array'];
                 }
                 $relTags = implode(',',$relTags);
                 unset($tagApp,$tagArray);
