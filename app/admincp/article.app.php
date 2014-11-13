@@ -506,7 +506,7 @@ class articleApp{
             $url OR $this->article_data($body,$aid,$haspic);
             $this->categoryApp->update_count_one($cid);
             if($callback){
-            	return array("code"=>$callback,'indexId'=>$aid);
+            	return array("code"=>$callback,'indexid'=>$aid);
             }
             $moreBtn = array(
                     array("text" =>"查看该文章","url"=>iURL::get('article',array(array('id'=>$aid,'url'=>$url,'cid'=>$cid,'pubdate'=>$pubdate),$this->category[$cid]))->href,"o"=>'target="_blank"'),
