@@ -101,7 +101,7 @@ if($action=='install'){
 	$setting['router']['DIR']        = $router_dir;
 	$setting['router']['public_url'] = $router_url.'/public';
 	$setting['router']['user_url']   = $router_url.'/usercp';
-	$setting['router']['404']        = $router_url.'/404.html';
+	$setting['router']['404']        = $router_url.'/public/404.html';
 	$setting['router']['tag_url']    = $router_url;
 
 	$setting['FS']['url']            = $router_url.'/res/';
