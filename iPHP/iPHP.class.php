@@ -322,11 +322,11 @@ class iPHP{
 	        return true;
 	    }
 	}
-	public static function throw404($msg="",$code="",$b=true){
+	public static function throw404($msg="",$code=""){
 		iPHP_DEBUG && self::throwException($msg,$code);
 		self::http_status(404,$code);
 		defined('iPHP_URL_404') && self::gotourl(iPHP_URL_404);
-		$b && exit();
+		exit();
 	}
 
 	public static function http_status($code,$ECODE='') {
@@ -346,8 +346,6 @@ class iPHP{
 	    );
 	    if(isset($_status[$code])) {
 	        header('HTTP/1.1 '.$code.' '.$_status[$code]);
-	        // 确保FastCGI模式下正常
-	        header('Status:'.$code.' '.$_status[$code]);
 			$ECODE && header("X-iPHP-ECODE:".$ECODE);
 	    }
 	}
