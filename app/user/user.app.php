@@ -31,7 +31,7 @@ class userApp {
         $status = array('logined'=>false,'followed'=>false,'isme'=>false);
         if($this->uid){ // &uid=
             $this->user = user::get($this->uid);
-            iPHP::http404($this->user,"user:".$this->uid);
+            empty($this->user) && iPHP::throw404('运行出错！找不到该用户',"user:".$this->uid);
         }
         $this->me = user::status(); //判断是否登陆
         if(empty($this->me) && empty($this->user)){

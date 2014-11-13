@@ -67,21 +67,21 @@ class iPHP{
         }else {
             self::$iTPL->display($tpl);
             if(iPHP_DEBUG){
-	            //echo '<span class="label label-success">内存:'.iFS::sizeUnit(memory_get_usage()).', 执行时间:'.iPHP::timer_stop().'s, SQL执行:'.iDB::$num_queries.'次</span>';
+	            //echo '<span class="label label-success">内存:'.iFS::sizeUnit(memory_get_usage()).', 执行时间:'.self::timer_stop().'s, SQL执行:'.iDB::$num_queries.'次</span>';
             }
         }
     }
     public static function view($tpl,$p='index') {
-        $tpl OR iPHP::throwException('运行出错！ 请设置模板文件', '001','TPL');
+        $tpl OR self::throw404('运行出错！ 请设置模板文件', '001','TPL');
         if(strpos($tpl,'APP:/')!==false){
             $tpl = 'file::'.self::$app_tpl."||".str_replace('APP:/','',$tpl);
         }else{
         	$tpl = self::$iTPL->get_tpl($tpl);
         }
         if(@is_file(iPHP_TPL_DIR."/".$tpl)) {
-            return iPHP::pl($tpl);
+            return self::pl($tpl);
         }else{
-        	iPHP::throwException('运行出错！ 找不到模板文件 <b>' .$tpl. '</b>', '002','TPL');
+        	self::throw404('运行出错！ 找不到模板文件 <b>' .$tpl. '</b>', '002','TPL');
         }
     }
 
@@ -255,10 +255,7 @@ class iPHP{
 		return addslashes($content);
     }
 
-	public static function throwException($msg,$code,$name='',$h404=true) {
-		if(!headers_sent() && $h404){
-			self::http_status(404,$code);
-		}
+	public static function throwException($msg,$code) {
 	    trigger_error(iPHP_APP.' '.$msg. '(' . $code . ')',E_USER_ERROR);
 	}
 	public static function p2num($path,$page=false){
@@ -325,12 +322,11 @@ class iPHP{
 	        return true;
 	    }
 	}
-	public static function http404($v,$code="",$b=true){
-		if(empty($v)){
-			self::http_status(404,$code);
-			defined('iPHP_URL_404') && self::gotourl(iPHP_URL_404);
-			$b && exit();
-		}
+	public static function throw404($msg="",$code="",$b=true){
+		iPHP_DEBUG && self::throwException($msg,$code);
+		self::http_status(404,$code);
+		defined('iPHP_URL_404') && self::gotourl(iPHP_URL_404);
+		$b && exit();
 	}
 
 	public static function http_status($code,$ECODE='') {
@@ -432,7 +428,7 @@ class iPHP{
         return $a;
     }
     public static function warning($info) {
-    	iPHP::msg('warning:#:warning:#:'.$info);
+    	self::msg('warning:#:warning:#:'.$info);
     }
     public static function msg($info,$ret=false) {
     	list($label,$icon,$content)= explode(':#:',$info);
@@ -738,7 +734,7 @@ function iPHP_ERROR_HANDLER($errno, $errstr, $errfile, $errline){
 	@header("Pragma: no-cache");
     $_GET['frame'] OR exit($html);
     $html = str_replace("\n",'<br />',$html);
-    iPHP::$dialog['lock'] = true;
-    iPHP::dialog(array("warning:#:warning-sign:#:{$html}",'系统错误!可发邮件到 idreamsoft@qq.com 反馈错误!我们将及时处理'),'js:1',30);
+    self::$dialog['lock'] = true;
+    self::dialog(array("warning:#:warning-sign:#:{$html}",'系统错误!可发邮件到 idreamsoft@qq.com 反馈错误!我们将及时处理'),'js:1',30);
     exit;
 }

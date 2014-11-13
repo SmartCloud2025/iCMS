@@ -52,7 +52,7 @@ class articleApp {
     }
     public function article($id,$page=1,$tpl=true){
         $article = iDB::row("SELECT * FROM `#iCMS@__article` WHERE id='".(int)$id."' AND `status` ='1' LIMIT 1;",ARRAY_A);
-        $article OR iPHP::throwException('运行出错！找不到文章: <b>ID:'. $id.'</b>', 10001);
+        $article OR iPHP::throw404('运行出错！找不到文章: <b>ID:'. $id.'</b>', 10001);
         if($article['url']) {
             if(iPHP::$iTPL_MODE=="html") {
                 return false;
@@ -94,7 +94,7 @@ class articleApp {
         $categoryApp = iPHP::app("category");
         $category    = $categoryApp->category($article['cid'],false);
 
-        $category OR iPHP::throwException('运行出错！找不到该文章的栏目缓存<b>cid:'. $article['cid'].'</b> 请更新栏目缓存或者确认栏目是否存在', 10002);
+        $category OR iPHP::throw404('运行出错！找不到该文章的栏目缓存<b>cid:'. $article['cid'].'</b> 请更新栏目缓存或者确认栏目是否存在', 10002);
 
         if($category['status']==0) return false;
 
