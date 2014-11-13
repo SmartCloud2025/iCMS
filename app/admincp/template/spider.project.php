@@ -11,9 +11,12 @@ iACP::head();
 ?>
 <script type="text/javascript">
 $(function(){
-	<?php if($_GET['cid']){  ?>
-	iCMS.select('cid',"<?php echo $_GET['cid'] ; ?>");
-	<?php } ?>
+  <?php if($_GET['cid']){  ?>
+  iCMS.select('cid',"<?php echo $_GET['cid'] ; ?>");
+  <?php } ?>
+  <?php if($_GET['rid']){  ?>
+  iCMS.select('cid',"<?php echo $_GET['rid'] ; ?>");
+  <?php } ?>
 	<?php if($_GET['sub']=="on"){ ?>
 	iCMS.checked('#sub');
 	<?php } ?>
@@ -38,6 +41,14 @@ $(function(){
           <span class="add-on">
           <input type="checkbox" name="sub" id="sub"/>
           子栏目 </span> </div>
+        <div class="input-prepend"> <span class="add-on">规则</span>
+          <select name="rid" id="rid" class="span3 chosen-select">
+            <option value="0">所有规则</option>
+            <?php foreach ((array)$ruleArray as $rid => $rname) {
+              echo '<option value="'.$rid.'">'.$rname.'</option>';
+            }?>
+          </select>
+        </div>
         <div class="input-prepend input-append"> <span class="add-on">每页</span>
           <input type="text" name="perpage" id="perpage" value="<?php echo $_GET['perpage'] ? $_GET['perpage'] : 20; ?>" style="width:36px;"/>
           <span class="add-on">条记录</span> </div>

@@ -58,7 +58,7 @@ $(function(){
 <div class="iCMS-container">
   <div class="widget-box">
     <div class="widget-title"> <span class="icon"> <i class="fa fa-plus-square"></i> </span>
-      <h5 class="brs"><?php echo empty($this->rid)?'添加':'修改' ; ?>规则</h5>
+      <h5 class="brs"><?php echo ($this->rid ?'修改':'添加') ; ?><?php echo "[{$rs['name']}]"; ?>规则</h5>
       <ul class="nav nav-tabs" id="spider-tab">
         <li class="active"><a href="#spider-base" data-toggle="tab"><i class="fa fa-info-circle"></i> 基本设置</a></li>
         <li><a href="#spider-data" data-toggle="tab"><i class="fa fa-truck"></i> 数据项</a></li>
@@ -191,6 +191,9 @@ $(function(){
                     <label class="checkbox">
                       <input type="checkbox" name="rule[data][<?php echo $dkey;?>][json_decode]" value="1"<?php if($data['json_decode']){ echo ' checked="true"';};?>>
                       json解码</label>
+                    <label class="checkbox">
+                      <input type="checkbox" name="rule[data][<?php echo $dkey;?>][img_absolute]" value="1"<?php if($data['img_absolute']){ echo ' checked="true"';};?>>
+                      图片地址补全</label>
                     <div class="clearfloat mb10"></div></td>
                   <td><a class="btn btn-small delprop"><i class="fa fa-trash-o"></i> 删除</a></td>
                 </tr>
@@ -240,6 +243,9 @@ $(function(){
                     <label class="checkbox">
                       <input type="checkbox" name="rule[data][__NO__][json_decode]" value="1">
                       json解码</label>
+                    <label class="checkbox">
+                      <input type="checkbox" name="rule[data][__NO__][img_absolute]" value="1">
+                      图片地址补全</label>
                     <div class="clearfloat mb10"></div></td>
                   <td><a class="btn btn-small delprop"><i class="fa fa-trash-o"></i> 删除</a></td>
                 </tr>

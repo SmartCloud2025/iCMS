@@ -635,25 +635,29 @@ class spiderApp {
             }
         }
 
-        $rule = $this->pregTag($data['rule']);
+        $data_rule = $this->pregTag($data['rule']);
         if ($this->contTest) {
-            print_r(iS::escapeStr($rule));
+            print_r(iS::escapeStr($data_rule));
             echo "<hr />";
         }
-        if (preg_match('/(<\w+>|\.\*|\.\+|\\\d|\\\w)/i', $rule)) {
+        if (preg_match('/(<\w+>|\.\*|\.\+|\\\d|\\\w)/i', $data_rule)) {
             if ($data['multi']) {
-                preg_match_all('|' . $rule . '|is', $html, $matches, PREG_SET_ORDER);
+                preg_match_all('|' . $data_rule . '|is', $html, $matches, PREG_SET_ORDER);
                 $conArray = array();
                 foreach ((array) $matches AS $mkey => $mat) {
                     $conArray[] = $mat['content'];
                 }
                 $content = implode('#--iCMS.PageBreak--#', $conArray);
+                if ($this->contTest) {
+                    print_r(htmlspecialchars($content));
+                    echo "<hr />";
+                }
             } else {
-                preg_match('|' . $rule . '|is', $html, $matches, $PREG_SET_ORDER);
+                preg_match('|' . $data_rule . '|is', $html, $matches, $PREG_SET_ORDER);
                 $content = $matches['content'];
             }
         } else {
-            $content = $rule;
+            $content = $data_rule;
         }
 		$html = null;
         unset($html);
@@ -665,13 +669,30 @@ class spiderApp {
             $content = preg_replace('/<[\/\!]*?[^<>]*?>/is', '', $content);
         }
         if ($data['format'] && $content) {
-            $_content = iPHP::cleanHtml($content);
-            trim($_content) && $content = $_content;
+            // $_content = iPHP::cleanHtml($content);
+            // trim($_content) && $content = $_content;
             $content = autoformat($content);
             $content = stripslashes($content);
             unset($_content);
         }
-
+        if ($data['img_absolute'] && $content) {
+            preg_match_all("/<img.*?src\s*=[\"|'](.*?)[\"|']/is", $content, $img_match);
+            if($img_match[1]){
+                $_img_array = array_unique($img_match[1]);
+                $_rule_uri  = parse_url($rule['__url__']);
+                $_rule_host = $_rule_uri['scheme'].'://'.$_rule_uri['host'];
+                $_img_urls  = array();
+                foreach ($_img_array as $_img_key => $_img_src) {
+                    $_img_src = trim($_img_src);
+                    if (stripos($_img_src,'http://') === false){
+                        $_img_urls[$_img_key] = $_rule_host.'/'.ltrim($_img_src,'/');
+                    }else{
+                        unset($_img_array[$_img_key]);
+                    }
+                }
+                $_img_urls && $content = str_replace($_img_array, $_img_urls, $content);
+            }
+        }
 
         $data['trim'] && $content = trim($content);
 
