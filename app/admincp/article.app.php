@@ -671,7 +671,7 @@ class articleApp{
         iFS::$forceExt = "jpg";
         $content = stripslashes($content);
         preg_match_all("/<img.*?src\s*=[\"|'](.*?)[\"|']/is", $content, $match);
-        $array = array_unique($match[1]);
+        $array  = array_unique($match[1]);
         $uri    = parse_url(iCMS_FS_URL);
         $fArray = array();
         foreach ($array as $key => $value) {
@@ -686,6 +686,9 @@ class articleApp{
             if($remote==="autopic" && $key==0){
                 return $value;
             }
+        }
+        if($remote==="autopic" && empty($array)){
+            return;
         }
         $array && $fArray && $content = str_replace($array, $fArray, $content);
         return addslashes($content);
