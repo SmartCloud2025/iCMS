@@ -133,7 +133,7 @@ function article_list($vars){
         $limit     = '';
     }
     if($vars['cache']){
-        $cache_name = 'article/'.$md5."/".(int)$GLOBALS['page'];
+        $cache_name = iPHP_DEVICE.'/article/'.$md5."/".(int)$GLOBALS['page'];
         $resource   = iCache::get($cache_name);
     }
     // $func = '__article_array';

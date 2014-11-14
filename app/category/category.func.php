@@ -39,10 +39,10 @@ function category_list($vars){
 			$where_sql.=" AND `rootid`='$parent'";
 		break;
 	}
-	if(isset($vars['pid'])){
+	if(isset($vars['pids'])){
 		iPHP::import(iPHP_APP_CORE .'/iMAP.class.php');
 		map::init('prop',iCMS_APP_CATEGORY);
-		$where_sql.= map::exists($vars['pid'],'`#iCMS@__category`.cid'); //主表小 map表大
+		$where_sql.= map::exists($vars['pids'],'`#iCMS@__category`.cid'); //主表小 map表大
 //		$map_where=map::where($vars['pids']); //主表大 map表大
 //		$map_ids    = map::ids($vars['pid']);
 //		$map_sql    = map::sql($vars['pid']); //map 表小的用 in
@@ -52,7 +52,7 @@ function category_list($vars){
 		//$where_sql.=" AND `cid` IN ($map_sql)";
 	}
 	if($vars['cache']){
-		$cache_name = 'category/'.md5($where_sql);
+		$cache_name = iPHP_DEVICE.'/category/'.md5($where_sql);
 		$resource   = iCache::get($cache_name);
 	}
 	if(empty($resource)){

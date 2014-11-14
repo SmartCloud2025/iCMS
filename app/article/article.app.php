@@ -214,19 +214,18 @@ class articleApp {
                     $article['tag_array'][$tk]['url']  = $tag['url'];
                     $article['tag_array'][$tk]['link'] = $tag['link'];
                     $article['tags_link'].= $tag['link'];
+                    $tag_name_array[] = $tag['name'];
                 }
-                $_tc = count($tagArray);
-                if($_tc>3){
-                    $relTags = array_slice($article['tag_array'],0,3);
+                $tag_count = count($tag_name_array);
+                if($tag_count>3){
+                    $tag_names = array_slice($tag_name_array,0,3);
                 }else{
-                    $relTags = $article['tag_array'];
+                    $tag_names = $tag_name_array;
                 }
-                $relTags = implode(',',$relTags);
-                unset($tagApp,$tagArray);
+                $tag_names = implode(',',$tag_names);
+                unset($tagApp,$tagArray,$tag_name_array);
             }
-
-            $article['rel_name'] = $relTags?$relTags:$category['name'];
-            $article['rel']      = $article['related'];
+            $article['tag_names'] = $tag_names?$tag_names:$category['name'];
         }
 
         if($vars['meta']){

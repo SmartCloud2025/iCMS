@@ -36,7 +36,7 @@ function favorite_list($vars=null){
         $offset	= $multi->offset;
 	}
 	if($vars['cache']){
-		$cache_name = 'favorite/'.$md5."/".(int)$GLOBALS['page'];
+		$cache_name = iPHP_DEVICE.'/favorite/'.$md5."/".(int)$GLOBALS['page'];
 		$resource   = iCache::get($cache_name);
 	}
 	if(empty($resource)){

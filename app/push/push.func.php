@@ -40,7 +40,7 @@ function push_list($vars){
         default:        $order_sql=" ORDER BY `id` DESC";
     }
 	if($vars['cache']){
-        $cache_name = 'push/'.md5($where_sql);
+        $cache_name = iPHP_DEVICE.'/push/'.md5($where_sql);
         $resource   = iCache::get($cache_name);
 	}
 	if(empty($resource)){

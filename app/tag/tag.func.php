@@ -71,7 +71,7 @@ function tag_list($vars){
         $offset	= $multi->offset;
 	}
 	if($vars['cache']){
-		$cache_name = 'tags/'.$md5."/".(int)$GLOBALS['page'];
+		$cache_name = iPHP_DEVICE.'/tags/'.$md5."/".(int)$GLOBALS['page'];
 		$resource   = iCache::get($cache_name);
 	}
     if($map_sql || $offset){

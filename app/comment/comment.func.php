@@ -111,7 +111,7 @@ function comment_list($vars){
 		iPHP::assign("comment_total",$total);
 	}
 	if($vars['cache']){
-		$cache_name = 'comment/'.$md5."/".(int)$offset;
+		$cache_name = iPHP_DEVICE.'/comment/'.$md5."/".(int)$offset;
 		$resource   = iCache::get($cache_name);
 	}
 	if(empty($resource)){

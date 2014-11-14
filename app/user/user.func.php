@@ -63,7 +63,7 @@ function user_list($vars=null){
         $where_sql = "WHERE `uid` IN({$ids})";
     }
 	if($vars['cache']){
-        $cache_name = 'user_list/'.md5($where_sql);
+        $cache_name = iPHP_DEVICE.'/user_list/'.md5($where_sql);
         $resource   = iCache::get($cache_name);
 	}
 
