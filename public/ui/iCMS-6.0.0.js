@@ -36,6 +36,7 @@
             var timeOutID = null,t = t || 0, l = l || 0,
             pop = a.parent().find('.popover');
             a.hover(function() {
+                $(".popover").hide();
                 var position = $(this).position();
                 pop.show().css({
                     top: position.top + t,

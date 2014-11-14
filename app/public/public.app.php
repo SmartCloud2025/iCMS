@@ -7,7 +7,7 @@
  * @$Id: public.app.php 1392 2013-05-20 12:28:08Z coolmoo $
  */
 class publicApp {
-	public $methods	= array('weixin','sitemapindex','sitemap','seccode','agreement','crontab','time');
+	public $methods	= array('weixin','sitemapindex','sitemap','seccode','agreement','crontab','time','qrcode');
     public function API_agreement(){
     	iPHP::view('iCMS://agreement.htm');
     }
@@ -111,7 +111,8 @@ class publicApp {
         iSeccode::run();
     }
 
-    public function qrcode(){
-        iPHP::QRcode();
+    public function API_qrcode(){
+        $url = iS::escapeStr($_GET['url']);
+        iPHP::QRcode($url);
     }
 }
