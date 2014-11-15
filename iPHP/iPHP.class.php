@@ -325,7 +325,9 @@ class iPHP{
 	public static function throw404($msg="",$code=""){
 		iPHP_DEBUG && self::throwException($msg,$code);
 		self::http_status(404,$code);
-		defined('iPHP_URL_404') && self::gotourl(iPHP_URL_404);
+		if(defined('iPHP_URL_404')){
+			iPHP_URL_404 && self::gotourl(iPHP_URL_404.'?url='.$_SERVER['HTTP_HOST'].$_SERVER['REQUEST_URI']);
+		}
 		exit();
 	}
 
@@ -583,6 +585,7 @@ class iPHP{
 	    //(int)$lastpg<2 &&UCP::$pagenav='';
 	}
 	public static function total($tnkey,$sql,$type=null){
+		$tnkey=='sql.md5' && $tnkey = md5($sql);
 		$tnkey = substr($tnkey,8,16);
 		$total = (int)$_GET['total_num'];
     	if(empty($total) && $type===null &&!isset($_GET['total_cahce'])){

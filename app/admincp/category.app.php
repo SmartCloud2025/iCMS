@@ -494,7 +494,7 @@ class categoryApp extends category{
     function listbtn($rs){
         $a='<a href="'.iURL::get('category',$rs)->href.'" class="btn btn-small"><i class="fa fa-link"></i> 访问</a> ';
         iACP::CP($rs['cid'],'ca') && $a.='<a href="'.__ADMINCP__.'=article&do=add&cid='.$rs['cid'] .'" class="btn btn-small"><i class="fa fa-edit"></i> 添加文章</a> ';
-        iACP::CP($rs['cid'],'cs') && $a.='<a href="'.__ADMINCP__.'=article&cid='.$rs['cid'] .'&sub=on" class="btn btn-small"><i class="fa fa-list-alt"></i> 文章管理</a>';
+        iACP::CP($rs['cid'],'cs') && $a.='<a href="'.__ADMINCP__.'=article&cid='.$rs['cid'] .'&sub=on" class="btn btn-small"><i class="fa fa-list-alt"></i> 文章管理</a> ';
         return $a;
     }
     function treebtn($rs){

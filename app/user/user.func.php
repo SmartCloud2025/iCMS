@@ -42,31 +42,37 @@ function user_list($vars=null){
         $map_sql   = iCMS::map_sql($map_where);
         $where_sql = ",({$map_sql}) map {$where_sql} AND `uid` = map.`iid`";
     }
-	$md5	= md5($where_sql.$order_sql);
 	$offset	= 0;
 	$limit  = "LIMIT {$maxperpage}";
 	if($vars['page']){
-		$total	= iPHP::total($md5,"SELECT count(*) FROM `#iCMS@__user` {$where_sql} ");
+		$total	= iPHP::total('sql.md5',"SELECT count(*) FROM `#iCMS@__user` {$where_sql} ");
 		iPHP::assign("user_total",$total);
 		$multi  = iCMS::page(array('total'=>$total,'perpage'=>$maxperpage,'unit'=>iPHP::lang('iCMS:page:list'),'nowindex'=>$GLOBALS['page']));
 		$offset = $multi->offset;
 		$limit  = "LIMIT {$offset},{$maxperpage}";
+        iPHP::assign("user_list_total",$total);
 	}
+    $hash = md5($where_sql.$order_sql.$limit);
+
     if($map_sql || $offset){
-        $ids_array = iDB::all("
-            SELECT `uid` FROM `#iCMS@__user`
-            {$where_sql} {$order_sql} {$limit}
-        ");
+        if($vars['cache']){
+			$map_cache_name = iPHP_DEVICE.'/user_map/'.$hash;
+			$ids_array      = iCache::get($map_cache_name);
+        }
+        if(empty($ids_array)){
+            $ids_array = iDB::all("SELECT `id` FROM `#iCMS@__user` {$where_sql} {$order_sql} {$limit}");
+            iPHP_SQL_DEBUG && iDB::debug(1);
+            $vars['cache'] && iCache::set($map_cache_name,$ids_array,$cache_time);
+        }
         //iDB::debug(1);
         $ids       = iCMS::get_ids($ids_array,'uid');
         $ids       = $ids?$ids:'0';
         $where_sql = "WHERE `uid` IN({$ids})";
     }
-	if($vars['cache']){
-        $cache_name = iPHP_DEVICE.'/user_list/'.md5($where_sql);
-        $resource   = iCache::get($cache_name);
-	}
-
+    if($vars['cache']){
+		$cache_name = iPHP_DEVICE.'/user_list/'.$hash;
+		$resource   = iCache::get($cache_name);
+    }
 	if(empty($resource)){
         $resource = iDB::all("SELECT * FROM `#iCMS@__user` {$where_sql} {$order_sql} {$limit}");
 		iPHP_SQL_DEBUG && iDB::debug(1);

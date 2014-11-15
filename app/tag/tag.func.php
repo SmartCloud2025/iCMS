@@ -61,29 +61,41 @@ function tag_list($vars){
         $where_sql = ",({$map_sql}) map {$where_sql} AND `id` = map.`iid`";
     }
 
-	$md5	= md5($where_sql.$order_sql);
 	$offset	= 0;
 	$limit  = "LIMIT {$maxperpage}";
 	if($vars['page']){
-		$total	= iPHP::total($md5,"SELECT count(*) FROM `#iCMS@__tags` {$where_sql} ");
+		$total	= iPHP::total('sql.md5',"SELECT count(*) FROM `#iCMS@__tags` {$where_sql} ");
 		iPHP::assign("tags_total",$total);
-        $multi	= iCMS::page(array('total'=>$total,'perpage'=>$maxperpage,'unit'=>iPHP::lang('iCMS:page:list'),'nowindex'=>$GLOBALS['page']));
-        $offset	= $multi->offset;
+		$multi  = iCMS::page(array('total'=>$total,'perpage'=>$maxperpage,'unit'=>iPHP::lang('iCMS:page:list'),'nowindex'=>$GLOBALS['page']));
+		$offset = $multi->offset;
+		$limit  = "LIMIT {$offset},{$maxperpage}";
+        iPHP::assign("tags_list_total",$total);
 	}
+	$hash = md5($where_sql.$order_sql.$limit);
+
 	if($vars['cache']){
 		$cache_name = iPHP_DEVICE.'/tags/'.$md5."/".(int)$GLOBALS['page'];
 		$resource   = iCache::get($cache_name);
 	}
     if($map_sql || $offset){
-        $ids_array = iDB::all("
-            SELECT `id` FROM `#iCMS@__tags`
-            {$where_sql} {$order_sql} {$limit}
-        ");
+        if($vars['cache']){
+			$map_cache_name = iPHP_DEVICE.'/tags_map/'.$hash;
+			$ids_array      = iCache::get($map_cache_name);
+        }
+        if(empty($ids_array)){
+            $ids_array = iDB::all("SELECT `id` FROM `#iCMS@__tags` {$where_sql} {$order_sql} {$limit}");
+            iPHP_SQL_DEBUG && iDB::debug(1);
+            $vars['cache'] && iCache::set($map_cache_name,$ids_array,$cache_time);
+        }
         //iDB::debug(1);
         $ids       = iCMS::get_ids($ids_array);
         $ids       = $ids?$ids:'0';
         $where_sql = "WHERE `id` IN({$ids})";
         $limit     = '';
+    }
+    if($vars['cache']){
+        $cache_name = iPHP_DEVICE.'/tags/'.$hash;
+        $resource   = iCache::get($cache_name);
     }
 	if(empty($resource)){
 		$resource = iDB::all("SELECT * FROM `#iCMS@__tags` {$where_sql} {$order_sql} {$limit}");
@@ -130,7 +142,7 @@ function tag_flist($vars){
         $offset	= $multi->offset;
 	}
 	if($vars['cache']){
-		$cache_name = 'tags/'.$md5."/".(int)$GLOBALS['page'];
+		$cache_name = iPHP_DEVICE.'/tags/'.$md5."/".(int)$GLOBALS['page'];
 		$resource   = iCache::get($cache_name);
 	}
 	if(empty($resource)){

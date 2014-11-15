@@ -108,12 +108,11 @@ function article_list($vars){
         $map_sql   = iCMS::map_sql($map_where);
         $where_sql = ",({$map_sql}) map {$where_sql} AND `id` = map.`iid`";
     }
-    $md5    = md5($where_sql.$order_sql.$maxperpage);
     $offset = 0;
     $limit  = "LIMIT {$maxperpage}";
     if($vars['page']){
         $total_type = $vars['total_cache']?$vars['total_cache']:null;
-        $total      = iPHP::total($md5,"SELECT count(*) FROM `#iCMS@__article` {$where_sql}",$total_type);
+        $total      = iPHP::total('sql.md5',"SELECT count(*) FROM `#iCMS@__article` {$where_sql}",$total_type);
         $pagenav    = isset($vars['pagenav'])?$vars['pagenav']:"pagenav";
         $pnstyle    = isset($vars['pnstyle'])?$vars['pnstyle']:0;
         $multi      = iCMS::page(array('total_type'=>$total_type,'total'=>$total,'perpage'=>$maxperpage,'unit'=>iPHP::lang('iCMS:page:list'),'nowindex'=>$GLOBALS['page']));
@@ -121,19 +120,25 @@ function article_list($vars){
         $limit      = "LIMIT {$offset},{$maxperpage}";
         iPHP::assign("article_list_total",$total);
     }
+
+    $hash = md5($where_sql.$order_sql.$limit);
     if($map_sql || $offset){
-        $ids_array = iDB::all("
-            SELECT `id` FROM `#iCMS@__article`
-            {$where_sql} {$order_sql} {$limit}
-        ");
-        iPHP_SQL_DEBUG && iDB::debug(1);
+        if($vars['cache']){
+            $map_cache_name = iPHP_DEVICE.'/article_map/'.$hash;
+            $ids_array      = iCache::get($map_cache_name);
+        }
+        if(empty($ids_array)){
+            $ids_array = iDB::all("SELECT `id` FROM `#iCMS@__article` {$where_sql} {$order_sql} {$limit}");
+            iPHP_SQL_DEBUG && iDB::debug(1);
+            $vars['cache'] && iCache::set($map_cache_name,$ids_array,$cache_time);
+        }
         $ids       = iCMS::get_ids($ids_array);
         $ids       = $ids?$ids:'0';
         $where_sql = "WHERE `id` IN({$ids})";
         $limit     = '';
     }
     if($vars['cache']){
-        $cache_name = iPHP_DEVICE.'/article/'.$md5."/".(int)$GLOBALS['page'];
+        $cache_name = iPHP_DEVICE.'/article/'.$hash;
         $resource   = iCache::get($cache_name);
     }
     // $func = '__article_array';

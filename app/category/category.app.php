@@ -28,7 +28,9 @@ class categoryApp{
 
     public function category($id,$tpl='index') {
         $category = iCache::get('iCMS/category/'.$id);
-       	$category OR iPHP::throw404('运行出错！找不到该栏目<b>cid:'. $id.'</b> 请更新栏目缓存或者确认栏目是否存在', 20001);
+        if(empty($category) && $tpl){
+            iPHP::throw404('运行出错！找不到该栏目<b>cid:'. $id.'</b> 请更新栏目缓存或者确认栏目是否存在', 20001);
+        }
         if($category['status']==0) return false;
 
         $iurl = iURL::get('category',$category);

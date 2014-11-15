@@ -679,17 +679,24 @@ class spiderApp {
             preg_match_all("/<img.*?src\s*=[\"|'](.*?)[\"|']/is", $content, $img_match);
             if($img_match[1]){
                 $_img_array = array_unique($img_match[1]);
-                $_rule_uri  = parse_url($rule['__url__']);
-                $_rule_host = $_rule_uri['scheme'].'://'.$_rule_uri['host'];
-                $_img_urls  = array();
+
+                $_rule_url_dir = pathinfo($rule['__url__'],PATHINFO_DIRNAME);
+                $_rule_uri     = parse_url($rule['__url__']);
+                $_rule_host    = $_rule_uri['scheme'].'://'.$_rule_uri['host'];
+                $_img_urls     = array();
                 foreach ($_img_array as $_img_key => $_img_src) {
                     $_img_src = trim($_img_src);
                     if (stripos($_img_src,'http://') === false){
-                        $_img_urls[$_img_key] = $_rule_host.'/'.ltrim($_img_src,'/');
+                        if ($_img_src{0}=='/'){
+                            $_img_urls[$_img_key] = $_rule_host.'/'.ltrim($_img_src,'/');
+                        }else{
+                            $_img_urls[$_img_key] = iFS::path($_rule_url_dir.'/'.ltrim($_img_src,'/'));
+                        }
                     }else{
                         unset($_img_array[$_img_key]);
                     }
                 }
+                //print_r($_img_urls);
                 $_img_urls && $content = str_replace($_img_array, $_img_urls, $content);
             }
         }
