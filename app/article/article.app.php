@@ -127,12 +127,13 @@ class articleApp {
             }
             $body     = explode('#--iCMS.PageBreak--#',$art_data['body']);
             $count    = count($body);
-            $total    = $count+1;
+            $total    = $count+intval(iCMS::$config['article']['pageno_incr']);
+
             $article['body']     = $this->keywords($body[intval($page-1)]);
             $article['body']     = $this->taoke($article['body']);
             $article['subtitle'] = $art_data['subtitle'];
-            unset($art_data);
             $article['taoke']    = $this->taoke;
+            unset($art_data);
             if($total>1) {
                 $flag    = 0;
                 $num_nav = '';
@@ -158,8 +159,8 @@ class articleApp {
                 $pagenav   = $index_nav.$prev_nav.$num_nav.$next_nav.$end_nav;
             }
             $article['page'] = array(
-                'total'   => $total,
-                'count'   => $count,
+                'total'   => $total,//总页数
+                'count'   => $count,//实际页数
                 'current' => $page,
                 'num'     => $num_nav,
                 'text'    => $text_nav,
@@ -167,21 +168,26 @@ class articleApp {
                 'prev'    => $prev_url,
                 'next'    => $next_url,
                 'pageurl' => $pageurl,
+                'last'    => ($count==$page?true:false),//实际最后一页
                 'end'     => ($total==$page?true:false)
             );
             unset($index_nav,$prev_nav,$num_nav,$next_nav,$end_nav,$pagenav);
-            if($page<$total){
+            if($page<=$count){
                 $img_array = array_unique($pic_array[0]);
                 foreach($img_array as $key =>$img){
-                    $article['body'] = str_replace($img,'<p align="center"><a href="'.$next_url.'"><b>'.iPHP::lang('iCMS:article:clicknext').'</b></a></p>
-                    <p align="center"><a href="'.$next_url.'" title="'.$article['title'].'">'.$img.'</a></p>',$article['body']);
+                    $img_replace = '<p align="center">'.$img.'</p>';
+                    if(iCMS::$config['article']['pic_next'] && $page<$count){
+                        $img_replace = '<p align="center"><a href="'.$next_url.'"><b>'.iPHP::lang('iCMS:article:clicknext').'</b></a></p>
+                        <p align="center"><a href="'.$next_url.'" title="'.$article['title'].'">'.$img.'</a></p>';
+                    }
+                    $article['body'] = str_replace($img,$img_replace,$article['body']);
                 }
             }
         }
 
-        if($vars['prev_next']){ //实测 mysql消耗大户 不缓存顶不住
+        if($vars['prev_next'] && iCMS::$config['article']['prev_next']){
             //上一篇
-            $prev_cache_name = 'article/'.$article['id'].'/prev';
+            $prev_cache_name = iPHP_DEVICE.'/article/'.$article['id'].'/prev';
             $prev = iCache::get($prev_cache_name);
             if(empty($prev)){
                 $prers = iDB::row("SELECT * FROM `#iCMS@__article` WHERE `id` < '{$article['id']}' AND `cid`='{$article['cid']}' AND `status`='1' order by id DESC LIMIT 1;");
@@ -192,7 +198,7 @@ class articleApp {
             }
             $article['prev'] = $prev?$prev:iPHP::lang('iCMS:article:first');
             //下一篇
-            $next_cache_name = 'article/'.$article['id'].'/next';
+            $next_cache_name = iPHP_DEVICE.'/article/'.$article['id'].'/next';
             $next = iCache::get($next_cache_name);
             if(empty($next)){
                 $nextrs = iDB::row("SELECT * FROM `#iCMS@__article` WHERE `id` > '{$article['id']}'  and `cid`='{$article['cid']}' AND `status`='1' order by id ASC LIMIT 1;");

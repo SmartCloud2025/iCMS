@@ -736,6 +736,27 @@ function modal_tplfile(el,a){
             </div>
             <span class="help-inline">后台侧边栏默认开启,启用后可选择打开或者最小化</span>
             <hr />
+            <h3>文章显示相关设置</h3>
+            <div class="clearfloat"></div>
+            <div class="input-prepend"> <span class="add-on">文章图片链接</span>
+              <div class="switch" data-on-label="启用" data-off-label="关闭">
+                <input type="checkbox" data-type="switch" name="config[article][pic_next]" id="article_pic_next" <?php echo $config['article']['pic_next']?'checked':''; ?>/>
+              </div>
+            </div>
+            <span class="help-inline">启用后文章内的图片都会带上下一页的链接和点击图片进入下一页的链接</span>
+            <div class="clearfloat mb10"></div>
+            <div class="input-prepend"> <span class="add-on">文章分页+N</span>
+              <input type="text" name="config[article][pageno_incr]" class="span3" id="article_pageno_incr" value="<?php echo $config['article']['pageno_incr'] ; ?>"/>
+            </div>
+            <span class="help-inline">设置此项后,内容分页数比实际页数+N页,不增加请设置为0</span>
+            <div class="clearfloat mb10"></div>
+            <div class="input-prepend"> <span class="add-on">文章上下文</span>
+              <div class="switch" data-on-label="启用" data-off-label="关闭">
+                <input type="checkbox" data-type="switch" name="config[article][prev_next]" id="article_prev_next" <?php echo $config['article']['prev_next']?'checked':''; ?>/>
+              </div>
+            </div>
+            <span class="help-inline">启用文章上下文(内容页的上一篇/下一篇) 这个比较耗性能 如果访问量较大 建议关闭</span>
+            <hr />
             <h3>微信公众平台</h3>
             <span class="help-inline">申请地址:https://mp.weixin.qq.com/</span>
             <div class="clearfloat"></div>
