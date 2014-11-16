@@ -36,6 +36,9 @@ class iCMS {
         iPHP_DEBUG      && iDB::$show_errors = true;
         iPHP_TPL_DEBUG  && iPHP::clear_compiled_tpl();
 
+        $__URI = parse_url(self::$config['router']['URL']);
+        define('__HOST__',       $__URI['scheme'].'://'.$__URI['host']);
+
         define('iCMS_DIR',       self::$config['router']['DIR']);
         define('iCMS_URL',       self::$config['router']['URL']);
         define('iCMS_PUBLIC_URL',self::$config['router']['public_url']);
@@ -45,6 +48,7 @@ class iCMS {
         define('iCMS_API',       iCMS_PUBLIC_URL.'/api.php');
         define('iCMS_UI',        iCMS_DIR.'app/ui/common');
         define('iCMS_UI_URL',    iCMS_URL.'/app/ui/common');
+
         self::$apps = self::$config['apps'];
         self::assign_site();
 	}

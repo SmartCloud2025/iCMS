@@ -49,6 +49,7 @@ $(function(){
             }?>
           </select>
         </div>
+        <div class="clearfix mb10"></div>
         <div class="input-prepend input-append"> <span class="add-on">每页</span>
           <input type="text" name="perpage" id="perpage" value="<?php echo $_GET['perpage'] ? $_GET['perpage'] : 20; ?>" style="width:36px;"/>
           <span class="add-on">条记录</span> </div>

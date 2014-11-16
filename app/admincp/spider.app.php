@@ -372,16 +372,17 @@ class spiderApp {
             unset($html);
 
             if ($this->ruleTest) {
-                echo iS::escapeStr($this->pregTag($rule['list_area_rule']));
+                echo iS::escapeStr($rule['list_area_rule']);
 //    			echo iS::escapeStr($list_area);
                 echo "<hr />";
             }
             if ($rule['list_area_format']) {
-                $list_area = $this->dataClean($data['list_area_format'], $list_area);
+                $list_area = $this->dataClean($rule['list_area_format'], $list_area);
             }
             if ($this->ruleTest) {
-                echo iS::escapeStr($this->pregTag($rule['list_area_format']));
-//              echo iS::escapeStr($list_area);
+                echo iS::escapeStr($rule['list_area_format']);
+                echo "<hr />";
+                echo iS::escapeStr($list_area);
                 echo "<hr />";
             }
 
@@ -399,7 +400,8 @@ class spiderApp {
             }
 
             if ($this->ruleTest) {
-                echo iS::escapeStr($this->pregTag($rule['list_url_rule']));
+                echo iS::escapeStr($rule['list_url_rule']);
+                echo "<hr />";
                 echo iS::escapeStr($rule['list_url']);
                 echo "<hr />";
             }
@@ -754,6 +756,7 @@ class spiderApp {
             list($_pattern, $_replacement) = explode("==", $rule);
             $_pattern          = trim($_pattern);
             $_replacement      = trim($_replacement);
+            $_replacement      = str_replace('\n', "\n", $_replacement);
             $pattern[$key]     = '|' . $this->pregTag($_pattern) . '|is';
             $replacement[$key] = $_replacement;
         }

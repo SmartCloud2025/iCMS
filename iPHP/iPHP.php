@@ -48,7 +48,6 @@ iS::gp('page','GP',2);
 
 define('__SELF__',	$_SERVER['PHP_SELF']);
 define('__REF__', 	$_SERVER['HTTP_REFERER']);
-define('__HOST__', 	$_SERVER['HTTP_HOST']);
 
 iPHP::loadClass("Mysql");		//加载数据库操作类
 iPHP::loadClass("FileSystem");	//加载文件操作类

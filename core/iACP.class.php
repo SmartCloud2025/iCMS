@@ -13,7 +13,8 @@
 defined('iPHP') OR exit('What are you doing?');
 
 define('__ADMINCP__',	__SELF__ . '?app');
-define('ACP_PATH',		iPHP_APP_DIR . '/admincp');
+define('ACP_PATH',      iPHP_APP_DIR . '/admincp');
+define('ACP_HOST',      "http://".$_SERVER['HTTP_HOST']);
 
 define('iCMS_SUPERADMIN_UID', '1');
 require iPHP_APP_CORE.'/iMember.class.php';

@@ -509,7 +509,7 @@ class articleApp{
             	return array("code"=>$callback,'indexid'=>$aid);
             }
             $moreBtn = array(
-                    array("text" =>"查看该文章","url"=>iURL::get('article',array(array('id'=>$aid,'url'=>$url,'cid'=>$cid,'pubdate'=>$pubdate),$this->category[$cid]))->href,"o"=>'target="_blank"'),
+                    array("text" =>"查看该文章","target"=>'_blank',"url"=>iURL::get('article',array(array('id'=>$aid,'url'=>$url,'cid'=>$cid,'pubdate'=>$pubdate),$this->category[$cid]))->href,"o"=>'target="_blank"'),
                     array("text" =>"编辑该文章","url"=>APP_URI."&do=add&id=".$aid),
                     array("text" =>"继续添加文章","url"=>APP_URI."&do=add&cid=".$cid),
                     array("text" =>"返回文章列表","url"=>$SELFURL),
@@ -617,7 +617,7 @@ class articleApp{
         $remote   = isset($_POST['remote']) ?true:false;
         $dellink  = isset($_POST['dellink']) ?true:false;
         $_POST['isRedirect']  && iFS::$isRedirect = true;
-        $_POST['iswatermark'] && $GLOBALS['iCONFIG']['watermark']['enable'] = false;
+        $_POST['iswatermark'] && iFS::$watermark = false;
         $dellink && $body   = preg_replace("/<a[^>].*?>(.*?)<\/a>/si", "\\1",$body);
 
         $body = $this->remotepic($body,$remote);

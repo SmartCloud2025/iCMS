@@ -403,6 +403,7 @@ class iPHP{
     }
     public static function json($a,$break=true,$ret=false){
     	header("Access-Control-Allow-Origin: ".__HOST__);
+    	header('Access-Control-Allow-Headers: X-Requested-With,X_Requested_With');
     	$json	= json_encode($a);
     	$_GET['callback'] && $json = $_GET['callback'].'('.$json.')';
     	$_GET['script'] && exit("<script>{$json};</script>");

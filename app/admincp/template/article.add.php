@@ -315,7 +315,7 @@ function _modal_dialog(cancel_text){
                 </div>
                 <a class="btn" href="javascript:addEditorPage();"><i class="fa fa-file-o"></i> 新增一页</a>
                 <a class="btn" href="javascript:delEditorPage();"><i class="fa fa-times-circle"></i> 删除当前页</a>
-                <a class="btn" href="javascript:mergeEditorPage();"><i class="fa fa-align-justify"></i> 合并分页</a>
+                <a class="btn" href="javascript:mergeEditorPage();"><i class="fa fa-align-justify"></i> 合并编辑</a>
                 <a class="btn" href="javascript:iCMS.editor.insPageBreak();"><i class="fa fa-ellipsis-h"></i> 插入分页符</a>
                 <a class="btn" href="javascript:iCMS.editor.delPageBreakflag();"><i class="fa fa-ban"></i> 删除分页符</a>
                 <a class="btn" href="javascript:iCMS.editor.cleanup();"><i class="fa fa-magic"></i> 自动排版</a>
