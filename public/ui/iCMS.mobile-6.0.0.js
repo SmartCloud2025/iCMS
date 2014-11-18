@@ -12,7 +12,7 @@
             //     return path.replace("{P}",curPage);
             //   };
             // },
-            //debug:true,
+            // debug:true,
             dataType:"html+callback",
             showPageNum:5,
             maxPage: maxPage||100,

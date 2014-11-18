@@ -33,14 +33,14 @@ iACP::head(false);
   </div>
   <div class="clearfloat mb10"></div>
     <div class="input-prepend input-append">
-    <span class="add-on"><input type="radio" class="radio" name='fna' value="co" /></span>
+    <span class="add-on"><input type="radio" class="radio" name='fna' value="co" checked/></span>
     <span class="add-on">覆盖原文件</span>
   </div>
     <div class="input-prepend input-append">
-    <span class="add-on"><input type="radio" class="radio" name='fna' value="mv" checked/></span>
+    <span class="add-on"><input type="radio" class="radio" name='fna' value="mv"/></span>
     <span class="add-on">重命名</span>
   </div>
-  <div id="newfn">
+  <div id="newfn" class="hide">
     <div class="clearfloat mb10"></div>
     <div class="input-prepend input-append">
       <span class="add-on">新文件名</span>
