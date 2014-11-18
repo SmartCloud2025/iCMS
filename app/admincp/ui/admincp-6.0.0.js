@@ -316,7 +316,7 @@ function modal_icms(el,a){
                             //.removeClass("chosen-select")
                             .attr("id",iCMS.random(3));
                         $("option:first",select).remove();
-                        select.find("option:selected").attr("selected", false);
+                        $("option:selected",select).attr("selected", false);
                         return select;
                     },
                     prop: function(){
@@ -324,9 +324,10 @@ function modal_icms(el,a){
                             //.removeClass("chosen-select")
                             .attr("name",'pid[]')
                             .attr("multiple",'multiple')
+                            .attr("class",'span3')
                             .attr("id",iCMS.random(3));
                         $("option:first",select).remove()
-                        select.find("option:selected").attr("selected", false);
+                        $("option:selected",select).attr("selected", false);
                         return select;
                     },
                 },

@@ -33,6 +33,7 @@ class iACP {
     public static $app        = NULL;
     public static $app_name   = NULL;
     public static $app_do     = NULL;
+    public static $app_args   = NULL;
     public static $app_method = NULL;
     public static $app_tpl    = NULL;
     public static $app_path   = NULL;
@@ -54,7 +55,7 @@ class iACP {
 			exit;
 		}
 	}
-    public static function run($prefix="do_") {
+    public static function run($args = NULL,$prefix="do_") {
         self::init();
         $app = $_GET['app'];
         $app OR $app = 'home';
@@ -82,7 +83,15 @@ class iACP {
         $app_methods = get_class_methods($appName);
         in_array(self::$app_method, $app_methods) OR iPHP::throwException('运行出错！ <b>' . self::$app_name . '</b> 类中找不到方法定义: <b>' . self::$app_method . '</b>', 1003);
         $method = self::$app_method;
-		self::$app->$method();
+        $args===null && $args = self::$app_args;
+        if($args){
+            if($args==='object'){
+                return self::$app;
+            }
+            return self::$app->$method($args);
+        }else{
+            return self::$app->$method();
+        }
     }
 
     public static function app($app = NULL, $arg = NULL) {

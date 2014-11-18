@@ -181,7 +181,7 @@ $(function(){
           <thead>
             <tr>
               <th><i class="fa fa-arrows-v"></i></th>
-              <th class="span1">排序</th>
+              <th class="span1">ID</th>
               <th>标题</th>
               <th class="span2">日期</th>
               <th style="width:80px;">栏目</th>
@@ -200,7 +200,9 @@ $(function(){
             ?>
             <tr id="id<?php echo $value['id'] ; ?>">
               <td><input type="checkbox" name="id[]" value="<?php echo $value['id'] ; ?>" /></td>
-              <td class="ordernum"><input type="text" name="ordernum[<?php echo $value['id'] ; ?>]" value="<?php echo $value['ordernum'] ; ?>" aid="<?php echo $value['id'] ; ?>"/></td>
+              <td>
+                <?php echo $value['id'] ; ?>
+              </td>
               <td><div class="edit" aid="<?php echo $value['id'] ; ?>">
                   <?php if($value['status']=="3"){ ?>
                   <span class="label label-important">待审核</span>
