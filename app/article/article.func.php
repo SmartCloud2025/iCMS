@@ -212,7 +212,7 @@ function article_search($vars){
 
     $SPH->setSortMode(SPH_SORT_EXTENDED,$orderby);
 
-    $query    = $vars['q'];
+    $query    = str_replace(',','|',$vars['q']);
     $vars['acc']&& $query = '"'.$vars['q'].'"';
     $vars['@']  && $query = '@('.$vars['@'].') '.$query;
 

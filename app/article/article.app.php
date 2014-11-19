@@ -334,6 +334,6 @@ class articleApp {
         return '<a data-type="0"
         biz-itemid="'.$itemid.'"
         data-tmpl="350x100" data-tmplid="6" data-rd="2" data-style="2" data-border="1"
-        href="'.$url.'">'.$tk_url.'</a>';
+        href="'.$url.'" rel="nofollow"></a>';
     }
 }
