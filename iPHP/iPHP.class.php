@@ -736,7 +736,7 @@ function iPHP_ERROR_HANDLER($errno, $errstr, $errfile, $errline){
 	@header("Pragma: no-cache");
     $_GET['frame'] OR exit($html);
     $html = str_replace("\n",'<br />',$html);
-    self::$dialog['lock'] = true;
-    self::dialog(array("warning:#:warning-sign:#:{$html}",'系统错误!可发邮件到 idreamsoft@qq.com 反馈错误!我们将及时处理'),'js:1',30);
+    iPHP::$dialog['lock'] = true;
+    iPHP::dialog(array("warning:#:warning-sign:#:{$html}",'系统错误!可发邮件到 idreamsoft@qq.com 反馈错误!我们将及时处理'),'js:1',30);
     exit;
 }

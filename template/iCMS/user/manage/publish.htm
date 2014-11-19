@@ -1,6 +1,5 @@
 <script>
-iCMS.config.fileTypes = "*.<!--{$iCMS.CONFIG.FS.allow_ext|replace:',':';*.'}-->";
-iCMS.config.UI        = '<!--{$iCMS.UI}-->';
+iCMS.config.UI = '<!--{$iCMS.UI}-->';
 </script>
   <link href="<!--{$iCMS.UI}-->/bootstrap/2.3.2/css/bootstrap-switch.css" type="text/css" rel="stylesheet"/>
   <script src="<!--{$iCMS.UI}-->/bootstrap/2.3.2/js/bootstrap-switch.min.js"></script>
@@ -54,7 +53,7 @@ iCMS.config.UI        = '<!--{$iCMS.UI}-->';
         <div class="switch" id="article-type" data-on-label="原创" data-off-label="转贴"> <input type="checkbox" data-type="switch" name="creative" <!--{if $article.creative}-->checked<!--{/if}-->/> </div>
       </div>
       <div class="input-prepend <!--{if $article.creative}-->hide<!--{/if}-->" id="source-box"> <span class="add-on">出 处</span>
-        <input class="span5" name="source" id="source" type="text" value="<!--{$article.source}-->">
+        <input class="span4" name="source" id="source" type="text" value="<!--{$article.source}-->">
       </div>
       <div class="clearfix mb10"></div>
       <script type="text/plain" id="editor" style="width:100%;height:360px;"><!--{$article_data.body}--></script>

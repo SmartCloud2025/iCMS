@@ -100,7 +100,7 @@ body { background-color: #fff; background-image: url(img/bg-v6.png); _background
 .userApp-box .sidebar .base_info { margin: 10px 0 20px 14px; }
 .userApp-box .sidebar a.c { font-weight: bold; }
 .userApp-box .sidebar a { padding: 0 10px; line-height: 28px; font-size: 14px; }
-.userApp-box .contents { font-size: 14px; width: 710px; margin-left: 35px; margin-top: 22px; }
+.userApp-box .contents { font-size: 14px; width: 720px; margin-left: 15px; margin-top: 10px; }
 .userApp-box .iner { _padding-top: -50px; display: inline; *vertical-align: 10px; }
 .userApp-box .title { background: url(img/profile_title_bg.png) no-repeat; width: 100%; height: 30px; line-height: 30px; padding-left: 20px; margin-bottom: 10px; }
 .userApp-box .title span { color: #70A700; font-size: 14px; font-weight: bold; height: 30px; line-height: 30px; }
