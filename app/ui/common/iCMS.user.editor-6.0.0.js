@@ -3,7 +3,7 @@
     window.UEDITOR_CONFIG = {
         UEDITOR_HOME_URL: URL
         ,iCMS_PUBLIC_URL:window.iCMS.config.PUBLIC
-        ,catchRemoteImageEnable:window.iCMS.config.catchRemoteImageEnable||false //远程图片本地化
+        ,catchRemoteImageEnable:false //远程图片本地化
         ,serverUrl: window.iCMS.config.API + '?app=user'
         ,toolbars: [['fullscreen', 'preview','|',
         'pasteplain', 'selectall', 'undo', 'redo', 'searchreplace', '|',
