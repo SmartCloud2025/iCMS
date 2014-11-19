@@ -303,7 +303,6 @@ $(function(){
                       <li><a data-toggle="batch" data-action="weight"><i class="fa fa-cog"></i> 设置置顶权重</a></li>
                       <li><a data-toggle="batch" data-action="keyword"><i class="fa fa-star"></i> 设置关键字</a></li>
                       <li><a data-toggle="batch" data-action="tag"><i class="fa fa-tags"></i> 设置标签</a></li>
-                      <li><a data-toggle="batch" data-action="order"><i class="fa fa-list-ol"></i> 更新排序</a></li>
                       <li class="divider"></li>
                       <li><a data-toggle="batch" data-action="status:2"><i class="fa fa-trash-o"></i> 移入回收站</a></li>
                       <li><a data-toggle="batch" data-action="dels"><i class="fa fa-trash-o"></i> 永久删除</a></li>

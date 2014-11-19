@@ -154,7 +154,7 @@ class articleApp{
                     $mtag = iS::escapeStr($_POST['mtag']);
 			        if($_POST['pattern']=='replace') {
 			        }elseif($_POST['pattern']=='addto') {
-			        	$art['tags'] && $mtag = $this->detag($art['tags']).','.$mtag;
+			        	$art['tags'] && $mtag = $art['tags'].','.$mtag;
 			        }
 			        $tags = tag::diff($mtag,$art['tags'],iMember::$userid,$id,$art['cid']);
                     $tags = addslashes($tags);
