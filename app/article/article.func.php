@@ -89,24 +89,31 @@ function article_list($vars){
     isset($vars['nopic'])&& $where_sql.= " AND `haspic`='0'";
 
     switch ($vars['orderby']) {
-        case "id":          $order_sql =" ORDER BY `id` $by";            break;
-        case "hot":         $order_sql =" ORDER BY `hits` $by";          break;
-        case "week":        $order_sql =" ORDER BY `hits_week` $by";    break;
-        case "month":       $order_sql =" ORDER BY `hits_month` $by";  break;
-        case "comment":     $order_sql =" ORDER BY `comments` $by";      break;
-        case "pubdate":     $order_sql =" ORDER BY `pubdate` $by";       break;
-        case "disorder":    $order_sql =" ORDER BY `ordernum` $by";      break;
-        case "rand":        $order_sql =" ORDER BY rand() $by";          break;
-        case "weight":      $order_sql =" ORDER BY `weight`,`ordernum` ASC";break;
-        default:            $order_sql =" ORDER BY `id` DESC";
+        case "id":       $order_sql = " ORDER BY `id` $by"; break;
+        case "hot":      $order_sql = " ORDER BY `hits` $by"; break;
+        case "week":     $order_sql = " ORDER BY `hits_week` $by"; break;
+        case "month":    $order_sql = " ORDER BY `hits_month` $by"; break;
+        case "comment":  $order_sql = " ORDER BY `comments` $by"; break;
+        case "pubdate":  $order_sql = " ORDER BY `pubdate` $by"; break;
+        case "disorder": $order_sql = " ORDER BY `ordernum` $by"; break;
+        case "rand":     $order_sql = " ORDER BY rand() $by"; break;
+        case "weight":   $order_sql = " ORDER BY `weight`,`ordernum` ASC"; break;
+        default:$order_sql = " ORDER BY `id` $by";
     }
     isset($vars['startdate'])&& $where_sql .= " AND `pubdate`>='".strtotime($vars['startdate'])."'";
     isset($vars['enddate'])  && $where_sql .= " AND `pubdate`<='".strtotime($vars['enddate'])."'";
     isset($vars['where'])    && $where_sql .= $vars['where'];
 
     if($map_where){
-        $map_sql   = iCMS::map_sql($map_where);
-        $where_sql = ",({$map_sql}) map {$where_sql} AND `id` = map.`iid`";
+        $map_sql   = iCMS::map_sql($map_where,'join');
+        //join
+        empty($vars['cid']) && $map_order_sql = " ORDER BY map.`iid` $by";
+        //$map_order_sql = " ORDER BY `icms_article`.`id` $by";
+        //
+        $where_sql.= ' AND '.$map_sql['where'];
+        $where_sql = ",{$map_sql['from']} {$where_sql} AND `#iCMS@__article`.`id` = map.`iid`";
+        //derived
+        // $where_sql = ",({$map_sql}) map {$where_sql} AND `id` = map.`iid`";
     }
     $offset = 0;
     $limit  = "LIMIT {$maxperpage}";
@@ -122,13 +129,16 @@ function article_list($vars){
     }
 
     $hash = md5($where_sql.$order_sql.$limit);
-    if($map_sql || $offset){
+    if($map_sql){
+        empty($vars['cid']) && $order_sql = $map_order_sql;
+    }
+    if($offset){
         if($vars['cache']){
-            $map_cache_name = iPHP_DEVICE.'/article_map/'.$hash;
+            $map_cache_name = iPHP_DEVICE.'/article_page/'.$hash;
             $ids_array      = iCache::get($map_cache_name);
         }
         if(empty($ids_array)){
-            $ids_array = iDB::all("SELECT `id` FROM `#iCMS@__article` {$where_sql} {$order_sql} {$limit}");
+            $ids_array = iDB::all("SELECT `#iCMS@__article`.`id` FROM `#iCMS@__article` {$where_sql} {$order_sql} {$limit}");
             iPHP_SQL_DEBUG && iDB::debug(1);
             $vars['cache'] && iCache::set($map_cache_name,$ids_array,$cache_time);
         }
@@ -146,7 +156,7 @@ function article_list($vars){
     //     $func = '__article_user_home_array';
     // }
     if(empty($resource)){
-        $resource = iDB::all("SELECT * FROM `#iCMS@__article` {$where_sql} {$order_sql} {$limit}");
+        $resource = iDB::all("SELECT `#iCMS@__article`.* FROM `#iCMS@__article` {$where_sql} {$order_sql} {$limit}");
         iPHP_SQL_DEBUG && iDB::debug(1);
         $resource = __article_array($vars,$resource);
         $vars['cache'] && iCache::set($cache_name,$resource,$cache_time);
@@ -155,6 +165,8 @@ function article_list($vars){
     return $resource;
 }
 function article_search($vars){
+    if(empty(iCMS::$config['sphinx']['host'])) return array();
+
     $resource = array();
     $hidden   = iCache::get('iCMS/category/hidden');
     $hidden &&  $where_sql .=iPHP::where($hidden,'cid','not');

@@ -344,14 +344,18 @@ class iCMS {
         }
         return false;
     }
-    public static function map_sql($where,$field='iid') {
+    public static function map_sql($where,$type=null,$field='iid') {
         if(empty($where)){
             return false;
         }
+        $i=0;
         foreach ($where as $key => $value) {
-            $_FROM[]  = $key;
-            $_WHERE[] = $value;
-            $_FIELD[] = $key.".`{$field}`";
+            $as = ' map';
+            $i && $as.=$i;
+            $_FROM[]  = $key.$as;
+            $_WHERE[] = str_replace($key,$as,$value);
+            $_FIELD[] = $as.".`{$field}`";
+            $i++;
         }
         $_field = $_FIELD[0];
         $_count = count($_FIELD);
@@ -359,6 +363,9 @@ class iCMS {
             foreach ($_FIELD as $fkey => $fd) {
                 $fkey && array_push($_WHERE,$_field.' = '.$fd);
             }
+        }
+        if($type=='join'){
+            return array('from' =>implode(',', $_FROM),'where'=>implode(' AND ', $_WHERE) );
         }
         return 'SELECT '.$_field.' AS '.$field.' FROM '.implode(',', $_FROM).' WHERE '.implode(' AND ', $_WHERE);
     }
