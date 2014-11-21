@@ -89,7 +89,7 @@ body { background-color: #fff; background-image: url(img/bg-v6.png); _background
 /* ----home.btn-------- */
 #home_btn { font-weight: bold; margin-top: 10px; padding-left: 25px; padding-bottom: 15px; border-bottom: 1px dotted #DBDBDB; }
 #home_btn a { width: 90px; }
-.userApp-box { width: 960px; }
+.userApp-box { width: 960px; margin: 10px auto; }
 .userApp-box .piece_hd { background: url(img/profile_hd_bg.png) no-repeat; }
 .userApp-box .piece_bd { min-height: 600px; background: url(img/profile_bd_bg.png) repeat-y; }
 .userApp-box .piece_ft { background: url(img/profile_ft_bg.png) no-repeat; }

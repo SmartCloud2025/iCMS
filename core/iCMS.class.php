@@ -95,26 +95,29 @@ class iCMS {
     private static function multiple_device(&$config){
         $template = $config['template'];
         foreach ((array)$template['device'] as $key => $device) {
-            $has_tpl = self::device_agent($device['ua']);
-            if($device['tpl'] && $has_tpl){
+            if($device['tpl'] && self::device_agent($device['ua'])){
                 $device_name = $device['name'];
                 $device_tpl  = $device['tpl'];
                 $domain      = $device['domain'];
                 break;
             }
         }
-
+        $is_mobile = false;
         //检查是否移动设备
         if(self::device_agent($template['mobile']['agent'])){
-            $device_name = 'mobile';
-            $mobile_tpl  = $template['mobile']['tpl'];
-            $domain      = $template['mobile']['domain'];
+            $is_mobile     = true;
+            //$device_name = 'mobile';
+            $mobile_tpl    = $template['mobile']['tpl'];
+            $domain        = $template['mobile']['domain'];
         }
 
         if($device_tpl){ //设备模板
             $def_tpl = $device_tpl;
-        }else{ //没有设置设备模板 但是移动设备
-            $mobile_tpl && $def_tpl = $mobile_tpl;
+        }else{
+            if($is_mobile){//没有设置设备模板 但是移动设备
+                $device_name = 'mobile';
+                $def_tpl     = $mobile_tpl;
+            }
         }
 
         if(empty($def_tpl)){
@@ -122,12 +125,10 @@ class iCMS {
             $def_tpl     = $template['pc']['tpl'];
             $domain      = false;
         }
+        $domain && $config['router'] = str_replace($config['router']['URL'], $domain, $config['router']);
         define('iPHP_DEFAULT_TPL',$def_tpl);
         define('iPHP_MOBILE_TPL',$mobile_tpl);
         define('iPHP_DEVICE',$device_name);
-        if($domain){
-            $config['router'] = str_replace($config['router']['URL'], $domain, $config['router']);
-        }
     }
     private static function device_agent($user_agent){
         $user_agent = str_replace(',','|',preg_quote($user_agent));

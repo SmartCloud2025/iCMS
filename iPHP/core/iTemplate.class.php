@@ -189,22 +189,23 @@ class iTemplate {
 	}
 	function get_tpl($tpl){
         if(strpos($tpl,iPHP_APP.':/') !==false){
-        	if(iPHP_DEVICE=='pc'){
-				$_tpl = str_replace(iPHP_APP.':/',iPHP_APP.'/'.iPHP_DEFAULT_TPL,$tpl); // iCMS/default/
-			}else{//移动设备
-				$_tpl = str_replace(iPHP_APP.':/',iPHP_APP.'/'.iPHP_MOBILE_TPL,$tpl); // iCMS/mobile/
-        	}
+			$_tpl = str_replace(iPHP_APP.':/',iPHP_DEFAULT_TPL,$tpl);
+			if(@is_file(iPHP_TPL_DIR."/".$_tpl)) return $_tpl;
 
-			if(@is_file(iPHP_TPL_DIR."/".$_tpl)){
-				return $_tpl;
-			}else{// iCMS/
-				$tpl = str_replace(iPHP_APP.':/',iPHP_APP,$tpl);
+        	if(iPHP_DEVICE!='pc'){//移动设备
+				$_tpl = str_replace(iPHP_APP.':/',iPHP_MOBILE_TPL,$tpl); // mobile/
+				if(@is_file(iPHP_TPL_DIR."/".$_tpl)) return $_tpl;
 			}
+			$tpl = str_replace(iPHP_APP.':/',iPHP_APP,$tpl); //iCMS
 		}elseif(strpos($tpl,'{iTPL}') !==false){
 			$tpl = str_replace('{iTPL}',iPHP_DEFAULT_TPL,$tpl);
 		}
-		$path = iPHP_TPL_DIR."/".$tpl;
-		@is_file($path) OR $this->trigger_error("file '$path' does not exist", E_USER_ERROR);
+		if(iPHP_DEVICE!='pc' && strpos($tpl,iPHP_APP) === false){
+			$current_tpl = dirname($tpl);
+			if(!in_array($current_tpl,array(iPHP_DEFAULT_TPL,iPHP_MOBILE_TPL))){
+				$tpl =  str_replace($current_tpl.'/', iPHP_DEFAULT_TPL.'/', $tpl);
+			}
+		}
 		return $tpl;
 	}
 	function _get_compile_file($file){

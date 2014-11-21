@@ -15,8 +15,10 @@ class tagApp {
     }
     public function do_iCMS($a = null) {
         if ($_GET['name']) {
-            $name  = $_GET['name'];
-            mb_check_encoding($name, "UTF-8") OR $name = mb_convert_encoding($name, "UTF-8", "gbk");
+            $name   = $_GET['name'];
+            $encode = mb_detect_encoding($name, array("ASCII","UTF-8","GB2312","GBK","BIG5"));
+            $encode!='UTF-8' && $name = mb_convert_encoding($name,"UTF-8",$encode);
+
             $val   = iS::escapeStr($name);
             $field = 'name';
         } elseif ($_GET['tkey']) {
