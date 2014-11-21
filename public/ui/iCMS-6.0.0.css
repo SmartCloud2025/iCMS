@@ -109,9 +109,9 @@ a,a:hover,a:focus { color: #259 }
 .iCMS_login_dialog .lb_bd .lb_s .lb_s_img { display: block; float: left; width: 43px; height: 43px }
 .iCMS_login_dialog .lb_bd .lb_s .lb_s_t { display: block; float: left; margin: 12px 0 0 12px; width: 120px; color: #333; font-size: 22px }
 /* ================================ */
-.iCMS_agreement_wrap { padding-right: 40px; padding-left: 40px; width: 968px; _width: 968px;margin: 10px auto;}
+.iCMS_agreement_wrap { padding-right: 40px; padding-left: 40px;margin: 10px auto;}
 .iCMS_agreement_wrap .agr_h { margin-bottom: 50px; text-align: center; font-weight: bold; font-size: 26px }
-.iCMS_agreement_wrap pre { font-size: 14px; line-height: 160%; width: 100%; color: #666; padding: 15px; white-space: pre-wrap; white-space: -moz-pre-wrap !important; white-space: -pre-wrap; white-space: -o-pre-wrap; word-wrap: break-word }
+.iCMS_agreement_wrap pre { font-size: 14px; line-height: 160%;color: #666; padding: 15px; white-space: pre-wrap; white-space: -moz-pre-wrap !important; white-space: -pre-wrap; white-space: -o-pre-wrap; word-wrap: break-word }
 /* =============== */
 .iCMS_up_down { margin-left: 10px; }
 .iCMS_up_down .up_down_btn { position: relative; display: block; text-decoration: none; text-align: left; color: #fff; background: #fff; font-size: 16px; line-height: 25px; font-family: "微软雅黑"; border: 1px solid #ddd; border-radius: 5px; padding: 5px; float: left; margin-right: 10px; }
