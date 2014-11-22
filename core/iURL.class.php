@@ -55,7 +55,7 @@ class iURL {
             case 'CID':     $e = $c['cid'];break;
             case '0xCID':   $e = sprintf("%08s",$c['cid']);break;
             case 'CDIR':    $e = $c['dir'];break;
-            case 'CPDIR':   $e = substr(self::CPDIR($c['cid']),1);break;
+            case 'CPDIR':   $e = substr(self::CPDIR($c['rootid']),1);break;
 
             case 'TIME':	$e = $a['pubdate'];break;
             case 'YY':		$e = get_date($a['pubdate'],'y');break;
