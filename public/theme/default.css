@@ -102,6 +102,8 @@ body { background: #FFF url(img/body-bg.png) repeat-x; }
 #links .bd { padding-left: 10px; }
 #links .bd a:link, #links .bd a:visited { display: inline; float: left; margin: 10px 10px 0 0; padding: 5px 10px; border-radius: 3px; background: #3886c2; box-shadow: 0 1px 1px 0 #ccc; color: #fff; white-space: nowrap; font-size: 14px; }
 #register { padding-top: 10px; }
+.iCMS_pagination span.current, .iCMS_pagination span.page_nowindex { border: 1px solid #08c; background-color: #3a87ad; color: #fff; font-weight: bold; }
+
 /* list
 -------------------------------------------------- */
 .list-item { }
@@ -147,7 +149,6 @@ body { background: #FFF url(img/body-bg.png) repeat-x; }
 .article-body p { margin: 6px 0; text-indent: 28px; font-size: 14px; line-height: 24px; }
 .article-pagenav { position: relative; margin: 0 auto; padding: 10px; background: #f3f3f3; text-align: center; font-size: 14px; }
 .article-pagenav a { color: #666; }
-.article-pagenav .current { border: 1px solid #08c; background-color: #3a87ad; color: #fff; font-weight: bold; }
 .comments_list { }
 .comments_list h3 { width: 630px; padding: 8px 15px; font-size: 14px; margin-left: 10px; }
 .comment_form { border-top: 1px solid #eaeaea; }
