@@ -94,7 +94,7 @@ td.ordernum input { width: 30px; text-align: center; padding: 2px; margin-bottom
 .treeview li .operation { float: right; width: auto; text-align: left; }
 .treeview li i { margin-top: 0px !important; }
 .ui-state-highlight { height: 1.5em; line-height: 1.2em; border: 2xp solid rgb(2, 111, 250) !important; }
-#treecontrol { margin: 8px 0px 0px 0px !important; float: left; }
+#treecontrol { margin: 8px 0px 0px 0px !important;display: inline-block !important;}
 /* Sidebar Navigation */
 .sidebar-display #content { margin-left: 0px; }
 .sidebar-display #content-header, .sidebar-mini #content-header { -webkit-border-radius: 0; -moz-border-radius: 0; border-radius: 0; }

@@ -307,6 +307,8 @@ class categoryApp extends category{
                 $sql.=" AND CONCAT(name,title,keywords,description) REGEXP '{$_GET['keywords']}'";
             }
         }
+        $_GET['rootid'] && $sql.= iPHP::where($_GET['rootid'],'rootid');
+
         $orderby    = $_GET['orderby']?$_GET['orderby']:"cid DESC";
         $maxperpage = $_GET['perpage']>0?(int)$_GET['perpage']:20;
         $total      = iPHP::total(false,"SELECT count(*) FROM `#iCMS@__category` {$sql}","G");

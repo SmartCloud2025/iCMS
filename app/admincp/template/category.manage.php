@@ -53,6 +53,9 @@ $(function(){
 <?php if($_GET['st']){ ?>
 iCMS.select('st',"<?php echo $_GET['st'] ; ?>");
 <?php } ?>
+<?php if($_GET['rootid']){  ?>
+iCMS.select('rootid',"<?php echo $_GET['rootid'] ; ?>");
+<?php } ?>
   $("#<?php echo APP_FORMID;?>").batch({
     move:function(){
       return $("#mergeBatch").clone(true);
@@ -71,6 +74,11 @@ iCMS.select('st',"<?php echo $_GET['st'] ; ?>");
       <form action="<?php echo __SELF__ ; ?>" method="get" class="form-inline">
         <input type="hidden" name="app" value="<?php echo iACP::$app_name;?>" />
         <input type="hidden" name="do" value="<?php echo iACP::$app_do;?>" />
+        <div class="input-prepend"> <span class="add-on">父<?php echo $this->name_text;?></span>
+          <select name="rootid" id="rootid" class="chosen-select" style="width: 230px;">
+            <option value="0">所有<?php echo $this->name_text;?></option>
+            <?php echo $category_select = $this->select('s',0,0,1,true) ; ?>
+          </select></div>
         <div class="input-prepend input-append"> <span class="add-on">每页</span>
           <input type="text" name="perpage" id="perpage" value="<?php echo $maxperpage ; ?>" style="width:36px;"/>
           <span class="add-on">条记录</span> </div>
@@ -107,6 +115,10 @@ iCMS.select('st',"<?php echo $_GET['st'] ; ?>");
         <div class="form-actions">
           <button class="btn btn-primary" type="submit"><i class="fa fa-check"></i> 提交</button>
           <a class="btn" href="<?php echo APP_FURI; ?>&do=cache" target="iPHP_FRAME"><i class="fa fa-refresh"></i> 更新缓存</a>
+          <div id="treecontrol">
+            <a href="javascript:;" class="btn"><i class="fa fa-angle-double-up"></i> 全部折叠</a>
+            <a href="javascript:;" class="btn"><i class="fa fa-angle-double-down"></i> 全部展开</a>
+          </div>
         </div>
       </form>
       <?php } ?>
@@ -118,7 +130,7 @@ iCMS.select('st',"<?php echo $_GET['st'] ; ?>");
               <th style="width:10px;"><i class="fa fa-arrows-v"></i></th>
               <th style="width:24px;">cid</th>
               <th>pid</th>
-              <th style="width:40px;">rootid</th>
+              <th style="width:40px;">父<?php echo $this->name_text;?></th>
               <th class="span4"><?php echo $this->name_text;?></th>
               <th style="width:40px;">记录数</th>
               <th>操作</th>
@@ -130,7 +142,7 @@ iCMS.select('st',"<?php echo $_GET['st'] ; ?>");
               <td><input type="checkbox" name="id[]" value="<?php echo $rs[$i]['cid'] ; ?>" /></td>
               <td><?php echo $rs[$i]['cid'] ; ?></td>
               <td><?php echo $rs[$i]['pid'] ; ?></td>
-              <td><?php echo $rs[$i]['rootid'] ; ?></td>
+              <td><a href="<?php echo APP_DOURI; ?>&rootid=<?php echo $rs[$i]['rootid'] ; ?>"><?php echo  $this->category[$rs[$i]['rootid']]['name'] ; ?></a></td>
               <td><input <?php if($rs[$i]['rootid']=="0"){ ?> style="font-weight:bold"<?php } ?> type="text" name="name[<?php echo $rs[$i]['cid'] ; ?>]" value="<?php echo $rs[$i]['name'] ; ?>" class='tip' title='创建者:<?php echo $rs[$i]['creator']; ?><br />创建时间:<?php echo get_date($rs[$i]['createtime']); ?>'>
                 <?php if(!$rs[$i]['status']){ ?>
                 <i class="fa fa-eye-slash" title="隐藏<?php echo $this->name_text;?>"></i>
@@ -186,7 +198,7 @@ iCMS.select('st',"<?php echo $_GET['st'] ; ?>");
           <div class="input-prepend"> <span class="add-on">请选择目标<?php echo $this->name_text;?></span>
             <select name="tocid" class="span3">
               <option value="0">===顶级<?php echo $this->name_text;?>===</option>
-              <?php echo $this->select('s',0,0,1,true);?>
+              <?php echo $category_select;?>
             </select>
           </div>
         </div>
