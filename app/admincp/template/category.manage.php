@@ -53,7 +53,7 @@ $(function(){
 <?php if($_GET['st']){ ?>
 iCMS.select('st',"<?php echo $_GET['st'] ; ?>");
 <?php } ?>
-<?php if($_GET['rootid']){  ?>
+<?php if(isset($_GET['rootid']) &&$_GET['rootid']!='-1') {  ?>
 iCMS.select('rootid',"<?php echo $_GET['rootid'] ; ?>");
 <?php } ?>
   $("#<?php echo APP_FORMID;?>").batch({
@@ -76,7 +76,8 @@ iCMS.select('rootid',"<?php echo $_GET['rootid'] ; ?>");
         <input type="hidden" name="do" value="<?php echo iACP::$app_do;?>" />
         <div class="input-prepend"> <span class="add-on">父<?php echo $this->name_text;?></span>
           <select name="rootid" id="rootid" class="chosen-select" style="width: 230px;">
-            <option value="0">所有<?php echo $this->name_text;?></option>
+            <option value="-1">所有<?php echo $this->name_text;?></option>
+            <option value="0">=====顶级<?php echo $this->name_text;?>=====</option>
             <?php echo $category_select = $this->select('s',0,0,1,true) ; ?>
           </select></div>
         <div class="input-prepend input-append"> <span class="add-on">每页</span>
@@ -130,7 +131,7 @@ iCMS.select('rootid',"<?php echo $_GET['rootid'] ; ?>");
               <th style="width:10px;"><i class="fa fa-arrows-v"></i></th>
               <th style="width:24px;">cid</th>
               <th>pid</th>
-              <th style="width:40px;">父<?php echo $this->name_text;?></th>
+              <th style="span3">父<?php echo $this->name_text;?></th>
               <th class="span4"><?php echo $this->name_text;?></th>
               <th style="width:40px;">记录数</th>
               <th>操作</th>
@@ -138,7 +139,7 @@ iCMS.select('rootid',"<?php echo $_GET['rootid'] ; ?>");
           </thead>
           <tbody>
             <?php for($i=0;$i<$_count;$i++){?>
-            <tr id="tr<?php echo $rs[$i]['cid'] ; ?>" class="status<?php echo $rs[$i]['status'] ; ?>">
+            <tr id="<?php echo $rs[$i]['cid'] ; ?>" class="status<?php echo $rs[$i]['status'] ; ?>">
               <td><input type="checkbox" name="id[]" value="<?php echo $rs[$i]['cid'] ; ?>" /></td>
               <td><?php echo $rs[$i]['cid'] ; ?></td>
               <td><?php echo $rs[$i]['pid'] ; ?></td>
