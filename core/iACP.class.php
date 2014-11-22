@@ -44,8 +44,8 @@ class iACP {
         self::$menu = new iMenu();
         self::MP('ADMINCP','page'); //检查是否有后台权限
         self::MP('__MID__','page'); //检查菜单ID
-        self::$apps = array('home', 'category', 'pushcategory','tagcategory', 'article', 'push', 'prop', 'setting', 'filter', 'cache','tags','editor');
-        //self::frame();
+        self::$apps  = array('home', 'category', 'pushcategory','tagcategory', 'article', 'push', 'prop', 'setting', 'filter', 'cache','tags','editor');
+        iFS::$userid = iMember::$userid;
     }
 
 	public static function frame(){

@@ -425,9 +425,6 @@ class articleApp{
         $body        = (array)$_POST['body'];
         $creative    = (int)$_POST['creative'];
 
-        $autopic  = isset($_POST['autopic']) ?true:false;
-        $remote   = isset($_POST['remote']) ?true:false;
-
         iACP::CP($cid,($aid?'ce':'ca'),'alert');
 
         $weight       = _int($_POST['weight']);
@@ -440,6 +437,7 @@ class articleApp{
         empty($cid)  && iPHP::alert('请选择所属栏目');
         empty($body) && empty($url) && iPHP::alert('文章内容不能为空！');
         $userid OR $userid = iMember::$userid;
+        iFS::$userid = $userid;
 
         if(empty($aid) && iCMS::$config['publish']['repeatitle']) {
 			articleTable::check_title($title) && iPHP::alert('该标题的文章已经存在!请检查是否重复');
@@ -614,15 +612,12 @@ class articleApp{
         $body     = implode('#--iCMS.PageBreak--#',$bodyArray);
         $body     = preg_replace(array('/<script.+?<\/script>/is','/<form.+?<\/form>/is'),'',$body);
 
-        $remote   = isset($_POST['remote']) ?true:false;
-        $dellink  = isset($_POST['dellink']) ?true:false;
         $_POST['isRedirect']  && iFS::$isRedirect = true;
         $_POST['iswatermark'] && iFS::$watermark = false;
-        $dellink && $body   = preg_replace("/<a[^>].*?>(.*?)<\/a>/si", "\\1",$body);
-
-        $body = $this->remotepic($body,$remote);
-        $body = $this->remotepic($body,$remote);
-        $body = $this->remotepic($body,$remote);
+        isset($_POST['dellink']) && $body = preg_replace("/<a[^>].*?>(.*?)<\/a>/si", "\\1",$body);
+        isset($_POST['remote'])  && $body = $this->remotepic($body,true,$aid);
+        isset($_POST['remote'])  && $body = $this->remotepic($body,true,$aid);
+        isset($_POST['remote'])  && $body = $this->remotepic($body,true,$aid);
 
         $fields = articleTable::data_fields($id);
         $data   = compact ($fields);
@@ -633,7 +628,7 @@ class articleApp{
         }
 
         if(isset($_POST['autopic']) && empty($haspic)){
-            $picurl = $this->remotepic($body,'autopic');
+            $picurl = $this->remotepic($body,'autopic',$aid);
             $uri    = parse_url(iCMS_FS_URL);
             if (stripos($picurl,$uri['host']) !== false){
                 $picdata = (array)articleTable::value('picdata',$aid);
@@ -646,26 +641,9 @@ class articleApp{
                 articleTable::update(compact('haspic','pic','picdata'),array('id'=>$aid));
             }
         }
-        $this->insert_db_pic($body,$aid);
-    }
-    function insert_db_pic($content,$aid) {
-        $content = stripslashes($content);
-        preg_match_all("/<img.*?src\s*=[\"|'](.*?)[\"|']/is",$content,$match);
-        $array = array_unique($match[1]);
-        $uri   = parse_url(iCMS_FS_URL);
-        foreach($array as $key =>$value) {
-            $value = trim($value);
-            if (stripos($value,$uri['host']) !== false){
-                $pic      = iFS::fp($value,'-http');
-                $filename = basename($pic);
-                $filename = substr($filename,0, 32);
-                $faid     = articleTable::filedata_value($filename);
-                empty($faid) && articleTable::filedata_update_indexid($aid,$filename);
-            }
-        }
     }
 
-    function remotepic($content,$remote = false) {
+    function remotepic($content,$remote = false,$aid=0) {
         if (!$remote) return $content;
 
         iFS::$forceExt = "jpg";
@@ -674,12 +652,21 @@ class articleApp{
         $array  = array_unique($match[1]);
         $uri    = parse_url(iCMS_FS_URL);
         $fArray = array();
+        $fpArray= array();
         foreach ($array as $key => $value) {
             $value = trim($value);
             if (stripos($value,$uri['host']) === false){
                 $filepath = iFS::http($value);
-                $filepath && $value = iFS::fp($filepath, '+http');
-                $fArray[$key] = $value;
+                if($filepath){
+                    if($aid){
+                        $filename = basename($filepath);
+                        $filename = substr($filename,0, 32);
+                        $faid     = articleTable::filedata_value($filename);
+                        empty($faid) && articleTable::filedata_update_indexid($aid,$filename);
+                    }
+                    $value        = iFS::fp($filepath, '+http');
+                    $fArray[$key] = $value;
+                }
             }else{
                 unset($array[$key]);
             }
