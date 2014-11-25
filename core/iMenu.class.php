@@ -42,14 +42,23 @@ class iMenu {
 
 	function get_array($cache=false){
 		$rs	= iDB::all("SELECT * FROM `#iCMS@__menu` ORDER BY `ordernum` , `id` ASC",ARRAY_A);
+		$this->menu_array  = array();
+		$this->root_array  = array();
+		$this->parent      = array();
+		$this->menu_uri    = array();
+		$this->child_array = array();
+
 		foreach((array)$rs AS $M) {
 			$this->menu_array[$M['id']]               = $M;
 			$this->root_array[$M['rootid']][$M['id']] = $M;
 			$this->parent[$M['id']]                   = $M['rootid'];
 	        $M['app']!='separator' && $this->child_array[$M['rootid']][$M['id']] = $M['id'];
-			$this->menu_uri[$M['app']][$M['href']] = $M['id'];
+			if(!$this->menu_uri[$M['app']][$M['href']]){
+				$this->menu_uri[$M['app']][$M['href']] = $M['id'];
+			}
 			$this->menu_uri[$M['app']]['#']        = $M['rootid'];
 		}
+
 		foreach ((array)$this->root_array as $rid => $array) {
 			uasort($array, "order_num");
 			$this->root_array[$rid] = $array;

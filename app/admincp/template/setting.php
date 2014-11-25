@@ -137,7 +137,7 @@ function modal_tplfile(el,a){
                 <input type="checkbox" data-type="switch" name="config[template][index_mode]" id="index_mode" <?php echo $config['template']['index_mode']?'checked':''; ?>/>
               </div>
             </div>
-            <span class="help-inline">只对PC端有效.首页生成静态后自动跳转.如果出现循环跳转请关闭此项</span>
+            <span class="help-inline">只对桌面端有效.首页生成静态后自动跳转.如果出现循环跳转请关闭此项</span>
             <div class="clearfloat mb10"></div>
             <div class="input-prepend"> <span class="add-on">首页REWRITE</span>
               <div class="switch">
@@ -152,15 +152,15 @@ function modal_tplfile(el,a){
               <?php iACP::files_modal_btn('模板','file','template_index','tplfile');?></div>
             <span class="help-inline">首页默认模板，注：最好使用<span class="label label-inverse">{iTPL}</span>代替模板目录,程序将会自行切换PC端或者移动端</span>
             <div class="clearfloat mb10 solid"></div>
-            <div class="input-prepend"> <span class="add-on">PC端域名</span>
+            <div class="input-prepend"> <span class="add-on">桌面端域名</span>
               <input type="text" name="config[router][URL]" class="span3" value="<?php echo $config['router']['URL'] ; ?>"/>
             </div>
             <span class="help-inline">例:<span class="label label-info">http://www.idreamsoft.com</span></span>
             <div class="clearfloat mb10"></div>
-            <div class="input-prepend input-append"> <span class="add-on">PC端模板</span>
+            <div class="input-prepend input-append"> <span class="add-on">桌面端模板</span>
               <input type="text" name="config[template][desktop][tpl]" class="span3" id="template_desktop_tpl" value="<?php echo $config['template']['desktop']['tpl'] ; ?>"/>
               <?php iACP::files_modal_btn('模板','dir','template_desktop_tpl');?></div>
-            <span class="help-inline">网站PC端模板默认模板</span>
+            <span class="help-inline">网站桌面端模板默认模板</span>
             <div class="clearfloat mb10 solid"></div>
             <div class="input-prepend"> <span class="add-on">移动端识别</span>
               <input type="text" name="config[template][mobile][agent]" class="span3" id="template_mobile_agent" value="<?php echo $config['template']['mobile']['agent'] ; ?>"/>
@@ -203,7 +203,7 @@ function modal_tplfile(el,a){
                     </div>
                     <span class="help-inline"></span>
                     <div class="clearfloat mb10"></div>
-                    <div class="input-prepend input-append"> <span class="add-on">模板</span>
+                    <div class="input-prepend input-append"> <span class="add-on">设备模板</span>
                       <input type="text" name="config[template][device][<?php echo $key;?>][tpl]" class="span3" id="device_tpl_<?php echo $key;?>" value="<?php echo $device['tpl'];?>"/>
                       <?php iACP::files_modal_btn('模板','dir','device_tpl_'.$key);?>
                     </div>
@@ -231,7 +231,7 @@ function modal_tplfile(el,a){
                   </div>
                   <span class="help-inline"><span class="label label-info">例:http://ipad.idreamsoft.com</span></span>
                   <div class="clearfloat mb10"></div>
-                  <div class="input-prepend input-append"> <span class="add-on">模板</span>
+                  <div class="input-prepend input-append"> <span class="add-on">设备模板</span>
                     <input type="text" name="config[template][device][{key}][tpl]" class="span3" id="device_tpl_{key}" value="" disabled="disabled"/>
                     <?php iACP::files_modal_btn('模板','dir','device_tpl_{key}');?>
                   </div>

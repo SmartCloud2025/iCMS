@@ -50,7 +50,7 @@ $(function(){
     <div class="widget-title"> <span class="icon"> <i class="fa fa-list"></i> </span>
       <h5>后台菜单</h5>
       <div id="treecontrol"> <a style="display:none;"></a> <a style="display:none;"></a> <a class="btn btn-mini btn-info" href="javascript:;">展开/收缩</a></div>
-      <a style="margin: 10px 0px 0px 10px;" class="btn btn-mini" href="<?php echo __ADMINCP__; ?>=cache&do=menu" target="iPHP_FRAME"><i class="fa fa-refresh"></i> 更新缓存</a>
+      <a style="margin: 10px;" class="btn btn-mini" href="<?php echo __ADMINCP__; ?>=cache&do=menu" target="iPHP_FRAME"><i class="fa fa-refresh"></i> 更新缓存</a>
     </div>
     <div class="widget-content nopadding">
       <div id="menu-list" class="tab-content">

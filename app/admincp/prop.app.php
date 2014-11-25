@@ -32,7 +32,7 @@ class propApp{
         $type     = iS::escapeStr($_POST['type']);
         $val      = iS::escapeStr($_POST['val']);
 
-		($field=='pid'&& !is_numeric($val)) && iPHP::alert('pid字段的值能用数字');
+		($field=='pid'&& !is_numeric($val)) && iPHP::alert('pid字段的值只能用数字');
         $field OR iPHP::alert('属性字段不能为空!');
         $name OR iPHP::alert('属性名称不能为空!');
         $type OR iPHP::alert('类型不能为空!');

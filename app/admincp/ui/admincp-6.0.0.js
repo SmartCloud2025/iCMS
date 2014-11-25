@@ -45,9 +45,15 @@ $(function() {
     });
     doc.on("click",'[data-toggle="insert"]',function() {
         var a = $(this), data = a.data('insert'),
-        href = a.attr('href'), target = a.attr('data-target'),
+        href = a.attr('href'),
+        value = a.attr('data-value'),
+        target = a.attr('data-target'),
         val = a.text();
-        $(target).val(val);
+        if(value){
+            $(target).val(value);
+        }else{
+            $(target).val(val);
+        }
         a.parent().parent().parent().removeClass("open");
         //console.log();
         return false;
