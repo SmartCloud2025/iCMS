@@ -36,9 +36,6 @@ class iCMS {
         iPHP_DEBUG      && iDB::$show_errors = true;
         iPHP_TPL_DEBUG  && iPHP::clear_compiled_tpl();
 
-        $__URI = parse_url(self::$config['router']['URL']);
-        define('__HOST__',       $__URI['scheme'].'://'.$__URI['host']);
-
         define('iCMS_DIR',       self::$config['router']['DIR']);
         define('iCMS_URL',       self::$config['router']['URL']);
         define('iCMS_PUBLIC_URL',self::$config['router']['public_url']);
@@ -89,7 +86,6 @@ class iCMS {
 
         self::multiple_device($config);
         self::$config = $config;
-        //var_dump(self::$config['template']);
     }
     //多终端适配
     private static function multiple_device(&$config){
@@ -128,6 +124,9 @@ class iCMS {
         define('iPHP_DEFAULT_TPL',$def_tpl);
         define('iPHP_MOBILE_TPL',$mobile_tpl);
         define('iPHP_DEVICE',$device_name);
+        define('iPHP_HOST', $config['router']['URL']);
+        header("Access-Control-Allow-Origin: ".iPHP_HOST);
+        header('Access-Control-Allow-Headers: X-Requested-With,X_Requested_With');
     }
     private static function device_agent($user_agent){
         $user_agent = str_replace(',','|',preg_quote($user_agent));

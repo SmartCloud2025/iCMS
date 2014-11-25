@@ -101,8 +101,6 @@ class editorApp{
         $result = preg_replace("/\/\*[\s\S]+?\*\//", "", $config_json, true);
 
         if (isset($_GET["callback"])) {
-            header("Access-Control-Allow-Origin: ".__HOST__); //设置允许跨域访问
-            header('Access-Control-Allow-Headers: X-Requested-With,X_Requested_With'); //设置允许的跨域header
             if (preg_match("/^[\w_]+$/", $_GET["callback"])) {
                 echo htmlspecialchars($_GET["callback"]) . '(' . $result . ')';
             } else {
