@@ -340,7 +340,7 @@ function modal_icms(el,a){
                     return true;
                 }
                 var a = $(this),b = this,
-                    act   = a.attr('data-action'),
+                    act   = a.attr('data-action').replace(',','_'),
                     ab    = $('#'+act+'Batch'),
                     box   = document.getElementById(act+'Batch'),
                     title = a.text();
