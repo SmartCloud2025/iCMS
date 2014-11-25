@@ -94,7 +94,11 @@ class articleApp {
         $categoryApp = iPHP::app("category");
         $category    = $categoryApp->category($article['cid'],false);
 
-        $category OR iPHP::throw404('运行出错！找不到该文章的栏目缓存<b>cid:'. $article['cid'].'</b> 请更新栏目缓存或者确认栏目是否存在', 10002);
+        if($tpl){
+            $category OR iPHP::throw404('运行出错！找不到该文章的栏目缓存<b>cid:'. $article['cid'].'</b> 请更新栏目缓存或者确认栏目是否存在', 10002);
+        }else{
+            if(empty($category)) return false;
+        }
 
         if($category['status']==0) return false;
 
