@@ -158,8 +158,8 @@ function modal_tplfile(el,a){
             <span class="help-inline">例:<span class="label label-info">http://www.idreamsoft.com</span></span>
             <div class="clearfloat mb10"></div>
             <div class="input-prepend input-append"> <span class="add-on">PC端模板</span>
-              <input type="text" name="config[template][pc][tpl]" class="span3" id="template_pc_tpl" value="<?php echo $config['template']['pc']['tpl'] ; ?>"/>
-              <?php iACP::files_modal_btn('模板','dir','template_pc_tpl');?></div>
+              <input type="text" name="config[template][desktop][tpl]" class="span3" id="template_desktop_tpl" value="<?php echo $config['template']['desktop']['tpl'] ; ?>"/>
+              <?php iACP::files_modal_btn('模板','dir','template_desktop_tpl');?></div>
             <span class="help-inline">网站PC端模板默认模板</span>
             <div class="clearfloat mb10 solid"></div>
             <div class="input-prepend"> <span class="add-on">移动端识别</span>

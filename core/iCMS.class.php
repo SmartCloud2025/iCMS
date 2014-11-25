@@ -102,27 +102,26 @@ class iCMS {
                 break;
             }
         }
-        $is_mobile = false;
+        iPHP::$mobile = false;
         //检查是否移动设备
         if(self::device_agent($template['mobile']['agent'])){
-            $is_mobile     = true;
-            //$device_name = 'mobile';
-            $mobile_tpl    = $template['mobile']['tpl'];
-            $domain        = $template['mobile']['domain'];
+            iPHP::$mobile = true;
+            $mobile_tpl   = $template['mobile']['tpl'];
+            $domain       = $template['mobile']['domain'];
         }
 
         if($device_tpl){ //设备模板
             $def_tpl = $device_tpl;
         }else{
-            if($is_mobile){//没有设置设备模板 但是移动设备
+            if(iPHP::$mobile){//没有设置设备模板 但是移动设备
                 $device_name = 'mobile';
                 $def_tpl     = $mobile_tpl;
             }
         }
 
         if(empty($def_tpl)){
-            $device_name = 'pc';
-            $def_tpl     = $template['pc']['tpl'];
+            $device_name = 'desktop';
+            $def_tpl     = $template['desktop']['tpl'];
             $domain      = false;
         }
         $domain && $config['router'] = str_replace($config['router']['URL'], $domain, $config['router']);
@@ -399,7 +398,7 @@ class iCMS {
     }
     //------------------------------------
     public static function gotohtml($fp,$url='') {
-        if(iPHP::$iTPL_MODE=='html'||empty($url)||stristr($url, '.php?')||iPHP_DEVICE!='pc') return;
+        if(iPHP::$iTPL_MODE=='html'||empty($url)||stristr($url, '.php?')||iPHP_DEVICE!='desktop') return;
 
         @is_file($fp) && iPHP::gotourl($url);
     }

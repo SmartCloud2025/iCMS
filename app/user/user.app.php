@@ -124,7 +124,7 @@ class userApp {
         list($article,$article_data) = articleTable::data($id,0,user::$userid);
         $cid = empty($article['cid'])?(int)$_GET['cid']:$article['cid'];
 
-        if(iPHP_DEVICE!=="pc" && empty($article)){
+        if(iPHP_DEVICE!=="desktop" && empty($article)){
             $article['mobile'] = "1";
         }
 
@@ -431,7 +431,7 @@ class userApp {
         iFS::$checkFileData = false;
         $dir = get_user_dir(user::$userid,'coverpic');
         $filename = user::$userid;
-        if(iPHP_DEVICE!='pc'){
+        if(iPHP_DEVICE!='desktop'){
             $filename = 'm_'.user::$userid;
         }
         $F   = iFS::upload('upfile',$dir,$filename,'jpg');

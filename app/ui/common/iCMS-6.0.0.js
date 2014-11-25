@@ -291,8 +291,9 @@
                 .replace(/style=[" ]?([^"]+)[" ]/ig, "")
                 .replace(/<a[^>]+href=[" ]?([^"]+)[" ]?[^>]*>(.*?)<\/a>/ig, "[url=$1]$2[/url]")
                 .replace(/<img[^>]+src=[" ]?([^"]+)[" ]?[^>]*>/ig, "[img]$1[/img]")
-                .replace(/<embed[^>]+src=[" ]?([^"]+)[" ]\s+width=[" ]?([^"]\d+)[" ]\s+height=[" ]?([^"]\d+)[" ]?[^>]*>.*?<\/embed>/ig, "[media=$2,$3]$1[/media]")
-                .replace(/<embed[^>]+src=[" ]?([^"]+)[" ]?[^>]*>.*?<\/embed>/ig, "[media]$1[/media]")
+                .replace(/<embed/g, "\n<embed")
+                .replace(/<embed[^>]+class="edui-faked-video"[^"].+src=[" ]?([^"]+)[" ]+width=[" ]?([^"]\d+)[" ]+height=[" ]?([^"]\d+)[" ]?[^>]*>/ig, "[video=$2,$3]$1[/video]")
+                .replace(/<embed[^>]+class="edui-faked-music"[^"].+src=[" ]?([^"]+)[" ]+width=[" ]?([^"]\d+)[" ]+height=[" ]?([^"]\d+)[" ]?[^>]*>/ig, "[music=$2,$3]$1[/music]")
                 .replace(/<b[^>]*>(.*?)<\/b>/ig, "[b]$1[/b]")
                 .replace(/<strong[^>]*>(.*?)<\/strong>/ig, "[b]$1[/b]")
                 .replace(/<p[^>]*?>/g, "\n\n")
@@ -308,13 +309,15 @@
                 .replace(/\[b\](.*?)\[\/b\]/ig, '<b>$1</b>')
                 .replace(/\[url=([^\]|#]+)\](.*?)\[\/url\]/g, '$2')
                 .replace(/\[url=([^\]]+)\](.*?)\[\/url\]/g, '<a target="_blank" href="$1">$2</a>')
-                .replace(/\n+/g, "[iCMS.N]");
+               .replace(/\n+/g, "[iCMS.N]");
 
             content = this.n2p(content);
             content = content.replace(/#--iCMS.PageBreak--#/g, "<!---->#--iCMS.PageBreak--#")
                 .replace(/<p>\s*<p>/g, '<p>')
                 .replace(/<\/p>\s*<\/p>/g, '</p>')
                 .replace(/<p>\s*<\/p>/g, '')
+                .replace(/\[video=(\d+),(\d+)\](.*?)\[\/video\]/ig, '<embed type="application/x-shockwave-flash" class="edui-faked-video" pluginspage="http://www.macromedia.com/go/getflashplayer" src="$3" width="$1" height="$2" wmode="transparent" play="true" loop="false" menu="false" allowscriptaccess="never" allowfullscreen="true"/>')
+                .replace(/\[music=(\d+),(\d+)\](.*?)\[\/music\]/ig, '<embed type="application/x-shockwave-flash" class="edui-faked-music" pluginspage="http://www.macromedia.com/go/getflashplayer" src="$3" width="$1" height="$2" wmode="transparent" play="true" loop="false" menu="false" allowscriptaccess="never" allowfullscreen="true" align="none"/>')
                 .replace(/<p><br\/><\/p>/g, '');
             return content;
         },

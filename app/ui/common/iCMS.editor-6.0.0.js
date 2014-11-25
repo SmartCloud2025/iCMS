@@ -156,7 +156,7 @@
             var ed = this.container[this.id],
             html = iCMS.format(ed.getContent());
             ed.setContent(html);
-            ed.execCommand("autoTypeset");
+            //ed.execCommand("autoTypeset");
             ed.focus();
         },
     };

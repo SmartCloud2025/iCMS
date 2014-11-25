@@ -20,7 +20,7 @@ class indexApp {
         $index_tpl  = $a[0]?$a[0]:iCMS::$config['template']['index'];
         $index_name OR $index_name = 'index';
         $iurl = iURL::get('index',array('urlRule'=>$index_name.iCMS::$config['router']['html_ext']));
-        if(iCMS::$config['template']['index_mode'] && iPHP_DEVICE=="pc"){
+        if(iCMS::$config['template']['index_mode'] && iPHP_DEVICE=="desktop"){
             iCMS::gotohtml($iurl->path,$iurl->href);
         }
         if(iPHP::$iTPL_MODE=="html" || iCMS::$config['template']['index_rewrite']){
