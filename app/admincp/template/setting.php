@@ -344,11 +344,10 @@ function modal_tplfile(el,a){
             <div class="input-prepend"> <span class="add-on">缓存配置</span>
               <textarea name="config[cache][host]" id="cache_host" class="span6" style="height: 150px;"><?php echo $config['cache']['host'] ; ?></textarea>
             </div>
-            <span class="help-inline">
-            文件缓存目录:文件层级(data:1) 默认为空<hr />
+            <span class="help-inline">文件缓存目录:文件层级(cache:1)<br />
             memcached服务器IP:每行一个,带端口. <br />
             例:127.0.0.1:11211<br />
-            127.0.0.2:11211<hr />
+            127.0.0.2:11211<br />
             Redis UNIX SOCK<br />
             unix:///tmp/redis.sock@db:1 <br />
             127.0.0.1:6379@db:1</span>
