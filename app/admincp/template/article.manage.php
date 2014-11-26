@@ -121,6 +121,8 @@ $(function(){
             <optgroup label="降序">
             <option value="id DESC">ID[降序]</option>
             <option value="hits DESC">点击[降序]</option>
+            <option value="hits_week DESC">周点击[降序]</option>
+            <option value="hits_month DESC">月点击[降序]</option>
             <option value="good DESC">顶[降序]</option>
             <option value="postime DESC">时间[降序]</option>
             <option value="pubdate DESC">发布时间[降序]</option>
@@ -129,6 +131,8 @@ $(function(){
             <optgroup label="升序">
             <option value="id ASC">ID[升序]</option>
             <option value="hits ASC">点击[升序]</option>
+            <option value="hits_week ASC">周点击[升序]</option>
+            <option value="hits_month ASC">月点击[升序]</option>
             <option value="good ASC">顶[升序]</option>
             <option value="postime ASC">时间[升序]</option>
             <option value="pubdate ASC">发布时间[降序]</option>
