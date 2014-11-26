@@ -35,7 +35,7 @@ class tagApp {
 
     public function tag($val, $field = 'name', $tpl = 'tag') {
         $val OR iPHP::throw404('运行出错！TAG不能为空', 30002);
-        $tag = iDB::row("SELECT * FROM `#iCMS@__tags` where `$field`='$val' LIMIT 1;", ARRAY_A);
+        $tag = iDB::row("SELECT * FROM `#iCMS@__tags` where `$field`='$val' AND `status`='1'  LIMIT 1;", ARRAY_A);
         if(empty($tag)){
             if($tpl){
                 iPHP::throw404('运行出错！找不到标签: <b>'.$field.':'. $val.'</b>', 30003);

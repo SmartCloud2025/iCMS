@@ -100,7 +100,8 @@ body { background: #FFF url(img/body-bg.png) repeat-x; }
 #links .fa { color: #369; }
 #links h3 { border-left: 0px; }
 #links .bd { padding-left: 10px; }
-#links .bd a:link, #links .bd a:visited { display: inline; float: left; margin: 10px 10px 0 0; padding: 5px 10px; border-radius: 3px; background: #3886c2; box-shadow: 0 1px 1px 0 #ccc; color: #fff; white-space: nowrap; font-size: 14px; }
+#links .bd a:link, #links .bd a:visited { display: inline; float: left; margin: 4px 10px 0 0; padding: 1px; /*border-radius: 3px; background: #3886c2; box-shadow: 0 1px 1px 0 #ccc;  */
+color: #333; white-space: nowrap; font-size: 12px; }
 #register { padding-top: 10px; }
 .iCMS_pagination span.current, .iCMS_pagination span.page_nowindex { border: 1px solid #08c; background-color: #3a87ad; color: #fff; font-weight: bold; }
 

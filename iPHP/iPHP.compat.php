@@ -264,27 +264,18 @@ function html2js($string) {
     }
     return $string;
 }
-function dhtmlspecialchars($string) {
-    if(is_array($string)) {
-        foreach($string as $key => $val) {
-            $string[$key] = dhtmlspecialchars($val);
+
+if (!function_exists('htmlspecialchars_decode')) {
+    function htmlspecialchars_decode($string) {
+        if(is_array($string)) {
+            foreach($string as $key => $val) {
+                $string[$key] = htmlspecialchars_decode($val);
+            }
+        } else {
+            $string = str_replace (array('&amp;','&#039;','&quot;','&lt;','&gt;'), array('&','\'','\"','<','>'), $string );
         }
-    } else {
-    	$string = str_replace(array("\0","%00"),'',$string);
-        $string = preg_replace('/&amp;((#(\d{3,5}|x[a-fA-F0-9]{4})|[a-zA-Z][a-z0-9]{2,5});)/', '&\\1',
-                str_replace(array('&', '"',"'", '<', '>'), array('&amp;', '&quot;','&#039;', '&lt;', '&gt;'), $string));
+        return $string;
     }
-    return $string;
-}
-function unhtmlspecialchars($string) {
-    if(is_array($string)) {
-        foreach($string as $key => $val) {
-            $string[$key] = unhtmlspecialchars($val);
-        }
-    } else {
-        $string = str_replace (array('&amp;','&#039;','&quot;','&lt;','&gt;'), array('&','\'','\"','<','>'), $string );
-    }
-    return $string;
 }
 
 function random($length, $numeric = 0) {

@@ -96,6 +96,8 @@ class tag {
 	public function update($tag,$uid="0",$iid="0",$cid='0',$tcid='0') {
 	    if(empty($tag)) return;
 
+	    $tag = htmlspecialchars_decode($tag);
+	    $tag = preg_replace('/<[\/\!]*?[^<>]*?>/is','',$tag);
 	    $tid = iDB::value("SELECT `id` FROM `#iCMS@__tags` WHERE `name`='$tag'");
 	    if($tid) {
 	        $tlid = iDB::value("SELECT `id` FROM `#iCMS@__tags_map` WHERE `iid`='$iid' and `node`='$tid' and `appid`='".TAG_APPID."'");

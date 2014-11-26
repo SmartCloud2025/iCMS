@@ -120,9 +120,13 @@ class iFS {
         fclose($handle);
         $chmod && @chmod($fn, 0777);
     }
-
+    public static function escapeDir($dir) {
+        $dir = str_replace(array("'",'#','=','`','$','%','&',';'), '', $dir);
+        return rtrim(preg_replace('/(\/){2,}|(\\\){1,}/', '/', $dir), '/');
+    }
     //创建目录
     public static function mkdir($d) {
+        $d = self::escapeDir($d) ;
         $d = str_replace('//', '/', $d);
         if (file_exists($d))
             return @is_dir($d);
@@ -165,6 +169,7 @@ class iFS {
     }
 
     public static function path($p = '') {
+        $p   = str_replace("\0", '',$p);
         $end = substr ($p,-1);
         $a   = explode('/', $p);
         $o   = array();
