@@ -18,7 +18,7 @@ class iFC {
 	protected $_file;
 
 	function __construct($args=array('dirs'=> '','level'=>'0','compress'=>'9')){
-		$this->_dirs            = iPATH.$args['dirs'];
+		$this->_dirs            = rtrim(iPHP_APP_CACHE.'/'.$args['dirs'],'/').'/';
 		$this->_dir_level       = empty($args['level']) ? -1 : floor(32/$args['level']);
 		$this->_compress_enable = $args['compress'];
 		$this->_have_zlib       = function_exists("gzcompress");
@@ -67,7 +67,7 @@ class iFC {
 	}
    	function get_file($key,$method){
 		$key     = str_replace(':','/',$key);
-		$dirPath = $this->_dirs.'/'.(strpos($key,'/')!==false?dirname($key):'');
+		$dirPath = $this->_dirs.(strpos($key,'/')!==false?dirname($key):'');
    		if($this->_dir_level!=-1){
 			$md5_array  = $this->str_split(md5($key),$this->_dir_level);
 			$dirPath   .= '/'.implode('/',$md5_array).'/';
@@ -97,7 +97,12 @@ class iFC {
         fclose($handle);
         $chmod && @chmod($fn,0777);
     }
+    private function escapeDir($dir) {
+        $dir = str_replace(array("'",'#','=','`','$','%','&',';'), '', $dir);
+        return rtrim(preg_replace('/(\/){2,}|(\\\){1,}/', '/', $dir), '/');
+    }
     private function mkdir($d) {
+    	$d = $this->escapeDir($d) ;
         $d = str_replace( '//', '/', $d );
         if ( file_exists($d) )
             return @is_dir($d);

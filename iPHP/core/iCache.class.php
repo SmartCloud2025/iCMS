@@ -83,7 +83,7 @@ class iCache{
     public static function get($keys,$ckey=NULL){
         $_keys=implode('',(array)$keys);
         if(!self::$config['enable']){
-        	if(strstr($_keys,iPHP_APP)===false){
+        	if(strpos($_keys,iPHP_APP)===false){
         		return NULL;
         	}else{
         		self::sysCache();
@@ -98,7 +98,7 @@ class iCache{
     }
     public static function set($keys,$res,$cachetime="-1") {
         if(!self::$config['enable']){
-        	if(strstr($keys,iPHP_APP)===false){
+        	if(strpos($keys,iPHP_APP)===false){
         		return NULL;
         	}else{
         		self::sysCache();
@@ -125,7 +125,7 @@ class iCache{
     public static function sysCache(){
         iPHP::loadClass('FileCache');
 	    self::$link	= new iFC(array(
-            'dirs'     => 'cache',
+            'dirs'     => '',
             'level'    => 0,
             'compress' => 1
 	    ));
