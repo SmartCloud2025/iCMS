@@ -665,10 +665,9 @@ class spiderApp {
                 $html = $this->allHtml;
             }
         }
-        print_r(htmlspecialchars($html));
         if($data['dom']){
             iPHP::import(iPHP_LIB.'/phpQuery.php');
-            $this->ruleTest && phpQuery::$debug =1;
+            $this->contTest && phpQuery::$debug =1;
             $doc     = phpQuery::newDocument($html);
             list($content_dom,$content_fun,$content_attr) = explode("\n", $data['rule']);
             $content_dom  = trim($content_dom);
