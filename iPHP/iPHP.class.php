@@ -463,6 +463,9 @@ class iPHP{
         self::$break && exit();
     }
 	public static function alert($msg,$js=null,$s=3) {
+		if(iPHP::$dialog['alert'] === 'window'){
+			self::js("js:window.alert('{$msg}')");
+		}
 		self::$dialog = array(
 			'lock'   =>true,
 			'width'  =>360,

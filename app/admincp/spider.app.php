@@ -742,6 +742,7 @@ class spiderApp {
                 echo "\n[".$name . "内容为空!请检查,规则是否正确!]\n";
                 return false;
             }else{
+                $this->contTest && iPHP::$dialog['alert']='window';
                 iPHP::alert($name . '内容为空!请检查,规则是否正确!!');
             }
         }
