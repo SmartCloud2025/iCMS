@@ -1390,19 +1390,10 @@ class phpQueryObject
 		if (! phpQuery::$debug )
 			return;
 		print('<pre>');
-		if(is_array($in)){
-			$in  =  array_map ( "htmlspecialchars" ,$in);
-		}else{
-			$in = htmlspecialchars($in);
-		}
 		print_r($in);
-		// file debug
-//		file_put_contents(dirname(__FILE__).'/phpQuery.log', print_r($in, true)."\n", FILE_APPEND);
-		// quite handy debug trace
-//		if ( is_array($in))
-//			print_r(array_slice(debug_backtrace(), 3));
 		print("</pre>\n");
 	}
+
 	/**
 	 * @access private
 	 */

@@ -666,8 +666,9 @@ class spiderApp {
             }
         }
         if($data['dom']){
+
             iPHP::import(iPHP_LIB.'/phpQuery.php');
-            $this->contTest && phpQuery::$debug =1;
+            //$this->contTest && phpQuery::$debug =1;
             $doc     = phpQuery::newDocument($html);
             list($content_dom,$content_fun,$content_attr) = explode("\n", $data['rule']);
             $content_dom  = trim($content_dom);
@@ -683,6 +684,10 @@ class spiderApp {
                 }
             }
             $content = implode('#--iCMS.PageBreak--#', $conArray);
+            if ($this->contTest) {
+                print_r(htmlspecialchars($content));
+                echo "<hr />";
+            }
             phpQuery::unloadDocuments();
         }else{
             $data_rule = $this->pregTag($data['rule']);
