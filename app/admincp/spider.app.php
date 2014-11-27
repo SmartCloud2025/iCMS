@@ -1024,6 +1024,7 @@ class spiderApp {
         if ($this->contTest || $this->ruleTest) {
             echo '<pre>';
             print_r($info);
+            var_dump($responses);
             echo '</pre><hr />';
             if($_GET['breakinfo']){
             	exit();
