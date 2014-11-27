@@ -373,7 +373,7 @@ class spiderApp {
 //		}
         if($rule['mode']=="2"){
             iPHP::import(iPHP_LIB.'/phpQuery.php');
-            $this->ruleTest && phpQuery::$debug =1;
+            //$this->ruleTest && phpQuery::$debug =1;
         }
 
         $pubArray = array();
