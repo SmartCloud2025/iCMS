@@ -123,14 +123,21 @@ class iFC {
 
         return false;
     }
-	function str_split($str,$length = 1) {
-		if ($length < 1) return false;
+	function str_split($str,$level = 1) {
+		if ($level < 1) return false;
 
-		$strlen = strlen($str);
-		$ret = array();
-		for ($i = 0; $i < $strlen; $i += $length) {
-			$ret[] = substr($str,$i,$length);
-		}
+        if ($level == 1) {
+            $ret = array(substr($str,0,3),substr($str,3));
+        } elseif ($level == 2) {
+            $ret = array(substr($str,0,3),substr( $str,3,6),substr ($str,6));
+        } else {
+			$strlen = strlen($str);
+			$ret    = array();
+			for ($i = 0; $i < $strlen; $i += $level) {
+				$ret[] = substr($str,$i,$level);
+			}
+        }
+
 		return $ret;
 	}
 }

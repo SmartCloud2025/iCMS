@@ -1068,22 +1068,33 @@ class spiderApp {
 			unset($responses,$info);
             return $this->remote($url, $_referer, $_count);
         }
-        if ($this->charset == "auto") {
-            $encode = mb_detect_encoding($responses, array("ASCII","UTF-8","GB2312","GBK","BIG5"));
-            $encode!='UTF-8' && $responses = mb_convert_encoding($responses,"UTF-8",$encode);
-        } elseif ($this->charset == "gbk") {
-            $responses = mb_convert_encoding($responses, "UTF-8", "gbk");
-        }
+        $this->charset && $responses = $this->charsetTrans($responses,$this->charset);
 		curl_close($ch);
 		unset($info);
         return $responses;
     }
+    function charsetTrans($html, $encode, $out = 'UTF-8') {
+        if($encode=='auto'){
+            preg_match('/<meta[^>]*?charset=([a-zA-z0-9\-\_]+)[^>]*?>/is', $html, $charset);
+            $encode = str_replace(array('"',"'"),'', trim($charset[1]));
+            if(function_exists('mb_detect_encoding') && empty($encode)) {
+                $encode = mb_detect_encoding($html, array("ASCII","UTF-8","GB2312","GBK","BIG5"));
+            }
+            if(strtoupper($encode)=='UTF-8'){
+                return $html;
+            }
+        }
+        if (function_exists('iconv')) {
+            return iconv($encode,'UTF-8//IGNORE', $html);
+        } elseif (function_exists('mb_convert_encoding')) {
+            return mb_convert_encoding($html,'UTF-8//IGNORE',$encode);
+        } else {
+            iPHP::throwException('charsetTrans failed, no function');
+        }
+    }
+    function check_content_code($content) {
+        $content = $this->charsetTrans($content,'auto');
 
-    function check_content_code($content, $delay = 0) {
-        $encode = mb_detect_encoding($content, array("ASCII","UTF-8","GB2312","GBK","BIG5"));
-        $encode!='UTF-8' && $content = mb_convert_encoding($content,"UTF-8",$encode);
-//	    $page_right_rule	= $this->pregTag($this->page_right_code);
-//	    preg_match('|'.$page_right_rule.'|is', $data, $matches);
         if ($this->content_right_code) {
 	        $matches = strpos($content, $this->content_right_code);
 	        if (empty($matches)) {
