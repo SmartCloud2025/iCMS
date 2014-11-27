@@ -1093,8 +1093,6 @@ class spiderApp {
         }
     }
     function check_content_code($content) {
-        $content = $this->charsetTrans($content,'auto');
-
         if ($this->content_right_code) {
 	        $matches = strpos($content, $this->content_right_code);
 	        if (empty($matches)) {
