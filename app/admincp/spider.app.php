@@ -187,7 +187,7 @@ class spiderApp {
     }
 
     function post($work = null) {
-        $_POST        = $this->spider_content();
+        $_POST = $this->spider_content();
         if($this->work){
            if(empty($_POST['title'])){
                echo "标题不能为空\n";
@@ -291,7 +291,6 @@ class spiderApp {
             }
         }
         return $urls;
-        //var_dump($urls);
     }
     function title_url($row,$rule){
         if($rule['mode']=="2"){
@@ -387,8 +386,9 @@ class spiderApp {
             }
             $html = $this->remote($url);
             if($rule['mode']=="2"){
-                $doc   = phpQuery::newDocumentHTML($html);
-                $lists = $doc[trim($rule['list_area_rule'])];
+                $doc       = phpQuery::newDocumentHTML($html);
+                $list_area = $doc[trim($rule['list_area_rule'])];
+                $lists     = pq($list_area)->find(trim($rule['list_area_format']));
             }else{
                 $list_area_rule = $this->pregTag($rule['list_area_rule']);
                 if ($list_area_rule) {
@@ -666,7 +666,6 @@ class spiderApp {
             }
         }
         if($data['dom']){
-
             iPHP::import(iPHP_LIB.'/phpQuery.php');
             //$this->contTest && phpQuery::$debug =1;
             $doc     = phpQuery::newDocument($html);
@@ -675,15 +674,24 @@ class spiderApp {
             $content_fun  = trim($content_fun);
             $content_attr = trim($content_attr);
             $content_fun OR $content_fun = 'html';
-            $conArray = array();
-            foreach ($doc[$content_dom] as $doc_key => $doc_value) {
+            if ($data['multi']) {
+                $conArray = array();
+                foreach ($doc[$content_dom] as $doc_key => $doc_value) {
+                    if($content_attr){
+                        $conArray[] = pq($doc_value)->$content_fun($content_attr);
+                    }else{
+                        $conArray[] = pq($doc_value)->$content_fun();
+                    }
+                }
+                $content = implode('#--iCMS.PageBreak--#', $conArray);
+            }else{
                 if($content_attr){
-                    $conArray[] = pq($doc_value)->$content_fun($content_attr);
+                    $content = $doc[$content_dom]->$content_fun($content_attr);
                 }else{
-                    $conArray[] = pq($doc_value)->$content_fun();
+                    $content = $doc[$content_dom]->$content_fun();
                 }
             }
-            $content = implode('#--iCMS.PageBreak--#', $conArray);
+
             if ($this->contTest) {
                 print_r(htmlspecialchars($content));
                 echo "<hr />";
@@ -776,7 +784,6 @@ class spiderApp {
                 }
             }
         }
-
         if ($data['empty'] && empty($content)) {
             if($this->work){
                 echo "\n[".$name . "内容为空!请检查,规则是否正确!]\n";
@@ -887,6 +894,7 @@ class spiderApp {
             );
         }
         $rule['sort'] OR $rule['sort'] = 1;
+        $rule['mode'] OR $rule['mode'] = 1;
         $rule['page_no_start'] OR $rule['page_no_start'] = 1;
         $rule['page_no_end'] OR $rule['page_no_end'] = 5;
         $rule['page_no_step'] OR $rule['page_no_step'] = 1;

@@ -41,11 +41,9 @@ $(function() {
           </tr>
         </thead>
         <tbody class="spider-list" id="spider-list-<?php echo md5($furl); ?>">
-          <?php
+    <?php
 	  	foreach ($lists AS $lkey => $row) {
-                $title = $row['title'];
-                $title = preg_replace('/<[\/\!]*?[^<>]*?>/is', '', $title);
-                $url = str_replace('<%url%>', $row['url'], $rule['list_url']);
+        list($title,$url) = $this->title_url($row,$rule);
 				$hash = md5($url);
 				if(!$sArray[$hash]){
 		?>
