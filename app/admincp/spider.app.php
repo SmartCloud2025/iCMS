@@ -418,7 +418,7 @@ class spiderApp {
                     $hash  = md5($url);
 
                     if ($this->ruleTest) {
-                        echo $title . ' (<a href="' . APP_URI . '&do=testcont&url=' . $url . '&rid=' . $rid . '&pid=' . $pid . '" target="_blank">测试内容规则</a>) <br />';
+                        echo $title . ' (<a href="' . APP_URI . '&do=testcont&url=' . $url . '&rid=' . $rid . '&pid=' . $pid . '&title=' . urlencode($title) . '" target="_blank">测试内容规则</a>) <br />';
                         echo $url . "<br />";
                         echo $hash . "<br /><br />";
                     } else {
@@ -502,6 +502,7 @@ class spiderApp {
             $title = $this->title;
             $url   = $this->url;
         }
+
 		if($pid){
             $project        = $this->project($pid);
             $prule_list_url = $project['list_url'];
