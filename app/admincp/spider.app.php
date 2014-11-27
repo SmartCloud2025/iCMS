@@ -1008,14 +1008,16 @@ class spiderApp {
         $ch = curl_init();
         curl_setopt($ch, CURLOPT_URL, $url);
         curl_setopt($ch, CURLOPT_ENCODING, 'gzip');
-        curl_setopt($ch, CURLOPT_TIMEOUT, 1);
-        curl_setopt($ch, CURLOPT_CONNECTTIMEOUT, 3);
+        curl_setopt($ch, CURLOPT_TIMEOUT, 30);
+        curl_setopt($ch, CURLOPT_CONNECTTIMEOUT, 30);
         curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
         curl_setopt($ch, CURLOPT_FAILONERROR, 1);
         curl_setopt($ch, CURLOPT_REFERER, $_referer ? $_referer : $curlopt_referer);
         curl_setopt($ch, CURLOPT_USERAGENT, $this->useragent);
         curl_setopt($ch, CURLOPT_HEADER, 0);
         curl_setopt($ch, CURLOPT_NOSIGNAL, true);
+        curl_setopt($ch, CURLOPT_FOLLOWLOCATION, 1); // 使用自动跳转
+        curl_setopt($ch, CURLOPT_MAXREDIRS, 7);//查找次数，防止查找太深
         $responses = curl_exec($ch);
         $info = curl_getinfo($ch);
         if ($this->contTest || $this->ruleTest) {
@@ -1026,26 +1028,26 @@ class spiderApp {
             	exit();
             }
         }
-        if (($info['http_code'] == 301 || $info['http_code'] == 302) && $_count < 5) {
-            $_count++;
-            $newurl = $info['redirect_url'];
-	        if(empty($newurl)){
-		    	curl_setopt($ch, CURLOPT_HEADER, 1);
-		    	$header		= curl_exec($ch);
-		    	preg_match ('|Location: (.*)|i',$header,$matches);
-		    	$newurl 	= ltrim($matches[1],'/');
-			    if(empty($newurl)) return false;
+   //      if (($info['http_code'] == 301 || $info['http_code'] == 302) && $_count < 5) {
+   //          $_count++;
+   //          $newurl = $info['redirect_url'];
+	  //       if(empty($newurl)){
+		 //    	curl_setopt($ch, CURLOPT_HEADER, 1);
+		 //    	$header		= curl_exec($ch);
+		 //    	preg_match ('|Location: (.*)|i',$header,$matches);
+		 //    	$newurl 	= ltrim($matches[1],'/');
+			//     if(empty($newurl)) return false;
 
-		    	if(!strstr($newurl,'http://')){
-			    	$host	= $uri['scheme'].'://'.$uri['host'];
-		    		$newurl = $host.'/'.$newurl;
-		    	}
-	        }
-	        $newurl	= trim($newurl);
-			curl_close($ch);
-			unset($responses,$info);
-            return $this->remote($url, $_referer, $_count);
-        }
+		 //    	if(!strstr($newurl,'http://')){
+			//     	$host	= $uri['scheme'].'://'.$uri['host'];
+		 //    		$newurl = $host.'/'.$newurl;
+		 //    	}
+	  //       }
+	  //       $newurl	= trim($newurl);
+			// curl_close($ch);
+			// unset($responses,$info);
+   //          return $this->remote($url, $_referer, $_count);
+   //      }
         if ($info['http_code'] == 404 || $info['http_code'] == 500) {
 			curl_close($ch);
 			unset($responses,$info);
