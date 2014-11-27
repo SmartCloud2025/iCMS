@@ -896,7 +896,9 @@ class spiderApp {
 
         empty($name) && iPHP::alert('规则名称不能为空！');
         //empty($rule['list_area_rule']) 	&& iPHP::alert('列表区域规则不能为空！');
-        empty($rule['list_url_rule']) && iPHP::alert('列表链接规则不能为空！');
+        if($rule['mode']!='2'){
+            empty($rule['list_url_rule']) && iPHP::alert('列表链接规则不能为空！');
+        }
 
         $rule   = addslashes(serialize($rule));
         $fields = array('name', 'rule');
