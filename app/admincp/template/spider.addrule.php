@@ -33,10 +33,26 @@ $(function(){
 		var ntr=$(".aclone",tb).clone(true).removeClass("hide aclone");
 		$('input,textarea',ntr).removeAttr("disabled");
 		$('input,textarea',ntr).each(function(i){
-			this.name=this.name.replace('[__NO__]','['+length+']');
+      this.id = this.id.replace('__NO__',length);
+      this.name = this.name.replace('[__NO__]','['+length+']');
 		});
+    $('a[data-target]',ntr).each(function(i){
+      var target= $(this).attr('data-target')
+      target = target.replace('__NO__',length);
+      $(this).attr('data-target',target);
+    });
 		$('.tip',ntr).tooltip();
-    $(':checkbox,:radio',ntr).uniform();
+    $(':checkbox,:radio',ntr).uniform()
+    .on("click",function(){
+        checkedStatus = $(this).prop("checked");
+        this.checked = checkedStatus;
+        if (checkedStatus == this.checked) {
+          $(this).closest('.checker > span').removeClass('checked');
+        }
+        if (this.checked) {
+         $(this).closest('.checker > span').addClass('checked');
+        }
+    });
 		ntr.appendTo(tbody);
 		return false;
 	});
@@ -109,6 +125,16 @@ $(function(){
               <label class="radio">
                 <input type="radio" name="rule[sort]" id="charset3" value="3"<?php if($rule['sort']=="3"){ echo ' checked="true"';};?>>
                 随机乱序 </label>
+              </span></div>
+            <div class="clearfloat mb10"></div>
+            <div class="input-prepend input-append"> <span class="add-on">采集模式</span><span class="add-on">
+              <label class="radio">
+                <input type="radio" name="rule[mode]" id="mode1" value="1"<?php if($rule['mode']=="1"){ echo ' checked="true"';};?>>
+                正则 </label>
+              </span><span class="add-on">
+              <label class="radio">
+                <input type="radio" name="rule[mode]" id="mode2" value="2"<?php if($rule['mode']=="2"){ echo ' checked="true"';};?>>
+                xpath </label>
               </span></div>
             <div class="clearfloat mb10"></div>
             <div class="input-prepend input-sp"><span class="add-on">列表网址</span>
@@ -194,6 +220,10 @@ $(function(){
                     <label class="checkbox">
                       <input type="checkbox" name="rule[data][<?php echo $dkey;?>][img_absolute]" value="1"<?php if($data['img_absolute']){ echo ' checked="true"';};?>>
                       图片地址补全</label>
+                      <div class="clearfloat mb10"></div>
+                    <label class="checkbox">
+                      <input type="checkbox" name="rule[data][<?php echo $dkey;?>][dom]" value="1"<?php if($data['dom']){ echo ' checked="true"';};?>>
+                      使用dom匹配</label>
                     <div class="clearfloat mb10"></div></td>
                   <td><a class="btn btn-small delprop"><i class="fa fa-trash-o"></i> 删除</a></td>
                 </tr>
@@ -203,7 +233,8 @@ $(function(){
                 <tr class="hide aclone">
                   <td><div class="btn-group btn-group-vertical">
                       <input name="rule[data][__NO__][name]" type="text" disabled="disabled" class="rule_data_name" value=""/>
-                      <a class="btn" href="<%content%>" data-toggle="insertContent" data-target="#rule_data___NO___rule">内容标识</a> <a class="btn" href="<%var%>" data-toggle="insertContent" data-target="#rule_data___NO___rule">变量标识</a> </div></td>
+                      <a class="btn" href="<%content%>" data-toggle="insertContent" data-target="#rule_data___NO___rule">内容标识</a>
+                      <a class="btn" href="<%var%>" data-toggle="insertContent" data-target="#rule_data___NO___rule">变量标识</a> </div></td>
                   <td class="rule_data_rule"><textarea name="rule[data][__NO__][rule]" disabled="disabled" class="span6" id="rule_data___NO___rule"></textarea>
                     <div class="clearfloat mb10"></div>
                     <div class="input-prepend input-sp"> <span class="add-on s4">数据整理</span>
@@ -246,6 +277,10 @@ $(function(){
                     <label class="checkbox">
                       <input type="checkbox" name="rule[data][__NO__][img_absolute]" value="1">
                       图片地址补全</label>
+                    <div class="clearfloat mb10"></div>
+                    <label class="checkbox">
+                      <input type="checkbox" name="rule[data][__NO__][dom]" value="1">
+                      使用dom匹配</label>
                     <div class="clearfloat mb10"></div></td>
                   <td><a class="btn btn-small delprop"><i class="fa fa-trash-o"></i> 删除</a></td>
                 </tr>

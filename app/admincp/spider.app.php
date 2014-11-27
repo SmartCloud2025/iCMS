@@ -293,7 +293,28 @@ class spiderApp {
         return $urls;
         //var_dump($urls);
     }
-
+    function title_url($row,$rule){
+        if($rule['mode']=="2"){
+            $pq    = pq($row);
+            list($title_attr,$url_attr) = explode("\n", $rule['list_url_rule']);
+            $title_attr = trim($title_attr);
+            $url_attr   = trim($url_attr);
+            $title_attr OR $title_attr = 'text';
+            $url_attr OR $url_attr = 'href';
+            if($title_attr=='text'){
+                $title = $pq->text();
+            }else{
+                $title = $pq->attr($title_attr);
+            }
+            $url = $pq->attr($url_attr);
+        }else{
+            $title = $row['title'];
+            $url   = str_replace('<%url%>', $row['url'], $rule['list_url']);
+        }
+        $title = preg_replace('/<[\/\!]*?[^<>]*?>/is', '', $title);
+        $this->title = $title;
+        return array($title,$url);
+    }
     function spider_url($work = NULL) {
         $pid = $this->pid;
         if ($pid) {
@@ -350,6 +371,11 @@ class spiderApp {
 //	    	echo "</pre>";
 //	    	echo "<hr />";
 //		}
+        if($rule['mode']=="2"){
+            iPHP::import(iPHP_LIB.'/phpQuery.php');
+            $this->ruleTest && phpQuery::$debug =1;
+        }
+
         $pubArray = array();
         foreach ($urlsArray AS $key => $url) {
             $url = trim($url);
@@ -360,37 +386,42 @@ class spiderApp {
                 echo $url . "<br />";
             }
             $html = $this->remote($url);
+            if($rule['mode']=="2"){
+                $doc   = phpQuery::newDocumentHTML($html);
+                $lists = $doc[trim($rule['list_area_rule'])];
+            }else{
+                $list_area_rule = $this->pregTag($rule['list_area_rule']);
+                if ($list_area_rule) {
+                    preg_match('|' . $list_area_rule . '|is', $html, $matches, $PREG_SET_ORDER);
+                    $list_area = $matches['content'];
+                } else {
+                    $list_area = $html;
+                }
 
-            $list_area_rule = $this->pregTag($rule['list_area_rule']);
-            if ($list_area_rule) {
-                preg_match('|' . $list_area_rule . '|is', $html, $matches, $PREG_SET_ORDER);
-                $list_area = $matches['content'];
-            } else {
-                $list_area = $html;
+    			$html = null;
+                unset($html);
+
+                if ($this->ruleTest) {
+                    echo iS::escapeStr($rule['list_area_rule']);
+    //    			echo iS::escapeStr($list_area);
+                    echo "<hr />";
+                }
+                if ($rule['list_area_format']) {
+                    $list_area = $this->dataClean($rule['list_area_format'], $list_area);
+                }
+                if ($this->ruleTest) {
+                    echo iS::escapeStr($rule['list_area_format']);
+                    echo "<hr />";
+                    echo iS::escapeStr($list_area);
+                    echo "<hr />";
+                }
+
+                preg_match_all('|' . $this->pregTag($rule['list_url_rule']) . '|is', $list_area, $lists, PREG_SET_ORDER);
+
+                $list_area = null;
+                unset($list_area);
             }
-			$html = null;
-            unset($html);
-
-            if ($this->ruleTest) {
-                echo iS::escapeStr($rule['list_area_rule']);
-//    			echo iS::escapeStr($list_area);
-                echo "<hr />";
-            }
-            if ($rule['list_area_format']) {
-                $list_area = $this->dataClean($rule['list_area_format'], $list_area);
-            }
-            if ($this->ruleTest) {
-                echo iS::escapeStr($rule['list_area_format']);
-                echo "<hr />";
-                echo iS::escapeStr($list_area);
-                echo "<hr />";
-            }
-
-            preg_match_all('|' . $this->pregTag($rule['list_url_rule']) . '|is', $list_area, $lists, PREG_SET_ORDER);
-
-			$list_area = null;
-            unset($list_area);
-
+            //
             if ($rule['sort'] == "1") {
                 //arsort($lists);
             } elseif ($rule['sort'] == "2") {
@@ -412,11 +443,8 @@ class spiderApp {
                 $listsArray[$url] = $lists;
             } else {
                 foreach ($lists AS $lkey => $row) {
-                    $title = $row['title'];
-                    $title = preg_replace('/<[\/\!]*?[^<>]*?>/is', '', $title);
-                    $url   = str_replace('<%url%>', $row['url'], $rule['list_url']);
+                    list($title,$url) = $this->title_url($row,$rule);
                     $hash  = md5($url);
-
                     if ($this->ruleTest) {
                         echo $title . ' (<a href="' . APP_URI . '&do=testcont&url=' . $url . '&rid=' . $rid . '&pid=' . $pid . '&title=' . urlencode($title) . '" target="_blank">测试内容规则</a>) <br />';
                         echo $url . "<br />";
@@ -442,9 +470,9 @@ class spiderApp {
 				foreach ($listsArray AS $furl => $lists) {
                     echo "开始采集:".$furl." 列表 ".count($lists)."条记录\n";
 					foreach ($lists AS $lkey => $row) {
-                        $url  = str_replace('<%url%>', $row['url'], $rule['list_url']);
-                        $hash = md5($url);
-                        echo "title:".$row['title']."\n";
+                        list($title,$url) = $this->title_url($row,$rule);
+                        $hash  = md5($url);
+                        echo "title:".$this->title."\n";
                         echo "url:".$url."\n";
 						if(!$this->checkurl($hash)){
                             echo "开始采集....";
@@ -637,30 +665,51 @@ class spiderApp {
                 $html = $this->allHtml;
             }
         }
-
-        $data_rule = $this->pregTag($data['rule']);
-        if ($this->contTest) {
-            print_r(iS::escapeStr($data_rule));
-            echo "<hr />";
-        }
-        if (preg_match('/(<\w+>|\.\*|\.\+|\\\d|\\\w)/i', $data_rule)) {
-            if ($data['multi']) {
-                preg_match_all('|' . $data_rule . '|is', $html, $matches, PREG_SET_ORDER);
-                $conArray = array();
-                foreach ((array) $matches AS $mkey => $mat) {
-                    $conArray[] = $mat['content'];
+        print_r(htmlspecialchars($html));
+        if($data['dom']){
+            iPHP::import(iPHP_LIB.'/phpQuery.php');
+            $this->ruleTest && phpQuery::$debug =1;
+            $doc     = phpQuery::newDocument($html);
+            list($content_dom,$content_fun,$content_attr) = explode("\n", $data['rule']);
+            $content_dom  = trim($content_dom);
+            $content_fun  = trim($content_fun);
+            $content_attr = trim($content_attr);
+            $content_fun OR $content_fun = 'html';
+            $conArray = array();
+            foreach ($doc[$content_dom] as $doc_key => $doc_value) {
+                if($content_attr){
+                    $conArray[] = pq($doc_value)->$content_fun($content_attr);
+                }else{
+                    $conArray[] = pq($doc_value)->$content_fun();
                 }
-                $content = implode('#--iCMS.PageBreak--#', $conArray);
-                if ($this->contTest) {
-                    print_r(htmlspecialchars($content));
-                    echo "<hr />";
+            }
+            $content = implode('#--iCMS.PageBreak--#', $conArray);
+            phpQuery::unloadDocuments();
+        }else{
+            $data_rule = $this->pregTag($data['rule']);
+            if ($this->contTest) {
+                print_r(iS::escapeStr($data_rule));
+                echo "<hr />";
+            }
+            if (preg_match('/(<\w+>|\.\*|\.\+|\\\d|\\\w)/i', $data_rule)) {
+                if ($data['multi']) {
+                    preg_match_all('|' . $data_rule . '|is', $html, $matches, PREG_SET_ORDER);
+                    $conArray = array();
+                    foreach ((array) $matches AS $mkey => $mat) {
+                        $conArray[] = $mat['content'];
+                    }
+                    $content = implode('#--iCMS.PageBreak--#', $conArray);
+                    if ($this->contTest) {
+                        print_r(htmlspecialchars($content));
+                        echo "<hr />";
+                    }
+                } else {
+                    preg_match('|' . $data_rule . '|is', $html, $matches, $PREG_SET_ORDER);
+                    $content = $matches['content'];
                 }
             } else {
-                preg_match('|' . $data_rule . '|is', $html, $matches, $PREG_SET_ORDER);
-                $content = $matches['content'];
+                $content = $data_rule;
             }
-        } else {
-            $content = $data_rule;
         }
 		$html = null;
         unset($html);
@@ -678,29 +727,16 @@ class spiderApp {
             $content = stripslashes($content);
             unset($_content);
         }
+
         if ($data['img_absolute'] && $content) {
             preg_match_all("/<img.*?src\s*=[\"|'](.*?)[\"|']/is", $content, $img_match);
             if($img_match[1]){
                 $_img_array = array_unique($img_match[1]);
-
-                $_rule_url_dir = pathinfo($rule['__url__'],PATHINFO_DIRNAME);
-                $_rule_uri     = parse_url($rule['__url__']);
-                $_rule_host    = $_rule_uri['scheme'].'://'.$_rule_uri['host'];
-                $_img_urls     = array();
-                foreach ($_img_array as $_img_key => $_img_src) {
-                    $_img_src = trim($_img_src);
-                    if (stripos($_img_src,'http://') === false){
-                        if ($_img_src{0}=='/'){
-                            $_img_urls[$_img_key] = $_rule_host.'/'.ltrim($_img_src,'/');
-                        }else{
-                            $_img_urls[$_img_key] = iFS::path($_rule_url_dir.'/'.ltrim($_img_src,'/'));
-                        }
-                    }else{
-                        unset($_img_array[$_img_key]);
-                    }
+                $_img_urls  = array();
+                foreach ((array)$_img_array as $_img_key => $_img_src) {
+                    $_img_urls[$_img_key] = $this->_url_complement($rule['__url__'],$_img_src);
                 }
-                //print_r($_img_urls);
-                $_img_urls && $content = str_replace($_img_array, $_img_urls, $content);
+               $content = str_replace($_img_array, $_img_urls, $content);
             }
         }
 
@@ -751,7 +787,21 @@ class spiderApp {
         }
         return $content;
     }
-
+    function _url_complement($baseUrl,$href){
+        $href = trim($href);
+        if (stripos($href,'http://') === false){
+            if ($href{0}=='/'){
+                $base_uri  = parse_url($baseUrl);
+                $base_host = $base_uri['scheme'].'://'.$base_uri['host'];
+                return $base_host.'/'.ltrim($href,'/');
+            }else{
+                $base_url  = pathinfo($baseUrl,PATHINFO_DIRNAME);
+                return iFS::path($base_url.'/'.ltrim($href,'/'));
+            }
+        }else{
+            return $href;
+        }
+    }
     function dataClean($rules, $string) {
         $ruleArray = explode("\n", $rules);
         foreach ($ruleArray AS $key => $rule) {
@@ -1075,8 +1125,8 @@ class spiderApp {
     }
     function charsetTrans($html, $encode, $out = 'UTF-8') {
         if($encode=='auto'){
-            preg_match('/<meta[^>]*?charset=([a-zA-z0-9\-\_]+)[^>]*?>/is', $html, $charset);
-            $encode = str_replace(array('"',"'"),'', trim($charset[1]));
+            preg_match('/<meta[^>]*?charset=(["\']?)([a-zA-z0-9\-\_]+)(\1)[^>]*?>/is', $html, $charset);
+            $encode = str_replace(array('"',"'"),'', trim($charset[2]));
             if(function_exists('mb_detect_encoding') && empty($encode)) {
                 $encode = mb_detect_encoding($html, array("ASCII","UTF-8","GB2312","GBK","BIG5"));
             }
@@ -1084,6 +1134,7 @@ class spiderApp {
                 return $html;
             }
         }
+        $html = preg_replace('/(<meta[^>]*?charset=(["\']?))[a-z\d_\-]*(\2[^>]*?>)/is', "\\1$out\\3", $html,1);
         if (function_exists('iconv')) {
             return iconv($encode,'UTF-8//IGNORE', $html);
         } elseif (function_exists('mb_convert_encoding')) {
