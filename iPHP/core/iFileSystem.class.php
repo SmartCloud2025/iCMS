@@ -773,6 +773,8 @@ class iFS {
     	if(self::$callback){
     		$a['state']	= $msg;
     		return $a;
+        }else if($_GET['format']=='json'){
+            return json_encode($a);
     	}else{
         	exit('<script type="text/javascript">window.top.alert("' . $msg . '");</script>');
         }
