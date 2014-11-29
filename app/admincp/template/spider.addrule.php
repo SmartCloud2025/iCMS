@@ -134,7 +134,7 @@ $(function(){
               </span><span class="add-on">
               <label class="radio">
                 <input type="radio" name="rule[mode]" id="mode2" value="2"<?php if($rule['mode']=="2"){ echo ' checked="true"';};?>>
-                xpath </label>
+                phpQuery </label>
               </span></div>
             <div class="clearfloat mb10"></div>
             <div class="input-prepend input-sp"><span class="add-on">列表网址</span>
@@ -223,7 +223,7 @@ $(function(){
                       <div class="clearfloat mb10"></div>
                     <label class="checkbox">
                       <input type="checkbox" name="rule[data][<?php echo $dkey;?>][dom]" value="1"<?php if($data['dom']){ echo ' checked="true"';};?>>
-                      使用dom匹配</label>
+                      使用phpQuery匹配</label>
                     <div class="clearfloat mb10"></div></td>
                   <td><a class="btn btn-small delprop"><i class="fa fa-trash-o"></i> 删除</a></td>
                 </tr>
@@ -280,7 +280,7 @@ $(function(){
                     <div class="clearfloat mb10"></div>
                     <label class="checkbox">
                       <input type="checkbox" name="rule[data][__NO__][dom]" value="1">
-                      使用dom匹配</label>
+                      使用phpQuery匹配</label>
                     <div class="clearfloat mb10"></div></td>
                   <td><a class="btn btn-small delprop"><i class="fa fa-trash-o"></i> 删除</a></td>
                 </tr>

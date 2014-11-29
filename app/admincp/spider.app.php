@@ -388,6 +388,7 @@ class spiderApp {
             if($rule['mode']=="2"){
                 $doc       = phpQuery::newDocumentHTML($html);
                 $list_area = $doc[trim($rule['list_area_rule'])];
+                empty($rule['list_area_format']) && $rule['list_area_format'] = 'a';
                 $lists     = pq($list_area)->find(trim($rule['list_area_format']));
             }else{
                 $list_area_rule = $this->pregTag($rule['list_area_rule']);
@@ -813,17 +814,44 @@ class spiderApp {
             return $href;
         }
     }
-    function dataClean($rules, $string) {
+    function dataClean($rules, $content) {
+        iPHP::import(iPHP_LIB.'/phpQuery.php');
         $ruleArray = explode("\n", $rules);
         foreach ($ruleArray AS $key => $rule) {
             list($_pattern, $_replacement) = explode("==", $rule);
-            $_pattern          = trim($_pattern);
-            $_replacement      = trim($_replacement);
-            $_replacement      = str_replace('\n', "\n", $_replacement);
-            $pattern[$key]     = '|' . $this->pregTag($_pattern) . '|is';
-            $replacement[$key] = $_replacement;
+            $_pattern     = trim($_pattern);
+            $_replacement = trim($_replacement);
+            $_replacement = str_replace('\n', "\n", $_replacement);
+            if(strpos($_pattern, 'DOM::')!==false){
+                $doc      = phpQuery::newDocument($content);
+                $_pattern = str_replace('DOM::','', $_pattern);
+                list($pq_dom, $pq_fun,$pq_attr) = explode("::", $_pattern);
+                $pq_array = pq($pq_dom);
+                foreach ($pq_array as $pq_key => $pq_val) {
+                    if($pq_fun){
+                        if($pq_attr){
+                            $pq_content = pq($pq_val)->$pq_fun($pq_attr);
+                        }else{
+                            $pq_content = pq($pq_val)->$pq_fun();
+                        }
+                    }else{
+                        $pq_content = (string)pq($pq_val);
+                    }
+                    $pq_pattern[$pq_key]     = $pq_content;
+                    $pq_replacement[$pq_key] = $_replacement;
+                }
+                //var_dump(array_map('htmlspecialchars', $pq_pattern));
+                $content = str_replace($pq_pattern,$pq_replacement, $content);
+            }else{
+                $replacement[$key] = $_replacement;
+                $pattern[$key] = '|' . $this->pregTag($_pattern) . '|is';
+            }
         }
-        return preg_replace($pattern, $replacement, $string);
+        if($pattern){
+            return preg_replace($pattern, $replacement, $content);
+        }else{
+            return $content;
+        }
     }
 
     function checkurl($hash) {
