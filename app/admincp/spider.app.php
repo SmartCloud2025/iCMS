@@ -308,8 +308,11 @@ class spiderApp {
             $url = $pq->attr($url_attr);
         }else{
             $title = $row['title'];
-            $url   = str_replace('<%url%>', $row['url'], $rule['list_url']);
+            $url   = $row['url'];
         }
+        //_url_complement($baseUrl,$href)
+        $url   = str_replace('<%url%>',$url, $rule['list_url']);
+        $rule['list_url_clean'] && $url = $this->dataClean($rule['list_url_clean'],$url);
         $title = preg_replace('/<[\/\!]*?[^<>]*?>/is', '', $title);
         $this->title = $title;
         return array($title,$url);
@@ -1160,18 +1163,28 @@ class spiderApp {
 			unset($responses,$info);
             return $this->remote($url, $_referer, $_count);
         }
-        $this->charset && $responses = $this->charsetTrans($responses,$this->charset);
+        $pos = stripos($info['content_type'], 'charset=');
+        if($pos!==false){
+            $content_charset = substr($info['content_type'], $pos+8);
+        }
+
+        $this->charset && $responses = $this->charsetTrans($responses,$content_charset,$this->charset);
 		curl_close($ch);
 		unset($info);
         return $responses;
     }
-    function charsetTrans($html, $encode, $out = 'UTF-8') {
+    function charsetTrans($html,$content_charset,$encode, $out = 'UTF-8') {
         if($encode=='auto'){
             preg_match('/<meta[^>]*?charset=(["\']?)([a-zA-z0-9\-\_]+)(\1)[^>]*?>/is', $html, $charset);
             $encode = str_replace(array('"',"'"),'', trim($charset[2]));
+            //var_dump('encode'.$encode);
+            if($content_charset){
+                $encode = $content_charset;
+            }
             if(function_exists('mb_detect_encoding') && empty($encode)) {
                 $encode = mb_detect_encoding($html, array("ASCII","UTF-8","GB2312","GBK","BIG5"));
             }
+            //var_dump('content_charset'.$content_charset);
             if(strtoupper($encode)=='UTF-8'){
                 return $html;
             }

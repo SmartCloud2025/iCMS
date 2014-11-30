@@ -172,21 +172,23 @@ class articleApp {
                 'prev'    => $prev_url,
                 'next'    => $next_url,
                 'pageurl' => $pageurl,
-                'last'    => ($count==$page?true:false),//实际最后一页
-                'end'     => ($total==$page?true:false)
+                'last'    => ($page==$count?true:false),//实际最后一页
+                'end'     => ($page==$total?true:false)
             );
             unset($index_nav,$prev_nav,$num_nav,$next_nav,$end_nav,$pagenav);
-            if($page<=$count){
+            //var_dump($page,$total,$count);
+            if($pic_array[0]){
                 $img_array = array_unique($pic_array[0]);
                 foreach($img_array as $key =>$img){
-                    $img_replace = '<p align="center">'.$img.'</p>';
-                    if(iCMS::$config['article']['pic_next'] && $page<$count){
-                        $img_replace = '<p align="center"><a href="'.$next_url.'"><b>'.iPHP::lang('iCMS:article:clicknext').'</b></a></p>
+                    $img_replace[$key] = '<p align="center">'.$img.'</p>';
+                    if(iCMS::$config['article']['pic_next'] && $count<$total){
+                        $img_replace[$key] = '<p align="center"><a href="'.$next_url.'"><b>'.iPHP::lang('iCMS:article:clicknext').'</b></a></p>
                         <p align="center"><a href="'.$next_url.'" title="'.$article['title'].'">'.$img.'</a></p>';
                     }
-                    $article['body'] = str_replace($img,$img_replace,$article['body']);
                 }
+                $article['body'] = str_replace($img_array,$img_replace,$article['body']);
             }
+
         }
 
         if($vars['prev_next'] && iCMS::$config['article']['prev_next']){

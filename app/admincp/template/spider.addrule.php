@@ -138,26 +138,32 @@ $(function(){
               </span></div>
             <div class="clearfloat mb10"></div>
             <div class="input-prepend input-sp"><span class="add-on">列表网址</span>
-              <textarea name="rule[list_urls]" id="list_urls" class="span6" style="height: 90px;"><?php echo $rule['list_urls'] ; ?></textarea>
+              <textarea name="rule[list_urls]" id="list_urls" class="span6"><?php echo $rule['list_urls'] ; ?></textarea>
             </div>
             <div class="clearfloat mb10"></div>
             <div class="input-prepend input-sp"><span class="add-on">列表区域规则</span>
-              <textarea name="rule[list_area_rule]" id="list_area_rule" class="span6" style="height: 90px;"><?php echo $rule['list_area_rule'] ; ?></textarea>
+              <textarea name="rule[list_area_rule]" id="list_area_rule" class="span6"><?php echo $rule['list_area_rule'] ; ?></textarea>
               <div class="btn-group btn-group-vertical"> <a class="btn" href="<%content%>" data-toggle="insertContent" data-target="#list_area_rule">内容标识</a> <a class="btn" href="<%var%>" data-toggle="insertContent" data-target="#list_area_rule">变量标识</a> </div>
             </div>
             <div class="clearfloat mb10"></div>
             <div class="input-prepend input-sp"><span class="add-on">列表区域整理</span>
-              <textarea name="rule[list_area_format]" id="list_area_format" class="span6" style="height: 90px;"><?php echo $rule['list_area_format'] ; ?></textarea>
+              <textarea name="rule[list_area_format]" id="list_area_format" class="span6"><?php echo $rule['list_area_format'] ; ?></textarea>
             </div>
             <div class="clearfloat mb10"></div>
             <div class="input-prepend input-sp"><span class="add-on">列表链接规则</span>
-              <textarea name="rule[list_url_rule]" id="list_url_rule" class="span6" style="height: 90px;"><?php echo $rule['list_url_rule'] ; ?></textarea>
+              <textarea name="rule[list_url_rule]" id="list_url_rule" class="span6"><?php echo $rule['list_url_rule'] ; ?></textarea>
               <div class="btn-group btn-group-vertical"> <a class="btn" href="<%title%>" data-toggle="insertContent" data-target="#list_url_rule">标题</a> <a class="btn" href="<%url%>" data-toggle="insertContent" data-target="#list_url_rule">网址</a> <a class="btn" href="<%var%>" data-toggle="insertContent" data-target="#list_url_rule">变量标识</a> </div>
             </div>
             <div class="clearfloat mb10"></div>
             <div class="input-prepend input-append"><span class="add-on">网址合成</span>
               <input type="text" name="rule[list_url]" class="span6" id="list_url" value="<?php echo $rule['list_url'] ; ?>"/>
-              <a class="btn" href="<%url%>" data-toggle="insertContent" data-target="#list_url">网址</a> </div>
+              <a class="btn" href="<%url%>" data-toggle="insertContent" data-target="#list_url">网址</a>
+            </div>
+            <div class="clearfloat mb10"></div>
+            <div class="input-prepend input-append"><span class="add-on">网址整理</span>
+              <textarea name="rule[list_url_clean]" id="list_url_clean" class="span6 tip" title="合成后整理"><?php echo $rule['list_url_clean'] ; ?></textarea>
+              <a class="btn" href="<%url%>" data-toggle="insertContent" data-target="#list_url_clean">变量标识</a>
+            </div>
             <div class="clearfloat mb10"></div>
           </div>
           <div id="spider-data" class="tab-pane">
@@ -300,12 +306,12 @@ $(function(){
             <div class="tab-content">
               <div id="spider-page-area-rule" class="tab-pane active">
                 <div class="input-prepend input-sp"><span class="add-on">分页区域规则</span>
-                  <textarea name="rule[page_area_rule]" id="page_area_rule" class="span6" style="height: 90px;"><?php echo $rule['page_area_rule'] ; ?></textarea>
+                  <textarea name="rule[page_area_rule]" id="page_area_rule" class="span6"><?php echo $rule['page_area_rule'] ; ?></textarea>
                   <div class="btn-group btn-group-vertical"> <a class="btn" href="<%content%>" data-toggle="insertContent" data-target="#page_area_rule">内容标识</a> <a class="btn" href="<%var%>" data-toggle="insertContent" data-target="#page_area_rule">变量标识</a> </div>
                 </div>
                 <div class="clearfloat mb10"></div>
                 <div class="input-prepend input-sp"><span class="add-on">分页链接规则</span>
-                  <textarea name="rule[page_url_rule]" id="page_url_rule" class="span6" style="height: 90px;"><?php echo $rule['page_url_rule'] ; ?></textarea>
+                  <textarea name="rule[page_url_rule]" id="page_url_rule" class="span6"><?php echo $rule['page_url_rule'] ; ?></textarea>
                   <div class="btn-group btn-group-vertical"> <a class="btn" href="<%url%>" data-toggle="insertContent" data-target="#page_url_rule">网址</a> <a class="btn" href="<%var%>" data-toggle="insertContent" data-target="#page_url_rule">变量标识</a> </div>
                 </div>
               </div>
