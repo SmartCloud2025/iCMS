@@ -307,9 +307,11 @@ class spiderApp {
             }
             $url = $pq->attr($url_attr);
         }else{
-            $title = $row['title'];
-            $url   = $row['url'];
+            $title = trim($row['title']);
+            $url   = trim($row['url']);
         }
+        $title = trim($title);
+        $url   = trim($url);
         //_url_complement($baseUrl,$href)
         $url   = str_replace('<%url%>',$url, $rule['list_url']);
         $rule['list_url_clean'] && $url = $this->dataClean($rule['list_url_clean'],$url);
