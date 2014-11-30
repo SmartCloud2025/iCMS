@@ -638,8 +638,8 @@ class spiderApp {
 					print_r($page_url_array);
 					echo "</pre><hr />";
 				}
-		        $this->content_right_code = $rule['page_url_right'];
-		        $this->content_error_code = $rule['page_url_error'];
+		        $this->content_right_code = trim($rule['page_url_right']);
+		        $this->content_error_code = trim($rule['page_url_error']);
 
                 $pcontent = '';
                 $pcon     = '';
