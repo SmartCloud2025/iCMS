@@ -307,8 +307,8 @@ class spiderApp {
             }
             $url = $pq->attr($url_attr);
         }else{
-            $title = trim($row['title']);
-            $url   = trim($row['url']);
+            $title = $row['title'];
+            $url   = $row['url'];
         }
         $title = trim($title);
         $url   = trim($url);
@@ -619,10 +619,14 @@ class spiderApp {
             			gc_collect_cycles();
             		}
             	}else{
-            		$page_url_rule = $this->pregTag($rule['page_url_parse']);
-					preg_match('|' . $page_url_rule . '|is', $rule['__url__'], $matches, $PREG_SET_ORDER);
-			        $page_url = str_replace('<%url%>', $matches['url'], $rule['page_url']);
-			        $page_url_array	= array();
+                    if($rule['page_url_parse']=='<%url%>'){
+                        $page_url = str_replace('<%url%>',$rule['__url__'],$rule['page_url']);
+                    }else{
+                		$page_url_rule = $this->pregTag($rule['page_url_parse']);
+    					preg_match('|' . $page_url_rule . '|is', $rule['__url__'], $matches, $PREG_SET_ORDER);
+    			        $page_url = str_replace('<%url%>', $matches['url'], $rule['page_url']);
+			        }
+                    $page_url_array	= array();
 			        for ($pn = $rule['page_no_start']; $pn <= $rule['page_no_end']; $pn = $pn + $rule['page_no_step']) {
 			            $page_url_array[$pn] = str_replace('<%step%>', $pn, $page_url);
 			            gc_collect_cycles();

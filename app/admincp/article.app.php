@@ -449,6 +449,7 @@ class articleApp{
             $body_text   = preg_replace(array('/<p[^>]*>/is','/<[\/\!]*?[^<>]*?>/is',"/\n+/","/　+/","/^\n/"),array("\n\n",'',"\n",'',''),$body_text);
             $description = csubstr($body_text,iCMS::$config['publish']['descLen']);
             $description = addslashes($description);
+            $description = str_replace('#--iCMS.PageBreak--#','',$description);
             unset($body_text);
         }
 
