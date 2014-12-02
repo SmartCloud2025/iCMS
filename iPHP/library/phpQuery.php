@@ -255,19 +255,22 @@ class DOMDocumentWrapper {
 			$version = '1.0';
 		$this->document = new DOMDocument($version, $charset);
 		$this->charset = $this->document->encoding;
-//		$this->document->encoding = $charset;
+		$this->document->encoding = $charset;
 		$this->document->formatOutput = true;
 		$this->document->preserveWhiteSpace = true;
 	}
 	protected function loadMarkupHTML($markup, $requestedCharset = null) {
 		if (phpQuery::$debug)
-			phpQuery::debug('Full markup load (HTML): '.substr($markup, 0, 250));
+			phpQuery::debug('Full markup load (HTML): '.htmlspecialchars(substr($markup, 0, 500)));
 		$this->loadMarkupReset();
 		$this->isHTML = true;
 		if (!isset($this->isDocumentFragment))
 			$this->isDocumentFragment = self::isDocumentFragmentHTML($markup);
 		$charset = null;
 		$documentCharset = $this->charsetFromHTML($markup);
+		if (phpQuery::$debug)
+			phpQuery::debug('documentCharset: '.$documentCharset);
+
 		$addDocumentCharset = false;
 		if ($documentCharset) {
 			$charset = $documentCharset;
@@ -280,7 +283,7 @@ class DOMDocumentWrapper {
 		// HTTP 1.1 says that the default charset is ISO-8859-1
 		// @see http://www.w3.org/International/O-HTTP-charset
 		if (! $documentCharset) {
-			$documentCharset = 'ISO-8859-1';
+			$documentCharset = 'UTF-8';
 			$addDocumentCharset = true;
 		}
 		// Should be careful here, still need 'magic encoding detection' since lots of pages have other 'default encoding'
@@ -323,14 +326,17 @@ class DOMDocumentWrapper {
 			}
 			phpQuery::debug("Full markup load (HTML), documentCreate('$charset')");
 			$this->documentCreate($charset);
+			//phpQuery::debug('loadMarkupHTML:markup: '.htmlspecialchars(substr($markup, 0, 500)));
+			$markup = mb_convert_encoding($markup, 'HTML-ENTITIES', "UTF-8");
 			$return = phpQuery::$debug === 2
 				? $this->document->loadHTML($markup)
-				: @$this->document->loadHTML($markup);
+				: @$this->document->loadHTML(mb_convert_encoding($markup, 'HTML-ENTITIES', "UTF-8"));
 			if ($return)
 				$this->root = $this->document;
 		}
 		if ($return && ! $this->contentType)
 			$this->contentType = 'text/html';
+
 		return $return;
 	}
 	protected function loadMarkupXML($markup, $requestedCharset = null) {
@@ -693,7 +699,7 @@ class DOMDocumentWrapper {
 		}
 		$fragment->isDocumentFragment = $tmp;
 		if (phpQuery::$debug)
-			phpQuery::debug('documentFragmentToMarkup: '.substr($markup, 0, 150));
+			phpQuery::debug('documentFragmentToMarkup: '.htmlspecialchars(substr($markup, 0, 500)));
 		return $markup;
 	}
 	/**
@@ -743,7 +749,7 @@ class DOMDocumentWrapper {
 				self::debug("Fixing XHTML");
 				$markup = self::markupFixXHTML($markup);
 			}
-			self::debug("Markup: ".substr($markup, 0, 250));
+			// self::debug("Markup:1: ".htmlspecialchars(substr($markup, 0, 500)));
 			return $markup;
 		} else {
 			if ($this->isDocumentFragment) {
@@ -765,7 +771,7 @@ class DOMDocumentWrapper {
 					self::debug("Fixing XHTML");
 					$markup = self::markupFixXHTML($markup);
 				}
-				self::debug("Markup: ".substr($markup, 0, 250));
+				// self::debug("Markup:2: ".htmlspecialchars(substr($markup, 0, 500)));
 				return $markup;
 			}
 		}
@@ -1391,7 +1397,7 @@ class phpQueryObject
 			return;
 		print('<pre>');
 		print_r($in);
-		print("</pre>\n");
+		print("</pre><br />\n");
 	}
 
 	/**
@@ -5005,7 +5011,9 @@ abstract class phpQuery {
 	}
 	public static function debug($text) {
 		if (self::$debug)
-			print var_dump($text);
+			print('<pre>');
+			var_dump($text);
+			print("</pre><br />\n");
 	}
 	/**
 	 * Make an AJAX request.

@@ -377,7 +377,7 @@ class spiderApp {
 //		}
         if($rule['mode']=="2"){
             iPHP::import(iPHP_LIB.'/phpQuery.php');
-            //$this->ruleTest && phpQuery::$debug =1;
+            $this->ruleTest && $_GET['pq_debug'] && phpQuery::$debug =1;
         }
 
         $pubArray = array();
@@ -391,7 +391,7 @@ class spiderApp {
             }
             $html = $this->remote($url);
             if($rule['mode']=="2"){
-                $doc       = phpQuery::newDocumentHTML($html);
+                $doc       = phpQuery::newDocumentHTML($html,'UTF-8');
                 $list_area = $doc[trim($rule['list_area_rule'])];
                 empty($rule['list_area_format']) && $rule['list_area_format'] = 'a';
                 $lists     = pq($list_area)->find(trim($rule['list_area_format']));
@@ -677,8 +677,8 @@ class spiderApp {
         }
         if($data['dom']){
             iPHP::import(iPHP_LIB.'/phpQuery.php');
-            //$this->contTest && phpQuery::$debug =1;
-            $doc     = phpQuery::newDocument($html);
+            $this->contTest && $_GET['pq_debug'] && phpQuery::$debug =1;
+            $doc     = phpQuery::newDocumentHTML($html,'UTF-8');
             list($content_dom,$content_fun,$content_attr) = explode("\n", $data['rule']);
             $content_dom  = trim($content_dom);
             $content_fun  = trim($content_fun);
@@ -832,7 +832,7 @@ class spiderApp {
             $_replacement = trim($_replacement);
             $_replacement = str_replace('\n', "\n", $_replacement);
             if(strpos($_pattern, 'DOM::')!==false){
-                $doc      = phpQuery::newDocument($content);
+                $doc      = phpQuery::newDocumentHTML($content,'UTF-8');
                 $_pattern = str_replace('DOM::','', $_pattern);
                 list($pq_dom, $pq_fun,$pq_attr) = explode("::", $_pattern);
                 $pq_array = pq($pq_dom);
@@ -1183,23 +1183,24 @@ class spiderApp {
         if($encode=='auto'){
             preg_match('/<meta[^>]*?charset=(["\']?)([a-zA-z0-9\-\_]+)(\1)[^>]*?>/is', $html, $charset);
             $encode = str_replace(array('"',"'"),'', trim($charset[2]));
-            //var_dump('encode'.$encode);
             if($content_charset){
                 $encode = $content_charset;
             }
             if(function_exists('mb_detect_encoding') && empty($encode)) {
-                $encode = mb_detect_encoding($html, array("ASCII","UTF-8","GB2312","GBK","BIG5"));
-            }
-            //var_dump('content_charset'.$content_charset);
-            if(strtoupper($encode)=='UTF-8'){
-                return $html;
+                $encode = mb_detect_encoding($html, array("ASCII","UTF-8","GB2312","GBK","BIG5"));                var_dump('mb_detect_encoding:'.$encode);
             }
         }
+        if ($this->contTest || $this->ruleTest) {
+            echo 'encoding:'.$encode . '<br />';
+        }
+        if(strtoupper($encode)=='UTF-8'){
+            return $html;
+        }
         $html = preg_replace('/(<meta[^>]*?charset=(["\']?))[a-z\d_\-]*(\2[^>]*?>)/is', "\\1$out\\3", $html,1);
-        if (function_exists('iconv')) {
-            return iconv($encode,'UTF-8//IGNORE', $html);
-        } elseif (function_exists('mb_convert_encoding')) {
-            return mb_convert_encoding($html,'UTF-8//IGNORE',$encode);
+        if (function_exists('mb_convert_encoding')) {
+            return mb_convert_encoding($html,'UTF-8',$encode);
+        } elseif (function_exists('iconv')) {
+            return iconv($encode,'UTF-8', $html);
         } else {
             iPHP::throwException('charsetTrans failed, no function');
         }

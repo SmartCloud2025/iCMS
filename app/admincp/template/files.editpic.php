@@ -13,6 +13,7 @@ iACP::head(false);
 .iCMS-container {margin: 0px;background-color: #ECEEEF;}
 #onBrowse{text-align: center;padding: 20px;}
 .savetodir{margin-bottom: 0px;}
+.ui-dialog-footer button{padding: 10px 20px;}
 </style>
 <script src="./app/ui/common/meitu/xiuxiu.js" type="text/javascript"></script>
 <div id="onBrowse" class="well" style="display:none;">
