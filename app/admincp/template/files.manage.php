@@ -90,7 +90,7 @@ $(function(){
               <td>
                 <a class="btn btn-small" href="<?php echo $href; ?>" data-toggle="modal" title="查看"><i class="fa fa-eye"></i> 查看</a>
                 <?php if(iACP::MP('FILE.EDIT')){?>
-                <a class="btn btn-small tip" href="<?php echo APP_FURI;?>&do=editpic&from=modal&pic=<?php echo $filepath ; ?>" data-toggle="modal" title="使用美图秀秀编辑图片"><i class="fa fa-edit"></i> 编辑</a>
+                <a class="btn btn-small" href="<?php echo APP_FURI;?>&do=editpic&from=modal&pic=<?php echo $filepath ; ?>" data-toggle="modal" title="编辑图片(<?php echo $rs[$i]['filename'].'.'.$rs[$i]['ext']; ?>)"><i class="fa fa-edit"></i> 编辑</a>
                 <?php }?>
                 <?php if(strstr($rs[$i]['ofilename'],'http://')){?>
                 <a href="<?php echo APP_FURI; ?>&do=download&id=<?php echo $rs[$i]['id'] ; ?>" class="btn btn-small" title="正常重新下载" target="iPHP_FRAME"><i class="fa fa-download"></i> 下载</a>

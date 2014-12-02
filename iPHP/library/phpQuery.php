@@ -210,7 +210,7 @@ class DOMDocumentWrapper {
 	protected function loadMarkup($markup) {
 		$loaded = false;
 		if ($this->contentType) {
-			self::debug("Load markup for content type {$this->contentType}");
+			phpQuery::debug("Load markup for content type {$this->contentType}");
 			// content determined by contentType
 			list($contentType, $charset) = $this->contentTypeToArray($this->contentType);
 			switch($contentType) {
@@ -348,7 +348,7 @@ class DOMDocumentWrapper {
 		$isContentTypeXHTML = $this->isXHTML();
 		$isMarkupXHTML = $this->isXHTML($markup);
 		if ($isContentTypeXHTML || $isMarkupXHTML) {
-			self::debug('Full markup load (XML), XHTML detected');
+			phpQuery::debug('Full markup load (XML), XHTML detected');
 			$this->isXHTML = true;
 		}
 		// determine document fragment
@@ -592,7 +592,7 @@ class DOMDocumentWrapper {
 //		}
 		if (is_array($source) || $source instanceof DOMNODELIST) {
 			// dom nodes
-			self::debug('Importing nodes to document');
+			phpQuery::debug('Importing nodes to document');
 			foreach($source as $node)
 				$return[] = $this->document->importNode($node, true);
 		} else {
@@ -724,7 +724,7 @@ class DOMDocumentWrapper {
 							+ array_slice($nodes, $i+1);
 						}
 			if ($this->isXML && ! $innerMarkup) {
-				self::debug("Getting outerXML with charset '{$this->charset}'");
+				phpQuery::debug("Getting outerXML with charset '{$this->charset}'");
 				// we need outerXML, so we can benefit from
 				// $node param support in saveXML()
 				foreach($nodes as $node)
@@ -741,12 +741,12 @@ class DOMDocumentWrapper {
 					}
 				else
 					$loop = $nodes;
-				self::debug("Getting markup, moving selected nodes (".count($loop).") to new DocumentFragment");
+				phpQuery::debug("Getting markup, moving selected nodes (".count($loop).") to new DocumentFragment");
 				$fake = $this->documentFragmentCreate($loop);
 				$markup = $this->documentFragmentToMarkup($fake);
 			}
 			if ($this->isXHTML) {
-				self::debug("Fixing XHTML");
+				phpQuery::debug("Fixing XHTML");
 				$markup = self::markupFixXHTML($markup);
 			}
 			// self::debug("Markup:1: ".htmlspecialchars(substr($markup, 0, 500)));
@@ -754,7 +754,7 @@ class DOMDocumentWrapper {
 		} else {
 			if ($this->isDocumentFragment) {
 				// documentFragment, html only...
-				self::debug("Getting markup, DocumentFragment detected");
+				phpQuery::debug("Getting markup, DocumentFragment detected");
 //				return $this->markup(
 ////					$this->document->getElementsByTagName('body')->item(0)
 //					$this->document->root, true
@@ -763,12 +763,12 @@ class DOMDocumentWrapper {
 				// no need for markupFixXHTML, as it's done thought markup($nodes) method
 				return $markup;
 			} else {
-				self::debug("Getting markup (".($this->isXML?'XML':'HTML')."), final with charset '{$this->charset}'");
+				phpQuery::debug("Getting markup (".($this->isXML?'XML':'HTML')."), final with charset '{$this->charset}'");
 				$markup = $this->isXML
 					? $this->document->saveXML()
 					: $this->document->saveHTML();
 				if ($this->isXHTML) {
-					self::debug("Fixing XHTML");
+					phpQuery::debug("Fixing XHTML");
 					$markup = self::markupFixXHTML($markup);
 				}
 				// self::debug("Markup:2: ".htmlspecialchars(substr($markup, 0, 500)));
@@ -1392,12 +1392,8 @@ class phpQueryObject
 	/**
 	 * @access private
 	 */
-	protected function debug($in) {
-		if (! phpQuery::$debug )
-			return;
-		print('<pre>');
-		print_r($in);
-		print("</pre><br />\n");
+	protected function debug($text) {
+		phpQuery::debug($text);
 	}
 
 	/**
@@ -4600,7 +4596,7 @@ abstract class phpQuery {
 	 */
 	public static function selectDocument($id) {
 		$id = self::getDocumentID($id);
-		self::debug("Selecting document '$id' as default one");
+		phpQuery::debug("Selecting document '$id' as default one");
 		self::$defaultDocumentID = self::getDocumentID($id);
 	}
 	/**
@@ -4890,12 +4886,12 @@ abstract class phpQuery {
 		foreach($source as $method => $callback) {
 			if (isset($targetRef[$method])) {
 //				throw new Exception
-				self::debug("Duplicate method '{$method}', can\'t extend '{$target}'");
+				phpQuery::debug("Duplicate method '{$method}', can\'t extend '{$target}'");
 				continue;
 			}
 			if (isset($targetRef2[$method])) {
 //				throw new Exception
-				self::debug("Duplicate method '{$method}' from plugin '{$targetRef2[$method]}',"
+				phpQuery::debug("Duplicate method '{$method}' from plugin '{$targetRef2[$method]}',"
 					." can\'t extend '{$target}'");
 				continue;
 			}
@@ -5010,10 +5006,11 @@ abstract class phpQuery {
 		return ! is_array($input) && substr(trim($input), 0, 1) == '<';
 	}
 	public static function debug($text) {
-		if (self::$debug)
+		if (self::$debug){
 			print('<pre>');
 			var_dump($text);
 			print("</pre><br />\n");
+		}
 	}
 	/**
 	 * Make an AJAX request.
@@ -5161,17 +5158,17 @@ abstract class phpQuery {
 		if ($options['global'])
 			phpQueryEvents::trigger($documentID, 'ajaxSend', array($client, $options));
 		if (phpQuery::$debug) {
-			self::debug("{$options['type']}: {$options['url']}\n");
-			self::debug("Options: <pre>".var_export($options, true)."</pre>\n");
+			phpQuery::debug("{$options['type']}: {$options['url']}\n");
+			phpQuery::debug("Options: <pre>".var_export($options, true)."</pre>\n");
 //			if ($client->getCookieJar())
 //				self::debug("Cookies: <pre>".var_export($client->getCookieJar()->getMatchingCookies($options['url']), true)."</pre>\n");
 		}
 		// request
 		$response = $client->request();
 		if (phpQuery::$debug) {
-			self::debug('Status: '.$response->getStatus().' / '.$response->getMessage());
-			self::debug($client->getLastRequest());
-			self::debug($response->getHeaders());
+			phpQuery::debug('Status: '.$response->getStatus().' / '.$response->getMessage());
+			phpQuery::debug($client->getLastRequest());
+			phpQuery::debug($response->getHeaders());
 		}
 		if ($response->isSuccessful()) {
 			// XXX tempolary
@@ -5528,7 +5525,7 @@ abstract class phpQuery {
 			$params = func_get_args();
 			return self::callbackRun(array(self::$plugins, 'browserGet'), $params);
 		} else {
-			self::debug('WebBrowser plugin not available...');
+			phpQuery::debug('WebBrowser plugin not available...');
 		}
 	}
 	/**
@@ -5546,7 +5543,7 @@ abstract class phpQuery {
 			$params = func_get_args();
 			return self::callbackRun(array(self::$plugins, 'browserPost'), $params);
 		} else {
-			self::debug('WebBrowser plugin not available...');
+			phpQuery::debug('WebBrowser plugin not available...');
 		}
 	}
 	/**
@@ -5563,7 +5560,7 @@ abstract class phpQuery {
 			$params = func_get_args();
 			return self::callbackRun(array(self::$plugins, 'browser'), $params);
 		} else {
-			self::debug('WebBrowser plugin not available...');
+			phpQuery::debug('WebBrowser plugin not available...');
 		}
 	}
 	/**
