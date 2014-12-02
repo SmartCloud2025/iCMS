@@ -217,6 +217,7 @@ class articleApp {
         }
 
         if($vars['tags']){
+            $article['tags_fname'] = $category['name'];
             if($article['tags']) {
                 $tagApp   = iPHP::app("tag");
                 $tagArray = $tagApp->get_array($article['tags']);
@@ -228,16 +229,9 @@ class articleApp {
                     $article['tags_link'].= $tag['link'];
                     $tag_name_array[] = $tag['name'];
                 }
-                $tag_count = count($tag_name_array);
-                if($tag_count>3){
-                    $tag_names = array_slice($tag_name_array,0,3);
-                }else{
-                    $tag_names = $tag_name_array;
-                }
-                $tag_names = implode(',',$tag_names);
+                $tag_name_array && $article['tags_fname'] = $tag_name_array[0];
                 unset($tagApp,$tagArray,$tag_name_array);
             }
-            $article['tag_names'] = $tag_names?$tag_names:$category['name'];
         }
 
         if($vars['meta']){

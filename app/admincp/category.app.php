@@ -344,14 +344,11 @@ class categoryApp extends category{
         iPHP::success('更新完成');
     }
     function search_sql($cid,$field='cid'){
-        if($cid) {
-            $cids  = $cid;
-            if($_GET['sub']){
-                $cids  = $this->get_ids($cid,true);
-                array_push ($cids,$cid);
-            }
+        if($cid){
+            $cids  = (array)$cid;
+            $_GET['sub'] && $cids+=$this->get_ids($cid,true);
+            $cids && $sql= iPHP::where($cids,$field);
         }
-        $cids && $sql= iPHP::where($cids,$field);
         return $sql;
     }
     function power_tree($cid=0){
@@ -453,16 +450,21 @@ class categoryApp extends category{
             $this->update_count($value[$i]['cid']);
         }
     }
-    function get_ids($cid = "0",$all=true) {
-        $cids   = array();
-        foreach((array)$this->rootid[$cid] AS $_cid) {
-            if(!iACP::CP($_cid,'cs')) continue;
-
-            $cids[] = $_cid;
-            $all && $cids[]  = $this->get_ids($_cid,$all);
+    function get_ids($cid = "0",$all=true,$root_array=null) {
+        $root_array OR $root_array = $this->rootid;
+        $cids = array();
+        is_array($cid) OR $cid = explode(',', $cid);
+        foreach($cid AS $_id) {
+            $cids+=(array)$root_array[$_id];
+        }
+        if($all){
+            foreach((array)$cids AS $_cid) {
+                $root_array[$_cid] && $cids+=$this->get_ids($_cid,$all,$root_array);
+            }
         }
         $cids = array_unique($cids);
         $cids = array_filter($cids);
+
         return $cids;
     }
 
