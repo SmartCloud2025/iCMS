@@ -1198,9 +1198,9 @@ class spiderApp {
         }
         $html = preg_replace('/(<meta[^>]*?charset=(["\']?))[a-z\d_\-]*(\2[^>]*?>)/is', "\\1$out\\3", $html,1);
         if (function_exists('mb_convert_encoding')) {
-            return mb_convert_encoding($html,'UTF-8//IGNORE',$encode);
+            return mb_convert_encoding($html,'UTF-8',$encode);
         } elseif (function_exists('iconv')) {
-            return iconv($encode,'UTF-8//IGNORE', $html);
+            return iconv($encode,'UTF-8', $html);
         } else {
             iPHP::throwException('charsetTrans failed, no function');
         }
