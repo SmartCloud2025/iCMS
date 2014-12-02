@@ -319,7 +319,8 @@ class articleApp{
                 $cids = $cid;
             }
             if($_GET['sub'] && $cid){
-                $cids+= $this->categoryApp->get_ids($cid,true);
+                $cids = $this->categoryApp->get_ids($cid,true);
+                array_push ($cids,$cid);
             }
             if($_GET['scid'] && $cid){
                 iPHP::import(iPHP_APP_CORE .'/iMAP.class.php');

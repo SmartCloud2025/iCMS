@@ -347,7 +347,7 @@ class categoryApp extends category{
         if($cid){
             $cids  = (array)$cid;
             $_GET['sub'] && $cids+=$this->get_ids($cid,true);
-            $cids && $sql= iPHP::where($cids,$field);
+            $sql= iPHP::where($cids,$field);
         }
         return $sql;
     }
