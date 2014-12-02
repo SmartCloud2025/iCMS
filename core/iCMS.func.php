@@ -63,6 +63,7 @@ function get_pic($src,$size=0,$thumb=0){
         $data['width']  = $size['w'];
         $data['height'] = $size['h'];
     }
+    var_dump($thumb);
     if($size && $thumb){
         $data['thumb'] = bitscale(array(
             "tw" => $thumb['width'],
@@ -73,7 +74,12 @@ function get_pic($src,$size=0,$thumb=0){
     }
     return $data;
 }
-
+function get_twh($width=null,$height=null){
+    $ret    = array();
+    $width  ===null OR $ret['width'] = $width;
+    $height ===null OR $ret['height'] = $height;
+    return $ret;
+}
 function autoformat($html){
     $html = stripslashes($html);
     $html = preg_replace(array(

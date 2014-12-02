@@ -274,10 +274,12 @@ class articleApp {
             'count' => $article['comments']
         );
 
-        $article['picdata'] && $article['picdata'] = unserialize($article['picdata']);
-        $article['pic']   = get_pic($article['pic']);
-        $article['mpic']  = get_pic($article['mpic']);
-        $article['spic']  = get_pic($article['spic']);
+        if($article['picdata']){
+            $picdata = unserialize($article['picdata']);
+        }
+        $article['pic']   = get_pic($article['pic'],$picdata['b'],get_twh($vars['btw'],$vars['bth']));
+        $article['mpic']  = get_pic($article['mpic'],$picdata['m'],get_twh($vars['mtw'],$vars['mth']));
+        $article['spic']  = get_pic($article['spic'],$picdata['s'],get_twh($vars['stw'],$vars['sth']));
         $article['param'] = array(
             "appid" => $article['appid'],
             "iid"   => $article['id'],
@@ -286,7 +288,6 @@ class articleApp {
             "title" => $article['title'],
             "url"   => $article['url']
         );
-
         return $article;
     }
     public function ubb($content){
