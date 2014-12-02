@@ -63,13 +63,12 @@ function get_pic($src,$size=0,$thumb=0){
         $data['width']  = $size['w'];
         $data['height'] = $size['h'];
     }
-
     if($size && $thumb){
         $data+= bitscale(array(
-            "tw" => $thumb['width'],
-            "th" => $thumb['height'],
-            "nw" => $size['w'],
-            "nh" => $size['h'],
+            "tw" => (int)$thumb['width'],
+            "th" => (int)$thumb['height'],
+            "w" => (int)$size['w'],
+            "h" => (int)$size['h'],
         ));
     }
     return $data;
