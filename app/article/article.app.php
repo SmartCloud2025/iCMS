@@ -277,8 +277,7 @@ class articleApp {
         if($article['picdata']){
             $picdata = unserialize($article['picdata']);
         }
-        $vars['btw']='200';
-        $vars['bth']='100';
+
         $article['pic']   = get_pic($article['pic'],$picdata['b'],get_twh($vars['btw'],$vars['bth']));
         $article['mpic']  = get_pic($article['mpic'],$picdata['m'],get_twh($vars['mtw'],$vars['mth']));
         $article['spic']  = get_pic($article['spic'],$picdata['s'],get_twh($vars['stw'],$vars['sth']));
