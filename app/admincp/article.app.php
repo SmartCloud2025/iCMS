@@ -453,9 +453,9 @@ class articleApp{
             unset($body_text);
         }
 
-        strstr($pic, 'http://') && $pic   = iFS::http($pic);
-        strstr($mpic, 'http://') && $mpic = iFS::http($mpic);
-        strstr($spic, 'http://') && $spic = iFS::http($spic);
+        stripos($pic, 'http://') ===false OR $pic  = iFS::http($pic);
+        stripos($mpic, 'http://')===false OR $mpic = iFS::http($mpic);
+        stripos($spic, 'http://')===false OR $spic = iFS::http($spic);
 
 
         $haspic   = empty($pic)?0:1;
@@ -611,20 +611,26 @@ class articleApp{
         $subtitle = iS::escapeStr($_POST['subtitle']);
         $body     = implode('#--iCMS.PageBreak--#',$bodyArray);
         $body     = preg_replace(array('/<script.+?<\/script>/is','/<form.+?<\/form>/is'),'',$body);
-
-        $_POST['isRedirect']  && iFS::$isRedirect = true;
-        $_POST['iswatermark'] && iFS::$watermark = false;
         isset($_POST['dellink']) && $body = preg_replace("/<a[^>].*?>(.*?)<\/a>/si", "\\1",$body);
-        isset($_POST['remote'])  && $body = $this->remotepic($body,true,$aid);
-        isset($_POST['remote'])  && $body = $this->remotepic($body,true,$aid);
-        isset($_POST['remote'])  && $body = $this->remotepic($body,true,$aid);
 
         $fields = articleTable::data_fields($id);
         $data   = compact ($fields);
         if($id){
             articleTable::data_update($data,compact('id'));
         }else{
-            articleTable::data_insert($data);
+            $id = articleTable::data_insert($data);
+        }
+
+        $_POST['isRedirect']  && iFS::$isRedirect = true;
+        $_POST['iswatermark'] && iFS::$watermark = false;
+
+        if(isset($_POST['remote'])){
+            $body = $this->remotepic($body,true,$aid);
+            $body = $this->remotepic($body,true,$aid);
+            $body = $this->remotepic($body,true,$aid);
+            if($body && $id){
+                iDB::update('article_data',array('body'=>$body),array('id'=>$id));
+            }
         }
 
         if(isset($_POST['autopic']) && empty($haspic)){
