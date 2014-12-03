@@ -1129,7 +1129,6 @@ class spiderApp {
         if ($this->contTest || $this->ruleTest) {
             echo '<pre>';
             print_r($info);
-            print_r(htmlspecialchars(substr($responses,0,500)));
             echo '</pre><hr />';
             if($_GET['breakinfo']){
             	exit();
@@ -1179,6 +1178,11 @@ class spiderApp {
         $this->charset && $responses = $this->charsetTrans($responses,$content_charset,$this->charset);
 		curl_close($ch);
 		unset($info);
+        if ($this->contTest || $this->ruleTest) {
+            echo '<pre>';
+            print_r(htmlspecialchars(substr($responses,0,500)));
+            echo '</pre><hr />';
+        }
         return $responses;
     }
     function charsetTrans($html,$content_charset,$encode, $out = 'UTF-8') {
