@@ -1129,7 +1129,7 @@ class spiderApp {
         if ($this->contTest || $this->ruleTest) {
             echo '<pre>';
             print_r($info);
-            //var_dump($responses);
+            print_r(htmlspecialchars(substr($info,0,500)));
             echo '</pre><hr />';
             if($_GET['breakinfo']){
             	exit();
