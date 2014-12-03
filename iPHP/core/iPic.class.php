@@ -212,7 +212,7 @@ class iPic {
     function imagecreate($type,$src) {
     	switch($type){
     		case 1:$res = imagecreatefromgif($src);break;
-    		case 2:$res = imagecreatefromjpeg($src);break;
+    		case 2:ini_set('gd.jpeg_ignore_warning',1);$res = imagecreatefromjpeg($src);break;
     		case 3:$res = imagecreatefrompng($src);break;
     	}
         return $res;
