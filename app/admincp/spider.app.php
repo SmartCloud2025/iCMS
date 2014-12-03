@@ -627,10 +627,12 @@ class spiderApp {
     			        $page_url = str_replace('<%url%>', $matches['url'], $rule['page_url']);
 			        }
                     $page_url_array	= array();
-			        for ($pn = $rule['page_no_start']; $pn <= $rule['page_no_end']; $pn = $pn + $rule['page_no_step']) {
-			            $page_url_array[$pn] = str_replace('<%step%>', $pn, $page_url);
-			            gc_collect_cycles();
-			        }
+                    if (stripos($page_url,'<%step%>') !== false){
+                        for ($pn = $rule['page_no_start']; $pn <= $rule['page_no_end']; $pn = $pn + $rule['page_no_step']) {
+                            $page_url_array[$pn] = str_replace('<%step%>', $pn, $page_url);
+                            gc_collect_cycles();
+                        }
+                    }
             	}
 				unset($page_area);
 		        if ($this->contTest) {
@@ -1208,14 +1210,14 @@ class spiderApp {
     function check_content_code($content) {
         if ($this->content_right_code) {
 	        $matches = strpos($content, $this->content_right_code);
-	        if (empty($matches)) {
+	        if ($matches===false) {
 	            $match = false;
 	            return false;
 	        }
         }
         if ($this->content_error_code) {
             $_matches = strpos($content, $this->content_error_code);
-            if ($_matches) {
+            if ($_matches!==false) {
                 $match = false;
                 return false;
             }
