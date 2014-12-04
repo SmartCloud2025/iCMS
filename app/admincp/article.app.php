@@ -539,7 +539,11 @@ class articleApp{
                 $this->categoryApp->update_count_one($_cid,'-');
                 $this->categoryApp->update_count_one($cid);
             }
-   //          if(!strstr($this->category[$cid]['contentRule'],'{PHP}')&&!$this->category[$cid]['url']&&$this->category[$cid]['mode']=="1" && $status) {
+            if($callback){
+                return array("code"=>$callback,'indexid'=>$aid);
+            }
+
+   //       if(!strstr($this->category[$cid]['contentRule'],'{PHP}')&&!$this->category[$cid]['url']&&$this->category[$cid]['mode']=="1" && $status) {
 			// 	$htmlApp = iACP::app('html');
 			// 	$htmlApp->Article($aid);
 			// }

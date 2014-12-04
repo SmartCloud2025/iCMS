@@ -13,6 +13,7 @@ iACP::head();
 </style>
 <script>
 $(function(){
+  iCMS.select('checker',"<?php echo $rs['checker']; ?>");
   var box = document.getElementById("mkurls");
   $('#makeurls').click(function(){
       iCMS.dialog({title:'添加采集地址',
@@ -193,8 +194,23 @@ $(function(){
             </select>
           </div>
           <div class="clearfloat mb10"></div>
+          <div class="input-prepend"> <span class="add-on">检查模式</span>
+            <select name="checker" id="checker" class="chosen-select span3">
+              <option value="0">不检查重复</option>
+              <option value="1">按网址检查</option>
+              <option value="2">按标题检查</option>
+              <option value="3">网址和标题</option>
+            </select>
+          </div>
+          <div class="clearfloat mb10"></div>
+          <div class="input-prepend input-append"><span class="add-on">检查范围</span>
+            <span class="add-on">仅限本方案
+            <input name="self" type="checkbox" id="self" value="1" <?php if($rs['self']) echo 'checked="checked"'  ?>/>
+              </span>
+          </div>
+          <div class="clearfloat mb10"></div>
           <div class="input-prepend"><span class="add-on">采集间隔</span>
-            <input type="text" name="sleep" class="span2" id="sleep" value="<?php echo $rs['sleep']; ?>"/>
+            <input type="text" name="sleep" class="span1" id="sleep" value="<?php echo $rs['sleep']; ?>"/>
           </div>
           <div class="clearfloat mb10"></div>
           <div class="input-prepend"><span class="add-on">自动采集</span>
@@ -202,6 +218,7 @@ $(function(){
               <input type="checkbox" data-type="switch" name="auto" id="auto" <?php echo $rs['auto']?'checked':''; ?>/>
             </div>
           </div>
+          <span class="help-inline">此选项只作标识,如果要实现自动采集功能 需要在服务器上部署计划任务</span>
           <div class="clearfloat mb10"></div>
         </div>
         <div class="form-actions">

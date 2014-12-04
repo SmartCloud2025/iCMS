@@ -89,7 +89,16 @@ $(function(){
               <td><?php echo get_date($rs[$i]['addtime'], 'Y-m-d H:i'); ?></td>
               <td><?php echo $rs[$i]['pubdate'] ? get_date($rs[$i]['pubdate'], 'Y-m-d H:i') : '未发布' ?></td>
               <td><?php echo $rs[$i]['status']; ?>/<?php echo $rs[$i]['publish']; ?></td>
-              <td><a href="<?php echo __ADMINCP__; ?>=article&do=add&id=<?php echo $rs[$i]['indexid'] ; ?>" class="btn btn-small"><i class="fa fa-edit"></i> 编辑内容</a> <a href="<?php echo APP_FURI; ?>&do=publish&sid=<?php echo $rs[$i]['id']; ?>&pid=<?php echo $rs[$i]['pid']; ?>" class="btn btn-small" target="iPHP_FRAME"><i class="fa fa-edit"></i> 发布</a> <a href="<?php echo APP_URI; ?>&do=testcont&rid=<?php echo $rs[$i]['rid']; ?>&url=<?php echo $rs[$i]['url']; ?>" class="btn btn-small" data-toggle="modal" title="测试内容规则"><i class="fa fa-keyboard-o"></i> 测试</a> <a href="<?php echo APP_FURI; ?>&do=delspider&sid=<?php echo $rs[$i]['id']; ?>" target="iPHP_FRAME" class="del btn btn-small" title='永久删除'  onclick="return confirm('确定要删除?');"/><i class="fa fa-trash-o"></i> 删除</a></td>
+              <td>
+                <?php if($rs[$i]['publish']){?>
+                <a href="<?php echo __ADMINCP__; ?>=article&do=add&id=<?php echo $rs[$i]['indexid'] ; ?>" class="btn btn-small"><i class="fa fa-edit"></i> 编辑内容</a>
+                <a href="<?php echo APP_FURI; ?>&do=publish&sid=<?php echo $rs[$i]['id']; ?>&pid=<?php echo $rs[$i]['pid']; ?>&indexid=<?php echo $rs[$i]['indexid'] ; ?>" class="btn btn-small" target="iPHP_FRAME"><i class="fa fa-edit"></i> 重新发布</a>
+                <?php }else{?>
+                <a href="<?php echo APP_FURI; ?>&do=publish&sid=<?php echo $rs[$i]['id']; ?>&pid=<?php echo $rs[$i]['pid']; ?>" class="btn btn-small" target="iPHP_FRAME"><i class="fa fa-edit"></i> 发布</a>
+                <?php }?>
+                <a href="<?php echo APP_URI; ?>&do=testcont&rid=<?php echo $rs[$i]['rid']; ?>&url=<?php echo $rs[$i]['url']; ?>" class="btn btn-small" data-toggle="modal" title="测试内容规则"><i class="fa fa-keyboard-o"></i> 测试</a>
+                <a href="<?php echo APP_FURI; ?>&do=delspider&sid=<?php echo $rs[$i]['id']; ?>" target="iPHP_FRAME" class="del btn btn-small" title='永久删除'  onclick="return confirm('确定要删除?');"/><i class="fa fa-trash-o"></i> 删除</a>
+              </td>
             </tr>
             <?php } ?>
           </tbody>

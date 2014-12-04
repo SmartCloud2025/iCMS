@@ -151,42 +151,8 @@ class spiderApp {
         $a['js']  = 'parent.$("#' . md5($this->url) . '").remove();';
 		return $a;
 	}
-    function do_publish($work = null) {
-        $sid = $this->sid;
-        if ($sid) {
-            $sRs = iDB::row("SELECT * FROM `#iCMS@__spider_url` WHERE `id`='$this->sid' LIMIT 1;");
-            $this->title = $sRs->title;
-            $this->url = $sRs->url;
-        }
-        $hash	= md5($this->url);
-        $sid	= iDB::value("SELECT `id` FROM `#iCMS@__spider_url` where `hash` = '$hash' and `publish`='1'");
-        $msg	= '该URL的文章已经发布过!请检查是否重复';
-        if ($sid) {
-            $work===NULL && iPHP::alert($msg.' [sid:'.$sid.']', 'js:parent.$("#' . $hash . '").remove();');
-            if($work=='multi'){
-	            return '-1';
-            }
-        }elseif($title) {
-            if (iDB::value("SELECT `id` FROM `#iCMS@__article` where `title` = '$title'")) {
-            	if($sid){
-                	iDB::query("UPDATE `#iCMS@__spider_url` SET `publish` = '1' WHERE `id` = '$sid';");
-                }else{
-                    $data = array(
-                        'cid'=>$this->cid,'rid'=>$this->rid,'pid'=>$this->pid, 'title'=>$this->title, 'url'=>$this->url,
-                        'hash'=>$hash, 'status'=>'1', 'publish'=>'1', 'addtime'=>time(), 'pubdate'=>time()
-                    );
-                    iDB::insert('spider_url',$data);
-                }
-                $work===NULL && iPHP::alert($msg, 'js:parent.$("#' . $hash . '").remove();');
-	            if($work=='multi'){
-					return '-1';
-	            }
-            }
-        }
-		return $this->post($work);
-    }
 
-    function post($work = null) {
+    function do_publish($work = null) {
         $_POST = $this->spider_content();
         if($this->work){
            if(empty($_POST['title'])){
@@ -198,8 +164,40 @@ class spiderApp {
                return false;
            }
         }
-        $pid          = $this->pid;
-        $project      = $this->project($pid);
+        $pid     = $this->pid;
+        $project = $this->project($pid);
+        $hash    = md5($this->url);
+        if($project['checker'] && empty($_GET['indexid'])){
+            $title = $this->title;
+            $url   = $this->url;
+            switch ($project['checker']) {
+                case '1'://按网址检查
+                    $sql ="`url` = '$url'";
+                    $msg ='该网址的文章已经发布过!请检查是否重复';
+                break;
+                case '2'://按标题检查
+                    $sql ="`title` = '$title'";
+                    $msg ='该标题的文章已经发布过!请检查是否重复';
+                break;
+                case '3'://网址和标题
+                    $sql ="`url` = '$url' AND `title` = '$title'";
+                    $msg ='该网址和标题的文章已经发布过!请检查是否重复';
+                break;
+            }
+            $project['self'] && $sql.=" AND `pid`='$pid'";
+            $checker = iDB::value("SELECT `id` FROM `#iCMS@__spider_url` where $sql AND `publish`='1'");
+            if($checker){
+                $work===NULL && iPHP::alert($msg, 'js:parent.$("#' . $hash . '").remove();');
+                if($work=='shell'){
+                    echo $msg."\n";
+                    return false;
+                }
+                if($work=="multi"){
+                    return '-1';
+                }
+            }
+        }
+
         $sleep        = $project['sleep'];
         $poid         = $project['poid'];
         $_POST['cid'] = $project['cid'];
@@ -211,6 +209,11 @@ class spiderApp {
                 list($pkey, $pval) = explode("=", $pstr);
                 $_POST[$pkey] = trim($pval);
             }
+        }
+        if($_GET['indexid']){
+            $aid = (int)$_GET['indexid'];
+            $_POST['aid']  = $aid;
+            $_POST['adid'] = iDB::value("SELECT `id` FROM `#iCMS@__article_data` WHERE aid='$aid'");
         }
         iS::slashes($_POST);
         $app      = iACP::app($postRs->app);
@@ -488,7 +491,7 @@ class spiderApp {
                             $this->rid = $rid;
                             $this->url = $url;
 
-                            $callback  = $this->post("shell");
+                            $callback  = $this->do_publish("shell");
 							if ($callback['code'] == "1001") {
                                 echo "....OK\n";
 								if($project['sleep']){
@@ -1096,6 +1099,9 @@ class spiderApp {
         $cid      = iS::escapeStr($_POST['cid']);
         $rid      = iS::escapeStr($_POST['rid']);
         $poid     = iS::escapeStr($_POST['poid']);
+        $poid     = iS::escapeStr($_POST['poid']);
+        $checker  = iS::escapeStr($_POST['checker']);
+        $self     = isset($_POST['self'])?'1':'0';
         $sleep    = iS::escapeStr($_POST['sleep']);
         $auto     = iS::escapeStr($_POST['auto']);
 
@@ -1103,7 +1109,7 @@ class spiderApp {
         empty($cid) && iPHP::alert('请选择绑定的栏目');
         empty($rid) && iPHP::alert('请选择采集规则');
         //empty($poid)	&& iPHP::alert('请选择发布规则');
-        $fields = array('name', 'urls','list_url', 'cid', 'rid', 'poid', 'sleep', 'auto');
+        $fields = array('name', 'urls','list_url', 'cid', 'rid', 'poid','checker','self','sleep', 'auto');
         $data   = compact ($fields);
         if ($id) {
             iDB::update('spider_project',$data,array('id'=>$id));
