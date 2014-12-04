@@ -79,6 +79,7 @@ $(function(){
         <li class="active"><a href="#spider-base" data-toggle="tab"><i class="fa fa-info-circle"></i> 基本设置</a></li>
         <li><a href="#spider-data" data-toggle="tab"><i class="fa fa-truck"></i> 数据项</a></li>
         <li><a href="#spider-page" data-toggle="tab"><i class="fa fa-columns"></i> 分页设置</a></li>
+        <li><a href="#spider-pic" data-toggle="tab"><i class="fa fa-columns"></i> 图片下载设置</a></li>
       </ul>
     </div>
     <div class="widget-content nopadding">
@@ -104,6 +105,17 @@ $(function(){
               <input type="text" name="rule[cookie]" class="span6" id="cookie" value="<?php echo $rule['cookie'] ; ?>"/>
             </div>
             <div class="clearfloat mb10"></div>
+            <div class="input-prepend"><span class="add-on">CURLOPT_ENCODING</span>
+              <input type="text" name="rule[curl][encoding]" class="span6" id="CURLOPT_ENCODING" value="<?php echo $rule['curl']['encoding'] ; ?>"/>
+            </div>
+            <span class="help-inline"><span class="label label-important">CURL设置为客户端解码 默认为空,如果采集乱码可以填上gzip,deflate</span></span>
+            <div class="clearfloat mb10"></div>
+            <div class="input-prepend"><span class="add-on">来路页</span>
+              <input type="text" name="rule[curl][referer]" class="span6" id="CURLOPT_REFERER" value="<?php echo $rule['curl']['referer'] ; ?>"/>
+            </div>
+            <span class="help-inline"><span class="label label-important">CURL伪造来路页 默认为空,如果网站限制来路可填上相关来路</span></span>
+            <div class="clearfloat mb10"></div>
+
             <div class="input-prepend input-append"> <span class="add-on">网页编码</span><span class="add-on">
               <label class="radio">
                 <input type="radio" name="rule[charset]" id="charset1" value="utf-8"<?php if($rule['charset']=="utf-8"){ echo ' checked="true"';};?>>
@@ -348,6 +360,18 @@ $(function(){
             <div class="input-prepend input-append"><span class="add-on">网址合成</span>
               <input type="text" name="rule[page_url]" class="span6" id="page_url" value="<?php echo $rule['page_url'] ; ?>"/>
               <a class="btn" href="<%url%>" data-toggle="insertContent" data-target="#page_url">分页网址</a> <a class="btn" href="<%step%>" data-toggle="insertContent" data-target="#page_url">分页增量</a> </div>
+            <div class="clearfloat mb10"></div>
+          </div>
+          <div id="spider-pic" class="tab-pane">
+            <div class="input-prepend"><span class="add-on">CURLOPT_ENCODING</span>
+              <input type="text" name="rule[fs][encoding]" class="span6" id="FS_ENCODING" value="<?php echo $rule['fs']['encoding'] ; ?>"/>
+            </div>
+            <span class="help-inline"><span class="label label-important">默认为空,如果采集乱码可以填上gzip,deflate</span></span>
+            <div class="clearfloat mb10"></div>
+            <div class="input-prepend"><span class="add-on">CURLOPT_REFERER</span>
+              <input type="text" name="rule[fs][referer]" class="span6" id="FS_REFERER" value="<?php echo $rule['fs']['referer'] ; ?>"/>
+            </div>
+            <span class="help-inline"><span class="label label-important">默认为空,如果网站限制来路可填上相关来路</span></span>
             <div class="clearfloat mb10"></div>
           </div>
         </div>

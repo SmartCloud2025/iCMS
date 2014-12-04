@@ -357,8 +357,10 @@ class spiderApp {
         unset($_urlsArray,$_key,$_url,$_matches,$_urlsList,$urlsList);
         $urlsArray  = array_unique($urlsArray);
 
-        $this->useragent = $rule['user_agent'];
-        $this->charset = $rule['charset'];
+        // $this->useragent = $rule['user_agent'];
+        // $this->encoding  = $rule['curl']['encoding'];
+        // $this->referer   = $rule['curl']['referer'];
+        // $this->charset   = $rule['charset'];
 
         if(empty($urlsArray)){
             if($work=='shell'){
@@ -545,8 +547,6 @@ class spiderApp {
         $ruleA           = $this->rule($rid);
         $rule            = $ruleA['rule'];
         $dataArray       = $rule['data'];
-        $this->useragent = $rule['user_agent'];
-        $this->charset   = $rule['charset'];
 
 		if($prule_list_url){
 			$rule['list_url']	= $prule_list_url;
@@ -594,6 +594,9 @@ class spiderApp {
             print_r(iS::escapeStr($responses));
             echo "</pre><hr />";
         }
+
+        iFS::$CURLOPT_ENCODING = $rule['fs']['encoding'];
+        iFS::$CURLOPT_REFERER  = $rule['fs']['referer'];
         return $responses;
     }
 
@@ -893,7 +896,10 @@ class spiderApp {
         $rs = iDB::row("SELECT * FROM `#iCMS@__spider_rule` WHERE `id`='$id' LIMIT 1;", ARRAY_A);
         $rs['rule'] && $rs['rule'] = stripslashes_deep(unserialize($rs['rule']));
         $rs['user_agent'] OR $rs['user_agent'] = "Mozilla/5.0 (compatible; Baiduspider/2.0; +http://www.baidu.com/search/spider.html)";
-        $this->useragent = $rs['user_agent'];
+        $this->useragent = $rs['rule']['user_agent'];
+        $this->encoding  = $rs['rule']['curl']['encoding'];
+        $this->referer   = $rs['rule']['curl']['referer'];
+        $this->charset   = $rs['rule']['charset'];
         return $rs;
     }
 
@@ -1106,19 +1112,20 @@ class spiderApp {
         iPHP::success('完成', 'url:' . APP_URI . '&do=project');
     }
 
-    function remote($url, $_referer = false, $_count = 0) {
-        $uri = parse_url($url);
-        $curlopt_referer = $uri['scheme'] . '://' . $uri['host'];
+    function remote($url, $_count = 0) {
+        if(empty($this->referer)){
+            $uri = parse_url($url);
+            $this->referer = $uri['scheme'] . '://' . $uri['host'];
+        }
+
         $ch = curl_init();
         curl_setopt($ch, CURLOPT_URL, $url);
-        curl_setopt($ch, CURLOPT_ENCODING, '');
-        // curl_setopt($ch, CURLOPT_ENCODING, 'gzip,deflate');
+        curl_setopt($ch, CURLOPT_ENCODING, $this->encoding);
         curl_setopt($ch, CURLOPT_TIMEOUT, 3);
         curl_setopt($ch, CURLOPT_CONNECTTIMEOUT, 3);
         curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
         curl_setopt($ch, CURLOPT_FAILONERROR, 1);
-        curl_setopt($ch, CURLOPT_REFERER, $_referer ? $_referer : $curlopt_referer);
-        // curl_setopt($ch, CURLOPT_AUTOREFERER, true);
+        curl_setopt($ch, CURLOPT_REFERER, $this->referer);
         curl_setopt($ch, CURLOPT_USERAGENT, $this->useragent);
         curl_setopt($ch, CURLOPT_HEADER, 0);
         curl_setopt($ch, CURLOPT_NOSIGNAL, true);
@@ -1152,7 +1159,7 @@ class spiderApp {
 	        $newurl	= trim($newurl);
 			curl_close($ch);
 			unset($responses,$info);
-            return $this->remote($url, $_referer, $_count);
+            return $this->remote($url, $_count);
         }
         if ($info['http_code'] == 404 || $info['http_code'] == 500) {
 			curl_close($ch);
@@ -1168,7 +1175,7 @@ class spiderApp {
             }
 			curl_close($ch);
 			unset($responses,$info);
-            return $this->remote($url, $_referer, $_count);
+            return $this->remote($url, $_count);
         }
         $pos = stripos($info['content_type'], 'charset=');
         if($pos!==false){

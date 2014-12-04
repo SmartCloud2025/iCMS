@@ -45,6 +45,10 @@ class iFS {
     public static $watermark        = true;
     public static $watermark_config = null;
 
+    public static $CURLOPT_ENCODING  = '';
+    public static $CURLOPT_REFERER   = null;
+    public static $CURLOPT_USERAGENT = 'Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/38.0.2125.122 Safari/537.36';
+
     public static function init($config,$watermark_config,$table='') {
         self::$config           = $config;
         self::$watermark_config = $watermark_config;
@@ -214,25 +218,26 @@ class iFS {
     }
 
     //获取远程页面的内容
-    public static function remote($url, $_referer = false, $_count = 0) {
+    public static function remote($url,$_count = 0) {
         if (function_exists('curl_init')) {
 		    if(empty($url)){
 				echo 'remote:('.$_count.')'.$url."\n";
 		        echo "url:empty\n";
 		        return false;
 		    }
-            $uri = parse_url($url);
-            $curlopt_referer = $uri['scheme'] . '://' . $uri['host'];
+            if(empty(self::$REFERER)){
+                $uri           = parse_url($url);
+                self::$REFERER = $uri['scheme'] . '://' . $uri['host'];
+            }
             $ch = curl_init();
             curl_setopt($ch, CURLOPT_URL, $url);
-            // curl_setopt($ch, CURLOPT_ENCODING, 'gzip');
-            curl_setopt($ch, CURLOPT_ENCODING, '');
-            curl_setopt($ch, CURLOPT_TIMEOUT, 10);
+            curl_setopt($ch, CURLOPT_ENCODING,self::$CURLOPT_ENCODING);
+            curl_setopt($ch, CURLOPT_TIMEOUT, 3);
             curl_setopt($ch, CURLOPT_CONNECTTIMEOUT, 3);
             curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
             curl_setopt($ch, CURLOPT_FAILONERROR, 1);
-            curl_setopt($ch, CURLOPT_REFERER, $_referer ? $_referer : $curlopt_referer);
-            curl_setopt($ch, CURLOPT_USERAGENT, 'Mozilla/4.0 (compatible; MSIE 7.0; Windows NT 5.1; Mozilla/4.0 (compatible; MSIE 6.0; Windows NT 5.1; SV1) ; .NET CLR 1.1.4322; .NET CLR 2.0.50727; .NET CLR 3.0.4506.2152; .NET CLR 3.5.30729)');
+            curl_setopt($ch, CURLOPT_REFERER,self::$CURLOPT_REFERER);
+            curl_setopt($ch, CURLOPT_USERAGENT,self::$CURLOPT_USERAGENT);
             curl_setopt($ch, CURLOPT_HEADER, 0);
             curl_setopt($ch, CURLOPT_NOSIGNAL, true);
             $responses	= curl_exec($ch);
@@ -645,7 +650,6 @@ class iFS {
         $FileExt = self::CheckValidExt($http); //判断过滤文件类型
 		if(self::$callback && is_array($FileExt) && $FileExt['code']=="0") return $FileExt;
         $fileresults = self::remote($http);
-//        $fileresults	= self::mremote($http);
 
         if ($fileresults) {
             $file_md5 = md5($fileresults);
@@ -703,55 +707,6 @@ class iFS {
             }
         }
     }
-
-    //获取远程页面的内容
-    public static function mremote($url, $_referer = false) {
-        $uri = parse_url($url);
-        $curlopt_referer = $uri['scheme'] . '://' . $uri['host'];
-        $mch = curl_multi_init();
-        $ch = curl_init();
-        curl_setopt($ch, CURLOPT_URL, $url);
-        // curl_setopt($ch, CURLOPT_ENCODING, 'gzip');
-        curl_setopt($ch, CURLOPT_ENCODING, '');
-        curl_setopt($ch, CURLOPT_TIMEOUT, 10);
-        curl_setopt($ch, CURLOPT_CONNECTTIMEOUT, 3);
-        curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
-        curl_setopt($ch, CURLOPT_FAILONERROR, 1);
-        curl_setopt($ch, CURLOPT_REFERER, $_referer ? $_referer : $curlopt_referer);
-        curl_setopt($ch, CURLOPT_USERAGENT, 'Mozilla/4.0 (compatible; MSIE 7.0; Windows NT 5.1; Mozilla/4.0 (compatible; MSIE 6.0; Windows NT 5.1; SV1) ; .NET CLR 1.1.4322; .NET CLR 2.0.50727; .NET CLR 3.0.4506.2152; .NET CLR 3.5.30729)');
-        curl_setopt($ch, CURLOPT_HEADER, 0);
-        curl_setopt($ch, CURLOPT_NOSIGNAL, true);
-        curl_multi_add_handle($mch, $ch);
-        $flag = null;
-        do {
-            curl_multi_exec($mch, $flag);
-        } while ($flag > 0);
-
-        $responses = curl_multi_getcontent($ch);
-        $info = curl_getinfo($ch);
-
-        if ($info['http_code'] == 301 || $info['http_code'] == 302) {
-            $newurl = $info['redirect_url'];
-	        if(empty($newurl)){
-		    	curl_setopt($ch, CURLOPT_HEADER, 1);
-		    	$header		= curl_exec($ch);
-		    	preg_match ('|Location: (.*)|i',$header,$matches);
-		    	$newurl 	= ltrim($matches[1],'/');
-			    if(empty($newurl)) return false;
-
-		    	if(!strstr($newurl,'http://')){
-			    	$host	= $uri['scheme'].'://'.$uri['host'];
-		    		$newurl = $host.'/'.$newurl;
-		    	}
-	        }
-	        $newurl	= trim($newurl);
-            $responses = self::mremote($newurl, false);
-        }
-        curl_multi_remove_handle($mch, $ch);
-        curl_multi_close($mch);
-        return $responses;
-    }
-
 
     function a($a,$break=false) {
 		$stateMap = array(
