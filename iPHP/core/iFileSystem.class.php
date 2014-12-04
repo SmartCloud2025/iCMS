@@ -225,9 +225,9 @@ class iFS {
 		        echo "url:empty\n";
 		        return false;
 		    }
-            if(empty(self::$REFERER)){
-                $uri           = parse_url($url);
-                self::$REFERER = $uri['scheme'] . '://' . $uri['host'];
+            if(empty(self::$CURLOPT_REFERER)){
+                $uri                   = parse_url($url);
+                self::$CURLOPT_REFERER = $uri['scheme'] . '://' . $uri['host'];
             }
             $ch = curl_init();
             curl_setopt($ch, CURLOPT_URL, $url);
