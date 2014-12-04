@@ -461,14 +461,16 @@ DROP TABLE IF EXISTS `#iCMS@__spider_project`;
 
 CREATE TABLE `#iCMS@__spider_project` (
   `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
-  `name` varchar(255) DEFAULT NULL,
-  `urls` text,
-  `list_url` varchar(255) DEFAULT NULL,
-  `cid` int(10) unsigned DEFAULT NULL,
-  `rid` int(10) unsigned DEFAULT NULL,
-  `poid` int(10) unsigned DEFAULT NULL,
-  `sleep` int(10) unsigned DEFAULT NULL,
-  `auto` tinyint(1) DEFAULT NULL,
+  `name` varchar(255) NOT NULL,
+  `urls` text NOT NULL,
+  `list_url` varchar(255) NOT NULL,
+  `cid` int(10) unsigned NOT NULL,
+  `rid` int(10) unsigned NOT NULL,
+  `poid` int(10) unsigned NOT NULL,
+  `sleep` int(10) unsigned NOT NULL,
+  `checker` tinyint(1) unsigned NOT NULL,
+  `self` tinyint(1) unsigned NOT NULL,
+  `auto` tinyint(1) unsigned NOT NULL,
   PRIMARY KEY (`id`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 
@@ -499,7 +501,9 @@ CREATE TABLE `#iCMS@__spider_url` (
   `pubdate` int(10) NOT NULL,
   `status` tinyint(1) NOT NULL,
   PRIMARY KEY (`id`),
-  KEY `hash` (`hash`)
+  KEY `hash` (`hash`),
+  KEY `title` (`title`),
+  KEY `url` (`url`(255))
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 
 
