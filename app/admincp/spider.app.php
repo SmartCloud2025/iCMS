@@ -596,7 +596,7 @@ class spiderApp {
         }
 
         iFS::$CURLOPT_ENCODING = $rule['fs']['encoding'];
-        iFS::$CURLOPT_REFERER  = $rule['fs']['referer'];
+        $rule['fs']['referer'] && iFS::$CURLOPT_REFERER  = $rule['fs']['referer'];
         return $responses;
     }
 
