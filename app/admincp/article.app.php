@@ -165,21 +165,8 @@ class articleApp{
     		case 'thumb':
 		        foreach((array)$_POST['id'] AS $id) {
 		            $body	= articleTable::body($id);
-		            $img 	= array();
-		            preg_match_all("/<img.*?src\s*=[\"|'|\s]*(http:\/\/.*?\.(gif|jpg|jpeg|bmp|png)).*?>/is",$body,$img);
-		            $_array = array_unique($img[1]);
-		            foreach($_array as $key =>$value) {
-		                $value = iFS::fp($value,'http2iPATH');
-		                if(file_exists($value)) {
-							list($picwidth, $picheight, $type, $attr) = getimagesize($value);
-                            empty($picwidth) && $picwidth  = 0;
-                            empty($picheight)&& $picheight = 0;
-                            $pic    = iFS::fp($value,'-iPATH');
-                            $haspic = 1;
-                            articleTable::update(compact('haspic','pic','picwidth','picheight'),compact('id'));
-		                    break;
-		                }
-		            }
+                    $picurl = $this->remotepic($body,'autopic',$id);
+                    $this->pic($picurl,$id);
 		        }
 		        iPHP::success('成功提取缩略图!','js:1');
     		break;
@@ -639,20 +626,22 @@ class articleApp{
 
         if(isset($_POST['autopic']) && empty($haspic)){
             $picurl = $this->remotepic($body,'autopic',$aid);
-            $uri    = parse_url(iCMS_FS_URL);
-            if (stripos($picurl,$uri['host']) !== false){
-                $picdata = (array)articleTable::value('picdata',$aid);
-                $picdata && $picdata = @unserialize($picdata);
-                $pic = iFS::fp($picurl,'-http');
-                list($width, $height, $type, $attr) = @getimagesize(iFS::fp($pic,'+iPATH'));
-                $picdata['b'] = array('w'=>$width,'h'=>$height);
-                $picdata = addslashes(serialize($picdata));
-                $haspic  = 1;
-                articleTable::update(compact('haspic','pic','picdata'),array('id'=>$aid));
-            }
+            $this->pic($picurl,$aid);
         }
     }
-
+    function pic($picurl,$aid){
+        $uri = parse_url(iCMS_FS_URL);
+        if (stripos($picurl,$uri['host']) !== false){
+            $picdata = (array)articleTable::value('picdata',$aid);
+            $picdata && $picdata = @unserialize($picdata);
+            $pic = iFS::fp($picurl,'-http');
+            list($width, $height, $type, $attr) = @getimagesize(iFS::fp($pic,'+iPATH'));
+            $picdata['b'] = array('w'=>$width,'h'=>$height);
+            $picdata = addslashes(serialize($picdata));
+            $haspic  = 1;
+            articleTable::update(compact('haspic','pic','picdata'),array('id'=>$aid));
+        }
+    }
     function remotepic($content,$remote = false,$aid=0) {
         if (!$remote) return $content;
 
