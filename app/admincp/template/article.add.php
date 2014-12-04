@@ -26,6 +26,14 @@ $(function(){
   iCMS.select('pid',"<?php echo $rs['pid']?trim($rs['pid']):0 ; ?>");
   iCMS.select('cid',"<?php echo $rs['cid']; ?>");
   iCMS.select('scid',"<?php echo trim($rs['scid']);?>");
+  iCMS.select('status',"<?php echo $rs['status']; ?>");
+  $('#inbox').click(function(){
+    if($(this).prop("checked")){
+      iCMS.select('status',"0");
+    }else{
+      iCMS.select('status',"1");
+    }
+  })
 	$("#cid").change(function() {
     var cid = this.value;
 		$.getJSON("<?php echo APP_URI; ?>",{'do':'getmeta','cid':cid},function(prop){
@@ -211,7 +219,6 @@ function _modal_dialog(cancel_text){
 
         <input name="aid" type="hidden" value="<?php echo $this->id ; ?>" />
         <input name="adid" type="hidden" value="<?php echo $adRs['id']; ?>" />
-        <input name="status" type="hidden" value="<?php echo $rs['status'] ; ?>" />
         <input name="userid" type="hidden" value="<?php echo $rs['userid'] ; ?>" />
         <input name="postype" type="hidden" value="<?php echo $rs['postype'] ; ?>" />
         <input name="REFERER" type="hidden" value="<?php echo $REFERER ; ?>" />
@@ -226,6 +233,15 @@ function _modal_dialog(cancel_text){
                 <select onclick="window.location.replace('<?php echo __ADMINCP__; ?>=category&do=add');">
                 <option value="0"> == 暂无栏目请先添加 == </option>
                 <?php }  ?>
+              </select>
+            </div>
+            <div class="input-prepend"> <span class="add-on">状 态</span>
+              <select name="status" id="status" class="chosen-select span2">
+                <option value="0"> 草稿 </option>
+                <option value="1"> 正常 </option>
+                <option value="2"> 回收站 </option>
+                <option value="3"> 待审核 </option>
+                <option value="4"> 未通过 </option>
               </select>
             </div>
             <div class="clearfloat mb10"></div>
