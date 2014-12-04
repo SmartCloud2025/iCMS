@@ -899,6 +899,7 @@ class spiderApp {
         $this->useragent = $rs['rule']['user_agent'];
         $this->encoding  = $rs['rule']['curl']['encoding'];
         $this->referer   = $rs['rule']['curl']['referer'];
+        $this->cookie    = $rs['rule']['curl']['cookie'];
         $this->charset   = $rs['rule']['charset'];
         return $rs;
     }
@@ -1119,18 +1120,22 @@ class spiderApp {
         }
 
         $ch = curl_init();
-        curl_setopt($ch, CURLOPT_URL, $url);
-        curl_setopt($ch, CURLOPT_ENCODING, $this->encoding);
-        curl_setopt($ch, CURLOPT_TIMEOUT, 3);
-        curl_setopt($ch, CURLOPT_CONNECTTIMEOUT, 3);
-        curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
-        curl_setopt($ch, CURLOPT_FAILONERROR, 1);
-        curl_setopt($ch, CURLOPT_REFERER, $this->referer);
-        curl_setopt($ch, CURLOPT_USERAGENT, $this->useragent);
-        curl_setopt($ch, CURLOPT_HEADER, 0);
-        curl_setopt($ch, CURLOPT_NOSIGNAL, true);
-        // curl_setopt($ch, CURLOPT_FOLLOWLOCATION, 1); // 使用自动跳转
-        // curl_setopt($ch, CURLOPT_MAXREDIRS, 7);//查找次数，防止查找太深
+        $options = array(
+            CURLOPT_URL            => $url,
+            CURLOPT_ENCODING       => $this->encoding,
+            CURLOPT_REFERER        => $this->referer,
+            CURLOPT_USERAGENT      => $this->useragent,
+            CURLOPT_TIMEOUT        => 3,
+            CURLOPT_CONNECTTIMEOUT => 3,
+            CURLOPT_RETURNTRANSFER => 1,
+            CURLOPT_FAILONERROR    => 1,
+            CURLOPT_HEADER         => 0,
+            CURLOPT_NOSIGNAL       => true,
+            // CURLOPT_FOLLOWLOCATION => 1,// 使用自动跳转
+            // CURLOPT_MAXREDIRS => 7,//查找次数，防止查找太深
+        );
+        $this->cookie && $options[CURLOPT_COOKIE] = $this->cookie;
+        curl_setopt_array ( $ch ,  $options );
         $responses = curl_exec($ch);
         $info = curl_getinfo($ch);
         if ($this->contTest || $this->ruleTest) {

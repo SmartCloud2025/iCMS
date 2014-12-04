@@ -102,13 +102,13 @@ $(function(){
             </div>
             <div class="clearfloat mb10"></div>
             <div class="input-prepend"><span class="add-on">Cookie</span>
-              <input type="text" name="rule[cookie]" class="span6" id="cookie" value="<?php echo $rule['cookie'] ; ?>"/>
+              <input type="text" name="rule[curl][cookie]" class="span6" id="CURLOPT_COOKIE" value="<?php echo $rule['curl']['cookie'] ; ?>"/>
             </div>
             <div class="clearfloat mb10"></div>
-            <div class="input-prepend"><span class="add-on">CURLOPT_ENCODING</span>
+            <div class="input-prepend"><span class="add-on">客户端解码</span>
               <input type="text" name="rule[curl][encoding]" class="span6" id="CURLOPT_ENCODING" value="<?php echo $rule['curl']['encoding'] ; ?>"/>
             </div>
-            <span class="help-inline"><span class="label label-important">CURL设置为客户端解码 默认为空,如果采集乱码可以填上gzip,deflate</span></span>
+            <span class="help-inline"><span class="label label-important">CURL设置 为客户端解码 默认为空,如果采集乱码可以填上gzip,deflate</span></span>
             <div class="clearfloat mb10"></div>
             <div class="input-prepend"><span class="add-on">来路页</span>
               <input type="text" name="rule[curl][referer]" class="span6" id="CURLOPT_REFERER" value="<?php echo $rule['curl']['referer'] ; ?>"/>
