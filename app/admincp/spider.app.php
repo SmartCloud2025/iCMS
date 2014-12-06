@@ -1211,7 +1211,8 @@ class spiderApp {
                 $encode = $content_charset;
             }
             if(function_exists('mb_detect_encoding') && empty($encode)) {
-                $encode = mb_detect_encoding($html, array("ASCII","UTF-8","GB2312","GBK","BIG5"));                var_dump('mb_detect_encoding:'.$encode);
+                $encode = mb_detect_encoding($html, array("ASCII","UTF-8","GB2312","GBK","BIG5"));
+                var_dump('mb_detect_encoding:'.$encode);
             }
         }
         if ($this->contTest || $this->ruleTest) {

@@ -411,11 +411,11 @@ class articleApp{
         $metadata    = $metadata?addslashes(serialize($metadata)):'';
         $body        = (array)$_POST['body'];
         $creative    = (int)$_POST['creative'];
-
         iACP::CP($cid,($aid?'ce':'ca'),'alert');
 
-        $weight       = _int($_POST['weight']);
+        empty($_POST['pubdate']) && $_POST['pubdate'] = get_date(0,'Y-m-d H:i:s');
         $pubdate   = iPHP::str2time($_POST['pubdate']);
+        $weight    = _int($_POST['weight']);
         $postype   = $_POST['postype']?$_POST['postype']:0;
         $ischapter = isset($_POST['ischapter'])?1:0;
         isset($_POST['inbox']) && $status = "0";
