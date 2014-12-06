@@ -136,6 +136,7 @@ class spiderApp {
             ob_flush();
             flush();
 		}
+        iDB::update('spider_project',array('lastupdate'=>time()),array('id'=>$this->pid));
 		iPHP::dialog('success:#:check:#:采集完成!',0,3,0,true);
 	}
 	function multipublish(){
@@ -151,19 +152,7 @@ class spiderApp {
         $a['js']  = 'parent.$("#' . md5($this->url) . '").remove();';
 		return $a;
 	}
-
-    function do_publish($work = null) {
-        $_POST = $this->spider_content();
-        if($this->work){
-           if(empty($_POST['title'])){
-               echo "标题不能为空\n";
-               return false;
-           }
-           if(empty($_POST['body'])){
-               echo "内容不能为空\n";
-               return false;
-           }
-        }
+    function checker($work = null){
         $pid     = $this->pid;
         $project = $this->project($pid);
         $hash    = md5($this->url);
@@ -195,9 +184,30 @@ class spiderApp {
                 if($work=="multi"){
                     return '-1';
                 }
+            }else{
+                return true;
             }
         }
-
+        return true;
+    }
+    function do_publish($work = null) {
+        $_POST = $this->spider_content();
+        if($this->work){
+           if(empty($_POST['title'])){
+               echo "标题不能为空\n";
+               return false;
+           }
+           if(empty($_POST['body'])){
+               echo "内容不能为空\n";
+               return false;
+           }
+        }
+        $checker = $this->checker($work);
+        if($checker!==true){
+            return $checker;
+        }
+        $pid          = $this->pid;
+        $project      = $this->project($pid);
         $sleep        = $project['sleep'];
         $poid         = $project['poid'];
         $_POST['cid'] = $project['cid'];
@@ -297,7 +307,7 @@ class spiderApp {
     }
     function title_url($row,$rule){
         if($rule['mode']=="2"){
-            $pq    = pq($row);
+            $pq    = phpQuery::pq($row);
             list($title_attr,$url_attr) = explode("\n", $rule['list_url_rule']);
             $title_attr = trim($title_attr);
             $url_attr   = trim($url_attr);
@@ -329,11 +339,19 @@ class spiderApp {
             $cid = $project['cid'];
             $rid = $project['rid'];
             $prule_list_url = $project['list_url'];
+            $lastupdate     = $project['lastupdate'];
         } else {
             $cid = $this->cid;
             $rid = $this->rid;
         }
         if($work=='shell'){
+            $lastupdate = $project['lastupdate'];
+            if($project['psleep']){
+                if(time()-$lastupdate<$project['psleep']){
+                    echo '采集方案['.$pid."]:".format_date($lastupdate)."刚采集过了,请".($project['psleep']/3600)."小时后在继续采集\n";
+                    return;
+                }
+            }
             echo '开始采集方案['.$pid."]\n";
         }
         $ruleA = $this->rule($rid);
@@ -386,6 +404,7 @@ class spiderApp {
         }
 
         $pubArray = array();
+        $pubCount = array();
         foreach ($urlsArray AS $key => $url) {
             $url = trim($url);
             if($work=='shell'){
@@ -399,7 +418,8 @@ class spiderApp {
                 $doc       = phpQuery::newDocumentHTML($html,'UTF-8');
                 $list_area = $doc[trim($rule['list_area_rule'])];
                 empty($rule['list_area_format']) && $rule['list_area_format'] = 'a';
-                $lists     = pq($list_area)->find(trim($rule['list_area_format']));
+                $lists     = phpQuery::pq($list_area)->find(trim($rule['list_area_format']));
+                //echo 'list:getDocumentID:'.$lists->getDocumentID()."\n";
             }else{
                 $list_area_rule = $this->pregTag($rule['list_area_rule']);
                 if ($list_area_rule) {
@@ -451,10 +471,52 @@ class spiderApp {
 				$rule['list_url']	= $prule_list_url;
 			}
             if ($work) {
-                $listsArray[$url] = $lists;
+                if($work=="shell"){
+                    $pubCount[$url]['count'] = count($lists);
+                    echo "开始采集:".$url." 列表 ".$pubCount[$url]['count']."条记录\n";
+                    foreach ($lists AS $lkey => $row) {
+                        list($this->title,$this->url) = $this->title_url($row,$rule,$lists);
+                        $hash  = md5($this->url);
+                        echo "title:".$this->title."\n";
+                        echo "url:".$this->url."\n";
+                        $this->rid = $rid;
+                        $checker = $this->checker($work);
+                        if($checker===true){
+                            echo "开始采集....";
+                            $callback  = $this->do_publish("shell");
+                            if ($callback['code'] == "1001") {
+                                $pubCount[$url]['success']++;
+                                echo "....√\n";
+                                if($project['sleep']){
+                                    echo "sleep:".$project['sleep']."s\n";
+                                    if($rule['mode']!="2"){
+                                        unset($lists[$lkey]);
+                                    }
+                                    gc_collect_cycles();
+                                    sleep($project['sleep']);
+                                }else{
+                                    //sleep(1);
+                                }
+                            }else{
+                                $pubCount[$url]['error']++;
+                                echo "error\n\n";
+                                continue;
+                            }
+                        }
+                        $pubCount[$url]['published']++;
+                    }
+                    if($rule['mode']=="2"){
+                        phpQuery::unloadDocuments($doc->getDocumentID());
+                    }else{
+                        unset($lists);
+                    }
+                    continue;
+                }else{
+                    $listsArray[$url] = $lists;
+                }
             } else {
                 foreach ($lists AS $lkey => $row) {
-                    list($title,$url) = $this->title_url($row,$rule);
+                    list($title,$url) = $this->title_url($row,$rule,$lists);
                     $hash  = md5($url);
                     if ($this->ruleTest) {
                         echo $title . ' (<a href="' . APP_URI . '&do=testcont&url=' . $url . '&rid=' . $rid . '&pid=' . $pid . '&title=' . urlencode($title) . '" target="_blank">测试内容规则</a>) <br />';
@@ -462,7 +524,8 @@ class spiderApp {
                         echo $hash . "<br /><br />";
                     } else {
                         //iDB::query("INSERT INTO `#iCMS@__spider_url` (`cid`, `rid`,`pid`, `hash`, `title`, `url`, `status`, `publish`, `addtime`, `pubdate`) VALUES ('$cid', '$rid','$pid','$hash','$title', '$url', '0', '0', '" . time() . "', '0');");
-                        $this->checkurl($hash) OR $pubArray[]	=array('sid'=>iDB::$insert_id,'url'=>$url,'title'=>$title,'cid'=>$cid,'rid'=>$rid,'pid'=>$pid,'hash'=>$hash);
+                        $checker = $this->checker($work);
+                        $checker===true && $pubArray[] = array('sid'=>iDB::$insert_id,'url'=>$url,'title'=>$title,'cid'=>$cid,'rid'=>$rid,'pid'=>$pid,'hash'=>$hash);
                     }
                 }
             }
@@ -473,48 +536,14 @@ class spiderApp {
 		$lists = null;
         unset($lists);
 		gc_collect_cycles();
-
         if ($work) {
-			if($work=="shell"){
-				$urlArray	= array();
-                echo '共采集到'.count($listsArray)."页\n";
-				foreach ($listsArray AS $furl => $lists) {
-                    echo "开始采集:".$furl." 列表 ".count($lists)."条记录\n";
-					foreach ($lists AS $lkey => $row) {
-                        list($title,$url) = $this->title_url($row,$rule);
-                        $hash  = md5($url);
-                        echo "title:".$this->title."\n";
-                        echo "url:".$url."\n";
-						if(!$this->checkurl($hash)){
-                            echo "开始采集....";
-							//$urlArray[]= $url;
-                            $this->rid = $rid;
-                            $this->url = $url;
-
-                            $callback  = $this->do_publish("shell");
-							if ($callback['code'] == "1001") {
-                                echo "....OK\n";
-								if($project['sleep']){
-									echo "sleep:".$project['sleep']."s\n";
-									unset($lists[$lkey]);
-									gc_collect_cycles();
-									sleep($project['sleep']);
-								}else{
-									sleep(1);
-								}
-							}else{
-                                echo "error\n\n";
-                                continue;
-								//die("error");
-							}
-						}else{
-                            echo "采集过了\n\n";
-                        }
-					}
-				}
-				return $urlArray;
-			}
-
+            if($work=="shell"){
+                echo "采集数据统结果:\n";
+                print_r($pubCount);
+                echo "全部采集完成....\n";
+                iDB::update('spider_project',array('lastupdate'=>time()),array('id'=>$pid));
+                return;
+            }
             $sArrayTmp = iDB::all("SELECT `hash` FROM `#iCMS@__spider_url` where `pid`='$pid'");
             $_count = count($sArrayTmp);
             for ($i = 0; $i < $_count; $i++) {
@@ -687,6 +716,7 @@ class spiderApp {
             iPHP::import(iPHP_LIB.'/phpQuery.php');
             $this->contTest && $_GET['pq_debug'] && phpQuery::$debug =1;
             $doc     = phpQuery::newDocumentHTML($html,'UTF-8');
+            //echo "\ndata:getDocumentID:".$doc->getDocumentID()."\n";
             list($content_dom,$content_fun,$content_attr) = explode("\n", $data['rule']);
             $content_dom  = trim($content_dom);
             $content_fun  = trim($content_fun);
@@ -696,9 +726,9 @@ class spiderApp {
                 $conArray = array();
                 foreach ($doc[$content_dom] as $doc_key => $doc_value) {
                     if($content_attr){
-                        $conArray[] = pq($doc_value)->$content_fun($content_attr);
+                        $conArray[] = phpQuery::pq($doc_value)->$content_fun($content_attr);
                     }else{
-                        $conArray[] = pq($doc_value)->$content_fun();
+                        $conArray[] = phpQuery::pq($doc_value)->$content_fun();
                     }
                 }
                 $content = implode('#--iCMS.PageBreak--#', $conArray);
@@ -714,7 +744,7 @@ class spiderApp {
                 print_r(htmlspecialchars($content));
                 echo "<hr />";
             }
-            phpQuery::unloadDocuments();
+            phpQuery::unloadDocuments($doc->getDocumentID());
         }else{
             $data_rule = $this->pregTag($data['rule']);
             if ($this->contTest) {
@@ -841,22 +871,24 @@ class spiderApp {
             $_replacement = str_replace('\n', "\n", $_replacement);
             if(strpos($_pattern, 'DOM::')!==false){
                 $doc      = phpQuery::newDocumentHTML($content,'UTF-8');
+                //echo 'dataClean:getDocumentID:'.$doc->getDocumentID()."\n";
                 $_pattern = str_replace('DOM::','', $_pattern);
                 list($pq_dom, $pq_fun,$pq_attr) = explode("::", $_pattern);
-                $pq_array = pq($pq_dom);
+                $pq_array = phpQuery::pq($pq_dom);
                 foreach ($pq_array as $pq_key => $pq_val) {
                     if($pq_fun){
                         if($pq_attr){
-                            $pq_content = pq($pq_val)->$pq_fun($pq_attr);
+                            $pq_content = phpQuery::pq($pq_val)->$pq_fun($pq_attr);
                         }else{
-                            $pq_content = pq($pq_val)->$pq_fun();
+                            $pq_content = phpQuery::pq($pq_val)->$pq_fun();
                         }
                     }else{
-                        $pq_content = (string)pq($pq_val);
+                        $pq_content = (string)phpQuery::pq($pq_val);
                     }
                     $pq_pattern[$pq_key]     = $pq_content;
                     $pq_replacement[$pq_key] = $_replacement;
                 }
+                phpQuery::unloadDocuments($doc->getDocumentID());
                 //var_dump(array_map('htmlspecialchars', $pq_pattern));
                 $content = str_replace($pq_pattern,$pq_replacement, $content);
             }else{
@@ -1087,29 +1119,30 @@ class spiderApp {
         $rule_option = $this->rule_opt($rs['rid']);
         $post_option = $this->post_opt($rs['poid']);
 
-        $rs['sleep'] OR $rs['sleep'] = 30;
+        //$rs['sleep'] OR $rs['sleep'] = 30;
         include iACP::view("spider.addproject");
     }
 
     function do_saveproject() {
-        $id       = (int) $_POST['id'];
-        $name     = iS::escapeStr($_POST['name']);
-        $urls     = iS::escapeStr($_POST['urls']);
-        $list_url = $_POST['list_url'];
-        $cid      = iS::escapeStr($_POST['cid']);
-        $rid      = iS::escapeStr($_POST['rid']);
-        $poid     = iS::escapeStr($_POST['poid']);
-        $poid     = iS::escapeStr($_POST['poid']);
-        $checker  = iS::escapeStr($_POST['checker']);
-        $self     = isset($_POST['self'])?'1':'0';
-        $sleep    = iS::escapeStr($_POST['sleep']);
-        $auto     = iS::escapeStr($_POST['auto']);
-
+        $id         = (int) $_POST['id'];
+        $name       = iS::escapeStr($_POST['name']);
+        $urls       = iS::escapeStr($_POST['urls']);
+        $list_url   = $_POST['list_url'];
+        $cid        = iS::escapeStr($_POST['cid']);
+        $rid        = iS::escapeStr($_POST['rid']);
+        $poid       = iS::escapeStr($_POST['poid']);
+        $poid       = iS::escapeStr($_POST['poid']);
+        $checker    = iS::escapeStr($_POST['checker']);
+        $self       = isset($_POST['self'])?'1':'0';
+        $sleep      = iS::escapeStr($_POST['sleep']);
+        $auto       = iS::escapeStr($_POST['auto']);
+        $psleep     = iS::escapeStr($_POST['psleep']);
+        $lastupdate = $_POST['lastupdate']?iPHP::str2time($_POST['lastupdate']):'';
         empty($name)&& iPHP::alert('名称不能为空！');
         empty($cid) && iPHP::alert('请选择绑定的栏目');
         empty($rid) && iPHP::alert('请选择采集规则');
         //empty($poid)	&& iPHP::alert('请选择发布规则');
-        $fields = array('name', 'urls','list_url', 'cid', 'rid', 'poid','checker','self','sleep', 'auto');
+        $fields = array('name', 'urls','list_url', 'cid', 'rid', 'poid','checker','self','sleep','auto','lastupdate','psleep');
         $data   = compact ($fields);
         if ($id) {
             iDB::update('spider_project',$data,array('id'=>$id));

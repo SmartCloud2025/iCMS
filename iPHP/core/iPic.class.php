@@ -18,6 +18,42 @@ class iPic {
 		self::$config    = $config;
 		self::$watermark = iPHP_APP_CONF;
     }
+    /** 图片局部打马赛克
+    * @param  String  $source 原图
+    * @param  int     $x1     起点横坐标
+    * @param  int     $y1     起点纵坐标
+    * @param  int     $x2     终点横坐标
+    * @param  int     $y2     终点纵坐标
+    * @param  int     $deep   深度，数字越大越模糊
+    * @return boolean
+    */
+    public static function mosaics($source,$x1, $y1, $x2, $y2, $deep='9'){
+        // 判断原图是否存在
+        if(!file_exists($source)){
+            return false;
+        }
+        // 获取原图信息
+        list($owidth, $oheight, $otype) = @getimagesize($source);
+        // 判断区域是否超出图片
+        if($x1>$owidth || $x1<0 || $x2>$owidth || $x2<0 || $y1>$oheight || $y1<0 || $y2>$oheight || $y2<0){
+            return false;
+        }
+        $source_img = self::imagecreate($otype,$source);
+
+        // 打马赛克
+        for($x=$x1; $x<$x2; $x=$x+$deep){
+            for($y=$y1; $y<$y2; $y=$y+$deep){
+                $color = imagecolorat($source_img, $x+round($deep/2), $y+round($deep/2));
+                imagefilledrectangle($source_img, $x, $y, $x+$deep, $y+$deep, $color);
+            }
+        }
+        @unlink($source);
+        self::image($source_img,$otype,$source);
+        //释放内存
+        isset($source_img) && imagedestroy($source_img);
+        return @is_file($source)? true : false;
+    }
+
     public static function watermark($pf) {
         if(!self::$config['enable']) return;
 
@@ -151,6 +187,7 @@ class iPic {
         unset($water_info);
         isset($water_im) && imagedestroy($water_im);
         unset($ground_info);
+        return @is_file($pf)? true : false;
     }
     public static function thumbnail($src,$tw="0",$th="0",$scale=true) {
     	if(!self::$config['thumb']['enable']) return;

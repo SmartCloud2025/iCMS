@@ -209,16 +209,29 @@ $(function(){
               </span>
           </div>
           <div class="clearfloat mb10"></div>
-          <div class="input-prepend"><span class="add-on">采集间隔</span>
-            <input type="text" name="sleep" class="span1" id="sleep" value="<?php echo $rs['sleep']; ?>"/>
-          </div>
-          <div class="clearfloat mb10"></div>
           <div class="input-prepend"><span class="add-on">自动采集</span>
             <div class="switch">
               <input type="checkbox" data-type="switch" name="auto" id="auto" <?php echo $rs['auto']?'checked':''; ?>/>
             </div>
           </div>
           <span class="help-inline">此选项只作标识,如果要实现自动采集功能 需要在服务器上部署计划任务</span>
+          <div class="clearfloat mb10"></div>
+          <div class="input-prepend input-append"><span class="add-on">单条间隔</span>
+            <input type="text" name="sleep" class="span1" id="sleep" value="<?php echo $rs['sleep']; ?>"/>
+            <span class="add-on">秒</span>
+          </div>
+          <span class="help-inline">单条数据采集的间隔 (自动采集)</span>
+          <div class="clearfloat mb10"></div>
+          <div class="input-prepend input-append"><span class="add-on">方案间隔</span>
+            <input type="text" name="psleep" class="span1" id="psleep" value="<?php echo $rs['psleep']; ?>"/>
+            <span class="add-on">秒</span>
+          </div>
+          <span class="help-inline">本方案下次采集的间隔 (自动采集)</span>
+          <div class="clearfloat mb10"></div>
+          <div class="input-prepend"> <span class="add-on">完成时间</span>
+            <input id="lastupdate" class="span3" value="<?php echo $rs['lastupdate']?get_date($rs['lastupdate'],'Y-m-d H:i:s'):'' ; ?>"  name="lastupdate" type="text" style="width:230px"/>
+          </div>
+          <span class="help-inline">本方案上次采集完成时间 (自动采集)</span>
           <div class="clearfloat mb10"></div>
         </div>
         <div class="form-actions">
