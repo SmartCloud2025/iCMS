@@ -25,6 +25,7 @@ class iPHP{
 
 	public static function iTemplate(){
         self::$iTPL = new iTemplate();
+        self::$iTPL->template_callback = array("iPHP","tpl_path");
         self::$iTPL->template_dir      = iPHP_TPL_DIR;
         self::$iTPL->compile_dir       = iPHP_TPL_CACHE;
         self::$iTPL->left_delimiter    = '<!--{';
@@ -73,18 +74,34 @@ class iPHP{
     }
     public static function view($tpl,$p='index') {
         $tpl OR self::throw404('运行出错！ 请设置模板文件', '001','TPL');
-        if(strpos($tpl,'APP:/')!==false){
-            $tpl = 'file::'.self::$app_tpl."||".str_replace('APP:/','',$tpl);
-        }else{
-        	$tpl = self::$iTPL->get_tpl($tpl);
-        }
+        return self::pl($tpl);
+
+    }
+	function tpl_path($tpl){
+        if(strpos($tpl,iPHP_APP.':/') !==false){
+			$_tpl = str_replace(iPHP_APP.':/',iPHP_DEFAULT_TPL,$tpl);
+			if(@is_file(iPHP_TPL_DIR."/".$_tpl)) return $_tpl;
+
+        	if(iPHP_DEVICE!='desktop'){//移动设备
+				$_tpl = str_replace(iPHP_APP.':/',iPHP_MOBILE_TPL,$tpl); // mobile/
+				if(@is_file(iPHP_TPL_DIR."/".$_tpl)) return $_tpl;
+			}
+			$tpl = str_replace(iPHP_APP.':/',iPHP_APP,$tpl); //iCMS
+		}elseif(strpos($tpl,'{iTPL}') !==false){
+			$tpl = str_replace('{iTPL}',iPHP_DEFAULT_TPL,$tpl);
+		}
+		if(iPHP_DEVICE!='desktop' && strpos($tpl,iPHP_APP) === false){
+			$current_tpl = dirname($tpl);
+			if(!in_array($current_tpl,array(iPHP_DEFAULT_TPL,iPHP_MOBILE_TPL))){
+				$tpl =  str_replace($current_tpl.'/', iPHP_DEFAULT_TPL.'/', $tpl);
+			}
+		}
         if(@is_file(iPHP_TPL_DIR."/".$tpl)) {
-            return self::pl($tpl);
+			return $tpl;
         }else{
         	self::throw404('运行出错！ 找不到模板文件 <b>' .$tpl. '</b>', '002','TPL');
         }
-    }
-
+	}
 	public static function PG($key){
 		return isset($_POST[$key])?$_POST[$key]:$_GET[$key];
 	}

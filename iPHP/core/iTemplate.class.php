@@ -14,7 +14,7 @@ class iTemplate {
 	public $template_dir              = "template";	// where the templates are to be found
 	public $plugins_dir               = "plugins";	// where the plugins are to be found
 	public $compile_dir               = "cache";	// the directory to store the compiled files in
-	public $tpl_tags                  = array();	// the directory to store the compiled files in
+	public $template_callback         = null;	// the directory to store the compiled files in
 
 	public $php_extract_vars          = false;	// Set this to true if you want the $this->_tpl variables to be extracted for use by PHP code inside the template.
 	public $php_handling              = "PHP_QUOTE";//2007-7-23 0:01 quote php tags
@@ -179,35 +179,22 @@ class iTemplate {
 			$this->template_dir = $_dir;
 		}else{
 			strpos($file,'./') !==false && $file = str_replace('./',dirname($this->_file).'/',$file);
-			$file = $this->get_tpl($file);
+			if ($this->template_callback){
+				$template_callback = $this->template_callback;
+				if(is_array($template_callback)){
+					$file = call_user_func_array($template_callback,array($file));
+				}else{
+					$file = $template_callback($file);
+				}
+			}
 		}
 
 		$this->template_dir = $this->_get_dir($this->template_dir);
 		$RootPath           = $this->template_dir.$file;
-		@is_file($RootPath) OR $this->trigger_error("file '$RootPath' does not exist", E_USER_ERROR);
+		@is_file($RootPath) OR $this->trigger_error("template file '$RootPath' does not exist", E_USER_ERROR);
 		return $RootPath;
 	}
-	function get_tpl($tpl){
-        if(strpos($tpl,iPHP_APP.':/') !==false){
-			$_tpl = str_replace(iPHP_APP.':/',iPHP_DEFAULT_TPL,$tpl);
-			if(@is_file(iPHP_TPL_DIR."/".$_tpl)) return $_tpl;
 
-        	if(iPHP_DEVICE!='desktop'){//移动设备
-				$_tpl = str_replace(iPHP_APP.':/',iPHP_MOBILE_TPL,$tpl); // mobile/
-				if(@is_file(iPHP_TPL_DIR."/".$_tpl)) return $_tpl;
-			}
-			$tpl = str_replace(iPHP_APP.':/',iPHP_APP,$tpl); //iCMS
-		}elseif(strpos($tpl,'{iTPL}') !==false){
-			$tpl = str_replace('{iTPL}',iPHP_DEFAULT_TPL,$tpl);
-		}
-		if(iPHP_DEVICE!='desktop' && strpos($tpl,iPHP_APP) === false){
-			$current_tpl = dirname($tpl);
-			if(!in_array($current_tpl,array(iPHP_DEFAULT_TPL,iPHP_MOBILE_TPL))){
-				$tpl =  str_replace($current_tpl.'/', iPHP_DEFAULT_TPL.'/', $tpl);
-			}
-		}
-		return $tpl;
-	}
 	function _get_compile_file($file){
 		$this->compile_dir = $this->_get_dir($this->compile_dir);
 		$compile_file      = str_replace(array($this->template_dir,'/','.'),array('','_','_'),$file).'.php';
@@ -252,14 +239,15 @@ class iTemplate {
 	}
 
 	function _fetch_compile($file, $ret = false){
-		$template_file 		= $this->_get_resource($file);
-		$compile_file       = $this->_get_compile_file($template_file);
+		$template_file = $this->_get_resource($file);
+		$compile_file  = $this->_get_compile_file($template_file);
 		$this->_include_file OR $this->_file = $file;
 
 		if (!@is_file($compile_file)){
 			$iTC                            = new iTemplate_Compiler();
 			$iTC->left_delimiter            = $this->left_delimiter;
 			$iTC->right_delimiter           = $this->right_delimiter;
+			$iTC->template_callback         = $this->template_callback;
 			$iTC->plugins_dir               = &$this->plugins_dir;
 			$iTC->template_dir              = &$this->template_dir;
 			$iTC->compile_dir               = &$this->compile_dir;
@@ -367,6 +355,7 @@ class iTemplate_Compiler extends iTemplate {
 	public $template_dir              = "";
 	public $reserved_template_varname = "";
 	public $default_modifiers         = array();
+	public $template_callback         = null;
 
 	public $php_extract_vars          = true;	// Set this to false if you do not want the $this->_tpl variables to be extracted for use by PHP code inside the template.
 	public $error                     = true;
