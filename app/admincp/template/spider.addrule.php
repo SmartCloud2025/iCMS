@@ -15,6 +15,8 @@ iACP::head();
 </style>
 <script type="text/javascript">
 $(function(){
+  iCMS.select('watermark_pos',"<?php echo (int)$rule['watermark']['pos'] ; ?>");
+
 	<?php if($_GET['tab']){?>
 		var $itab	= $("#<?php echo $_GET['app']; ?>-tab");
 		$("li",$itab).removeClass("active");
@@ -74,7 +76,7 @@ $(function(){
 <div class="iCMS-container">
   <div class="widget-box">
     <div class="widget-title"> <span class="icon"> <i class="fa fa-plus-square"></i> </span>
-      <h5 class="brs"><?php echo ($this->rid ?'修改':'添加') ; ?><?php echo "[{$rs['name']}]"; ?>规则</h5>
+      <h5 class="brs"><?php echo ($this->rid ?'修改'."[{$rs['name']}]":'添加新') ; ?>规则</h5>
       <ul class="nav nav-tabs" id="spider-tab">
         <li class="active"><a href="#spider-base" data-toggle="tab"><i class="fa fa-info-circle"></i> 基本设置</a></li>
         <li><a href="#spider-data" data-toggle="tab"><i class="fa fa-truck"></i> 数据项</a></li>
@@ -372,6 +374,43 @@ $(function(){
               <input type="text" name="rule[fs][referer]" class="span6" id="FS_REFERER" value="<?php echo $rule['fs']['referer'] ; ?>"/>
             </div>
             <span class="help-inline"><span class="label label-important">默认为空,如果网站限制来路可填上相关来路</span></span>
+            <div class="clearfloat mb10"></div>
+            <div class="input-prepend input-append"> <span class="add-on">水印设置</span><span class="add-on">
+              <label class="radio">
+                <input type="radio" name="rule[watermark_mode]" id="watermark_mode0" value="0"<?php if(!$rule['watermark_mode']){ echo ' checked="true"';};?>>
+                系统全局 </label>
+              </span><span class="add-on">
+              <label class="radio">
+                <input type="radio" name="rule[watermark_mode]" id="watermark_mode1" value="1"<?php if($rule['watermark_mode']){ echo ' checked="true"';};?>>
+                本规则 </label>
+              </span></div>
+            <div class="clearfloat mb10"></div>
+            <div class="input-prepend"> <span class="add-on">水印位置</span>
+              <select name="rule[watermark][pos]" id="watermark_pos" class="span3 chosen-select">
+                <option value="0">随机位置</option>
+                <option value="1">顶部居左</option>
+                <option value="2">顶部居中</option>
+                <option value="3">顶部居右</option>
+                <option value="4">中部居左</option>
+                <option value="5">中部居中</option>
+                <option value="6">中部居右</option>
+                <option value="7">底部居左</option>
+                <option value="8">底部居中</option>
+                <option value="9">底部居右</option>
+                <option value="-1">自定义</option>
+              </select>
+            </div>
+            <div class="clearfloat mb10"></div>
+            <div class="input-prepend input-append"> <span class="add-on">水印位置偏移</span><span class="add-on" style="width:24px;">X</span>
+              <input type="text" name="rule[watermark][x]" class="span1" id="watermark_x" value="<?php echo $rule['watermark']['x'] ; ?>"/>
+              <span class="add-on" style="width:24px;">Y</span>
+              <input type="text" name="rule[watermark][y]" class="span1" id="watermark_y" value="<?php echo $rule['watermark']['y'] ; ?>"/>
+            </div>
+            <div class="clearfloat mb10"></div>
+            <div class="input-prepend"> <span class="add-on">水印图片文件</span>
+              <input type="text" name="rule[watermark][img]" class="span3" id="watermark_img" value="<?php echo $rule['watermark']['img'] ; ?>"/>
+            </div>
+            <span class="help-inline">水印图片存放路径：conf/iCMS/watermark.png， 如果水印图片不存在，则使用文字水印</span>
             <div class="clearfloat mb10"></div>
           </div>
         </div>

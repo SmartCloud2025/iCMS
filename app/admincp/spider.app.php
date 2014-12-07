@@ -629,6 +629,12 @@ class spiderApp {
 
         iFS::$CURLOPT_ENCODING = $rule['fs']['encoding'];
         $rule['fs']['referer'] && iFS::$CURLOPT_REFERER  = $rule['fs']['referer'];
+        if($rule['watermark_mode']){
+            iFS::$watermark_config['pos'] = $rule['watermark']['pos'];
+            iFS::$watermark_config['x']   = $rule['watermark']['x'];
+            iFS::$watermark_config['y']   = $rule['watermark']['y'];
+            $rule['watermark']['img'] && iFS::$watermark_config['img'] = $rule['watermark']['img'];
+        }
         return $responses;
     }
 
@@ -979,6 +985,7 @@ class spiderApp {
         $rule['page_no_start'] OR $rule['page_no_start'] = 1;
         $rule['page_no_end'] OR $rule['page_no_end'] = 5;
         $rule['page_no_step'] OR $rule['page_no_step'] = 1;
+
         include iACP::view("spider.addrule");
     }
 
