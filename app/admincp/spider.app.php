@@ -1072,7 +1072,7 @@ class spiderApp {
     }
 
     function do_copyproject() {
-        iDB::query("INSERT INTO `#iCMS@__spider_project` (`name`, `urls`, `cid`, `rid`, `poid`, `sleep`) select `name`, `urls`, `cid`, `rid`, `poid`, `sleep` from `#iCMS@__spider_project` where id = '$this->pid'");
+        iDB::query("INSERT INTO `#iCMS@__spider_project` (`name`, `urls`, `cid`, `rid`, `poid`, `sleep`,`checker`,`self`,`auto`, `psleep`) select `name`, `urls`, `cid`, `rid`, `poid`, `sleep`,`checker`,`self`,`auto`,`psleep` from `#iCMS@__spider_project` where id = '$this->pid'");
         $pid = iDB::$insert_id;
         iPHP::success('复制完成,编辑此方案', 'url:' . APP_URI . '&do=addproject&pid=' . $pid.'&copy=1');
     }

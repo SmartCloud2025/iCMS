@@ -73,8 +73,7 @@ class tagApp {
         $tag['url'] OR $tag['url'] = $tag['iurl']->href;
         $tag['link']  = '<a href="'.$tag['url'].'" class="tag" target="_blank">'.$tag['name'].'</a>';
 
-
-        if($category['mode']||stristr($tag['url'], '.php?')===false){
+        if($category['mode'] && stripos($tag['url'], '.php?')===false){
             iCMS::set_html_url($tag['iurl']);
         }
 

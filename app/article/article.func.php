@@ -107,11 +107,14 @@ function article_list($vars){
     if($map_where){
         $map_sql   = iCMS::map_sql($map_where,'join');
         //join
-        empty($vars['cid']) && $map_order_sql = " ORDER BY map.`iid` $by";
+        //empty($vars['cid']) && $map_order_sql = " ORDER BY map.`iid` $by";
+        $map_table = 'map';
+        $vars['map_order_table'] && $map_table = $vars['map_order_table'];
+        $map_order_sql = " ORDER BY {$map_table}.`iid` $by";
         //$map_order_sql = " ORDER BY `icms_article`.`id` $by";
         //
         $where_sql.= ' AND '.$map_sql['where'];
-        $where_sql = ",{$map_sql['from']} {$where_sql} AND `#iCMS@__article`.`id` = map.`iid`";
+        $where_sql = ",{$map_sql['from']} {$where_sql} AND `#iCMS@__article`.`id` = {$map_table}.`iid`";
         //derived
         // $where_sql = ",({$map_sql}) map {$where_sql} AND `id` = map.`iid`";
     }
@@ -129,16 +132,14 @@ function article_list($vars){
     }
 
     $hash = md5($where_sql.$order_sql.$limit);
-    if($map_sql){
-        empty($vars['cid']) && $order_sql = $map_order_sql;
-    }
     if($offset){
         if($vars['cache']){
             $map_cache_name = iPHP_DEVICE.'/article_page/'.$hash;
             $ids_array      = iCache::get($map_cache_name);
         }
         if(empty($ids_array)){
-            $ids_array = iDB::all("SELECT `#iCMS@__article`.`id` FROM `#iCMS@__article` {$where_sql} {$order_sql} {$limit}");
+            $ids_order_sql = $map_order_sql?$map_order_sql:$order_sql;
+            $ids_array     = iDB::all("SELECT `#iCMS@__article`.`id` FROM `#iCMS@__article` {$where_sql} {$ids_order_sql} {$limit}");
             iPHP_SQL_DEBUG && iDB::debug(1);
             $vars['cache'] && iCache::set($map_cache_name,$ids_array,$cache_time);
         }
@@ -146,7 +147,12 @@ function article_list($vars){
         $ids       = $ids?$ids:'0';
         $where_sql = "WHERE `id` IN({$ids})";
         $limit     = '';
+    }else{
+        if($map_order_sql){
+            $order_sql  = $map_order_sql;
+        }
     }
+
     if($vars['cache']){
         $cache_name = iPHP_DEVICE.'/article/'.$hash;
         $resource   = iCache::get($cache_name);
