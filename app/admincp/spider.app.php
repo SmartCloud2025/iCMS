@@ -510,7 +510,6 @@ class spiderApp {
                     }else{
                         unset($lists);
                     }
-                    continue;
                 }else{
                     $listsArray[$url] = $lists;
                 }
