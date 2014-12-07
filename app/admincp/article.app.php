@@ -284,7 +284,7 @@ class articleApp{
 
         if(isset($_GET['pid']) && $pid!='-1'){
             $uri_array['pid'] = $pid;
-            if($_GET['pid']==0){
+            if(empty($_GET['pid'])){
                 $sql.= " AND `pid`=''";
             }else{
                 iPHP::import(iPHP_APP_CORE .'/iMAP.class.php');
