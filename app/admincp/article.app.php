@@ -333,8 +333,8 @@ class articleApp{
         }
         $_GET['title']     && $sql.=" AND `title` like '%{$_GET['title']}%'";
         $_GET['tag']       && $sql.=" AND `tags` REGEXP '[[:<:]]".preg_quote(rawurldecode($_GET['tag']),'/')."[[:>:]]'";
-        $_GET['starttime'] && $sql.=" AND `pubdate`>=UNIX_TIMESTAMP('".$_GET['starttime']." 00:00:00')";
-        $_GET['endtime']   && $sql.=" AND `pubdate`<=UNIX_TIMESTAMP('".$_GET['endtime']." 23:59:59')";
+        $_GET['starttime'] && $sql.=" AND `pubdate`>='".iPHP::str2time($_GET['starttime']." 00:00:00")."'";
+        $_GET['endtime']   && $sql.=" AND `pubdate`<='".iPHP::str2time($_GET['endtime']." 23:59:59")."'";
         isset($_GET['pic'])&& $sql.=" AND `haspic` ='".($_GET['pic']?1:0)."'";
 
         isset($_GET['userid']) && $uri_array['userid']  = (int)$_GET['userid'];
