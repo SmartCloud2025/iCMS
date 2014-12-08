@@ -80,7 +80,21 @@ class iCache{
         	$GLOBALS['iCache']['link'] = self::$link;
         }
 	}
+    public static function prefix($keys,$prefix=NULL){
+        if($prefix){
+            if(is_array($keys)){
+                foreach($keys AS $k){
+                    $_keys[] = $prefix.'/'.$k;
+                }
+                $keys = $_keys;
+            }else{
+                $keys = $prefix.'/'.$keys;
+            }
+        }
+        return $keys;
+    }
     public static function get($keys,$ckey=NULL){
+        $keys = self::prefix($keys,self::$config['prefix']);
         $_keys=implode('',(array)$keys);
         if(!self::$config['enable']){
         	if(strpos($_keys,iPHP_APP)===false){
@@ -97,6 +111,8 @@ class iCache{
         return $ckey===NULL?$GLOBALS['iCache'][$_keys]:$GLOBALS['iCache'][$_keys][$ckey];
     }
     public static function set($keys,$res,$cachetime="-1") {
+        $keys = self::prefix($keys,self::$config['prefix']);
+
         if(!self::$config['enable']){
         	if(strpos($keys,iPHP_APP)===false){
         		return NULL;
@@ -111,15 +127,12 @@ class iCache{
         return $this;
     }
     public static function delete($key='', $time = 0){
+        $key = self::prefix($key,self::$config['prefix']);
     	self::$link->delete($key,$time);
     }
     public static function getsys($keys,$ckey=NULL){
-    	if(is_array($keys)){
-    		foreach($keys AS $k){
-    			$_keys[] = iPHP_APP.'/'.$k;
-    		}
-    		$keys = $_keys;
-    	}
+        $keys = self::prefix($keys,iPHP_APP);
+        $keys = self::prefix($keys,self::$config['prefix']);
     	return self::get($keys,$ckey);
     }
     public static function sysCache(){

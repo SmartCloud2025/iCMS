@@ -55,6 +55,7 @@ class iCMS {
             preg_match("/[^\.\/][\w\-]+\.[^\.\/]+$/", $site, $matches);
             $site = $matches[0];
         }
+        iPHP_MULTI_SITE && define('iPHP_APP_SITE',$site);
         strpos($site, '..') === false OR exit('<h1>What are you doing?(code:001)</h1>');
 
         //config.php 中开启iPHP_APP_CONF后 此处设置无效,
@@ -68,7 +69,8 @@ class iCMS {
         defined('iPHP_TPL_DEBUG')    OR define('iPHP_TPL_DEBUG',$config['debug']['tpl']);    //模板调试
         defined('iPHP_SQL_DEBUG')    OR define('iPHP_SQL_DEBUG',$config['debug']['sql']);    //模板调试
         defined('iPHP_TIME_CORRECT') OR define('iPHP_TIME_CORRECT',$config['time']['cvtime']);
-        //config.php --END--
+        defined('iPHP_APP_SITE')     && $config['cache']['prefix'] = iPHP_APP_SITE;
+       //config.php --END--
 
         define('iPHP_URL_404',$config['router']['404']);//404定义
         ini_set('display_errors','OFF');
