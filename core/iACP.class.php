@@ -221,7 +221,7 @@ class iACP {
     public static function foot() {
         include self::view("admincp.footer");
     }
-    public static function picBtnGroup($callback) {
+    public static function picBtnGroup($callback,$indexid=0) {
         include self::view("admincp.picBtnGroup");
     }
     public static function propBtn($field, $type = "") {

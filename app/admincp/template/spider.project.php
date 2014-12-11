@@ -15,7 +15,7 @@ $(function(){
   iCMS.select('cid',"<?php echo $_GET['cid'] ; ?>");
   <?php } ?>
   <?php if($_GET['rid']){  ?>
-  iCMS.select('cid',"<?php echo $_GET['rid'] ; ?>");
+  iCMS.select('rid',"<?php echo $_GET['rid'] ; ?>");
   <?php } ?>
 	<?php if($_GET['sub']=="on"){ ?>
 	iCMS.checked('#sub');

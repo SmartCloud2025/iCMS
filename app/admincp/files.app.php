@@ -209,7 +209,7 @@ class filesApp{
         $pic       = $_GET['pic'];
         //$pic OR iPHP::alert("请选择图片!");
         if($pic){
-            $src       = iFS::fp($pic,'+http');
+            $src       = iFS::fp($pic,'+http')."?".time();
             $srcPath   = iFS::fp($pic,'+iPATH');
             $fsInfo    = iFS::info($pic);
             $file_name = $fsInfo->filename;
@@ -227,6 +227,19 @@ class filesApp{
             $src      = false;
             $file_ext = 'jpg';
         }
+        if($_GET['indexid']){
+            $rs = iDB::all("SELECT * FROM `#iCMS@__filedata` where `indexid`='{$_GET['indexid']}' order by `id` ASC LIMIT 100");
+            foreach ((array)$rs as $key => $value) {
+                $filepath = $value['path'] . $value['filename'] . '.' . $value['ext'];
+                $src[] = iFS::fp($filepath,'+http')."?".time();
+            }
+        }
+        if($_GET['pics']){
+            $src = explode(',', $_GET['pics']);
+            if(count($src)==1){
+                $src = $_GET['pics'];
+            }
+        }
         $max_size  = (int)$this->upload_max_filesize;
         stristr($this->upload_max_filesize,'m') && $max_size = $max_size*1024*1024;
         include iACP::view("files.editpic");
@@ -234,5 +247,39 @@ class filesApp{
     function do_preview(){
         $_GET['pic'] && $src = iFS::fp($_GET['pic'],'+http');
         include iACP::view("files.preview");
+    }
+    function do_deldir(){
+        iACP::MP('FILE.DELETE','alert');
+        $_GET['path'] OR iPHP::alert("请选择要删除的目录");
+        strpos($_GET['path'], '..') !== false && iPHP::alert("目录路径中带有..");
+
+        $hash         = md5($_GET['path']);
+        $dirRootPath = iFS::fp($_GET['path'],'+iPATH');
+
+        if(iFS::rmdir($dirRootPath)){
+            $msg    = 'success:#:check:#:目录删除完成!';
+            $_GET['ajax'] && iPHP::json(array('code'=>1,'msg'=>$msg));
+        }else{
+            $msg    = 'warning:#:warning:#:找不到相关目录,目录删除失败!';
+            $_GET['ajax'] && iPHP::json(array('code'=>0,'msg'=>$msg));
+        }
+        iPHP::dialog($msg,'js:parent.$("#'.$hash.'").remove();');
+    }
+    function do_delfile(){
+        iACP::MP('FILE.DELETE','alert');
+        $_GET['path'] OR iPHP::alert("请选择要删除的文件");
+        strpos($_GET['path'], '..') !== false && iPHP::alert("文件路径中带有..");
+        iFS::CheckValidExt($_GET['path']); //判断过滤文件类型
+
+        $hash         = md5($_GET['path']);
+        $FileRootPath = iFS::fp($_GET['path'],'+iPATH');
+        if(iFS::del($FileRootPath)){
+            $msg    = 'success:#:check:#:文件删除完成!';
+            $_GET['ajax'] && iPHP::json(array('code'=>1,'msg'=>$msg));
+        }else{
+            $msg    = 'warning:#:warning:#:找不到相关文件,文件删除失败!';
+            $_GET['ajax'] && iPHP::json(array('code'=>0,'msg'=>$msg));
+        }
+        iPHP::dialog($msg,'js:parent.$("#'.$hash.'").remove();');
     }
 }

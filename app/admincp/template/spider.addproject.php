@@ -66,7 +66,10 @@ $(function(){
       iCMS.alert("请使用(*)格式通配符匹配网址");
       return;
     }
+
     if(format==0){
+      var num=parseInt(num)-1;
+      if(num<0) num=0;
       start = parseInt(begin);
       end   = start+parseInt(num);
     }else if(format==1){

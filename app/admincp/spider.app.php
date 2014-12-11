@@ -225,24 +225,47 @@ class spiderApp {
             $_POST['aid']  = $aid;
             $_POST['adid'] = iDB::value("SELECT `id` FROM `#iCMS@__article_data` WHERE aid='$aid'");
         }
+        $hash  = md5($this->url);
+        $title = iS::escapeStr($_POST['title']);
+        $url   = iS::escapeStr($_POST['reurl']);
+        if(empty($this->sid)){
+            $spider_url = iDB::row("SELECT `id`,`publish` FROM `#iCMS@__spider_url` where `url`='$url'",ARRAY_A);
+            if(empty($spider_url['publish'])){
+                $spider_url_data = array(
+                    'cid'     => $this->cid,
+                    'rid'     => $this->rid,
+                    'pid'     => $pid,
+                    'title'   => $title,
+                    'url'     => $url,
+                    'hash'    => $hash,
+                    'status'  => '1',
+                    'addtime' => time(),
+                    'publish' => '0',
+                    'indexid' => '0',
+                    'pubdate' => ''
+                );
+                $suid = iDB::insert('spider_url',$spider_url_data);
+            }else{
+                empty($spider_url['publish']) && $suid = $spider_url['id'];
+            }
+        }else{
+            $suid = $this->sid;
+        }
+
         iS::slashes($_POST);
         $app      = iACP::app($postRs->app);
         $fun      = $postRs->fun;
         $callback = $app->$fun("1001");
         if ($callback['code'] == "1001") {
+            iDB::update('spider_url',array(
+                'publish' => '1',
+                'indexid' => $callback['indexid'],
+                'pubdate' => time()
+            ),array('id'=>$suid));
+
             if ($this->sid) {
-                iDB::query("UPDATE `#iCMS@__spider_url` SET `publish` = '1', `pubdate` = '" . time() . "' WHERE `id` = '$this->sid';");
                 $work===NULL && iPHP::success("发布成功!",'js:1');
             } else {
-                $hash    = md5($this->url);
-                $title   = iS::escapeStr($_POST['title']);
-                $url     = iS::escapeStr($_POST['reurl']);
-                $indexid = $callback['indexid'];
-                $data = array(
-                    'cid'=>$this->cid,'rid'=>$this->rid,'pid'=>$pid,'indexid'=>$indexid,'title'=>$title, 'url'=>$url,
-                    'hash'=>$hash, 'status'=>'1', 'publish'=>'1', 'addtime'=>time(), 'pubdate'=>time()
-                );
-                iDB::insert('spider_url',$data);
 		        $work===NULL && iPHP::success("发布成功!", 'js:parent.$("#' . $hash . '").remove();');
             }
         }
@@ -255,6 +278,10 @@ class spiderApp {
         $urls = "";
         $start = (int)$begin;
         if($format==0){
+            $num = $num-1;
+            if($num<0){
+                $num = 1;
+            }
             $end = $start+$num;
         }else if($format==1){
             $end = $start*pow($step,$num-1);
@@ -638,6 +665,9 @@ class spiderApp {
     }
 
     function content($html,$data,$rule) {
+        if(trim($data['rule'])===''){
+            return;
+        }
         $name = $data['name'];
         if ($data['page']) {
         	if(empty($rule['page_url'])){
@@ -946,7 +976,7 @@ class spiderApp {
 
     function do_rule() {
         if ($_GET['keywords']) {
-            $sql = " WHERE `keyword` REGEXP '{$_GET['keywords']}'";
+            $sql = " WHERE `name` REGEXP '{$_GET['keywords']}'";
         }
         $orderby = $_GET['orderby'] ? $_GET['orderby'] : "id DESC";
         $maxperpage = $_GET['perpage']>0?(int)$_GET['perpage']:20;

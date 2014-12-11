@@ -143,7 +143,7 @@ $(function(){
 	            $_count		= count($dirRs);
 	            for($i=0;$i<$_count;$i++){
             ?>
-            <tr>
+            <tr id="<?php echo md5($dirRs[$i]['path']); ?>">
               <td><input type="checkbox" value="<?php echo $dirRs[$i]['path'] ; ?>" data-click="dir"/></td>
               <td><a href="<?php echo $dirRs[$i]['url']; ?>" class="dirname"><?php echo $dirRs[$i]['name'] ; ?></a></td>
               <td class="op">
@@ -151,7 +151,7 @@ $(function(){
                 <a class="btn btn-small mv_dir"><i class="fa fa-edit"></i> 重命名</a>
                 <a href="<?php echo __ADMINCP__; ?>=files&do=multi&from=modal&dir=<?php echo $dirRs[$i]['path'] ; ?>" class="btn btn-small" data-toggle="modal" data-meta='{"width":"98%","height":"580px"}' title="上传到此目录"><i class="fa fa-upload"></i> 上传</a>
                 <?php } ?>
-                <a href="<?php echo __ADMINCP__; ?>=files&frame=iPHP&do=del&id=<?php echo $rs[$i]['id'] ; ?>&indexid=<?php echo $rs[$i]['indexid'] ; ?>" target="iPHP_FRAME" class="del btn btn-small" title='永久删除'  onclick="return confirm('确定要删除?');"/><i class="fa fa-trash-o"></i> 删除</a></td>
+                <a class="btn btn-small" href="<?php echo __ADMINCP__; ?>=files&frame=iPHP&do=deldir&path=<?php echo $dirRs[$i]['path'] ; ?>" target="iPHP_FRAME" title="删除目录"><i class="fa fa-trash-o"></i> 删除</a>
             </tr>
             <?php }  ?>
           </tbody>
@@ -183,7 +183,7 @@ $(function(){
             for($i=0;$i<$_count;$i++){
             	$icon	= iFS::icon($fileRs[$i]['name'],'./app/admincp/ui');
             ?>
-            <tr>
+            <tr id="<?php echo md5($fileRs[$i]['path']) ; ?>">
               <td><input type="checkbox" value="<?php echo $fileRs[$i]['path'] ; ?>" url="<?php echo $fileRs[$i]['url'] ; ?>"  data-click="file"/></td>
               <td><?php if (in_array(strtolower($fileRs[$i]['ext']),array('jpg','png','gif','jpeg'))){?>
                 <a href="###" class="tip-right" title="<img src='<?php echo $fileRs[$i]['url'] ; ?>' width='120px'/>"><?php echo $icon ; ?> <?php echo $fileRs[$i]['name'] ; ?></a>
@@ -202,7 +202,7 @@ $(function(){
                   <?php if($href){?>
               	  <a class="btn btn-small" href="<?php echo $href; ?>" data-toggle="modal" title="查看文件"><i class="fa fa-eye"></i> 查看</a>
               	  <?php }?>
-              	  <a class="btn btn-small" href="<?php echo $href; ?>" data-toggle="modal" title="删除文件"><i class="fa fa-trash-o"></i> 删除</a>
+              	  <a class="btn btn-small" href="<?php echo __ADMINCP__; ?>=files&frame=iPHP&do=delfile&path=<?php echo $fileRs[$i]['path'] ; ?>" target="iPHP_FRAME" title="删除文件"><i class="fa fa-trash-o"></i> 删除</a>
               </td>
             </tr>
             <?php }  ?>

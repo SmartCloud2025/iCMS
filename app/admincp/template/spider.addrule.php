@@ -29,7 +29,7 @@ $(function(){
 	});
 
 	$(".addprop").click(function(){
-		var length=$("#spider-data tbody tr").length;
+		var length=$("#spider-data tbody tr").length+1;
 		var href = $(this).attr("href");
 		var tb	= $(href),tbody=$("tbody",tb);
 		var ntr=$(".aclone",tb).clone(true).removeClass("hide aclone");

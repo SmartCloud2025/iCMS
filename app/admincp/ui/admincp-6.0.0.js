@@ -341,15 +341,23 @@ function modal_icms(el,a){
 
 
             $('[data-toggle="batch"]').click(function(){
-                if($("input[name]:checkbox:checked",im).length==0){
+                var checkbox = $("input[name]:checkbox:checked",im);
+                if(checkbox.length==0){
                     iCMS.alert("请选择要操作项目!");
                     return true;
                 }
+
                 var a = $(this),b = this,
                     act   = a.attr('data-action').replace(',','_'),
                     ab    = $('#'+act+'Batch'),
                     box   = document.getElementById(act+'Batch'),
                     title = a.text();
+
+                    if(options['dialog']===false){
+                        options[act](checkbox);
+                        return;
+                    }
+
                     action.val(act).appendTo(im);
                     //console.log(box,typeof box);
                     if(box==null){
@@ -361,6 +369,7 @@ function modal_icms(el,a){
                             $(box).html(options[act]());
                         }
                     }
+
                     window.batch_dialog = iCMS.dialog({id:'iCMS-batch',
                         title:title,content:box,
                         okValue: '确定',ok: function () {

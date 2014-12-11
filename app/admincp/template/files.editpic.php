@@ -26,7 +26,7 @@ iACP::head(false);
   <a class="btn btn-success" href="<?php echo __ADMINCP__; ?>=files&do=picture&from=modal&click=dir&callback=savetodir" data-toggle="modal" data-meta='{"width":"75%","height":"480px"}' data-zIndex="9999999" title="保存到新目录"><i class="fa fa-save"></i> 保存到..</a>
   <span class="span2 uneditable-input savetodir hide"></span>
   <hr />
-    <div class="input-prepend input-append">
+  <div class="input-prepend input-append">
     <span class="add-on">添加水印</span>
     <div class="switch">
       <input type="checkbox" data-type="switch" id="watermark"/>
@@ -49,11 +49,19 @@ iACP::head(false);
       <span class="add-on">.jpg</span>
     </div>
   </div>
+  <div class="input-prepend input-append">
+    <span class="add-on">保存后关闭对话框</span>
+    <div class="switch">
+      <input type="checkbox" data-type="switch" id="close_modal"/>
+    </div>
+  </div>
 </div>
   <div class="iCMS-container">
     <div id="PhotoEditor">
-    <img src="<?php echo $src;?>" alt="预览">
-  </div>
+      <?php if(!is_array($src)){ ?>
+      <img src="<?php echo $src;?>" alt="预览">
+      <?php } ?>
+    </div>
 </div>
 <script type="text/javascript">
 var sel_dialog,sel_channel='main',program = {'name':'<?php echo $file_name;?>', 'udir':"<?php echo $file_path;?>",'ext':'<?php echo $file_ext;?>'}
@@ -93,12 +101,22 @@ $(function() {
     xiuxiu.setLaunchVars("preventBrowseDefault", 1);
     xiuxiu.setLaunchVars("preventUploadDefault", 1);
     xiuxiu.setLaunchVars("file_name", "<?php echo $file_name;?>");
-    xiuxiu.embedSWF("PhotoEditor",3,"100%","630");
+    <?php if(is_array($src)){ ?>
+    xiuxiu.setLaunchVars("nav", "puzzle/puzzleModel");
+    //xiuxiu.setLaunchVars("nav", "/puzzleModel");
+    //xiuxiu.embedSWF("PhotoEditor",2,"100%","630","lite");
+    <?php }else{ ?>
+    <?php } ?>
     /*第1个参数是加载编辑器div容器，第2个参数是编辑器类型，第3个参数是div容器宽，第4个参数是div容器高*/
+    xiuxiu.embedSWF("PhotoEditor",3,"100%","630");
     xiuxiu.setUploadURL("<?php echo ACP_HOST;?>/admincp.php?app=files&do=IO&format=json&id=<?php echo $file_id;?>");//修改为您自己的上传接收图片程序
-    xiuxiu.onInit = function (){
+    xiuxiu.onInit = function (id){
       <?php if($src){ ?>
-      xiuxiu.loadPhoto("<?php echo $src;?>?<?php echo time();?>");
+        <?php if(is_array($src)){ ?>
+          xiuxiu.loadPhoto(["<?php echo implode('","',(array)$src);?>"],false,id,{loadImageChannel: "imageThumbsPanel"});
+        <?php }else{ ?>
+          xiuxiu.loadPhoto('<?php echo $src;?>');
+        <?php } ?>
       <?php } ?>
       xiuxiu.setUploadDataFieldName ('upfile');
       xiuxiu.setUploadType(1);
@@ -162,6 +180,9 @@ $(function() {
           window.parent.iCMS_MODAL.destroy();
         });
         <?php }?>
+        if($('#close_modal').prop("checked")){
+          window.parent.iCMS_MODAL.destroy();
+        }
         // if(state=='off'){
         //   window.parent.iCMS_MODAL.destroy();
         // }
