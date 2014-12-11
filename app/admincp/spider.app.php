@@ -444,8 +444,12 @@ class spiderApp {
             if($rule['mode']=="2"){
                 $doc       = phpQuery::newDocumentHTML($html,'UTF-8');
                 $list_area = $doc[trim($rule['list_area_rule'])];
-                empty($rule['list_area_format']) && $rule['list_area_format'] = 'a';
-                $lists     = phpQuery::pq($list_area)->find(trim($rule['list_area_format']));
+                if($rule['list_area_format']){
+                    //empty($rule['list_area_format']) && $rule['list_area_format'] = 'a';
+                    $lists = phpQuery::pq(trim($rule['list_area_format']),$list_area);
+                }else{
+                    $lists = $list_area;
+                }
                 //echo 'list:getDocumentID:'.$lists->getDocumentID()."\n";
             }else{
                 $list_area_rule = $this->pregTag($rule['list_area_rule']);
