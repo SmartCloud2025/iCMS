@@ -207,7 +207,7 @@ function article_search($vars){
     isset($vars['postype'])&& $SPH->SetFilter('postype',array($vars['postype']));
 
     if(isset($vars['cid'])){
-        $cids    = $vars['sub']?iCMS::get_category_ids($vars['cid'],true):$vars['cid'];
+        $cids    = $vars['sub']?iCMS::get_category_ids($vars['cid'],true):(array)$vars['cid'];
         $cids OR $cids = (array)$vars['cid'];
         $cids    = array_map("intval", $cids);
         $SPH->SetFilter('cid',$cids);
