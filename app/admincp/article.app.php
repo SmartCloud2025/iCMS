@@ -420,11 +420,13 @@ class articleApp{
         $ischapter = isset($_POST['ischapter'])?1:0;
         isset($_POST['inbox']) && $status = "0";
 
+        $tags && $tags = preg_replace('/<[\/\!]*?[^<>]*?>/is','',$tags);
         empty($title)&& iPHP::alert('标题不能为空！');
         empty($cid)  && iPHP::alert('请选择所属栏目');
         empty($body) && empty($url) && iPHP::alert('文章内容不能为空！');
         $userid OR $userid = iMember::$userid;
         iFS::$userid = $userid;
+
 
         if(empty($aid) && iCMS::$config['publish']['repeatitle']) {
 			articleTable::check_title($title) && iPHP::alert('该标题的文章已经存在!请检查是否重复');

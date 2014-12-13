@@ -235,7 +235,7 @@ class spiderApp {
                     'cid'     => $this->cid,
                     'rid'     => $this->rid,
                     'pid'     => $pid,
-                    'title'   => $title,
+                    'title'   => addslashes($title),
                     'url'     => $url,
                     'hash'    => $hash,
                     'status'  => '1',

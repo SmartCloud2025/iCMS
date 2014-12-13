@@ -55,7 +55,11 @@ $(function(){
               <td><input type="checkbox" name="id[]" value="<?php echo $rs[$i]['id'] ; ?>" /></td>
               <td><?php echo $rs[$i]['id'] ; ?></td>
               <td><?php echo $rs[$i]['name'] ; ?></td>
-              <td><a href="<?php echo APP_FURI; ?>&do=copyrule&rid=<?php echo $rs[$i]['id'] ; ?>" class="btn btn-small" target="iPHP_FRAME"><i class="fa fa-copy"></i> 复制</a> <a href="<?php echo APP_URI; ?>&do=testrule&rid=<?php echo $rs[$i]['id'] ; ?>" class="btn btn-small" data-toggle="modal" title="测试规则"><i class="fa fa-keyboard-o"></i> 测试</a> <a href="<?php echo APP_URI; ?>&do=addrule&rid=<?php echo $rs[$i]['id'] ; ?>" class="btn btn-small"><i class="fa fa-edit"></i> 编辑</a> <a href="<?php echo APP_FURI; ?>&do=delrule&rid=<?php echo $rs[$i]['id'] ; ?>" target="iPHP_FRAME" class="del btn btn-small" title='永久删除'  onclick="return confirm('确定要删除?');"/><i class="fa fa-trash-o"></i> 删除</a></td>
+              <td>
+                <a href="<?php echo APP_FURI; ?>&do=copyrule&rid=<?php echo $rs[$i]['id'] ; ?>" class="btn btn-small" target="iPHP_FRAME"><i class="fa fa-copy"></i> 复制</a>
+                <a href="<?php echo APP_URI; ?>&do=testrule&rid=<?php echo $rs[$i]['id'] ; ?>" class="btn btn-small" data-toggle="modal" title="测试规则"><i class="fa fa-keyboard-o"></i> 测试</a>
+                <a href="<?php echo APP_URI; ?>&do=addrule&rid=<?php echo $rs[$i]['id'] ; ?>" class="btn btn-small"><i class="fa fa-edit"></i> 编辑</a>
+                <a href="<?php echo APP_FURI; ?>&do=delrule&rid=<?php echo $rs[$i]['id'] ; ?>" target="iPHP_FRAME" class="del btn btn-small" title='永久删除'  onclick="return confirm('确定要删除?');"/><i class="fa fa-trash-o"></i> 删除</a></td>
             </tr>
             <?php }  ?>
           </tbody>
