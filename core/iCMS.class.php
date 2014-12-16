@@ -236,7 +236,7 @@ class iCMS {
     //------------------------------------
     public static function hits_sql($all=true){
         $timeline = self::timeline();
-        //var_dump($timeline);
+        // var_dump($timeline);
         $pieces = array();
         $all && $pieces[] = '`hits` = hits+1';
         foreach ($timeline as $key => $bool) {
@@ -262,7 +262,7 @@ class iCMS {
         $week     = get_date($time,"YW");
         $month    = get_date($time,"Ym");
         $timeline = array($today,$week,$month);
-        $_timeline[0]==$today OR iCache::set('iCMS/timeline',$timeline,86400);
+        $_timeline[0]==$today OR iCache::set('iCMS/timeline',$timeline,0);
         //var_dump($_timeline,$timeline);
         return array(
             'yday'  => ($today-$_timeline[0]),
