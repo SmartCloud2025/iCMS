@@ -14,7 +14,6 @@ $(function(){
 	iCMS.select('st',"<?php echo $_GET['st'] ; ?>");
 	<?php } ?>
 	$("#<?php echo APP_FORMID;?>").batch({
-    dialog:false,
     edit:function(checkbox){
       var pics = new Array();
       $.each(checkbox,function(key, val) {
@@ -26,7 +25,7 @@ $(function(){
       $(this).modal({
         href:"<?php echo APP_FURI;?>&do=editpic&from=modal&pics="+(pics.join(',')),
         width: "85%",height: "640px",overflow:true});
-      return false;
+      return 'false';
     }
   });
 });
@@ -129,7 +128,7 @@ $(function(){
                   </span>
                   <div class="btn-group dropup" id="iCMS-batch"> <a class="btn dropdown-toggle" data-toggle="dropdown" tabindex="-1"><i class="fa fa-wrench"></i> 批 量 操 作 </a><a class="btn dropdown-toggle" data-toggle="dropdown" tabindex="-1"> <span class="caret"></span></a>
                     <ul class="dropdown-menu">
-                      <li><a data-toggle="batch" data-action="edit" title="多选可拼接"><i class="fa fa-edit"></i> 编辑 </a></li>
+                      <li><a data-toggle="batch" data-action="edit" data-dialog="no" title="多选可拼接"><i class="fa fa-edit"></i> 编辑 </a></li>
                       <li class="divider"></li>
                       <li><a data-toggle="batch" data-action="dels"><i class="fa fa-trash-o"></i> 删除</a></li>
                     </ul>

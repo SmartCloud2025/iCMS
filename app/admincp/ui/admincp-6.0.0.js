@@ -348,41 +348,42 @@ function modal_icms(el,a){
                 }
 
                 var a = $(this),b = this,
-                    act   = a.attr('data-action').replace(',','_'),
-                    ab    = $('#'+act+'Batch'),
-                    box   = document.getElementById(act+'Batch'),
-                    title = a.text();
+                act   = a.attr('data-action').replace(',','_'),
+                dia   = a.attr('data-dialog'),
+                ab    = $('#'+act+'Batch'),
+                box   = document.getElementById(act+'Batch'),
+                title = a.text();
 
-                    if(options['dialog']===false){
-                        options[act](checkbox);
-                        return;
+                if(dia==="no"){
+                    options[act](checkbox);
+                    return;
+                }
+                action.val(act).appendTo(im);
+                //console.log(box,typeof box);
+                if(box==null){
+                    //console.log(typeof options[act]);
+                    if(typeof options[act]==="undefined"){
+                        box = '确定要'+$.trim(title)+'?';
+                        iCMS.config.DIALOG = {label:'warning',icon:'warning'};
+                    }else{
+                        box = document.createElement("div");
+                        $(box).html(options[act]());
                     }
+                }
 
-                    action.val(act).appendTo(im);
-                    //console.log(box,typeof box);
-                    if(box==null){
-                        if(typeof options[act]==="undefined"){
-                            box = '确定要'+$.trim(title)+'?';
-                            iCMS.config.DIALOG = {label:'warning',icon:'warning'};
-                        }else{
-                            box = document.createElement("div");
-                            $(box).html(options[act]());
+                window.batch_dialog = iCMS.dialog({id:'iCMS-batch',
+                    title:title,content:box,
+                    okValue: '确定',ok: function () {
+                        if(typeof box=="object"){
+                            batch_content.html($(box).clone(true));
                         }
+                        im.submit();
+                    },
+                    cancelValue: "取消",cancel: function(){
+                        action.val(0);
+                        batch_content.empty();
                     }
-
-                    window.batch_dialog = iCMS.dialog({id:'iCMS-batch',
-                        title:title,content:box,
-                        okValue: '确定',ok: function () {
-                            if(typeof box=="object"){
-                                batch_content.html($(box).clone(true));
-                            }
-                            im.submit();
-                        },
-                        cancelValue: "取消",cancel: function(){
-                            action.val(0);
-                            batch_content.empty();
-                        }
-                    });
+                });
             });
             return im;
         }
