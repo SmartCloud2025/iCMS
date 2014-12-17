@@ -444,12 +444,22 @@ class spiderApp {
             if($rule['mode']=="2"){
                 $doc       = phpQuery::newDocumentHTML($html,'UTF-8');
                 $list_area = $doc[trim($rule['list_area_rule'])];
-                if($rule['list_area_format']){
-                    //empty($rule['list_area_format']) && $rule['list_area_format'] = 'a';
-                    $lists = phpQuery::pq(trim($rule['list_area_format']),$list_area);
-                }else{
-                    $lists = $list_area;
+                if ($rule['list_area_format']) {
+                    $list_area = $this->dataClean($rule['list_area_format'], $list_area);
                 }
+                if ($this->ruleTest) {
+                    echo iS::escapeStr($rule['list_area_format']);
+                    echo "<hr />";
+                    echo iS::escapeStr($list_area);
+                    echo "<hr />";
+                }
+                $lists = $list_area;
+                // if($rule['list_area_format']){
+                //     //empty($rule['list_area_format']) && $rule['list_area_format'] = 'a';
+                //     $lists = phpQuery::pq(trim($rule['list_area_format']),$list_area);
+                // }else{
+                //     $lists = $list_area;
+                // }
                 //echo 'list:getDocumentID:'.$lists->getDocumentID()."\n";
             }else{
                 $list_area_rule = $this->pregTag($rule['list_area_rule']);
