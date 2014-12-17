@@ -33,6 +33,19 @@ $(function(){
 			return select;
 		}
 	});
+  $("#import").click(function(event) {
+      var import_wrap = document.getElementById("import_wrap");
+      iCMS.dialog({
+        title: 'iCMS - 批理导入标签',
+        content:import_wrap
+      });
+  });
+  $("#local").click(function() {
+      $("#localfile").click();
+  });
+  $("#localfile").change(function() {
+      $("#import_wrap form").submit();
+  });
 });
 </script>
 
@@ -54,7 +67,7 @@ $(function(){
         <div class="input-prepend input-append"> <span class="add-on">栏目</span>
           <select name="cid" id="cid" class="span3 chosen-select">
             <option value="0">所有栏目</option>
-            <?php echo $this->categoryApp->select('cs') ; ?>
+            <?php echo $cid_select = $this->categoryApp->select('cs') ; ?>
           </select>
           <span class="add-on">
           <input type="checkbox" name="sub" id="sub"/>
@@ -62,7 +75,7 @@ $(function(){
         <div class="input-prepend input-append"> <span class="add-on">分类</span>
           <select name="tcid" id="tcid" class="chosen-select">
             <option value="0">所有分类</option>
-            <?php echo $this->tagcategory->select('cs') ; ?>
+            <?php echo $tcid_select = $this->tagcategory->select('cs') ; ?>
           </select>
           <span class="add-on">
           <input type="checkbox" name="tfsub" id="tfsub"/>
@@ -100,6 +113,9 @@ $(function(){
         <div class="input-prepend input-append"> <span class="add-on">关键字</span>
           <input type="text" name="keywords" class="span2" id="keywords" value="<?php echo $_GET['keywords'] ; ?>" />
           <button class="btn btn-primary" type="submit"><i class="fa fa-search"></i> 搜 索</button>
+        </div>
+        <div style="float:right;">
+          <button class="btn btn-success" type="button" id="import"><i class="fa fa-send"></i> 批理导入标签</button>
         </div>
       </form>
     </div>
@@ -195,4 +211,33 @@ $(function(){
 </div>
 </div>
 <div id="iCMS_mdiv" style="display:none;"> </div>
+<div id="import_wrap" style="display:none;">
+  <form action="<?php echo APP_FURI; ?>&do=import" method="post" enctype="multipart/form-data" target="iPHP_FRAME">
+    <div class="input-prepend"> <span class="add-on">栏目</span>
+      <select name="cid" class="span3 chosen-select">
+        <option value="0">默认栏目</option>
+        <?php echo $cid_select; ?>
+      </select>
+    </div>
+    <div class="clearfloat mb10"></div>
+    <div class="input-prepend"> <span class="add-on">分类</span>
+      <select name="tcid" class="span3 chosen-select">
+        <option value="0">默认分类</option>
+        <?php echo $tcid_select; ?>
+      </select>
+    </div>
+    <div class="clearfloat mb10"></div>
+    <div class="alert alert-info">
+      只允许导入TXT文件
+      <br />
+      每行一个标签
+      <br />
+      请把文件编码转换成UTF-8
+    </div>
+    <div class="clearfloat mb10"></div>
+    <a id="local" class="btn btn-primary btn-large btn-block"><i class="fa fa-upload"></i> 请选择要导入的标签</a>
+    <input id="localfile" name="upfile" type="file" class="hide"/>
+    <div class="clearfloat mb10"></div>
+  </form>
+</div>
 <?php iACP::foot();?>

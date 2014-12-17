@@ -81,6 +81,55 @@ class tagsApp{
         $_count = count($rs);
     	include iACP::view("tags.manage");
     }
+    function do_import(){
+        iFS::$checkFileData = false;
+        iFS::$config['allow_ext']='txt';
+        $F    = iFS::upload('upfile');
+        $path = $F['RootPath'];
+        if($path){
+            $contents = file_get_contents($path);
+            $encode   = mb_detect_encoding($contents, array("ASCII","UTF-8","GB2312","GBK","BIG5"));
+            if(strtoupper($encode)!='UTF-8'){
+                if (function_exists('mb_convert_encoding')) {
+                    $contents = mb_convert_encoding($contents,'UTF-8',$encode);
+                } elseif (function_exists('iconv')) {
+                    $contents = iconv($encode,'UTF-8', $contents);
+                }else{
+                    iPHP::alert('请把文件编码转换成UTF-8！');
+                }
+            }
+            if($contents){
+                iPHP::import(iPHP_APP_CORE .'/iMAP.class.php');
+                $fields   = array('uid', 'cid', 'tcid', 'pid', 'tkey', 'name', 'seotitle', 'subtitle', 'keywords', 'description', 'metadata','haspic', 'pic', 'url', 'related', 'count', 'weight', 'tpl', 'ordernum', 'pubdate', 'status');
+                $cid      = (int)$_POST['cid'];
+                $tcid     = (int)$_POST['tcid'];
+                $variable = explode("\n", $contents);
+                foreach ($variable as $key => $name) {
+                    $name = trim($name);
+                    if(empty($name)){
+                        continue;
+                    }
+                    $name = preg_replace('/<[\/\!]*?[^<>]*?>/is','',$name);
+                    $name = addslashes($name);
+                    if(iDB::value("SELECT `id` FROM `#iCMS@__tags` where `name` = '$name'")){
+                        continue;
+                    }
+                    $tkey    = strtolower(pinyin($name));
+                    $uid     = iMember::$userid;
+                    $haspic  = '0';
+                    $status  = '1';
+                    $pubdate = time();
+                    $data    = compact ($fields);
+                    $id = iDB::insert('tags',$data);
+                    map::init('category',$this->appid);
+                    $cid  && map::add($cid,$id);
+                    $tcid && map::add($tcid,$id);
+                }
+            }
+            @unlink($path);
+            iPHP::success('标签导入完成');
+        }
+    }
     function do_save(){
         $id          = (int)$_POST['id'];
         $uid         = (int)$_POST['uid'];
