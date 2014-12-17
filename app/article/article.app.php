@@ -180,6 +180,7 @@ class articleApp {
             if($pic_array[0]){
                 $img_array = array_unique($pic_array[0]);
                 foreach($img_array as $key =>$img){
+                    $img = str_replace('<img', '<img title="'.$article['title'].'" alt="'.$article['title'].'"', $img);
                     $img_replace[$key] = '<p align="center">'.$img.'</p>';
                     if(iCMS::$config['article']['pic_next'] && $count<$total){
                         $img_replace[$key] = '<p align="center"><a href="'.$next_url.'"><b>'.iPHP::lang('iCMS:article:clicknext').'</b></a></p>
