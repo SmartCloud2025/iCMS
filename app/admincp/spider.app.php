@@ -685,24 +685,57 @@ class spiderApp {
         $name = $data['name'];
         if ($data['page']) {
         	if(empty($rule['page_url'])){
-        		$rule['page_url']=$rule['list_url'];
+        		$rule['page_url'] = $rule['list_url'];
         	}
             if (empty($this->allHtml)) {
-		        $page_area_rule = $this->pregTag($rule['page_area_rule']);
-		        if ($page_area_rule) {
-		            preg_match('|' . $page_area_rule . '|is', $html, $matches, $PREG_SET_ORDER);
-		            $page_area = $matches['content'];
-		        } else {
-		            $page_area = $html;
-		        }
-            	if($rule['page_url_rule']){
-            		$page_url_rule = $this->pregTag($rule['page_url_rule']);
-            		preg_match_all('|' .$page_url_rule. '|is', $page_area, $page_url_matches, PREG_SET_ORDER);
-            		foreach ($page_url_matches AS $pn => $row) {
-            			$page_url_array[$pn] = str_replace('<%url%>', $row['url'], $rule['page_url']);
-            			gc_collect_cycles();
-            		}
-            	}else{
+                $page_url_array = array();
+                $page_area_rule = trim($rule['page_area_rule']);
+                if($page_area_rule){
+                    if(strpos($page_area_rule, 'DOM::')!==false){
+                        iPHP::import(iPHP_LIB.'/phpQuery.php');
+                        $doc      = phpQuery::newDocumentHTML($html,'UTF-8');
+                        $pq_dom   = str_replace('DOM::','', $page_area_rule);
+                        $pq_array = phpQuery::pq($pq_dom);
+                        foreach ($pq_array as $pn => $pq_val) {
+                            $href = phpQuery::pq($pq_val)->attr('href');
+                            if($href){
+                                if($rule['page_url_rule']){
+                                    $page_url_rule = $this->pregTag($rule['page_url_rule']);
+                                    // var_dump('|' . $page_url_rule . '|is');
+                                    if (!preg_match('|' . $page_url_rule . '|is', $href)){
+                                        continue;
+                                    }
+                                }
+                                $page_url_array[$pn] = $this->_url_complement($rule['__url__'],$href);
+                            }
+                        }
+                        if($page_url_array){
+                            $page_url_array = array_filter($page_url_array);
+                            $page_url_array = array_unique($page_url_array);
+                            $puk = array_search($rule['__url__'],$page_url_array);
+                            unset($page_url_array[$puk]);
+                        }
+                        //var_dump($page_url_array);
+                        // exit;
+                    }else{
+                        $page_area_rule = $this->pregTag($page_area_rule);
+                        if ($page_area_rule) {
+                            preg_match('|' . $page_area_rule . '|is', $html, $matches, $PREG_SET_ORDER);
+                            $page_area = $matches['content'];
+                        } else {
+                            $page_area = $html;
+                        }
+                        if($rule['page_url_rule']){
+                            $page_url_rule = $this->pregTag($rule['page_url_rule']);
+                            preg_match_all('|' .$page_url_rule. '|is', $page_area, $page_url_matches, PREG_SET_ORDER);
+                            foreach ($page_url_matches AS $pn => $row) {
+                                $page_url_array[$pn] = str_replace('<%url%>', $row['url'], $rule['page_url']);
+                                gc_collect_cycles();
+                            }
+                        }
+                        unset($page_area);
+                    }
+                }else{ // 逻辑方式
                     if($rule['page_url_parse']=='<%url%>'){
                         $page_url = str_replace('<%url%>',$rule['__url__'],$rule['page_url']);
                     }else{
@@ -710,7 +743,6 @@ class spiderApp {
     					preg_match('|' . $page_url_rule . '|is', $rule['__url__'], $matches, $PREG_SET_ORDER);
     			        $page_url = str_replace('<%url%>', $matches['url'], $rule['page_url']);
 			        }
-                    $page_url_array	= array();
                     if (stripos($page_url,'<%step%>') !== false){
                         for ($pn = $rule['page_no_start']; $pn <= $rule['page_no_end']; $pn = $pn + $rule['page_no_step']) {
                             $page_url_array[$pn] = str_replace('<%step%>', $pn, $page_url);
@@ -718,7 +750,6 @@ class spiderApp {
                         }
                     }
             	}
-				unset($page_area);
 		        if ($this->contTest) {
 		            echo $rule['__url__'] . "<br />";
 		            echo $rule['page_url'] . "<br />";
@@ -959,6 +990,9 @@ class spiderApp {
 
     function pregTag($rule) {
         $rule = trim($rule);
+        if(empty($rule)){
+            return false;
+        }
         $rule = str_replace("%>", "%>\n", $rule);
         preg_match_all("/<%(.+)%>/i", $rule, $matches);
         $pregArray = array_unique($matches[0]);
