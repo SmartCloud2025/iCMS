@@ -471,6 +471,8 @@ CREATE TABLE `#iCMS@__spider_project` (
   `checker` tinyint(1) unsigned NOT NULL,
   `self` tinyint(1) unsigned NOT NULL,
   `auto` tinyint(1) unsigned NOT NULL,
+  `lastupdate` int(10) unsigned NOT NULL,
+  `psleep` int(10) unsigned NOT NULL,
   PRIMARY KEY (`id`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 
