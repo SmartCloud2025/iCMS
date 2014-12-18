@@ -25,10 +25,12 @@ class tagsApp{
         include iACP::view('tags.add');
     }
     function do_update(){
-        $sql = iACP::fields($_GET['iDT']);
-    	$sql &&	iDB::query("UPDATE `#iCMS@__tags` SET $sql WHERE `id` ='$this->id' LIMIT 1 ");
-    	$this->id && tag::cache($this->id,'id');
-    	iPHP::success('操作成功!','js:1');
+        if($this->id){
+            $data = iACP::fields($_GET['iDT']);
+            $data && iDB::update("tags",$data,array('id'=>$this->id));
+            tag::cache($this->id,'id');
+            iPHP::success('操作成功!','js:1');
+        }
     }
     function do_iCMS(){
     	iACP::$app_method="domanage";
@@ -325,8 +327,11 @@ class tagsApp{
     			}
     		break;
     		default:
-				$sql = iACP::fields($batch);
-
+                iPHP::alert('请选择要操作项!','js:1');
+				// $data = iACP::fields($batch);
+    //             foreach($idArray AS $id) {
+    //                 $data && iDB::update("tags",$data,array('id'=>$id));
+    //             }
 		}
         $sql && iDB::query("UPDATE `#iCMS@__tags` SET {$sql} WHERE `id` IN ($ids)");
 		iPHP::success('操作成功!','js:1');

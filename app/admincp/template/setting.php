@@ -430,9 +430,9 @@ function modal_tplfile(el,a){
             <span class="help-inline">将在上传的图片附件中加上您在下面设置的图片或文字水印</span>
             <div class="clearfloat mb10"></div>
             <div class="input-prepend input-append"> <span class="add-on">图片尺寸</span><span class="add-on" style="width:24px;">宽度</span>
-              <input type="text" name="config[watermark][width]" class="span1" id="watermark_width" value="<?php echo $config['thumb']['width'] ; ?>"/>
+              <input type="text" name="config[watermark][width]" class="span1" id="watermark_width" value="<?php echo $config['watermark']['width'] ; ?>"/>
               <span class="add-on" style="width:24px;">高度</span>
-              <input type="text" name="config[watermark][height]" class="span1" id="watermark_height" value="<?php echo $config['thumb']['height'] ; ?>"/>
+              <input type="text" name="config[watermark][height]" class="span1" id="watermark_height" value="<?php echo $config['watermark']['height'] ; ?>"/>
             </div>
             <span class="help-inline">单位:像素(px) 只对超过程序设置的大小的附件图片才加上水印图片或文字(设置为0不限制)</span>
             <div class="clearfloat mb10"></div>

@@ -23,6 +23,13 @@ class spiderApp {
         $this->url   = $_GET['url'];
         $this->work  = false;
     }
+    function do_update(){
+        if($this->sid){
+            $data = iACP::fields($_GET['iDT']);
+            $data && iDB::update("spider_url",$data,array('id'=>$this->sid));
+        }
+        iPHP::success('操作成功!','js:1');
+    }
     function do_batch(){
         $idArray = (array)$_POST['id'];
         $idArray OR iPHP::alert("请选择要删除的项目");
