@@ -82,6 +82,7 @@ class tagsApp{
     	include iACP::view("tags.manage");
     }
     function do_import(){
+        $_POST['cid'] OR iPHP::alert('请选择标签所属栏目！');
         iFS::$checkFileData = false;
         iFS::$config['allow_ext']='txt';
         $F    = iFS::upload('upfile');
@@ -101,17 +102,21 @@ class tagsApp{
             if($contents){
                 iPHP::import(iPHP_APP_CORE .'/iMAP.class.php');
                 $fields   = array('uid', 'cid', 'tcid', 'pid', 'tkey', 'name', 'seotitle', 'subtitle', 'keywords', 'description', 'metadata','haspic', 'pic', 'url', 'related', 'count', 'weight', 'tpl', 'ordernum', 'pubdate', 'status');
-                $cid      = (int)$_POST['cid'];
-                $tcid     = (int)$_POST['tcid'];
+                $cid      = implode(',', (array)$_POST['cid']);
+                $tcid     = implode(',', (array)$_POST['tcid']);
+                $pid      = implode(',', (array)$_POST['pid']);
                 $variable = explode("\n", $contents);
+                $msg = array();
                 foreach ($variable as $key => $name) {
                     $name = trim($name);
                     if(empty($name)){
+                        $msg['empty']++;
                         continue;
                     }
                     $name = preg_replace('/<[\/\!]*?[^<>]*?>/is','',$name);
                     $name = addslashes($name);
                     if(iDB::value("SELECT `id` FROM `#iCMS@__tags` where `name` = '$name'")){
+                        $msg['has']++;
                         continue;
                     }
                     $tkey    = strtolower(pinyin($name));
@@ -121,13 +126,18 @@ class tagsApp{
                     $pubdate = time();
                     $data    = compact ($fields);
                     $id = iDB::insert('tags',$data);
+
+                    map::init('prop',$this->appid);
+                    $pid && map::add($pid,$id);
+
                     map::init('category',$this->appid);
                     $cid  && map::add($cid,$id);
                     $tcid && map::add($tcid,$id);
+                    $msg['success']++;
                 }
             }
             @unlink($path);
-            iPHP::success('标签导入完成');
+            iPHP::success('标签导入完成<br />空标签:'.(int)$msg['empty'].'个<br />已经存在标签:'.(int)$msg['has'].'个<br />成功导入标签:'.(int)$msg['success'].'个');
         }
     }
     function do_save(){

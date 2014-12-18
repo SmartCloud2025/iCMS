@@ -45,6 +45,7 @@ $(function(){
   });
   $("#localfile").change(function() {
       $("#import_wrap form").submit();
+      $(this).val('');
   });
 });
 </script>
@@ -61,7 +62,7 @@ $(function(){
         <div class="input-prepend"> <span class="add-on">标签属性</span>
           <select name="pid" id="pid" class="span2 chosen-select">
             <option value="-1">所有标签</option>
-            <?php echo iACP::getProp("pid") ; ?>
+            <?php echo $pid_select = iACP::getProp("pid") ; ?>
           </select>
         </div>
         <div class="input-prepend input-append"> <span class="add-on">栏目</span>
@@ -214,16 +215,23 @@ $(function(){
 <div id="import_wrap" style="display:none;">
   <form action="<?php echo APP_FURI; ?>&do=import" method="post" enctype="multipart/form-data" target="iPHP_FRAME">
     <div class="input-prepend"> <span class="add-on">栏目</span>
-      <select name="cid" class="span3 chosen-select">
-        <option value="0">默认栏目</option>
+      <select name="cid" class="span3 chosen-select" multiple="multiple" data-placeholder="请选择栏目(可多选)...">
+        <option value="0">请选择标签所属栏目</option>
         <?php echo $cid_select; ?>
       </select>
     </div>
     <div class="clearfloat mb10"></div>
     <div class="input-prepend"> <span class="add-on">分类</span>
-      <select name="tcid" class="span3 chosen-select">
+      <select name="tcid" class="span3 chosen-select" multiple="multiple" data-placeholder="请选择分类(可多选)...">
         <option value="0">默认分类</option>
         <?php echo $tcid_select; ?>
+      </select>
+    </div>
+    <div class="clearfloat mb10"></div>
+    <div class="input-prepend"> <span class="add-on">属性</span>
+      <select name="pid" class="span3 chosen-select" multiple="multiple" data-placeholder="请选择属性(可多选)...">
+        <option value="0">默认属性</option>
+        <?php echo $pid_select ; ?>
       </select>
     </div>
     <div class="clearfloat mb10"></div>
