@@ -234,7 +234,7 @@ iCMS.select('rootid',"<?php echo $_GET['rootid'] ; ?>");
               <ul class="dropdown-menu">
                 <li><a href="{CID}" data-toggle="insertContent" data-target="#contentRule"><span class="label label-inverse">{CID}</span> <?php echo $this->name_text;?>ID</a></li>
                 <li><a href="{CDIR}" data-toggle="insertContent" data-target="#contentRule"><span class="label label-inverse">{CDIR}</span> <?php echo $this->name_text;?>目录</a></li>
-                <li><a href="{FPDIR}" data-toggle="insertContent" data-target="#contentRule"><span class="label label-inverse">{FPDIR}</span> <?php echo $this->name_text;?>目录(含父目录)</a></li>
+                <li><a href="{CPDIR}" data-toggle="insertContent" data-target="#contentRule"><span class="label label-inverse">{CPDIR}</span> <?php echo $this->name_text;?>目录(含父目录)</a></li>
                 <li class="divider"></li>
                 <li><a href="{YYYY}" data-toggle="insertContent" data-target="#contentRule"><span class="label label-inverse">{YYYY}</span> 4位数年份2012</a></li>
                 <li><a href="{YY}" data-toggle="insertContent" data-target="#contentRule"><span class="label label-inverse">{YY}</span> 2位数年份12</a></li>

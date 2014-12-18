@@ -296,6 +296,10 @@ class tagsApp{
 		        $weight	=_int($_POST['mweight']);
 		        $sql	="`weight` = '$weight'";
     		break;
+            case 'tpl':
+                $tpl = iS::escapeStr($_POST['mtpl']);
+                $sql = "`tpl` = '$tpl'";
+            break;
     		case 'keyword':
     			if($_POST['pattern']=='replace') {
     				$sql	="`keywords` = '".iS::escapeStr($_POST['mkeyword'])."'";
@@ -324,7 +328,7 @@ class tagsApp{
 				$sql = iACP::fields($batch);
 
 		}
-		iDB::query("UPDATE `#iCMS@__tags` SET {$sql} WHERE `id` IN ($ids)");
+        $sql && iDB::query("UPDATE `#iCMS@__tags` SET {$sql} WHERE `id` IN ($ids)");
 		iPHP::success('操作成功!','js:1');
 	}
 }

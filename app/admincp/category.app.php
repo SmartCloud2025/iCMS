@@ -274,7 +274,7 @@ class categoryApp extends category{
                 iPHP::success('全部删除完成!','js:1');
             break;
        }
-        iDB::query("UPDATE `#iCMS@__category` SET {$sql} WHERE `cid` IN ($ids)");
+        $sql && iDB::query("UPDATE `#iCMS@__category` SET {$sql} WHERE `cid` IN ($ids)");
         $this->cache(true,$this->appid);
         iPHP::success('操作成功!','js:1');
     }

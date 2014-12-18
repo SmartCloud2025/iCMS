@@ -8,6 +8,9 @@
 defined('iPHP') OR exit('What are you doing?');
 iACP::head();
 ?>
+<style>
+.modal{z-index: 999999 !important;}
+</style>
 <script type="text/javascript">
 var upordurl="<?php echo APP_URI; ?>&do=updateorder";
 $(function(){
@@ -199,6 +202,7 @@ $(function(){
                     <li><a data-toggle="batch" data-action="top"><i class="fa fa-cog"></i> 设置权重</a></li>
                     <li><a data-toggle="batch" data-action="keyword"><i class="fa fa-star"></i> 设置关键字</a></li>
                     <li><a data-toggle="batch" data-action="tag"><i class="fa fa-tags"></i> 设置相关标签</a></li>
+                    <li><a data-toggle="batch" data-action="tpl"><i class="fa fa-tags"></i> 设置模板</a></li>
                     <li class="divider"></li>
                     <li><a data-toggle="batch" data-action="dels"><i class="fa fa-trash-o"></i> 删除</a></li>
                   </ul>
@@ -211,7 +215,13 @@ $(function(){
   </div>
 </div>
 </div>
-<div id="iCMS_mdiv" style="display:none;"> </div>
+<div class="iCMS-batch">
+  <div id="tplBatch">
+    <div class="input-prepend input-append"> <span class="add-on">标签模板</span>
+      <input type="text" name="mtpl" class="span2" id="mtpl" value=""/>
+    <a href="<?php echo __ADMINCP__; ?>=files&do=seltpl&from=modal&click=file&target=mtpl" class="btn" data-toggle="modal" title="选择模板文件"><i class="fa fa-search"></i> 选择</a> </div>
+  </div>
+</div>
 <div id="import_wrap" style="display:none;">
   <form action="<?php echo APP_FURI; ?>&do=import" method="post" enctype="multipart/form-data" target="iPHP_FRAME">
     <div class="input-prepend"> <span class="add-on">栏目</span>

@@ -33,7 +33,7 @@ $(function() {
             <th>操作</th>
           </tr>
         </thead>
-        <?php foreach ($listsArray AS $furl => $lists) {?>
+        <?php foreach ((array)$listsArray AS $furl => $lists) {?>
         <thead>
           <tr>
             <th><input type="checkbox" class="checkAll" data-target="#spider-list-<?php echo md5($furl); ?>" /></th>
@@ -42,7 +42,7 @@ $(function() {
         </thead>
         <tbody class="spider-list" id="spider-list-<?php echo md5($furl); ?>">
     <?php
-	  	foreach ($lists AS $lkey => $row) {
+	  	foreach ((array)$lists AS $lkey => $row) {
         list($title,$url) = $this->title_url($row,$rule);
 				$hash = md5($url);
 				if(!$sArray[$hash]){

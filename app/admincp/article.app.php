@@ -188,7 +188,7 @@ class articleApp{
     		default:
 				$data = iACP::fields($batch);
     	}
-        articleTable::batch($data,$ids);
+        $data && articleTable::batch($data,$ids);
 		iPHP::success('操作成功!','js:1');
     }
     function do_getjson(){
