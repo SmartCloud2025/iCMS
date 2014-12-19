@@ -7,14 +7,22 @@
  * @$Id: article.app.php 2408 2014-04-30 18:58:23Z coolmoo $
  */
 class articleApp {
-	public $methods	= array('iCMS','article','hits','good','bad','like_comment','comment');
+	public $methods	= array('iCMS','article','clink','hits','good','bad','like_comment','comment');
     public function __construct() {}
 
     public function do_iCMS($a = null) {
     	return $this->article((int)$_GET['id'],isset($_GET['p'])?(int)$_GET['p']:1);
     }
+    public function do_clink($a = null) {
+        $clink = iS::escapeStr($_GET['clink']);
+        $id    = iDB::value("SELECT * FROM `#iCMS@__article` WHERE `clink`='".$clink."' AND `status` ='1';");
+        return $this->article((int)$id,isset($_GET['p'])?(int)$_GET['p']:1);
+    }
     public function API_iCMS(){
         return $this->do_iCMS();
+    }
+    public function API_clink(){
+        return $this->do_clink();
     }
     public function API_hits($id = null){
         $id===null && $id = (int)$_GET['id'];
