@@ -456,7 +456,16 @@ class spiderApp {
                 // }
 
                 if($rule['list_area_format']){
-                    $lists = phpQuery::pq(trim($rule['list_area_format']),$list_area);
+                    $list_area_format = trim($rule['list_area_format']);
+                    if(strpos($list_area_format, 'ARRAY::')!==false){
+                        $list_area_format = str_replace('ARRAY::', '', $list_area_format);
+                        $lists = array();
+                        foreach ($list_area as $la_key => $la) {
+                            $lists[] = phpQuery::pq($list_area_format,$la);
+                        }
+                    }else{
+                        $lists = phpQuery::pq($list_area_format,$list_area);
+                    }
                 }else{
                     $lists = $list_area;
                 }
