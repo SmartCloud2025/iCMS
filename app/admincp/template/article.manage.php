@@ -29,7 +29,7 @@ $(function(){
   <?php if($_GET['scid']=="on"){ ?>
     iCMS.checked('#search_scid');
   <?php } ?>
-  iCMS.checked('.spic[value=<?php echo $_GET['pic'] ; ?>]');
+  iCMS.checked('.spic[value="<?php echo $_GET['pic'] ; ?>"]');
 
 	var edialog;
 	$(".edit").dblclick(function(){
