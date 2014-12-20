@@ -20,6 +20,9 @@ $(function(){
 	<?php if($_GET['sub']=="on"){ ?>
 	iCMS.checked('#sub');
 	<?php } ?>
+  <?php if($_GET['auto']){ ?>
+  iCMS.checked('.auto');
+  <?php } ?>
 	$("#<?php echo APP_FORMID;?>").batch();
 });
 </script>
@@ -49,6 +52,9 @@ $(function(){
             }?>
           </select>
         </div>
+        <div class="input-prepend"><span class="add-on">自动执行
+          <input type="radio" name="auto" class="checkbox auto" value="1"/>
+          </span> </div>
         <div class="clearfix mb10"></div>
         <div class="input-prepend input-append"> <span class="add-on">每页</span>
           <input type="text" name="perpage" id="perpage" value="<?php echo $_GET['perpage'] ? $_GET['perpage'] : 20; ?>" style="width:36px;"/>
@@ -89,7 +95,7 @@ $(function(){
               <td><?php echo $rs[$i]['id']; ?></td>
               <td><a href="<?php echo APP_URI; ?>&do=inbox&pid=<?php echo $rs[$i]['id']; ?>"><?php echo $rs[$i]['name']; ?></a></td>
               <td><a href="<?php echo APP_URI; ?>&do=project&rid=<?php echo $rs[$i]['rid']; ?>&<?php echo $uri; ?>"><?php echo $ruleArray[$rs[$i]['rid']]; ?></a></td>
-              <td><a href="<?php echo APP_URI; ?>&do=project&cid=<?php echo $rs[$i]['cid']; ?>&<?php echo $uri; ?>"><?php echo $C['name']; ?></a></td>
+              <td><a href="<?php echo APP_URI; ?>&do=project&cid=<?php echo $rs[$i]['cid']; ?>&<?php echo $uri; ?>"><?php echo $C['name']; ?></a><?php echo $rs[$i]['auto']?"[自动采集]":''; ?></td>
               <td><a href="<?php echo APP_URI; ?>&do=project&poid=<?php echo $rs[$i]['poid']; ?>&<?php echo $uri; ?>"><?php echo $postArray[$rs[$i]['poid']]; ?></a></td>
               <td><a href="<?php echo APP_FURI; ?>&do=copyproject&pid=<?php echo $rs[$i]['id']; ?>" class="btn btn-small" target="iPHP_FRAME"><i class="fa fa-copy"></i> 复制</a>
                 <a href="<?php echo APP_URI; ?>&do=testrule&pid=<?php echo $rs[$i]['id']; ?>" class="btn btn-small" data-toggle="modal" title="测试规则"><i class="fa fa-keyboard-o"></i> 测试</a>

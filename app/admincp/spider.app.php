@@ -1191,6 +1191,9 @@ class spiderApp {
         if ($_GET['rid']) {
             $sql.=" AND `rid` ='" . (int) $_GET['rid'] . "'";
         }
+        if ($_GET['auto']) {
+            $sql.=" AND `auto` ='1'";
+        }
         if ($_GET['poid']) {
             $sql.=" AND `poid` ='" . (int) $_GET['poid'] . "'";
         }
