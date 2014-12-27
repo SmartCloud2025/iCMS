@@ -127,7 +127,7 @@ class iFS {
             self::yun($fn, $fn,'QiNiu');
             if(self::$config['yun']['local']){
                 self::del($fn);
-                return;
+                return true;
             }
         }
     }
@@ -382,8 +382,6 @@ class iFS {
         $fp     = ltrim(self::fp($fp,'-iPATH'),'/');
         $res    = $client->uploadFile($tn,self::$config['yun'][$provider]['Bucket'],$fp);
         $res    = json_decode($res,true);
-        var_dump($res);
-
         //self::$config['yun']['local'] && self::del($tn);
         if($res['error']){
             return self::a(array('code'=>0,'state'=>'Error'));
@@ -395,7 +393,7 @@ class iFS {
             self::yun($tn, $fp,'QiNiu');
             if(self::$config['yun']['local']){
                 self::del($tn);
-                return;
+                return true;
             }
         }
         if (function_exists('move_uploaded_file') && @move_uploaded_file($tn, $fp)) {
