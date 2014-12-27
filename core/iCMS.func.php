@@ -11,17 +11,20 @@
 */
 
 function small($sfp,$w='',$h='',$scale=true) {
-    if(strpos($sfp, 'http://')!==false||strpos($sfp,'_')!==false){
+    if(empty($sfp)){
+        echo iCMS_FS_URL.'1x1.gif';
+        return;
+    }
+    if(strpos($sfp,'_')!==false){
         echo $sfp;
         return;
     }
-    $ext = iFS::getext($sfp);
-    if(empty($sfp)){
-        $twh    =iCMS_FS_URL.'1x1.gif';
-    }else{
-        $twh    = $sfp.'_'.$w.'x'.$h.'.jpg';
+    $uri = parse_url(iCMS_FS_URL);
+    if(stripos($sfp,$uri['host']) === false){
+        echo $sfp;
+        return;
     }
-    echo $twh;
+    echo $sfp.'_'.$w.'x'.$h.'.jpg';
 }
 function baiduping($href) {
     $url    ='http://ping.baidu.com/ping/RPC2';
