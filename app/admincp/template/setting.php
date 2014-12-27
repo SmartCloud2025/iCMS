@@ -407,6 +407,36 @@ function modal_tplfile(el,a){
             <div class="input-prepend"> <span class="add-on">允许上传类型</span>
               <input type="text" name="config[FS][allow_ext]" class="span4" id="FS_allow_ext" value="<?php echo $config['FS']['allow_ext'] ; ?>"/>
             </div>
+            <hr />
+            <div class="input-prepend"> <span class="add-on">使用云存储</span>
+              <div class="switch">
+                <input type="checkbox" data-type="switch" name="config[FS][yun][enable]" id="yun_enable" <?php echo $config['FS']['yun']['enable']?'checked':''; ?>/>
+              </div>
+              <span class="help-inline">使用云存储后,相关管理请到云存储管理</span>
+            </div>
+            <div class="clearfloat mb10"></div>
+            <div class="input-prepend"> <span class="add-on">不保留本地</span>
+              <div class="switch">
+                <input type="checkbox" data-type="switch" name="config[FS][yun][local]" id="yun_local" <?php echo $config['FS']['yun']['local']?'checked':''; ?>/>
+              </div>
+            </div>
+            <span class="help-inline">默认保留本地资源,权当备份用</span>
+            <div class="clearfloat mb10"></div>
+            <h3>七牛云存储</h3>
+            <span class="help-inline">申请地址:https://portal.qiniu.com/signup</span>
+            <div class="clearfloat"></div>
+            <div class="input-prepend"> <span class="add-on">Bucket</span>
+              <input type="text" name="config[FS][yun][QiNiu][Bucket]" class="span4" id="yun_QiNiu_Bucket" value="<?php echo $config['FS']['yun']['QiNiu']['Bucket'] ; ?>"/>
+            </div>
+            <div class="clearfloat mb10"></div>
+            <div class="input-prepend"> <span class="add-on">AccessKey</span>
+              <input type="text" name="config[FS][yun][QiNiu][AccessKey]" class="span4" id="yun_QiNiu_AccessKey" value="<?php echo $config['FS']['yun']['QiNiu']['AccessKey'] ; ?>"/>
+            </div>
+            <div class="clearfloat mb10"></div>
+            <div class="input-prepend"> <span class="add-on">SecretKey</span>
+              <input type="text" name="config[FS][yun][QiNiu][SecretKey]" class="span4" id="yun_QiNiu_SecretKey" value="<?php echo $config['FS']['yun']['QiNiu']['SecretKey'] ; ?>"/>
+            </div>
+            <div class="clearfloat mb10"></div>
           </div>
           <div id="setting-thumb" class="tab-pane hide">
             <div class="input-prepend"> <span class="add-on">缩略图</span>

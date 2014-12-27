@@ -123,6 +123,13 @@ class iFS {
         $method == "rb+" && ftruncate($handle, strlen($data));
         fclose($handle);
         $chmod && @chmod($fn, 0777);
+        if(self::$config['yun']['enable']){
+            self::yun($fn, $fn,'QiNiu');
+            if(self::$config['yun']['local']){
+                self::del($fn);
+                return;
+            }
+        }
     }
     public static function escapeDir($dir) {
         $dir = str_replace(array("'",'#','=','`','$','%','&',';'), '', $dir);
@@ -369,8 +376,28 @@ class iFS {
         self::mkdir($RootPath);
         return array($RootPath,$FileDir);
     }
+    public static function yun($tn, $fp,$provider='QiNiu') {
+        iPHP::import(iPHP_LIB.'/QiniuClient.php');
+        $client = new QiniuClient(self::$config['yun'][$provider]['AccessKey'],self::$config['yun'][$provider]['SecretKey']);
+        $fp     = ltrim(self::fp($fp,'-iPATH'),'/');
+        $res    = $client->uploadFile($tn,self::$config['yun'][$provider]['Bucket'],$fp);
+        $res    = json_decode($res,true);
+        var_dump($res);
 
+        //self::$config['yun']['local'] && self::del($tn);
+        if($res['error']){
+            return self::a(array('code'=>0,'state'=>'Error'));
+        }
+        return true;
+    }
     public static function save_ufile($tn, $fp) {
+        if(self::$config['yun']['enable']){
+            self::yun($tn, $fp,'QiNiu');
+            if(self::$config['yun']['local']){
+                self::del($tn);
+                return;
+            }
+        }
         if (function_exists('move_uploaded_file') && @move_uploaded_file($tn, $fp)) {
             @chmod($fp, 0777);
         } elseif (@copy($tn, $fp)) {

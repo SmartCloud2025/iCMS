@@ -16,7 +16,7 @@ iACP::head();
         <li><a href="<?php echo __ADMINCP__; ?>=article"><i class="icon-survey"></i>文章管理</a></li>
         <li><a href="<?php echo __ADMINCP__; ?>=tags"><i class="icon-tag"></i>标签管理</a></li>
         <li><a href="<?php echo __ADMINCP__; ?>=spider&do=project"><i class="icon-download"></i>采集管理</a></li>
-        <li><a href="<?php echo __ADMINCP__; ?>=account&do=user"><i class="icon-people"></i>用户管理</a></li>
+        <li><a href="<?php echo __ADMINCP__; ?>=user"><i class="icon-people"></i>用户管理</a></li>
         <li><a href="<?php echo __ADMINCP__; ?>=database&do=backup"><i class="icon-database"></i>数据库管理</a></li>
       </ul>
     </div>
