@@ -11,10 +11,11 @@
 */
 
 function small($sfp,$w='',$h='',$scale=true) {
-    $ext    = iFS::getext($sfp);
-    if(strpos($sfp,'_')!==false)
-        return $sfp;
-
+    if(strpos($sfp, 'http://')!==false||strpos($sfp,'_')!==false){
+        echo $sfp;
+        return;
+    }
+    $ext = iFS::getext($sfp);
     if(empty($sfp)){
         $twh    =iCMS_FS_URL.'1x1.gif';
     }else{

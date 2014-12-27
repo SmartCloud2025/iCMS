@@ -17,7 +17,7 @@ class tagApp {
         if ($_GET['name']) {
             $name   = $_GET['name'];
             $encode = mb_detect_encoding($name, array("ASCII","UTF-8","GB2312","GBK","BIG5"));
-            $encode!='UTF-8' && $name = mb_convert_encoding($name,"UTF-8",$encode);
+            strtoupper($encode)!='UTF-8' && $name = mb_convert_encoding($name,"UTF-8",$encode);
 
             $val   = iS::escapeStr($name);
             $field = 'name';

@@ -18,19 +18,12 @@ class searchApp {
         }
         $q  = iS::escapeStr($q);
 
-        empty($q) && iPHP::throw404('应用程序运行出错.亲!搜点什么吧!!', 60001);
+        //empty($q) && iPHP::throw404('应用程序运行出错.亲!搜点什么吧!!', 60001);
 
         $search['title']   = stripslashes($q);
         $search['keyword'] = $q;
         $tpl = '{iTPL}/search.htm';
-
-        // $this->surl     = iPHP::router('/api/search');//"http://www.ladyband.com/search?q=".$search['name'].'&t='.$_GET['t'];
-        // $GLOBALS['iPage']['url']  = $this->surl.'&page={P}';
-        // $GLOBALS['iPage']['html'] = array('enable'=>true,'index'=>$this->surl,'ext'=>"");
-        //
-        //iCMS::value('callback',$_GET['callback']);
-        $this->slog($q);
-
+        $q && $this->slog($q);
         iPHP::assign("search",$search);
         return iPHP::view($tpl,'search');
     }

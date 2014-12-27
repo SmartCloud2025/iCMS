@@ -382,7 +382,7 @@ class iCMS {
 			$GLOBALS['iSPH']->SetServer($hosts);
 		}else{
 			list($host,$port)=explode(':',$hosts);
-			$GLOBALS['iSPH']->SetServer($host,$port);
+			$GLOBALS['iSPH']->SetServer($host,(int)$port);
 		}
 		return $GLOBALS['iSPH'];
     }

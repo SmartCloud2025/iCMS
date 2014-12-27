@@ -37,7 +37,7 @@ class iPHP{
         self::$iTPL->register_modifier("html2txt","html2text");
         //self::$iTPL->register_modifier("pinyin","GetPinyin");
         self::$iTPL->register_modifier("unicode","get_unicode");
-        self::$iTPL->register_modifier("small","gethumb");
+        //self::$iTPL->register_modifier("small","gethumb");
         self::$iTPL->register_modifier("thumb","small");
         self::$iTPL->register_modifier("random","random");
 	}

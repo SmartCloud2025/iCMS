@@ -68,11 +68,13 @@ function article_list($vars){
         map::init('tags',iCMS_APP_ARTICLE);
         $map_where+=map::where($vars['tids']);
     }
-    if($vars['keywords']){ //最好使用 iCMS:article:search
+    if(isset($vars['keywords'])){//最好使用 iCMS:article:search
+        if(empty($vars['keywords'])) return;
+
         if(strpos($vars['keywords'],',')===false){
             $vars['keywords'] = str_replace(array('%','_'),array('\%','\_'),$vars['keywords']);
             $where_sql.= " AND CONCAT(title,keywords,description) like '%".addslashes($vars['keywords'])."%'";
-           }else{
+        }else{
             $kws = explode(',',$vars['keywords']);
             foreach($kws AS $kwv){
                 $keywords.= addslashes($kwv)."|";

@@ -36,7 +36,13 @@
       <!-- Baidu Button END -->
       <div id="page">
         <div class="title">
-          <h1><!--{$search.title}--></h1>
+          <h1>
+            <!--{if $search.keyword}-->
+              <!--{$search.title}-->
+            <!--{else}-->
+              亲!搜点什么吧!!
+            <!--{/if}-->
+          </h1>
         </div>
         <div class="list-item">
           <ul>
