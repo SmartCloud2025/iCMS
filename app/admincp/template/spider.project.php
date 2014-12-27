@@ -52,8 +52,9 @@ $(function(){
             }?>
           </select>
         </div>
-        <div class="input-prepend"><span class="add-on">自动执行
-          <input type="radio" name="auto" class="checkbox auto" value="1"/>
+        <div class="input-prepend input-append"><span class="add-on">自动执行</span>
+          <span class="add-on">
+            <input type="radio" name="auto" class="checkbox auto" value="1"/>
           </span> </div>
         <div class="clearfix mb10"></div>
         <div class="input-prepend input-append"> <span class="add-on">每页</span>

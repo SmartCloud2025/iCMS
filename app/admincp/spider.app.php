@@ -239,7 +239,7 @@ class spiderApp {
             $spider_url = iDB::row("SELECT `id`,`publish` FROM `#iCMS@__spider_url` where `url`='$url'",ARRAY_A);
             if(empty($spider_url['publish'])){
                 $spider_url_data = array(
-                    'cid'     => $this->cid,
+                    'cid'     => $project['cid'],
                     'rid'     => $this->rid,
                     'pid'     => $pid,
                     'title'   => addslashes($title),
