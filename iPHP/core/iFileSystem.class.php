@@ -373,6 +373,9 @@ class iFS {
         $FileDir  = ltrim($FileDir,'./');
         $RootPath = self::get_dir() . $FileDir;
         $RootPath = rtrim($RootPath,'/').'/';
+        if(self::$config['yun']['enable'] && self::$config['yun']['local']){
+            return array($RootPath,$FileDir);
+        }
         self::mkdir($RootPath);
         return array($RootPath,$FileDir);
     }
