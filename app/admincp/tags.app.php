@@ -85,8 +85,9 @@ class tagsApp{
     }
     function do_import(){
         $_POST['cid'] OR iPHP::alert('请选择标签所属栏目！');
-        iFS::$checkFileData = false;
-        iFS::$config['allow_ext']='txt';
+        iFS::$checkFileData           = false;
+        iFS::$config['allow_ext']     = 'txt';
+        iFS::$config['yun']['enable'] = false;
         $F    = iFS::upload('upfile');
         $path = $F['RootPath'];
         if($path){

@@ -123,14 +123,8 @@ class iFS {
         $method == "rb+" && ftruncate($handle, strlen($data));
         fclose($handle);
         $chmod && @chmod($fn, 0777);
-        if(self::$config['yun']['enable']){
-            self::yun($fn, $fn,'QiNiu');
-            if(self::$config['yun']['local']){
-                self::del($fn);
-                return true;
-            }
-        }
     }
+
     public static function escapeDir($dir) {
         $dir = str_replace(array("'",'#','=','`','$','%','&',';'), '', $dir);
         return rtrim(preg_replace('/(\/){2,}|(\\\){1,}/', '/', $dir), '/');
@@ -373,32 +367,14 @@ class iFS {
         $FileDir  = ltrim($FileDir,'./');
         $RootPath = self::get_dir() . $FileDir;
         $RootPath = rtrim($RootPath,'/').'/';
-        if(self::$config['yun']['enable'] && self::$config['yun']['local']){
-            return array($RootPath,$FileDir);
-        }
+        // if(self::$config['yun']['enable'] && self::$config['yun']['local']){
+        //     return array($RootPath,$FileDir);
+        // }
         self::mkdir($RootPath);
         return array($RootPath,$FileDir);
     }
-    public static function yun($tn, $fp,$provider='QiNiu') {
-        iPHP::import(iPHP_LIB.'/QiniuClient.php');
-        $client = new QiniuClient(self::$config['yun'][$provider]['AccessKey'],self::$config['yun'][$provider]['SecretKey']);
-        $fp     = ltrim(self::fp($fp,'-iPATH'),'/');
-        $res    = $client->uploadFile($tn,self::$config['yun'][$provider]['Bucket'],$fp);
-        $res    = json_decode($res,true);
-        //self::$config['yun']['local'] && self::del($tn);
-        if($res['error']){
-            return self::a(array('code'=>0,'state'=>'Error'));
-        }
-        return true;
-    }
+
     public static function save_ufile($tn, $fp) {
-        if(self::$config['yun']['enable']){
-            self::yun($tn, $fp,'QiNiu');
-            if(self::$config['yun']['local']){
-                self::del($tn);
-                return true;
-            }
-        }
         if (function_exists('move_uploaded_file') && @move_uploaded_file($tn, $fp)) {
             @chmod($fp, 0777);
         } elseif (@copy($tn, $fp)) {
@@ -443,6 +419,28 @@ class iFS {
             iPic::watermark($frp);
         }
     }
+    public static function yun_write($frp){
+        if(self::$config['yun']['enable']){
+            self::yun($frp,'QiNiu');
+            if(self::$config['yun']['local']){
+                self::del($frp);
+                return true;
+            }
+        }
+    }
+
+    public static function yun($frp,$provider='QiNiu') {
+        iPHP::import(iPHP_LIB.'/QiniuClient.php');
+        $client = new QiniuClient(self::$config['yun'][$provider]['AccessKey'],self::$config['yun'][$provider]['SecretKey']);
+        $fp     = ltrim(self::fp($frp,'-iPATH'),'/');
+        $res    = $client->uploadFile($frp,self::$config['yun'][$provider]['Bucket'],$fp);
+        $res    = json_decode($res,true);
+        if($res['error']){
+            return self::a(array('code'=>0,'state'=>'Error'));
+        }
+        return true;
+    }
+
     public static function IO($FileName='',$udir='',$FileExt='jpg'){
         list($RootPath,$FileDir) = self::mk_udir($udir); // 文件保存目录方式
         $filedata = file_get_contents('php://input');
@@ -457,6 +455,7 @@ class iFS {
         $FileRootPath = $RootPath . $FileName . "." . $FileExt;
         self::write($FileRootPath,$filedata);
         self::watermark($FileExt,$FileRootPath);
+        self::yun_write($FileRootPath);
 
         $fid = self::insFileData(array(
             'filename'  => $FileName,
@@ -493,6 +492,8 @@ class iFS {
         $FileRootPath = $RootPath . $FileName . "." . $FileExt;
 		self::write($FileRootPath,$filedata);
         self::watermark($FileExt,$FileRootPath);
+        self::yun_write($FileRootPath);
+
         $fid = self::insFileData(array(
             'filename'  => $file_md5,
             'ofilename' => '',
@@ -562,11 +563,12 @@ class iFS {
                 $FilePath     = $FileDir . $FileName . "." . $FileExt;
                 $FileRootPath = $RootPath . $FileName . "." . $FileExt;
             }
-            $ret	= self::save_ufile($tmp_file, $FileRootPath);
+            $ret = self::save_ufile($tmp_file, $FileRootPath);
+            @unlink($tmp_file);
             if(self::$callback && is_array($ret) && $ret['code']=="0") return $ret;
 
-            @unlink($tmp_file);
             self::watermark($FileExt,$FileRootPath);
+            self::yun_write($FileRootPath);
 
             $fid OR $fid = self::insFileData(array(
                 'filename'  => $file_md5,
@@ -695,6 +697,7 @@ class iFS {
                 if(!is_file($FileRootPath)){
                     self::write($FileRootPath, $fileresults);
                     self::watermark($FileExt,$FileRootPath);
+                    self::yun_write($FileRootPath);
                 }
                 if($ret=='array'){
                     return self::_array(1,$frs,$RootPath);
@@ -705,6 +708,7 @@ class iFS {
                 $FileRootPath = $RootPath .$FileName;
                 self::write($FileRootPath, $fileresults);
                 self::watermark($FileExt,$FileRootPath);
+                self::yun_write($FileRootPath);
                 $FileSize = @filesize($FileRootPath);
                 empty($FileSize) && $FileSize = 0;
                 $fid = self::insFileData(array(

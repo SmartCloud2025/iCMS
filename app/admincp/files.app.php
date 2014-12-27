@@ -120,6 +120,8 @@ class filesApp{
     		iFS::write($FileRootPath,$fileresults);
             iFS::$watermark = !isset($_GET['unwatermark']);
             iFS::watermark($rs->ext,$FileRootPath);
+            iFS::yun_write($FileRootPath);
+
     		$_FileSize	= strlen($fileresults);
     		if($_FileSize!=$rs->size){
 	    		iDB::query("update `#iCMS@__filedata` SET `size`='$_FileSize' WHERE `id` = '$this->id'");

@@ -602,6 +602,7 @@ class userApp {
                 $avatarpath = iFS::fp(get_user_pic($uid),'+iPATH');
                 iFS::mkdir(dirname($avatarpath));
                 iFS::write($avatarpath,$avatarData);
+                iFS::yun_write($avatarpath);
             }
         }
 
