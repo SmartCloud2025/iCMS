@@ -1,57 +1,57 @@
 <?php
 class TB {
-	public static $appid  = 21181857;
-	public static $appkey = '4ec6477b9129b78db88d6107b4cbd39f';
-	public static $scope  = "promotion,item,usergrade";
-	public static $openid = '';
-	public static $url    = "";
-	public static $info   = '';
+	public $appid  = 21181857;
+	public $appkey = '4ec6477b9129b78db88d6107b4cbd39f';
+	public $scope  = "promotion,item,usergrade";
+	public $openid = '';
+	public $url    = "";
+	public $info   = '';
 
-	public static function login(){
+	public function login(){
 	    $state = md5(uniqid(rand(), TRUE)); //CSRF protection
 	    iPHP::set_cookie("TB_STATE",authcode($state,'ENCODE'));
 	    $login_url = "https://oauth.taobao.com/authorize?response_type=code&client_id="
-	        . self::$appid . "&redirect_uri=" . urlencode(CALLBACK_URL.self::$callback)
+	        . $this->appid . "&redirect_uri=" . urlencode(CALLBACK_URL.$this->callback)
 	        . "&state=" .$state
-	        . "&scope=".self::$scope;
+	        . "&scope=".$this->scope;
 	    header("Location:$login_url");
 	}
-	public static function callback(){
+	public function callback(){
 		$state	= authcode(iPHP::get_cookie("TB_STATE"), 'DECODE');
 		if($_GET['state']!=$state && empty($_GET['code'])){
-			self::login();
+			$this->login();
 			exit;
 		}
 
         $POST_FIELDS = "grant_type=authorization_code&"
-            . "client_id=" . self::$appid. "&redirect_uri=" . urlencode(CALLBACK_URL.self::$callback)
-            . "&client_secret=" . self::$appkey. "&code=" . $_GET["code"];
+            . "client_id=" . $this->appid. "&redirect_uri=" . urlencode(CALLBACK_URL.$this->callback)
+            . "&client_secret=" . $this->appkey. "&code=" . $_GET["code"];
 
-        $response	= self::postUrl('https://oauth.taobao.com/token',$POST_FIELDS);
-	    self::$info	= json_decode($response, true);
-	    if(self::$info['error']){
-			self::login();
+        $response	= $this->postUrl('https://oauth.taobao.com/token',$POST_FIELDS);
+	    $this->info	= json_decode($response, true);
+	    if($this->info['error']){
+			$this->login();
 			exit;
 	    }
-	    self::$openid	= self::$info['taobao_user_id'];
-	    iPHP::set_cookie("TB_OPENID",self::$openid);
+	    $this->openid	= $this->info['taobao_user_id'];
+	    iPHP::set_cookie("TB_OPENID",$this->openid);
 	}
-	public static function get_openid(){
-		self::$openid  = authcode(iPHP::get_cookie("TB_OPENID"), 'DECODE');
-		return self::$openid;
+	public function get_openid(){
+		$this->openid  = authcode(iPHP::get_cookie("TB_OPENID"), 'DECODE');
+		return $this->openid;
 	}
-	public static function get_user_info(){
-		$user['nickname'] =self::$info['taobao_user_nick'];
+	public function get_user_info(){
+		$user['nickname'] =$this->info['taobao_user_nick'];
 		$user['gender']   =0; //$user['gender']=="??"?'1':0;
 		$user['avatar']   =''; //$user['figureurl_2'];
 		return $user;
 	}
-	public static function cleancookie(){
+	public function cleancookie(){
 		iPHP::set_cookie('TB_STATE', '',-31536000);
 		iPHP::set_cookie('TB_OPENID', '',-31536000);
 	}
 
-	public static function postUrl($url, $POSTFIELDS) {
+	public function postUrl($url, $POSTFIELDS) {
 	    $ch = curl_init();
 	    curl_setopt($ch, CURLOPT_URL, $url);
 	    curl_setopt($ch, CURLOPT_RETURNTRANSFER,1);
