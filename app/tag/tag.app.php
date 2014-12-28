@@ -17,8 +17,13 @@ class tagApp {
         if ($_GET['name']) {
             $name   = $_GET['name'];
             $encode = mb_detect_encoding($name, array("ASCII","UTF-8","GB2312","GBK","BIG5"));
-            strtoupper($encode)!='UTF-8' && $name = mb_convert_encoding($name,"UTF-8",$encode);
-
+            if(strtoupper($encode)!='UTF-8'){
+                if (function_exists('iconv')) {
+                    $name  = iconv($encode,'UTF-8//IGNORE', $name);
+                } elseif (function_exists('mb_convert_encoding')) {
+                    $name  = mb_convert_encoding($name,'UTF-8//IGNORE',$encode);
+                }
+            }
             $val   = iS::escapeStr($name);
             $field = 'name';
         } elseif ($_GET['tkey']) {

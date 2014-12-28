@@ -180,8 +180,7 @@ class iPHP{
 		$app_dir   = $app_name = $app;
 		$file_type = 'app';
     	if(strpos($app,'.')!==false){
-    		$app = explode('.', $app);
-    		list($app_dir,$app_name,$file_type) = $app;
+    		list($app_dir,$app_name,$file_type) = explode('.', $app);
     		if(empty($file_type)){
     			$file_type= $app_name;
     			$app_name = $app_dir;

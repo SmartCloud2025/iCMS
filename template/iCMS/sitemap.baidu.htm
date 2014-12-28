@@ -14,14 +14,14 @@
             <priority>1.0</priority>
         </url>
     	<!--{/iCMS}-->
-        <!--{iCMS:article:list loop="true" row="10000" sub="all" cid="$cid"}-->
+        <!--{iCMS:article:list loop="true" row="5000" sub="all" cid="$cid"}-->
         <url>
             <loc><!--{$article_list.url|escape}--></loc>
             <lastmod><!--{$article_list.pubdate|date:"Y-m-d"}--></lastmod>
             <changefreq>always</changefreq>
         </url>
         <!--{/iCMS}-->
-        <!--{iCMS:tag:list loop="true" row="1000" sub="all" cid="$cid"}-->
+        <!--{iCMS:tag:list loop="true" row="5000" sub="all" cid="$cid"}-->
         <url>
             <loc><!--{$tag_list.url|escape}--></loc>
             <lastmod><!--{$iCMS.NOW|date:"Y-m-d"}--></lastmod>
@@ -43,14 +43,14 @@
             </url>
             <!--{/iCMS}-->
         <!--{/iCMS}-->
-        <!--{iCMS:article:list loop="true" row="10000" sub="all"}-->
+        <!--{iCMS:article:list loop="true" row="5000" sub="all"}-->
         <url>
             <loc><!--{$article_list.url|escape}--></loc>
             <lastmod><!--{$article_list.pubdate|date:"Y-m-d"}--></lastmod>
             <changefreq>always</changefreq>
         </url>
         <!--{/iCMS}-->
-        <!--{iCMS:tag:list loop="true" row="1000"}-->
+        <!--{iCMS:tag:list loop="true" row="5000"}-->
         <url>
             <loc><!--{$tag_list.url|escape}--></loc>
             <lastmod><!--{$iCMS.NOW|date:"Y-m-d"}--></lastmod>

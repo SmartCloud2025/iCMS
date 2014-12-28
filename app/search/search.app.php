@@ -13,12 +13,19 @@ class searchApp {
 	}
     public function search($a = null) {
         $q  = htmlspecialchars(rawurldecode($_GET['q']));
-        if(!mb_check_encoding($q,"UTF-8")){
-            $q  = mb_convert_encoding($q,"UTF-8","gbk");
+        $encode = mb_detect_encoding($q, array("ASCII","UTF-8","GB2312","GBK","BIG5"));
+        if(strtoupper($encode)!='UTF-8'){
+            if (function_exists('iconv')) {
+                $q  = iconv($encode,'UTF-8//IGNORE', $q);
+            } elseif (function_exists('mb_convert_encoding')) {
+                $q  = mb_convert_encoding($q,'UTF-8//IGNORE',$encode);
+            }
         }
         $q  = iS::escapeStr($q);
 
         //empty($q) && iPHP::throw404('应用程序运行出错.亲!搜点什么吧!!', 60001);
+        $fwd = iCMS::filter($q);
+        $fwd && iPHP::throw404('非法搜索词!', 60002);
 
         $search['title']   = stripslashes($q);
         $search['keyword'] = $q;
