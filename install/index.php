@@ -13,7 +13,8 @@ define('iPHP',TRUE);
 define('iPHP_APP','iCMS'); //应用名
 define('iPATH',dirname(strtr(__FILE__,'\\','/'))."/../");
 //框架初始化
-require iPATH.'iPHP/iPHP.php';		//iPHP框架文件
+require iPATH.'iPHP/iPHP.php';			//iPHP框架文件
+require iPATH.'core/iCMS.version.php';	//iCMS版本信息
 
 $_URI      = $_SERVER['PHP_SELF'];
 $_DIR      = substr(dirname($_URI),0,-8);
@@ -484,10 +485,12 @@ $lock_file = iPATH.'cache/install.lock';
 				</ul>
 			</div>
 		</footer>
-		<script type="text/javascript">
-		var _bdhmProtocol = (("https:" == document.location.protocol) ? " https://" : " http://");
-		document.write(unescape("%3Cscript src='" + _bdhmProtocol + "hm.baidu.com/h.js%3F7b43330a4da4a6f4353e553988ee8a62' type='text/javascript'%3E%3C/script%3E"));
-		</script>
-		<script type="text/javascript" src="http://www.idreamsoft.com/cms/install.php"></script>
+		<div class="hide">
+			<script type="text/javascript">
+			var _bdhmProtocol = (("https:" == document.location.protocol) ? " https://" : " http://");
+			document.write(unescape("%3Cscript src='" + _bdhmProtocol + "hm.baidu.com/h.js%3F7b43330a4da4a6f4353e553988ee8a62' type='text/javascript'%3E%3C/script%3E"));
+			</script>
+			<script type="text/javascript" src="http://www.idreamsoft.com/cms/install.php"></script>
+		</div>
 	</body>
 </html>

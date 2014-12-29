@@ -55,6 +55,10 @@ iCMS 可以用来干什么：
 将上面列出的所有文件和目录上传到服务器上的指定目录，如DocumentRoot目录或者任何你希望安装iCMS的目录。
 ## 安装
 上传完毕后使用浏览器直接访问安装目录(install)即可看到iCMS的安装程序。恭喜，你的服务器可以完美支持iCMS，点击**开始安装**进入下一步。
+
+打开浏览器，在地址栏中输入http://您的网站域名/install/index.php
+![安装界面][5]
+
 ###填写配置信息
 按照程序安装向导的要求填写相关服务器参数和初始化设置信息，完成后点击下一步。
 ###完成安装
@@ -72,3 +76,4 @@ iCMS 可以用来干什么：
 [2]: http://www.mysql.com/
 [3]: http://www.postgresql.org/
 [4]: http://sqlite.org/
+[5]: http://www.idreamsoft.com/static/install.jpg
