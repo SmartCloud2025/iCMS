@@ -45,10 +45,12 @@ class iFS {
     public static $watermark        = true;
     public static $watermark_config = null;
 
-    public static $CURL_COUNT        = 3;
-    public static $CURLOPT_ENCODING  = '';
-    public static $CURLOPT_REFERER   = null;
-    public static $CURLOPT_USERAGENT = 'Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/38.0.2125.122 Safari/537.36';
+    public static $CURL_COUNT             = 3;
+    public static $CURLOPT_ENCODING       = '';
+    public static $CURLOPT_REFERER        = null;
+    public static $CURLOPT_TIMEOUT        = 10; //数据传输的最大允许时间
+    public static $CURLOPT_CONNECTTIMEOUT = 3;  //连接超时时间
+    public static $CURLOPT_USERAGENT      = 'Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/38.0.2125.122 Safari/537.36';
 
     public static function init($config,$watermark_config,$table='') {
         self::$config           = $config;
@@ -234,8 +236,8 @@ class iFS {
             $ch = curl_init();
             curl_setopt($ch, CURLOPT_URL, $url);
             curl_setopt($ch, CURLOPT_ENCODING,self::$CURLOPT_ENCODING);
-            curl_setopt($ch, CURLOPT_TIMEOUT, 3);
-            curl_setopt($ch, CURLOPT_CONNECTTIMEOUT, 3);
+            curl_setopt($ch, CURLOPT_TIMEOUT, self::$CURLOPT_TIMEOUT); //数据传输的最大允许时间
+            curl_setopt($ch, CURLOPT_CONNECTTIMEOUT, self::$CURLOPT_CONNECTTIMEOUT); //连接超时时间
             curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
             curl_setopt($ch, CURLOPT_FAILONERROR, 1);
             curl_setopt($ch, CURLOPT_REFERER,self::$CURLOPT_REFERER);
