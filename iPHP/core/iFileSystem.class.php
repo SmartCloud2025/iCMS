@@ -245,7 +245,34 @@ class iFS {
             $responses	= curl_exec($ch);
             $info 		= curl_getinfo($ch);
             $errno 		= curl_errno($ch);
-			if ($errno > 0) {
+            if($info['http_code'] == 404 || $info['http_code'] == 500){
+                curl_close($ch);
+                echo $url."\n";
+                echo "http_code:".$info['http_code']."\n";
+                unset($responses,$info);
+                return false;
+            }
+            if (($info['http_code'] == 301 || $info['http_code'] == 302) && $_count < self::$CURL_COUNT) {
+                $newurl = $info['redirect_url'];
+                if(empty($newurl)){
+                    curl_setopt($ch, CURLOPT_HEADER, 1);
+                    $header     = curl_exec($ch);
+                    preg_match ('|Location: (.*)|i',$header,$matches);
+                    $newurl     = ltrim($matches[1],'/');
+                    if(empty($newurl)) return false;
+
+                    if(!strstr($newurl,'http://')){
+                        $host   = $uri['scheme'].'://'.$uri['host'];
+                        $newurl = $host.'/'.$newurl;
+                    }
+                }
+                $newurl = trim($newurl);
+                curl_close($ch);
+                unset($responses,$info);
+                $_count++;
+                return self::remote($newurl,$_count);
+            }
+			if ($errno > 0 || empty($responses)|| empty($info['http_code'])) {
 	            if ($_count < self::$CURL_COUNT) {
 	                $_count++;
 					curl_close($ch);
@@ -260,39 +287,6 @@ class iFS {
 					return false;
 	            }
 			}
-            if (($info['http_code'] == 301 || $info['http_code'] == 302) && $_count < self::$CURL_COUNT) {
-                $newurl = $info['redirect_url'];
-		        if(empty($newurl)){
-			    	curl_setopt($ch, CURLOPT_HEADER, 1);
-			    	$header		= curl_exec($ch);
-			    	preg_match ('|Location: (.*)|i',$header,$matches);
-			    	$newurl 	= ltrim($matches[1],'/');
-				    if(empty($newurl)) return false;
-
-			    	if(!strstr($newurl,'http://')){
-				    	$host	= $uri['scheme'].'://'.$uri['host'];
-			    		$newurl = $host.'/'.$newurl;
-			    	}
-		        }
-		        $newurl	= trim($newurl);
-				curl_close($ch);
-				unset($responses,$info);
-                $_count++;
-                return self::remote($newurl,$_count);
-            }
-            if($info['http_code'] == 404 || $info['http_code'] == 500){
-                curl_close($ch);
-                unset($responses,$info);
-                echo $url."\n";
-                echo "http_code:".$info['http_code']."\n";
-                return false;
-            }
-            if ((empty($responses)||empty($info['http_code'])) && $_count < self::$CURL_COUNT) {
-                $_count++;
-				curl_close($ch);
-				unset($responses,$info);
-                return self::remote($url,$_count);
-            }
             curl_close($ch);
         } elseif (ini_get('allow_url_fopen') && ($handle = fopen($url, 'rb'))) {
             if (function_exists('stream_get_contents')) {
