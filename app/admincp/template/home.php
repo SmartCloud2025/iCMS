@@ -217,7 +217,7 @@ $(function(){
 		    }
 		);
 	},1000);
-	<?php if(iCMS::$config['system']['patch']){?>
+	<?php if(iCMS::$config['system']['patch'] && iACP::is_superadmin()){?>
     	window.setTimeout(function(){
 			$.getJSON('<?php echo __ADMINCP__;?>=patch&do=check&ajax=1&jt=<?php echo time(); ?>',
 				function(json){

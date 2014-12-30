@@ -45,6 +45,7 @@ class iFS {
     public static $watermark        = true;
     public static $watermark_config = null;
 
+    public static $CURL_COUNT        = 3;
     public static $CURLOPT_ENCODING  = '';
     public static $CURLOPT_REFERER   = null;
     public static $CURLOPT_USERAGENT = 'Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/38.0.2125.122 Safari/537.36';
@@ -245,11 +246,11 @@ class iFS {
             $info 		= curl_getinfo($ch);
             $errno 		= curl_errno($ch);
 			if ($errno > 0) {
-	            if ($_count < 5) {
+	            if ($_count < self::$CURL_COUNT) {
 	                $_count++;
 					curl_close($ch);
 					unset($responses,$info);
-	                return self::remote($url, $_referer, $_count);
+	                return self::remote($url,$_count);
 	            }else{
 					$curl_error = curl_error($ch);
 					curl_close($ch);
@@ -259,7 +260,7 @@ class iFS {
 					return false;
 	            }
 			}
-            if (($info['http_code'] == 301 || $info['http_code'] == 302) && $_count < 3) {
+            if (($info['http_code'] == 301 || $info['http_code'] == 302) && $_count < self::$CURL_COUNT) {
                 $newurl = $info['redirect_url'];
 		        if(empty($newurl)){
 			    	curl_setopt($ch, CURLOPT_HEADER, 1);
@@ -277,7 +278,7 @@ class iFS {
 				curl_close($ch);
 				unset($responses,$info);
                 $_count++;
-                return self::remote($newurl, $_referer,$_count);
+                return self::remote($newurl,$_count);
             }
             if($info['http_code'] == 404 || $info['http_code'] == 500){
                 curl_close($ch);
@@ -286,11 +287,11 @@ class iFS {
                 echo "http_code:".$info['http_code']."\n";
                 return false;
             }
-            if ((empty($responses)||empty($info['http_code'])) && $_count < 3) {
+            if ((empty($responses)||empty($info['http_code'])) && $_count < self::$CURL_COUNT) {
                 $_count++;
 				curl_close($ch);
 				unset($responses,$info);
-                return self::remote($url, $_referer, $_count);
+                return self::remote($url,$_count);
             }
             curl_close($ch);
         } elseif (ini_get('allow_url_fopen') && ($handle = fopen($url, 'rb'))) {
@@ -738,12 +739,12 @@ class iFS {
             }
             return $FilePath;
         } else {
-            if ($times < 3) {
-                $times++;
-                return self::http($http,$ret,$times);
-            } else {
+            // if ($times < 3) {
+            //     $times++;
+            //     return self::http($http,$ret,$times);
+            // } else {
                 return false;
-            }
+            // }
         }
     }
 
