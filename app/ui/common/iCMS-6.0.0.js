@@ -105,7 +105,7 @@
             opts.id      = 'iPHP-DIALOG-ALERT';
             opts.content = msg;
             opts.height  = 150;
-            opts.time    = null;
+            opts.time    = 3000;
             window.top.iCMS.dialog(opts,callback);
         },
         dialog: function(options,callback) {
