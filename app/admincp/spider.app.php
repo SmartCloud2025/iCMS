@@ -670,7 +670,11 @@ class spiderApp {
         $rule['__url__']	= $url;
         foreach ($dataArray AS $key => $data) {
             $content = $this->content($html,$data,$rule);
-            $responses[$data['name']] = $content;
+            if(isset($responses[$data['name']])){
+                $responses[$data['name']].= $content;
+            }else{
+                $responses[$data['name']] = $content;
+            }
             if($data['name']=='title' && empty($content)){
                 $responses['title'] = $title;
             }
@@ -989,6 +993,15 @@ class spiderApp {
                 //var_dump(array_map('htmlspecialchars', $pq_pattern));
                 $content = str_replace($pq_pattern,$pq_replacement, $content);
             }else{
+                if($_pattern=='~SELF~'){
+                    $_pattern = $content;
+                }
+                if(strpos($_replacement, '~SELF~')!==false){
+                    $_replacement = str_replace('~SELF~',$content, $_replacement);
+                }
+                if(strpos($_replacement, '~S~')!==false){
+                    $_replacement = str_replace('~S~',' ', $_replacement);
+                }
                 $replacement[$key] = $_replacement;
                 $pattern[$key] = '|' . $this->pregTag($_pattern) . '|is';
             }
