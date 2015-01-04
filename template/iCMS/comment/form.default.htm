@@ -27,6 +27,12 @@
 			</div>
             <div class="clearfix"></div>
 			<div class="iCMS_cmt_command">
+              <!--{if $iCMS.CONFIG.comment.seccode }-->
+              <div class="iCMS_cmt_seccode">
+                <input type="text" maxlength="4" name="seccode" class="iCMS_seccode commentApp-seccode form-control" placeholder="验证码">
+                <img src="<!--{iCMS:router url='/api/seccode'}-->" alt="验证码" class="iCMS_seccode_img r3" title="点击更换验证码图片"/>
+              </div>
+              <!--{/if}-->
 				<button class="btn btn-primary cmt-add" type="submit"><i class="fa fa-check"></i> 评 论</button>
 				<a href="javascript:;" class="cmt-cancel">取 消</a>
 			</div>
@@ -34,6 +40,7 @@
 		</div>
 		<script>
 		$(function(){
+            iCMS.comment.seccode = <!--{if $iCMS.CONFIG.comment.seccode }-->true<!--{else}-->false<!--{/if}-->;
             <!--{if $comment_vars.display=="iframe"}-->
             iCMS.comment.iframe_height('form');
             <!--{/if}-->
@@ -79,6 +86,8 @@
                     		var pagenav = $(".commentApp-pagenav-api",doc);
                     		iCMS.comment.page(999999,pagenav);
                     	}
+                    }else{
+                        iCMS.alert(c.msg);
                     }
                 })
             });

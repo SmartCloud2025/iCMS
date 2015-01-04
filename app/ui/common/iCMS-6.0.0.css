@@ -125,7 +125,8 @@ a:hover { text-decoration: none; }
 .iCMS_dialog .ui-dialog-header .ui-dialog-close {top: 0px; right: 0px; padding: 8px 12px; }
 .iCMS_dialog .ui-dialog-body { padding: 0px; }
 .iCMS_dialog .ui-dialog-table { height: 100%; width: 100%; vertical-align: middle; }
-.iCMS_dialog .ui-dialog-content { color: #222; padding: 10px; max-width: 760px; max-height: 500px; min-width: 240px; min-height: 90px; }
+/*.iCMS_dialog .ui-dialog-content {height: auto !important; color: #222; padding: 10px; max-width: 760px; max-height: 500px; min-width: 240px; min-height: 120px; overflow-y: scroll; }*/
+.iCMS_dialog .ui-dialog-content {height: auto !important; color: #222; padding: 20px; display: block;max-width: 760px;min-width: 240px;}
 .iCMS_dialog .ui-dialog-content .buttons { text-align: right; background: #fff }
 .iCMS_dialog .ui-dialog-content .buttons a.cancel { color: #259; margin-right: 15px; cursor: pointer; }
 .iCMS_dialog .ui-dialog-content .buttons a.cancel:hover { text-decoration: underline; }
@@ -143,7 +144,7 @@ a:hover { text-decoration: none; }
 .iCMS_tooltip_popup .ui-dialog-header .ui-dialog-close { top: 5px; }
 .iCMS_tooltip_popup .ui-dialog-body { padding: 10px; }
 .iPHP-msg { text-align: center; margin: 0px 5px; padding: 0px 4px; }
-.iPHP-msg .label { /* white-space: pre-wrap;  */padding: 8px 10px; font-size: 14px; letter-spacing: 1px; line-height: 160%; }
+.iPHP-msg .label { white-space: pre-wrap; padding: 8px 10px; font-size: 14px; letter-spacing: 1px; line-height: 160%; }
 .iPHP-msg pre { text-align: left; }
 .iPHP-msg i { font-size: 18px; }
 .iPHP-msg .label-success hr { margin: 10px 0; border-top: 1px solid #007202; border-bottom: 1px solid #6A946B; }

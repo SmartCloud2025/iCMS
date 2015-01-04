@@ -47,7 +47,8 @@
                 event.preventDefault();
                 iCMS.user.pm(this);
             });
-            $(".iCMS_seccode_img,.iCMS_seccode_text").click(function() {
+            $(".iCMS_seccode_img,.iCMS_seccode_text").click(function(event) {
+                event.preventDefault();
                 $(".iCMS_seccode_img").attr('src', iCMS.api('public', '&do=seccode&') + Math.random());
             });
             $(".iCMS_search_btn").click(function(event) {
@@ -104,7 +105,7 @@
             opts.id      = 'iPHP-DIALOG-ALERT';
             opts.content = msg;
             opts.height  = 150;
-            opts.time    = 3000;
+            opts.time    = null;
             window.top.iCMS.dialog(opts,callback);
         },
         dialog: function(options,callback) {

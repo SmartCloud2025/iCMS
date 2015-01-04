@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="zh-cn">
+  <head>
+    <title><!--{$article.title}-->的评论_<!--{$site.title}-->_<!--{$site.seotitle}--></title>
+    <meta name="keywords" content="<!--{$article.keywords}-->" />
+    <meta name="description" content="<!--{$article.description}-->"/>
+    <!--{iCMS:public:ui}-->
+    <script type="text/javascript">
+    $(function(){
+      $("img",".article_body").each(function(i){
+        iCMS.imgFix(this,300);
+        $(this).fadeIn();
+      });
+    })
+    </script>
+  </head>
+  <body class="iCMS-mobile">
+    <!--{include file="./navbar.htm"}-->
+    <div class="container">
+      <div class="wrapper">
+        <article>
+          <h1><!--{$article.link}--></h1>
+          <div class="info">
+            <span class="label label-success"><!--{$article.user.at}--></span> 时间:<!--{$article.pubdate|date:"Y-m-d H:s"}-->
+          </div>
+          <!--{if $article.description}-->
+          <blockquote>
+            <p class="bg-info"><!--{$article.description}--></p>
+            <p class="clearfix mb10"></p>
+          </blockquote>
+          <!--{/if}-->
+        </article>
+        <div class="clearfix"></div>
+        <section class="panel panel-default comment">
+          <div class="panel-heading">
+            <h3><i class="fa fa-comments-o"></i> <!--{$article.title}-->的评论</h3>
+          </div>
+          <!--{iCMS:comment:list display="default" page="true" row="10" appid="$article.appid" iid="$article.id"}-->
+          <!--{iCMS:comment:form display="default" ref="true"}-->
+        </section>
+        <div class="clearfix mt10"></div>
+        <section class="panel panel-default related">
+          <div class="panel-heading">
+            <h3><i class="fa fa-fire"></i> 热门文章<span>HOT</span></h3>
+          </div>
+          <div class="list-group">
+            <!--{iCMS:article:list loop="true" row="10" orderby="hot" cid="$category.cid"}-->
+            <a class="list-group-item" href="<!--{$article_list.url}-->" target="_blank"><!--{$article_list.title}--></a>
+            <!--{/iCMS}-->
+          </div>
+        </section>
+      </div>
+    </div>
+    <div id="scrollLoad-switcher">
+      <button class="btn" type="button" title="关闭/启用 内容自动加载功能"><i class="fa fa-toggle-on"></i></button>
+    </div>
+    <script>
+    $(function(){
+      $(".fs_btn").click(function(){
+        var i = $(".font_big").length;
+        if (!i) {
+          $(".article_body").addClass("font_big");
+          $(this).find("sup").html("-");
+        }else{
+          $(".article_body").removeClass("font_big");
+          $(this).find("sup").html("+");
+        }
+      })
+      //滚动加载
+      iCMS.scrollLoad(".article_body",".content","#pages_next","<!--{$article.page.total}-->",
+      function(e){
+        //$("#scrollLoad-switcher").show();
+        var pages_nav = $("#pages_nav",e).html();
+        $("#pages_nav",e).remove();
+        $(".article_pagenav").html(pages_nav);
+      },function(path, page){
+        return function(curPage) {
+          return path.replace(/_\d+/,'_'+curPage);
+        };
+      });
+      //滚动加载 开关
+      $('#scrollLoad-switcher .btn').click(function(e) {
+        e.preventDefault();
+        $('.article_body').infinitescroll('toggle');
+        var icon = $("i",this);
+        if(icon.hasClass('fa-toggle-off')){
+          icon.removeClass('fa-toggle-off').addClass('fa-toggle-on');
+        }else{
+          icon.removeClass('fa-toggle-on').addClass('fa-toggle-off');
+        }
+        $(this).blur();
+      });
+    })
+    </script>
+    <script src="<!--{$article.hits.script}-->"></script>
+    <!--{include file="./footer.htm"}-->
+  </body>
+</html>

@@ -12,6 +12,7 @@
 iPHP::app('user.class','static');
 class commentApp{
     function __construct() {
+        $this->id = (int)$_GET['id'];
     }
     function do_iCMS($appid=0){
     	iPHP::import(iPHP_APP_CORE .'/iAPP.class.php');
@@ -23,7 +24,8 @@ class commentApp{
 			$_GET['appid'] && $appid=(int)$_GET['appid'];
 			$sql.= " AND `appid`='$appid'";
 		}
-		$_GET['iid']   && $sql.= " AND `iid`='".(int)$_GET['iid']."'";
+        $_GET['iid']          && $sql.= " AND `iid`='".(int)$_GET['iid']."'";
+        isset($_GET['status']) && $sql.= " AND `status`='".$_GET['status']."'";
 		if($_GET['cid']){
             $cid = (int)$_GET['cid'];
             if(isset($_GET['sub'])){
@@ -54,9 +56,8 @@ class commentApp{
     	$this->do_iCMS($appid);
     }
     function do_get_reply(){
-    	$_GET['id'] OR exit("请选择要操作的评论");
-    	$id = (int)$_GET['id'];
-        $comment = iDB::row("SELECT * FROM `#iCMS@__comment` WHERE `id`='$id' LIMIT 1");
+    	$this->id OR exit("请选择要操作的评论");
+        $comment = iDB::row("SELECT * FROM `#iCMS@__comment` WHERE `id`='$this->id' LIMIT 1");
         empty($comment) && exit('<div class="claerfix mb10"></div>评论已被删除');
         echo nl2br($comment->content);
         echo '<div class="claerfix mb10"></div>';
@@ -65,7 +66,7 @@ class commentApp{
 
     }
     function do_del($id = null,$dialog=true){
-    	$id===null && $id=(int)$_GET['id'];
+    	$id===null && $id=$this->id;
     	$id OR iPHP::alert('请选择要删除的评论!');
     	$comment = iDB::row("SELECT * FROM `#iCMS@__comment` WHERE `id`='$id' LIMIT 1");
 
@@ -94,4 +95,11 @@ class commentApp{
     		break;
 		}
 	}
+    function do_update(){
+        if($this->id){
+            $data = iACP::fields($_GET['iDT']);
+            $data && iDB::update("comment",$data,array('id'=>$this->id));
+            iPHP::success('操作成功!','js:1');
+        }
+    }
 }

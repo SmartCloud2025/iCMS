@@ -14,6 +14,9 @@ a:hover>.iCMS_icon_report { background-position: -71px -170px }
 #iCMS-cmt-profile { display: none }
 #iCMS-cmt-login { margin: 10px 0px }
 .iCMS_cmt_editor { }
+.iCMS_cmt_seccode{float: left;overflow: hidden; margin-top: 8px; line-height: 30px; room: 1; _width: 100%; }
+.iCMS_cmt_seccode span{float: left;color: #333;vertical-align: middle;text-align: center;font-size: 14px;}
+.iCMS-mobile .iCMS_cmt_seccode .form-control{width: 70px;height:35px !important}
 .iCMS_editor_text { padding: 5px 10px; width: 100%; max-width: 580px; height: 90px; background: url(img/iCMS.logo.bg-6.0.png) no-repeat center center; font-size: 14px; line-height: 1.7 }
 .iCMS_cmt_command { text-align: right }
 .iCMS_cmt_command .cmt-add { float: right; margin: 8px 0px 8px 8px; padding: 5px 10px }
@@ -58,6 +61,9 @@ html.no-touch .commentApp-list-wrap .load-more:hover { background: #fefefe; text
 .commentApp-info { text-align: center }
 .commentApp-form .commentApp-textarea { padding: 7px 8px; color: #222; font-size: 13px; line-height: 22px; min-height: 22px; width: 95% }
 .commentApp-form.expanded .cmt-command { display: block; line-height: 33px; }
+.commentApp-form.expanded .cmt-seccode{float: left;overflow: hidden; line-height: 30px; room: 1; _width: 100%; }
+.commentApp-form.expanded .cmt-seccode span{float: left;color: #333;vertical-align: middle;text-align: center;font-size: 14px;}
+.iCMS-mobile .commentApp-form.expanded  .form-control{width: 70px;height:35px !important}
 .commentApp-form .cmt-command { display: none; padding: 10px 0; text-align: right }
 .commentApp-form .cmt-command .btn-primary { float: right; }
 .commentApp-form .cmt-command .cmt-command-cancel { float: right; }

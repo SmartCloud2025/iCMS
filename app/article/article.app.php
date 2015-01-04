@@ -37,6 +37,12 @@ class articleApp {
     public function API_bad(){
         $this->vote('bad');
     }
+    public function API_comment(){
+        $appid = (int)$_GET['appid'];
+        $cid   = (int)$_GET['cid'];
+        $iid   = (int)$_GET['iid'];
+        $this->article($iid,1,'{iTPL}/article.comment.htm');
+    }
     private function vote($_do){
         // iPHP::app('user.class','static');
         // user::get_cookie() OR iPHP::code(0,'iCMS:!login',0,'json');
@@ -273,7 +279,7 @@ class articleApp {
             'month'  => $article['hits_month'],
         );
         $article['comment'] = array(
-            'url'   => iCMS_API."?app=comment&do=article&appid={$article['appid']}&iid={$article['id']}&cid={$article['cid']}",
+            'url'   => iCMS_API."?app=article&do=comment&appid={$article['appid']}&iid={$article['id']}&cid={$article['cid']}",
             'count' => $article['comments']
         );
 

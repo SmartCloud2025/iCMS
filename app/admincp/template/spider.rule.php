@@ -11,6 +11,20 @@ iACP::head();
 <script type="text/javascript">
 $(function(){
 	$("#<?php echo APP_FORMID;?>").batch();
+  $("#import_rule").click(function(event) {
+      var import_rule_wrap = document.getElementById("import_rule_wrap");
+      iCMS.dialog({
+        title: 'iCMS - 导入规则',
+        content:import_rule_wrap
+      });
+  });
+  $("#local").click(function() {
+      $("#localfile").click();
+  });
+  $("#localfile").change(function() {
+      $("#import_rule_wrap form").submit();
+      $(this).val('');
+  });
 });
 </script>
 <div class="iCMS-container">
@@ -28,6 +42,9 @@ $(function(){
         <div class="input-prepend input-append"> <span class="add-on">关键字</span>
           <input type="text" name="keywords" class="span2" id="keywords" value="<?php echo $_GET['keywords'] ; ?>" />
           <button class="btn btn-primary" type="submit"><i class="fa fa-search"></i> 搜 索</button>
+        </div>
+        <div style="float:right;">
+          <button class="btn btn-success" type="button" id="import_rule"><i class="fa fa-send"></i> 导入规则</button>
         </div>
       </form>
     </div>
@@ -56,7 +73,8 @@ $(function(){
               <td><?php echo $rs[$i]['id'] ; ?></td>
               <td><?php echo $rs[$i]['name'] ; ?></td>
               <td>
-                <a href="<?php echo APP_FURI; ?>&do=copyrule&rid=<?php echo $rs[$i]['id'] ; ?>" class="btn btn-small" target="iPHP_FRAME"><i class="fa fa-copy"></i> 复制</a>
+                <a href="<?php echo APP_FURI; ?>&do=exportrule&rid=<?php echo $rs[$i]['id'] ; ?>" class="btn btn-small" target="iPHP_FRAME"><i class="fa fa-download"></i> 导出</a>
+                <a href="<?php echo APP_FURI; ?>&do=copyrule&rid=<?php echo $rs[$i]['id'] ; ?>" class="btn btn-small" target="iPHP_FRAME"><i class="fa fa-clipboard"></i> 复制</a>
                 <a href="<?php echo APP_URI; ?>&do=testrule&rid=<?php echo $rs[$i]['id'] ; ?>" class="btn btn-small" data-toggle="modal" title="测试规则"><i class="fa fa-keyboard-o"></i> 测试</a>
                 <a href="<?php echo APP_URI; ?>&do=addrule&rid=<?php echo $rs[$i]['id'] ; ?>" class="btn btn-small"><i class="fa fa-edit"></i> 编辑</a>
                 <a href="<?php echo APP_FURI; ?>&do=delrule&rid=<?php echo $rs[$i]['id'] ; ?>" target="iPHP_FRAME" class="del btn btn-small" title='永久删除'  onclick="return confirm('确定要删除?');"/><i class="fa fa-trash-o"></i> 删除</a></td>
@@ -81,5 +99,16 @@ $(function(){
       </form>
     </div>
   </div>
+</div>
+<div id="import_rule_wrap" style="display:none;">
+  <form action="<?php echo APP_FURI; ?>&do=import_rule" method="post" enctype="multipart/form-data" target="iPHP_FRAME">
+    <div class="alert alert-info">
+      只允许导入TXT文件
+    </div>
+    <div class="clearfloat mb10"></div>
+    <a id="local" class="btn btn-primary btn-large btn-block"><i class="fa fa-upload"></i> 请选择要导入的规则</a>
+    <input id="localfile" name="upfile" type="file" class="hide"/>
+    <div class="clearfloat mb10"></div>
+  </form>
 </div>
 <?php iACP::foot();?>

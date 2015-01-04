@@ -1051,7 +1051,31 @@ class spiderApp {
         $_count = count($rs);
         include iACP::view("spider.rule");
     }
-
+    function do_exportrule(){
+        $rs   = iDB::row("select `name`, `rule` from `#iCMS@__spider_rule` where id = '$this->rid'");
+        $data = array('name'=>addslashes($rs->name),'rule'=>addslashes($rs->rule));
+        $data = base64_encode(serialize($data));
+        Header("Content-type: application/octet-stream");
+        Header("Content-Disposition: attachment; filename=spider.rule.".$rs->name.'.txt');
+        echo $data;
+    }
+    function do_import_rule(){
+        iFS::$checkFileData           = false;
+        iFS::$config['allow_ext']     = 'txt';
+        iFS::$config['yun']['enable'] = false;
+        $F    = iFS::upload('upfile');
+        $path = $F['RootPath'];
+        if($path){
+            $data = file_get_contents($path);
+            if($data){
+                $data = base64_decode($data);
+                $data = unserialize($data);
+                iDB::insert("spider_rule",$data);
+            }
+            @unlink($path);
+            iPHP::success('规则导入完成','js:1');
+        }
+    }
     function do_copyrule() {
         iDB::query("insert into `#iCMS@__spider_rule` (`name`, `rule`) select `name`, `rule` from `#iCMS@__spider_rule` where id = '$this->rid'");
         $rid = iDB::$insert_id;

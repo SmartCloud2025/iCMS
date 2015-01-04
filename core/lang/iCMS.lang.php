@@ -12,22 +12,22 @@
 defined('iPHP') OR exit('What are you doing?');
 
 return array(
-	'!login'=>'请先登陆！',
-	'error'=>'哎呀呀呀！非常抱歉,居然出错了！<br />请稍候再试试,我们的程序猿正在努力修复中...',
-	'page'=>array(
-		'index'   =>'首页',
-		'prev'    =>'上一页',
-		'next'    =>'下一页',
-		'last'    =>'末页',
-		'other'   =>'共',
-		'unit'    =>'页',
-		'list'    =>'篇文章',
-		'sql'     =>'条记录',
-		'tag'     =>'个标签',
-		'comment' =>'条评论',
-		'format_left' =>'',
+	'!login' =>'请先登陆！',
+	'error'  =>'哎呀呀呀！非常抱歉,居然出错了！<br />请稍候再试试,我们的程序猿正在努力修复中...',
+	'page'   =>array(
+		'index'        =>'首页',
+		'prev'         =>'上一页',
+		'next'         =>'下一页',
+		'last'         =>'末页',
+		'other'        =>'共',
+		'unit'         =>'页',
+		'list'         =>'篇文章',
+		'sql'          =>'条记录',
+		'tag'          =>'个标签',
+		'comment'      =>'条评论',
+		'format_left'  =>'',
 		'format_right' =>'',
-		'di' =>'第',
+		'di'           =>'第',
 	),
 	'article'=>array(
 		'first'     =>'已经是第一篇',
@@ -35,8 +35,8 @@ return array(
 		'clicknext' =>'点击图片进入下一页',
 		'empty_id'  =>'文章ID不能为空',
 		'!good'     =>'您已经点过赞了啦 ！',
-		'good'      =>'谢谢您的赞,我会更加努力的',
-		'!bad'      =>'这垃圾的文章,多踩一下都会脏了咱的手！',
+		'good'      =>'谢谢您的赞，我会更加努力的',
+		'!bad'      =>'这垃圾的文章，多踩一下都会脏了咱的手！',
 		'bad'       =>'您已经过踩了啦！',
 	),
 	'report'=>array(
@@ -61,9 +61,11 @@ return array(
 	),
 	'comment'=> array(
 		'empty'   =>'请输入内容！',
-		'success' =>'感谢您的评论 ！',
+		'success' =>'感谢您的评论！',
+		'examine' =>'您的评论已经提交，请等待管理审核通过后方可显示 ！',
 		'!like'   =>'您已经点过赞了啦 ！',
 		'like'    =>'谢谢您的赞',
+		'filter'  =>'评论内容中包含被系统屏蔽的字符，请重新填写。',
 	),
 	'seccode'=> array(
 		'empty'=>'请输入验证码！',

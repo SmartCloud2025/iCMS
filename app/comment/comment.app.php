@@ -73,6 +73,11 @@ class commentApp {
     public function ACTION_add(){
         iPHP::app('user.class','static');
         user::get_cookie() OR iPHP::code(0,'iCMS:!login',0,'json');
+        $seccode = iS::escapeStr($_POST['seccode']);
+
+        if(iCMS::$config['comment']['seccode']){
+            iPHP::seccode($seccode) OR iPHP::code(0,'iCMS:seccode:error','seccode','json');
+        }
 
         iPHP::app('user.msg.class','static');
 
@@ -88,12 +93,15 @@ class commentApp {
         $iid OR iPHP::code(0,'iCMS:article:empty_id',0,'json');
         $content OR iPHP::code(0,'iCMS:comment:empty',0,'json');
 
+        $fwd = iCMS::filter($content);
+        $fwd && iPHP::code(0,'iCMS:comment:filter',0,'json');
+
         $appid OR $appid = iCMS_APP_ARTICLE;
         $addtime  = time();
         $ip       = iPHP::getIp();
         $userid   = user::$userid;
         $username = user::$nickname;
-        $status   = '1';
+        $status   = iCMS::$config['comment']['examine']?'0':'1';
         $up       = '0';
         $down     = '0';
         $quote    = '0';
@@ -105,7 +113,11 @@ class commentApp {
         $id     = iDB::insert('comment',$data);
         iDB::query("UPDATE `#iCMS@__article` SET comments=comments+1 WHERE `id` ='{$iid}' limit 1");
         user::update_count($userid,1,'comments');
+        if(iCMS::$config['comment']['examine']){
+            iPHP::code(0,'iCMS:comment:examine',$id,'json');
+        }
         iPHP::code(1,'iCMS:comment:success',$id,'json');
+
     }
 
 }

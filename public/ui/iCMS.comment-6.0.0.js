@@ -4,17 +4,27 @@
         like_text:'<span class="like-num" data-tip="iCMS:s:1 人觉得这个很赞"><em>1</em> <span>赞</span></span>',
         page_no:{},
         page_total:{},
-        form:$('<div class="commentApp-form">'+
+        cform:function() {
+            var form = $('<div class="commentApp-form">'+
                 '<div class="commentApp-ipt">' +
                 '<input class="commentApp-textarea form-control" type="text" placeholder="写下你的评论…">' +
                 '</div>' +
-                '<div class="clearfix"></div>' +
                 '<div class="cmt-command">' +
+                '<div class="cmt-seccode">' +
+                '<input type="text" maxlength="4" name="seccode" class="iCMS_seccode commentApp-seccode form-control" placeholder="验证码">'+
+                '<img src="'+iCMS.api('public', "&do=seccode")+'" alt="验证码" class="iCMS_seccode_img r3" title="点击更换验证码图片"/>'+
+                '</div>' +
                 '<a href="javascript:;" name="addnew" class="btn btn-primary">评论</a>' +
                 '<a href="javascript:;" name="closeform" class="cmt-command-cancel">取消</a>' +
                 '</div>'+
-                '</div>'),
-        page: function(pn, a) {
+                '<div class="clearfix"></div>' +
+                '</div>');
+            if(!this.seccode){
+                $(".cmt-seccode",form).hide();
+            }
+            return form;
+        },
+        page:function(pn, a) {
             var $this = $(a),
                 p = $this.parent(),
                 pp = p.parent(),
@@ -40,7 +50,7 @@
             }
             var item = $(a).parent().parent(),
                 param = iCMS.param($(a)),
-                form  = this.form.clone(),
+                form  = this.cform().clone(),
                 _form = $('.commentApp-form', item);
             if (_form.length > 0) {
                 _form.remove();
@@ -58,6 +68,10 @@
                 textarea.val("");
                 form.remove();
                 iCMS.comment.iframe_height('list');
+            });
+            $(".iCMS_seccode_img",form).click(function(event) {
+                event.preventDefault();
+                $(this).attr('src', iCMS.api('public', '&do=seccode&') + Math.random());
             });
         },
         like:function (a) {
@@ -85,10 +99,12 @@
             }
             var form = $(a).parent().parent(),
                 textarea = $('.commentApp-textarea', form),
+                seccode = $('.commentApp-seccode', form),
                 data = textarea.data('param'),
                 cmt_param = $.extend(param, data);
 
             cmt_param.action  = 'add';
+            cmt_param.seccode = seccode.val();
             cmt_param.content = textarea.val();
 
             if (!cmt_param.content) {
@@ -201,12 +217,13 @@
             var spike = '<i class="iCMS_icon iCMS_icon_spike commentApp-bubble" style="display: inline; left: 481px;"></i>',
                 box   = $('<div class="commentApp-list-wrap">'),
                 list  = $('<div class="commentApp-list">'),
-                form  = this.form.clone(),
+                form  = this.cform().clone(),
                 iid   = param['iid'];
             box.html(this.loading);
             box.append(spike, list, form);
             p.after(box);
             form.addClass('commentApp-list-wrap-ft');
+
             //加载评论
             iCMS.comment.page_no[iid]    = 0;
             iCMS.comment.page_total[iid] = 0;
@@ -221,6 +238,9 @@
                 pp.removeClass('expanded');
                 $('.commentApp-textarea', pp).val("");
             });
+            // .on('click', '.iCMS_seccode_img', function(event) {
+            //     $(".iCMS_seccode_img").attr('src', iCMS.api('public', '&do=seccode&') + Math.random());
+            // });
             //加载更多
             box.on('click', 'a[name="load-more"]', function(event) {
                 event.preventDefault();
@@ -252,3 +272,9 @@
         }
     };
 })(jQuery);
+$(function(){
+    $(".iCMS_seccode_img,.iCMS_seccode_text").click(function(event) {
+        event.preventDefault();
+        $(".iCMS_seccode_img").attr('src', iCMS.api('public', '&do=seccode&') + Math.random());
+    });
+})

@@ -104,6 +104,9 @@ function update_popover(html,a){
                   发表评论
                 <?php } ?>
                 <a href="<?php echo APP_URI; ?>&ip=<?php echo $value['ip'] ; ?>" class="tip" title="查看该IP所有评论"><span class="label label-inverse">IP：<?php echo $value['ip'] ; ?></span></a>
+                <?php if(!$value['status']){?>
+                 <span class="label label-warning">未审核</span>
+                <?php } ?>
               </span>
               <p>
               <?php echo nl2br($value['content']); ?>
@@ -115,6 +118,9 @@ function update_popover(html,a){
               <div class="claerfix"></div>
               <span class="label"><?php echo get_date($value['addtime'],'Y-m-d H:i:s');?></span>
               <span class="label label-info"><i class="fa fa-thumbs-o-up"></i> <?php echo $value['up'] ; ?></span>
+              <?php if(!$value['status']){?>
+              <a href="<?php echo APP_FURI; ?>&do=update&id=<?php echo $value['id'] ; ?>&iDT=status:1" class="btn btn-success btn-mini" target="iPHP_FRAME">通过审核</a>
+              <?php } ?>
               <a href="<?php echo APP_FURI; ?>&do=del&id=<?php echo $value['id'] ; ?>" class="btn btn-danger btn-mini" target="iPHP_FRAME" onclick="return confirm('确定要删除?');">删除</a>
             </div>
             <div class="claerfix mb10"></div>
