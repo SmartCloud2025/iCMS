@@ -234,11 +234,11 @@ class iCMS {
     	self::run($app,null,null,'API_');
     }
     //------------------------------------
-    public static function hits_sql($all=true){
+    public static function hits_sql($all=true,$hit=1){
         $timeline = self::timeline();
         // var_dump($timeline);
         $pieces = array();
-        $all && $pieces[] = '`hits` = hits+1';
+        $all && $pieces[] = '`hits` = hits+'.$hit;
         foreach ($timeline as $key => $bool) {
             $field = "hits_{$key}";
             if($key=='yday'){
@@ -249,7 +249,7 @@ class iCMS {
                 }
                 continue;
             }
-            $pieces[]="`{$field}` = ".($bool?"{$field}+1":'1');
+            $pieces[]="`{$field}` = ".($bool?"{$field}+{$hit}":$hit);
         }
         return implode(',', $pieces);
     }

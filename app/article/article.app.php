@@ -265,9 +265,13 @@ class articleApp {
         }
 
 
-        if(strstr($article['source'], '|')){
-            list($s_name,$s_url) = explode('|',$article['source']);
+        if(strstr($article['source'], '||')){
+            list($s_name,$s_url) = explode('||',$article['source']);
             $article['source']   = '<a href="'.$s_url.'" target="_blank">'.$s_name.'</a>';
+        }
+        if(strstr($article['author'], '||')){
+            list($a_name,$a_url) = explode('||',$article['author']);
+            $article['author']   = '<a href="'.$a_url.'" target="_blank">'.$a_name.'</a>';
         }
 
         $article['hits'] = array(
