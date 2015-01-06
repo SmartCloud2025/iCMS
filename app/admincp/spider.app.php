@@ -671,18 +671,28 @@ class spiderApp {
         foreach ($dataArray AS $key => $data) {
             $content = $this->content($html,$data,$rule);
             $dname   = $data['name'];
+
             if (strpos($dname,'.')!== false){
                 $f_key = substr($dname,0,stripos($dname, "."));
                 $s_key = substr(strrchr($dname, "."), 1);
-                $responses[$f_key][$s_key] = $content;
+                if(isset($responses[$f_key][$s_key])){
+                    if(is_array($responses[$f_key][$s_key])){
+                        $responses[$f_key][$s_key] = array_merge($responses[$f_key][$s_key],$content);
+                    }else{
+                        $responses[$f_key][$s_key].= $content;
+                    }
+                }else{
+                    $responses[$f_key][$s_key] = $content;
+                }
             }else{
-                $responses[$dname] = $content;
                 if(isset($responses[$dname])){
                     if(is_array($responses[$dname])){
                         $responses[$dname] = array_merge($responses[$dname],$content);
                     }else{
                         $responses[$dname].= $content;
                     }
+                }else{
+                    $responses[$dname] = $content;
                 }
             }
         }
