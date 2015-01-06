@@ -670,15 +670,24 @@ class spiderApp {
         $rule['__url__']	= $url;
         foreach ($dataArray AS $key => $data) {
             $content = $this->content($html,$data,$rule);
-            if(isset($responses[$data['name']])){
-                $responses[$data['name']].= $content;
+            $dname   = $data['name'];
+            if (strpos($dname,'.')!== false){
+                $f_key = substr($dname,0,stripos($dname, "."));
+                $s_key = substr(strrchr($dname, "."), 1);
+                $responses[$f_key][$s_key] = $content;
             }else{
-                $responses[$data['name']] = $content;
-            }
-            if($data['name']=='title' && empty($content)){
-                $responses['title'] = $title;
+                $responses[$dname] = $content;
+                if(isset($responses[$dname])){
+                    if(is_array($responses[$dname])){
+                        $responses[$dname] = array_merge($responses[$dname],$content);
+                    }else{
+                        $responses[$dname].= $content;
+                    }
+                }
             }
         }
+        empty($responses['title']) && $responses['title'] = $title;
+
 		$html = null;
         unset($html);
         gc_collect_cycles();

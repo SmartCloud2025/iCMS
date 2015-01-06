@@ -96,9 +96,23 @@ function autoformat($html){
     '/<img[^>]+src=[" ]?([^"]+)[" ]?[^>]*>/is'
     ),array('','','','',"\n","$1\n","$1\n","\n[img]$1[/img]"),$html);
 
-    $html = str_replace("&nbsp;",'',$html);
-    $html = str_replace("　",'',$html);
+    if (stripos($html,'<embed') !== false){
+        iPHP::import(iPHP_LIB.'/phpQuery.php');
+        $doc = phpQuery::newDocumentHTML($html,'UTF-8');
+        foreach ($doc['embed'] as $embed_key => $embed) {
+            $obj          = phpQuery::pq($embed);
+            $embed_src    = $obj->attr("src");
+            $embed_width  = $obj->attr("width");
+            $embed_height = $obj->attr("height");
+            empty($embed_width) && $embed_width = "500";
+            empty($embed_height) && $embed_height = "450";
 
+            $embed_htm    = (string)$obj;
+            $html         = str_replace($embed_htm,'[video='.$embed_width.','.$embed_height.']'.$embed_src.'[/video]',$html);
+        }
+    }
+
+    $html = str_replace(array("&nbsp;","　"),'',$html);
     $html = preg_replace(array(
     '/<b[^>]*>(.*?)<\/b>/i',
     '/<strong[^>]*>(.*?)<\/strong>/i'
@@ -115,7 +129,11 @@ function ubb2html($content){
     '/\[b\](.*?)\[\/b\]/is',
     '/\[url=([^\]]+)\](.*?)\[\/url\]/is',
     '/\[url=([^\]|#]+)\](.*?)\[\/url\]/is',
-    ),array('<img src="$1" />','<strong>$1</strong>','<a target="_blank" href="$1">$2</a>','$2'),$content);
+    '/\[video=(\d+),(\d+)\](.*?)\[\/video\]/is',
+    ),array(
+    '<img src="$1" />','<strong>$1</strong>','<a target="_blank" href="$1">$2</a>','$2',
+    '<embed type="application/x-shockwave-flash" class="edui-faked-video" pluginspage="http://www.macromedia.com/go/getflashplayer" src="$3" width="$1" height="$2" wmode="transparent" play="true" loop="false" menu="false" allowscriptaccess="never" allowfullscreen="true"/>'
+    ),$content);
 }
 function nl2p($html){
     $_htmlArray = explode("\n",$html);
