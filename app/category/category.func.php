@@ -18,6 +18,14 @@ function category_list($vars){
 	$where_sql  =" WHERE `appid`='$appid' AND `status`='$status'";
 	$resource   = array();
 	isset($vars['mode']) && $where_sql.=" AND `mode` = '{$vars['mode']}'";
+
+	if (stripos($vars['cid'],',') !== false){
+		$vars['cid'] = explode(',', $vars['cid']);
+	}
+	if (stripos($vars['cid!'],',') !== false){
+		$vars['cid!'] = explode(',', $vars['cid!']);
+	}
+
 	isset($vars['cid']) && !isset($vars['stype']) && $where_sql.= iPHP::where($vars['cid'],'cid');
 	isset($vars['cid!']) && $where_sql.= iPHP::where($vars['cid!'],'cid','not');
 	switch ($vars['stype']) {
@@ -26,11 +34,11 @@ function category_list($vars){
 			$where_sql.=" AND rootid='0'";
 		break;
 		case "sub":
-			$vars['cid'] && $where_sql.=" AND `rootid` = '{$vars['cid']}'";
+			$vars['cid'] && $where_sql.= iPHP::where($vars['cid'],'rootid');
 		break;
-		case "subtop":
-			$vars['cid'] && $where_sql.= iPHP::where($vars['cid'],'cid');
-		break;
+		// case "subtop":
+		// 	$vars['cid'] && $where_sql.= iPHP::where($vars['cid'],'cid');
+		// break;
 		case "subone":
 			$where_sql.= iPHP::where(iCMS::get_category_ids($vars['cid'],false),'cid');
 		break;
