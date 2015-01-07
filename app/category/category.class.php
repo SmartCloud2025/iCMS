@@ -68,8 +68,8 @@ class category {
 	    if($C['metadata']){
 	    	$mdArray	= array();
 	    	$_metadata	= unserialize($C['metadata']);
-	    	foreach($_metadata AS $mdval){
-	    		$mdArray[$mdval['key']]=$mdval['value'];
+	    	foreach($_metadata as $key => $value){
+	    		$mdArray[$key] = $value;
 	    	}
 	    	$C['metadata']=$mdArray;
 	    }

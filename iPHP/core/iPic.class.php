@@ -238,7 +238,7 @@ class iPic {
         }
 
     }
-    function image($res,$type,$fn) {
+    public static function image($res,$type,$fn) {
     	switch($type){
     		case 1:imagegif($res,$fn);break;
     		case 2:imagejpeg($res,$fn);break;
@@ -246,15 +246,18 @@ class iPic {
     	}
         imagedestroy($res);
     }
-    function imagecreate($type,$src) {
+    public static function imagecreate($type,$src) {
     	switch($type){
     		case 1:$res = imagecreatefromgif($src);break;
-    		case 2:ini_set('gd.jpeg_ignore_warning',1);$res = imagecreatefromjpeg($src);break;
+    		case 2:
+            ini_set('gd.jpeg_ignore_warning',1);
+            $res = imagecreatefromjpeg($src);
+            break;
     		case 3:$res = imagecreatefrompng($src);break;
     	}
         return $res;
     }
-	function scale($a) {
+	public static function scale($a) {
 		if( $a['w']/$a['h'] > $a['tw']/$a['th']  && $a['w'] >$a['tw'] ){
 			$a['h'] = ceil($a['h'] * ($a['tw']/$a['w']));
 			$a['w'] = $a['tw'];

@@ -39,7 +39,7 @@ function category_list($vars){
 		// case "subtop":
 		// 	$vars['cid'] && $where_sql.= iPHP::where($vars['cid'],'cid');
 		// break;
-		case "subone":
+		case "suball":
 			$where_sql.= iPHP::where(iCMS::get_category_ids($vars['cid'],false),'cid');
 		break;
 		case "self":
