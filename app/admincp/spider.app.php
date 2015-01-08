@@ -670,10 +670,6 @@ class spiderApp {
         $rule['__url__']	= $url;
         foreach ($dataArray AS $key => $data) {
             $content = $this->content($html,$data,$rule);
-            unset($this->allHtml);
-            $this->allHtml = "";
-            gc_collect_cycles();
-
             $dname   = $data['name'];
             if (strpos($dname,'.')!== false){
                 $f_key = substr($dname,0,stripos($dname, "."));
@@ -698,12 +694,12 @@ class spiderApp {
                     $responses[$dname] = $content;
                 }
             }
+            gc_collect_cycles();
         }
         empty($responses['title']) && $responses['title'] = $title;
-
-		$html = null;
-        unset($html);
+        unset($this->allHtml,$html);
         gc_collect_cycles();
+
         if ($this->contTest) {
             echo "<pre style='width:99%;word-wrap: break-word;'>";
             print_r(iS::escapeStr($responses));
@@ -810,7 +806,7 @@ class spiderApp {
                 $pcontent = '';
                 $pcon     = '';
                 foreach ($page_url_array AS $pukey => $purl) {
-                    usleep(100);
+                    //usleep(100);
                     $phtml = $this->remote($purl);
                     if ($phtml === false) {
                         break;
@@ -824,7 +820,9 @@ class spiderApp {
                     $pageurl[] = $purl;
                     $pcon.= $phttp['content'];
                 }
+                gc_collect_cycles();
                 $html.= $pcon;
+                unset($pcon);
                 $this->allHtml = $html;
 
                 if ($this->contTest) {
@@ -856,6 +854,7 @@ class spiderApp {
                     }
                 }
                 $content = implode('#--iCMS.PageBreak--#', $conArray);
+                unset($conArray);
             }else{
                 if($content_attr){
                     $content = $doc[$content_dom]->$content_fun($content_attr);
@@ -869,6 +868,7 @@ class spiderApp {
                 echo "<hr />";
             }
             phpQuery::unloadDocuments($doc->getDocumentID());
+            unset($doc);
         }else{
             $data_rule = $this->pregTag($data['rule']);
             if ($this->contTest) {
@@ -909,7 +909,7 @@ class spiderApp {
             // trim($_content) && $content = $_content;
             $content = autoformat($content);
             $content = stripslashes($content);
-            unset($_content);
+            // unset($_content);
         }
 
         if ($data['img_absolute'] && $content) {
@@ -954,6 +954,7 @@ class spiderApp {
                     //$content		= addslashes($newcontent);
                     $content = $newcontent;
                 }
+                unset($newcontent);
             }
         }
         if ($data['empty'] && empty($content)) {
