@@ -670,8 +670,11 @@ class spiderApp {
         $rule['__url__']	= $url;
         foreach ($dataArray AS $key => $data) {
             $content = $this->content($html,$data,$rule);
-            $dname   = $data['name'];
+            unset($this->allHtml);
+            $this->allHtml = "";
+            gc_collect_cycles();
 
+            $dname   = $data['name'];
             if (strpos($dname,'.')!== false){
                 $f_key = substr($dname,0,stripos($dname, "."));
                 $s_key = substr(strrchr($dname, "."), 1);
@@ -822,6 +825,7 @@ class spiderApp {
                     $pcon.= $phttp['content'];
                 }
                 $html.= $pcon;
+                $this->allHtml = $html;
 
                 if ($this->contTest) {
                     echo "<pre>";
