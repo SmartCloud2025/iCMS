@@ -924,8 +924,6 @@ class spiderApp {
             }
         }
 
-        $data['trim'] && $content = trim($content);
-
         if ($data['json_decode']) {
             $content = preg_replace('/&#\d{2,5};/ue', "utf8_entity_decode('\\0')", $content);
             $content = preg_replace(array('/&#x([a-fA-F0-7]{2,8});/ue', '/%u([a-fA-F0-7]{2,8})/ue', '/\\\u([a-fA-F0-7]{2,8})/ue'), "utf8_entity_decode('&#'.hexdec('\\1').';')", $content);
@@ -966,6 +964,9 @@ class spiderApp {
                 iPHP::alert($name . '内容为空!请检查,规则是否正确!!');
             }
         }
+
+        $data['trim'] && $content = trim($content);
+
         if($data['array']){
         	return array($content);
         }
