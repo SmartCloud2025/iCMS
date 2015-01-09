@@ -35,9 +35,9 @@ class iFS {
 
     public static $TABLE            = null;
     public static $forceExt         = false;
-    public static $isRedirect       = false;
+    public static $redirect         = false;
     public static $checkFileData    = true;
-    public static $isValidext       = true;
+    public static $validext         = true;
     public static $config           = null;
     public static $userid           = 0;
     public static $callback         = false;
@@ -611,7 +611,7 @@ class iFS {
             (empty($FileExt) || strlen($FileExt) > 4) && $FileExt = self::$forceExt;
             return $FileExt;
         }
-        if (!self::$isValidext)
+        if (!self::$validext)
             return $FileExt;
 
         $aExt = explode(',', strtolower(self::$config['allow_ext']));

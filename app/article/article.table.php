@@ -7,6 +7,8 @@
  * @$Id: article.table.php 2408 2014-04-30 18:58:23Z coolmoo $
  */
 class articleTable {
+    public static $ID = 0;
+
     public static function select($sql='',$orderby='',$offset=0,$maxperpage=10){
         $rs = iDB::all("SELECT * FROM `#iCMS@__article` {$sql} order by {$orderby} LIMIT {$offset},{$maxperpage}");
         //iDB::debug(1);
@@ -55,13 +57,22 @@ class articleTable {
         $rs    = iDB::row("SELECT * FROM `#iCMS@__article` WHERE `id`='$id' {$sql} LIMIT 1;",ARRAY_A);
         if($rs){
             $aid   = $rs['id'];
-            $adsql = $adid?" AND `id`='{$adid}'":'';
-            $adrs  = iDB::row("SELECT * FROM `#iCMS@__article_data` WHERE `aid`='$aid' {$adsql}",ARRAY_A);
+            if(iCMS_ARTICLE_DATA==="TEXT"){
+                $adrs  = self::get_text($aid);
+            }else{
+                $adsql = $adid?" AND `id`='{$adid}'":'';
+                $adrs  = iDB::row("SELECT * FROM `#iCMS@__article_data` WHERE `aid`='$aid' {$adsql}",ARRAY_A);
+            }
         }
         return array($rs,$adrs);
     }
     public static function body($id=0){
-        return iDB::value("SELECT body FROM `#iCMS@__article_data` WHERE aid='$id'");
+        if(iCMS_ARTICLE_DATA==="TEXT"){
+            $body = self::get_text($id,1,'body');
+        }else{
+            $body = iDB::value("SELECT body FROM `#iCMS@__article_data` WHERE aid='$id'");
+        }
+        return $body;
     }
 
     public static function batch($data,$ids){
@@ -86,17 +97,25 @@ class articleTable {
         return $fields;
     }
     public static function data_insert($data){
+        if(iCMS_ARTICLE_DATA==="TEXT"){
+            return self::put_text(self::$ID,$data);
+        }
         return iDB::insert('article_data',$data);
     }
     public static function data_update($data,$where){
+        if(iCMS_ARTICLE_DATA==="TEXT"){
+            return self::put_text(self::$ID,$data);
+        }
         return iDB::update('article_data',$data,$where);
     }
 
     public static function del($id){
         iDB::query("DELETE FROM `#iCMS@__article` WHERE id='$id'");
-
     }
     public static function del_data($id){
+        if(iCMS_ARTICLE_DATA==="TEXT"){
+            return self::del_text($id);
+        }
         iDB::query("DELETE FROM `#iCMS@__article_data` WHERE `aid`='$id'");
     }
 
@@ -116,35 +135,45 @@ class articleTable {
         iDB::query("DELETE FROM `#iCMS@__comment` WHERE iid='$iid' and appid='".iCMS_APP_ARTICLE."'");
     }
 // ================ iCMS_ARTICLE_DATA(FILE) =============
-    public static function get_fdata_dir($id){
-        $nid  = abs(intval($id));
-        $nid  = sprintf("%010d", $nid);
-        $dir1 = substr($nid, 0, 3);
-        $dir2 = substr($nid, 3, 2);
-        $dir3 = substr($nid, 5, 2);
+    public static function get_text_dir($id){
+        $id   = abs(intval($id));
+        $nid  = sprintf("%09d", $id);
+        $dir  = substr($nid, 0, 3).'/'.substr($nid, 3, 3).'/'.substr($nid, 6, 3);
         $kdir = substr(md5(iPHP_KEY),8,16);
-        $path = 'article_'.$kdir.'/'.$dir1.'/'.$dir2.'/'.$dir3.'/'.$id;
+        $path = '#article_'.$kdir.'#/'.$dir.'/'.$id;
         return $path;
     }
-    public static function get_fdata_file($id,$page=1) {
-        return self::get_fdata_dir($id).'/'.$page.".php";
+    public static function get_text_file($id,$page=1) {
+        $fpath = self::get_text_dir($id).'/p'.$page.".php";
+        return array($fpath,iPATH.'/'.$fpath);
     }
-    public static function put_fdata($id,$body,$page=1) {
-        iFS::mkdir(self::get_fdata_dir($id));
-        $file_path = self::get_fdata_file($id,$page);
-        if($body){
-            iFS::write($file_path,'<?php exit;?>'.$body);
+    public static function put_text($id,$data,$page=1) {
+        iFS::mkdir(iPATH.'/'.self::get_text_dir($id).'/');
+        $fp = self::get_text_file($id,$page);
+        if($data){
+            iFS::write($fp[1],'<?php exit;?>'.serialize($data));
+            return $fp[0];
         }else{
             return false;
         }
     }
-    public static function get_fdata($id,$page=1) {
-        $file_path = self::get_fdata_file($id,$page);
-        if(!is_file($file_path)){
-            return false;
+    public static function get_text($id,$page=1,$field=null) {
+        $fp = self::get_text_file($id,$page);
+        if(!is_file($fp[1])){
+            return array();
         }
-        $body = file_get_contents($file_path);
-        return substr($body,13);
+        $data = file_get_contents($fp[1]);
+        $data = unserialize(substr($data,13));
+        $data['subtitle'] && $data['subtitle'] = stripslashes($data['subtitle']);
+        $data['body'] = stripslashes($data['body']);
+
+        if($field){
+            return $data[$field];
+        }
+        return $data;
+    }
+    public static function del_text($id,$page=1) {
+        iFS::rmdir(iPATH.'/'.self::get_text_dir($id).'/');
     }
 
 }

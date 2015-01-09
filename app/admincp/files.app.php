@@ -111,10 +111,10 @@ class filesApp{
 		}
     }
     function do_download(){
-        $rs              = iFS::getFileData('id',$this->id);
-        iFS::$isRedirect = true;
-        $FileRootPath    = iFS::fp($rs->filepath,"+iPATH");
-        $fileresults     = iFS::remote($rs->ofilename);
+        $rs            = iFS::getFileData('id',$this->id);
+        iFS::$redirect = true;
+        $FileRootPath  = iFS::fp($rs->filepath,"+iPATH");
+        $fileresults   = iFS::remote($rs->ofilename);
     	if($fileresults){
     		iFS::mkdir(dirname($FileRootPath));
     		iFS::write($FileRootPath,$fileresults);

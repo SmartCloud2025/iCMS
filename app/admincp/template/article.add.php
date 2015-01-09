@@ -356,7 +356,7 @@ function _modal_dialog(cancel_text){
               提取缩略图 </span><span class="add-on wauto">
               <input name="dellink" type="checkbox" id="dellink" value="1"/>
               清除链接 </span>  <span class="add-on wauto">
-              <input name="isRedirect" type="checkbox" id="isRedirect" value="1" />
+              <input name="isredirect" type="checkbox" id="isredirect" value="1" />
               增强图片下载 </span>
               <?php if(iCMS::$config['watermark']['enable']=="1"){ ?>
               <span class="add-on wauto">

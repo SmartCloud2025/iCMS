@@ -23,16 +23,7 @@ class articleApp{
         $this->_status     = '1';
         define('TAG_APPID',$this->appid);
     }
-    // function detag($tags){
-    //     if($tags{0}.$tags{1}=='[['){
-    //         $tagsArray = json_decode($tags);
-    //         foreach ((array)$tagsArray as $k => $_tag) {
-    //             $_tagArray[] = $_tag[0];
-    //         }
-    //         $tags =implode(',', (array)$_tagArray);
-    //     }
-    //     return $tags;
-    // }
+
     function do_add(){
         $_GET['cid'] && iACP::CP($_GET['cid'],'ca','page');//添加权限
         $rs      = array();
@@ -606,23 +597,26 @@ class articleApp{
         $body     = preg_replace(array('/<script.+?<\/script>/is','/<form.+?<\/form>/is'),'',$body);
         isset($_POST['dellink']) && $body = preg_replace("/<a[^>].*?>(.*?)<\/a>/si", "\\1",$body);
 
+        articleTable::$ID = $aid;
+
         $fields = articleTable::data_fields($id);
         $data   = compact ($fields);
+
         if($id){
             articleTable::data_update($data,compact('id'));
         }else{
             $id = articleTable::data_insert($data);
         }
 
-        $_POST['isRedirect']  && iFS::$isRedirect = true;
-        $_POST['iswatermark'] && iFS::$watermark = false;
+        $_POST['isredirect'] && iFS::$redirect  = true;
+        $_POST['iswatermark']&& iFS::$watermark = false;
 
         if(isset($_POST['remote'])){
             $body = $this->remotepic($body,true,$aid);
             $body = $this->remotepic($body,true,$aid);
             $body = $this->remotepic($body,true,$aid);
             if($body && $id){
-                iDB::update('article_data',array('body'=>$body),array('id'=>$id));
+                articleTable::data_update(array('body'=>$body),compact('id'));
             }
         }
 

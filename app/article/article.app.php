@@ -75,7 +75,12 @@ class articleApp {
                 iPHP::gotourl($article['url']);
             }
         }
-        $article && $article_data = iDB::row("SELECT body,subtitle FROM `#iCMS@__article_data` WHERE aid='".(int)$id."' LIMIT 1;",ARRAY_A);
+        if(iCMS_ARTICLE_DATA==="TEXT"){
+            iPHP::app('article.table');
+            $article_data = articleTable::get_text($id);
+        }else{
+            $article && $article_data = iDB::row("SELECT body,subtitle FROM `#iCMS@__article_data` WHERE aid='".(int)$id."' LIMIT 1;",ARRAY_A);
+        }
         $vars = array(
             'tags'          =>true,
             'user'          =>true,
@@ -133,6 +138,12 @@ class articleApp {
         $this->taoke = false;
         if($art_data){
             $pageurl = $article['iurl']->pageurl;
+
+            // if(strpos($art_data['body'], '#--iCMS.ArticleData--#')!==false){
+            //     iPHP::app('article.table');
+            //     $art_data['body'] = articleTable::get_text($article['id']);
+            // }
+
             $art_data['body'] = $this->ubb($art_data['body']);
 
             preg_match_all("/<img.*?src\s*=[\"|'|\s]*(http:\/\/.*?\.(gif|jpg|jpeg|bmp|png)).*?>/is",$art_data['body'],$pic_array);
