@@ -140,7 +140,7 @@ class articleTable {
         $nid  = sprintf("%09d", $id);
         $dir  = substr($nid, 0, 3).'/'.substr($nid, 3, 3).'/'.substr($nid, 6, 3);
         $kdir = substr(md5(iPHP_KEY),8,16);
-        $path = '#article_'.$kdir.'#/'.$dir.'/'.$id;
+        $path = 'article_'.$kdir.'/'.$dir.'/'.$id;
         return $path;
     }
     public static function get_text_file($id,$page=1) {
