@@ -51,9 +51,10 @@ class tagApp {
         $tag = $this->value($tag);
         if ($tpl) {
             iCMS::hooks('enable_comment',true);
-            iPHP::assign("tag", $tag);
             iPHP::assign('category',$tag['category']);
             iPHP::assign('tag_category',$tag['tag_category']);
+            unset($tag['category'],$tag['tag_category']);
+            iPHP::assign("tag", $tag);
             if (strstr($tpl, '.htm')) {
                 return iPHP::view($tpl, 'tag');
             }

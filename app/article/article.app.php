@@ -96,10 +96,11 @@ class articleApp {
 
         if($tpl) {
             iCMS::hooks('enable_comment',true);
-            iPHP::assign('article',$article);
-            iPHP::assign('category',$article['category']);
             $article_tpl = empty($article['tpl'])?$article['category']['contentTPL']:$article['tpl'];
             strstr($tpl,'.htm') && $article_tpl	= $tpl;
+            iPHP::assign('category',$article['category']);
+            unset($article['category']);
+            iPHP::assign('article',$article);
             $html	= iPHP::view($article_tpl,'article');
             if(iPHP::$iTPL_MODE=="html") return array($html,$article);
         }else{
@@ -301,6 +302,7 @@ class articleApp {
         if($article['picdata']){
             $picdata = unserialize($article['picdata']);
         }
+        unset($article['picdata']);
 
         $article['pic']   = get_pic($article['pic'],$picdata['b'],get_twh($vars['btw'],$vars['bth']));
         $article['mpic']  = get_pic($article['mpic'],$picdata['m'],get_twh($vars['mtw'],$vars['mth']));
