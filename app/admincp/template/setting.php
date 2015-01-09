@@ -70,7 +70,7 @@ function modal_tplfile(el,a){
         <li><a href="#setting-tag" data-toggle="tab">标签</a></li>
         <li><a href="#setting-cache" data-toggle="tab">缓存</a></li>
         <li><a href="#setting-file" data-toggle="tab">附件</a></li>
-        <li><a href="#setting-thumb" data-toggle="tab">缩略图</a></li>
+        <!-- <li><a href="#setting-thumb" data-toggle="tab">缩略图</a></li> -->
         <li><a href="#setting-watermark" data-toggle="tab">水印</a></li>
         <li><a href="#setting-user" data-toggle="tab">用户</a></li>
         <li><a href="#setting-publish" data-toggle="tab">发布</a></li>
@@ -438,6 +438,7 @@ function modal_tplfile(el,a){
             </div>
             <div class="clearfloat mb10"></div>
           </div>
+          <!--
           <div id="setting-thumb" class="tab-pane hide">
             <div class="input-prepend"> <span class="add-on">缩略图</span>
               <div class="switch">
@@ -450,7 +451,9 @@ function modal_tplfile(el,a){
               <span class="add-on" style="width:24px;">高度</span>
               <input type="text" name="config[thumb][height]" class="span1" id="thumb_height" value="<?php echo $config['thumb']['height'] ; ?>"/>
             </div>
-            <span class="help-inline">px</span> </div>
+            <span class="help-inline">px</span>
+          </div>
+          -->
           <div id="setting-watermark" class="tab-pane hide">
             <div class="input-prepend"> <span class="add-on">水印</span>
               <div class="switch">
@@ -515,13 +518,16 @@ function modal_tplfile(el,a){
             <div class="input-prepend"> <span class="add-on">水印透明度</span>
               <input type="text" name="config[watermark][transparent]" class="span3" id="watermark_transparent" value="<?php echo $config['watermark']['transparent'] ; ?>"/>
             </div>
+            <!--
             <div class="clearfloat mb10"></div>
             <div class="input-prepend"> <span class="add-on">缩略图水印</span>
               <div class="switch">
                 <input type="checkbox" data-type="switch" name="config[watermark][thumb]" id="watermark_thumb" <?php echo $config['watermark']['thumb']?'checked':''; ?>/>
               </div>
             </div>
-            <span class="help-inline">开启时缩略图也会打上水印</span> </div>
+            <span class="help-inline">开启时缩略图也会打上水印</span>
+            -->
+          </div>
           <div id="setting-user" class="tab-pane hide">
             <div class="input-prepend"> <span class="add-on">用户注册</span>
               <div class="switch">
