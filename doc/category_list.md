@@ -37,10 +37,10 @@ iCMS模板标签
 |appid|2,3,4|应用ID
 |mode|2,3,4|应用ID
 |stype|top,sub,self,suball|top:顶级栏目 <br /> sub:子级栏目 <br /> self:同级栏目 <br /> suball:所有子级栏目
-|as|变量别名|
+|as|无|变量别名
 |start|0|开始索引号
-|step|步进值|
-|max|最大索引值|
+|step|1|步进值
+|max|无|最大索引值
 
 ###标签内部变量
 > *为系统变量

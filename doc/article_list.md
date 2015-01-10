@@ -92,10 +92,10 @@ iCMS模板标签
 |weight|权重|文章的权重
 |nopic|true|无缩略图
 |where|SQL语句|如果你觉得上面的条件不够用,那自己写吧
-|as|变量别名|
+|as|无|变量别名
 |start|0|开始索引号
-|step|步进值|
-|max|最大索引值|
+|step|1|步进值
+|max|无|最大索引值
 
 - page = "true" 时  可调用分页标签
 

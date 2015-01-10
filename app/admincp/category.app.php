@@ -129,10 +129,6 @@ class categoryApp extends category{
 			$contentprop = addslashes(serialize($ca));
 		}
 
-        if(empty($dir) && empty($url)) {
-            $dir = strtolower(pinyin($name));
-        }
-
         if($mode=="2"){
         	if(strpos($categoryRule,'{CDIR}')=== FALSE && strpos($categoryRule,'{CID}')=== FALSE){
         		iPHP::alert('伪静态模式下版块URL规则<hr />必需要有<br />{CDIR}版块目录<br />或者<br />{CID}版块ID');
@@ -154,10 +150,13 @@ class categoryApp extends category{
         		$_name	= trim($_name);
                 if(empty($_name)) continue;
 
-		        empty($url) && $_dir = strtolower(pinyin($_name));
-                $this->check_dir($_dir,$appid,$url);
+                if(empty($dir) && empty($url)) {
+                    $dir = strtolower(pinyin($_name));
+                }
+
+                $this->check_dir($dir,$appid,$url);
                 $data['name']       = $_name;
-                $data['dir']        = $_dir;
+                $data['dir']        = $dir;
                 $data['userid']     = iMember::$userid;
                 $data['creator']    = iMember::$nickname;
                 $data['createtime'] = time();
@@ -171,8 +170,13 @@ class categoryApp extends category{
             }
             $msg=$this->name_text."添加完成!";
         }else {
+            if(empty($dir) && empty($url)) {
+                $dir = strtolower(pinyin($name));
+            }
             iACP::CP($cid,'e','alert');
             $this->check_dir($dir,$appid,$url,$cid);
+
+            $data['dir'] = $dir;
             iDB::update('category', $data, array('cid'=>$cid));
             map::diff($pid,$_pid,$cid);
             $this->cahce_one($cid);
