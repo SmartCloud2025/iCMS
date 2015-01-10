@@ -448,6 +448,9 @@ class spiderApp {
                 echo $url . "<br />";
             }
             $html = $this->remote($url);
+            if(empty($html)){
+                continue;
+            }
             if($rule['mode']=="2"){
                 $doc       = phpQuery::newDocumentHTML($html,'UTF-8');
                 $list_area = $doc[trim($rule['list_area_rule'])];
@@ -808,7 +811,7 @@ class spiderApp {
                 foreach ($page_url_array AS $pukey => $purl) {
                     //usleep(100);
                     $phtml = $this->remote($purl);
-                    if ($phtml === false) {
+                    if (empty($phtml)) {
                         break;
                     }
                     $phttp = $this->check_content_code($phtml);
@@ -1351,7 +1354,7 @@ class spiderApp {
             	exit();
             }
         }
-        if (($info['http_code'] == 301 || $info['http_code'] == 302) && $_count < 5) {
+        if (in_array($info['http_code'],array(301,302)) && $_count < 5) {
             $_count++;
             $newurl = $info['redirect_url'];
 	        if(empty($newurl)){
@@ -1371,13 +1374,13 @@ class spiderApp {
 			unset($responses,$info);
             return $this->remote($url, $_count);
         }
-        if ($info['http_code'] == 404 || $info['http_code'] == 500) {
+        if (in_array($info['http_code'],array(404,500))) {
 			curl_close($ch);
 			unset($responses,$info);
             return false;
         }
 
-        if ((empty($responses)||empty($info['http_code'])) && $_count < 5) {
+        if ((empty($responses)||$info['http_code']!=200) && $_count < 5) {
             $_count++;
             if ($this->contTest || $this->ruleTest) {
                 echo $url . '<br />';
