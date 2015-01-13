@@ -39,9 +39,9 @@ class user {
 					'home'     => iPHP::router(array('/{uid}/',$uid),iCMS_REWRITE),
 					'comment'  => iPHP::router(array('/{uid}/comment/',$uid),iCMS_REWRITE),
 					'favorite' => iPHP::router(array('/{uid}/favorite/',$uid),iCMS_REWRITE),
-					//'share'    => iPHP::router(array('/{uid}/share/',$uid),iCMS_REWRITE),
+					//'share'  => iPHP::router(array('/{uid}/share/',$uid),iCMS_REWRITE),
 					'fans'     => iPHP::router(array('/{uid}/fans/',$uid),iCMS_REWRITE),
-					'follow'   => iPHP::router(array('/{uid}/follow/',$uid),iCMS_REWRITE),
+					'follower' => iPHP::router(array('/{uid}/follower/',$uid),iCMS_REWRITE),
 	            );
 	        break;
 	    }

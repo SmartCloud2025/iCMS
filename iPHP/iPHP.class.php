@@ -290,11 +290,11 @@ class iPHP{
 			@is_file($path) OR self::throwException($path.' not exist',0013);
 			$router = self::import($path,true);
 		}
-		return self::router_url($key,$router);
-	}
-	private static function router_url($key,$router=null){
 		if(is_array($key)){
 			$url = $router?$router[$key[0]]:$key[0];
+			if($static && stripos($url, '/{uid}/')===0){
+				$url = rtrim(iCMS_USER_URL,'/').$url;
+			}
 			if(is_array($key[1])){ /* 多个{} 例:/{uid}/{cid}/ */
 				preg_match_all('/\{(\w+)\}/i',$url, $matches);
 				$url = str_replace($matches[0], $key[1], $url);
@@ -305,8 +305,10 @@ class iPHP{
 		}else{
 			$url = $router?$router[$key]:$key;
 		}
+
 		return $url;
 	}
+
     public static function lang($string='') {
     	if(empty($string)) return false;
 

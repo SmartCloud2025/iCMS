@@ -26,11 +26,11 @@
 window.iCMS.init({
 	API:"<!--{iCMS:router url='/api'}-->",
 	PUBLIC:"<!--{$site.urls.public}-->",
-	COOKIE:'<!--{$iCMS.COOKIE_PRE}-->'
+	COOKIE:'<!--{$iCMS.COOKIE_PRE}-->',
+	COMMENT:{seccode:<!--{if $iCMS.CONFIG.comment.seccode }-->true<!--{else}-->false<!--{/if}-->}
 });
 $(function(){
 	iCMS.run();
-
 })
 </script>
 <!--{/if}-->

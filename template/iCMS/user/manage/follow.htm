@@ -2,7 +2,7 @@
   <div class="pg_follow w670">
     <table class="table table-striped">
       <tbody>
-        <!--{iCMS:user:follow loop="true" row="30" userid=$user.uid}-->
+        <!--{iCMS:user:follow loop="true" page="true" row="10" userid="$user.uid"}-->
         <tr id="id-<!--{$user_follow.uid}-->">
           <td class="avatar_35"><a title="<!--{$user_follow.name}-->" href="<!--{$user_follow.url}-->">
               <img class="iCMS_user_avatar avatar_35" data-tip="iCMS:ucard:<!--{$user_follow.uid}-->" src="<!--{$user_follow.avatar}-->" onerror="iCMS.user.noavatar(this);">

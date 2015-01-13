@@ -58,7 +58,7 @@ return array(
 	'/{uid}/share/'         => iCMS_URL.'/user.php?do=share&uid={uid}',
 	'/{uid}/favorite/'      => iCMS_URL.'/user.php?do=favorite&uid={uid}',
 	'/{uid}/fans/'          => iCMS_URL.'/user.php?do=fans&uid={uid}',
-	'/{uid}/follow/'        => iCMS_URL.'/user.php?do=follow&uid={uid}',
+	'/{uid}/follower/'      => iCMS_URL.'/user.php?do=follower&uid={uid}',
 	'/{uid}/{cid}/'         => iCMS_URL.'/user.php?do=home&uid={uid}&cid={cid}',
 	'/{uid}/favorite/{id}/' => iCMS_URL.'/user.php?do=favorite&uid={uid}&id={id}',
 

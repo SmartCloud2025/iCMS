@@ -27,7 +27,7 @@
         <div class="card_data">
           <ul>
             <li class='last'> <a href="<!--{$user.urls.fans}-->"> <span class="text_count"><!--{$user.fans|num10K}--></span> <span class="text_atr">粉丝</span> </a> </li>
-            <li> <a href="<!--{$user.urls.follow}-->"> <span class="text_count"><!--{$user.follow|num10K}--></span> <span class="text_atr">关注</span> </a> </li>
+            <li> <a href="<!--{$user.urls.follower}-->"> <span class="text_count"><!--{$user.follow|num10K}--></span> <span class="text_atr">关注</span> </a> </li>
             <li class='first'> <a href="<!--{$user.urls.home}-->"> <span class="text_count"><!--{$user.article|num10K}--></span> <span class="text_atr">文章</span> </a> </li>
           </ul>
         </div>
@@ -38,9 +38,14 @@
       <!--{if $user.category.name}-->
       <h3 class="category_name"><span class="label label-info"><!--{$user.category.name}--></span></h3>
       <!--{/if}-->
-      <!--{if $iCMS.APP.DO=="home"}-->
-        <!--{include file="./home.article.htm"}-->
-      <!--{/if}-->
+      <!--{switch from="$iCMS.APP.DO"}-->
+        <!--{case value="home"}-->
+        <!--{include file="./home.article.htm" import="true"}-->
+        <!--{case value="follower"}-->
+        <!--{include file="./home.follower.htm" import="true"}-->
+        <!--{case value="fans"}-->
+        <!--{include file="./home.fans.htm" import="true"}-->
+      <!--{/switch}-->
       <div id="artpagenav" class="iCMS_pagination">
         <!--{$iCMS.PAGE.NAV}-->
       </div>
@@ -90,7 +95,7 @@
         <div class="hd">
           <h3>统计<span>STATISTICS</span></h3>
         </div>
-        <ul>
+        <ul class="statistics">
           <li><span class="label label-success">今日访问：<!--{$user.hits_today}--></span></li>
           <li><span class="label label-success">昨日访问：<!--{$user.hits_yday}--></span></li>
           <li><span class="label label-info">本周访问：<!--{$user.hits_week}--></span></li>
@@ -99,6 +104,7 @@
         </ul>
       </div>
     </div>
+    <div class="clearfix"></div>
   </div>
   <!--{include file="{iTPL}/footer.htm"}-->
   <script src="<!--{$user.hits_script}-->"></script>

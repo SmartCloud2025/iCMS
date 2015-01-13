@@ -1,0 +1,26 @@
+<tr id="uid_<!--{$user_follow.uid}-->" class="userfollow">
+  <td class="avatar_35">
+    <a title="<!--{$user_follow.name}-->" href="<!--{$user_follow.url}-->">
+      <img class="iCMS_user_avatar avatar_35" data-tip="iCMS:ucard:<!--{$user_follow.uid}-->" src="<!--{$user_follow.avatar}-->" onerror="iCMS.user.noavatar(this);">
+    </a>
+  </td>
+  <td>
+    <div class="info">
+      <span class="label label-success"><!--{$user_follow.name}--></span> <i class="icon_<!--{$user.gender}-->"></i>
+    </div>
+  </td>
+  <td class="span2">
+    <div data-param='{"uid":"<!--{$user_follow.uid}-->","name":"<!--{$user_follow.name}-->"}'>
+      <!--{if $user_follow.uid==$me.uid}-->
+      你自己
+      <!--{else}-->
+        <!--{if $user_follow.followed}-->
+        <a href="javascript:;" data-param='{"follow":"1"}' class="btn_follow"><i class="fa fa-check"></i> 已关注，取消</a>
+        <!--{else}-->
+        <a href="javascript:;" data-param='{"follow":"0"}' class="btn btn-success btn_follow"><i class="fa fa-plus"></i> 关注</a>
+        <!--{/if}-->
+      <!--{/if}-->
+    </div>
+  </td>
+</tr>
+

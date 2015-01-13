@@ -537,6 +537,9 @@ class spiderApp {
                     echo "开始采集:".$url." 列表 ".$pubCount[$url]['count']."条记录\n";
                     foreach ($lists AS $lkey => $row) {
                         list($this->title,$this->url) = $this->title_url($row,$rule,$lists);
+                        if($this->url===false){
+                            continue;
+                        }
                         $hash  = md5($this->url);
                         echo "title:".$this->title."\n";
                         echo "url:".$this->url."\n";
@@ -577,6 +580,9 @@ class spiderApp {
             } else {
                 foreach ($lists AS $lkey => $row) {
                     list($title,$url) = $this->title_url($row,$rule,$lists);
+                    if($url===false){
+                        continue;
+                    }
                     $hash  = md5($url);
                     if ($this->ruleTest) {
                         echo $title . ' (<a href="' . APP_URI . '&do=testcont&url=' . $url . '&rid=' . $rid . '&pid=' . $pid . '&title=' . urlencode($title) . '" target="_blank">测试内容规则</a>) <br />';
@@ -998,6 +1004,25 @@ class spiderApp {
             $_pattern     = trim($_pattern);
             $_replacement = trim($_replacement);
             $_replacement = str_replace('\n', "\n", $_replacement);
+            if(strpos($_pattern, 'NEED::')!==false){
+                $need = str_replace('NEED::','', $_pattern);
+                if(strpos($content,$need)===false){
+                    return false;
+                }
+            }
+            // if(strpos($_pattern, 'NOT::')!==false){
+            //     $not = str_replace('NOT::','', $_pattern);
+            //     if(strpos($content,$not)!==false){
+            //         return false;
+            //     }
+            // }
+            if(strpos($_pattern, 'LEN::')!==false){
+                $len        = str_replace('LEN::','', $_pattern);
+                $len_content = preg_replace(array('/<[\/\!]*?[^<>]*?>/is','/\s*/is'),'',$content);
+                if(cstrlen($len_content)<$len){
+                    return false;
+                }
+            }
             if(strpos($_pattern, 'DOM::')!==false){
                 $doc      = phpQuery::newDocumentHTML($content,'UTF-8');
                 //echo 'dataClean:getDocumentID:'.$doc->getDocumentID()."\n";

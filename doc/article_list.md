@@ -135,14 +135,16 @@ iCMS模板标签
 ####获取 5个顶分类 下10个子分类 每个分类最新的10篇文章
 
 ```
-<!--{iCMS:category:list loop="true" row="10"}-->
- <a href="<!--{$category_list.url}-->"><!--{$category_list.title}--></a>
-  <!--{iCMS:category:list loop="true" row="10" stype="sub" cid="$category.cid" as="cate"}-->
-    <a href="<!--{$cate.url}-->"><!--{$cate.title}--></a>
+<!--{iCMS:category:list loop="true" row="5" stype="top"}-->
+ <h3><!--{$category_list.name}--></h3>
+  <!--{iCMS:category:list loop="true" row="10" stype="sub" cid="$category_list.cid" as="cate"}-->
+    <b><!--{$cate.name}--></b>
     <!--{iCMS:article:list loop="true" row="10" cid="$cate.cid"}-->
       <a href="<!--{$article_list.url}-->"><!--{$article_list.title}--></a>
     <!--{/iCMS}-->
+    <hr />
   <!--{/iCMS}-->
+  <hr />
 <!--{/iCMS}-->
 ```
 

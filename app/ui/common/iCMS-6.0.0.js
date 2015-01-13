@@ -32,6 +32,7 @@
                 event.preventDefault();
                 var param = iCMS.param($(this));
                 if (param['do'] =='comment') {
+                    iCMS.comment.seccode = iCMS.config.COMMENT.seccode;
                     iCMS.comment.box(this);
                 } else if (param['do'] =='favorite') {
                     iCMS.user.favorite(this);

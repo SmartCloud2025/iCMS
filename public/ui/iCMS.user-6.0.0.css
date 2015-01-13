@@ -1,8 +1,9 @@
 body { background-color: #fff; background-image: url(img/bg-v6.png); _background-attachment: fixed; }
+#footer{margin-top:0px;}
 /* userApp */
 .userApp_home { margin: 0 auto; width: 960px; background-color: #fff; }
-.userApp_home .main-col { float: left; width: 640px; margin-top: 10px; min-height: 900px; _height: 900px; border-right: 1px solid #E4E4E4; background: #fff; }
-.userApp_home .right-col { float: right; padding-top: 20px; padding-bottom: 30px; width: 319px; }
+.userApp_home .main-col { float: left; width: 640px; min-height: 900px; _height: 900px; border-right: 1px solid #E4E4E4; background: #fff; }
+.userApp_home .right-col { float: right; min-height: 900px; _height: 900px;padding-top: 20px;width: 319px; }
 .userApp_home .mod { margin-left: 10px; margin-right: 10px; }
 .userApp_home .mod .hd { margin-bottom: 4px; }
 .userApp_home .txtList li { display: block; margin-bottom: 3px; list-style: none; }
@@ -11,6 +12,8 @@ body { background-color: #fff; background-image: url(img/bg-v6.png); _background
 .userApp_home .txtList li a span { margin-left: 10px; }
 .avatar_list { }
 .avatar_list li { display: inline-block; margin-bottom: 4px; }
+.userApp_home .statistics .label{padding: 4px 5px;margin: 2px 0px;font-weight:normal;min-width: 80px;}
+
 /* --icon--- */
 .icon_manage { display: inline-block; width: 16px; height: 16px; background: url(img/manage.png) no-repeat top left; }
 .icon_user { display: inline-block; width: 16px; height: 16px; background: url(img/user.png) no-repeat top left; }
@@ -85,6 +88,11 @@ body { background-color: #fff; background-image: url(img/bg-v6.png); _background
 #favList .fav-link h2{font-weight: bold;display: inline;}
 #favList .data{font-size: 12px;}
 #favList .fav-data-link{color: #698EBF;}
+#followerList{}
+#fansList{}
+.userfollow{}
+.userfollow .info .label{float: left;font-size: 14px;padding: 5px 6px;}
+.userfollow .info i{margin: 0px 2px 0px 5px;}
 /* ======userApp======== */
 /* ----home.btn-------- */
 #home_btn { font-weight: bold; margin-top: 10px; padding-left: 25px; padding-bottom: 15px; border-bottom: 1px dotted #DBDBDB; }

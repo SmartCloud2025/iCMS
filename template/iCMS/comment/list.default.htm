@@ -53,7 +53,7 @@
 			</div>
 			<script>
 			$(function() {
-            	iCMS.comment.seccode = <!--{if $iCMS.CONFIG.comment.seccode }-->true<!--{else}-->false<!--{/if}-->;
+            	iCMS.comment.seccode = iCMS.config.COMMENT.seccode;
 	            <!--{if $comment_vars.display=="iframe"}-->
                 iCMS.comment.iframe_height('list');
 	            <!--{/if}-->

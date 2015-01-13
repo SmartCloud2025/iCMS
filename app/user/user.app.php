@@ -11,7 +11,7 @@ defined('iPHP') OR exit('What are you doing?');
 iPHP::app('user.class','static');
 iPHP::app('user.msg.class','static');
 class userApp {
-    public $methods = array('iCMS','home','favorite','article','publish','manage','profile','data','hits','check','follow','login','logout','register','add_category','upload','mobileUp','config','uploadvideo','uploadimage','catchimage','report','fav_category','ucard','pm');
+    public $methods = array('iCMS','home','favorite','article','publish','manage','profile','data','hits','check','follow','follower','fans','login','logout','register','add_category','upload','mobileUp','config','uploadvideo','uploadimage','catchimage','report','fav_category','ucard','pm');
     public $openid  = null;
     public $user    = array();
     public $me      = array();
@@ -58,12 +58,19 @@ class userApp {
     public function do_iCMS($a = null) {
         $this->do_home();
     }
-    public function do_home(){
+    public function do_home($category=true){
         $this->user(true);
-        $u['category'] = user::category((int)$_GET['cid'],iCMS_APP_ARTICLE);
+        $category && $u['category'] = user::category((int)$_GET['cid'],iCMS_APP_ARTICLE);
         iPHP::append('user',$u,true);
         iPHP::view('iCMS://user/home.htm');
     }
+    public function do_fans(){
+        $this->do_home();
+    }
+    public function do_follower(){
+        $this->do_home();
+    }
+
     public function do_favorite(){
         $this->do_home();
     }

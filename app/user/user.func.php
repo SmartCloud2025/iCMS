@@ -46,8 +46,7 @@ function user_list($vars=null){
 	$limit  = "LIMIT {$maxperpage}";
 	if($vars['page']){
 		$total	= iPHP::total('sql.md5',"SELECT count(*) FROM `#iCMS@__user` {$where_sql} ");
-		iPHP::assign("user_total",$total);
-		$multi  = iCMS::page(array('total'=>$total,'perpage'=>$maxperpage,'unit'=>iPHP::lang('iCMS:page:list'),'nowindex'=>$GLOBALS['page']));
+		$multi  = iCMS::page(array('total'=>$total,'perpage'=>$maxperpage,'unit'=>iPHP::lang('iCMS:page:sql'),'nowindex'=>$GLOBALS['page']));
 		$offset = $multi->offset;
 		$limit  = "LIMIT {$offset},{$maxperpage}";
         iPHP::assign("user_list_total",$total);
@@ -114,16 +113,31 @@ function user_category($vars=null){
 	return $resource;
 }
 function user_follow($vars=null){
-	$row = isset($vars['row'])?(int)$vars['row']:"30";
+	$maxperpage = isset($vars['row'])?(int)$vars['row']:"30";
 	if($vars['fuid']){
-		$where_sql = "WHERE `fuid`='".$vars['fuid']."'";	//fans
-		if(isset($vars['check'])){
-			$follow = user::follow($vars['fuid'],'all'); //all follow
-		}
+		$where_sql = "WHERE `fuid`='".$vars['fuid']."'"; //fans
 	}else{
-		$where_sql = "WHERE `uid`='".$vars['userid']."'";	//follow
+		$where_sql = "WHERE `uid`='".$vars['userid']."'";//follow
 	}
-	$resource = iDB::all("SELECT * FROM `#iCMS@__user_follow` {$where_sql} LIMIT $row");
+
+	$vars['followed'] && $follow_data = user::follow($vars['followed'],'all');
+
+	$offset	= 0;
+	$limit  = "LIMIT {$maxperpage}";
+	if($vars['page']){
+		$total	= iPHP::total('sql.md5',"SELECT count(*) FROM `#iCMS@__user_follow` {$where_sql} {$limit}");
+		$multi  = iCMS::page(array('total'=>$total,'perpage'=>$maxperpage,'unit'=>iPHP::lang('iCMS:page:sql'),'nowindex'=>$GLOBALS['page']));
+		$offset = $multi->offset;
+		$limit  = "LIMIT {$offset},{$maxperpage}";
+        iPHP::assign("user_follow_total",$total);
+	}
+    $hash = md5($where_sql.$limit);
+
+    if($vars['cache']){
+		$cache_name = iPHP_DEVICE.'/user_follow/'.$hash;
+		$resource   = iCache::get($cache_name);
+    }
+	$resource = iDB::all("SELECT * FROM `#iCMS@__user_follow` {$where_sql} {$limit}");
 	iPHP_SQL_DEBUG && iDB::debug(1);
 	if($resource)foreach ($resource as $key => $value) {
 		if($vars['fuid']){
@@ -135,9 +149,7 @@ function user_follow($vars=null){
 			$value['uid']    = $value['fuid'];
 			$value['name']   = $value['fname'];
 		}
-		if(isset($vars['check'])){
-			$value['followed'] = $follow[$value['uid']]?1:0;
-		}
+		$follow_data && $value['followed'] = $follow_data[$value['uid']]?1:0;
 		$resource[$key] = $value;
 	}
 	//var_dump($rs);
