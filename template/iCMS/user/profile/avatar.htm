@@ -5,7 +5,7 @@
 window.onload=function(){
   xiuxiu.setLaunchVars("avatarPreview", {visible:true, label:"裁剪预览",small:{width:30,height:30}, medium:{width:60,height:60},large:{width:150,height:150, label:"大尺寸"}});
   xiuxiu.embedSWF("avatar_editor",5,"100%","450");
-  xiuxiu.setUploadURL("<!--{iCMS:router url='/user'}-->");
+  xiuxiu.setUploadURL("<!--{iCMS:router url='/user' host='true'}-->");
   xiuxiu.onInit = function (){
     xiuxiu.loadPhoto("<!--{$me.avatar}-->?<!--{$iCMS.TIME}-->");
     xiuxiu.setUploadArgs({'action':'profile','pg':'avatar','format':'json'});
