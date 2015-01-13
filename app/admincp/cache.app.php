@@ -11,6 +11,7 @@
 */
 class cacheApp{
     function __construct() {
+        $this->do_app();
     }
     function do_iCMS(){
 		if (in_array($_GET['acp'], array('setting','prop','filter','keywords'))) {

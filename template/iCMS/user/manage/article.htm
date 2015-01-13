@@ -6,10 +6,10 @@
     <input name="pg" type="hidden" value="article" />
     <div class="article">
       <ul id="article-tab" class="nav nav-tabs">
-        <li class="active" name="s1"><a href="<!--{$article.manage}-->"><i class="fa fa-dashboard"></i> 我的文章</a></li>
-        <li name="s3"><a href="<!--{$article.manage}-->&status=3"><i class="fa fa-minus-circle"></i> 审核中文章</a></li>
-        <li name="s4"><a href="<!--{$article.manage}-->&status=4"><i class="fa fa-times-circle"></i> 未通过审核</a></li>
-        <li name="s2"><a href="<!--{$article.manage}-->&status=2"><i class="fa fa-trash-o"></i> 回收站</a></li>
+        <li class="active" name="s1"><a href="<!--{iCMS:router url='/user/article'}-->"><i class="fa fa-dashboard"></i> 我的文章</a></li>
+        <li name="s3"><a href="<!--{iCMS:router url='/user/article/status/3'}-->"><i class="fa fa-minus-circle"></i> 审核中文章</a></li>
+        <li name="s4"><a href="<!--{iCMS:router url='/user/article/status/4'}-->"><i class="fa fa-times-circle"></i> 未通过审核</a></li>
+        <li name="s2"><a href="<!--{iCMS:router url='/user/article/status/2'}-->"><i class="fa fa-trash-o"></i> 回收站</a></li>
       </ul>
       <table class="table table-striped">
         <thead>

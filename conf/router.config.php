@@ -10,14 +10,17 @@
 defined('iPHP') OR exit('What are you doing?');
 
 return array(
-	'/user'                     => iCMS_URL.'/user.php',
-	'/user/home'                => iCMS_URL.'/user.php?do=home',
-	'/user/publish'             => iCMS_URL.'/user.php?do=manage&pg=publish',
-	'/user/article'        		=> iCMS_URL.'/user.php?do=manage&pg=article',
-	'/user/category'            => iCMS_URL.'/user.php?do=manage&pg=category',
-	'/user/comment'             => iCMS_URL.'/user.php?do=manage&pg=comment',
-	'/user/inbox'             	=> iCMS_URL.'/user.php?do=manage&pg=inbox',
-	'/user/inbox/{uid}'         => iCMS_URL.'/user.php?do=manage&pg=inbox&user={uid}',
+	'/user'                  => iCMS_URL.'/user.php',
+	'/user/home'             => iCMS_URL.'/user.php?do=home',
+	'/user/publish'          => iCMS_URL.'/user.php?do=manage&pg=publish',
+	'/user/article'          => iCMS_URL.'/user.php?do=manage&pg=article',
+	'/user/article/status/2' => iCMS_URL.'/user.php?do=manage&pg=article&status=2',
+	'/user/article/status/3' => iCMS_URL.'/user.php?do=manage&pg=article&status=3',
+	'/user/article/status/4' => iCMS_URL.'/user.php?do=manage&pg=article&status=4',
+	'/user/category'         => iCMS_URL.'/user.php?do=manage&pg=category',
+	'/user/comment'          => iCMS_URL.'/user.php?do=manage&pg=comment',
+	'/user/inbox'            => iCMS_URL.'/user.php?do=manage&pg=inbox',
+	'/user/inbox/{uid}'      => iCMS_URL.'/user.php?do=manage&pg=inbox&user={uid}',
 
 	'/user/manage'              => iCMS_URL.'/user.php?do=manage',
 	'/user/manage/favorite'     => iCMS_URL.'/user.php?do=manage&pg=favorite',

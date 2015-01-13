@@ -672,7 +672,11 @@ class articleApp{
         if($remote==="autopic" && empty($array)){
             return;
         }
-        $array && $fArray && $content = str_replace($array, $fArray, $content);
+        if($array && $fArray){
+            krsort($array);
+            krsort($fArray);
+            $content = str_replace($array, $fArray, $content);
+        }
         return addslashes($content);
     }
     function picdata($pic='',$mpic='',$spic=''){
