@@ -77,7 +77,7 @@ class iPHP{
         return self::pl($tpl);
 
     }
-	function tpl_path($tpl){
+	public static function tpl_path($tpl){
         if(strpos($tpl,iPHP_APP.':/') !==false){
 			$_tpl = str_replace(iPHP_APP.':/',iPHP_DEFAULT_TPL,$tpl);
 			if(@is_file(iPHP_TPL_DIR."/".$_tpl)) return $_tpl;
